@@ -1,0 +1,6 @@
+<div class="root">
+  <c-navbar></c-navbar>
+  <main class="content" [ngClass]="{'moved': isMenuExpanded$ | async}">
+    <router-outlet></router-outlet>
+  </main>
+</div>

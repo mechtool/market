@@ -1,0 +1,32 @@
+@media all and (max-width: 576px) {
+
+	.banner-meta {
+		margin-top: 0;
+	}
+
+	h3 {
+		font-size: var(--font-size-16);
+		line-height: 21px;
+		letter-spacing: 0.11em;
+	}
+
+	.banner-descr {
+		font-size: var(--font-size-14);
+		line-height: 18px;
+	}
+
+	.btn {
+		max-width: 120px;
+	}
+
+	.banner-cover {
+		max-width: 60px;
+		justify-content: flex-end;
+		align-items: flex-end;
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+	}
+
+}
+

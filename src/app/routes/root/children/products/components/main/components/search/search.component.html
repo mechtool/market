@@ -1,0 +1,45 @@
+<div class="search" [ngClass]="{'hovered': isInputHovered, 'focused': isInputFocused}">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <input
+      placeholder="Поиск товаров"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      aria-autocomplete="list"
+      name="query"
+      formControlName="query"
+      (mouseenter)="isInputHovered = true"
+      (mouseleave)="isInputHovered = false"
+      (focus)="isInputFocused = true"
+      (blur)="isInputFocused = false">
+
+    <div class="buttons">
+      <div class="buttons__item">
+        <button class="btn btn_square btn_search"></button>
+      </div>
+      <div class="buttons__item">
+        <a class="btn btn_square btn_category"></a>
+      </div>
+    </div>
+
+    <div
+      class="suggest"
+      (mouseover)="quickSearchOver = true"
+      (mouseout)="quickSearchOver = false"
+      *ngIf="isInputFocused || quickSearchOver">
+
+      <c-main-search-history *ngIf="!searchQuery"></c-main-search-history>
+      <c-main-search-products
+        [products]="productsSuggestions"
+        [categories]="categoriesSuggestions"
+        *ngIf="searchQuery"></c-main-search-products>
+
+    </div>
+
+  </form>
+  <div class="region">
+    <a class="btn">Москва</a>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.banner {
+	background-color: var(--color-background-base);
+	display: flex;
+	border-radius: 2px;
+	transition: background-color .3s;
+}
+
+.banner h3,
+.banner .banner-descr {
+	transition: color .3s;
+}
+
+.banner-descr p {
+	margin-top: 0;
+	margin-bottom: 10px;
+}
+
+.banner-descr p:last-child {
+	margin-bottom: 0;
+}
+
+.banner {
+	width: 100%;
+	padding: 15px 30px 15px 25px;
+	position: relative;
+}
+
+.banner-cover {
+	margin-left: auto;
+	width: 100%;
+	max-width: 130px;
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+.banner-meta {
+	margin-top: 15px;
+	padding-right: 20px;
+	display: flex;
+	flex-direction: column;
+}
+
+h3 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-weight: var(--font-weight-bold);
+	font-size: var(--font-size-18);
+	line-height: 23px;
+	letter-spacing: .11em;
+}
+
+.banner-descr {
+	line-height: 19px;
+	margin-bottom: 25px;
+}
+
+.banner-btn {
+	justify-self: flex-end;
+}
+
+.btn {
+	width: 100%;
+	max-width: 160px;
+}
+
+.banner:hover {
+	background-color: #ffefc7;
+}
+
+.banner:hover h3 {
+	color: #060606;
+}
+
+.banner:hover .banner-descr {
+	color: #000000;
+}

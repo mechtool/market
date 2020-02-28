@@ -1,0 +1,45 @@
+.item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+	font-size: var(--font-size-13);
+	line-height: 17px;
+  padding: 5px 13px 5px 5px;
+
+  &:hover {
+    background-color: var(--color-accent-lighter);
+    .cover img, .title, .meta {
+      opacity: 1;
+    }
+  }
+}
+
+.cover {
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 15px;
+  flex-shrink: 0;
+
+  img {
+    max-width: 20px;
+    max-height: 20px;
+    opacity: .2;
+  }
+}
+
+.title {
+	opacity: .7;
+	margin-right: 20px;
+}
+
+.meta {
+	opacity: .3;
+	justify-self: flex-end;
+	margin-left: auto;
+	flex-shrink: 0;
+}
+
+

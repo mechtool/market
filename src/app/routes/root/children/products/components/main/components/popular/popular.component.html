@@ -1,0 +1,31 @@
+<div class="popular">
+
+  <div class="title">
+    <strong>Популярные товары</strong>
+    <span>количество предложений от поставщиков и минимальная цена</span>
+  </div>
+
+  <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
+
+    <c-product-card
+      [routerLink]="['./product/1']"
+      imgUrl="/assets/img/tmp/product_0.png"
+      imgAlt="Браслет Honor Band 5 четвертая версия"
+      title="Браслет Honor Band 5 четвертая версия"
+      offersCount="455"
+      price="12745"
+    ></c-product-card>
+
+    <c-banner-card
+      [routerLink]="['./product/100']"
+      imgUrl="/assets/img/tmp/catalog_banner_popular.png"
+      imgAlt="Умная колонка с Алисой"
+    >
+      <span class="banner-card-title">Умная колонка<br> с Алисой</span>
+      <span class="banner-card-body">И другие товары Яндекса</span>
+    </c-banner-card>
+
+  </div>
+
+</div>
+

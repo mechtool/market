@@ -1,0 +1,22 @@
+<a class="item" [routerLink]="routerLink">
+
+  <div class="cover">
+    <img src="{{img}}" alt="{{imgAlt}}" title="{{imgAlt}}">
+  </div>
+
+  <div class="title">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="meta">
+    <ng-container *ngIf="type === 'productOffer'">
+      {{offersCount}} предложений
+    </ng-container>
+    <ng-container *ngIf="type === 'category'">
+      Категория
+    </ng-container>
+  </div>
+
+</a>
+
+

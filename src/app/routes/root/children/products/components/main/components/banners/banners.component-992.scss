@@ -1,0 +1,11 @@
+@media all and (max-width: 992px) {
+  .banners {
+    * {
+      display: none;
+      &:nth-child(1) {
+        display: flex;
+      }
+    }
+  }
+}
+

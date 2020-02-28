@@ -1,0 +1,46 @@
+@media all and (max-width: 576px) {
+
+  .product-card {
+		max-width: none;
+    margin: 5px 0 10px;
+	}
+
+	.link {
+		flex-direction: row;
+		align-items: stretch;
+	}
+
+	.cover {
+		height: 100%;
+		width: 80px;
+		padding: 0;
+		margin-bottom: 0;
+		margin-right: 40px;
+		flex-shrink: 0;
+		display: flex;
+    justify-content: center;
+	}
+
+	.body {
+		flex-grow: 1;
+  }
+
+  .title {
+		min-height: auto;
+		font-size: var(--font-size-12);
+		line-height: 15px;
+	}
+
+	.meta {
+		max-width: 160px;
+  }
+
+  .banner{
+    display: none;
+  }
+
+}
+
+
+
+

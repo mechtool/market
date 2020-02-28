@@ -1,0 +1,19 @@
+@media all and (max-width: 576px) {
+
+	.search {
+		padding-left: 0;
+		padding-right: 0;
+		margin-right: -20px;
+    margin-left: -20px;
+
+    .region {
+      display: none;
+    }
+
+    form {
+      margin: 0;
+      padding: 0 20px;
+    }
+	}
+
+}

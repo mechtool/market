@@ -1,0 +1,25 @@
+<div class="history">
+  <div class="title">История запросов:</div>
+
+  <div class="items">
+
+    <c-main-search-item
+      *ngFor="let product of products"
+      [routerLink]="['./product/' + product.id]"
+      img="{{product.imgUrl}}"
+      imgAlt="{{product.title}}"
+      offersCount="{{product.offersCount}}"
+      type="productOffer"
+    ><div [innerHTML]="product.title"></div></c-main-search-item>
+
+    <c-main-search-item
+      *ngFor="let category of categories"
+      [routerLink]="['./product/' + category.id]"
+      img="{{category.imgUrl}}"
+      imgAlt="{{category.title}}"
+      type="category"
+    ><div [innerHTML]="category.title"></div></c-main-search-item>
+
+  </div>
+</div>
+
