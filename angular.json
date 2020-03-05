@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/client",
+            "outputPath": "dist/default",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -55,6 +55,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
+              "outputPath": "dist/dev",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": true,
@@ -84,6 +85,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
+              "outputPath": "dist/stage",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": true,
@@ -108,6 +110,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
+              "outputPath": "dist/prod",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,

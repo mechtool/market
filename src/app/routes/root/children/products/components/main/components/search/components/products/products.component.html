@@ -9,19 +9,19 @@
     <c-main-search-item
       *ngFor="let product of products"
       [routerLink]="['./product/' + product.id]"
-      img="{{product.imgUrl}}"
-      imgAlt="{{product.title}}"
-      offersCount="{{product.offersCount}}"
+      img="{{product.imageUrl}}"
+      imgAlt="{{product.productName}}"
+      offersCount="{{product.totalOffers}}"
       type="productOffer"
-    ><div [innerHTML]="product.title"></div></c-main-search-item>
+    ><div [innerHTML]="product.productName"></div></c-main-search-item>
 
     <c-main-search-item
       *ngFor="let category of categories"
-      [routerLink]="['./product/' + category.id]"
-      img="{{category.imgUrl}}"
-      imgAlt="{{category.title}}"
+      [routerLink]="['./product/' + category.categoryId]"
+      img="{{category.imageUrl}}"
+      imgAlt="{{category.categoryName}}"
       type="category"
-    ><div [innerHTML]="category.title"></div></c-main-search-item>
+    ><div [innerHTML]="category.categoryName"></div></c-main-search-item>
 
   </div>
 </div>

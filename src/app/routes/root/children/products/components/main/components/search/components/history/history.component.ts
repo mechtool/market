@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SuggestResponseItemProductModel, SuggestResponseItemCategoryModel } from 'src/app/routes/root/children/products/models';
+import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
 import { ProductsService } from 'src/app/routes/root/children/products/services';
 
 @Component({
@@ -11,8 +11,8 @@ import { ProductsService } from 'src/app/routes/root/children/products/services'
 })
 export class MainSearchHistoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  products: SuggestResponseItemProductModel[];
-  categories: SuggestResponseItemCategoryModel[];
+  products: SuggestionProductItemModel[];
+  categories: SuggestionCategoryItemModel[];
 
   constructor(private _productsService: ProductsService) {}
 

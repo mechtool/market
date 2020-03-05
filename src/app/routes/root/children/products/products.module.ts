@@ -16,7 +16,7 @@ import {
   ProductComponent,
 } from './components';
 import { ProductsService } from './services';
-import { ProductCardModule, BannerCardModule } from '#shared/modules';
+import { NomenclatureCardModule, BannerCardModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -25,7 +25,7 @@ import { ProductCardModule, BannerCardModule } from '#shared/modules';
     FormsModule,
     ReactiveFormsModule,
     ProductsRoutingModule,
-    ProductCardModule,
+    NomenclatureCardModule,
     BannerCardModule,
   ],
   declarations: [

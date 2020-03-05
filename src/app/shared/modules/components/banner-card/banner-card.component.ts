@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
 export class BannerCardComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   @Input() routerLink: string[];
-  @Input() imgUrl : string;
+  @Input() imageUrl : string;
   @Input() imgAlt : string;
 
   constructor() {}

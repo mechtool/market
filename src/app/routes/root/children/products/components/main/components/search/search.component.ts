@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { ResponsiveService } from '#shared/modules';
 import { ProductsService } from './../../../../services';
-import { SuggestResponseItemProductModel, SuggestResponseItemCategoryModel } from './../../../../models';
+import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
 import { Router } from '@angular/router';
+
+const MIN_QUERY_LENGTH = 3;
 
 @Component({
   selector: 'c-main-search',
@@ -21,8 +23,8 @@ export class MainSearchComponent implements OnInit, OnDestroy {
   isInputHovered = false;
   isInputFocused = false;
   quickSearchOver = false;
-  productsSuggestions: SuggestResponseItemProductModel[];
-  categoriesSuggestions: SuggestResponseItemCategoryModel[];
+  productsSuggestions: SuggestionProductItemModel[];
+  categoriesSuggestions: SuggestionCategoryItemModel[];
 
   get searchQuery() {
     return this.form.get('query').value;
@@ -40,8 +42,9 @@ export class MainSearchComponent implements OnInit, OnDestroy {
     this.form.get('query').valueChanges
       .pipe(
         takeUntil(this._unsubscriber$),
+        filter(res => res.length >= MIN_QUERY_LENGTH),
         switchMap((res) => {
-          return this._productsService.getSuggestions(res);
+          return this._productsService.searchSuggestions(res);
         })
       )
       .subscribe((res) => {
@@ -72,7 +75,7 @@ export class MainSearchComponent implements OnInit, OnDestroy {
 
   private _initForm(): void {
     this.form = this._fb.group({
-      query: [''],
+      query: ['', [Validators.required, Validators.minLength(MIN_QUERY_LENGTH)]],
     });
   }
 

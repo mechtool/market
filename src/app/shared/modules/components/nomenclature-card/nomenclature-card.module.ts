@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductCardComponent } from './product-card.component';
+import { NomenclatureCardComponent } from './nomenclature-card.component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
   ],
-  exports: [ProductCardComponent],
-  declarations: [ProductCardComponent],
+  exports: [NomenclatureCardComponent],
+  declarations: [NomenclatureCardComponent],
 })
-export class ProductCardModule { }
+export class NomenclatureCardModule { }

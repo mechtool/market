@@ -21,7 +21,7 @@ import {
   PipesModule,
   CommonServicesModule,
   InputQtyModule,
-  ProductCardModule,
+  NomenclatureCardModule,
 } from '#shared/modules';
 
 import { AppComponent } from './app.component';
@@ -54,7 +54,7 @@ registerLocaleData(ru);
     BrowserAnimationsModule,
     PipesModule,
     InputQtyModule,
-    ProductCardModule,
+    NomenclatureCardModule,
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
   ],

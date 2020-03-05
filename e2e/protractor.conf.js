@@ -3,6 +3,7 @@
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
 const { SpecReporter } = require('jasmine-spec-reporter');
+const puppeteer = require('puppeteer');
 
 /**
  * @type { import("protractor").Config }
@@ -12,17 +13,24 @@ exports.config = {
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
+  SELENIUM_PROMISE_MANAGER: false,
   capabilities: {
-    browserName: 'chrome'
+    browserName: 'chrome',
+    acceptInsecureCerts : true,
+    chromeOptions: {
+      // args: ['--disable-gpu', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
+      args: ['--headless', '--disable-gpu', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
+      binary: puppeteer.executablePath(),
+    },
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
     print: function() {}
   },
+  restartBrowserBetweenTests: false,
   onPrepare() {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.json')

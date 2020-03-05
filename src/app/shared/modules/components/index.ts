@@ -1,4 +1,4 @@
 export * from './input-qty';
-export * from './product-card';
+export * from './nomenclature-card';
 export * from './banner-card';
 

@@ -25,3 +25,13 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Docker commands (TODO)
+
+`docker-compose build --no-cache`  
+`docker run -it client_app /bin/sh`  
+`docker images`  
+`docker image rm ID --force`  
+`docker cp a00c26bec94a:/usr/src/app/dist/. .`  
+`docker run -it --rm client_app /bin/sh`  
+`docker run --rm client_app npm run e2e`  

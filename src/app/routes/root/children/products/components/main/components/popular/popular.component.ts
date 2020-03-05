@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+import { ProductsService } from '../../../../services';
+import { NomenclatureCardModel } from './../../../../models';
 
 @Component({
   selector: 'c-main-popular',
@@ -12,14 +14,26 @@ import { Subject } from 'rxjs';
 })
 export class MainPopularComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
+  nomenclatures: NomenclatureCardModel[];
 
-  constructor() {}
+  constructor(private _productsService: ProductsService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._getPopularNomenclatures();
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  private _getPopularNomenclatures(): void {
+    this._productsService.getPopularNomenclatureCards()
+      .subscribe((res) => {
+        this.nomenclatures = res;
+      }, (err) => {
+        console.log('error');
+      });
   }
 
 }

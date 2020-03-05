@@ -1,133 +1,93 @@
 import { Observable, of, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { SuggestResponseModel } from '../models';
-
-const MIN_QUERY_LENGTH = 3;
+import { NomenclatureCardModel } from '../models';
+import { SuggestionModel } from '#shared/modules/common-services/models';
+import { BNetService } from '#shared/modules/common-services';
 
 @Injectable()
 export class ProductsService {
 
-  constructor() {}
+  constructor(private _bnetService: BNetService) {}
 
-  getSuggestions(query: string): Observable<SuggestResponseModel> {
-    if (query.length < MIN_QUERY_LENGTH) {
-      return of({
-        products: null,
-        categories: null,
-      });
-    }
-    if (query.length >= MIN_QUERY_LENGTH) {
-      return of({
-        products: [
-          {
-            title: 'Шишкин лес, 1,5 литра, негаз. <strong>вода</strong>',
-            imgUrl: '/assets/img/tmp/quick_1.png',
-            offersCount: 137,
-            id: 1
-          }, {
-            title: 'Липтон, 2 литра, минеральная <strong>вода</strong>',
-            imgUrl: '/assets/img/tmp/quick_2.png',
-            offersCount: 64,
-            id: 2
-          }, {
-            title: 'Минеральная <strong>вода</strong> "Эвиан", негаз.',
-            imgUrl: '/assets/img/tmp/quick_3.png',
-            offersCount: 31,
-            id: 3
-          }, {
-            title: '<strong>Вода</strong> питьевая Baikal430 негаз., ПЭТ',
-            imgUrl: '/assets/img/tmp/quick_4.png',
-            offersCount: 26,
-            id: 4
-          }, {
-            title: '<strong>Вода</strong> Боржоми, негаз.',
-            imgUrl: '/assets/img/tmp/quick_5.png',
-            offersCount: 4,
-            id: 5
-          },
-        ],
-        categories: [
-          {
-            title: 'Продукты питания / Детская <strong>вода</strong>',
-            imgUrl: '/assets/img/tmp/quick_6.png',
-            id: 1
-          }, {
-            title: 'Продукты питания / Детская <strong>вода</strong>2',
-            imgUrl: '/assets/img/tmp/quick_6.png',
-            id: 2
-          }, {
-            title: 'Продукты питания / Детская <strong>вода</strong>3',
-            imgUrl: '/assets/img/tmp/quick_6.png',
-            id: 3
-          }, {
-            title: 'Продукты питания / Детская <strong>вода</strong>4',
-            imgUrl: '/assets/img/tmp/quick_6.png',
-            id: 4
-          }, {
-            title: 'Продукты питания / Детская <strong>вода</strong>5',
-            imgUrl: '/assets/img/tmp/quick_6.png',
-            id: 5
-          }
-        ],
-      });
-    }
+  searchSuggestions(textQuery: string): Observable<SuggestionModel> {
+    return this._bnetService.searchSuggestions(textQuery);
   }
 
-  getHistoricalSuggestions(): Observable<SuggestResponseModel> {
+  getHistoricalSuggestions(): Observable<SuggestionModel> {
+    // TODO: save in localStorage
     return of({
       products: [
         {
-          title: 'Шишкин лес, 1,5 литра, негаз. <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          offersCount: 137,
-          id: 1
+          id: 1,
+          productName: 'Шишкин лес, 1,5 литра, негаз. <strong>вода</strong>',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
+          totalOffers: 137,
         }, {
-          title: 'Липтон, 2 литра, минеральная <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          offersCount: 64,
-          id: 2
+          id: 2,
+          productName: 'Липтон, 2 литра, минеральная <strong>вода</strong>',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
+          totalOffers: 64,
         }, {
-          title: 'Минеральная <strong>вода</strong> "Эвиан", негаз.',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          offersCount: 31,
-          id: 3
+          id: 3,
+          productName: 'Минеральная <strong>вода</strong> "Эвиан", негаз.',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
+          totalOffers: 31,
         }, {
-          title: '<strong>Вода</strong> питьевая Baikal430 негаз., ПЭТ',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          offersCount: 26,
-          id: 4
+          id: 4,
+          productName: '<strong>Вода</strong> питьевая Baikal430 негаз., ПЭТ',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
+          totalOffers: 26,
         }, {
-          title: '<strong>Вода</strong> Боржоми, негаз.',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          offersCount: 4,
-          id: 5
+          id: 5,
+          productName: '<strong>Вода</strong> Боржоми, негаз.',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
+          totalOffers: 4,
         },
       ],
       categories: [
         {
-          title: 'Продукты питания / Детская <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          id: 1
+          categoryId: 1,
+          categoryName: 'Продукты питания / Детская <strong>вода</strong>',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
         }, {
-          title: 'Продукты питания / Детская <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          id: 2
+          categoryId: 2,
+          categoryName: 'Продукты питания / Детская <strong>вода</strong>2',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
         }, {
-          title: 'Продукты питания / Детская <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          id: 3
+          categoryId: 3,
+          categoryName: 'Продукты питания / Детская <strong>вода</strong>3',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
         }, {
-          title: 'Продукты питания / Детская <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          id: 4
+          categoryId: 4,
+          categoryName: 'Продукты питания / Детская <strong>вода</strong>',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
         }, {
-          title: 'Продукты питания / Детская <strong>вода</strong>',
-          imgUrl: '/assets/img/svg/quick_search_history.svg',
-          id: 5
-        }
+          categoryId: 5,
+          categoryName: 'Продукты питания / Детская <strong>вода</strong>5',
+          imageUrl: '/assets/img/svg/quick_search_history.svg',
+        },
       ],
     });
+  }
+
+  getPopularNomenclatureCards(): Observable<NomenclatureCardModel[]> {
+    return this._bnetService.searchNomenclatures({ suppliers: ['23b975fe-3cce-4b72-bde6-90c255759aff'] })
+      .pipe(
+        map((res) => {
+          return res?._embedded?.items?.map((nom) => {
+            return new NomenclatureCardModel({
+              id: nom.id,
+              productName: nom.productName,
+              imageUrl: nom.imageUrls?.[0],
+              offersSummary: {
+                minPrice: nom.offersSummary.minPrice,
+                totalOffers: nom.offersSummary.totalOffers,
+              },
+            });
+          });
+        })
+      );
   }
 
 }

@@ -1,4 +1,4 @@
-.product-card {
+.nomenclature-card {
   display: flex;
 	margin: 10px;
 	width: 100%;
@@ -77,16 +77,16 @@
 	transition: background-color .3s;
 }
 
-.product-card:hover .meta {
+.nomenclature-card:hover .meta {
 	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0), 0px -1px 2px rgba(0, 0, 0, 0);
 }
 
-.product-card:hover .count {
+.nomenclature-card:hover .count {
 	background-color: var(--color-accent-lighter);
 	color: #060606;
 }
 
-.product-card:hover .price {
+.nomenclature-card:hover .price {
 	background-color: var(--color-accent);
 	color: #060606;
 }

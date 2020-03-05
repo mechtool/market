@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SuggestResponseItemProductModel, SuggestResponseItemCategoryModel } from 'src/app/routes/root/children/products/models';
+import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'c-main-search-products',
@@ -10,8 +10,8 @@ import { SuggestResponseItemProductModel, SuggestResponseItemCategoryModel } fro
 })
 export class MainSearchProductsComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() products: SuggestResponseItemProductModel[];
-  @Input() categories: SuggestResponseItemCategoryModel[];
+  @Input() products: SuggestionProductItemModel[];
+  @Input() categories: SuggestionCategoryItemModel[];
 
   constructor() {}
 
