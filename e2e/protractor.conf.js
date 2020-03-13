@@ -19,7 +19,7 @@ exports.config = {
     acceptInsecureCerts : true,
     chromeOptions: {
       // args: ['--disable-gpu', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
-      args: ['--headless', '--disable-gpu', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
+      args: ['--headless', '--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
       binary: puppeteer.executablePath(),
     },
   },

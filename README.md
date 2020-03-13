@@ -1,33 +1,48 @@
 # Client
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.3.
+Приложение использует в качестве фреймворка Angular 9.0.6. Взаимодействует с "1С:Бизнес-сеть" через специальный сервис __client-service__, выступающий в качестве Backend-for-Frontend
 
-## Development server
+## Окружения
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Приложение может функционировать на DEV/STAGE/PROD окружениях (папка `environments`).
 
-## Code scaffolding
+## Девелоперский сервер
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Выполнить `npm run start` для запуска девелоперского сервера. Адрес: `https://{ВАШ_IP}:4200/`. Приложение автоматически перезагрузится при изменении исходного кода. По умолчанию, приложение взаимодействует с локально запущенным экзмепляром __client-service__ не напрямую, а посредством создания proxy-сервера, настройки которого хранятся в `proxy.conf.js`. В этом же файле можно сменить адрес взаимодействующего Backend-for-Frontend сервиса (раскоментировав некоторые строки).
 
-## Build
+## Сборка
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Результатом сборки является папка с артефактами (HTMl, JS, CSS и тд файлами). Запускать сборку необходимо для каждого окружения. 
 
-## Running unit tests
+### Без использования Docker
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Выполнить `npm run build:dev` для сборки проекта для DEV окружения. Собранные артефакты будут храниться в папке `dist/dev`. 
+Выполнить `npm run build:stage` для сборки проекта для DEV окружения. Собранные артефакты будут храниться в папке `dist/stage`. 
+Выполнить `npm run build:prod` для сборки проекта для DEV окружения. Собранные артефакты будут храниться в папке `dist/prod`.
+Выполнить `npm run build` для сборки проекта для всех окружений. Собранные артефакты будут храниться в папке `dist`. 
 
-## Running end-to-end tests
+### С использованием Docker
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Для выполнения такой сборки на ПК должен быть установлен Docker.  
+Выполнить `npm run docker:build:dev` для сборки проекта для DEV окружения. Собранные артефакты будут храниться в папке `dist/dev`. 
+Выполнить `npm run docker:build:stage` для сборки проекта для DEV окружения. Собранные артефакты будут храниться в папке `dist/stage`.  
+Выполнить `npm run docker:build:prod` для сборки проекта для DEV окружения. Собранные артефакты будут храниться в папке `dist/prod`.  
+Выполнить `npm run docker:build` для сборки проекта для всех окружений. Собранные артефакты будут храниться в папке `dist`. 
 
-## Further help
+## Запуск unit тестов (TODO)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Выполнить `npm run test` для запуска unit тестов с использованием [Karma](https://karma-runner.github.io).
 
-## Docker commands (TODO)
+## Запуск end-to-end тестов (TODO)
 
+Выполнить `npm run e2e` для запуска end-to-end тестов на локальном стенде с использованием [Protractor](http://www.protractortest.org/).  
+Выполнить `npm run e2e:dev` для запуска end-to-end тестов на стенде в DEV окружении с использованием [Protractor](http://www.protractortest.org/).  
+Выполнить `npm run e2e:stage` для запуска end-to-end тестов на стенде в STAGE окружении с использованием [Protractor](http://www.protractortest.org/).  
+Выполнить `npm run e2e:prod` для запуска end-to-end тестов на стенде в PROD окружении с использованием [Protractor](http://www.protractortest.org/).  
+
+## Полезные Docker команды (TODO)
+
+`docker-compose up --build --force-recreate`  
 `docker-compose build --no-cache`  
 `docker run -it client_app /bin/sh`  
 `docker images`  

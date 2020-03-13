@@ -23,36 +23,8 @@ export async function waitForUrlToChangeTo(urlToChange: any, includeTicketQueryP
   });
 }
 
-function makeINN() {
-  let result = '';
-  const characters = '123456789';
-  for (let i = 0; i < 12; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
-function encodeBase64(str: any) {
-  return Buffer.from(unescape(encodeURIComponent(str)), 'ascii').toString('base64');
-}
-
-export function generateRegCtx() {
-  return encodeBase64(JSON.stringify({
-    cid: 'E2E-TEST_cid',
-    app: 'E2E-TEST_app',
-    name: 'E2E-TEST_name',
-    legalId: makeINN(),
-    contacts: {
-      phone: 'E2E-TEST_phone',
-      email: 'E2E-TEST@el-mail.ru',
-      address: 'E2E-TEST_address',
-    }
-  }));
-}
-
 export function presenceOfAll(elementArrayFinder) {
   return function () {
     return elementArrayFinder.count(count => count > 0);
   };
 }
-// browser.wait(presenceOfAll(orgsPage.getOrganizationsElements()), 10000);

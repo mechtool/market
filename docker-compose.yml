@@ -5,3 +5,11 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+
+  # example_service_name:
+  #   container_name: example_container_name
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/Dockerfile.serve
+  #   ports:
+  #     - '4200:4200'
