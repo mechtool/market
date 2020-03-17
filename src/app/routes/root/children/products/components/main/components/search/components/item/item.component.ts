@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@a
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'c-main-search-item',
+  selector: 'my-main-search-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

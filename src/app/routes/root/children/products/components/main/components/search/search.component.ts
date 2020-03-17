@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 const MIN_QUERY_LENGTH = 3;
 
 @Component({
-  selector: 'c-main-search',
+  selector: 'my-main-search',
   templateUrl: './search.component.html',
   styleUrls: [
     './search.component.scss',

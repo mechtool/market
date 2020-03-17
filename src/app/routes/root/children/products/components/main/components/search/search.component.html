@@ -30,11 +30,11 @@
       (mouseout)="quickSearchOver = false"
       *ngIf="isInputFocused || quickSearchOver">
 
-      <c-main-search-history *ngIf="!searchQuery"></c-main-search-history>
-      <c-main-search-products
+      <my-main-search-history *ngIf="!searchQuery"></my-main-search-history>
+      <my-main-search-products
         [products]="productsSuggestions"
         [categories]="categoriesSuggestions"
-        *ngIf="searchQuery"></c-main-search-products>
+        *ngIf="searchQuery"></my-main-search-products>
 
     </div>
 

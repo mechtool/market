@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, TemplateRef, ChangeDetectionStrate
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'c-main-banners-banner',
+  selector: 'my-main-banners-banner',
   templateUrl: './banner.component.html',
   styleUrls: [
     './banner.component.scss',

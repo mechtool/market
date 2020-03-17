@@ -9,7 +9,7 @@ import { NavigationService } from '#shared/modules';
 import { NavItemModel } from '#shared/modules/common-services/models';
 
 @Component({
-  selector: 'c-navbar-nav',
+  selector: 'my-navbar-nav',
   templateUrl: './nav.component.html',
   styleUrls: [
     './nav.component.scss',

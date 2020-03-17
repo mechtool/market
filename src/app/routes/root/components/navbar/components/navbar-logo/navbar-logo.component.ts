@@ -8,7 +8,7 @@ import { NavigationService, ResponsiveService } from '#shared/modules';
 import { takeUntil, filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'c-navbar-logo',
+  selector: 'my-navbar-logo',
   templateUrl: './navbar-logo.component.html',
   styleUrls: [
     './navbar-logo.component.scss',

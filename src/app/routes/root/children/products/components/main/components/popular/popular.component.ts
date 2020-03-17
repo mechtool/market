@@ -4,7 +4,7 @@ import { ProductsService } from '../../../../services';
 import { NomenclatureCardModel } from './../../../../models';
 
 @Component({
-  selector: 'c-main-popular',
+  selector: 'my-main-popular',
   templateUrl: './popular.component.html',
   styleUrls: [
     './popular.component.scss',

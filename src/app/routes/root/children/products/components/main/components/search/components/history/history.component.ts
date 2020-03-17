@@ -4,7 +4,7 @@ import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared
 import { ProductsService } from 'src/app/routes/root/children/products/services';
 
 @Component({
-  selector: 'c-main-search-history',
+  selector: 'my-main-search-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

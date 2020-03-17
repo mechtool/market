@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'c-main-banners',
+  selector: 'my-main-banners',
   templateUrl: './banners.component.html',
   styleUrls: [
     './banners.component.scss',

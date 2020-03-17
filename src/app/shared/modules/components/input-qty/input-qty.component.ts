@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'c-input-qty',
+  selector: 'my-input-qty',
   templateUrl: './input-qty.component.html',
   styleUrls: ['./input-qty.component.scss'],
 })

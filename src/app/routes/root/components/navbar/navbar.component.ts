@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 import { NavigationService } from '#shared/modules';
 
 @Component({
-  selector: 'c-navbar',
+  selector: 'my-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: [
     './navbar.component.scss',

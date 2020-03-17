@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
 
 @Component({
-  selector: 'c-main-search-products',
+  selector: 'my-main-search-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

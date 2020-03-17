@@ -1,10 +1,36 @@
-import { by, element } from 'protractor';
+import { by, element, ElementFinder } from 'protractor';
 
 export class AppPage {
 
-  async getTitleText(): Promise<string> {
-    const titleElement = element(by.css('c-app .content span'));
-    return await titleElement.getText();
+  getNavbarElement(): ElementFinder {
+    const navbarElement = element(by.css('my-navbar'));
+    return navbarElement;
   }
+
+  getNavbarContainerElement(): ElementFinder {
+    const navbarContainerElement = element(by.css('my-navbar .navbar'));
+    return navbarContainerElement;
+  }
+
+  getNavbarLogoElement(): ElementFinder {
+    const navbarLogoElement = element(by.css('my-navbar my-navbar-logo'));
+    return navbarLogoElement;
+  }
+
+  getMainElement(): ElementFinder {
+    const mainElement = element(by.css('main'));
+    return mainElement;
+  }
+
+
+  // async getTitleText(): Promise<string> {
+  //   const titleElement = element(by.css('my-app .content span'));
+  //   return await titleElement.getText();
+  // }
+
+  // getUserMenuLink() {
+  //   const userMenuLink = element(by.css('.user-menu > a'));
+  //   return userMenuLink;
+  // }
 
 }

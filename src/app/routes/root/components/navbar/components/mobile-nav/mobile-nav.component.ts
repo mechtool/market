@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { NavigationService } from '#shared/modules';
 
 @Component({
-  selector: 'c-navbar-mobile-nav',
+  selector: 'my-navbar-mobile-nav',
   templateUrl: './mobile-nav.component.html',
   styleUrls: [
     './mobile-nav.component.scss',

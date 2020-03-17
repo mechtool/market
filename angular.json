@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "client": {
+    "mynew": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -12,7 +12,7 @@
       },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "c",
+      "prefix": "my",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -137,7 +137,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "aot": true,
-            "browserTarget": "client:build",
+            "browserTarget": "mynew:build",
             "disableHostCheck": true,
             "host": "0.0.0.0",
             "proxyConfig": "./proxy.conf.js",
@@ -147,23 +147,23 @@
           },
           "configurations": {
             "test": {
-              "browserTarget": "client:build:test"
+              "browserTarget": "mynew:build:test"
             },
             "dev": {
-              "browserTarget": "client:build:dev"
+              "browserTarget": "mynew:build:dev"
             },
             "stage": {
-              "browserTarget": "client:build:stage"
+              "browserTarget": "mynew:build:stage"
             },
             "production": {
-              "browserTarget": "client:build:production"
+              "browserTarget": "mynew:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "client:build"
+            "browserTarget": "mynew:build"
           }
         },
         "test": {
@@ -206,22 +206,22 @@
           "configurations": {
             "dev": {
               "devServerTarget": "",
-              "baseUrl": "http://client.legacy-api.dev.dept07"
+              "baseUrl": "http://mynew.legacy-api.dev.dept07"
             },
             "stage": {
               "devServerTarget": "",
-              "baseUrl": "https://bnet-client-stage.1c.ru"
+              "baseUrl": "https://bnet-mynew-stage.1c.ru"
             },
             "production": {
               "devServerTarget": "",
-              "baseUrl": "https://client.1cbn.ru"
+              "baseUrl": "https://mynew.1cbn.ru"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "client",
+  "defaultProject": "mynew",
   "cli": {
     "packageManager": "npm"
   }

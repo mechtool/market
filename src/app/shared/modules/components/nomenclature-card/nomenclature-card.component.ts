@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { NomenclatureCardModel } from 'src/app/routes/root/children/products/models';
 
 @Component({
-  selector: 'c-nomenclature-card',
+  selector: 'my-nomenclature-card',
   templateUrl: './nomenclature-card.component.html',
   styleUrls: [
     './nomenclature-card.component.scss',

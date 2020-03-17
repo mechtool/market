@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@a
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'c-banner-card',
+  selector: 'my-banner-card',
   templateUrl: './banner-card.component.html',
   styleUrls: [
     './banner-card.component.scss',

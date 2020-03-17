@@ -45,13 +45,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "c",
+      "my",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "c",
+      "my",
       "kebab-case"
     ],
     "import-blacklist": [

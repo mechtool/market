@@ -3,22 +3,22 @@
 
   <div class="items">
 
-    <c-main-search-item
+    <my-main-search-item
       *ngFor="let product of products"
       [routerLink]="['./product/' + product.id]"
       img="{{product.imageUrl}}"
       imgAlt="{{product.productName}}"
       offersCount="{{product.totalOffers}}"
       type="productOffer"
-    ><div [innerHTML]="product.productName"></div></c-main-search-item>
+    ><div [innerHTML]="product.productName"></div></my-main-search-item>
 
-    <c-main-search-item
+    <my-main-search-item
       *ngFor="let category of categories"
       [routerLink]="['./product/' + category.categoryId]"
       img="{{category.imageUrl}}"
       imgAlt="{{category.categoryName}}"
       type="category"
-    ><div [innerHTML]="category.categoryName"></div></c-main-search-item>
+    ><div [innerHTML]="category.categoryName"></div></my-main-search-item>
 
   </div>
 </div>
