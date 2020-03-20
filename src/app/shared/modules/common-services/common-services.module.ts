@@ -5,6 +5,7 @@ import { BNetService } from './bnet.service';
 import { CacheService } from './cache.service';
 import { NavigationService } from './navigation.service';
 import { ResponsiveService } from './responsive.service';
+import { ProductService } from './product.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -19,6 +20,7 @@ export class CommonServicesModule {
         CacheService,
         NavigationService,
         ResponsiveService,
+        ProductService,
       ],
     };
   }

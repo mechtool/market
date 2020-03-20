@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { NomenclatureCardModel } from 'src/app/routes/root/children/products/models';
+import { NomenclatureCardModel } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'my-nomenclature-card',

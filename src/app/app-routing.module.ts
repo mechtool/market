@@ -16,15 +16,48 @@ const routes: Routes = [
       {
         path: '',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/products/products.module').then(m => m.ProductsModule),
+        loadChildren: () => import('./routes/root/children/product/product.module').then(m => m.ProductModule),
       }, {
         path: 'search',
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/search/search.module').then(m => m.SearchModule)
       }, {
-        path: 'basket',
+        path: 'supplier',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/basket/basket.module').then(m => m.BasketModule)
+        loadChildren: () => import('./routes/root/children/supplier/supplier.module').then(m => m.SupplierModule),
+      }, {
+        path: 'cart',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/cart/cart.module').then(m => m.CartModule)
+      }, {
+        path: 'category',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/category/category.module').then(m => m.CategoryModule)
+      }, {
+        path: 'checkout',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/checkout/checkout.module').then(m => m.CheckoutModule)
+      }, {
+        path: 'my',
+        children: [
+          {
+            path: 'orders',
+            data: { preload: false },
+            loadChildren: () => import('./routes/root/children/my/orders/orders.module').then(m => m.OrdersModule)
+          }, {
+            path: 'lists',
+            data: { preload: false },
+            loadChildren: () => import('./routes/root/children/my/lists/lists.module').then(m => m.ListsModule)
+          }, {
+            path: 'organizations',
+            data: { preload: false },
+            loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then(m => m.OrganizationsModule)
+          }, {
+            path: '**',
+            redirectTo: 'orders',
+            pathMatch: 'full',
+          }
+        ]
       }, {
         path: '**',
         redirectTo: '',
