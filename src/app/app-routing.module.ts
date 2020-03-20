@@ -8,7 +8,7 @@ const routes: Routes = [
   {
     path: 'login',
     data: { preload: false },
-    loadChildren: () => import('./routes/login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./routes/login/login.module').then(m => m.LoginModule),
   }, {
     path: '',
     component: RootComponent,
@@ -20,7 +20,7 @@ const routes: Routes = [
       }, {
         path: 'search',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/search/search.module').then(m => m.SearchModule)
+        loadChildren: () => import('./routes/root/children/search/search.module').then(m => m.SearchModule),
       }, {
         path: 'supplier',
         data: { preload: false },
@@ -28,36 +28,38 @@ const routes: Routes = [
       }, {
         path: 'cart',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/cart/cart.module').then(m => m.CartModule)
+        loadChildren: () => import('./routes/root/children/cart/cart.module').then(m => m.CartModule),
       }, {
         path: 'category',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/category/category.module').then(m => m.CategoryModule)
+        loadChildren: () => import('./routes/root/children/category/category.module').then(m => m.CategoryModule),
       }, {
         path: 'checkout',
+        canActivate: [AuthGuard],
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/checkout/checkout.module').then(m => m.CheckoutModule)
+        loadChildren: () => import('./routes/root/children/checkout/checkout.module').then(m => m.CheckoutModule),
       }, {
         path: 'my',
+        canActivate: [AuthGuard],
         children: [
           {
             path: 'orders',
             data: { preload: false },
-            loadChildren: () => import('./routes/root/children/my/orders/orders.module').then(m => m.OrdersModule)
+            loadChildren: () => import('./routes/root/children/my/orders/orders.module').then(m => m.OrdersModule),
           }, {
             path: 'lists',
             data: { preload: false },
-            loadChildren: () => import('./routes/root/children/my/lists/lists.module').then(m => m.ListsModule)
+            loadChildren: () => import('./routes/root/children/my/lists/lists.module').then(m => m.ListsModule),
           }, {
             path: 'organizations',
             data: { preload: false },
-            loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then(m => m.OrganizationsModule)
+            loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then(m => m.OrganizationsModule),
           }, {
             path: '**',
             redirectTo: 'orders',
             pathMatch: 'full',
           }
-        ]
+        ],
       }, {
         path: '**',
         redirectTo: '',

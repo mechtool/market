@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+import { AuthService } from '#shared/modules/common-services/auth.service';
 
 @Component({
   templateUrl: './lists.component.html',
@@ -8,9 +9,12 @@ import { Subject } from 'rxjs';
 export class ListsComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
 
-  constructor() {}
+  constructor(private _authService: AuthService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+      // console.log('logout');
+      // this._authService.logout();
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();

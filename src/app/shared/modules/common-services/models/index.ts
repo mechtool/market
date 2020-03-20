@@ -7,3 +7,5 @@ export * from './nomenclature-card.model';
 export * from './suggestion.model';
 export * from './suggestion-category-item.model';
 export * from './suggestion-product-item.model';
+export * from './auth-request.model';
+export * from './auth-response.model';

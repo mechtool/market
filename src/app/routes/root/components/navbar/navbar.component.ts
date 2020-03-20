@@ -3,9 +3,9 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { takeUntil, filter } from 'rxjs/operators';
+import { takeUntil, filter, map } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { NavigationService } from '#shared/modules';
+import { NavigationService, AuthService } from '#shared/modules';
 
 @Component({
   selector: 'my-navbar',
@@ -19,6 +19,14 @@ import { NavigationService } from '#shared/modules';
 export class NavbarComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
 
+  get isAuthed$() {
+    return this._authService.userData$.asObservable()
+      .pipe(
+        takeUntil(this._unsubscriber$),
+        map(res => res ? true : false),
+      );
+  }
+
   get isMenuExpanded$() {
     return this._navService.isMenuExpanded$.asObservable()
       .pipe(
@@ -27,7 +35,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       );
   }
 
-  constructor(private _navService: NavigationService) {}
+  constructor(
+    private _navService: NavigationService,
+    private _authService: AuthService,
+  ) {}
 
   ngOnInit() {}
 

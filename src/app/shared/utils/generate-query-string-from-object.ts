@@ -1,4 +1,4 @@
-export function concatUrlQueryParamsObject(url: string,  queryParamsObject: Object) {
+export function generateQueryStringFromObject( queryParamsObject: Object): string {
   const queryParams = new URLSearchParams();
   Object.keys(queryParamsObject).forEach((key) => {
     if (Array.isArray(queryParamsObject[key])) {
@@ -10,5 +10,5 @@ export function concatUrlQueryParamsObject(url: string,  queryParamsObject: Obje
       queryParams.append(key, queryParamsObject[key]);
     }
   });
-  return `${url}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+  return queryParams.toString() ? queryParams.toString() : '';
 }

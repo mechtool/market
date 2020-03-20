@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   OnDestroy,
+  Input,
 } from '@angular/core';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -18,6 +19,7 @@ import { NavItemModel } from '#shared/modules/common-services/models';
 })
 export class NavbarNavComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
+  @Input() isAuthed: boolean;
   navItems: NavItemModel[] = null;
 
   get isMenuExpanded$() {

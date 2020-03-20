@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
-import { concatUrlQueryParamsObject } from '#shared/utils';
+import { generateQueryStringFromObject } from '#shared/utils';
 import {
   NomenclaturesSearchQueryModel,
   NomenclaturesListResponseModel,
@@ -16,8 +16,8 @@ export class BNetService {
 
   constructor(private _apiService: ApiService) { }
 
-  searchNomenclatures(searchQuery?: NomenclaturesSearchQueryModel): Observable<NomenclaturesListResponseModel> {
-    return this._apiService.get(concatUrlQueryParamsObject(`${API_URL}/nomenclatures/search`, searchQuery));
+  searchNomenclatures(searchQuery: NomenclaturesSearchQueryModel): Observable<NomenclaturesListResponseModel> {
+    return this._apiService.get(`${API_URL}/nomenclatures/search${generateQueryStringFromObject(searchQuery)}`);
   }
 
   searchSuggestions(textQuery: string): Observable<SuggestionModel> {
