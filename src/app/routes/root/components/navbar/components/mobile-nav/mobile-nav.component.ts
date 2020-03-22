@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  Input,
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavigationService } from '#shared/modules';
@@ -17,7 +16,6 @@ import { NavigationService } from '#shared/modules';
 })
 export class NavbarMobileNavComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() isAuthed: boolean;
 
   constructor(
     private _navService: NavigationService,

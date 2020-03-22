@@ -4,7 +4,7 @@ export class NavItemModel {
   icon?: string;
   command?: () => any;
   url?: string;
-  routerLink?: string;
+  routerLink?: string[];
   queryParams?: { [k: string]: any };
   style?: any;
   styleClass?: string;

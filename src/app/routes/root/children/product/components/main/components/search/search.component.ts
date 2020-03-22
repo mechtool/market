@@ -50,6 +50,8 @@ export class MainSearchComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.productsSuggestions  = res.products;
         this.categoriesSuggestions  = res.categories;
+      }, (err) => {
+        console.log('error');
       });
   }
 
@@ -63,7 +65,7 @@ export class MainSearchComponent implements OnInit, OnDestroy {
     if (query.length >= 3) {
       this._router.navigate(['/search'], {
         queryParams: {
-          query: this.form.get('query').value,
+          q: this.form.get('query').value,
         }
       });
     }

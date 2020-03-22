@@ -30,6 +30,8 @@ export class ResponsiveService implements OnDestroy {
       ).subscribe((evt: any) => {
         this._setScreenWidth(evt.target.innerWidth);
         this._setMediaBreakpoint(evt.target.innerWidth);
+      }, (err) => {
+        console.log('error');
       });
   }
 

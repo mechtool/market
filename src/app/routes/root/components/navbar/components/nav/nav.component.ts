@@ -2,8 +2,8 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  Input,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NavigationService } from '#shared/modules';
@@ -19,7 +19,6 @@ import { NavItemModel } from '#shared/modules/common-services/models';
 })
 export class NavbarNavComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() isAuthed: boolean;
   navItems: NavItemModel[] = null;
 
   get isMenuExpanded$() {
@@ -30,15 +29,40 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
       );
   }
 
-  constructor(private _navService: NavigationService) {}
+  constructor(
+    private _navService: NavigationService,
+    private _router: Router,
+  ) {}
 
   ngOnInit() {
-    this.navItems = this._navService.getNavItems();
+    this._navService.navItems$
+      .pipe(
+        takeUntil(this._unsubscriber$),
+      ).subscribe((res) => {
+        this.navItems = res;
+      }, (err) => {
+        console.log('error');
+      });
   }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  navigateNavItem(navItem: NavItemModel): void {
+    if (navItem.items?.length) {
+      navItem.expanded = !navItem.expanded;
+    }
+    if (navItem.command) {
+      navItem.command();
+    }
+    if (navItem.routerLink) {
+      this._router.navigate(navItem.routerLink);
+    }
+    if (navItem.url) {
+      location.assign(navItem.url);
+    }
   }
 
 }

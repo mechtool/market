@@ -19,14 +19,6 @@ import { NavigationService, AuthService } from '#shared/modules';
 export class NavbarComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
 
-  get isAuthed$() {
-    return this._authService.userData$.asObservable()
-      .pipe(
-        takeUntil(this._unsubscriber$),
-        map(res => res ? true : false),
-      );
-  }
-
   get isMenuExpanded$() {
     return this._navService.isMenuExpanded$.asObservable()
       .pipe(

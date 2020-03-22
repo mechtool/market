@@ -3,8 +3,8 @@
     <li ngClass="{{item.styleClass}}" *ngFor="let item of navItems">
       <a
         class="nav-list_item"
-        [ngClass]="{'active': false,'collapsed': item.items?.length && !item.expanded, 'expanded': item.items?.length && item.expanded}"
-        (click)="item.expanded = !item.expanded">
+        [ngClass]="{'active': false, 'collapsed': item.items?.length && !item.expanded, 'expanded': item.items?.length && item.expanded}"
+        (click)="navigateNavItem(item)">
         <div class="nav_icon">
           <img src="assets/img/svg/icon__{{item.icon}}.svg" alt="{{item.label}}" title="{{item.label}}" >
         </div>
@@ -12,7 +12,7 @@
       </a>
       <ul class="nav-list nav-list_secondary" *ngIf="item.items?.length && item.expanded">
         <li *ngFor="let subItem of item.items">
-          <a class="nav-list_item">
+          <a class="nav-list_item" (click)="navigateNavItem(subItem)">
             <div class="nav_icon">
               <span class="nav_icon_point"></span>
             </div>

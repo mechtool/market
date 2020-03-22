@@ -11,7 +11,11 @@ import {
   getParamFromQueryString
 } from '#shared/utils';
 import { ApiService } from './api.service';
-import { AuthRequestModel, AuthResponseModel } from './models';
+import {
+  AuthRequestModel,
+  AuthRefreshRequestModel,
+  AuthResponseModel,
+} from './models';
 
 const API_URL = environment.apiUrl;
 const ITS_URL = environment.itsUrl;
@@ -60,6 +64,11 @@ export class AuthService {
     }
   }
 
+  register(path: string = '') {
+    const url = `${location.origin}${path}`;
+    redirectTo(`${ITS_URL}/registration?redirect=${url}`);
+  }
+
   auth(authRequest: AuthRequestModel): Observable<AuthResponseModel> {
     return this._apiService.post(`${API_URL}/auth`, {
       ticket: authRequest.ticket,
@@ -67,12 +76,8 @@ export class AuthService {
     });
   }
 
-  refresh(refreshToken: string): Observable<AuthResponseModel> {
-    return this._apiService.post(`${API_URL}/auth/refresh`, { refreshToken });
-  }
-
-  openWindowItsUserProfilePage(): Window {
-    return window.open(`${ITS_URL}/user/profile`);
+  refresh(authRefreshRequest: AuthRefreshRequestModel): Observable<AuthResponseModel> {
+    return this._apiService.post(`${API_URL}/auth/refresh`, authRefreshRequest);
   }
 
   private redirectExternalSsoAuth(url: string): void {

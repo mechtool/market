@@ -21,6 +21,8 @@ export class MainSearchHistoryComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.products = res.products;
         this.categories = res.categories;
+      }, (err) => {
+        console.log('error');
       });
   }
 

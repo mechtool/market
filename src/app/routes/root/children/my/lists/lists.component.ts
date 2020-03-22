@@ -11,10 +11,7 @@ export class ListsComponent implements OnInit, OnDestroy {
 
   constructor(private _authService: AuthService) {}
 
-  ngOnInit() {
-      // console.log('logout');
-      // this._authService.logout();
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this._unsubscriber$.next();
