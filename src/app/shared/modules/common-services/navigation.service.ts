@@ -40,19 +40,19 @@ export class NavigationService implements OnDestroy {
           {
             label: 'Войти',
             command: () => {
-              this._authService.login(`/my/lists`);
+              this._authService.login(`/my/orders`);
             },
           }, {
             label: 'Зарегистрироваться',
             command: () => {
-              this._authService.register(`/my/lists`);
+              this._authService.register(`/my/orders`);
             },
           },
         ]
       }, {
         label: 'О проекте',
         icon: 'info',
-        routerLink: ['/'],
+        routerLink: ['/about'],
       },
     ];
     const authedNavItems: NavItemModel[] = [
@@ -71,8 +71,8 @@ export class NavigationService implements OnDestroy {
         styleClass: 'delimiter',
       }, {
         label: 'Корзина',
-        routerLink: ['/cart'],
         icon: 'basket',
+        routerLink: ['/cart'],
       }, {
         label: 'Личный кабинет',
         icon: 'personal',
@@ -82,12 +82,6 @@ export class NavigationService implements OnDestroy {
             label: 'Мои заказы',
             routerLink: ['/my/orders'],
           }, {
-            label: 'Списки закупок',
-            routerLink: ['/my/lists'],
-          }, {
-            label: 'Поставщики',
-            routerLink: ['/'],
-          }, {
             label: 'Мои организации',
             routerLink: ['/my/organizations'],
           },
@@ -95,11 +89,7 @@ export class NavigationService implements OnDestroy {
       }, {
         label: 'О проекте',
         icon: 'info',
-        routerLink: ['/'],
-      }, {
-        label: 'Настройки_нет_иконки',
-        icon: 'info',
-        routerLink: ['/'],
+        routerLink: ['/about'],
       }, {
         label: 'Выход_верстка_без_иконки',
         icon: 'info',

@@ -22,6 +22,21 @@ export class AppPage {
     return mainElement;
   }
 
+  getNavBarLKElement(): ElementFinder {
+    const navBarLKElement = element(by.cssContainingText('.nav-list_item', 'Личный кабинет'));
+    return navBarLKElement;
+  }
+
+  getNavBarLoginElement(): ElementFinder {
+    const navBarLoginElement = element(by.cssContainingText('.nav-list_item', 'Войти'));
+    return navBarLoginElement;
+  }
+
+  getNavBarMyOrdersElement(): ElementFinder {
+    const navBarMyOrdersElement = element(by.cssContainingText('.nav-list_item', 'Мои заказы'));
+    return navBarMyOrdersElement;
+  }
+
 
   // async getTitleText(): Promise<string> {
   //   const titleElement = element(by.css('my-app .content span'));

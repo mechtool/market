@@ -11,6 +11,7 @@ export class NavItemModel {
   title?: string; // Tooltip
   items?: NavItemModel[];
   expanded?: boolean;
+  active?: boolean;
 
   constructor(params) {
     Object.assign(this, params);

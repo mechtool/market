@@ -39,6 +39,10 @@ const routes: Routes = [
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/checkout/checkout.module').then(m => m.CheckoutModule),
       }, {
+        path: 'about',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/about/about.module').then(m => m.AboutModule),
+      }, {
         path: 'my',
         canActivate: [AuthGuard],
         children: [
@@ -46,10 +50,6 @@ const routes: Routes = [
             path: 'orders',
             data: { preload: false },
             loadChildren: () => import('./routes/root/children/my/orders/orders.module').then(m => m.OrdersModule),
-          }, {
-            path: 'lists',
-            data: { preload: false },
-            loadChildren: () => import('./routes/root/children/my/lists/lists.module').then(m => m.ListsModule),
           }, {
             path: 'organizations',
             data: { preload: false },

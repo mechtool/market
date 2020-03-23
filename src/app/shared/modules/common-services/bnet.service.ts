@@ -17,7 +17,7 @@ export class BNetService {
   constructor(private _apiService: ApiService) { }
 
   searchNomenclatures(searchQuery: NomenclaturesSearchQueryModel): Observable<NomenclaturesListResponseModel> {
-    return this._apiService.get(`${API_URL}/nomenclatures/search${generateQueryStringFromObject(searchQuery)}`);
+    return this._apiService.get(`${API_URL}/nomenclatures/search?${generateQueryStringFromObject(searchQuery)}`);
   }
 
   searchSuggestions(textQuery: string): Observable<SuggestionModel> {

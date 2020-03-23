@@ -1,5 +1,6 @@
 import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
+import { LoginItsPage } from './login-its/login-its.po';
 import { logout, waitForUrlToChangeTo, navigateTo } from './utils/utils';
 
 describe('При запуске приложения', async () => {
@@ -29,21 +30,63 @@ describe('При запуске приложения', async () => {
       await expect(page.getMainElement().getAttribute('class')).toContain('moved');
     });
 
-    // afterAll(async () => {
-    //   await logout();
-    // });
+    describe('Когда выполняется клик на лого', async () => {
+
+      beforeAll(async () => {
+        await page.getNavBarLKElement().click();
+        await browser.sleep(3e2);
+      });
+
+      it(`отображается кнопка 'Войти' в меню`, async () => {
+        await expect(page.getNavBarLoginElement().isPresent()).toBe(true);
+      });
+
+    });
 
   });
 
-  afterEach(async () => {
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    } as logging.Entry));
+  afterAll(async () => {
+    await logout();
   });
-
-  // afterAll(async () => {
-  //   await logout();
-  // });
 
 });
+
+
+describe('При запуске приложения закрытого аутентификацией роута', async () => {
+  const page = new AppPage();
+  const loginItsPage = new LoginItsPage();
+
+  beforeAll(async () => {
+    await browser.waitForAngularEnabled(false);
+    await navigateTo('https://10.70.2.97:4200/my/orders');
+  });
+
+  it(`должно быть перенаправление на http://login(-dev)*.1c.ru`, async () => {
+    await expect(browser.getCurrentUrl()).toMatch(new RegExp('https://login(-dev)*.1c.ru/login', 'i'));
+  });
+
+  it(`после аутентификации должно быть перенаправление на закрытый аутентификацией роут`, async () => {
+    await loginItsPage.authUser();
+    await expect(waitForUrlToChangeTo('/my/orders')).toBeTruthy();
+  });
+
+  describe('Когда выполняется клик на лого', async () => {
+
+    beforeAll(async () => {
+      await page.getNavBarLKElement().click();
+      await browser.sleep(3e2);
+    });
+
+    it(`отображается кнопка 'Мои заказы' в меню`, async () => {
+      await expect(page.getNavBarMyOrdersElement().isPresent()).toBe(true);
+    });
+
+  });
+
+  afterAll(async () => {
+    await logout();
+  });
+
+
+});
+
