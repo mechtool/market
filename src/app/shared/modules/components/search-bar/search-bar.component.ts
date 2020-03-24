@@ -1,22 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
-import { ResponsiveService } from '#shared/modules';
-import { SuggestionService } from '../../../../services';
-import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
-import { Router } from '@angular/router';
+import { SuggestionService, ResponsiveService } from '../../common-services';
+import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '../../common-services/models';
 
 
 @Component({
-  selector: 'my-main-search',
-  templateUrl: './search.component.html',
+  selector: 'my-search-bar',
+  templateUrl: './search-bar.component.html',
   styleUrls: [
-    './search.component.scss',
-    './search.component-576.scss',
+    './search-bar.component.scss',
+    './search-bar.component-576.scss',
   ],
 })
-export class MainSearchComponent implements OnInit, OnDestroy {
+export class SearchBarComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   form: FormGroup;
   isInputHovered = false;

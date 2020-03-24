@@ -6,22 +6,22 @@
 
   <div class="items">
 
-    <my-main-search-item
+    <my-search-bar-item
       *ngFor="let product of products"
       [routerLink]="['./product/' + product.id]"
       img="{{product.imageUrl}}"
       imgAlt="{{product.productName}}"
       offersCount="{{product.totalOffers}}"
       type="productOffer"
-    ><div [innerHTML]="product.productName"></div></my-main-search-item>
+    ><div [innerHTML]="product.productName"></div></my-search-bar-item>
 
-    <my-main-search-item
+    <my-search-bar-item
       *ngFor="let category of categories"
       [routerLink]="['./product/' + category.categoryId]"
       img="{{category.imageUrl}}"
       imgAlt="{{category.categoryName}}"
       type="category"
-    ><div [innerHTML]="category.categoryName"></div></my-main-search-item>
+    ><div [innerHTML]="category.categoryName"></div></my-search-bar-item>
 
   </div>
 </div>

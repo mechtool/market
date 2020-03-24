@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { CacheService } from './cache.service';
 import { NavigationService } from './navigation.service';
 import { ResponsiveService } from './responsive.service';
+import { SuggestionService } from './suggestion.service';
 import { ProductService } from './product.service';
 
 @NgModule({
@@ -22,6 +23,7 @@ export class CommonServicesModule {
         CacheService,
         NavigationService,
         ResponsiveService,
+        SuggestionService,
         ProductService,
       ],
     };

@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@a
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'my-main-search-item',
+  selector: 'my-search-bar-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainSearchItemComponent implements OnInit, OnDestroy {
+export class SearchBarItemComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   @Input() routerLink: string[];
   @Input() img: string;

@@ -5,18 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductRoutingModule } from './product-routing.module';
 import {
   MainComponent,
-  MainSearchComponent,
-  MainSearchProductsComponent,
-  MainSearchHistoryComponent,
-  MainSearchItemComponent,
   MainBannersComponent,
   MainBannersBannerComponent,
   MainPopularComponent,
   ProductComponent,
   Code404Component,
 } from './components';
-import { SuggestionService } from './services';
-import { NomenclatureCardModule, BannerCardModule } from '#shared/modules';
+import { NomenclatureCardModule, BannerCardModule, SearchBarModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -27,19 +22,15 @@ import { NomenclatureCardModule, BannerCardModule } from '#shared/modules';
     ProductRoutingModule,
     NomenclatureCardModule,
     BannerCardModule,
+    SearchBarModule,
   ],
   declarations: [
     MainComponent,
-    MainSearchComponent,
-    MainSearchProductsComponent,
-    MainSearchHistoryComponent,
-    MainSearchItemComponent,
     MainBannersComponent,
     MainBannersBannerComponent,
     MainPopularComponent,
     ProductComponent,
     Code404Component,
   ],
-  providers: [SuggestionService],
 })
 export class ProductModule { }

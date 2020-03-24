@@ -30,12 +30,12 @@
       (mouseout)="quickSearchOver = false"
       *ngIf="isInputFocused || quickSearchOver">
 
-      <my-main-search-history *ngIf="!searchQuery"></my-main-search-history>
+      <my-search-bar-history *ngIf="!searchQuery"></my-search-bar-history>
       <div class="too-small-query" *ngIf="searchQuery && searchQuery.length < MIN_QUERY_LENGTH">Недостаточная длина запроса</div>
-      <my-main-search-products
+      <my-search-bar-products
         [products]="productsSuggestions"
         [categories]="categoriesSuggestions"
-        *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"></my-main-search-products>
+        *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"></my-search-bar-products>
 
     </div>
 

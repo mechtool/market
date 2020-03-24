@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
-import { SuggestionService } from '../../../../../../services';
+import { SuggestionService } from '../../../../common-services';
+import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '../../../../common-services/models';
 
 @Component({
-  selector: 'my-main-search-history',
+  selector: 'my-search-bar-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainSearchHistoryComponent implements OnInit, OnDestroy {
+export class SearchBarHistoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   products: SuggestionProductItemModel[];
   categories: SuggestionCategoryItemModel[];

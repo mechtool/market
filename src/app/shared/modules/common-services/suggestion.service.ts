@@ -1,8 +1,8 @@
 import { Observable, of, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { SuggestionModel } from '#shared/modules/common-services/models';
-import { BNetService } from '#shared/modules/common-services/bnet.service';
+import { SuggestionModel } from './models';
+import { BNetService } from './bnet.service';
 
 @Injectable()
 export class SuggestionService {
