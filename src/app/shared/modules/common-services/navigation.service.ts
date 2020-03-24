@@ -40,12 +40,12 @@ export class NavigationService implements OnDestroy {
           {
             label: 'Войти',
             command: () => {
-              this._authService.login(`/my/orders`);
+              this._authService.login();
             },
           }, {
             label: 'Зарегистрироваться',
             command: () => {
-              this._authService.register(`/my/orders`);
+              this._authService.register();
             },
           },
         ]

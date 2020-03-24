@@ -24,8 +24,4 @@ export class MainSearchItemComponent implements OnInit, OnDestroy {
     this._unsubscriber$.complete();
   }
 
-  test() {
-    console.log(1)
-  }
-
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '#shared/modules';
+import { AuthGuard, SsoTicketGuard } from '#shared/modules';
 import { RootComponent } from './routes/root/root.component';
 import { DelayedPreloadingStrategy } from '#shared/modules/setup-services';
 
@@ -11,6 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./routes/login/login.module').then(m => m.LoginModule),
   }, {
     path: '',
+    canActivate: [SsoTicketGuard],
     component: RootComponent,
     children: [
       {

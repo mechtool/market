@@ -40,33 +40,32 @@ export class AuthService {
     }
   }
 
-  logout() {
-    // TODO: необходимо пофиксить поведение https://login-dev.1c.ru, не воспринимается параметр service при logout
-    redirectTo(`${ITS_URL}/logout?service=${location.origin}`);
+  logout(path: string = '/') {
+    redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${path}`);
   }
 
-  login(path: string = ''): Observable<any> {
+  login(path: string = '/'): Observable<any> {
+    const pathName = path.split('?')[0];
     const ticket = getParamFromQueryString('ticket');
-    const url = `${location.origin}${path}`;
+    const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
+    const url = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
     if (!ticket) {
       this.redirectExternalSsoAuth(url);
     } else {
-      const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
-      const serviceName = `${location.origin}${location.pathname}${encodeURIComponent(queryStringWithoutTicket)}`;
+      const serviceName = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
       return this.auth({ ticket, serviceName })
         .pipe(
           map((authResponse: AuthResponseModel) => {
             this.setUserData(authResponse, false);
-            this._goTo(`${location.pathname}${queryStringWithoutTicket}`);
+            this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
             return true;
           })
         );
     }
   }
 
-  register(path: string = '') {
-    const url = `${location.origin}${path}`;
-    redirectTo(`${ITS_URL}/registration?redirect=${url}`);
+  register(path: string = '/') {
+    redirectTo(`${ITS_URL}/registration?redirect=${location.origin}${path}`);
   }
 
   auth(authRequest: AuthRequestModel): Observable<AuthResponseModel> {
@@ -80,12 +79,13 @@ export class AuthService {
     return this._apiService.post(`${API_URL}/auth/refresh`, authRefreshRequest);
   }
 
+  goTo(url: string): any {
+    this._router.navigateByUrl(url);
+  }
+
   private redirectExternalSsoAuth(url: string): void {
     location.assign(`${ITS_URL}/login?service=${url}`);
   }
 
-  private _goTo(url: string): any {
-    this._router.navigateByUrl(url);
-  }
 
 }
