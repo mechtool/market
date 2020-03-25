@@ -21,9 +21,10 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
   typeOfSearchProduct: TypeOfSearch.PRODUCT;
   typeOfSearchCategory: TypeOfSearch.CATEGORY;
 
-  constructor(private _router: Router,
-              private _localStorageService: LocalStorageService) {
-  }
+  constructor(
+    private _router: Router,
+    private _localStorageService: LocalStorageService,
+  ) {}
 
   ngOnInit() {
   }
@@ -34,11 +35,13 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
   }
 
   chooseProduct(product: SuggestionProductItemModel) {
+    console.log(product)
     this._localStorageService.putSearchProduct(product);
     this._router.navigate([`./product/${product.id}`]);
   }
 
   chooseCategory(category: SuggestionCategoryItemModel) {
+    console.log(category)
     this._localStorageService.putSearchCategory(category);
     this._router.navigate([`./category/${category.categoryId}`]);
   }

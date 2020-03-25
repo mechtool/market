@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { filter, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, switchMap, takeUntil, map } from 'rxjs/operators';
 import { LocalStorageService, ResponsiveService, SuggestionService } from '../../common-services';
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
 
@@ -15,61 +15,56 @@ import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../c
     './search-bar.component-576.scss',
   ],
 })
-export class SearchBarComponent implements OnInit, OnDestroy {
+export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   private _unsubscriber$: Subject<any> = new Subject();
   form: FormGroup;
   isInputHovered = false;
   isInputFocused = false;
   quickSearchOver = false;
-  productsSuggestions: SuggestionProductItemModel[];
-  categoriesSuggestions: SuggestionCategoryItemModel[];
   MIN_QUERY_LENGTH = 3;
+  @Input() productsSuggestions: SuggestionProductItemModel[];
+  @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
+  @Input() query = '';
+  @Input() availableFilters: any;
+  @Input() useBrowserStorage = true;
+  @Output() queryChange: EventEmitter<any> = new EventEmitter();
+  @Output() submitClick: EventEmitter<any> = new EventEmitter();
 
   get searchQuery() {
     return this.form.get('query').value;
   }
 
   constructor(
-    private _router: Router,
-    private _suggestionService: SuggestionService,
     private _responsiveService: ResponsiveService,
     private _fb: FormBuilder,
-    private _localStorageService: LocalStorageService,
   ) {
+    this._initForm();
+    this._subscribeOnQueryChanges();
   }
 
-  ngOnInit() {
-    this._initForm();
-    this.form.get('query').valueChanges
-      .pipe(
-        takeUntil(this._unsubscriber$),
-        filter(res => res.length >= this.MIN_QUERY_LENGTH),
-        switchMap((res) => {
-          return this._suggestionService.searchSuggestions(res);
-        })
-      )
-      .subscribe((res) => {
-        this.productsSuggestions = res.products;
-        this.categoriesSuggestions = res.categories;
-      }, (err) => {
-        console.log('error');
-      });
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.query) {
+      this._updateForm();
+    }
+  }
+
   submit() {
     const query = this.form.get('query').value;
     if (query.length >= this.MIN_QUERY_LENGTH) {
-      this._localStorageService.putSearchText(query);
-      this._router.navigate(['/search'], {
-        queryParams: {
-          q: this.form.get('query').value,
-        }
-      });
+      this.submitClick.emit(query);
+      // this._localStorageService.putSearchText(query);
+      // this._router.navigate(['/search'], {
+      //   queryParams: {
+      //     q: this.form.get('query').value,
+      //   }
+      // });
     }
   }
 
@@ -81,5 +76,22 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]],
     });
+  }
+
+  private _subscribeOnQueryChanges(): void {
+    this.form.get('query').valueChanges
+      .pipe(
+        takeUntil(this._unsubscriber$),
+        filter(res => res.length >= this.MIN_QUERY_LENGTH),
+      )
+      .subscribe((res) => {
+        this.queryChange.emit(res);
+      }, (err) => {
+        console.log('error');
+      });
+  }
+
+  private _updateForm() {
+    this.form.patchValue({ query: this.query || '' });
   }
 }

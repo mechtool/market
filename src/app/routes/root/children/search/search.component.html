@@ -1,3 +1,13 @@
 <div class="search">
-  SEARCH
+  <my-search-bar
+    [query]="query"
+    [availableFilters]="searchFilters"
+    (queryChange)="searchSuggestions($event)"
+    (submitClick)="navigateToSearchRoute($event)"
+    [productsSuggestions]="productsSuggestions"
+    [categoriesSuggestions]="categoriesSuggestions"
+  ></my-search-bar>
+  <my-search-result [nomenclatures]="searchedNomenclatures" [totalNomenclaturesCount]="totalSearchedNomenclaturesCount"></my-search-result>
 </div>
+
+

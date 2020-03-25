@@ -40,7 +40,7 @@ export class NavigationService implements OnDestroy {
           {
             label: 'Войти',
             command: () => {
-              this._authService.login();
+              this._authService.login(`${location.pathname}${location.search}`);
             },
           }, {
             label: 'Зарегистрироваться',
@@ -84,18 +84,17 @@ export class NavigationService implements OnDestroy {
           }, {
             label: 'Мои организации',
             routerLink: ['/my/organizations'],
+          }, {
+            label: 'Выход',
+            command: () => {
+              this._authService.logout(`${location.pathname}${location.search}`);
+            },
           },
         ]
       }, {
         label: 'О проекте',
         icon: 'info',
         routerLink: ['/about'],
-      }, {
-        label: 'Выход_верстка_без_иконки',
-        icon: 'info',
-        command: () => {
-          this._authService.logout();
-        },
       },
     ];
     return this._authService.userData$.asObservable()

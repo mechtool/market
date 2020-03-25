@@ -1,3 +1,9 @@
-<my-search-bar></my-search-bar>
+<my-search-bar
+  [availableFilters]="searchFilters"
+  (queryChange)="searchSuggestions($event)"
+  (submitClick)="navigateToSearchRoute($event)"
+  [productsSuggestions]="productsSuggestions"
+  [categoriesSuggestions]="categoriesSuggestions"
+></my-search-bar>
 <my-main-banners></my-main-banners>
 <my-main-popular></my-main-popular>

@@ -1,0 +1,27 @@
+@media all and (max-width: 576px) {
+
+	.title{
+		text-align: center;
+	}
+
+	.title strong{
+		display: block;
+	}
+
+	.title strong:after{
+		content: ":";
+	}
+
+	.title span{
+		display: block;
+	}
+
+	.title span::before{
+		display: none;
+  }
+
+  .content {
+		margin: 0;
+	}
+
+}

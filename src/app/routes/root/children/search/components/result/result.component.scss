@@ -1,0 +1,21 @@
+.title {
+	font-weight: var(--font-weight-light);
+	font-size: var(--font-size-18);
+	line-height: 23px;
+  margin: 0 20px 10px 0;
+
+  strong {
+    font-weight: var(--font-weight-medium);
+    letter-spacing: .11em;
+  }
+
+  span::before {
+    content: " – ";
+  }
+}
+
+.content {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 -10px;
+}

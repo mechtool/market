@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'appMultiplier',
+  name: 'myMultiplier',
 })
 
 export class MultiplierPipe implements PipeTransform {

@@ -9,7 +9,7 @@
       </span>
       <span class="meta" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
         <span class="count">{{nomenclature.offersSummary.totalOffers | number:'1.0-0'}}</span>
-        <span class="price"><span itemprop="price">{{nomenclature.offersSummary.minPrice | currency:'RUB':'symbol':'1.0-0'}}</span></span>
+        <span class="price"><span itemprop="price">{{nomenclature.offersSummary.minPrice | myMultiplier:'.01' | currency:'RUB':'symbol':'1.0-0'}}</span></span>
         <meta itemprop="priceCurrency" content="RUB" />
         <link itemprop="availability" href="https://schema.org/InStock" content="В наличии" />
       </span>

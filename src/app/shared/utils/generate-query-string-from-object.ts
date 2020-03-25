@@ -1,4 +1,4 @@
-export function generateQueryStringFromObject( queryParamsObject: Object): string {
+export function generateQueryStringFromObject( queryParamsObject: Object = {}): string {
   const queryParams = new URLSearchParams();
   Object.keys(queryParamsObject).forEach((key) => {
     if (Array.isArray(queryParamsObject[key])) {

@@ -1,6 +1,5 @@
 <div class="search" [ngClass]="{'hovered': isInputHovered, 'focused': isInputFocused}">
   <form [formGroup]="form" (ngSubmit)="submit()">
-
     <input
       placeholder="Поиск товаров"
       autocomplete="off"
@@ -31,7 +30,7 @@
       *ngIf="isInputFocused || quickSearchOver">
 
       <my-search-bar-history
-        *ngIf="!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH"></my-search-bar-history>
+        *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"></my-search-bar-history>
 
       <my-search-bar-products
         [products]="productsSuggestions"
