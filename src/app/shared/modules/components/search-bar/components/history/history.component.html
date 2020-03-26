@@ -1,24 +1,15 @@
 <div class="history">
-  <div class="title">История запросов:</div>
+  <div *ngIf="searchQueriesHistory.length" class="title">История запросов:</div>
 
   <div class="items">
 
     <my-search-bar-item
-      *ngFor="let product of products"
-      [routerLink]="['./product/' + product.id]"
-      img="{{product.imageUrl}}"
-      imgAlt="{{product.productName}}"
-      offersCount="{{product.totalOffers}}"
-      type="productOffer"
-    ><div [innerHTML]="product.productName"></div></my-search-bar-item>
-
-    <my-search-bar-item
-      *ngFor="let category of categories"
-      [routerLink]="['./category/' + category.categoryId]"
-      img="{{category.imageUrl}}"
-      imgAlt="{{category.categoryName}}"
-      type="category"
-    ><div [innerHTML]="category.categoryName"></div></my-search-bar-item>
+      *ngFor="let searchQuery of searchQueriesHistory"
+      img="{{searchQuery.imageUrl}}"
+      typeOfSearch="{{searchQuery.typeOfSearch}}"
+      type="searchQueryHistory"
+      (click)="clickSearchQuery(searchQuery)"
+    ><div [innerHTML]="searchQuery.searchText"></div></my-search-bar-item>
 
   </div>
 </div>

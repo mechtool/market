@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SuggestionService } from '../../../../common-services';
-import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '../../../../common-services/models';
+import { LocalStorageService, SuggestionService, TypeOfSearch } from '../../../../common-services';
+import { SuggestionSearchQueryHistoryItemModel } from '../../../../common-services/models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'my-search-bar-history',
@@ -11,24 +12,42 @@ import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '../../.
 })
 export class SearchBarHistoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  products: SuggestionProductItemModel[];
-  categories: SuggestionCategoryItemModel[];
+  searchQueriesHistory: SuggestionSearchQueryHistoryItemModel[];
 
-  constructor(private _suggestionService: SuggestionService) {}
+  constructor(private _suggestionService: SuggestionService,
+              private _router: Router,
+              private _localStorageService: LocalStorageService) {
+  }
 
   ngOnInit() {
     this._suggestionService.getHistoricalSuggestions()
       .subscribe((res) => {
-        this.products = res.products;
-        this.categories = res.categories;
+        this.searchQueriesHistory = res.searchQueriesHistory;
       }, (err) => {
-        console.log('error');
+        console.log('error', err);
       });
   }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  clickSearchQuery(searchQuery: SuggestionSearchQueryHistoryItemModel) {
+    this._localStorageService.putSearchQuery(searchQuery);
+    if (searchQuery.typeOfSearch === TypeOfSearch.PRODUCT) {
+
+      this._router.navigate([`./product/${searchQuery.id}`]);
+
+    } else if (searchQuery.typeOfSearch === TypeOfSearch.CATEGORY) {
+
+      this._router.navigate([`./category/${searchQuery.id}`]);
+
+    } else if (searchQuery.typeOfSearch === TypeOfSearch.SEARCH) {
+
+      this._router.navigate([`./search`], {queryParams: {q: searchQuery.searchText}});
+
+    }
   }
 
 }

@@ -6,4 +6,5 @@ export * from './cache.service';
 export * from './navigation.service';
 export * from './suggestion.service';
 export * from './responsive.service';
+export * from './local.storage.service';
 export * from './models';

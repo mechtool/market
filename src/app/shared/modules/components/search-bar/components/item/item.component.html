@@ -9,6 +9,9 @@
   </div>
 
   <div class="meta">
+    <ng-container *ngIf="type === 'searchQueryHistory'">
+      {{typeOfSearch}}
+    </ng-container>
     <ng-container *ngIf="type === 'productOffer'">
       {{offersCount}} предложений
     </ng-container>

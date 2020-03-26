@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
-import { SuggestionService, ResponsiveService } from '../../common-services';
-import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '../../common-services/models';
+import { LocalStorageService, ResponsiveService, SuggestionService } from '../../common-services';
+import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
 
 
 @Component({
@@ -34,7 +34,9 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     private _suggestionService: SuggestionService,
     private _responsiveService: ResponsiveService,
     private _fb: FormBuilder,
-  ) {}
+    private _localStorageService: LocalStorageService,
+  ) {
+  }
 
   ngOnInit() {
     this._initForm();
@@ -47,8 +49,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((res) => {
-        this.productsSuggestions  = res.products;
-        this.categoriesSuggestions  = res.categories;
+        this.productsSuggestions = res.products;
+        this.categoriesSuggestions = res.categories;
       }, (err) => {
         console.log('error');
       });
@@ -61,7 +63,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   submit() {
     const query = this.form.get('query').value;
-    if (query.length >= 3) {
+    if (query.length >= this.MIN_QUERY_LENGTH) {
+      this._localStorageService.putSearchText(query);
       this._router.navigate(['/search'], {
         queryParams: {
           q: this.form.get('query').value,
@@ -79,6 +82,4 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]],
     });
   }
-
-
 }

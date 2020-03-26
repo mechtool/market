@@ -8,19 +8,22 @@
 
     <my-search-bar-item
       *ngFor="let product of products"
-      [routerLink]="['./product/' + product.id]"
       img="{{product.imageUrl}}"
       imgAlt="{{product.productName}}"
       offersCount="{{product.totalOffers}}"
+      typeOfSearch="{{typeOfSearchProduct}}"
       type="productOffer"
+      (click)="chooseProduct(product)"
     ><div [innerHTML]="product.productName"></div></my-search-bar-item>
 
     <my-search-bar-item
       *ngFor="let category of categories"
-      [routerLink]="['./product/' + category.categoryId]"
+      [routerLink]="['./category/' + category.categoryId]"
       img="{{category.imageUrl}}"
       imgAlt="{{category.categoryName}}"
+      typeOfSearch="{{typeOfSearchCategory}}"
       type="category"
+      (click)="chooseCategory(category)"
     ><div [innerHTML]="category.categoryName"></div></my-search-bar-item>
 
   </div>

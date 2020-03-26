@@ -8,6 +8,7 @@ import { NavigationService } from './navigation.service';
 import { ResponsiveService } from './responsive.service';
 import { SuggestionService } from './suggestion.service';
 import { ProductService } from './product.service';
+import { LocalStorageService } from './local.storage.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -22,6 +23,7 @@ export class CommonServicesModule {
         AuthService,
         CacheService,
         NavigationService,
+        LocalStorageService,
         ResponsiveService,
         SuggestionService,
         ProductService,

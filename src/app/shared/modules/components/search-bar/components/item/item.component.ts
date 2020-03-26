@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -14,10 +14,13 @@ export class SearchBarItemComponent implements OnInit, OnDestroy {
   @Input() imgAlt: string;
   @Input() offersCount: string | number;
   @Input() type: string;
+  @Input() typeOfSearch: string;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
