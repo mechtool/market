@@ -1,7 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
-import { NomenclatureCardModel, SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
+import {
+  AllGroupQueryFiltersModel,
+  DefaultSearchAvailableModel,
+  NomenclatureCardModel,
+  SuggestionCategoryItemModel,
+  SuggestionProductItemModel,
+} from '#shared/modules/common-services/models';
 import { SuggestionService } from '#shared/modules/common-services/suggestion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '#shared/modules/common-services/local.storage.service';
@@ -12,7 +18,7 @@ import { LocalStorageService } from '#shared/modules/common-services/local.stora
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  searchFilters = {};
+  searchFilters: DefaultSearchAvailableModel;
   searchedNomenclatures: NomenclatureCardModel[];
   totalSearchedNomenclaturesCount: number;
   productsSuggestions: SuggestionProductItemModel[];
@@ -28,11 +34,22 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {
     this._route.queryParams.subscribe((res) => {
       this.query = res.q;
+      this.searchFilters = {
+        supplier: res.supplier,
+        trademark: res.trademark,
+        delivery: res.delivery,
+        pickup: res.pickup,
+        inStock: res.inStock,
+        onlyWithImages: res.onlyWithImages,
+        priceFrom: res.priceFrom,
+        priceTo: res.priceTo,
+      };
       this.searchNomenclatures();
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
@@ -59,11 +76,20 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  navigateToSearchRoute(e: string) {
-    this._localStorageService.putSearchText(e);
+  navigateToSearchRoute(filters: AllGroupQueryFiltersModel) {
+    this._localStorageService.putSearchText(filters.query);
+    const availableFilters = filters.availableFilters;
     this._router.navigate(['/search'], {
       queryParams: {
-        q: e,
+        q: filters.query,
+        supplier: availableFilters.supplier,
+        trademark: availableFilters.trademark,
+        delivery: availableFilters.delivery,
+        pickup: availableFilters.pickup,
+        inStock: availableFilters.inStock,
+        onlyWithImages: availableFilters.onlyWithImages,
+        priceFrom: availableFilters.priceFrom,
+        priceTo: availableFilters.priceTo,
       }
     });
   }

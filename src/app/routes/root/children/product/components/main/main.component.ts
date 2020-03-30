@@ -1,6 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SuggestionProductItemModel, SuggestionCategoryItemModel } from '#shared/modules/common-services/models';
+import {
+  SuggestionProductItemModel,
+  SuggestionCategoryItemModel,
+  AllGroupQueryFiltersModel
+} from '#shared/modules/common-services/models';
 import { SuggestionService, LocalStorageService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
 
@@ -42,11 +46,19 @@ export class MainComponent implements OnInit, OnDestroy {
       });
   }
 
-  navigateToSearchRoute(e: string) {
-    this._localStorageService.putSearchText(e);
+  navigateToSearchRoute(filters: AllGroupQueryFiltersModel) {
+    this._localStorageService.putSearchText(filters.query);
     this._router.navigate(['/search'], {
       queryParams: {
-        q: e,
+        q: filters.query,
+        supplier: filters.availableFilters.supplier,
+        trademark: filters.availableFilters.trademark,
+        delivery: filters.availableFilters.delivery,
+        pickup: filters.availableFilters.pickup,
+        inStock: filters.availableFilters.inStock,
+        onlyWithImages: filters.availableFilters.onlyWithImages,
+        priceFrom: filters.availableFilters.priceFrom,
+        priceTo: filters.availableFilters.priceTo,
       }
     });
   }

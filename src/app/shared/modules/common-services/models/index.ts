@@ -11,4 +11,6 @@ export * from './suggestion-search-query-history-item.model';
 export * from './auth-request.model';
 export * from './auth-refresh-request.model';
 export * from './auth-response.model';
+export * from './default.search.available.model';
+export * from './all.group.query.filters.model';
 export * from './user-location-fias-model';

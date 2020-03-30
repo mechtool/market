@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit, OnChanges, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { filter, switchMap, takeUntil, map } from 'rxjs/operators';
-import { LocalStorageService, ResponsiveService, SuggestionService } from '../../common-services';
+import { filter, takeUntil } from 'rxjs/operators';
+import { DefaultSearchAvailableModel, LocalStorageService, ResponsiveService } from '../../common-services';
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
 
 
@@ -25,7 +24,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() query = '';
-  @Input() availableFilters: any;
+  @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() useBrowserStorage = true;
   @Output() queryChange: EventEmitter<any> = new EventEmitter();
   @Output() submitClick: EventEmitter<any> = new EventEmitter();
@@ -35,6 +34,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   constructor(
+    private _localStorageService: LocalStorageService,
     private _responsiveService: ResponsiveService,
     private _fb: FormBuilder,
   ) {
@@ -42,7 +42,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this._subscribeOnQueryChanges();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
@@ -56,9 +57,14 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   submit() {
-    const query = this.form.get('query').value;
-    if (query.length >= this.MIN_QUERY_LENGTH) {
-      this.submitClick.emit(query);
+    const queryText = this.form.get('query').value;
+    const _availableFilters = this.form.get('availableFilters').value;
+    const groupAllQueryFilters = {
+      query: queryText,
+      availableFilters: _availableFilters,
+    };
+    if (queryText.length >= this.MIN_QUERY_LENGTH) {
+      this.submitClick.emit(groupAllQueryFilters);
       // this._localStorageService.putSearchText(query);
       // this._router.navigate(['/search'], {
       //   queryParams: {
@@ -73,8 +79,18 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private _initForm(): void {
+    // todo: availableFilters временная заглушак, поменять на реальный объек
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]],
+      availableFilters: this._fb.group({
+        supplier: '123456789',
+        delivery: this._localStorageService.hasUserLocation() ? this._localStorageService.getUserLocation().fias : undefined,
+        pickup: 'd8327a56-80de-4df2-815c-4f6ab1224c50',
+        inStock: true,
+        onlyWithImages: true,
+        priceFrom: undefined,
+        priceTo: undefined
+      })
     });
   }
 
