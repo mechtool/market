@@ -8,7 +8,9 @@ import { NavigationService } from './navigation.service';
 import { ResponsiveService } from './responsive.service';
 import { SuggestionService } from './suggestion.service';
 import { ProductService } from './product.service';
-import { LocalStorageService } from './local.storage.service';
+import { OrganizationsService } from './organizations.service';
+import { UserService } from './user.service';
+import { LocalStorageService } from './local-storage.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -27,6 +29,8 @@ export class CommonServicesModule {
         ResponsiveService,
         SuggestionService,
         ProductService,
+        OrganizationsService,
+        UserService,
       ],
     };
   }

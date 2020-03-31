@@ -1,9 +1,7 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, switchMap, catchError } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import {
   redirectTo,
@@ -16,29 +14,20 @@ import {
   AuthRefreshRequestModel,
   AuthResponseModel,
 } from './models';
+import { UserService } from './user.service';
 
 const API_URL = environment.apiUrl;
 const ITS_URL = environment.itsUrl;
 
 @Injectable()
 export class AuthService {
-  userData$: BehaviorSubject<AuthResponseModel> = new BehaviorSubject(null);
 
   constructor(
     private _apiService: ApiService,
+    private _userService: UserService,
     private _router: Router,
   ) {}
 
-  setUserData(data: any, fromNextTick = true): void {
-    if (fromNextTick) {
-      setTimeout(() => {
-        this.userData$.next(data);
-      }, 0);
-    }
-    if (!fromNextTick) {
-      this.userData$.next(data);
-    }
-  }
 
   logout(path: string = '/') {
     redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${path}`);
@@ -56,10 +45,11 @@ export class AuthService {
       return this.auth({ ticket, serviceName })
         .pipe(
           map((authResponse: AuthResponseModel) => {
-            this.setUserData(authResponse, false);
+            this._userService.setUserData(authResponse, false);
+            this._userService.updateUserOrganizations();
             this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
             return true;
-          })
+          }),
         );
     }
   }

@@ -6,7 +6,8 @@ import { generateQueryStringFromObject } from '#shared/utils';
 import {
   NomenclaturesSearchQueryModel,
   NomenclaturesListResponseModel,
-  SuggestionModel
+  SuggestionModel,
+  UserOrganizationModel,
 } from './models';
 
 const API_URL = environment.apiUrl;
@@ -22,5 +23,9 @@ export class BNetService {
 
   searchSuggestions(textQuery: string): Observable<SuggestionModel> {
     return this._apiService.get(`${API_URL}/suggestions/search?textQuery=${textQuery}`);
+  }
+
+  getUserOrganizations(): Observable<UserOrganizationModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/user-organizations`);
   }
 }

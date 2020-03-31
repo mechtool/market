@@ -4,6 +4,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavItemModel } from './models';
 import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 import { environment } from '#environments/environment';
 
 const ITS_URL = environment.itsUrl;
@@ -97,7 +98,7 @@ export class NavigationService implements OnDestroy {
         routerLink: ['/about'],
       },
     ];
-    return this._authService.userData$.asObservable()
+    return this._userService.userData$.asObservable()
       .pipe(
         takeUntil(this._unsubscriber$),
         map(res => res ? authedNavItems : notAuthedNavItems),
@@ -105,7 +106,7 @@ export class NavigationService implements OnDestroy {
   }
 
   constructor(
-    private _router: Router,
+    private _userService: UserService,
     private _authService: AuthService,
   ) {}
 

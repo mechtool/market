@@ -6,7 +6,7 @@ import {
   TypeOfSearch,
 } from '../../../../common-services/models';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../../../common-services/local.storage.service';
+import { LocalStorageService } from '../../../../common-services/local-storage.service';
 
 @Component({
   selector: 'my-search-bar-products',

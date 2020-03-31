@@ -3,9 +3,9 @@ import {
   OnDestroy,
   OnInit,
  } from '@angular/core';
-import { Subject, of } from 'rxjs';
+import { Subject } from 'rxjs';
 import { NavigationService, ResponsiveService } from '#shared/modules';
-import { takeUntil, filter, map } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 
 @Component({
   templateUrl: './root.component.html',

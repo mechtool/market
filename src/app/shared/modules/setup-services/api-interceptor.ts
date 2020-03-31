@@ -16,7 +16,7 @@ import {
   tap,
   take
 } from 'rxjs/operators';
-import { AuthService } from '#shared/modules/common-services';
+import { AuthService, UserService } from '#shared/modules/common-services';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
@@ -25,8 +25,10 @@ export class ApiInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const authService = this._injector.get(AuthService);
-    return authService.userData$
+    const userService = this._injector.get(UserService);
+    return userService.userData$
       .pipe(
+        take(1),
         switchMap((userData) => {
 
           const headerSettings = req.headers.keys().reduce((accumulator, key) => {
@@ -56,7 +58,7 @@ export class ApiInterceptor implements HttpInterceptor {
                         return of(null);
                       }),
                       tap((res) => {
-                        authService.setUserData(res);
+                        userService.setUserData(res);
                       }),
                       switchMap((res) => {
                         headers.set('Authorization', `Bearer ${userData.accessToken}`);

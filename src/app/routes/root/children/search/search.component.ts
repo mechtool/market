@@ -10,7 +10,7 @@ import {
 } from '#shared/modules/common-services/models';
 import { SuggestionService } from '#shared/modules/common-services/suggestion.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LocalStorageService } from '#shared/modules/common-services/local.storage.service';
+import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 
 @Component({
   templateUrl: './search.component.html',

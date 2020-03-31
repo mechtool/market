@@ -2,7 +2,7 @@ import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { SuggestionModel } from './models';
 import { BNetService } from './bnet.service';
-import { LocalStorageService } from './local.storage.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class SuggestionService {
