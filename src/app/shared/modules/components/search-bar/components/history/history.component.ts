@@ -44,8 +44,8 @@ export class SearchBarHistoryComponent implements OnInit, OnDestroy {
       this._router.navigate([`./category/${searchQuery.id}`]);
 
     } else if (searchQuery.typeOfSearch === TypeOfSearch.SEARCH) {
-
-      this._router.navigate([`./search`], {queryParams: {q: searchQuery.searchText}});
+      // todo: нужно ли при щелчке по элементу выпавшего списка подсказок передавать еще что-то из других фильтров
+      this._router.navigate([`./search`], { queryParams: { q: searchQuery.searchText } });
 
     }
   }

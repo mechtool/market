@@ -1,13 +1,14 @@
-import { Observable, of, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { NomenclatureCardModel } from './models';
+import { AllGroupQueryFiltersModel, NomenclatureCardModel } from './models';
 import { BNetService } from './bnet.service';
 
 @Injectable()
 export class ProductService {
 
-  constructor(private _bnetService: BNetService) {}
+  constructor(private _bnetService: BNetService) {
+  }
 
   getPopularNomenclatureCards(): Observable<NomenclatureCardModel[]> {
     return this._bnetService.searchNomenclatures({ priceFrom: 1 })
@@ -28,9 +29,21 @@ export class ProductService {
       );
   }
 
-  searchNomenclatureCards(): Observable<any> {
-    // TODO: params
-    return this._bnetService.searchNomenclatures({})
+  searchNomenclatureCards(filters: AllGroupQueryFiltersModel): Observable<any> {
+
+    const searchQuery = {
+      textQuery: filters.query,
+      priceFrom: filters.availableFilters.priceFrom,
+      priceTo: filters.availableFilters.priceTo,
+      suppliers: [filters.availableFilters.supplier],
+      tradeMarks: [filters.availableFilters.trademark],
+      onlyInStock: filters.availableFilters.inStock,
+      onlyWithImages: filters.availableFilters.onlyWithImages,
+      deliveryLocationFiasCode: filters.availableFilters.delivery,
+      pickupLocationFiasCode: filters.availableFilters.pickup,
+    };
+
+    return this._bnetService.searchNomenclatures(searchQuery)
       .pipe(
         map((res) => {
           // TODO

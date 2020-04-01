@@ -44,7 +44,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         priceFrom: res.priceFrom,
         priceTo: res.priceTo,
       };
-      this.searchNomenclatures();
+      this.searchNomenclatures({ query: this.query, availableFilters: this.searchFilters });
     });
   }
 
@@ -66,8 +66,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  searchNomenclatures(): void {
-    this._productService.searchNomenclatureCards()
+  searchNomenclatures(filters: AllGroupQueryFiltersModel): void {
+    this._productService.searchNomenclatureCards(filters)
       .subscribe((res) => {
         this.searchedNomenclatures = res._embedded.items;
         this.totalSearchedNomenclaturesCount = res.page.totalElements;

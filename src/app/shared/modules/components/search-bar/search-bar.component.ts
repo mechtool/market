@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { DefaultSearchAvailableModel, LocalStorageService, ResponsiveService } from '../../common-services';
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     private _localStorageService: LocalStorageService,
     private _responsiveService: ResponsiveService,
     private _fb: FormBuilder,
+    private _router: Router,
   ) {
     this._initForm();
     this._subscribeOnQueryChanges();
@@ -57,20 +59,14 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   submit() {
-    const queryText = this.form.get('query').value;
-    const _availableFilters = this.form.get('availableFilters').value;
+    const queryParam = this.form.get('query').value;
+    const availableFiltersParam = this.form.get('availableFilters').value;
     const groupAllQueryFilters = {
-      query: queryText,
-      availableFilters: _availableFilters,
+      query: queryParam,
+      availableFilters: availableFiltersParam,
     };
-    if (queryText.length >= this.MIN_QUERY_LENGTH) {
+    if (queryParam.length >= this.MIN_QUERY_LENGTH) {
       this.submitClick.emit(groupAllQueryFilters);
-      // this._localStorageService.putSearchText(query);
-      // this._router.navigate(['/search'], {
-      //   queryParams: {
-      //     q: this.form.get('query').value,
-      //   }
-      // });
     }
   }
 
