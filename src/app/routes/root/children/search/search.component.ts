@@ -25,13 +25,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   categoriesSuggestions: SuggestionCategoryItemModel[];
   query: string;
 
-  constructor(
-    private _route: ActivatedRoute,
-    private _productService: ProductService,
-    private _suggestionService: SuggestionService,
-    private _router: Router,
-    private _localStorageService: LocalStorageService,
-  ) {
+  constructor(private _route: ActivatedRoute,
+              private _productService: ProductService,
+              private _suggestionService: SuggestionService,
+              private _router: Router,
+              private _localStorageService: LocalStorageService,
+              ) {
     this._route.queryParams.subscribe((res) => {
       this.query = res.q;
       this.searchFilters = {
@@ -70,7 +69,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._productService.searchNomenclatureCards(filters)
       .subscribe((res) => {
         this.searchedNomenclatures = res._embedded.items;
-        this.totalSearchedNomenclaturesCount = res.page.totalElements;
+        this.totalSearchedNomenclaturesCount =  res.page?.totalElements;
       }, (err) => {
         console.log('error');
       });
