@@ -6,6 +6,7 @@ import { SearchBarComponent } from './search-bar.component';
 import { SearchBarHistoryComponent } from './components/history/history.component';
 import { SearchBarItemComponent } from './components/item/item.component';
 import { SearchBarProductsComponent } from './components/products/products.component';
+import { SearchBarFilterComponent } from './components/search-bar-filter/search-bar-filter.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { SearchBarProductsComponent } from './components/products/products.compo
     SearchBarHistoryComponent,
     SearchBarItemComponent,
     SearchBarProductsComponent,
+    SearchBarFilterComponent,
   ],
   exports: [SearchBarComponent],
 })

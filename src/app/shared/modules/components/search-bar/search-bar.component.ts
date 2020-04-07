@@ -21,11 +21,12 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   isInputHovered = false;
   isInputFocused = false;
   quickSearchOver = false;
+  visibleFilterForm = false;
   MIN_QUERY_LENGTH = 3;
+  availableFilters: DefaultSearchAvailableModel;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() query = '';
-  @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() useBrowserStorage = true;
   @Output() queryChange: EventEmitter<any> = new EventEmitter();
   @Output() submitClick: EventEmitter<any> = new EventEmitter();
@@ -79,9 +80,9 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]],
       availableFilters: this._fb.group({
-        supplier: '123456789',
-        delivery: this._localStorageService.hasUserLocation() ? this._localStorageService.getUserLocation().fias : undefined,
-        pickup: 'd8327a56-80de-4df2-815c-4f6ab1224c50',
+        supplier: undefined,
+        delivery: undefined,
+        pickup: undefined,
         inStock: true,
         onlyWithImages: true,
         priceFrom: undefined,
@@ -105,5 +106,16 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   private _updateForm() {
     this.form.patchValue({ query: this.query || '' });
+  }
+
+  clickFilterButton($event: MouseEvent) {
+    this.visibleFilterForm = !this.visibleFilterForm;
+  }
+
+  recFilter($event: DefaultSearchAvailableModel) {
+    this.availableFilters = $event;
+    if ($event) {
+      this.visibleFilterForm = !this.visibleFilterForm;
+    }
   }
 }

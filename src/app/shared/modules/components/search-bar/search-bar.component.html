@@ -11,7 +11,7 @@
       formControlName="query"
       (mouseenter)="isInputHovered = true"
       (mouseleave)="isInputHovered = false"
-      (focus)="isInputFocused = true"
+      (focus)="isInputFocused = true; visibleFilterForm = false"
       (blur)="isInputFocused = false">
 
     <div class="buttons">
@@ -19,7 +19,7 @@
         <button class="btn btn_square btn_search" [disabled]="form.invalid"></button>
       </div>
       <div class="buttons__item">
-        <a class="btn btn_square btn_category"></a>
+        <a class="btn btn_square btn_category" (click)="clickFilterButton($event)"></a>
       </div>
     </div>
 
@@ -39,8 +39,16 @@
 
     </div>
 
+    <div class="search-bar-filter">
+      <my-search-bar-filter
+        [availableFilters]="availableFilters"
+        (stateAvailableFilters)="recFilter($event)"
+        *ngIf="visibleFilterForm"
+      ></my-search-bar-filter>
+    </div>
+
   </form>
   <div class="region">
-    <a class="btn">Москва</a>
+    <a class="btn" (click)="visibleFilterForm = false">Москва</a>
   </div>
 </div>

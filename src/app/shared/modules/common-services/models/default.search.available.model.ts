@@ -1,10 +1,18 @@
 export class DefaultSearchAvailableModel {
   supplier?: string; // inn or name
   trademark?: string; // name brand or company
+  deliveryMethod?: DeliveryMethod = DeliveryMethod.ANY;
   delivery?: string;
   pickup?: string;
-  inStock?: boolean;
-  onlyWithImages?: boolean;
+  inStock = true;
+  onlyWithImages = true;
   priceFrom?: number;
   priceTo?: number;
 }
+
+export enum DeliveryMethod {
+  ANY = 'any',
+  DELIVERY = 'delivery',
+  PICKUP = 'pickup'
+}
+
