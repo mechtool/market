@@ -17,9 +17,7 @@ import { NavigationService } from '#shared/modules';
 export class NavbarMobileNavComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
 
-  constructor(
-    private _navService: NavigationService,
-  ) {}
+  constructor(private _navService: NavigationService) {}
 
   ngOnInit() {}
 

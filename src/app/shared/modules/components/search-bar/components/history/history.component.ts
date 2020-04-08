@@ -14,9 +14,11 @@ export class SearchBarHistoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   searchQueriesHistory: SuggestionSearchQueryHistoryItemModel[];
 
-  constructor(private _suggestionService: SuggestionService,
-              private _router: Router,
-              private _localStorageService: LocalStorageService) {
+  constructor(
+    private _suggestionService: SuggestionService,
+    private _router: Router,
+    private _localStorageService: LocalStorageService,
+  ) {
   }
 
   ngOnInit() {

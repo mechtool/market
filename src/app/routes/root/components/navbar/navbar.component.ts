@@ -3,9 +3,9 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { takeUntil, filter, map } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { NavigationService, AuthService } from '#shared/modules';
+import { NavigationService } from '#shared/modules';
 
 @Component({
   selector: 'my-navbar',
@@ -27,10 +27,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       );
   }
 
-  constructor(
-    private _navService: NavigationService,
-    private _authService: AuthService,
-  ) {}
+  constructor(private _navService: NavigationService) {}
 
   ngOnInit() {}
 
