@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
-  DefaultSearchAvailableModel,
   NomenclatureCardModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
@@ -18,7 +17,6 @@ import { LocalStorageService } from '#shared/modules/common-services/local-stora
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  searchFilters: DefaultSearchAvailableModel;
   searchedNomenclatures: NomenclatureCardModel[];
   totalSearchedNomenclaturesCount: number;
   productsSuggestions: SuggestionProductItemModel[];
@@ -30,10 +28,10 @@ export class SearchComponent implements OnInit, OnDestroy {
               private _suggestionService: SuggestionService,
               private _router: Router,
               private _localStorageService: LocalStorageService,
-              ) {
+  ) {
     this._route.queryParams.subscribe((res) => {
       this.query = res.q;
-      this.searchFilters = {
+      const searchFilters = {
         supplier: res.supplier,
         trademark: res.trademark,
         delivery: res.delivery,
@@ -43,7 +41,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         priceFrom: res.priceFrom,
         priceTo: res.priceTo,
       };
-      this.searchNomenclatures({ query: this.query, availableFilters: this.searchFilters });
+      this.searchNomenclatures({ query: this.query, availableFilters: searchFilters });
     });
   }
 
@@ -69,7 +67,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._productService.searchNomenclatureCards(filters)
       .subscribe((res) => {
         this.searchedNomenclatures = res._embedded.items;
-        this.totalSearchedNomenclaturesCount =  res.page?.totalElements;
+        this.totalSearchedNomenclaturesCount = res.page?.totalElements;
       }, (err) => {
         console.log('error');
       });

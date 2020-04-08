@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
-  SuggestionProductItemModel,
+  AllGroupQueryFiltersModel,
   SuggestionCategoryItemModel,
-  AllGroupQueryFiltersModel
+  SuggestionProductItemModel,
 } from '#shared/modules/common-services/models';
-import { SuggestionService, LocalStorageService } from '#shared/modules/common-services';
+import { LocalStorageService, SuggestionService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,6 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  searchFilters = {};
   useBrowserStorage = true;
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
@@ -27,9 +26,11 @@ export class MainComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _suggestionService: SuggestionService,
     private _localStorageService: LocalStorageService,
-  ) {}
+  ) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();

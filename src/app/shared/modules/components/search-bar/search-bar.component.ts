@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -24,7 +34,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   quickSearchOver = false;
   visibleFilterForm = false;
   MIN_QUERY_LENGTH = 3;
-  @Input() availableFilters: DefaultSearchAvailableModel;
+  availableFilters: DefaultSearchAvailableModel;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() query = '';
@@ -62,10 +72,9 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   submit() {
     const queryParam = this.form.get('query').value;
-    const availableFiltersParam = this.form.get('availableFilters').value;
     const groupAllQueryFilters = {
       query: queryParam,
-      availableFilters: availableFiltersParam,
+      availableFilters: this.availableFilters,
     };
     if (queryParam.length >= this.MIN_QUERY_LENGTH) {
       this.submitClick.emit(groupAllQueryFilters);
@@ -79,16 +88,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   private _initForm(): void {
     // todo: availableFilters временная заглушак, поменять на реальный объек
     this.form = this._fb.group({
-      query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]],
-      availableFilters: this._fb.group({
-        supplier: undefined,
-        delivery: undefined,
-        pickup: undefined,
-        inStock: true,
-        onlyWithImages: true,
-        priceFrom: undefined,
-        priceTo: undefined
-      })
+      query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]]
     });
   }
 

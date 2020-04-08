@@ -1,5 +1,4 @@
 <my-search-bar
-  [availableFilters]="searchFilters"
   (queryChange)="searchSuggestions($event)"
   (submitClick)="navigateToSearchRoute($event)"
   [productsSuggestions]="productsSuggestions"
