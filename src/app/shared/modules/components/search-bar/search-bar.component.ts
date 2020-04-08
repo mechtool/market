@@ -23,7 +23,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   quickSearchOver = false;
   visibleFilterForm = false;
   MIN_QUERY_LENGTH = 3;
-  availableFilters: DefaultSearchAvailableModel;
+  @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() query = '';
