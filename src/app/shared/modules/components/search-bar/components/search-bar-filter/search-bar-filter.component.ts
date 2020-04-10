@@ -1,12 +1,19 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { DefaultSearchAvailableModel, DeliveryMethod, LocalStorageService } from '../../../../common-services';
+import {
+  CountryCode,
+  DefaultSearchAvailableModel,
+  DeliveryMethod,
+  LocalStorageService
+} from '../../../../common-services';
 
 @Component({
   selector: 'my-search-bar-filter',
   templateUrl: './search-bar-filter.component.html',
   styleUrls: [
     './search-bar-filter.component.scss',
+    './search-bar-filter.component-400.scss',
+    './search-bar-filter.component-360.scss',
   ],
 })
 export class SearchBarFilterComponent implements OnInit, OnDestroy {
@@ -45,7 +52,11 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
   }
 
   private userLocation(): string {
-    return this._localStorageService.hasUserLocation() ? this._localStorageService.getUserLocation().fias : undefined;
+    if (this._localStorageService.hasUserLocation()) {
+      const fias = this._localStorageService.getUserLocation().fias;
+      return fias !== CountryCode.RUSSIA ? fias : null;
+    }
+    return null;
   }
 
   save() {
@@ -64,12 +75,12 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     const deliveryMethod = this.availableFiltersForm.get('deliveryMethod').value;
     if (deliveryMethod) {
       this.availableFilters.deliveryMethod = deliveryMethod;
-      if (deliveryMethod === 'any') {
+      if (deliveryMethod === this.anyMethod) {
         this.availableFilters.delivery = this.userLocation();
         this.availableFilters.pickup = this.userLocation();
-      } else if (deliveryMethod === 'delivery') {
+      } else if (deliveryMethod === this.deliveryMethod) {
         this.availableFilters.delivery = this.userLocation();
-      } else if (deliveryMethod === 'pickup') {
+      } else if (deliveryMethod === this.pickupMethod) {
         this.availableFilters.pickup = this.userLocation();
       }
     }

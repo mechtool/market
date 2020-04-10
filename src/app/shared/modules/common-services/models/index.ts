@@ -13,6 +13,5 @@ export * from './auth-refresh-request.model';
 export * from './auth-response.model';
 export * from './default.search.available.model';
 export * from './all.group.query.filters.model';
-export * from './user-location-fias.model';
 export * from './user-organization.model';
 export * from './location.model';

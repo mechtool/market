@@ -11,7 +11,7 @@
       formControlName="query"
       (mouseenter)="isInputHovered = true"
       (mouseleave)="isInputHovered = false"
-      (focus)="isInputFocused = true; visibleFilterForm = false"
+      (focus)="isInputFocused = true; visibleFilterForm = false; visibleLocationForm = false"
       (blur)="isInputFocused = false">
 
     <div class="buttons">
@@ -19,7 +19,7 @@
         <button class="btn btn_square btn_search" [disabled]="form.invalid"></button>
       </div>
       <div class="buttons__item">
-        <a class="btn btn_square btn_category" (click)="clickFilterButton($event)"></a>
+        <a class="btn btn_square btn_category" (click)="clickFilterButton()"></a>
       </div>
     </div>
 
@@ -30,7 +30,8 @@
       *ngIf="isInputFocused || quickSearchOver">
 
       <my-search-bar-history
-        *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"></my-search-bar-history>
+        *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
+      ></my-search-bar-history>
 
       <my-search-bar-products
         [products]="productsSuggestions"
@@ -47,8 +48,16 @@
       ></my-search-bar-filter>
     </div>
 
+    <div class="search-bar-location">
+      <my-search-bar-location
+        *ngIf="visibleLocationForm"
+        (stateLocationForm)="recLocation($event)"
+      >
+      </my-search-bar-location>
+    </div>
+
   </form>
   <div class="region">
-    <a class="btn" (click)="visibleFilterForm = false">Москва</a>
+    <a class="btn" (click)="clickLocationButton()">{{userLocation.name}}</a>
   </div>
 </div>

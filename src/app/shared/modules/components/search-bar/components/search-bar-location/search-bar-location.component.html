@@ -1,0 +1,12 @@
+<div class="dropdown_block choose-city_wrap">
+  <form [formGroup]="locationForm">
+    <div class="form-group">
+      <label for="formUserRegionLocation">Введите город</label>
+      <input nz-input type="text" autocomplete="off" id="formUserRegionLocation" name="city" placeholder="Введите город" formControlName="city"/>
+    </div>
+    <ul class="choose-city_list">
+      <li class="choose-city_item" *ngFor="let item of foundCities" (click)="chooseCity(item)">{{item.fullName}}</li>
+    </ul>
+  </form>
+</div>
+

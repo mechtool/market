@@ -6,7 +6,7 @@ import {
   SuggestionProductItemModel,
   SuggestionSearchQueryHistoryItemModel,
   TypeOfSearch,
-  UserLocationFiasModel,
+  LocationModel,
 } from '../common-services/models';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'local_search_queries_history_list';
@@ -77,11 +77,11 @@ export class LocalStorageService {
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
   }
 
-  getUserLocation(): UserLocationFiasModel {
+  getUserLocation(): LocationModel {
     return this._storage.get(USER_LOCATION_STORAGE_KEY);
   }
 
-  putUserLocation(location: UserLocationFiasModel) {
+  putUserLocation(location: LocationModel) {
     this._storage.set(USER_LOCATION_STORAGE_KEY, location);
   }
 
