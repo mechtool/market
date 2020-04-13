@@ -1,0 +1,20 @@
+@media all and (max-width: 1300px){
+
+  h1 {
+    display: none;
+    &.showed {
+      display: block;
+    }
+  }
+
+  .navbar-logo_icon-wrapper {
+    width: 60px;
+    padding-left: 0;
+    &.showed {
+      width: 70px;
+      padding-left: 10px;
+    }
+  }
+
+}
+

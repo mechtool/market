@@ -15,7 +15,8 @@ import { NavItemModel } from '#shared/modules/common-services/models';
   templateUrl: './nav.component.html',
   styleUrls: [
     './nav.component.scss',
-    './nav.component-768.scss',
+    './nav.component-1300.scss',
+    './nav.component-992.scss',
   ],
 })
 export class NavbarNavComponent implements OnInit, OnDestroy {

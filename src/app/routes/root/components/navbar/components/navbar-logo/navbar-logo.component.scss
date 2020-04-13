@@ -31,15 +31,15 @@
       align-items: center;
       justify-content: center;
       margin-right: 7px;
-      width: 60px;
-      padding-left: 0;
+      width: 70px;
+      padding-left: 10px;
       transition: padding-left .1s;
     }
   }
 
   h1 {
-    visibility: hidden;
-    opacity: 0;
+    visibility: visible;
+    opacity: 1;
     transition: opacity .4s;
     font-weight: var(--font-weight-demi);
     font-size: 25px;

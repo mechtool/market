@@ -12,7 +12,8 @@ import { takeUntil, filter } from 'rxjs/operators';
   templateUrl: './navbar-logo.component.html',
   styleUrls: [
     './navbar-logo.component.scss',
-    './navbar-logo.component-768.scss',
+    './navbar-logo.component-1300.scss',
+    './navbar-logo.component-992.scss',
   ],
 })
 export class NavbarLogoComponent implements OnInit, OnDestroy {

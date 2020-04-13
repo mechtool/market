@@ -27,8 +27,6 @@ nav {
   }
 
   .nav_label, .nav-list_item.collapsed::after, .nav-list_item.expanded::after {
-    visibility: hidden;
-    opacity: 0;
     transition: opacity .4s;
   }
 
@@ -53,8 +51,8 @@ nav {
   }
 
   .nav_icon {
-    width: 60px;
-    padding-left: 0;
+    width: 70px;
+    padding-left: 10px;
     transition: padding-left .1s;
   }
 

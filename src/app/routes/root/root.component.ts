@@ -8,8 +8,8 @@ import { BreadcrumbsService } from './components/breadcrumbs/breadcrumbs.service
   templateUrl: './root.component.html',
   styleUrls: [
     './root.component.scss',
+    './root.component-1300.scss',
     './root.component-992.scss',
-    './root.component-768.scss',
   ],
 })
 export class RootComponent implements OnInit, OnDestroy {

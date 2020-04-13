@@ -11,7 +11,7 @@ import { NavigationService } from '#shared/modules';
   templateUrl: './mobile-nav.component.html',
   styleUrls: [
     './mobile-nav.component.scss',
-    './mobile-nav.component-768.scss',
+    './mobile-nav.component-992.scss',
   ],
 })
 export class NavbarMobileNavComponent implements OnInit, OnDestroy {

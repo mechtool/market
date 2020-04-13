@@ -12,8 +12,8 @@ import { NavigationService } from '#shared/modules';
   templateUrl: './navbar.component.html',
   styleUrls: [
     './navbar.component.scss',
+    './navbar.component-1300.scss',
     './navbar.component-992.scss',
-    './navbar.component-768.scss',
   ],
 })
 export class NavbarComponent implements OnInit, OnDestroy {

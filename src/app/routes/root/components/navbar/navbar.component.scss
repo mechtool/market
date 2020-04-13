@@ -6,15 +6,18 @@
 .navbar {
 	position: fixed;
 	top: 0;
-	width: 60px;
+	width: 320px;
 	height: 100%;
 	flex-shrink: 0;
 	padding-top: 35px;
 	transition: width .2s;
 	background: var(--color-navbar-background-from);
-	background: linear-gradient(0deg, var(--color-navbar-background-from) 0%, var(--color-navbar-background-to) 100%);
+  background: linear-gradient(0deg, var(--color-navbar-background-from) 0%, var(--color-navbar-background-to) 100%);
+  box-shadow: inset -2px 0px 15px rgba(0, 0, 0, 0.03);
 
-  &.showed {
-    width: 320px;
+  &.hidden{
+    width: 60px;
+    box-shadow: none;
   }
+
 }

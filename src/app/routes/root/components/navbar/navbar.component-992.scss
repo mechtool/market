@@ -1,5 +1,18 @@
-@media all and (max-width: 992px) {
-	.navbar.showed {
-		width: 250px;
+@media all and (max-width: 992px){
+
+	.navbar {
+		position: relative;
+		width: 100%;
+		padding: 20px;
+    background: none;
+		margin: 0;
+		display: flex;
+		align-items: center;
 	}
+
+	.navbar.showed {
+		width: auto;
+	}
+
 }
+

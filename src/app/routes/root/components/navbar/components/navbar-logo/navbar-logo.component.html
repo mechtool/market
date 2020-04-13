@@ -1,6 +1,6 @@
 <div class="navbar-logo">
-  <div class="navbar-logo_icon-wrapper">
-    <div class="navbar-logo_icon" (click)="screenWidthGreaterThan(768) && toggleMenu()">
+  <div [ngClass]="{'showed': isMenuExpanded$ | async}" class="navbar-logo_icon-wrapper">
+    <div class="navbar-logo_icon" (click)="screenWidthGreaterThan(992) && toggleMenu()">
       <img src="assets/img/svg/icon__site.svg" alt="1C:Бизнес-cеть" title="1C:Бизнес-cеть" >
     </div>
   </div>

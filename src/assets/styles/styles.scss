@@ -79,7 +79,36 @@ button.btn:hover {
 }
 
 
-@media all and (max-width: 768px){
+@media all and (max-width: 1300px){
+
+	body::before {
+		content: '';
+		width: 100%;
+		height: 100%;
+		background-color: #000000;
+		opacity: 0;
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 3;
+		visibility: hidden;
+		transition: opacity .2s;
+  }
+
+	body.left-menu {
+		position: relative;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	body.left-menu::before {
+		opacity: .2;
+		visibility: visible;
+	}
+
+}
+
+@media all and (max-width: 992px){
 
 	body::before {
 		content: '';
@@ -107,4 +136,3 @@ button.btn:hover {
 	}
 
 }
-

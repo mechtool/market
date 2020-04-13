@@ -1,0 +1,14 @@
+@media all and (max-width: 1300px) {
+  .navbar {
+    width: 60px;
+    box-shadow: none;
+    &.showed{
+      width: 320px;
+      box-shadow: none;
+      z-index: 10;
+    }
+
+  }
+}
+
+
