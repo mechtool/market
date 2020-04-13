@@ -7,6 +7,7 @@ import {
 } from '#shared/modules/common-services/models';
 import { LocalStorageService, SuggestionService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
+import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   selector: 'my-main',
@@ -26,7 +27,9 @@ export class MainComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _suggestionService: SuggestionService,
     private _localStorageService: LocalStorageService,
+    private _breadcrumbsService: BreadcrumbsService,
   ) {
+    this._breadcrumbsService.setVisible(false);
   }
 
   ngOnInit() {

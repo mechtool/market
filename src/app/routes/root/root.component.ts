@@ -1,11 +1,8 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
- } from '@angular/core';
+import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavigationService, ResponsiveService } from '#shared/modules';
-import { takeUntil, filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
+import { BreadcrumbsService } from './components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   templateUrl: './root.component.html',
@@ -26,14 +23,20 @@ export class RootComponent implements OnInit, OnDestroy {
       );
   }
 
+  get breadcrumbsItems$() {
+    return this._breadcrumbsService.getItems();
+  }
+
   constructor(
     private _navService: NavigationService,
+    private _breadcrumbsService: BreadcrumbsService,
     private _responsiveService: ResponsiveService,
   ) {
     this._responsiveService.init();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();

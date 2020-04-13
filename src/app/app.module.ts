@@ -27,6 +27,7 @@ import {
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
 import {
+  BreadcrumbsModule,
   NavbarComponent,
   NavbarLogoComponent,
   NavbarMobileNavComponent,
@@ -57,6 +58,7 @@ registerLocaleData(ru);
     NomenclatureCardModule,
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
+    BreadcrumbsModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },

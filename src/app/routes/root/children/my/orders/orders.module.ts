@@ -14,4 +14,5 @@ import { OrdersComponent } from './orders.component';
     OrdersComponent,
   ],
 })
-export class OrdersModule { }
+export class OrdersModule {
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   templateUrl: './404.component.html',
@@ -8,7 +9,9 @@ import { Subject } from 'rxjs';
 export class Code404Component implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
 
-  constructor() {}
+  constructor(private _breadcrumbsService: BreadcrumbsService) {
+    this._breadcrumbsService.setVisible(false);
+  }
 
   ngOnInit() {}
 

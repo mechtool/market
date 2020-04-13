@@ -14,4 +14,5 @@ import { CartComponent } from './cart.component';
     CartComponent,
   ],
 })
-export class CartModule { }
+export class CartModule {
+}

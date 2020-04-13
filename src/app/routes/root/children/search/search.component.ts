@@ -10,6 +10,7 @@ import {
 import { SuggestionService } from '#shared/modules/common-services/suggestion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
+import { BreadcrumbsService } from '../../components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   templateUrl: './search.component.html',
@@ -28,6 +29,7 @@ export class SearchComponent implements OnInit, OnDestroy {
               private _suggestionService: SuggestionService,
               private _router: Router,
               private _localStorageService: LocalStorageService,
+              private _breadcrumbsService: BreadcrumbsService,
   ) {
     this._route.queryParams.subscribe((res) => {
       this.query = res.q;
@@ -43,6 +45,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       };
       this.searchNomenclatures({ query: this.query, availableFilters: searchFilters });
     });
+    this._breadcrumbsService.setVisible(false);
   }
 
   ngOnInit() {

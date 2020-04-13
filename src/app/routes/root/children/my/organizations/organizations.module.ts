@@ -14,4 +14,5 @@ import { OrganizationsComponent } from './organizations.component';
     OrganizationsComponent,
   ],
 })
-export class OrganizationsModule { }
+export class OrganizationsModule {
+}

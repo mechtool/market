@@ -4,14 +4,14 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductRoutingModule } from './product-routing.module';
 import {
-  MainComponent,
-  MainBannersComponent,
+  Code404Component,
   MainBannersBannerComponent,
+  MainBannersComponent,
+  MainComponent,
   MainPopularComponent,
   ProductComponent,
-  Code404Component,
 } from './components';
-import { NomenclatureCardModule, BannerCardModule, SearchBarModule } from '#shared/modules';
+import { BannerCardModule, NomenclatureCardModule, SearchBarModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -33,4 +33,5 @@ import { NomenclatureCardModule, BannerCardModule, SearchBarModule } from '#shar
     Code404Component,
   ],
 })
-export class ProductModule { }
+export class ProductModule {
+}
