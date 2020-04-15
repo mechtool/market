@@ -43,6 +43,7 @@ ol {
     font-weight: var(--font-medium);
     font-size: var(--font-size-13);
     white-space: nowrap;
+    border-bottom: 1px solid #fff;
 
     &:hover {
       border-bottom: 1px solid #fedc7b;

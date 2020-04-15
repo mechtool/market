@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, combineLatest, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import {
   AllGroupQueryFiltersModel,
   BreadcrumbItemModel,
   CategoryModel,
   DefaultSearchAvailableModel,
-  NomenclatureCardModel
-} from '../../../../../../shared/modules/common-services/models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, LocalStorageService } from '../../../../../../shared/modules/common-services';
+  NomenclatureCardModel,
+} from '#shared/modules/common-services/models';
+import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { CategoryService, LocalStorageService } from '#shared/modules/common-services';
 import { ProductService } from '#shared/modules/common-services/product.service';
+import { tap, switchMap, catchError } from 'rxjs/operators';
 
 @Component({
   templateUrl: './category.component.html',
@@ -18,7 +19,6 @@ import { ProductService } from '#shared/modules/common-services/product.service'
 })
 export class CategoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  private _breadcrumbItems: BreadcrumbItemModel[];
   categoryModel: CategoryModel;
   query: '';
   categoryId: string;
@@ -34,17 +34,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private _categoryService: CategoryService,
     private _localStorageService: LocalStorageService,
   ) {
-    this._initCategory();
-    this._initQueryParams();
-    this._searchNomenclatures({
-      query: this.query,
-      categoryId: this.categoryId,
-      availableFilters: this.searchFilters
-    });
+    this._watchUrlChanges();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this._unsubscriber$.next();
@@ -70,70 +63,67 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  refreshBreadcrumbs($event: CategoryModel[]) {
-    this._breadcrumbItems = [
-      {
-        label: 'Категории товаров',
-      }
-    ];
-
-    $event.forEach((res) => {
-      this._breadcrumbItems.push({
-        label: res.name,
-        routerLink: `/category/${res.id}`
+  refreshBreadcrumbs($event: CategoryModel[]): void {
+    const breadcrumbs = $event.reduce((accum, curr) => {
+      accum.push({
+        label: curr.name,
+        routerLink: `/category/${curr.id}`
       });
-    });
-
-    this._initBreadcrumbs();
+      return accum;
+    }, <BreadcrumbItemModel[]>[{
+      label: 'Категории товаров',
+    }]);
+    this._setBreadcrumbs(breadcrumbs);
   }
 
-  private _initCategory() {
-    this._activatedRoute.params.subscribe((res: any) => {
-      this.categoryId = res.id;
-      this._categoryService.getCategoryTree(this.categoryId)
-        .subscribe((categories) => {
-          this.categoryModel = categories[0];
-          this.refreshBreadcrumbs(categories);
-        }, (err) => {
-          console.error('error', err);
+  private _watchUrlChanges(): void {
+    combineLatest([
+      this._activatedRoute.params,
+      this._activatedRoute.queryParams,
+    ]).pipe(
+      tap(([params, queryParams]) => {
+        this.query = queryParams.q;
+        this.searchFilters = {
+          supplier: queryParams.supplier,
+          trademark: queryParams.trademark,
+          deliveryMethod: queryParams.deliveryMethod,
+          delivery: queryParams.delivery,
+          pickup: queryParams.pickup,
+          inStock: queryParams.inStock,
+          onlyWithImages: queryParams.onlyWithImages,
+          priceFrom: queryParams.priceFrom,
+          priceTo: queryParams.priceTo,
+        };
+      }),
+      switchMap(([params, queryParams]) => {
+        console.log(params.id);
+        this.categoryId = params.id;
+        return this._categoryService.getCategoryTree(this.categoryId);
+      }),
+      switchMap((res) => {
+        this.categoryModel = res[0];
+        this.refreshBreadcrumbs(res);
+        return this._productService.searchNomenclatureCards({
+          query: this.query,
+          categoryId: this.categoryId,
+          availableFilters: this.searchFilters,
         });
+      }),
+      catchError((err) => {
+        console.error('error', err);
+        return throwError(err);
+      }),
+    ).subscribe((res) => {
+      this.searchedNomenclatures = res._embedded.items;
+      this.totalSearchedNomenclaturesCount = res.page?.totalElements;
     }, (err) => {
       console.error('error', err);
     });
   }
 
-  private _initQueryParams() {
-    this._activatedRoute.queryParams
-      .subscribe((res) => {
-        this.query = res.q;
-        this.searchFilters = {
-          supplier: res.supplier,
-          trademark: res.trademark,
-          deliveryMethod: res.deliveryMethod,
-          delivery: res.delivery,
-          pickup: res.pickup,
-          inStock: res.inStock,
-          onlyWithImages: res.onlyWithImages,
-          priceFrom: res.priceFrom,
-          priceTo: res.priceTo,
-        };
-      }, (err) => {
-        console.error('error', err);
-      });
-  }
 
-  private _searchNomenclatures(filters: AllGroupQueryFiltersModel): void {
-    this._productService.searchNomenclatureCards(filters)
-      .subscribe((res) => {
-        this.searchedNomenclatures = res._embedded.items;
-        this.totalSearchedNomenclaturesCount = res.page?.totalElements;
-      }, (err) => {
-        console.error('error', err);
-      });
-  }
-
-  private _initBreadcrumbs() {
+  private _setBreadcrumbs(breadcrumbs: BreadcrumbItemModel[]): void {
     this._breadcrumbsService.setVisible(true);
-    this._breadcrumbsService.setItems(this._breadcrumbItems);
+    this._breadcrumbsService.setItems(breadcrumbs);
   }
 }
