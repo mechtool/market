@@ -1,2 +1,2 @@
-export * from './list/list.component';
-export * from './single/single.component';
+export * from './categories/categories.component';
+export * from './category/category.component';

@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CategoryListComponent, CategorySingleComponent } from './components';
+import { CategoriesComponent, CategoryComponent } from './components';
 
 const routes: Routes = [
   {
     path: '',
-    component: CategoryListComponent,
+    component: CategoriesComponent,
   }, {
     path: ':id',
-    component: CategorySingleComponent,
+    component: CategoryComponent,
   }, {
     path: '**',
     redirectTo: '',
@@ -24,4 +24,5 @@ const routes: Routes = [
     RouterModule,
   ],
 })
-export class CategoryRoutingModule {}
+export class CategoryRoutingModule {
+}

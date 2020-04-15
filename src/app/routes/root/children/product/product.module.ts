@@ -11,7 +11,7 @@ import {
   MainPopularComponent,
   ProductComponent,
 } from './components';
-import { BannerCardModule, NomenclatureCardModule, SearchBarModule } from '#shared/modules';
+import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -22,6 +22,7 @@ import { BannerCardModule, NomenclatureCardModule, SearchBarModule } from '#shar
     ProductRoutingModule,
     NomenclatureCardModule,
     BannerCardModule,
+    SearchResultsModule,
     SearchBarModule,
   ],
   declarations: [

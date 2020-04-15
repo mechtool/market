@@ -23,11 +23,10 @@
       </div>
     </div>
 
-    <div
-      class="suggest"
-      (mouseover)="quickSearchOver = true"
-      (mouseout)="quickSearchOver = false"
-      *ngIf="isInputFocused || quickSearchOver">
+    <div class="suggest"
+         (mouseover)="quickSearchOver = true"
+         (mouseout)="quickSearchOver = false"
+         *ngIf="!suggestionsOff && (isInputFocused || quickSearchOver)">
 
       <my-search-bar-history
         *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
@@ -36,7 +35,8 @@
       <my-search-bar-products
         [products]="productsSuggestions"
         [categories]="categoriesSuggestions"
-        *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"></my-search-bar-products>
+        *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"
+      ></my-search-bar-products>
 
     </div>
 
@@ -52,12 +52,13 @@
       <my-search-bar-location
         *ngIf="visibleLocationForm"
         (stateLocationForm)="recLocation($event)"
-      >
-      </my-search-bar-location>
+      ></my-search-bar-location>
     </div>
 
   </form>
+
   <div class="region">
     <a class="btn" (click)="clickLocationButton()">{{userLocation.name}}</a>
   </div>
+
 </div>

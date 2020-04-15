@@ -1,15 +1,14 @@
-import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ProductService } from '#shared/modules/common-services/product.service';
 import { NomenclatureCardModel } from '#shared/modules/common-services/models';
 
 @Component({
-  selector: 'my-search-result',
-  templateUrl: './result.component.html',
+  selector: 'my-search-results',
+  templateUrl: './search-results.component.html',
   styleUrls: [
-    './result.component.scss',
-    './result.component-768.scss',
-    './result.component-576.scss',
+    './search-results.component.scss',
+    './search-results.component-768.scss',
+    './search-results.component-576.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -18,14 +17,14 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   @Input() nomenclatures: NomenclatureCardModel[];
   @Input() totalNomenclaturesCount: number;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
   }
-
-
 }

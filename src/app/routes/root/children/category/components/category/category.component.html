@@ -1,16 +1,20 @@
-<div class="search">
+<div class="single">
+
+  <my-category-list
+    [category]="categoryModel"
+    (breadcrumbsForCategory)="refreshBreadcrumbs($event)"
+  ></my-category-list>
+
   <my-search-bar
     [query]="query"
-    (queryChange)="searchSuggestions($event)"
+    [categoryId]="categoryId"
     (submitClick)="changeQueryParameters($event)"
-    [productsSuggestions]="productsSuggestions"
-    [categoriesSuggestions]="categoriesSuggestions"
+    [suggestionsOff]="true"
   ></my-search-bar>
 
   <my-search-results
     [nomenclatures]="searchedNomenclatures"
     [totalNomenclaturesCount]="totalSearchedNomenclaturesCount"
   ></my-search-results>
+
 </div>
-
-

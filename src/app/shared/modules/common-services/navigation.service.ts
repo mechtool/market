@@ -1,7 +1,6 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { NavItemModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
@@ -23,7 +22,7 @@ export class NavigationService implements OnDestroy {
       }, {
         label: 'Категории товаров',
         icon: 'category',
-        routerLink: ['/category']
+        routerLink: ['/category/1'] // todo: не забыть исправить, после того как меню будет готово
       }, {
         label: 'Поставщики',
         icon: 'supplier',
@@ -33,7 +32,7 @@ export class NavigationService implements OnDestroy {
         label: 'Корзина',
         routerLink: ['/cart'],
         icon: 'basket',
-      },  {
+      }, {
         label: 'Личный кабинет',
         icon: 'personal',
         styleClass: 'delimiter',
@@ -64,7 +63,7 @@ export class NavigationService implements OnDestroy {
       }, {
         label: 'Категории товаров',
         icon: 'category',
-        routerLink: ['/category']
+        routerLink: ['/category/1'] // todo: не забыть исправить, после того как меню будет готово
       }, {
         label: 'Поставщики',
         icon: 'supplier',
@@ -108,7 +107,8 @@ export class NavigationService implements OnDestroy {
   constructor(
     private _userService: UserService,
     private _authService: AuthService,
-  ) {}
+  ) {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();

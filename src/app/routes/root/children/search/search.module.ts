@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchRoutingModule } from './search-routing.module';
 import { SearchComponent } from './search.component';
-import { SearchResultComponent } from './components/result/result.component';
-import { NomenclatureCardModule, BannerCardModule, SearchBarModule } from '#shared/modules';
+import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -14,10 +13,11 @@ import { NomenclatureCardModule, BannerCardModule, SearchBarModule } from '#shar
     NomenclatureCardModule,
     BannerCardModule,
     SearchBarModule,
+    SearchResultsModule,
   ],
   declarations: [
     SearchComponent,
-    SearchResultComponent,
   ],
 })
-export class SearchModule { }
+export class SearchModule {
+}

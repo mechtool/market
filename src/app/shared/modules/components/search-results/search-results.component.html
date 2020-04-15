@@ -1,0 +1,17 @@
+<div class="result">
+
+  <div class="title">
+    <strong>Результаты поиска</strong>
+    <span>найдено {{totalNomenclaturesCount}} товаров</span>
+  </div>
+
+  <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
+
+    <my-nomenclature-card
+      *ngFor="let nomenclature of nomenclatures"
+      [nomenclature]="nomenclature"
+    ></my-nomenclature-card>
+
+  </div>
+</div>
+

@@ -44,7 +44,9 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   availableFilters: DefaultSearchAvailableModel;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
+  @Input() suggestionsOff = false;
   @Input() query = '';
+  @Input() categoryId: string;
   @Input() useBrowserStorage = true;
   @Output() queryChange: EventEmitter<any> = new EventEmitter();
   @Output() submitClick: EventEmitter<any> = new EventEmitter();
@@ -60,7 +62,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     private _router: Router,
   ) {
     this._initForm();
-    this._subscribeOnQueryChanges();
+
+    if (!this.suggestionsOff) {
+      this._subscribeOnQueryChanges();
+    }
   }
 
   ngOnInit() {
@@ -81,6 +86,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     const queryParam = this.form.get('query').value;
     const groupAllQueryFilters = {
       query: queryParam,
+      categoryId: this.categoryId,
       availableFilters: this.availableFilters || new DefaultSearchAvailableModel(),
     };
     if (queryParam.length >= this.MIN_QUERY_LENGTH) {
@@ -107,6 +113,14 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   recLocation($event: LocationModel) {
     this.visibleLocationForm = !this.visibleLocationForm;
     this.userLocation = $event;
+    if (this.availableFilters) {
+      if (this.availableFilters.delivery) {
+        this.availableFilters.delivery = $event.fias;
+      }
+      if (this.availableFilters.pickup) {
+        this.availableFilters.pickup = $event.fias;
+      }
+    }
   }
 
   clickLocationButton() {

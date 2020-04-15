@@ -1,10 +1,5 @@
 <div class="breadcrumbs" *ngIf="visibleBreadcrumbs$ | async">
   <nz-breadcrumb>
-    <nz-breadcrumb-item>
-        <a [routerLink]="'/'">
-          <span>Личный кабинет</span>
-        </a>
-    </nz-breadcrumb-item>
     <nz-breadcrumb-item *ngFor="let item of items">
       <ng-container *ngIf="item.routerLink">
         <ng-container *ngIf="item.queryParams">

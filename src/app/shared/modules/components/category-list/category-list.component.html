@@ -1,0 +1,8 @@
+<div>
+  <h2>{{category.name}}</h2>
+  <div class="sub_category__content">
+    <ul class="sub_category__list">
+      <li class="sub_category__item" *ngFor="let item of categories" (click)="chooseCategory(item)">{{item.name}}</li>
+    </ul>
+  </div>
+</div>

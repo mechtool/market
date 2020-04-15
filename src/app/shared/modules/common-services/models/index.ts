@@ -16,3 +16,4 @@ export * from './all.group.query.filters.model';
 export * from './user-organization.model';
 export * from './location.model';
 export * from './breadcrumb-item.model';
+export * from './category.model';

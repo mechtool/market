@@ -19,7 +19,6 @@ import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrum
 })
 export class MainComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  useBrowserStorage = true;
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
 
@@ -46,7 +45,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.productsSuggestions = res.products;
         this.categoriesSuggestions = res.categories;
       }, (err) => {
-        console.log('error');
+        console.error('error', err);
       });
   }
 
@@ -57,6 +56,7 @@ export class MainComponent implements OnInit, OnDestroy {
         q: filters.query,
         supplier: filters.availableFilters.supplier,
         trademark: filters.availableFilters.trademark,
+        deliveryMethod: filters.availableFilters.deliveryMethod,
         delivery: filters.availableFilters.delivery,
         pickup: filters.availableFilters.pickup,
         inStock: filters.availableFilters.inStock,

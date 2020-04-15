@@ -25,6 +25,10 @@ export class AboutComponent implements OnInit, OnDestroy {
     this._breadcrumbsService.setVisible(true);
     this._breadcrumbsService.setItems([
       {
+        label: 'Личный кабинет',
+        routerLink: '/'
+      },
+      {
         label: 'О проекте 1С:Бизнес-сеть',
       }
     ]);

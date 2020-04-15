@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
+  DefaultSearchAvailableModel,
   NomenclatureCardModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
@@ -22,6 +23,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   totalSearchedNomenclaturesCount: number;
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
+  availableFilters: DefaultSearchAvailableModel;
   query: string;
 
   constructor(private _route: ActivatedRoute,
@@ -31,21 +33,13 @@ export class SearchComponent implements OnInit, OnDestroy {
               private _localStorageService: LocalStorageService,
               private _breadcrumbsService: BreadcrumbsService,
   ) {
-    this._route.queryParams.subscribe((res) => {
-      this.query = res.q;
-      const searchFilters = {
-        supplier: res.supplier,
-        trademark: res.trademark,
-        delivery: res.delivery,
-        pickup: res.pickup,
-        inStock: res.inStock,
-        onlyWithImages: res.onlyWithImages,
-        priceFrom: res.priceFrom,
-        priceTo: res.priceTo,
-      };
-      this.searchNomenclatures({ query: this.query, availableFilters: searchFilters });
+    this._initBreadcrumbs();
+    this._initQueryParams();
+    this._searchNomenclatures({
+      query: this.query,
+      availableFilters: this.availableFilters
     });
-    this._breadcrumbsService.setVisible(false);
+
   }
 
   ngOnInit() {
@@ -66,17 +60,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  searchNomenclatures(filters: AllGroupQueryFiltersModel): void {
-    this._productService.searchNomenclatureCards(filters)
-      .subscribe((res) => {
-        this.searchedNomenclatures = res._embedded.items;
-        this.totalSearchedNomenclaturesCount = res.page?.totalElements;
-      }, (err) => {
-        console.log('error');
-      });
-  }
-
-  navigateToSearchRoute(filters: AllGroupQueryFiltersModel) {
+  changeQueryParameters(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     const availableFilters = filters.availableFilters;
     this._router.navigate(['/search'], {
@@ -84,6 +68,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         q: filters.query,
         supplier: availableFilters.supplier,
         trademark: availableFilters.trademark,
+        deliveryMethod: availableFilters.deliveryMethod,
         delivery: availableFilters.delivery,
         pickup: availableFilters.pickup,
         inStock: availableFilters.inStock,
@@ -94,4 +79,34 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _searchNomenclatures(filters: AllGroupQueryFiltersModel): void {
+    this._productService.searchNomenclatureCards(filters)
+      .subscribe((res) => {
+        this.searchedNomenclatures = res._embedded.items;
+        this.totalSearchedNomenclaturesCount = res.page?.totalElements;
+      }, (err) => {
+        console.log('error');
+      });
+  }
+
+  private _initQueryParams() {
+    this._route.queryParams.subscribe((res) => {
+      this.query = res.q;
+      this.availableFilters = {
+        supplier: res.supplier,
+        trademark: res.trademark,
+        deliveryMethod: res.deliveryMethod,
+        delivery: res.delivery,
+        pickup: res.pickup,
+        inStock: res.inStock,
+        onlyWithImages: res.onlyWithImages,
+        priceFrom: res.priceFrom,
+        priceTo: res.priceTo,
+      };
+    });
+  }
+
+  private _initBreadcrumbs() {
+    this._breadcrumbsService.setVisible(false);
+  }
 }

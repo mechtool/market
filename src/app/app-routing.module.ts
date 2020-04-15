@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard, SsoTicketGuard } from '#shared/modules';
 import { RootComponent } from './routes/root/root.component';
 import { DelayedPreloadingStrategy } from '#shared/modules/setup-services';
@@ -76,5 +76,6 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
 

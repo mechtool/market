@@ -25,6 +25,10 @@ export class OrganizationsComponent implements OnInit, OnDestroy {
     this._breadcrumbsService.setVisible(true);
     this._breadcrumbsService.setItems([
       {
+        label: 'Личный кабинет',
+        routerLink: '/'
+      },
+      {
         label: 'Мои организации',
       },
     ]);

@@ -30,9 +30,9 @@ export class ProductService {
   }
 
   searchNomenclatureCards(filters: AllGroupQueryFiltersModel): Observable<any> {
-
     const searchQuery = {
       textQuery: filters.query,
+      categoryId: filters.categoryId,
       priceFrom: filters.availableFilters.priceFrom,
       priceTo: filters.availableFilters.priceTo,
       suppliers: [filters.availableFilters.supplier],
