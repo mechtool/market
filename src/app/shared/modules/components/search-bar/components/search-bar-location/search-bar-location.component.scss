@@ -1,5 +1,4 @@
 .dropdown_block {
-  position: absolute;
   background-color: #ffffff;
   box-shadow: 2px 4px 23px rgba(0, 0, 0, 0.1);
   border-radius: 2px;
@@ -39,7 +38,6 @@ input[type="text"] {
 }
 
 .choose-city_wrap {
-  //min-width: 270px;
   width: 400px;
   height: 500px;
   overflow: scroll;

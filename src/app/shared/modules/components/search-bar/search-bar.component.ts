@@ -41,7 +41,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   visibleLocationForm = false;
   MIN_QUERY_LENGTH = 3;
   userLocation: LocationModel;
-  availableFilters: DefaultSearchAvailableModel;
+  @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() suggestionsOff = false;
@@ -94,13 +94,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  screenWidthGreaterThan(val: number) {
-    return this._responsiveService.screenWidthGreaterThan(val);
-  }
-
-  clickFilterButton() {
-    this.visibleLocationForm = false;
-    this.visibleFilterForm = !this.visibleFilterForm;
+  changeFilterButton($event: boolean) {
+    this.visibleFilterForm = $event;
   }
 
   recFilter($event: DefaultSearchAvailableModel) {
@@ -111,8 +106,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   recLocation($event: LocationModel) {
-    this.visibleLocationForm = !this.visibleLocationForm;
     this.userLocation = $event;
+    this.visibleLocationForm = !this.visibleLocationForm;
     if (this.availableFilters) {
       if (this.availableFilters.delivery) {
         this.availableFilters.delivery = $event.fias;
@@ -123,9 +118,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  clickLocationButton() {
-    this.visibleLocationForm = !this.visibleLocationForm;
-    this.visibleFilterForm = false;
+  changeLocationButton($event: boolean) {
+    this.visibleLocationForm = $event;
   }
 
   private _initForm(): void {

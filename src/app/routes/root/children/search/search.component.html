@@ -1,6 +1,7 @@
 <div class="search">
   <my-search-bar
     [query]="query"
+    [availableFilters]="availableFilters"
     (queryChange)="searchSuggestions($event)"
     (submitClick)="changeQueryParameters($event)"
     [productsSuggestions]="productsSuggestions"

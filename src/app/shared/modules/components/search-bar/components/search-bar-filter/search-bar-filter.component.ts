@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CountryCode,
   DefaultSearchAvailableModel,
   DeliveryMethod,
   LocalStorageService
 } from '../../../../common-services';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'my-search-bar-filter',
@@ -18,16 +20,22 @@ import {
 })
 export class SearchBarFilterComponent implements OnInit, OnDestroy {
 
-  anyMethod = DeliveryMethod.ANY;
-  deliveryMethod = DeliveryMethod.DELIVERY;
-  pickupMethod = DeliveryMethod.PICKUP;
+  MIN_PRICE = 0;
+  MAX_PRICE = 1000000;
   availableFiltersForm: FormGroup;
+
+  deliveryOptions = [
+    { label: 'Любой', value: DeliveryMethod.ANY },
+    { label: 'Доставка', value: DeliveryMethod.DELIVERY },
+    { label: 'Самовывоз', value: DeliveryMethod.PICKUP }
+  ];
 
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Output() stateAvailableFilters: EventEmitter<DefaultSearchAvailableModel> = new EventEmitter();
 
   constructor(
     private _localStorageService: LocalStorageService,
+    private _activatedRoute: ActivatedRoute,
     private _fb: FormBuilder,
   ) {
   }
@@ -37,10 +45,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._initForm();
-  }
-
-  get getDeliveryMethod() {
-    return this.availableFiltersForm.get('deliveryMethod').value;
+    this._controlsPrices();
   }
 
   get inStock() {
@@ -49,14 +54,6 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
 
   get onlyWithImages() {
     return this.availableFiltersForm.get('onlyWithImages').value;
-  }
-
-  private userLocation(): string {
-    if (this._localStorageService.hasUserLocation()) {
-      const fias = this._localStorageService.getUserLocation().fias;
-      return fias !== CountryCode.RUSSIA ? fias : null;
-    }
-    return null;
   }
 
   save() {
@@ -75,12 +72,12 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     const deliveryMethod = this.availableFiltersForm.get('deliveryMethod').value;
     if (deliveryMethod) {
       this.availableFilters.deliveryMethod = deliveryMethod;
-      if (deliveryMethod === this.anyMethod) {
+      if (deliveryMethod === DeliveryMethod.ANY) {
         this.availableFilters.delivery = this.userLocation();
         this.availableFilters.pickup = this.userLocation();
-      } else if (deliveryMethod === this.deliveryMethod) {
+      } else if (deliveryMethod === DeliveryMethod.DELIVERY) {
         this.availableFilters.delivery = this.userLocation();
-      } else if (deliveryMethod === this.pickupMethod) {
+      } else if (deliveryMethod === DeliveryMethod.PICKUP) {
         this.availableFilters.pickup = this.userLocation();
       }
     }
@@ -107,6 +104,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
   }
 
   private _initForm() {
+
     this._initFilter();
 
     this.availableFiltersForm = this._fb.group({
@@ -117,7 +115,8 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
       onlyWithImages: this.availableFilters.onlyWithImages,
       // todo: добавить валидацию на отрицательное число и запретить в форме отрицательные числа
       priceFrom: this.availableFilters.priceFrom,
-      priceTo: this.availableFilters.priceTo
+      priceTo: this.availableFilters.priceTo,
+      priceBetween: new FormControl([this.availableFilters.priceFrom || this.MIN_PRICE, this.availableFilters.priceTo || this.MAX_PRICE]),
     });
   }
 
@@ -125,5 +124,36 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     if (this.availableFilters === undefined) {
       this.availableFilters = new DefaultSearchAvailableModel();
     }
+  }
+
+  private userLocation(): string {
+    if (this._localStorageService.hasUserLocation()) {
+      const fias = this._localStorageService.getUserLocation().fias;
+      return fias !== CountryCode.RUSSIA ? fias : null;
+    }
+    return null;
+  }
+
+  private _controlsPrices() {
+    this.availableFiltersForm.controls['priceFrom'].valueChanges.subscribe((price) => {
+      this.availableFiltersForm.controls['priceFrom'].setValue(+price, { onlySelf: true, emitEvent: false });
+      this.availableFiltersForm.controls['priceBetween'].setValue(
+        [+price, this.availableFiltersForm.get('priceBetween').value[1]], { onlySelf: true, emitEvent: false }
+      );
+    });
+
+    this.availableFiltersForm.controls['priceTo'].valueChanges.subscribe((price) => {
+      this.availableFiltersForm.controls['priceTo'].setValue(+price, { onlySelf: true, emitEvent: false });
+      this.availableFiltersForm.controls['priceBetween'].setValue(
+        [this.availableFiltersForm.get('priceBetween').value[0], +price], { onlySelf: true, emitEvent: false }
+      );
+    });
+
+    this.availableFiltersForm.controls['priceBetween'].valueChanges.subscribe((prices) => {
+      this.availableFiltersForm.controls['priceFrom'].setValue(+prices[0], { onlySelf: true, emitEvent: false }
+      );
+      this.availableFiltersForm.controls['priceTo'].setValue(+prices[1], { onlySelf: true, emitEvent: false }
+      );
+    });
   }
 }

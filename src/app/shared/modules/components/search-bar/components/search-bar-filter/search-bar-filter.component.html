@@ -1,54 +1,85 @@
 <div class="dropdown_block filter_wrap">
+
+  <!--
+  todo: Нужна стратегия по валидации данной формы, что делаем если введены не кооректные значения или условия, блокируем дальнейший ввод или ругаемся?
+  -->
+
   <p class="filter_title">Фильтр для поиска</p>
-  <form id="formFilter" [formGroup]="availableFiltersForm">
+
+  <form nz-form id="formFilter" [formGroup]="availableFiltersForm">
+
     <div class="form-group">
-      <label for="formFilterInn">ИНН или наименованию поставщика</label>
-      <input type="text" name="inn" id="formFilterInn" placeholder="Укажите поставщика" formControlName="supplier">
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
+          <input nz-input type="text" name="formFilterInn" id="formFilterInn" placeholder="Укажите поставщика"
+                 formControlName="supplier">
+        </nz-form-control>
+      </nz-form-item>
     </div>
+
     <div class="form-group">
-      <label for="formFilterBrand">Наименование бренда производителя</label>
-      <input type="text" name="brand" id="formFilterBrand" placeholder="Укажите бренд" formControlName="trademark">
+      <nz-form-item>
+        <nz-form-control>
+          <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
+          <input nz-input type="text" name="formFilterBrand" id="formFilterBrand" placeholder="Укажите бренд"
+                 formControlName="trademark">
+        </nz-form-control>
+      </nz-form-item>
     </div>
+
     <div class="form-group_title">Способ доставки</div>
-    <div class="form-group form-group_radio">
-      <label class="radio-wrap" [ngClass]="{'checked': getDeliveryMethod == anyMethod}">
-        <input type="radio" name="deliveryMethod" value="any" formControlName="deliveryMethod"> Любой
-      </label>
-      <label class="radio-wrap" [ngClass]="{'checked': getDeliveryMethod == deliveryMethod}">
-        <input type="radio" name="deliveryMethod" value="delivery" formControlName="deliveryMethod"> Самовывоз
-      </label>
-      <label class="radio-wrap" [ngClass]="{'checked': getDeliveryMethod == pickupMethod}">
-        <input type="radio" name="deliveryMethod" value="pickup" formControlName="deliveryMethod"> Доставка
-      </label>
+    <div class="form-group_radio">
+      <nz-radio-group formControlName="deliveryMethod">
+        <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
+      </nz-radio-group>
     </div>
+
     <div class="form-group_title">Параметры поиска</div>
-    <div class="form-group form-group_checkbox">
-      <label class="checkbox-wrap" [ngClass]="{'checked': inStock}">
-        <input type="checkbox" name="available" formControlName="inStock"> Только товары в наличии
-      </label>
-      <label class="checkbox-wrap" [ngClass]="{'checked': onlyWithImages}">
-        <input type="checkbox" name="pictures" formControlName="onlyWithImages">Только с картинками
-      </label>
+    <div class="form-group_checkbox">
+      <label nz-checkbox formControlName="inStock">Только товары в наличии</label>
+      <br/>
+      <label nz-checkbox formControlName="onlyWithImages">Только с картинками</label>
     </div>
+
     <div class="form-group_title">Цена</div>
+
     <div class="range_wrap range_price">
-      <div class="range" data-min="0" data-max="10000000"></div>
+      <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween"></nz-slider>
+
       <div class="range_inputs">
-        <div class="range_inputs-text">От</div>
-        <div>
-          <input type="number" name="price_from" id="formPriceFrom" class="range_input range_from price_from"
-                    placeholder="0 ₽" autocomplete="off" formControlName="priceFrom">
-        </div>
-        <div class="range_inputs-text range_inputs-delimiter">До</div>
-        <div>
-          <input type="number" name="price_to" id="formPriceTo" class="range_input range_to price_to"
-                    placeholder="10000 ₽" autocomplete="off" formControlName="priceTo">
-        </div>
+
+        <nz-form-item>
+          <div class="range_inputs-text">От</div>
+
+          <nz-form-control>
+            <input nz-input type="number" name="price_from" id="formPriceFrom"
+                   class="range_input range_from price_from"
+                   placeholder="{{MIN_PRICE}} ₽" autocomplete="off" formControlName="priceFrom"/>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item>
+          <div class="range_inputs-text range_inputs-delimiter">До</div>
+
+          <nz-form-control>
+            <input nz-input type="number" name="price_to" id="formPriceTo"
+                   class="range_input range_to price_to"
+                   placeholder="{{MAX_PRICE}} ₽" autocomplete="off" formControlName="priceTo"/>
+          </nz-form-control>
+        </nz-form-item>
+
       </div>
     </div>
+
     <div class="filter_btns">
-      <button type="submit" class="btn btn-yellow" (click)="save()">Сохранить</button>
-      <button type="button" id="filterClearButton" (click)="reset()" class="btn btn-transparent">Сбросить</button>
+      <button nz-button type="submit" class="btn btn-yellow"
+              (click)="save()">Сохранить
+      </button>
+      <button nz-button type="button" id="filterClearButton"
+              (click)="reset()" class="btn btn-transparent">Сбросить
+      </button>
     </div>
   </form>
 </div>

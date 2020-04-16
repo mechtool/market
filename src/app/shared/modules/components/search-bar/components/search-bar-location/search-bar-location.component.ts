@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { LocalStorageService, LocationService } from '../../../../common-services';
 import { LocationModel, Megacity } from '../../../../common-services/models/location.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -36,6 +36,13 @@ export class SearchBarLocationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._initForm();
     this._subscribeOnCityRequest();
+  }
+
+  @Input()
+  set cleanLocationForm(visible: boolean) {
+    if (!visible) {
+      this.ngOnInit();
+    }
   }
 
   private _initForm() {

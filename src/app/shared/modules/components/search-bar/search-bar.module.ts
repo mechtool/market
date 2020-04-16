@@ -8,8 +8,15 @@ import { SearchBarItemComponent } from './components/item/item.component';
 import { SearchBarProductsComponent } from './components/products/products.component';
 import { SearchBarFilterComponent } from './components/search-bar-filter/search-bar-filter.component';
 import { SearchBarLocationComponent } from './components/search-bar-location/search-bar-location.component';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import {
+  NzButtonModule,
+  NzCheckboxModule,
+  NzDropDownModule,
+  NzFormModule,
+  NzInputModule,
+  NzRadioModule,
+  NzSliderModule
+} from 'ng-zorro-antd';
 
 @NgModule({
   imports: [
@@ -17,8 +24,13 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    NzInputModule,
+    NzButtonModule,
+    NzCheckboxModule,
     NzDropDownModule,
+    NzFormModule,
+    NzInputModule,
+    NzRadioModule,
+    NzSliderModule,
   ],
   declarations: [
     SearchBarComponent,
@@ -30,5 +42,6 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
   ],
   exports: [SearchBarComponent],
 })
-export class SearchBarModule { }
+export class SearchBarModule {
+}
 

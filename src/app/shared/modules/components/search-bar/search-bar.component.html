@@ -11,7 +11,7 @@
       formControlName="query"
       (mouseenter)="isInputHovered = true"
       (mouseleave)="isInputHovered = false"
-      (focus)="isInputFocused = true; visibleFilterForm = false; visibleLocationForm = false"
+      (focus)="isInputFocused = true;"
       (blur)="isInputFocused = false">
 
     <div class="buttons">
@@ -19,7 +19,17 @@
         <button class="btn btn_square btn_search" [disabled]="form.invalid"></button>
       </div>
       <div class="buttons__item">
-        <a class="btn btn_square btn_category" (click)="clickFilterButton()"></a>
+        <a class="btn btn_square btn_category"
+           nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
+           [nzDropdownMenu]="filter_menu"
+           (nzVisibleChange)="changeFilterButton($event)" [(nzVisible)]="visibleFilterForm"></a>
+
+        <nz-dropdown-menu #filter_menu="nzDropdownMenu">
+          <my-search-bar-filter
+            [availableFilters]="availableFilters"
+            (stateAvailableFilters)="recFilter($event)"
+          ></my-search-bar-filter>
+        </nz-dropdown-menu>
       </div>
     </div>
 
@@ -40,25 +50,19 @@
 
     </div>
 
-    <div class="search-bar-filter">
-      <my-search-bar-filter
-        [availableFilters]="availableFilters"
-        (stateAvailableFilters)="recFilter($event)"
-        *ngIf="visibleFilterForm"
-      ></my-search-bar-filter>
-    </div>
-
-    <div class="search-bar-location">
-      <my-search-bar-location
-        *ngIf="visibleLocationForm"
-        (stateLocationForm)="recLocation($event)"
-      ></my-search-bar-location>
-    </div>
-
   </form>
 
   <div class="region">
-    <a class="btn" (click)="clickLocationButton()">{{userLocation.name}}</a>
+    <a class="btn" nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
+       [nzDropdownMenu]="location_menu"
+       (nzVisibleChange)="changeLocationButton($event)" [(nzVisible)]="visibleLocationForm">{{userLocation.name}}</a>
+
+    <nz-dropdown-menu #location_menu="nzDropdownMenu">
+      <my-search-bar-location
+        [cleanLocationForm]="visibleLocationForm"
+        (stateLocationForm)="recLocation($event)"
+      ></my-search-bar-location>
+    </nz-dropdown-menu>
   </div>
 
 </div>

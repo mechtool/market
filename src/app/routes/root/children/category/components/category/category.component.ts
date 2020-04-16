@@ -97,7 +97,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
         };
       }),
       switchMap(([params, queryParams]) => {
-        console.log(params.id);
         this.categoryId = params.id;
         return this._categoryService.getCategoryTree(this.categoryId);
       }),
