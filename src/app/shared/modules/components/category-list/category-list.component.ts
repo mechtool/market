@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CategoryModel } from '../../common-services/models/category.model';
 import { CategoryService } from '../../../modules/common-services/category.service';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
     './category-list.component.scss'
   ]
 })
-export class CategoryListComponent implements OnInit, OnDestroy {
+export class CategoryListComponent implements OnInit, OnDestroy, OnChanges {
 
   categories: CategoryModel[];
   @Input() category: CategoryModel;
@@ -26,6 +26,9 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     this._categoryService.getCategoriesChildren(this.category.id)
       .subscribe((res) => {
         this.categories = res;

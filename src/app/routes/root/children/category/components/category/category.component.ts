@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, combineLatest, throwError } from 'rxjs';
+import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import {
   AllGroupQueryFiltersModel,
@@ -8,10 +8,10 @@ import {
   DefaultSearchAvailableModel,
   NomenclatureCardModel,
 } from '#shared/modules/common-services/models';
-import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService, LocalStorageService } from '#shared/modules/common-services';
 import { ProductService } from '#shared/modules/common-services/product.service';
-import { tap, switchMap, catchError } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './category.component.html',
@@ -37,7 +37,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this._watchUrlChanges();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
@@ -101,7 +102,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
         return this._categoryService.getCategoryTree(this.categoryId);
       }),
       switchMap((res) => {
-        this.categoryModel = res[0];
+        // todo: поменять логику когда сделаем дерево категорий
+        this.categoryModel = res.filter(cat => cat.id === this.categoryId)[0];
         this.refreshBreadcrumbs(res);
         return this._productService.searchNomenclatureCards({
           query: this.query,
