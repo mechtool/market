@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
   templateUrl: './banners.component.html',
   styleUrls: [
     './banners.component.scss',
+    './banners.component-1680.scss',
     './banners.component-992.scss',
   ],
 })
