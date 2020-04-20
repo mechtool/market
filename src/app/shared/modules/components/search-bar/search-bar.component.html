@@ -66,3 +66,11 @@
   </div>
 
 </div>
+
+<div class="sort">
+  <my-results-sorter
+    *ngIf="visibleSort"
+    [sort]="sort"
+    (sortChange)="sortChange($event)"
+  ></my-results-sorter>
+</div>

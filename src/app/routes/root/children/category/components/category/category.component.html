@@ -8,8 +8,10 @@
   <my-search-bar
     [query]="query"
     [categoryId]="categoryId"
-    (submitClick)="changeQueryParameters($event)"
+    [sort]="sort"
+    (submitClick)="queryParametersChange($event)"
     [suggestionsOff]="true"
+    [visibleSort]="true"
   ></my-search-bar>
 
   <my-search-results

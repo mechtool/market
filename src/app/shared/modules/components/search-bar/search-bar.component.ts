@@ -13,10 +13,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import {
+  AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
   LocalStorageService,
   LocationModel,
-  ResponsiveService
+  ResponsiveService,
+  SortModel
 } from '../../common-services';
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
 import { Router } from '@angular/router';
@@ -41,15 +43,17 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   visibleLocationForm = false;
   MIN_QUERY_LENGTH = 3;
   userLocation: LocationModel;
+  @Input() query = '';
   @Input() availableFilters: DefaultSearchAvailableModel;
+  @Input() sort = SortModel.ASC;
+  @Input() visibleSort = false;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() suggestionsOff = false;
-  @Input() query = '';
   @Input() categoryId: string;
   @Input() useBrowserStorage = true;
-  @Output() queryChange: EventEmitter<any> = new EventEmitter();
-  @Output() submitClick: EventEmitter<any> = new EventEmitter();
+  @Output() queryChange: EventEmitter<string> = new EventEmitter();
+  @Output() submitClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
 
   get searchQuery() {
     return this.form.get('query').value;
@@ -88,6 +92,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
       query: queryParam,
       categoryId: this.categoryId,
       availableFilters: this.availableFilters || new DefaultSearchAvailableModel(),
+      sort: this.sort,
     };
     if (queryParam.length >= this.MIN_QUERY_LENGTH) {
       this.submitClick.emit(groupAllQueryFilters);
@@ -120,6 +125,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   changeLocationButton($event: boolean) {
     this.visibleLocationForm = $event;
+  }
+
+  sortChange($event: SortModel) {
+    this.sort = $event;
   }
 
   private _initForm(): void {

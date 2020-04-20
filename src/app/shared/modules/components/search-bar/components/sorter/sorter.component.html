@@ -1,0 +1,18 @@
+<div class="catalog_header">
+  <div class="catalog_header__btns">
+    <div class="dropdown catalog_sort">
+
+      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+        <span class="dropdown_control catalog_sort__control">{{currentSortType.label}}</span>
+      </a>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu nzSelectable>
+          <li class="catalog_sort__item" nz-menu-item *ngFor="let item of sortTypes"
+              (click)="chooseSort(item)">{{item.label}}</li>
+        </ul>
+      </nz-dropdown-menu>
+
+    </div>
+  </div>
+</div>

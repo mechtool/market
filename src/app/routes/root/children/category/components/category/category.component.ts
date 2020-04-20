@@ -7,6 +7,7 @@ import {
   CategoryModel,
   DefaultSearchAvailableModel,
   NomenclatureCardModel,
+  SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService, LocalStorageService } from '#shared/modules/common-services';
@@ -25,6 +26,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   searchFilters: DefaultSearchAvailableModel;
   searchedNomenclatures: NomenclatureCardModel[];
   totalSearchedNomenclaturesCount: number;
+  sort: SortModel;
 
   constructor(
     private _breadcrumbsService: BreadcrumbsService,
@@ -45,7 +47,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this._unsubscriber$.complete();
   }
 
-  changeQueryParameters(filters: AllGroupQueryFiltersModel) {
+  queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     const availableFilters = filters.availableFilters;
     this._router.navigate([`/category/${this.categoryId}`], {
@@ -60,6 +62,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         onlyWithImages: availableFilters.onlyWithImages,
         priceFrom: availableFilters.priceFrom,
         priceTo: availableFilters.priceTo,
+        sort: filters.sort,
       }
     });
   }
@@ -95,6 +98,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
           priceFrom: queryParams.priceFrom,
           priceTo: queryParams.priceTo,
         };
+        this.sort = queryParams.sort;
       }),
       switchMap(([params, queryParams]) => {
         this.categoryId = params.id;
@@ -102,12 +106,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
       }),
       switchMap((res) => {
         // todo: поменять логику когда сделаем дерево категорий
-        this.categoryModel = res.filter(cat => cat.id === this.categoryId)[0];
+        this.categoryModel = res.find(cat => cat.id === this.categoryId);
         this.refreshBreadcrumbs(res);
         return this._productService.searchNomenclatureCards({
           query: this.query,
           categoryId: this.categoryId,
           availableFilters: this.searchFilters,
+          sort: this.sort,
         });
       }),
       catchError((err) => {
@@ -121,7 +126,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       console.error('error', err);
     });
   }
-
 
   private _setBreadcrumbs(breadcrumbs: BreadcrumbItemModel[]): void {
     this._breadcrumbsService.setVisible(true);

@@ -2,10 +2,12 @@
   <my-search-bar
     [query]="query"
     [availableFilters]="availableFilters"
+    [sort]="sort"
     (queryChange)="searchSuggestions($event)"
-    (submitClick)="changeQueryParameters($event)"
+    (submitClick)="queryParametersChange($event)"
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
+    [visibleSort]="true"
   ></my-search-bar>
 
   <my-search-results

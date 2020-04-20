@@ -5,6 +5,7 @@ import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
   NomenclatureCardModel,
+  SortModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
 } from '#shared/modules/common-services/models';
@@ -25,6 +26,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   categoriesSuggestions: SuggestionCategoryItemModel[];
   availableFilters: DefaultSearchAvailableModel;
   query: string;
+  sort: SortModel;
 
   constructor(private _route: ActivatedRoute,
               private _productService: ProductService,
@@ -37,7 +39,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._initQueryParams();
     this._searchNomenclatures({
       query: this.query,
-      availableFilters: this.availableFilters
+      availableFilters: this.availableFilters,
+      sort: this.sort,
     });
 
   }
@@ -60,7 +63,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       });
   }
 
-  changeQueryParameters(filters: AllGroupQueryFiltersModel) {
+  queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     const availableFilters = filters.availableFilters;
     this._router.navigate(['/search'], {
@@ -75,6 +78,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         onlyWithImages: availableFilters.onlyWithImages,
         priceFrom: availableFilters.priceFrom,
         priceTo: availableFilters.priceTo,
+        sort: filters.sort,
       }
     });
   }
@@ -90,19 +94,20 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private _initQueryParams() {
-    this._route.queryParams.subscribe((res) => {
-      this.query = res.q;
+    this._route.queryParams.subscribe((queryParams) => {
+      this.query = queryParams.q;
       this.availableFilters = {
-        supplier: res.supplier,
-        trademark: res.trademark,
-        deliveryMethod: res.deliveryMethod,
-        delivery: res.delivery,
-        pickup: res.pickup,
-        inStock: res.inStock,
-        onlyWithImages: res.onlyWithImages,
-        priceFrom: res.priceFrom,
-        priceTo: res.priceTo,
+        supplier: queryParams.supplier,
+        trademark: queryParams.trademark,
+        deliveryMethod: queryParams.deliveryMethod,
+        delivery: queryParams.delivery,
+        pickup: queryParams.pickup,
+        inStock: queryParams.inStock,
+        onlyWithImages: queryParams.onlyWithImages,
+        priceFrom: queryParams.priceFrom,
+        priceTo: queryParams.priceTo,
       };
+      this.sort = queryParams.sort;
     });
   }
 

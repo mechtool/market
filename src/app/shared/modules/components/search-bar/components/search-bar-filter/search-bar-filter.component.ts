@@ -101,6 +101,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     this.availableFilters = undefined;
     this.stateAvailableFilters.emit(this.availableFilters);
     this._initForm();
+    this._controlsPrices();
   }
 
   private _initForm() {

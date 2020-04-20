@@ -1,0 +1,137 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.btn,
+a.btn,
+button.btn {
+  font-size: var(--font-size-main);
+  font-family: "Futura";
+  font-weight: var(--font-medium);
+  border: none;
+  border-radius: 2px;
+  background-color: #ffffff;
+  min-height: 40px;
+  line-height: 40px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px -1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.dropdown {
+  display: block;
+  position: relative;
+
+  &.showed .dropdown_block {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &_item {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    padding: 5px;
+  }
+
+  &block {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 2px 4px 23px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    z-index: 99;
+    transition: opacity 0.3s;
+  }
+}
+
+.catalog_header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  float: right;
+
+  &__count {
+    font-size: var(--font-size-18);
+    line-height: 23px;
+    margin-right: 20px;
+
+    strong {
+      font-weight: var(--font-medium);
+      letter-spacing: 0.11em;
+    }
+  }
+
+  &__title {
+    font-weight: var(--font-demi);
+    letter-spacing: 0.11em;
+
+    &:after {
+      content: " –";
+      font-weight: var(--font-light);
+    }
+  }
+
+  &__btns {
+    justify-self: flex-end;
+    margin-left: auto;
+
+    & .btn {
+      padding: 0 20px;
+    }
+  }
+}
+
+
+.catalog_sort {
+  &__control {
+    font-size: var(--font-size-12);
+    font-weight: var(--font-medium);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &_sm {
+      display: none;
+    }
+
+    &::after {
+      content: '';
+      width: 0;
+      height: 0;
+      margin-left: 3px;
+      border-style: solid;
+      border-width: 4px 3px 0 3px;
+      border-color: #454545 transparent transparent transparent;
+    }
+  }
+
+  &__wrap {
+    padding: 15px;
+    right: 0;
+    top: 20px;
+  }
+
+  &__item {
+    white-space: nowrap;
+    font-size: var(--font-size-12);
+    font-weight: var(--font-medium);
+    padding: 5px 12px 5px 7px;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #F6F6F6;
+    }
+  }
+}
+
+

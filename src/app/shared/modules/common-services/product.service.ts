@@ -41,6 +41,7 @@ export class ProductService {
       onlyWithImages: filters.availableFilters.onlyWithImages,
       deliveryLocationFiasCode: filters.availableFilters.delivery,
       pickupLocationFiasCode: filters.availableFilters.pickup,
+      sort: filters.sort,
     };
 
     return this._bnetService.searchNomenclatures(searchQuery)

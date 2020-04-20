@@ -63,8 +63,8 @@ export class MainComponent implements OnInit, OnDestroy {
         onlyWithImages: filters.availableFilters.onlyWithImages,
         priceFrom: filters.availableFilters.priceFrom,
         priceTo: filters.availableFilters.priceTo,
+        sort: filters.sort,
       }
     });
   }
-
 }
