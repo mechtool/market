@@ -9,7 +9,7 @@
   <form nz-form id="formFilter" [formGroup]="availableFiltersForm">
 
     <div class="form-group">
-      <nz-form-item>
+      <nz-form-item class="margin-cleared">
         <nz-form-control>
           <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
           <input nz-input type="text" name="formFilterInn" id="formFilterInn" placeholder="Укажите поставщика"
@@ -19,7 +19,7 @@
     </div>
 
     <div class="form-group">
-      <nz-form-item>
+      <nz-form-item class="margin-cleared">
         <nz-form-control>
           <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
           <input nz-input type="text" name="formFilterBrand" id="formFilterBrand" placeholder="Укажите бренд"
@@ -45,7 +45,7 @@
     <div class="form-group_title">Цена</div>
 
     <div class="range_wrap range_price">
-      <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween"></nz-slider>
+      <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween" nzTooltipVisible="{{false}}"></nz-slider>
 
       <div class="range_inputs">
 
@@ -74,11 +74,11 @@
     </div>
 
     <div class="filter_btns">
-      <button nz-button type="submit" class="btn btn-yellow"
+      <button nz-button type="submit" nzType="primary"
               (click)="save()">Сохранить
       </button>
-      <button nz-button type="button" id="filterClearButton"
-              (click)="reset()" class="btn btn-transparent">Сбросить
+      <button nz-button type="button" nzType="link"
+              (click)="reset()">Сбросить
       </button>
     </div>
   </form>

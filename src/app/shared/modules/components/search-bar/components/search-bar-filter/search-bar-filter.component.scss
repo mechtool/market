@@ -7,7 +7,6 @@
 }
 
 .form-group {
-  margin-bottom: 10px;
   position: relative;
 
   & .checkbox-wrap {
@@ -21,13 +20,15 @@
   }
 
   &_title {
-    font-weight: var(--font-demi);
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin: 14px 0;
+    font-weight: var(--font-weight-demi);
+    font-size: var(--font-size-15);
+    color: #454545;
+    letter-spacing: .05px;
   }
 
   label {
-    font-weight: var(--font-medium);
+    font-weight: var(--font-weight-medium);
     line-height: 19px;
     display: block;
     margin-bottom: 10px;
@@ -46,12 +47,9 @@ input[type="text"],
 input[type="number"],
 textarea {
   font-size: var(--font-size-main);
-  font-family: "Futura", Arial, Helvetica, sans-serif;
   letter-spacing: 0.05em;
   padding: 10px 15px;
   background-color: #ffffff;
-  border: 1px solid #d6d6d6;
-  outline-color: #fdc82f;
   resize: none;
   border-radius: 2px;
 }
@@ -104,25 +102,28 @@ input[type="text"] {
 }
 
 .filter_title {
-  margin: 0 0 27px 0;
-  font-weight: var(--font-demi);
+  margin: 0 0 20px 0;
+  font-weight: var(--font-weight-demi);
+  font-size: var(--font-size-15);
+  color: #454545;
+  letter-spacing: .05px;
 }
 
 .filter_wrap {
   padding: 30px 35px;
   min-width: 350px;
-  width: 390px;
+  width: 360px;
 
   & .form-group .checkbox-wrap {
     display: flex;
     font-size: var(--font-size-13);
-    font-weight: var(--font-medium);
+    font-weight: var(--font-weight-medium);
   }
 
   & .form-group_radio {
     display: flex;
     font-size: var(--font-size-13);
-    font-weight: var(--font-medium);
+    font-weight: var(--font-weight-medium);
   }
 
   input[type="text"] {
@@ -207,7 +208,6 @@ input[type="text"] {
 .filter_btns {
   display: flex;
   margin-top: 10px;
-  margin-left: 35px;
 
   & .btn {
     margin-left: 0;
@@ -217,4 +217,8 @@ input[type="text"] {
       min-width: 160px;
     }
   }
+}
+
+.margin-cleared {
+  margin: 0;
 }

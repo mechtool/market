@@ -16,7 +16,7 @@ ol {
 .sub_category_ {
 
   &_link {
-    font-weight: var(--font-medium);
+    font-weight: var(--font-weight-medium);
     font-size: var(--font-size-13);
     white-space: nowrap;
 
@@ -26,7 +26,7 @@ ol {
   }
 
   &_name {
-    font-weight: var(--font-bold);
+    font-weight: var(--font-demi-bold);
     font-size: var(--font-size-13);
     margin-top: 18px;
   }
@@ -40,7 +40,7 @@ ol {
 
   &_item {
     margin: 3px 20px 3px 0;
-    font-weight: var(--font-medium);
+    font-weight: var(--font-weight-medium);
     font-size: var(--font-size-13);
     white-space: nowrap;
     border-bottom: 1px solid #fff;

@@ -11,7 +11,7 @@
   position: relative;
 
   label {
-    font-weight: var(--font-medium);
+    font-weight: var(--font-weight-medium);
     line-height: 19px;
     display: block;
     margin-bottom: 10px;
@@ -44,7 +44,7 @@ input[type="text"] {
   padding: 30px 17px 15px 30px;
 
   & .form-group label {
-    font-weight: var(--font-demi);
+    font-weight: var(--font-weight-demi);
   }
 
   input {
@@ -55,7 +55,7 @@ input[type="text"] {
 .choose-city_item {
   display: flex;
   align-items: center;
-  font-weight: var(--font-medium);
+  font-weight: var(--font-weight-medium);
   min-height: 30px;
   padding: 5px;
   cursor: pointer;

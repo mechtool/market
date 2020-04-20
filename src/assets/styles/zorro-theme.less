@@ -1,3 +1,121 @@
 @import "../node_modules/ng-zorro-antd/ng-zorro-antd.less";
 
-// TODO: здесь можно переопределить стили NG-ZORRO
+// Здесь переопределяются стили NG-ZORRO
+
+// Common
+@accent-color: #fdc82f;
+@outline-color: #fedc7b;
+.active(@color: @outline-color) {
+  border-color: @color;
+  outline: 0;
+  box-shadow:none;
+}
+
+
+// Input
+@input-placeholder-color: rgba(69, 69, 69, .8);
+@input-border-color: #c4c4c4;
+@input-hover-border-color: @outline-color;
+
+
+// Radio
+@radio-prefix-cls: ~'@{ant-prefix}-radio';
+@radio-size: 20px;
+@radio-dot-color: @accent-color;
+.ant-form label {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--font-size-13);
+}
+.@{radio-prefix-cls}-wrapper {
+  margin-right: 15px;
+}
+span.ant-radio + * {
+  padding-right: 0;
+  padding-left: 6px;
+}
+.@{radio-prefix-cls} {
+  &-inner {
+    &::after {
+      @radio-dot-size: @radio-size - 10px;
+      top: (@radio-size - @radio-dot-size) / 2 - 2px;
+      left: (@radio-size - @radio-dot-size) / 2 - 2px;
+      width: @radio-dot-size;
+      height: @radio-dot-size;
+    }
+    border-width: 2px;
+  }
+}
+
+
+// Checkbox
+@checkbox-prefix-cls: ~'@{ant-prefix}-checkbox';
+@label-color: #454545;
+@checkbox-size : 20px;
+@checkbox-color: @accent-color;
+@checkbox-check-color: #fff;
+@checkbox-check-bg: @checkbox-check-color;
+@checkbox-border-width: @border-width-base;
+.@{checkbox-prefix-cls}-wrapper {
+  color: @label-color;
+}
+.@{checkbox-prefix-cls} + span {
+  padding-right: 8px;
+  padding-left: 16px;
+}
+
+
+// SLIDER
+@slider-prefix-cls: ~'@{ant-prefix}-slider';
+@slider-handle-color: @accent-color;
+
+.@{slider-prefix-cls} {
+  &-rail {
+    height: 2px;
+    background-color: @slider-rail-background-color;
+    border-radius: @border-radius-base;
+  }
+  &-track {
+    height: 2px;
+    background-color: #fed96e;
+    border-radius: @border-radius-base;
+  }
+  &-handle {
+    width: 4px;
+    border: solid @slider-handle-border-width @slider-handle-color;
+    border-radius: 0;
+    box-shadow: @slider-handle-shadow;
+    &-dragging&-dragging&-dragging {
+      border-color: @slider-handle-color-focus;
+    }
+    &:focus {
+      border-color: @slider-handle-color-focus;
+      box-shadow: 0 0 0 5px @slider-handle-color-focus-shadow;
+    }
+    &.@{ant-prefix}-tooltip-open {
+      border-color: @slider-handle-color-tooltip-open;
+    }
+  }
+  &:hover {
+    .@{slider-prefix-cls}-track {
+      background-color: #fed96e;
+    }
+    .@{slider-prefix-cls}-handle:not(.@{ant-prefix}-tooltip-open) {
+      border-color: #fed96e;
+    }
+  }
+
+
+}
+
+
+// Button
+@btn-height-base: 40px;
+@btn-font-weight: 500;
+@btn-shadow: none;
+@btn-primary-shadow: none;
+@btn-text-shadow: none;
+@btn-primary-color : #454545;
+@btn-primary-bg : @accent-color;
+@btn-padding-horizontal-base: 40px;
+

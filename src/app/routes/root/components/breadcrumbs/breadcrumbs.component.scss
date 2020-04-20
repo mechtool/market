@@ -1,20 +1,20 @@
-.breadcrumbs{
+.breadcrumbs {
   margin: 0 0 1em 0;
   padding: 12px 0;
   border-bottom: 1px solid #dadada;
 
-  a{
-    font-weight: var(--font-light);
+  a {
+    font-weight: var(--font-weight-light);
     line-height: 19px;
     letter-spacing: 0.11em;
     color: #908D8D;
 
-    &:hover{
+    &:hover {
       text-decoration: underline;
     }
   }
 
-  li{
+  li {
     list-style: none none;
     display: inline-block;
 
