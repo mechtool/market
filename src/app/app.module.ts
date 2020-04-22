@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import {
   LOCALE_ID,
   APP_INITIALIZER,
-  NgModule
+  NgModule,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   registerLocaleData,
   LocationStrategy,
-  PathLocationStrategy
+  PathLocationStrategy,
 } from '@angular/common';
 import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
@@ -34,7 +34,16 @@ import {
   NavbarNavComponent,
 } from './routes/root/components';
 
+import { NzIconModule, NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_I18N, ru_RU } from 'ng-zorro-antd';
+import { IconDefinition } from '@ant-design/icons-angular';
+import * as AllIcons from '@ant-design/icons-angular/icons';
+
 registerLocaleData(ru);
+const antDesignIcons = AllIcons as {
+  [key: string]: IconDefinition;
+};
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
 
 @NgModule({
   declarations: [
@@ -53,6 +62,7 @@ registerLocaleData(ru);
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NzIconModule,
     PipesModule,
     InputQtyModule,
     NomenclatureCardModule,
@@ -63,6 +73,8 @@ registerLocaleData(ru);
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: NZ_I18N, useValue: ru_RU },
+    { provide: NZ_ICONS, useValue: icons },
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
