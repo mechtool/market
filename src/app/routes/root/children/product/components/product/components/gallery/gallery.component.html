@@ -1,0 +1,46 @@
+<div class="product-base">
+  <div class="title-block">
+    <h2 class="title">{{nomenclature.productName}}</h2>
+    <div class="specs">
+      <div class="specs__item" *ngIf="nomenclature.manufacturer?.tradeMark">
+        <span class="specs__item__label">Наименование бренда:</span>
+        <span class="specs__item__value">{{nomenclature.manufacturer?.tradeMark}}</span>
+      </div>
+      <div class="specs__item" *ngIf="nomenclature.productPartNumber">
+        <span class="specs__item__label">Артикул:</span>
+        <span class="specs__item__value">{{nomenclature.productPartNumber}}</span>
+      </div>
+      <div class="specs__item" *ngIf="nomenclature.productBarCodes.length">
+        <span class="specs__item__label">Штрихкоды:</span>
+        <span class="specs__item__value">{{nomenclature.productBarCodes}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel">
+    <nz-carousel *ngIf="nomenclature.imageUrls.length">
+      <div nz-carousel-content *ngFor="let item of nomenclature.imageUrls">
+        <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + item + ')'}"></div>
+      </div>
+    </nz-carousel>
+
+    <div class="pic" *ngIf="!nomenclature.imageUrls.length">
+      <img src="assets/img/tmp/no_photo.png">
+    </div>
+  </div>
+
+  <div class="specs">
+    <div class="specs__item" *ngIf="nomenclature.manufacturer?.tradeMark">
+      <span class="specs__item__label">Наименование бренда:</span>
+      <span class="specs__item__value">{{nomenclature.manufacturer?.tradeMark}}</span>
+    </div>
+    <div class="specs__item" *ngIf="nomenclature.productPartNumber">
+      <span class="specs__item__label">Артикул:</span>
+      <span class="specs__item__value">{{nomenclature.productPartNumber}}</span>
+    </div>
+    <div class="specs__item" *ngIf="nomenclature.productBarCodes.length">
+      <span class="specs__item__label">Штрихкоды:</span>
+      <span class="specs__item__value">{{nomenclature.productBarCodes}}</span>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductRoutingModule } from './product-routing.module';
 import {
   Code404Component,
+  GalleryComponent,
   MainBannersBannerComponent,
   MainBannersComponent,
   MainComponent,
@@ -12,6 +13,7 @@ import {
   ProductComponent,
 } from './components';
 import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
+import { NzCarouselModule } from 'ng-zorro-antd';
 
 @NgModule({
   imports: [
@@ -24,14 +26,16 @@ import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResult
     BannerCardModule,
     SearchResultsModule,
     SearchBarModule,
+    NzCarouselModule,
   ],
   declarations: [
-    MainComponent,
-    MainBannersComponent,
+    Code404Component,
+    GalleryComponent,
     MainBannersBannerComponent,
+    MainBannersComponent,
+    MainComponent,
     MainPopularComponent,
     ProductComponent,
-    Code404Component,
   ],
 })
 export class ProductModule {

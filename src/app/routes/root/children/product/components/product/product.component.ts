@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { ProductService } from '#shared/modules/common-services/product.service';
+import { ActivatedRoute } from '@angular/router';
+import { NomenclatureModel } from '#shared/modules';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './product.component.html',
@@ -8,8 +12,14 @@ import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrum
 })
 export class ProductComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
+  nomenclature: NomenclatureModel;
 
-  constructor(private _breadcrumbsService: BreadcrumbsService) {
+  constructor(
+    private _breadcrumbsService: BreadcrumbsService,
+    private _productService: ProductService,
+    private _activatedRoute: ActivatedRoute,
+  ) {
+    this._initNomenclature();
     this._initBreadcrumbs();
   }
 
@@ -19,6 +29,25 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  private _initNomenclature() {
+    combineLatest([this._activatedRoute.params])
+      .pipe(
+        switchMap(([params]) => {
+          const nomenclatureId = params.id;
+          return this._productService.getNomenclature(nomenclatureId);
+        }),
+        catchError((err) => {
+          console.error('error', err);
+          return throwError(err);
+        }),
+      )
+      .subscribe((nomenclature) => {
+        this.nomenclature = nomenclature;
+      }, (err) => {
+        console.error('error', err);
+      });
   }
 
   private _initBreadcrumbs() {
@@ -32,7 +61,8 @@ export class ProductComponent implements OnInit, OnDestroy {
         label: 'Продукты',
       },
       {
-        label: 'Выбранный продукт',
+        label: this.nomenclature.productName,
+        routerLink: `/product/${this.nomenclature.id}`
       },
     ]);
   }

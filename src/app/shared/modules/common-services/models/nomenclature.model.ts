@@ -1,7 +1,7 @@
 import { NomenclatureFeatureModel } from './nomenclature-feature.model';
 
 export class NomenclatureModel {
-  id: number;
+  id: string;
   productName: string;
   imageUrls: string[];
   offersSummary: {
@@ -9,7 +9,7 @@ export class NomenclatureModel {
     totalOffers: number;
   };
 
-  categoryId?: number;
+  categoryId?: string;
   categoryName?: string;
   categoryParentsIds?: string[];
   productDescription?: string;

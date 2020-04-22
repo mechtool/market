@@ -8,7 +8,7 @@
 .active(@color: @outline-color) {
   border-color: @color;
   outline: 0;
-  box-shadow:none;
+  box-shadow: none;
 }
 
 
@@ -27,13 +27,16 @@
   align-items: center;
   font-size: var(--font-size-13);
 }
+
 .@{radio-prefix-cls}-wrapper {
   margin-right: 15px;
 }
+
 span.ant-radio + * {
   padding-right: 0;
   padding-left: 6px;
 }
+
 .@{radio-prefix-cls} {
   &-inner {
     &::after {
@@ -43,6 +46,7 @@ span.ant-radio + * {
       width: @radio-dot-size;
       height: @radio-dot-size;
     }
+
     border-width: 2px;
   }
 }
@@ -51,7 +55,7 @@ span.ant-radio + * {
 // Checkbox
 @checkbox-prefix-cls: ~'@{ant-prefix}-checkbox';
 @label-color: #454545;
-@checkbox-size : 20px;
+@checkbox-size: 20px;
 @checkbox-color: @accent-color;
 @checkbox-check-color: #fff;
 @checkbox-check-bg: @checkbox-check-color;
@@ -59,6 +63,7 @@ span.ant-radio + * {
 .@{checkbox-prefix-cls}-wrapper {
   color: @label-color;
 }
+
 .@{checkbox-prefix-cls} + span {
   padding-right: 8px;
   padding-left: 16px;
@@ -75,39 +80,70 @@ span.ant-radio + * {
     background-color: @slider-rail-background-color;
     border-radius: @border-radius-base;
   }
+
   &-track {
     height: 2px;
     background-color: #fed96e;
     border-radius: @border-radius-base;
   }
+
   &-handle {
     width: 4px;
     border: solid @slider-handle-border-width @slider-handle-color;
     border-radius: 0;
     box-shadow: @slider-handle-shadow;
+
     &-dragging&-dragging&-dragging {
       border-color: @slider-handle-color-focus;
     }
+
     &:focus {
       border-color: @slider-handle-color-focus;
       box-shadow: 0 0 0 5px @slider-handle-color-focus-shadow;
     }
+
     &.@{ant-prefix}-tooltip-open {
       border-color: @slider-handle-color-tooltip-open;
     }
   }
+
   &:hover {
     .@{slider-prefix-cls}-track {
       background-color: #fed96e;
     }
+
     .@{slider-prefix-cls}-handle:not(.@{ant-prefix}-tooltip-open) {
       border-color: #fed96e;
     }
   }
-
-
 }
 
+.ant-carousel .slick-dots {
+  position: inherit;
+  margin-top: -10px;
+
+  &-bottom {
+    height: 15px;
+  }
+
+  li {
+    & button {
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background: #8d8888;
+      margin-top: 2px;
+    }
+
+    &.slick-active button {
+      width: 14px;
+      height: 14px;
+      border-radius: 7px;
+      background: #000000;
+      margin-top: auto;
+    }
+  }
+}
 
 // Button
 @btn-height-base: 40px;
@@ -115,7 +151,7 @@ span.ant-radio + * {
 @btn-shadow: none;
 @btn-primary-shadow: none;
 @btn-text-shadow: none;
-@btn-primary-color : #454545;
-@btn-primary-bg : @accent-color;
+@btn-primary-color: #454545;
+@btn-primary-bg: @accent-color;
 @btn-padding-horizontal-base: 40px;
 

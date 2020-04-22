@@ -1,0 +1,38 @@
+@media (max-width: 768px) {
+  .title-block > .specs {
+    display: none;
+  }
+
+  .carousel + .specs {
+    display: block;
+  }
+
+  .product-base {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .title {
+    margin-bottom: 20px;
+    text-align: center;
+    padding-right: 0;
+
+    &-block {
+      order: 1;
+    }
+  }
+
+  .carousel {
+    margin: auto;
+    order: 2;
+  }
+
+  .specs {
+    order: 3;
+  }
+
+  .peppermint-slides {
+    margin-bottom: 18px;
+  }
+}
