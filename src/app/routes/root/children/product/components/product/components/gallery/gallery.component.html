@@ -19,19 +19,20 @@
 
   <div class="carousel">
 
-    <div class="pic" *ngIf="nomenclature.imageUrls.length === 1">
+    <div class="pic" *ngIf="!nomenclature.imageUrls">
+      <img src="assets/img/tmp/no_photo.png">
+    </div>
+
+    <div class="pic" *ngIf="nomenclature.imageUrls?.length === 1">
       <img src="{{nomenclature.imageUrls[0]}}">
     </div>
 
-    <nz-carousel *ngIf="nomenclature.imageUrls.length > 1">
+    <nz-carousel *ngIf="nomenclature.imageUrls?.length > 1">
       <div nz-carousel-content *ngFor="let item of nomenclature.imageUrls">
         <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + item + ')'}"></div>
       </div>
     </nz-carousel>
 
-    <div class="pic" *ngIf="!nomenclature.imageUrls.length">
-      <img src="assets/img/tmp/no_photo.png">
-    </div>
   </div>
 
   <div class="specs">
