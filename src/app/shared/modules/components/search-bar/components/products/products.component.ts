@@ -41,7 +41,11 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
 
   chooseCategory(category: SuggestionCategoryItemModel) {
     this._localStorageService.putSearchCategory(category);
-    this._router.navigate([`./category/${category.categoryId}`]);
+    this._router.navigate([`./category/${category.id}`]);
+  }
+
+  imageUrl(image: string): string {
+    return image ? image : 'assets/img/tmp/no_photo.png';
   }
 
 }

@@ -43,7 +43,7 @@ export class LocalStorageService {
     const filterHistoryList = historyList.filter(res => res.searchText !== _searchText);
     const query = {
       id: '',
-      imageUrl: '',
+      imageUrl: 'assets/img/svg/quick_search_history.svg',
       searchText: _searchText,
       typeOfSearch: TypeOfSearch.SEARCH,
     };
@@ -51,31 +51,32 @@ export class LocalStorageService {
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
   }
 
-  putSearchProduct(searchProduct: SuggestionProductItemModel) {
+  putSearchProduct(product: SuggestionProductItemModel) {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.searchText !== searchProduct.productName);
+    const filterHistoryList = historyList.filter(res => res.searchText !== product.name);
     const query = {
-      id: searchProduct.id,
-      imageUrl: searchProduct.imageUrl,
-      searchText: searchProduct.productName,
+      id: product.id,
+      imageUrl: product.imageUrl ? product.imageUrl : 'assets/img/tmp/no_photo.png',
+      searchText: product.name,
       typeOfSearch: TypeOfSearch.PRODUCT,
     };
     filterHistoryList.push(query);
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
   }
 
-  putSearchCategory(searchCategory: SuggestionCategoryItemModel) {
+  putSearchCategory(category: SuggestionCategoryItemModel) {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.searchText !== searchCategory.categoryName);
+    const filterHistoryList = historyList.filter(res => res.searchText !== category.name);
     const query = {
-      id: searchCategory.categoryId,
-      imageUrl: searchCategory.imageUrl,
-      searchText: searchCategory.categoryName,
+      id: category.id,
+      imageUrl: 'assets/img/tmp/lightning.png',
+      searchText: category.name,
       typeOfSearch: TypeOfSearch.CATEGORY,
     };
     filterHistoryList.push(query);
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
   }
+
 
   getUserLocation(): LocationModel {
     return this._storage.get(USER_LOCATION_STORAGE_KEY);

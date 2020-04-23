@@ -1,5 +1,5 @@
 export class NomenclatureCardModel {
-  id: number;
+  id: string;
   productName: string;
   imageUrl: string;
   offersSummary: {

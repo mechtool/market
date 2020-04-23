@@ -11,8 +11,8 @@ export class SuggestionService {
               private localStorageService: LocalStorageService) {
   }
 
-  searchSuggestions(textQuery: string): Observable<SuggestionModel> {
-    return this._bnetService.searchSuggestions(textQuery);
+  searchSuggestions(query: string): Observable<SuggestionModel> {
+    return this._bnetService.searchSuggestions(query);
   }
 
   getHistoricalSuggestions(): Observable<SuggestionModel> {

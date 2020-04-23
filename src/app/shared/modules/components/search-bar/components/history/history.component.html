@@ -6,6 +6,7 @@
     <my-search-bar-item
       *ngFor="let searchQuery of searchQueriesHistory"
       img="{{searchQuery.imageUrl}}"
+      imgAlt="{{searchQuery.searchText}}"
       typeOfSearch="{{searchQuery.typeOfSearch}}"
       type="searchQueryHistory"
       (click)="clickSearchQuery(searchQuery)"

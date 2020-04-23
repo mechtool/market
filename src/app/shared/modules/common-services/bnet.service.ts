@@ -65,10 +65,11 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/nomenclatures/search`, { params });
   }
 
-  searchSuggestions(textQuery: string): Observable<SuggestionModel> {
-    const params = new HttpParams().set('textQuery', textQuery);
-    return this._apiService.get(`${API_URL}/suggestions/search`, { params });
+  searchSuggestions(query: string): Observable<SuggestionModel> {
+    const params = new HttpParams().set('q', query);
+    return this._apiService.get(`${API_URL}/suggestions`, { params });
   }
+
 
   getUserOrganizations(): Observable<UserOrganizationModel[]> {
     return this._apiService.get(`${API_URL}/organizations/user-organizations`);

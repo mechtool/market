@@ -53,8 +53,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._unsubscriber$.complete();
   }
 
-  searchSuggestions(e: string) {
-    this._suggestionService.searchSuggestions(e)
+  searchSuggestions(query: string) {
+    this._suggestionService.searchSuggestions(query)
       .subscribe((res) => {
         this.productsSuggestions = res.products;
         this.categoriesSuggestions = res.categories;

@@ -1,6 +1,8 @@
 export class SuggestionProductItemModel {
-  id: number;
-  productName: string;
+  id: string;
+  name: string;
+  description?: string;
+  offers: number;
   imageUrl: string;
-  totalOffers?: number;
+  highlight?: string;
 }

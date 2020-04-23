@@ -42,6 +42,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   visibleFilterForm = false;
   visibleLocationForm = false;
   MIN_QUERY_LENGTH = 3;
+  MAX_QUERY_LENGTH = 20;
   userLocation: LocationModel;
   @Input() query = '';
   @Input() availableFilters: DefaultSearchAvailableModel;
@@ -150,7 +151,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.form.get('query').valueChanges
       .pipe(
         takeUntil(this._unsubscriber$),
-        filter(res => res.length >= this.MIN_QUERY_LENGTH),
+        filter(res => res.length >= this.MIN_QUERY_LENGTH && res.length <= this.MAX_QUERY_LENGTH),
       )
       .subscribe((res) => {
         this.queryChange.emit(res);

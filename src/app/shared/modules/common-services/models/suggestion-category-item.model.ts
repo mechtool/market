@@ -1,5 +1,6 @@
 export class SuggestionCategoryItemModel {
-  categoryId: number;
-  categoryName: string;
-  imageUrl: string;
+  id: string;
+  name: string;
+  offers: number;
+  highlight?: string;
 }
