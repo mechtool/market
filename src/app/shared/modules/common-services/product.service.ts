@@ -1,7 +1,12 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { AllGroupQueryFiltersModel, NomenclatureCardModel, NomenclatureModel } from './models';
+import {
+  AllGroupQueryFiltersModel,
+  NomenclatureCardModel,
+  NomenclatureOffersModel,
+  OfferFilterQueryModel
+} from './models';
 import { BNetService } from './bnet.service';
 
 @Injectable()
@@ -10,8 +15,8 @@ export class ProductService {
   constructor(private _bnetService: BNetService) {
   }
 
-  getNomenclature(id: string): Observable<NomenclatureModel> {
-    return this._bnetService.getNomenclature(id);
+  getNomenclature(id: string, filterQuery?: OfferFilterQueryModel): Observable<NomenclatureOffersModel> {
+    return this._bnetService.getNomenclature(id, filterQuery);
   }
 
   getPopularNomenclatureCards(): Observable<NomenclatureCardModel[]> {

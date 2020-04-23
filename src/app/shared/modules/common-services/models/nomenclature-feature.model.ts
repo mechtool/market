@@ -3,5 +3,13 @@ export class NomenclatureFeatureModel {
   featureName: string;
   value?: string;
   valueName?: string;
-  valueType?: string;
+  valueType: ValueType;
+}
+
+export enum ValueType {
+  BOOLEAN = 'boolean',
+  NUMBER = 'number',
+  ENUMERATION = 'enumeration',
+  STRING = 'string',
+  DATE = 'date'
 }

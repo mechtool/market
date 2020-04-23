@@ -3,7 +3,7 @@ import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ActivatedRoute } from '@angular/router';
-import { NomenclatureModel } from '#shared/modules';
+import { NomenclatureModel, OffersModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -13,6 +13,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 export class ProductComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   nomenclature: NomenclatureModel;
+  offers: OffersModel[];
 
   constructor(
     private _breadcrumbsService: BreadcrumbsService,
@@ -20,7 +21,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute,
   ) {
     this._initNomenclature();
-    this._initBreadcrumbs();
   }
 
   ngOnInit() {
@@ -43,8 +43,10 @@ export class ProductComponent implements OnInit, OnDestroy {
           return throwError(err);
         }),
       )
-      .subscribe((nomenclature) => {
-        this.nomenclature = nomenclature;
+      .subscribe((model) => {
+        this.nomenclature = model.nomenclature;
+        this.offers = model.offers;
+        this._initBreadcrumbs();
       }, (err) => {
         console.error('error', err);
       });
