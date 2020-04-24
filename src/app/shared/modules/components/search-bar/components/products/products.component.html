@@ -8,7 +8,7 @@
 
     <my-search-bar-item
       *ngFor="let product of products"
-      img="{{imageUrl(product.imageUrl)}}"
+      img="{{imageUrl(product.images[0].href)}}"
       imgAlt="{{product.name}}"
       offersCount="{{product.offers}}"
       typeOfSearch="{{typeOfSearchProduct}}"

@@ -1,8 +1,11 @@
 export class SuggestionProductItemModel {
   id: string;
   name: string;
-  description?: string;
   offers: number;
-  imageUrl: string;
-  highlight?: string;
+  highlight: string;
+  images?: SuggestionProductItemImageLinkModel[];
+}
+
+export class SuggestionProductItemImageLinkModel {
+  href: string;
 }

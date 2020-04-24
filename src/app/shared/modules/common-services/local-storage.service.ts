@@ -56,7 +56,7 @@ export class LocalStorageService {
     const filterHistoryList = historyList.filter(res => res.searchText !== product.name);
     const query = {
       id: product.id,
-      imageUrl: product.imageUrl ? product.imageUrl : 'assets/img/tmp/no_photo.png',
+      imageUrl: product.images ? product.images[0].href : 'assets/img/tmp/no_photo.png',
       searchText: product.name,
       typeOfSearch: TypeOfSearch.PRODUCT,
     };
