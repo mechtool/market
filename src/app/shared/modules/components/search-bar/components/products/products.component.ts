@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@a
 import { Subject } from 'rxjs';
 import {
   SuggestionCategoryItemModel,
+  SuggestionProductItemImageLinkModel,
   SuggestionProductItemModel,
   TypeOfSearch,
 } from '../../../../common-services/models';
@@ -24,7 +25,8 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private _localStorageService: LocalStorageService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
   }
@@ -44,8 +46,8 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
     this._router.navigate([`./category/${category.id}`]);
   }
 
-  imageUrl(image: string): string {
-    return image ? image : 'assets/img/tmp/no_photo.png';
+  imageUrl(image: SuggestionProductItemImageLinkModel[]): string {
+    return image ? image[0].href : 'assets/img/tmp/no_photo.png';
   }
 
 }
