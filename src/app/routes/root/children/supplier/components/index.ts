@@ -1,3 +1,3 @@
-export * from './list/list.component';
-export * from './single/single.component';
+export * from './suppliers/suppliers.component';
+export * from './supplier/supplier.component';
 export * from './product/product.component';

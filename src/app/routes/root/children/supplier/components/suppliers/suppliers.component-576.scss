@@ -1,0 +1,38 @@
+@media all and (max-width: 576px) {
+
+  .catalog {
+    margin: 0;
+  }
+
+  .catalog_suppliers {
+
+    & .catalog_item-link {
+      padding: 20px;
+    }
+
+    & .catalog_item-title {
+      font-size: var(--font-size-main);
+      font-weight: var(--font-medium);
+      margin-bottom: 15px;
+    }
+
+    & .product_supplier-type {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      margin-bottom: 0;
+    }
+
+    & .catalog_item-info {
+      margin-left: auto;
+    }
+  }
+
+  .catalog_item-about {
+    font-size: var(--font-size-12);
+    line-height: 15px;
+    margin-bottom: 25px;
+  }
+}

@@ -1,0 +1,19 @@
+<div class="catalog_item">
+  <div class="catalog_item-link">
+    <span class="catalog_item-img product_supplier-type" [style]="{'background-color': argb}"></span>
+    <span class="catalog_item-descr">
+          <span class="catalog_item-title">
+              {{supplier.name}}
+          </span>
+          <span class="catalog_item-about">
+              {{supplier.description}}
+          </span>
+    </span>
+
+    <div class="supplier_btns">
+      <button nz-button type="submit" nzType="primary"
+              (click)="clickSupplier()">В магазин
+      </button>
+    </div>
+  </div>
+</div>

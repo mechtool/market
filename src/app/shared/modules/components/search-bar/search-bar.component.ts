@@ -45,6 +45,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   MAX_QUERY_LENGTH = 20;
   userLocation: LocationModel;
   @Input() query = '';
+  @Input() placeholder = 'Поиск товаров';
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() sort = SortModel.ASC;
   @Input() visibleSort = false;

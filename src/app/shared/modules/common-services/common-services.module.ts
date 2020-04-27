@@ -13,6 +13,7 @@ import { OrganizationsService } from './organizations.service';
 import { UserService } from './user.service';
 import { LocalStorageService } from './local-storage.service';
 import { LocationService } from './location.service';
+import { SupplierService } from './supplier.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -35,6 +36,7 @@ export class CommonServicesModule {
         OrganizationsService,
         UserService,
         LocationService,
+        SupplierService,
       ],
     };
   }

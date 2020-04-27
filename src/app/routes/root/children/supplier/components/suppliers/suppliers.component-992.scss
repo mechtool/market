@@ -1,0 +1,11 @@
+@media all and (max-width: 992px) {
+
+  .catalog_header {
+    flex-direction: column;
+
+    &__count {
+      margin-right: 0;
+      text-align: center;
+    }
+  }
+}

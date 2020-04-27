@@ -1,0 +1,28 @@
+<div>
+
+  <h3>Поставщики</h3><br>
+
+  <my-search-bar
+    [query]="query"
+    placeholder="Поиск поставщиков"
+    (submitClick)="queryParametersChange($event)"
+    (queryChange)="queryChange($event)"
+    [suggestionsOff]="true"
+  ></my-search-bar>
+
+
+  <div class="catalog_header">
+    <div class="catalog_header__count">
+      <span class="catalog_header__title">Всего найдено</span><strong>{{suppliers.length}}</strong> поставщиков
+    </div>
+  </div>
+
+  <div class="catalog catalog_suppliers">
+
+    <my-supplier-card *ngFor="let item of suppliers"
+                      [supplier]="item"
+    ></my-supplier-card>
+
+  </div>
+
+</div>

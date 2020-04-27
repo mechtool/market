@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
 import {
@@ -12,6 +12,7 @@ import {
   UserOrganizationModel,
 } from './models';
 import { HttpParams } from '@angular/common/http';
+import { SupplierModel, TEMPORARY_SUPPLIER_LIST } from '#shared/modules/common-services/models/supplier.model';
 
 const API_URL = environment.apiUrl;
 
@@ -44,6 +45,17 @@ export class BNetService {
   searchLocations(textQuery: string): Observable<LocationModel[]> {
     const params = new HttpParams().set('textQuery', textQuery);
     return this._apiService.get(`${API_URL}/locations/search`, { params });
+  }
+
+  getSuppliers(query?: string, page?: string, size?: string): Observable<SupplierModel[]> {
+    // const params = new HttpParams().set('page', page).set('size', size);
+    // todo Изменить после того как появится реализация данного метода
+    // return this._apiService.get(`${API_URL}/suppliers`, { params });
+    if (query?.length) {
+      return of(TEMPORARY_SUPPLIER_LIST.filter(supplier => supplier.name === query || supplier.inn === query));
+    }
+    return of(TEMPORARY_SUPPLIER_LIST);
+
   }
 
   _params(searchQuery: any): HttpParams {
