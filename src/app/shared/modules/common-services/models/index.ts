@@ -19,6 +19,8 @@ export * from './suggestion.model';
 export * from './suggestion-category-item.model';
 export * from './suggestion-product-item.model';
 export * from './suggestion-search-query-history-item.model';
+export * from './supplier-info.model';
+export * from './trade-offer-info.model';
 export * from './user-organization.model';
 export * from './offers.model';
 export * from './offer-filter-query.model';

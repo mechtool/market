@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { ProductService } from '#shared/modules/common-services/product.service';
-import { ActivatedRoute } from '@angular/router';
-import { NomenclatureModel, OffersModel } from '#shared/modules';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NomenclatureModel, OffersModel, SortModel, TradeOfferInfoModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -14,12 +14,19 @@ export class ProductComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   nomenclature: NomenclatureModel;
   offers: OffersModel[];
+  tradeOffers: TradeOfferInfoModel[];
+  sort: SortModel;
+
 
   constructor(
     private _breadcrumbsService: BreadcrumbsService,
     private _productService: ProductService,
     private _activatedRoute: ActivatedRoute,
+    private _router: Router,
   ) {
+    this._activatedRoute.queryParams.subscribe((param) => {
+      this.sort = param.sort ? param.sort : SortModel.ASC;
+    });
     this._initNomenclature();
   }
 
@@ -29,6 +36,15 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  sortChange($event: SortModel) {
+    this.sort = $event;
+    this._router.navigate([`/product/${this.nomenclature.id}`], {
+      queryParams: {
+        sort: $event,
+      }
+    });
   }
 
   private _initNomenclature() {
@@ -44,6 +60,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         }),
       )
       .subscribe((model) => {
+        this.tradeOffers = this._mapOffers(model.offers);
         this.nomenclature = model.nomenclature;
         this.offers = model.offers;
         this._initBreadcrumbs();
@@ -67,5 +84,20 @@ export class ProductComponent implements OnInit, OnDestroy {
         routerLink: `/product/${this.nomenclature.id}`
       },
     ]);
+  }
+
+  private _mapOffers(offers: OffersModel[]): TradeOfferInfoModel[] {
+    return offers.map((offer) => {
+      return {
+        id: offer.id,
+        description: 'Описание специальных условия от поставщика, которые у него находятся в специальной вкладке' +
+          ' и выводится первые четыре строки этой инфы',
+        price: offer.price / 100,
+        stock: 679,
+        supplierId: offer.supplier.id,
+        supplierName: offer.supplier.name,
+        isSpecialPrice: true,
+      };
+    });
   }
 }

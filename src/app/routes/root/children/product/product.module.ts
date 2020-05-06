@@ -11,9 +11,18 @@ import {
   MainComponent,
   MainPopularComponent,
   ProductComponent,
+  TradeOfferCardsListComponent,
 } from './components';
-import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
-import { NzCarouselModule } from 'ng-zorro-antd';
+import {
+  BannerCardModule,
+  NomenclatureCardModule,
+  PipesModule,
+  SearchBarModule,
+  SearchResultsModule,
+  TradeOfferCardModule
+} from '#shared/modules';
+import { NzCarouselModule, NzDropDownModule } from 'ng-zorro-antd';
+
 
 @NgModule({
   imports: [
@@ -27,6 +36,9 @@ import { NzCarouselModule } from 'ng-zorro-antd';
     SearchResultsModule,
     SearchBarModule,
     NzCarouselModule,
+    TradeOfferCardModule,
+    NzDropDownModule,
+    PipesModule,
   ],
   declarations: [
     Code404Component,
@@ -36,6 +48,7 @@ import { NzCarouselModule } from 'ng-zorro-antd';
     MainComponent,
     MainPopularComponent,
     ProductComponent,
+    TradeOfferCardsListComponent,
   ],
 })
 export class ProductModule {

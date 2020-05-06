@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subject } from 'rxjs';
 import { AllGroupQueryFiltersModel } from '#shared/modules';
-import { SupplierModel } from '#shared/modules/common-services/models/supplier.model';
+import { SupplierInfoModel } from '#shared/modules/common-services/models/supplier-info.model';
 import { SupplierService } from '#shared/modules/common-services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
@@ -18,7 +18,7 @@ import { switchMap } from 'rxjs/operators';
 export class SupplierListComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   query = '';
-  suppliers: SupplierModel[];
+  suppliers: SupplierInfoModel[];
 
   constructor(
     private _router: Router,

@@ -1,0 +1,37 @@
+@media all and (max-width: 768px) {
+  .page-product {
+    margin-top: 0;
+  }
+
+  .section_tab__supplier .supplier_title .tooltip_wrap {
+    display: block;
+  }
+
+  .catalog_header__title {
+    width: 100%;
+    display: block;
+
+    &:after {
+      content: ":";
+      font-weight: var(--font-weight-demi);
+    }
+  }
+
+  .catalog_sort__control {
+    border: 1px solid #e0e0e0;
+    width: 150px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+
+    &::after {
+      margin-top: 1px;
+    }
+  }
+
+  .catalog_sort__wrap {
+    top: 45px;
+  }
+}

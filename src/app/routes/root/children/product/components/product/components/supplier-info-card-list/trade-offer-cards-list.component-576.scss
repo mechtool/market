@@ -1,0 +1,29 @@
+@media all and (max-width: 576px) {
+  .catalog_header__btns {
+    justify-self: flex-start;
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .catalog_sort__wrap {
+    top: 45px;
+    left: 0;
+    right: auto;
+  }
+
+  .catalog {
+    margin: 10px 0 0 0;
+  }
+
+  .catalog_suppliers .catalog_item__title {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+  }
+
+  .section_tab__supplier .supplier_title .tooltip_wrap {
+    display: block;
+    margin-left: auto;
+  }
+}

@@ -12,7 +12,7 @@ import {
   UserOrganizationModel,
 } from './models';
 import { HttpParams } from '@angular/common/http';
-import { SupplierModel, TEMPORARY_SUPPLIER_LIST } from '#shared/modules/common-services/models/supplier.model';
+import { SupplierInfoModel, TEMPORARY_SUPPLIER_LIST } from '#shared/modules/common-services/models/supplier-info.model';
 
 const API_URL = environment.apiUrl;
 
@@ -47,7 +47,7 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  getSuppliers(query?: string, page?: string, size?: string): Observable<SupplierModel[]> {
+  getSuppliers(query?: string, page?: string, size?: string): Observable<SupplierInfoModel[]> {
     // const params = new HttpParams().set('page', page).set('size', size);
     // todo Изменить после того как появится реализация данного метода
     // return this._apiService.get(`${API_URL}/suppliers`, { params });

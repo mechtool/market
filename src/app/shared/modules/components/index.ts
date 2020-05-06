@@ -5,4 +5,5 @@ export * from './nomenclature-card';
 export * from './search-bar';
 export * from './search-results';
 export * from './supplier-card';
+export * from './trade-offer-card';
 

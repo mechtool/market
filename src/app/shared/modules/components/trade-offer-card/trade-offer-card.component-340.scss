@@ -1,0 +1,40 @@
+@media all and (max-width: 340px) {
+
+  .catalog_item {
+
+    &__title {
+      letter-spacing: 0.05em;
+    }
+
+    &__info {
+      flex-direction: column;
+    }
+
+    &__img {
+      margin-right: 10px;
+    }
+
+    &__price {
+      border-left: 1px solid #e0e0e0;
+      border-top: none;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 3px;
+    }
+  }
+
+  .catalog_suppliers .catalog_item__info {
+    max-width: 110px;
+  }
+
+  .catalog_item__count,
+  .catalog_item__price {
+    width: 50%;
+    margin-right: -15px;
+  }
+
+  .catalog_item__count,
+  .catalog_item__link .catalog_item__count.tooltip {
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 3px;
+  }
+}

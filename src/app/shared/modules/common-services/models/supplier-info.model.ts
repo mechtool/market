@@ -1,4 +1,4 @@
-export class SupplierModel {
+export class SupplierInfoModel {
   id: string;
   name: string;
   inn: string;

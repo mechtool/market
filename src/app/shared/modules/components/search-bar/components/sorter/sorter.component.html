@@ -2,9 +2,9 @@
   <div class="catalog_header__btns">
     <div class="dropdown catalog_sort">
 
-      <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
+      <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
         <span class="dropdown_control catalog_sort__control">{{currentSortType.label}}</span>
-      </a>
+      </span>
 
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu nzSelectable>

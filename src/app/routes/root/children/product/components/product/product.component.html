@@ -1,7 +1,12 @@
 <div class="product">
+  <my-gallery [nomenclature]="nomenclature"></my-gallery>
 
-  <my-gallery
-    [nomenclature]="nomenclature"
-  ></my-gallery>
-
+  <my-supplier-info-card-list
+    [sort]="sort"
+    [tradeOffers]="tradeOffers"
+    (sortChange)="sortChange($event)"
+  ></my-supplier-info-card-list>
 </div>
+
+
+
