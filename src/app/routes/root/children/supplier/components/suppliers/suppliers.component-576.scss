@@ -1,17 +1,15 @@
 @media all and (max-width: 576px) {
-
   .catalog {
     margin: 0;
   }
 
   .catalog_suppliers {
-
     & .catalog_item-link {
       padding: 20px;
     }
 
     & .catalog_item-title {
-      font-size: var(--font-size-main);
+      font-size: var(--font-size-base);
       font-weight: var(--font-medium);
       margin-bottom: 15px;
     }

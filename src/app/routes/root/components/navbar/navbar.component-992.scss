@@ -1,18 +1,11 @@
-@media all and (max-width: 992px){
+@media all and (max-width: 992px) {
+  :host {
+    flex-direction: column;
+  }
 
-	.navbar {
-		position: relative;
-		width: 100%;
-		padding: 20px;
-    background: none;
-		margin: 0;
-		display: flex;
-		align-items: center;
-	}
-
-	.navbar.showed {
-		width: auto;
-	}
-
+  nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
-

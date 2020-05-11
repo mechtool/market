@@ -24,7 +24,7 @@
     font-weight: var(--font-weight-demi);
     font-size: var(--font-size-15);
     color: #454545;
-    letter-spacing: .05px;
+    letter-spacing: 0.05px;
   }
 
   label {
@@ -46,7 +46,7 @@
 input[type="text"],
 input[type="number"],
 textarea {
-  font-size: var(--font-size-main);
+  font-size: var(--font-size-base);
   letter-spacing: 0.05em;
   padding: 10px 15px;
   background-color: #ffffff;
@@ -106,7 +106,7 @@ input[type="text"] {
   font-weight: var(--font-weight-demi);
   font-size: var(--font-size-15);
   color: #454545;
-  letter-spacing: .05px;
+  letter-spacing: 0.05px;
 }
 
 .filter_wrap {
@@ -182,7 +182,7 @@ input[type="text"] {
   text-align: center;
   width: 100%;
   max-width: 120px;
-  content: '₽';
+  content: "₽";
 }
 
 .range_inputs {

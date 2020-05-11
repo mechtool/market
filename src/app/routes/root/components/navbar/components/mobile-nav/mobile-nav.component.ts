@@ -1,36 +1,19 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
-import { Subject } from 'rxjs';
-import { NavigationService } from '#shared/modules';
+import { Component, Input, HostBinding } from '@angular/core';
+import { NavigationService } from '#shared/modules/common-services/navigation.service';
 
 @Component({
-  selector: 'my-navbar-mobile-nav',
+  selector: 'my-mobile-nav',
   templateUrl: './mobile-nav.component.html',
   styleUrls: [
     './mobile-nav.component.scss',
     './mobile-nav.component-992.scss',
+    './mobile-nav.component-576.scss',
   ],
 })
-export class NavbarMobileNavComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
-
+export class NavbarMobileNavComponent {
   constructor(private _navService: NavigationService) {}
 
-  ngOnInit() {}
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
+  openMenu() {
+    this._navService.openMenu();
   }
-
-  toggleMenu() {
-    // TODO: don't need to use JavaScript style
-    document.getElementsByTagName('body')[0].classList.toggle('left-menu');
-    this._navService.toggleMenu();
-  }
-
-
 }

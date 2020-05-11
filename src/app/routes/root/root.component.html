@@ -1,6 +1,6 @@
 <div class="root">
   <my-navbar></my-navbar>
-  <main class="content" [ngClass]="{'moved': isMenuExpanded$ | async}">
+  <main class="content">
     <my-breadcrumbs [items]="breadcrumbsItems$ | async"></my-breadcrumbs>
     <router-outlet></router-outlet>
   </main>

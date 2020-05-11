@@ -12,6 +12,7 @@ export class NavItemModel {
   items?: NavItemModel[];
   expanded?: boolean;
   active?: boolean;
+  counter?: number;
 
   constructor(params) {
     Object.assign(this, params);

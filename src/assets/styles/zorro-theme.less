@@ -3,6 +3,7 @@
 // Здесь переопределяются стили NG-ZORRO
 
 // Common
+@heading-color: #454545;
 @accent-color: #fdc82f;
 @outline-color: #fedc7b;
 .active(@color: @outline-color) {
@@ -11,15 +12,13 @@
   box-shadow: none;
 }
 
-
 // Input
-@input-placeholder-color: rgba(69, 69, 69, .8);
+@input-placeholder-color: rgba(69, 69, 69, 0.8);
 @input-border-color: #c4c4c4;
 @input-hover-border-color: @outline-color;
 
-
 // Radio
-@radio-prefix-cls: ~'@{ant-prefix}-radio';
+@radio-prefix-cls: ~"@{ant-prefix}-radio";
 @radio-size: 20px;
 @radio-dot-color: @accent-color;
 .ant-form label {
@@ -51,9 +50,8 @@ span.ant-radio + * {
   }
 }
 
-
 // Checkbox
-@checkbox-prefix-cls: ~'@{ant-prefix}-checkbox';
+@checkbox-prefix-cls: ~"@{ant-prefix}-checkbox";
 @label-color: #454545;
 @checkbox-size: 20px;
 @checkbox-color: @accent-color;
@@ -69,9 +67,8 @@ span.ant-radio + * {
   padding-left: 16px;
 }
 
-
 // SLIDER
-@slider-prefix-cls: ~'@{ant-prefix}-slider';
+@slider-prefix-cls: ~"@{ant-prefix}-slider";
 @slider-handle-color: @accent-color;
 
 .@{slider-prefix-cls} {
@@ -155,4 +152,3 @@ span.ant-radio + * {
 @btn-primary-color: #454545;
 @btn-primary-bg: @accent-color;
 @btn-padding-horizontal-base: 40px;
-

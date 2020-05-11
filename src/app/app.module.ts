@@ -1,10 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import {
-  LOCALE_ID,
-  APP_INITIALIZER,
-  NgModule,
-} from '@angular/core';
+import { LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,13 +19,14 @@ import {
   InputQtyModule,
   NomenclatureCardModule,
 } from '#shared/modules';
+import { PortalModule } from '@angular/cdk/portal';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
 import {
   BreadcrumbsModule,
   NavbarComponent,
-  NavbarLogoComponent,
   NavbarMobileNavComponent,
   NavbarNavComponent,
 } from './routes/root/components';
@@ -43,14 +40,20 @@ registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
+  (key) => antDesignIcons[key]
+);
 
 @NgModule({
+  entryComponents: [
+    NavbarComponent,
+    NavbarMobileNavComponent,
+    NavbarNavComponent,
+  ],
   declarations: [
     AppComponent,
     RootComponent,
     NavbarComponent,
-    NavbarLogoComponent,
     NavbarMobileNavComponent,
     NavbarNavComponent,
   ],
@@ -62,6 +65,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    PortalModule,
+    OverlayModule,
     NzIconModule,
     PipesModule,
     InputQtyModule,
@@ -79,8 +84,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
       multi: true,
-    }
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

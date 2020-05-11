@@ -1,0 +1,56 @@
+@media all and (max-width: 992px) {
+  :host(.expanded) {
+    width: 320px;
+    background: #fff;
+    padding: 25px 25px 0;
+
+    .logo {
+      margin: 0;
+      padding: 0;
+
+      .opener {
+        background: #f24e43;
+      }
+
+      .label {
+        font-size: var(--font-size-18);
+        font-weight: var(--font-weight-demi);
+        line-height: 23px;
+        letter-spacing: -0.01em;
+      }
+
+      .btn_close {
+        display: block;
+        cursor: pointer;
+        margin-left: auto;
+        background: url(../../../../../../../assets/img/svg/icon__close.svg)
+          no-repeat center center;
+        min-width: 40px;
+
+        &:hover {
+          background-color: var(--color-accent);
+        }
+      }
+    }
+
+    .panel {
+      .label {
+        display: block;
+      }
+
+      .item {
+        a {
+          padding-left: 0;
+
+          &.active {
+            background-color: #f1f0f0;
+          }
+        }
+      }
+
+      .icon {
+        margin-right: 20px;
+      }
+    }
+  }
+}

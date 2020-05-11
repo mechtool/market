@@ -1,0 +1,29 @@
+<div class="logo">
+  <div class="opener" (click)="toggleMenu()">
+    <img src="assets/img/svg/icon__site.svg" alt="1C:Бизнес-cеть" title="1C:Бизнес-cеть" >
+  </div>
+  <h1 class="label">1C:Бизнес-cеть</h1>
+  <button type="button" class="btn btn_close nav__mobile__btn_close" (click)="closeMenu()"></button>
+</div>
+<div class="panel">
+  <ul class="list">
+    <li class="item" ngClass="{{item.styleClass}}" *ngFor="let item of navItems">
+      <a [ngClass]="{'active': item.label === navItemActive?.label}" (click)="navigateNavItem(item)">
+        <span class="icon">
+          <img src="assets/img/svg/icon__{{item.icon}}.svg" alt="{{item.label}}" title="{{item.label}}" >
+        </span>
+        <span class="label">{{item.label}}</span>
+        <span class="counter" *ngIf="item.counter">{{item.counter}}</span>
+        <span [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
+      </a>
+      <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
+        <li class="item" *ngFor="let subItem of item.items">
+          <a [ngClass]="{'active': subItem.label === navItemActive?.label}" (click)="navigateNavItem(subItem)">
+            <span class="icon icon-point"></span>
+            <span class="label">{{subItem.label}}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

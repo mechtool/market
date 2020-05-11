@@ -1,23 +1,9 @@
 :host {
-  --color-navbar-background-from: #f3f3f3;
-  --color-navbar-background-to: #fdfdfd;
+  display: flex;
+  flex-direction: row;
 }
 
-.navbar {
-	position: fixed;
-	top: 0;
-	width: 320px;
-	height: 100%;
-	flex-shrink: 0;
-	padding-top: 35px;
-	transition: width .2s;
-	background: var(--color-navbar-background-from);
-  background: linear-gradient(0deg, var(--color-navbar-background-from) 0%, var(--color-navbar-background-to) 100%);
-  box-shadow: inset -2px 0px 15px rgba(0, 0, 0, 0.03);
-
-  &.hidden{
-    width: 60px;
-    box-shadow: none;
-  }
-
+nav {
+  display: flex;
+  flex-direction: column;
 }

@@ -1,5 +1,4 @@
 @media all and (max-width: 576px) {
-
   .catalog_item {
     min-width: 280px;
     margin: 5px 0 10px;
@@ -51,7 +50,7 @@
   }
 
   .catalog_suppliers .catalog_item-title {
-    font-size: var(--font-size-main);
+    font-size: var(--font-size-base);
     font-weight: var(--font-medium);
     margin-bottom: 15px;
   }
