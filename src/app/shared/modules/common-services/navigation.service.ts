@@ -16,6 +16,7 @@ import { NavbarNavComponent } from '../../../routes/root/components/navbar/compo
 @Injectable()
 export class NavigationService implements OnDestroy {
   private _isMenuOpened = false;
+  private _areCategoriesShowed = false;
   private _componentPortal: ComponentPortal<NavbarNavComponent>;
   selectedPortal: Portal<any> | null;
   overlayRef: OverlayRef;
@@ -31,6 +32,10 @@ export class NavigationService implements OnDestroy {
     return this._isMenuOpened;
   }
 
+  get areCategoriesShowed() {
+    return this._areCategoriesShowed;
+  }
+
   private _unsubscriber$: Subject<any> = new Subject();
 
   get navItems$() {
@@ -43,7 +48,9 @@ export class NavigationService implements OnDestroy {
       {
         label: 'Категории товаров',
         icon: 'category',
-        routerLink: ['/category/1'], // todo: не забыть исправить, после того как меню будет готово
+        command: () => {
+          this.toggleCategories();
+        },
       },
       {
         label: 'Поставщики',
@@ -91,7 +98,9 @@ export class NavigationService implements OnDestroy {
       {
         label: 'Категории товаров',
         icon: 'category',
-        routerLink: ['/category/1'], // todo: не забыть исправить, после того как меню будет готово
+        command: () => {
+          this.toggleCategories();
+        },
       },
       {
         label: 'Поставщики',
@@ -217,6 +226,7 @@ export class NavigationService implements OnDestroy {
     this.selectedPortal = null;
     const config = new OverlayConfig({
       hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
     });
 
     this.overlayRef = this._overlay.create(config);
@@ -240,5 +250,17 @@ export class NavigationService implements OnDestroy {
     if (window.innerWidth > 992) {
       this.selectedPortal = this._componentPortal;
     }
+  }
+
+  showCategories() {
+    this._areCategoriesShowed = true;
+  }
+
+  hideCategories() {
+    this._areCategoriesShowed = false;
+  }
+
+  toggleCategories() {
+    this._areCategoriesShowed = !this._areCategoriesShowed;
   }
 }

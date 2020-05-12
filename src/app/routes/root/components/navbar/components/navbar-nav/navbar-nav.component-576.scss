@@ -2,4 +2,12 @@
   :host(.expanded) {
     width: 100vw;
   }
+
+  .categories-mobive-nav {
+    .logo {
+      .label {
+        display: none;
+      }
+    }
+  }
 }

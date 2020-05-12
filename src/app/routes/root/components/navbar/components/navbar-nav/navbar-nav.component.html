@@ -27,3 +27,594 @@
     </li>
   </ul>
 </div>
+
+<div class="categories" [ngClass]="{'showed': areCategoriesShowed}">
+  <div class="categories-mobive-nav">
+    <div class="logo">
+      <div class="opener">
+        <img src="./assets/img/svg/icon__site.svg" alt="1C:Бизнес-cеть" title="1C:Бизнес-cеть" >
+      </div>
+      <h1 class="label">1C:Бизнес-cеть</h1>
+    </div>
+    <div class="nav-btns">
+        <a href="#" class="btn btn_square">
+          <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
+        </a>
+        <a href="#" class="btn btn_square btn_mobile-menu" (click)="closeMenuWithCategories()">
+          <span></span>
+        </a>
+    </div>
+  </div>
+
+  <div style="display: flex">
+    <div class="categories_close">
+      <button class="categories__btn_close btn_close" (click)="hideCategories()"></button>
+    </div>
+    <div class="categories_list">
+      <div class="categories_header">Категории товаров</div>
+      <nav>
+          <ul class="nav_list">
+              <li>
+                  <a href="#" class="nav_item category_control hovered" data-category="11111">
+                      <span>Категория 1</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="22222">
+                      <span>Строительство и ремонт</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="33333">
+                      <span>Компьютеры и связь</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="44444">
+                      <span>Потребительские товары</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="55555">
+                      <span>Природные ресурсы и материалы для созидания</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="66666">
+                      <span> Продукты питания</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="77777">
+                      <span>Хозяйственные товары</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="88888">
+                      <span>Автомобильные товары</span>
+                  </a>
+              </li>
+              <li>
+                  <a href="#" class="nav_item category_control" data-category="99999">
+                      <span>Торговое оборудование</span>
+                  </a>
+              </li>
+          </ul>
+      </nav>
+    </div>
+    <div class="categories_panel">
+      <div class="categories__mobile_back">Категории товаров</div>
+      <div id="11111" class="category_item showed">
+          <div class="categories_header">Категория 1</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория 2-1</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Потративные плееры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор переменного тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Автомобильные товары</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Литые диски</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Коврики</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Форсунки</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Чехлы для сидений</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Жидкость</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для ремонта советских автомобилей</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Аккумуляторы</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Бамперы</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Дворники</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Запчасти для ремонта</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Освещение</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Звукоизоляция</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Термообводка</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Аллюминевые детали</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Аллюминевые детали</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Аллюминевые детали</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Аллюминевые детали</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория 3</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Компьютеры</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Планшеты</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Мобильные телефоны</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Зарядные устройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиоустройства</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Радиостанции</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Запчасти для ремонта кинотеаторв</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Наборы для активации</a>
+                      </li>
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Генератор тока</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="22222" class="category_item" aria-hidden="true">
+          <div class="categories_header">Строительство и ремонт</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="33333" class="category_item" aria-hidden="true">
+          <div class="categories_header">Компьютеры и связь</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="44444" class="category_item" aria-hidden="true">
+          <div class="categories_header">Потребительские товары</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="55555" class="category_item" aria-hidden="true">
+          <div class="categories_header">Природные ресурсы и материалы для созидания</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="66666" class="category_item" aria-hidden="true">
+          <div class="categories_header">Продукты питания</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="77777" class="category_item" aria-hidden="true">
+          <div class="categories_header">Хозяйственные товары</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="88888" class="category_item" aria-hidden="true">
+          <div class="categories_header">Автомобильные товары</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+      <div id="99999" class="category_item" aria-hidden="true">
+          <div class="categories_header">Торговое оборудование</div>
+          <div class="sub_categories scrollbar">
+              <div class="sub_category">
+                  <div class="sub_category__name">
+                      <a href="#">Подкатегория</a>
+                  </div>
+                  <ul class="sub_category__list">
+                      <li class="sub_category__item">
+                          <a class="sub_category__link" href="#">Подкатегория</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>

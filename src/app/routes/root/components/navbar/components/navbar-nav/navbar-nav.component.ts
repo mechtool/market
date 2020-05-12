@@ -1,4 +1,10 @@
-import { Component, Injector, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Injector,
+  HostBinding,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -13,6 +19,7 @@ import { Router } from '@angular/router';
     './navbar-nav.component.scss',
     './navbar-nav.component-1300.scss',
     './navbar-nav.component-992.scss',
+    './navbar-nav.component-768.scss',
     './navbar-nav.component-576.scss',
   ],
 })
@@ -21,6 +28,10 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   private _navService: NavigationService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
+
+  get areCategoriesShowed(): boolean {
+    return this._navService.areCategoriesShowed;
+  }
 
   @HostBinding('class.expanded')
   get isExpandedMenu(): boolean {
@@ -108,7 +119,20 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     }
   }
 
+  closeMenuWithCategories() {
+    this.hideCategories();
+    this.closeMenu();
+  }
+
+  openMenu(): void {
+    this._navService.openMenu();
+  }
+
   closeMenu(): void {
     this._navService.closeMenu();
+  }
+
+  hideCategories(): void {
+    this._navService.hideCategories();
   }
 }

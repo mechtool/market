@@ -1,4 +1,86 @@
 @media all and (max-width: 992px) {
+  .categories-mobive-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 25px 20px;
+
+    .opener {
+      cursor: pointer;
+      background: #3e3e3e;
+      width: 40px;
+      display: flex;
+      justify-content: center;
+      border-radius: 7px;
+      height: 40px;
+      align-items: center;
+
+      &:hover {
+        background: #f24e43;
+      }
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+
+      .opener {
+        display: inline-flex;
+      }
+
+      .label {
+        margin: 0 0 0 15px;
+
+        &::first-letter {
+          letter-spacing: -3px;
+        }
+      }
+    }
+
+    .nav-btns {
+      display: flex;
+      align-items: center;
+      * + * {
+        margin: 0 0 0 10px;
+      }
+
+      .btn_mobile-menu span {
+        display: block;
+        width: 16px;
+        height: 2px;
+        background-color: #4f4f4f;
+        &::before {
+          content: "";
+          display: block;
+          width: 16px;
+          height: 2px;
+          background-color: #4f4f4f;
+          position: relative;
+          top: -5px;
+        }
+        &:after {
+          content: "";
+          display: block;
+          width: 16px;
+          height: 2px;
+          background-color: #4f4f4f;
+          position: relative;
+          bottom: -3px;
+        }
+      }
+    }
+  }
+
+  :host(.expanded) {
+    .categories {
+      &.showed {
+        left: 0;
+        width: 100%;
+      }
+    }
+  }
+
   :host(.expanded) {
     width: 320px;
     background: #fff;
@@ -52,5 +134,39 @@
         margin-right: 20px;
       }
     }
+  }
+
+  .category_item {
+    height: calc(100% - 90px);
+  }
+
+  .categories_close {
+    right: 20px;
+    top: 128px;
+  }
+
+  .categories_list {
+    padding-bottom: 40px;
+  }
+
+  .categories_list .categories_header {
+    padding-left: 40px;
+  }
+
+  .categories_list .nav_item {
+    padding-left: 40px;
+    font-size: var(--font-size-main);
+  }
+
+  .categories_list:after {
+    opacity: 1;
+  }
+
+  .categories_panel {
+    padding-bottom: 40px;
+  }
+
+  .categories_panel:after {
+    opacity: 1;
   }
 }
