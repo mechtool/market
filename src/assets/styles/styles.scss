@@ -1,4 +1,5 @@
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+// TODO Денис, добавь кастомный deep для меню
+//@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 :root {
   font-size: 0.9375em;
@@ -60,11 +61,11 @@ ol {
 a.btn,
 button.btn {
   font-size: var(--font-size-base);
-  font-family: "Futura";
+  font-family: "Futura", serif;
   font-weight: var(--font-weight-medium);
-  border: none;
   border-radius: 2px;
   background-color: #ffffff;
+  color: var(--color-black);
   min-height: 40px;
   line-height: 40px;
   border: 1px solid #e0e0e0;

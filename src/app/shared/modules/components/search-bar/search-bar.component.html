@@ -1,18 +1,46 @@
 <div class="search" [ngClass]="{'hovered': isInputHovered, 'focused': isInputFocused}">
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <input
-      placeholder="{{placeholder}}"
-      autocomplete="off"
-      autocorrect="off"
-      autocapitalize="off"
-      spellcheck="false"
-      aria-autocomplete="list"
-      name="query"
-      formControlName="query"
-      (mouseenter)="isInputHovered = true"
-      (mouseleave)="isInputHovered = false"
-      (focus)="isInputFocused = true;"
-      (blur)="isInputFocused = false">
+
+    <!-- todo: Переделать input и nz-autocomplete, так же поправить отрисовку дропдауна при изменении размера страницы!!! -->
+    <nz-input-group [nzSuffix]="inputClearTpl">
+
+      <input
+        nz-input
+        placeholder="{{placeholder}}"
+        (keyup.enter)="submit()"
+        autocomplete="off"
+        name="query"
+        formControlName="query"
+        [nzAutocomplete]="auto"
+        (mouseenter)="isInputHovered = true"
+        (mouseleave)="isInputHovered = false"
+        (focus)="isInputFocused = true;"
+        (blur)="isInputFocused = false"/>
+
+    </nz-input-group>
+
+    <ng-template #inputClearTpl>
+      <img class="search_input__clear"
+           src="assets/img/svg/icon__close.svg"
+           *ngIf="searchQuery.length"
+           alt=""
+           (click)="cleanQuery()">
+    </ng-template>
+
+    <nz-autocomplete #auto nzOverlayClassName="autocomplete" nzBackfill>
+  <!--todo возможно стоит весь контент из my-search-bar-history и my-search-bar-products вынести сюда и отображать через *ngFor-->
+      <nz-auto-option [nzValue]="form.controls['query'].value">
+        <my-search-bar-history
+          *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
+        ></my-search-bar-history>
+
+        <my-search-bar-products
+          [products]="productsSuggestions"
+          [categories]="categoriesSuggestions"
+          *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"
+        ></my-search-bar-products>
+      </nz-auto-option>
+    </nz-autocomplete>
 
     <div class="buttons">
       <div class="buttons__item">
@@ -32,28 +60,10 @@
         </nz-dropdown-menu>
       </div>
     </div>
-
-    <div class="suggest"
-         (mouseover)="quickSearchOver = true"
-         (mouseout)="quickSearchOver = false"
-         *ngIf="!suggestionsOff && (isInputFocused || quickSearchOver)">
-
-      <my-search-bar-history
-        *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
-      ></my-search-bar-history>
-
-      <my-search-bar-products
-        [products]="productsSuggestions"
-        [categories]="categoriesSuggestions"
-        *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"
-      ></my-search-bar-products>
-
-    </div>
-
   </form>
 
   <div class="region">
-    <a class="btn" nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
+    <a class="btn btn_region" nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
        [nzDropdownMenu]="location_menu"
        (nzVisibleChange)="changeLocationButton($event)" [(nzVisible)]="visibleLocationForm">{{userLocation.name}}</a>
 

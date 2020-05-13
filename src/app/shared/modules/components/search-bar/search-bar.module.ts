@@ -12,13 +12,14 @@ import {
   SorterComponent
 } from './components';
 import {
+  NzAutocompleteModule,
   NzButtonModule,
   NzCheckboxModule,
   NzDropDownModule,
   NzFormModule,
   NzInputModule,
   NzRadioModule,
-  NzSliderModule
+  NzSliderModule,
 } from 'ng-zorro-antd';
 
 @NgModule({
@@ -34,6 +35,7 @@ import {
     NzInputModule,
     NzRadioModule,
     NzSliderModule,
+    NzAutocompleteModule,
   ],
   declarations: [
     SearchBarComponent,

@@ -1,46 +1,17 @@
+.history {
+  padding-left: 15px;
+  padding-right: 15px;
+}
 
 .title {
-	font-weight: var(--font-weight-medium);
-	font-size: var(--font-size-13);
-	line-height: 17px;
-	margin-bottom: 8px;
-	padding-left: 10px;
+  font-size: var(--font-size-13);
+  line-height: 17px;
+  margin-bottom: 8px;
+  padding-left: 10px;
 }
 
 .items {
 	max-height: 180px;
 	overflow-y: auto;
 	padding-right: 13px;
-}
-
-.items::-webkit-scrollbar {
-	width: 5px;
-}
-
-.items::-webkit-scrollbar-button {
-	display: none;
-}
-
-.items::-webkit-scrollbar-track {
-	width: 1px;
-	background-color: #EBEBEB;
-}
-
-.items::-webkit-scrollbar-track-piece {
-	width: 1px;
-	background-color: #EBEBEB;
-}
-
-.items::-webkit-scrollbar-thumb {
-	height: 50px;
-	width: 5px;
-	background-color: #969696;
-}
-
-.items::-webkit-scrollbar-corner {
-	display: none;
-}
-
-.items::-webkit-resizer {
-	display: none;
 }

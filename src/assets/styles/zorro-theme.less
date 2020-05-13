@@ -25,6 +25,7 @@
   display: inline-flex;
   align-items: center;
   font-size: var(--font-size-13);
+  font-weight: var(--font-weight-medium);
 }
 
 .@{radio-prefix-cls}-wrapper {
@@ -152,3 +153,11 @@ span.ant-radio + * {
 @btn-primary-color: #454545;
 @btn-primary-bg: @accent-color;
 @btn-padding-horizontal-base: 40px;
+.ant-btn-link {
+  color: #454545;
+}
+
+// nz-auto-option
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+  background-color: white;
+}

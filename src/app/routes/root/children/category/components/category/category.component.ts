@@ -21,7 +21,7 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 export class CategoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   categoryModel: CategoryModel;
-  query: '';
+  query = '';
   categoryId: string;
   searchFilters: DefaultSearchAvailableModel;
   searchedNomenclatures: NomenclatureCardModel[];

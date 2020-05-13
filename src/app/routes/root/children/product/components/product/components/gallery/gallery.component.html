@@ -10,7 +10,7 @@
         <span class="specs__item__label">Артикул:</span>
         <span class="specs__item__value">{{nomenclature.productPartNumber}}</span>
       </div>
-      <div class="specs__item" *ngIf="nomenclature.productBarCodes.length">
+      <div class="specs__item" *ngIf="nomenclature.productBarCodes?.length">
         <span class="specs__item__label">Штрихкоды:</span>
         <span class="specs__item__value">{{nomenclature.productBarCodes}}</span>
       </div>
@@ -44,7 +44,7 @@
       <span class="specs__item__label">Артикул:</span>
       <span class="specs__item__value">{{nomenclature.productPartNumber}}</span>
     </div>
-    <div class="specs__item" *ngIf="nomenclature.productBarCodes.length">
+    <div class="specs__item" *ngIf="nomenclature.productBarCodes?.length">
       <span class="specs__item__label">Штрихкоды:</span>
       <span class="specs__item__value">{{nomenclature.productBarCodes}}</span>
     </div>

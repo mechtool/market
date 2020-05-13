@@ -1,5 +1,43 @@
-:host {
-  --color-bar-hovered: #fff5d8;
+::ng-deep {
+  // todo: избавиться от ::ng-deep
+
+  .autocomplete {
+    left: -20px;
+    margin-top: 22px;
+    width: calc(100% + 130px);
+
+    ::-webkit-resizer {
+      display: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+
+      &-button {
+        display: none;
+      }
+
+      &-track {
+        width: 5px;
+        background-color: #ebebeb;
+
+        &-piece {
+          width: 1px;
+          background-color: #ebebeb;
+        }
+      }
+
+      &-thumb {
+        height: 50px;
+        width: 5px;
+        background-color: var(--color-accent-light);
+      }
+
+      &-corner {
+        display: none;
+      }
+    }
+  }
 }
 
 .search {
@@ -11,13 +49,67 @@
   align-items: center;
   border-radius: 2px;
   transition: background-color .2s;
+  border: 1px solid #e0e0e0;
+
+  .search_input__clear {
+    margin-top: 7px;
+    opacity: 0.44;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .ant-input-affix-wrapper {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+
+    &:hover {
+      border-color: var(--color-accent-light);
+    }
+
+    &:active {
+      border-color: var(--color-accent-light);
+    }
+  }
 
   &.hovered {
-    background-color: var(--color-bar-hovered);
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent);
+
+    .btn_search {
+      border-color: var(--color-accent-light);
+    }
+
+    .btn_category {
+      border-color: var(--color-accent-light);
+    }
+
+    .btn_region {
+      border-color: var(--color-accent-light);
+    }
   }
 
   &.focused {
-    background-color: var(--color-accent-lighter);
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent);
+
+    .btn_search {
+      border-color: var(--color-accent-light);
+    }
+
+    .btn_category {
+      border-color: var(--color-accent-light);
+    }
+
+    .btn_region {
+      border-color: var(--color-accent-light);
+    }
+
+    .ant-input-affix-wrapper {
+      border-color: var(--color-accent-light);
+    }
   }
 
   form {
@@ -34,25 +126,28 @@
     border: none;
     background: #ffffff;
     width: 100%;
-    height: 40px;
-    padding: 0 25px;
-    border-radius: 5px;
+    height: 100%;
+    padding: 0 15px;
     color: var(--color-primary);
-    font-family: "Futura";
-    font-size: var(--font-size-18);
-    font-weight: var(--font-weight-medium);
+    font-family: "Futura", serif;
+    font-size: var(--font-size-16);
+    font-weight: var(--font-weight-bold);
     line-height: 40px;
     outline: none;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, .08), 0px -1px 2px rgba(0, 0, 0, .05);
 
     &::placeholder {
       color: var(--color-primary);
       font-size: var(--font-size-base);
-      font-family: "Futura";
+      font-family: "Futura", serif;
       font-weight: var(--font-weight-medium);
       line-height: 40px;
-      letter-spacing: .05em;
+      letter-spacing: 0.02em;
     }
+  }
+
+
+  a.btn:hover {
+    border: 1px solid var(--color-accent);
   }
 
   .buttons {
@@ -66,26 +161,23 @@
       .btn_search {
         background: #ffffff url("../../../../../assets/img/svg/icon__search.svg") no-repeat center center;
         flex-shrink: 0;
+
+        &:hover {
+          background-color: var(--color-accent);
+          border: none;
+        }
+
       }
 
       .btn_category {
-        background: #ffffff url("../../../../../assets/img/svg/icon__category.svg") no-repeat center center;
+        background: #ffffff url("../../../../../assets/img/svg/icon__filter.svg") no-repeat center center;
+
+        &:hover {
+          background-color: var(--color-accent);
+          border: none;
+        }
       }
     }
-  }
-
-  .suggest {
-    position: absolute;
-    left: 0;
-    top: 60px;
-    z-index: 2;
-    width: 100%;
-    max-height: 235px;
-    overflow: hidden;
-    padding: 13px 27px 20px 40px;
-    background-color: #ffffff;
-    box-shadow: 0px 5px 14px 1px rgba(0, 0, 0, .1);
-    border-radius: 2px;
   }
 
   .region {
@@ -93,7 +185,7 @@
     align-items: center;
 
     &::before {
-      content: '';
+      content: "";
       width: 1px;
       height: 32px;
       background-color: #dfd8d8;
@@ -102,7 +194,18 @@
 
     .btn {
       padding: 0 35px;
-      border-radius: 5px;
+      white-space: nowrap;
+
+      &::after {
+        content: "";
+        width: 0;
+        height: 0;
+        margin-left: 3px;
+        margin-top: 2px;
+        border-style: solid;
+        border-width: 4px 3px 0 3px;
+        border-color: #454545 transparent transparent transparent;
+      }
     }
   }
 

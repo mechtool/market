@@ -208,15 +208,6 @@ input[type="text"] {
 .filter_btns {
   display: flex;
   margin-top: 10px;
-
-  & .btn {
-    margin-left: 0;
-
-    &-yellow {
-      margin-right: 10px;
-      min-width: 160px;
-    }
-  }
 }
 
 .margin-cleared {

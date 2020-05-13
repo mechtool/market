@@ -38,7 +38,6 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   form: FormGroup;
   isInputHovered = false;
   isInputFocused = false;
-  quickSearchOver = false;
   visibleFilterForm = false;
   visibleLocationForm = false;
   MIN_QUERY_LENGTH = 3;
@@ -99,6 +98,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     if (queryParam.length >= this.MIN_QUERY_LENGTH) {
       this.submitClick.emit(groupAllQueryFilters);
     }
+  }
+
+  cleanQuery() {
+    this._updateForm();
   }
 
   changeFilterButton($event: boolean) {
