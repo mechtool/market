@@ -44,6 +44,14 @@ h3 {
   margin: 0;
 }
 
+h1 {
+  font-weight: var(--font-weight-demi);
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
 ul,
 ol {
   margin: 0;
@@ -74,12 +82,10 @@ button.btn {
   cursor: pointer;
   text-decoration: none;
   transition: background-color 0.2s, border 0.2s;
-}
 
-.btn:hover,
-a.btn:hover,
-button.btn:hover {
-  background-color: var(--color-accent);
+  &:hover {
+    background-color: var(--color-accent);
+  }
 }
 
 .btn_square {
@@ -87,61 +93,10 @@ button.btn:hover {
   border-radius: 10px;
 }
 
-h1 {
-  font-weight: var(--font-weight-demi);
-  font-size: 20px;
-  line-height: 32px;
-  letter-spacing: 0.025em;
-  white-space: nowrap;
-}
-
-.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
-  opacity: 1;
-}
-.cdk-overlay-dark-backdrop {
+.overlay-backdrop-dark {
   background: rgba(0, 0, 0, 0.32);
-}
-.cdk-overlay-backdrop {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  pointer-events: auto;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
-  opacity: 0;
-}
 
-@media all and (max-width: 1300px) {
-  body::before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 3;
-    visibility: hidden;
-    transition: opacity 0.2s;
-  }
-}
-
-@media all and (max-width: 992px) {
-  body::before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: #000000;
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 80px;
-    z-index: 3;
-    visibility: hidden;
-    transition: opacity 0.2s;
+  &.cdk-overlay-backdrop-showing {
+    opacity: 1;
   }
 }

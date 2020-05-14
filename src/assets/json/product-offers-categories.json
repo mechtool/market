@@ -1,0 +1,1884 @@
+{
+	"categories": [
+		{
+			"id": "10953",
+			"parentId": "5725",
+			"name": "Оргтехника и расходные материалы - другое",
+			"isLeaf": true,
+			"products": 15,
+			"offers": 15
+		},
+		{
+			"id": "5725",
+			"parentId": "1",
+			"name": "Оргтехника и расходные материалы",
+			"isLeaf": false,
+			"products": 15,
+			"offers": 15
+		},
+		{
+			"id": "1",
+			"parentId": null,
+			"name": "Компьютеры и связь",
+			"isLeaf": false,
+			"products": 16,
+			"offers": 16
+		},
+		{
+			"id": "5",
+			"parentId": "3",
+			"name": "Настольные компьютеры",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "3",
+			"parentId": "2",
+			"name": "Компьютеры",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "2",
+			"parentId": "1",
+			"name": "Компьютерная техника",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "5882",
+			"parentId": "2407",
+			"name": "Красота и здоровье - другое",
+			"isLeaf": true,
+			"products": 320,
+			"offers": 320
+		},
+		{
+			"id": "2407",
+			"parentId": "208",
+			"name": "Красота и здоровье",
+			"isLeaf": false,
+			"products": 385,
+			"offers": 385
+		},
+		{
+			"id": "208",
+			"parentId": null,
+			"name": "Потребительские товары",
+			"isLeaf": false,
+			"products": 1548,
+			"offers": 1548
+		},
+		{
+			"id": "5943",
+			"parentId": "824",
+			"name": "Бумажная продукция - другое",
+			"isLeaf": true,
+			"products": 117,
+			"offers": 117
+		},
+		{
+			"id": "824",
+			"parentId": "616",
+			"name": "Бумажная продукция",
+			"isLeaf": false,
+			"products": 117,
+			"offers": 117
+		},
+		{
+			"id": "616",
+			"parentId": "208",
+			"name": "Товары для школы и офиса",
+			"isLeaf": false,
+			"products": 428,
+			"offers": 428
+		},
+		{
+			"id": "11064",
+			"parentId": "621",
+			"name": "Письменные и чертежные принадлежности - другое",
+			"isLeaf": true,
+			"products": 116,
+			"offers": 116
+		},
+		{
+			"id": "621",
+			"parentId": "616",
+			"name": "Письменные и чертежные принадлежности",
+			"isLeaf": false,
+			"products": 116,
+			"offers": 116
+		},
+		{
+			"id": "6555",
+			"parentId": "1057",
+			"name": "Канцтовары - другое",
+			"isLeaf": true,
+			"products": 96,
+			"offers": 96
+		},
+		{
+			"id": "1057",
+			"parentId": "616",
+			"name": "Канцтовары",
+			"isLeaf": false,
+			"products": 96,
+			"offers": 96
+		},
+		{
+			"id": "5941",
+			"parentId": "3294",
+			"name": "Посуда для готовки - другое",
+			"isLeaf": true,
+			"products": 95,
+			"offers": 95
+		},
+		{
+			"id": "3294",
+			"parentId": "3288",
+			"name": "Посуда для готовки",
+			"isLeaf": false,
+			"products": 95,
+			"offers": 95
+		},
+		{
+			"id": "3288",
+			"parentId": "2981",
+			"name": "Посуда",
+			"isLeaf": false,
+			"products": 363,
+			"offers": 363
+		},
+		{
+			"id": "2981",
+			"parentId": "208",
+			"name": "Товары для дома",
+			"isLeaf": false,
+			"products": 684,
+			"offers": 684
+		},
+		{
+			"id": "1341",
+			"parentId": "6617",
+			"name": "Папки и системы архивации - другое",
+			"isLeaf": true,
+			"products": 86,
+			"offers": 86
+		},
+		{
+			"id": "6617",
+			"parentId": "616",
+			"name": "Папки и системы архивации",
+			"isLeaf": false,
+			"products": 86,
+			"offers": 86
+		},
+		{
+			"id": "5824",
+			"parentId": "4086",
+			"name": "Средства для стирки - другое",
+			"isLeaf": true,
+			"products": 76,
+			"offers": 76
+		},
+		{
+			"id": "4086",
+			"parentId": "2986",
+			"name": "Средства для стирки",
+			"isLeaf": false,
+			"products": 76,
+			"offers": 76
+		},
+		{
+			"id": "2986",
+			"parentId": "2981",
+			"name": "Бытовая химия",
+			"isLeaf": false,
+			"products": 192,
+			"offers": 192
+		},
+		{
+			"id": "5830",
+			"parentId": "4011",
+			"name": "Чистящие и моющие средства - другое",
+			"isLeaf": true,
+			"products": 65,
+			"offers": 65
+		},
+		{
+			"id": "4011",
+			"parentId": "2986",
+			"name": "Чистящие и моющие средства",
+			"isLeaf": false,
+			"products": 96,
+			"offers": 96
+		},
+		{
+			"id": "5942",
+			"parentId": "3373",
+			"name": "Столовая посуда - другое",
+			"isLeaf": true,
+			"products": 64,
+			"offers": 64
+		},
+		{
+			"id": "3373",
+			"parentId": "3288",
+			"name": "Столовая посуда",
+			"isLeaf": false,
+			"products": 64,
+			"offers": 64
+		},
+		{
+			"id": "5888",
+			"parentId": "4436",
+			"name": "Изделия бумажно-гигиенические - другое",
+			"isLeaf": true,
+			"products": 59,
+			"offers": 59
+		},
+		{
+			"id": "4436",
+			"parentId": "2407",
+			"name": "Изделия бумажно-гигиенические",
+			"isLeaf": false,
+			"products": 59,
+			"offers": 59
+		},
+		{
+			"id": "6050",
+			"parentId": "3639",
+			"name": "Предметы сервировки - другое",
+			"isLeaf": true,
+			"products": 58,
+			"offers": 58
+		},
+		{
+			"id": "3639",
+			"parentId": "3288",
+			"name": "Предметы сервировки",
+			"isLeaf": false,
+			"products": 101,
+			"offers": 101
+		},
+		{
+			"id": "6245",
+			"parentId": "3580",
+			"name": "Посуда для напитков - другое",
+			"isLeaf": true,
+			"products": 50,
+			"offers": 50
+		},
+		{
+			"id": "3580",
+			"parentId": "3288",
+			"name": "Посуда для напитков",
+			"isLeaf": false,
+			"products": 50,
+			"offers": 50
+		},
+		{
+			"id": "3680",
+			"parentId": "3639",
+			"name": "Салфетки бумажные",
+			"isLeaf": true,
+			"products": 43,
+			"offers": 43
+		},
+		{
+			"id": "5940",
+			"parentId": "3061",
+			"name": "Инвентарь для уборки - другое",
+			"isLeaf": true,
+			"products": 43,
+			"offers": 43
+		},
+		{
+			"id": "3061",
+			"parentId": "2993",
+			"name": "Инвентарь для уборки",
+			"isLeaf": false,
+			"products": 45,
+			"offers": 45
+		},
+		{
+			"id": "2993",
+			"parentId": "2981",
+			"name": "Хозтовары",
+			"isLeaf": false,
+			"products": 53,
+			"offers": 53
+		},
+		{
+			"id": "5822",
+			"parentId": "3863",
+			"name": "Моющие средства - другое",
+			"isLeaf": true,
+			"products": 28,
+			"offers": 28
+		},
+		{
+			"id": "3863",
+			"parentId": "4011",
+			"name": "Средства для мытья посуды",
+			"isLeaf": false,
+			"products": 31,
+			"offers": 31
+		},
+		{
+			"id": "10989",
+			"parentId": "4096",
+			"name": "Текстиль для кухни - другое",
+			"isLeaf": true,
+			"products": 25,
+			"offers": 25
+		},
+		{
+			"id": "4096",
+			"parentId": "4009",
+			"name": "Текстиль для кухни",
+			"isLeaf": false,
+			"products": 25,
+			"offers": 25
+		},
+		{
+			"id": "4009",
+			"parentId": "2981",
+			"name": "Текстиль",
+			"isLeaf": false,
+			"products": 54,
+			"offers": 54
+		},
+		{
+			"id": "10991",
+			"parentId": "3947",
+			"name": "Посуда для хранения продуктов - другое",
+			"isLeaf": true,
+			"products": 25,
+			"offers": 25
+		},
+		{
+			"id": "3947",
+			"parentId": "3288",
+			"name": "Посуда для хранения продуктов",
+			"isLeaf": false,
+			"products": 25,
+			"offers": 25
+		},
+		{
+			"id": "5914",
+			"parentId": "3486",
+			"name": "Посуда для чая и кофе - другое",
+			"isLeaf": true,
+			"products": 24,
+			"offers": 24
+		},
+		{
+			"id": "3486",
+			"parentId": "3288",
+			"name": "Посуда для чая и кофе",
+			"isLeaf": false,
+			"products": 24,
+			"offers": 24
+		},
+		{
+			"id": "10963",
+			"parentId": "4009",
+			"name": "Текстиль - другое",
+			"isLeaf": true,
+			"products": 21,
+			"offers": 21
+		},
+		{
+			"id": "5912",
+			"parentId": "2981",
+			"name": "Товары для дома - другое",
+			"isLeaf": true,
+			"products": 21,
+			"offers": 21
+		},
+		{
+			"id": "3888",
+			"parentId": "2986",
+			"name": "Освежители и ароматизаторы воздуха",
+			"isLeaf": true,
+			"products": 20,
+			"offers": 20
+		},
+		{
+			"id": "351",
+			"parentId": "258",
+			"name": "Мелкая техника для кухни - другое",
+			"isLeaf": true,
+			"products": 14,
+			"offers": 14
+		},
+		{
+			"id": "258",
+			"parentId": "211",
+			"name": "Мелкая техника для кухни",
+			"isLeaf": false,
+			"products": 14,
+			"offers": 14
+		},
+		{
+			"id": "211",
+			"parentId": "208",
+			"name": "Бытовая техника",
+			"isLeaf": false,
+			"products": 14,
+			"offers": 14
+		},
+		{
+			"id": "5910",
+			"parentId": "2023",
+			"name": "Товары для дачи и сада - другое",
+			"isLeaf": true,
+			"products": 14,
+			"offers": 14
+		},
+		{
+			"id": "2023",
+			"parentId": "208",
+			"name": "Товары для дачи и сада",
+			"isLeaf": false,
+			"products": 14,
+			"offers": 14
+		},
+		{
+			"id": "6660",
+			"parentId": "1209",
+			"name": "Демонстрационное оборудование - другое",
+			"isLeaf": true,
+			"products": 13,
+			"offers": 13
+		},
+		{
+			"id": "1209",
+			"parentId": "616",
+			"name": "Демонстрационное оборудование",
+			"isLeaf": false,
+			"products": 13,
+			"offers": 13
+		},
+		{
+			"id": "8629",
+			"parentId": "1023",
+			"name": "Батарейки",
+			"isLeaf": true,
+			"products": 10,
+			"offers": 10
+		},
+		{
+			"id": "1023",
+			"parentId": "651",
+			"name": "Батарейки, аккумуляторы и зарядные устройства",
+			"isLeaf": false,
+			"products": 10,
+			"offers": 10
+		},
+		{
+			"id": "651",
+			"parentId": "208",
+			"name": "Электроника",
+			"isLeaf": false,
+			"products": 10,
+			"offers": 10
+		},
+		{
+			"id": "11003",
+			"parentId": "4015",
+			"name": "Постельное белье - другое",
+			"isLeaf": true,
+			"products": 8,
+			"offers": 8
+		},
+		{
+			"id": "4015",
+			"parentId": "4009",
+			"name": "Постельное белье",
+			"isLeaf": false,
+			"products": 8,
+			"offers": 8
+		},
+		{
+			"id": "6747",
+			"parentId": "2441",
+			"name": "Офисная мебель - другое",
+			"isLeaf": true,
+			"products": 7,
+			"offers": 7
+		},
+		{
+			"id": "2441",
+			"parentId": "2435",
+			"name": "Офисная мебель",
+			"isLeaf": false,
+			"products": 7,
+			"offers": 7
+		},
+		{
+			"id": "2435",
+			"parentId": "208",
+			"name": "Мебель",
+			"isLeaf": false,
+			"products": 7,
+			"offers": 7
+		},
+		{
+			"id": "5893",
+			"parentId": "4604",
+			"name": "Средства гигиены для женщин - другое",
+			"isLeaf": true,
+			"products": 6,
+			"offers": 6
+		},
+		{
+			"id": "4604",
+			"parentId": "2407",
+			"name": "Средства гигиены для женщин",
+			"isLeaf": false,
+			"products": 6,
+			"offers": 6
+		},
+		{
+			"id": "11115",
+			"parentId": "6221",
+			"name": "Сумки - другое",
+			"isLeaf": true,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "6221",
+			"parentId": "2993",
+			"name": "Сумки",
+			"isLeaf": false,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "5870",
+			"parentId": "1074",
+			"name": "Гигиена детская - другое",
+			"isLeaf": true,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "1074",
+			"parentId": "1062",
+			"name": "Гигиена детская",
+			"isLeaf": false,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "1062",
+			"parentId": "208",
+			"name": "Детские товары",
+			"isLeaf": false,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "3874",
+			"parentId": "3863",
+			"name": "Средства для мытья посуды",
+			"isLeaf": true,
+			"products": 3,
+			"offers": 3
+		},
+		{
+			"id": "3117",
+			"parentId": "3061",
+			"name": "Перчатки хозяйственные",
+			"isLeaf": true,
+			"products": 2,
+			"offers": 2
+		},
+		{
+			"id": "3793",
+			"parentId": "3761",
+			"name": "Терки, овощерезки",
+			"isLeaf": true,
+			"products": 2,
+			"offers": 2
+		},
+		{
+			"id": "3761",
+			"parentId": "3288",
+			"name": "Кухонные принадлежности",
+			"isLeaf": false,
+			"products": 4,
+			"offers": 4
+		},
+		{
+			"id": "5939",
+			"parentId": "3761",
+			"name": "Кухонные принадлежности - другое",
+			"isLeaf": true,
+			"products": 2,
+			"offers": 2
+		},
+		{
+			"id": "11175",
+			"parentId": "2999",
+			"name": "Хранение вещей - другое",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "2999",
+			"parentId": "2993",
+			"name": "Хранение вещей",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "11334",
+			"parentId": "4237",
+			"name": "Свечи, подсвечники",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "4237",
+			"parentId": "4173",
+			"name": "Предметы интерьера",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "4173",
+			"parentId": "2981",
+			"name": "Интерьер",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "3152",
+			"parentId": "3131",
+			"name": "Уход за одеждой",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "3131",
+			"parentId": "2993",
+			"name": "Уход за вещами",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "5871",
+			"parentId": "4477",
+			"name": "Корма для животных - другое",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "4477",
+			"parentId": "4469",
+			"name": "Корма для животных",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "4469",
+			"parentId": "208",
+			"name": "Товары для животных",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "5915",
+			"parentId": "2993",
+			"name": "Хозтовары - другое",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "4460",
+			"parentId": "4422",
+			"name": "Вина столовые красные",
+			"isLeaf": true,
+			"products": 331,
+			"offers": 331
+		},
+		{
+			"id": "4422",
+			"parentId": "3335",
+			"name": "Вина, винные напитки",
+			"isLeaf": false,
+			"products": 752,
+			"offers": 752
+		},
+		{
+			"id": "3335",
+			"parentId": "3321",
+			"name": "Алкогольные напитки",
+			"isLeaf": false,
+			"products": 1125,
+			"offers": 1125
+		},
+		{
+			"id": "3321",
+			"parentId": null,
+			"name": "Продукты, напитки, табак",
+			"isLeaf": false,
+			"products": 6222,
+			"offers": 6222
+		},
+		{
+			"id": "5809",
+			"parentId": "1542",
+			"name": "Бакалея - другое",
+			"isLeaf": true,
+			"products": 297,
+			"offers": 297
+		},
+		{
+			"id": "1542",
+			"parentId": "3321",
+			"name": "Бакалея",
+			"isLeaf": false,
+			"products": 1174,
+			"offers": 1174
+		},
+		{
+			"id": "4656",
+			"parentId": "4649",
+			"name": "Сыр",
+			"isLeaf": true,
+			"products": 286,
+			"offers": 286
+		},
+		{
+			"id": "4649",
+			"parentId": "3321",
+			"name": "Гастрономия",
+			"isLeaf": false,
+			"products": 427,
+			"offers": 427
+		},
+		{
+			"id": "6838",
+			"parentId": "6837",
+			"name": "Консервы - другое",
+			"isLeaf": true,
+			"products": 274,
+			"offers": 274
+		},
+		{
+			"id": "6837",
+			"parentId": "3321",
+			"name": "Консервы",
+			"isLeaf": false,
+			"products": 330,
+			"offers": 330
+		},
+		{
+			"id": "5852",
+			"parentId": "874",
+			"name": "Напитки безалкогольные - другое",
+			"isLeaf": true,
+			"products": 273,
+			"offers": 273
+		},
+		{
+			"id": "874",
+			"parentId": "3321",
+			"name": "Напитки безалкогольные",
+			"isLeaf": false,
+			"products": 423,
+			"offers": 423
+		},
+		{
+			"id": "2306",
+			"parentId": "1542",
+			"name": "Соус",
+			"isLeaf": true,
+			"products": 258,
+			"offers": 258
+		},
+		{
+			"id": "5839",
+			"parentId": "466",
+			"name": "Замороженные продукты - другое",
+			"isLeaf": true,
+			"products": 237,
+			"offers": 237
+		},
+		{
+			"id": "466",
+			"parentId": "6440",
+			"name": "Замороженные продукты",
+			"isLeaf": false,
+			"products": 396,
+			"offers": 396
+		},
+		{
+			"id": "6440",
+			"parentId": "3321",
+			"name": "Полуфабрикаты",
+			"isLeaf": false,
+			"products": 396,
+			"offers": 396
+		},
+		{
+			"id": "4429",
+			"parentId": "4422",
+			"name": "Вина столовые белые",
+			"isLeaf": true,
+			"products": 231,
+			"offers": 231
+		},
+		{
+			"id": "2905",
+			"parentId": "2743",
+			"name": "Шоколад",
+			"isLeaf": true,
+			"products": 220,
+			"offers": 220
+		},
+		{
+			"id": "2743",
+			"parentId": "3321",
+			"name": "Кондитерские изделия",
+			"isLeaf": false,
+			"products": 412,
+			"offers": 412
+		},
+		{
+			"id": "5856",
+			"parentId": "1510",
+			"name": "Рыба, морепродукты - другое",
+			"isLeaf": true,
+			"products": 214,
+			"offers": 214
+		},
+		{
+			"id": "1510",
+			"parentId": "3321",
+			"name": "Рыба, морепродукты",
+			"isLeaf": false,
+			"products": 270,
+			"offers": 270
+		},
+		{
+			"id": "5955",
+			"parentId": "2743",
+			"name": "Кондитерские изделия - другое",
+			"isLeaf": true,
+			"products": 192,
+			"offers": 192
+		},
+		{
+			"id": "5957",
+			"parentId": "3275",
+			"name": "Молочные продукты - другое",
+			"isLeaf": true,
+			"products": 184,
+			"offers": 184
+		},
+		{
+			"id": "3275",
+			"parentId": "3321",
+			"name": "Молочные продукты",
+			"isLeaf": false,
+			"products": 450,
+			"offers": 450
+		},
+		{
+			"id": "6603",
+			"parentId": "4453",
+			"name": "Вина игристые",
+			"isLeaf": true,
+			"products": 136,
+			"offers": 136
+		},
+		{
+			"id": "4453",
+			"parentId": "4422",
+			"name": "Вина игристые, шампанские",
+			"isLeaf": false,
+			"products": 136,
+			"offers": 136
+		},
+		{
+			"id": "5969",
+			"parentId": "1381",
+			"name": "Чай - другое",
+			"isLeaf": true,
+			"products": 125,
+			"offers": 125
+		},
+		{
+			"id": "1381",
+			"parentId": "1308",
+			"name": "Чай",
+			"isLeaf": false,
+			"products": 125,
+			"offers": 125
+		},
+		{
+			"id": "1308",
+			"parentId": "3321",
+			"name": "Чай, кофе, какао",
+			"isLeaf": false,
+			"products": 236,
+			"offers": 236
+		},
+		{
+			"id": "5959",
+			"parentId": "1154",
+			"name": "Хлебобулочные изделия - другое",
+			"isLeaf": true,
+			"products": 123,
+			"offers": 123
+		},
+		{
+			"id": "1154",
+			"parentId": "3321",
+			"name": "Хлебобулочные изделия",
+			"isLeaf": false,
+			"products": 123,
+			"offers": 123
+		},
+		{
+			"id": "2390",
+			"parentId": "1542",
+			"name": "Макаронные изделия",
+			"isLeaf": true,
+			"products": 118,
+			"offers": 118
+		},
+		{
+			"id": "5974",
+			"parentId": "985",
+			"name": "Вода - другое",
+			"isLeaf": true,
+			"products": 118,
+			"offers": 118
+		},
+		{
+			"id": "985",
+			"parentId": "874",
+			"name": "Вода",
+			"isLeaf": false,
+			"products": 118,
+			"offers": 118
+		},
+		{
+			"id": "3388",
+			"parentId": "3275",
+			"name": "Сливки",
+			"isLeaf": true,
+			"products": 115,
+			"offers": 115
+		},
+		{
+			"id": "5867",
+			"parentId": "4400",
+			"name": "Пиво - другое",
+			"isLeaf": true,
+			"products": 105,
+			"offers": 105
+		},
+		{
+			"id": "4400",
+			"parentId": "3335",
+			"name": "Пиво",
+			"isLeaf": false,
+			"products": 127,
+			"offers": 127
+		},
+		{
+			"id": "5960",
+			"parentId": "4922",
+			"name": "Овощи замороженные - другое",
+			"isLeaf": true,
+			"products": 104,
+			"offers": 104
+		},
+		{
+			"id": "4922",
+			"parentId": "466",
+			"name": "Овощи замороженные",
+			"isLeaf": false,
+			"products": 104,
+			"offers": 104
+		},
+		{
+			"id": "5968",
+			"parentId": "1321",
+			"name": "Кофе - другое",
+			"isLeaf": true,
+			"products": 102,
+			"offers": 102
+		},
+		{
+			"id": "1321",
+			"parentId": "1308",
+			"name": "Кофе",
+			"isLeaf": false,
+			"products": 102,
+			"offers": 102
+		},
+		{
+			"id": "5849",
+			"parentId": "3429",
+			"name": "Молоко - другое",
+			"isLeaf": true,
+			"products": 85,
+			"offers": 85
+		},
+		{
+			"id": "3429",
+			"parentId": "3275",
+			"name": "Молоко",
+			"isLeaf": false,
+			"products": 85,
+			"offers": 85
+		},
+		{
+			"id": "5926",
+			"parentId": "4567",
+			"name": "Колбаса - другое",
+			"isLeaf": true,
+			"products": 84,
+			"offers": 84
+		},
+		{
+			"id": "4567",
+			"parentId": "430",
+			"name": "Колбаса",
+			"isLeaf": false,
+			"products": 104,
+			"offers": 104
+		},
+		{
+			"id": "430",
+			"parentId": "3321",
+			"name": "Мясная гастрономия",
+			"isLeaf": false,
+			"products": 252,
+			"offers": 252
+		},
+		{
+			"id": "5817",
+			"parentId": "2596",
+			"name": "Снэки - другое",
+			"isLeaf": true,
+			"products": 83,
+			"offers": 83
+		},
+		{
+			"id": "2596",
+			"parentId": "1542",
+			"name": "Снэки",
+			"isLeaf": false,
+			"products": 83,
+			"offers": 83
+		},
+		{
+			"id": "6447",
+			"parentId": "6445",
+			"name": "Говядина охлажденная",
+			"isLeaf": true,
+			"products": 82,
+			"offers": 82
+		},
+		{
+			"id": "6445",
+			"parentId": "6300",
+			"name": "Мясо охлажденное",
+			"isLeaf": false,
+			"products": 167,
+			"offers": 167
+		},
+		{
+			"id": "6300",
+			"parentId": "4787",
+			"name": "Мясо",
+			"isLeaf": false,
+			"products": 235,
+			"offers": 235
+		},
+		{
+			"id": "4787",
+			"parentId": "3321",
+			"name": "Мясо, птица, яйцо",
+			"isLeaf": false,
+			"products": 407,
+			"offers": 407
+		},
+		{
+			"id": "5956",
+			"parentId": "430",
+			"name": "Мясная гастрономия - другое",
+			"isLeaf": true,
+			"products": 80,
+			"offers": 80
+		},
+		{
+			"id": "5985",
+			"parentId": "1796",
+			"name": "Пряность - другое",
+			"isLeaf": true,
+			"products": 80,
+			"offers": 80
+		},
+		{
+			"id": "1796",
+			"parentId": "1542",
+			"name": "Пряность",
+			"isLeaf": false,
+			"products": 80,
+			"offers": 80
+		},
+		{
+			"id": "6285",
+			"parentId": "6281",
+			"name": "Курица охлажденная",
+			"isLeaf": true,
+			"products": 75,
+			"offers": 75
+		},
+		{
+			"id": "6281",
+			"parentId": "4811",
+			"name": "Мясо птицы охлажденное",
+			"isLeaf": false,
+			"products": 94,
+			"offers": 94
+		},
+		{
+			"id": "4811",
+			"parentId": "4787",
+			"name": "Мясо птицы",
+			"isLeaf": false,
+			"products": 146,
+			"offers": 146
+		},
+		{
+			"id": "4481",
+			"parentId": "4476",
+			"name": "Виски",
+			"isLeaf": true,
+			"products": 71,
+			"offers": 71
+		},
+		{
+			"id": "4476",
+			"parentId": "3335",
+			"name": "Крепкие алкогольные напитки",
+			"isLeaf": false,
+			"products": 111,
+			"offers": 111
+		},
+		{
+			"id": "2009",
+			"parentId": "1542",
+			"name": "Сухие завтраки",
+			"isLeaf": true,
+			"products": 67,
+			"offers": 67
+		},
+		{
+			"id": "5923",
+			"parentId": "3395",
+			"name": "Творог - другое",
+			"isLeaf": true,
+			"products": 66,
+			"offers": 66
+		},
+		{
+			"id": "3395",
+			"parentId": "3275",
+			"name": "Творог",
+			"isLeaf": false,
+			"products": 66,
+			"offers": 66
+		},
+		{
+			"id": "2694",
+			"parentId": "3321",
+			"name": "Мороженое",
+			"isLeaf": true,
+			"products": 62,
+			"offers": 62
+		},
+		{
+			"id": "5979",
+			"parentId": "1676",
+			"name": "Масло растительное - другое",
+			"isLeaf": true,
+			"products": 61,
+			"offers": 61
+		},
+		{
+			"id": "1676",
+			"parentId": "1542",
+			"name": "Масло растительное",
+			"isLeaf": false,
+			"products": 61,
+			"offers": 61
+		},
+		{
+			"id": "5820",
+			"parentId": "4649",
+			"name": "Гастрономия - другое",
+			"isLeaf": true,
+			"products": 60,
+			"offers": 60
+		},
+		{
+			"id": "4533",
+			"parentId": "3335",
+			"name": "Водка",
+			"isLeaf": true,
+			"products": 58,
+			"offers": 58
+		},
+		{
+			"id": "6695",
+			"parentId": "1510",
+			"name": "Рыба охлажденная",
+			"isLeaf": true,
+			"products": 56,
+			"offers": 56
+		},
+		{
+			"id": "11373",
+			"parentId": "11372",
+			"name": "Фрукты, ягоды замороженные - другое",
+			"isLeaf": true,
+			"products": 55,
+			"offers": 55
+		},
+		{
+			"id": "11372",
+			"parentId": "466",
+			"name": "Фрукты, ягоды замороженные",
+			"isLeaf": false,
+			"products": 55,
+			"offers": 55
+		},
+		{
+			"id": "5925",
+			"parentId": "4636",
+			"name": "Колбасные изделия - другое",
+			"isLeaf": true,
+			"products": 47,
+			"offers": 47
+		},
+		{
+			"id": "4636",
+			"parentId": "430",
+			"name": "Колбасные изделия",
+			"isLeaf": false,
+			"products": 47,
+			"offers": 47
+		},
+		{
+			"id": "6053",
+			"parentId": "2279",
+			"name": "Мука и мучные смеси - другое",
+			"isLeaf": true,
+			"products": 45,
+			"offers": 45
+		},
+		{
+			"id": "2279",
+			"parentId": "1542",
+			"name": "Мука и мучные смеси",
+			"isLeaf": false,
+			"products": 45,
+			"offers": 45
+		},
+		{
+			"id": "6449",
+			"parentId": "6445",
+			"name": "Свинина охлажденная",
+			"isLeaf": true,
+			"products": 45,
+			"offers": 45
+		},
+		{
+			"id": "4506",
+			"parentId": "6436",
+			"name": "Бренди, бурбон",
+			"isLeaf": true,
+			"products": 44,
+			"offers": 44
+		},
+		{
+			"id": "6436",
+			"parentId": "3335",
+			"name": "Коньяк, арманьяк, бренди",
+			"isLeaf": false,
+			"products": 44,
+			"offers": 44
+		},
+		{
+			"id": "4771",
+			"parentId": "4649",
+			"name": "Масло сливочное",
+			"isLeaf": true,
+			"products": 43,
+			"offers": 43
+		},
+		{
+			"id": "4819",
+			"parentId": "6282",
+			"name": "Курица замороженная",
+			"isLeaf": true,
+			"products": 43,
+			"offers": 43
+		},
+		{
+			"id": "6282",
+			"parentId": "4811",
+			"name": "Мясо птицы замороженное",
+			"isLeaf": false,
+			"products": 52,
+			"offers": 52
+		},
+		{
+			"id": "1901",
+			"parentId": "1894",
+			"name": "Рис",
+			"isLeaf": true,
+			"products": 41,
+			"offers": 41
+		},
+		{
+			"id": "1894",
+			"parentId": "1542",
+			"name": "Крупа",
+			"isLeaf": false,
+			"products": 99,
+			"offers": 99
+		},
+		{
+			"id": "6448",
+			"parentId": "6445",
+			"name": "Мясо охлажденное - другое",
+			"isLeaf": true,
+			"products": 40,
+			"offers": 40
+		},
+		{
+			"id": "4832",
+			"parentId": "6474",
+			"name": "Говядина замороженная",
+			"isLeaf": true,
+			"products": 39,
+			"offers": 39
+		},
+		{
+			"id": "6474",
+			"parentId": "6300",
+			"name": "Мясо замороженное",
+			"isLeaf": false,
+			"products": 68,
+			"offers": 68
+		},
+		{
+			"id": "5833",
+			"parentId": "3164",
+			"name": "Детское питание - другое",
+			"isLeaf": true,
+			"products": 38,
+			"offers": 38
+		},
+		{
+			"id": "3164",
+			"parentId": "3321",
+			"name": "Детское питание",
+			"isLeaf": false,
+			"products": 38,
+			"offers": 38
+		},
+		{
+			"id": "5929",
+			"parentId": "3257",
+			"name": "Оливки, маслины - другое",
+			"isLeaf": true,
+			"products": 38,
+			"offers": 38
+		},
+		{
+			"id": "3257",
+			"parentId": "3321",
+			"name": "Оливки, маслины",
+			"isLeaf": false,
+			"products": 38,
+			"offers": 38
+		},
+		{
+			"id": "2182",
+			"parentId": "2160",
+			"name": "Сахар",
+			"isLeaf": true,
+			"products": 33,
+			"offers": 33
+		},
+		{
+			"id": "2160",
+			"parentId": "1542",
+			"name": "Соль, сахар, сода",
+			"isLeaf": false,
+			"products": 33,
+			"offers": 33
+		},
+		{
+			"id": "5980",
+			"parentId": "1894",
+			"name": "Крупа - другое",
+			"isLeaf": true,
+			"products": 33,
+			"offers": 33
+		},
+		{
+			"id": "4736",
+			"parentId": "4649",
+			"name": "Плавленый сыр",
+			"isLeaf": true,
+			"products": 32,
+			"offers": 32
+		},
+		{
+			"id": "5855",
+			"parentId": "4476",
+			"name": "Крепкие алкогольные напитки - другое",
+			"isLeaf": true,
+			"products": 31,
+			"offers": 31
+		},
+		{
+			"id": "5860",
+			"parentId": "3493",
+			"name": "Фрукты, овощи, грибы - другое",
+			"isLeaf": true,
+			"products": 27,
+			"offers": 27
+		},
+		{
+			"id": "3493",
+			"parentId": "3321",
+			"name": "Фрукты, овощи, грибы",
+			"isLeaf": false,
+			"products": 32,
+			"offers": 32
+		},
+		{
+			"id": "5991",
+			"parentId": "3335",
+			"name": "Ликеры",
+			"isLeaf": true,
+			"products": 27,
+			"offers": 27
+		},
+		{
+			"id": "6280",
+			"parentId": "6279",
+			"name": "Яйцо - другое",
+			"isLeaf": true,
+			"products": 26,
+			"offers": 26
+		},
+		{
+			"id": "6279",
+			"parentId": "4787",
+			"name": "Яйцо",
+			"isLeaf": false,
+			"products": 26,
+			"offers": 26
+		},
+		{
+			"id": "1983",
+			"parentId": "1894",
+			"name": "Бобовые",
+			"isLeaf": true,
+			"products": 25,
+			"offers": 25
+		},
+		{
+			"id": "4474",
+			"parentId": "4422",
+			"name": "Вина столовые розовые",
+			"isLeaf": true,
+			"products": 24,
+			"offers": 24
+		},
+		{
+			"id": "4608",
+			"parentId": "430",
+			"name": "Ветчина",
+			"isLeaf": true,
+			"products": 21,
+			"offers": 21
+		},
+		{
+			"id": "5862",
+			"parentId": "4422",
+			"name": "Вина, винные напитки - другое",
+			"isLeaf": true,
+			"products": 21,
+			"offers": 21
+		},
+		{
+			"id": "943",
+			"parentId": "1542",
+			"name": "Сироп",
+			"isLeaf": true,
+			"products": 21,
+			"offers": 21
+		},
+		{
+			"id": "4582",
+			"parentId": "4567",
+			"name": "Колбаса вареная",
+			"isLeaf": true,
+			"products": 20,
+			"offers": 20
+		},
+		{
+			"id": "5906",
+			"parentId": "3342",
+			"name": "Табачные изделия - другое",
+			"isLeaf": true,
+			"products": 20,
+			"offers": 20
+		},
+		{
+			"id": "3342",
+			"parentId": "3321",
+			"name": "Табачные изделия",
+			"isLeaf": false,
+			"products": 20,
+			"offers": 20
+		},
+		{
+			"id": "5965",
+			"parentId": "4839",
+			"name": "Консервы фруктово-ягодные - другое",
+			"isLeaf": true,
+			"products": 20,
+			"offers": 20
+		},
+		{
+			"id": "4839",
+			"parentId": "6837",
+			"name": "Консервы фруктово-ягодные",
+			"isLeaf": false,
+			"products": 20,
+			"offers": 20
+		},
+		{
+			"id": "6299",
+			"parentId": "6281",
+			"name": "Мясо птицы охлажденное - другое",
+			"isLeaf": true,
+			"products": 19,
+			"offers": 19
+		},
+		{
+			"id": "5964",
+			"parentId": "798",
+			"name": "Консервы рыбные - другое",
+			"isLeaf": true,
+			"products": 18,
+			"offers": 18
+		},
+		{
+			"id": "798",
+			"parentId": "6837",
+			"name": "Консервы рыбные",
+			"isLeaf": false,
+			"products": 18,
+			"offers": 18
+		},
+		{
+			"id": "5967",
+			"parentId": "4616",
+			"name": "Консервы мясные - другое",
+			"isLeaf": true,
+			"products": 18,
+			"offers": 18
+		},
+		{
+			"id": "4616",
+			"parentId": "6837",
+			"name": "Консервы мясные",
+			"isLeaf": false,
+			"products": 18,
+			"offers": 18
+		},
+		{
+			"id": "6476",
+			"parentId": "6474",
+			"name": "Свинина замороженная",
+			"isLeaf": true,
+			"products": 16,
+			"offers": 16
+		},
+		{
+			"id": "955",
+			"parentId": "874",
+			"name": "Чай холодный",
+			"isLeaf": true,
+			"products": 15,
+			"offers": 15
+		},
+		{
+			"id": "893",
+			"parentId": "874",
+			"name": "Напитки энергетические безалкогольные",
+			"isLeaf": true,
+			"products": 14,
+			"offers": 14
+		},
+		{
+			"id": "5970",
+			"parentId": "6474",
+			"name": "Мясо замороженное - другое",
+			"isLeaf": true,
+			"products": 13,
+			"offers": 13
+		},
+		{
+			"id": "4418",
+			"parentId": "4400",
+			"name": "Пиво безалкогольное",
+			"isLeaf": true,
+			"products": 12,
+			"offers": 12
+		},
+		{
+			"id": "5815",
+			"parentId": "2512",
+			"name": "Продукт быстрого приготовления - другое",
+			"isLeaf": true,
+			"products": 10,
+			"offers": 10
+		},
+		{
+			"id": "2512",
+			"parentId": "1542",
+			"name": "Продукт быстрого приготовления",
+			"isLeaf": false,
+			"products": 10,
+			"offers": 10
+		},
+		{
+			"id": "1504",
+			"parentId": "1308",
+			"name": "Какао",
+			"isLeaf": true,
+			"products": 9,
+			"offers": 9
+		},
+		{
+			"id": "4447",
+			"parentId": "4422",
+			"name": "Вермут",
+			"isLeaf": true,
+			"products": 9,
+			"offers": 9
+		},
+		{
+			"id": "6298",
+			"parentId": "6282",
+			"name": "Мясо птицы замороженное - другое",
+			"isLeaf": true,
+			"products": 9,
+			"offers": 9
+		},
+		{
+			"id": "6614",
+			"parentId": "4476",
+			"name": "Джин",
+			"isLeaf": true,
+			"products": 9,
+			"offers": 9
+		},
+		{
+			"id": "4410",
+			"parentId": "4400",
+			"name": "Пиво темное",
+			"isLeaf": true,
+			"products": 7,
+			"offers": 7
+		},
+		{
+			"id": "3797",
+			"parentId": "3721",
+			"name": "Салаты готовые",
+			"isLeaf": true,
+			"products": 6,
+			"offers": 6
+		},
+		{
+			"id": "3721",
+			"parentId": "3321",
+			"name": "Кулинария",
+			"isLeaf": false,
+			"products": 7,
+			"offers": 7
+		},
+		{
+			"id": "3514",
+			"parentId": "3493",
+			"name": "Фрукты свежие",
+			"isLeaf": true,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "4705",
+			"parentId": "4698",
+			"name": "Маргарин",
+			"isLeaf": true,
+			"products": 5,
+			"offers": 5
+		},
+		{
+			"id": "4698",
+			"parentId": "4649",
+			"name": "Маргарин, спред, жиры кулинарные",
+			"isLeaf": false,
+			"products": 6,
+			"offers": 6
+		},
+		{
+			"id": "6432",
+			"parentId": "4546",
+			"name": "Сидр, пуаре",
+			"isLeaf": true,
+			"products": 4,
+			"offers": 4
+		},
+		{
+			"id": "4546",
+			"parentId": "3335",
+			"name": "Слабоалкогольные напитки",
+			"isLeaf": false,
+			"products": 6,
+			"offers": 6
+		},
+		{
+			"id": "5975",
+			"parentId": "918",
+			"name": "Напитки сладкие безалкогольные - другое",
+			"isLeaf": true,
+			"products": 3,
+			"offers": 3
+		},
+		{
+			"id": "918",
+			"parentId": "874",
+			"name": "Напитки сладкие безалкогольные",
+			"isLeaf": false,
+			"products": 3,
+			"offers": 3
+		},
+		{
+			"id": "6433",
+			"parentId": "4400",
+			"name": "Пивной напиток",
+			"isLeaf": true,
+			"products": 3,
+			"offers": 3
+		},
+		{
+			"id": "5813",
+			"parentId": "2447",
+			"name": "Напиток растворимый - другое",
+			"isLeaf": true,
+			"products": 2,
+			"offers": 2
+		},
+		{
+			"id": "2447",
+			"parentId": "1542",
+			"name": "Напиток растворимый",
+			"isLeaf": false,
+			"products": 2,
+			"offers": 2
+		},
+		{
+			"id": "5866",
+			"parentId": "4546",
+			"name": "Слабоалкогольные напитки - другое",
+			"isLeaf": true,
+			"products": 2,
+			"offers": 2
+		},
+		{
+			"id": "10967",
+			"parentId": "4698",
+			"name": "Маргарин, спред, жиры кулинарные - другое",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "5846",
+			"parentId": "3721",
+			"name": "Кулинария - другое",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "8494",
+			"parentId": "6871",
+			"name": "Устройства для маркировки кабеля",
+			"isLeaf": true,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "6871",
+			"parentId": "3679",
+			"name": "Электромонтажный инструмент",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "3679",
+			"parentId": "3672",
+			"name": "Инструменты",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		},
+		{
+			"id": "3672",
+			"parentId": null,
+			"name": "Строительство и ремонт",
+			"isLeaf": false,
+			"products": 1,
+			"offers": 1
+		}
+	]
+}

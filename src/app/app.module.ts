@@ -18,6 +18,7 @@ import {
   CommonServicesModule,
   InputQtyModule,
   NomenclatureCardModule,
+  UserService,
 } from '#shared/modules';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -83,6 +84,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
+      deps: [UserService],
       multi: true,
     },
   ],

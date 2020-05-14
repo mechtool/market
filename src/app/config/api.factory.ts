@@ -1,11 +1,13 @@
-export function ApiFactory() {
-  return (() => {
-    return init();
-  });
+import { UserService } from '#shared/modules/common-services';
+
+export function ApiFactory(userService: UserService): () => Promise<any> {
+  return (): Promise<any> => {
+    return init(userService);
+  };
 }
 
-function init() {
+function init(userService: UserService) {
   return new Promise((resolve, reject) => {
-    resolve(true);
+    return userService.updateUserCategories().subscribe(resolve, reject);
   });
 }

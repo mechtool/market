@@ -61,7 +61,7 @@
   }
 
   .categories {
-    background: white;
+    background: #fff;
     position: fixed;
     top: 0;
     left: 320px;
@@ -182,6 +182,12 @@
   display: none;
 }
 
+.categories_base {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
 .categories_fade {
   opacity: 0;
   transform: translateX(-50px);
@@ -242,19 +248,15 @@
   color: var(--color-main);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-13);
+
+  &:hover {
+    background-color: #f6f6f6;
+  }
 }
 
 .categories_list .nav_item.active {
   background-color: #fbfbfb;
   color: #4f4f4f;
-}
-
-.categories_list .nav_item:hover {
-  background-color: transparent;
-}
-
-.categories_list .nav_item.hovered {
-  background-color: #f6f6f6;
 }
 
 .categories_list .nav_item span {

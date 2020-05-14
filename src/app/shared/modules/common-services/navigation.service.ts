@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { BehaviorSubject, Subject, fromEvent } from 'rxjs';
+import { Subject, fromEvent } from 'rxjs';
 import { map, takeUntil, debounceTime } from 'rxjs/operators';
 import { NavItemModel } from './models';
 import { AuthService } from './auth.service';
@@ -17,6 +17,7 @@ import { NavbarNavComponent } from '../../../routes/root/components/navbar/compo
 export class NavigationService implements OnDestroy {
   private _isMenuOpened = false;
   private _areCategoriesShowed = false;
+  private _mainCategorySelectedId: string = null;
   private _componentPortal: ComponentPortal<NavbarNavComponent>;
   selectedPortal: Portal<any> | null;
   overlayRef: OverlayRef;
@@ -34,6 +35,10 @@ export class NavigationService implements OnDestroy {
 
   get areCategoriesShowed() {
     return this._areCategoriesShowed;
+  }
+
+  get mainCategorySelectedId() {
+    return this._mainCategorySelectedId;
   }
 
   private _unsubscriber$: Subject<any> = new Subject();
@@ -226,6 +231,7 @@ export class NavigationService implements OnDestroy {
     this.selectedPortal = null;
     const config = new OverlayConfig({
       hasBackdrop: true,
+      backdropClass: 'overlay-backdrop-dark',
       scrollStrategy: this._overlay.scrollStrategies.block(),
     });
 
@@ -262,5 +268,9 @@ export class NavigationService implements OnDestroy {
 
   toggleCategories() {
     this._areCategoriesShowed = !this._areCategoriesShowed;
+  }
+
+  setMainCategorySelectedId(id: string) {
+    this._mainCategorySelectedId = id;
   }
 }

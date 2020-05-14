@@ -6,11 +6,13 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Location } from '@angular/common';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { NavigationService } from '#shared/modules/common-services/navigation.service';
-import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
+import { NavigationService } from '#shared/modules/common-services/navigation.service';
+import { UserService } from '#shared/modules/common-services/user.service';
+import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
+import { CategoryModel } from '#shared/modules/common-services/models/category.model';
 
 @Component({
   selector: 'my-navbar-nav',
@@ -26,11 +28,20 @@ import { Router } from '@angular/router';
 export class NavbarNavComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   private _navService: NavigationService;
+  private _userService: UserService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
 
   get areCategoriesShowed(): boolean {
     return this._navService.areCategoriesShowed;
+  }
+
+  get mainCategorySelectedId(): string {
+    return this._navService.mainCategorySelectedId;
+  }
+
+  get categoryItems$(): Observable<CategoryModel[]> {
+    return this._userService.userCategories$.asObservable();
   }
 
   @HostBinding('class.expanded')
@@ -54,6 +65,10 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     private _router: Router
   ) {
     this._navService = this.injector.get(NavigationService);
+    this._userService = this.injector.get(UserService);
+    this.categoryItems$.subscribe((res) => {
+      this.setMainCategorySelectedId(res[0].id);
+    });
   }
 
   ngOnInit() {
@@ -89,6 +104,17 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   }
 
   navigateNavItem(navItem: NavItemModel): void {
+    if (navItem.label !== 'Категории товаров') {
+      this.hideCategories();
+      if (
+        this._navService.overlayRef &&
+        this._navService.overlayRef.hasAttached()
+      ) {
+        this._navService.overlayRef.dispose();
+        this.closeMenu();
+      }
+    }
+
     if (navItem.items?.length) {
       navItem.expanded = !navItem.expanded;
     }
@@ -134,5 +160,14 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
 
   hideCategories(): void {
     this._navService.hideCategories();
+  }
+
+  handleCategories(): void {
+    this._navService.hideCategories();
+    this.setMainCategorySelectedId('1'); // TODO
+  }
+
+  setMainCategorySelectedId(id: string): void {
+    this._navService.setMainCategorySelectedId(id);
   }
 }

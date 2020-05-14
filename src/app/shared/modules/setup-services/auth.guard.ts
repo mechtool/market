@@ -12,7 +12,7 @@ import { UserService, AuthService } from '#shared/modules/common-services';
 export class AuthGuard implements CanActivate {
   constructor(
     private _userService: UserService,
-    private _authService: AuthService
+    private _authService: AuthService,
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
