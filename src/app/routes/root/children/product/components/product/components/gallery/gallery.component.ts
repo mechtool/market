@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NomenclatureModel } from '#shared/modules';
+import { absoluteImagePath } from '#shared/utils/get-image';
 
 @Component({
   selector: 'my-gallery',
@@ -17,6 +18,14 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  firstImageUrl(imgs: string[]) {
+    return imgs ? this.imageUrl(imgs[0]) : this.imageUrl(null);
+  }
+
+  imageUrl(img: string): string {
+    return absoluteImagePath(img);
   }
 
 }

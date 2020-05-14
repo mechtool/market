@@ -30,19 +30,18 @@
 
   img {
     max-width: 125px;
-    max-height: 90%;
+    max-height: 205px;
   }
 }
 
 .product-base {
   display: flex;
-  flex-wrap: wrap;
 }
 
 .title {
-  margin-bottom: 15px;
+  margin: 20px 0 10px 0;
   padding-right: 20px;
-  font-weight: var(--font-demi);
+  font-weight: var(--font-weight-demi);
   font-size: var(--font-size-18);
   line-height: 23px;
 
@@ -64,9 +63,10 @@
 
     &__label {
       width: 164px;
+      color: var(--color-black);
       opacity: 0.6;
       flex-shrink: 0;
-      font-weight: var(--font-medium);
+      font-weight: var(--font-weight-medium);
     }
   }
 }

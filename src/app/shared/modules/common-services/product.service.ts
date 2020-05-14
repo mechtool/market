@@ -20,7 +20,7 @@ export class ProductService {
   }
 
   getPopularNomenclatureCards(): Observable<NomenclatureCardModel[]> {
-    return this._bnetService.searchNomenclatures({ priceFrom: 1 })
+    return this._bnetService.searchNomenclatures({ priceFrom: 1, onlyWithImages: true })
       .pipe(
         map((res) => {
           return res?._embedded?.items?.map((nom) => {

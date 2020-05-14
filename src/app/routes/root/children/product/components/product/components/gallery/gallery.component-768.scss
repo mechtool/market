@@ -4,6 +4,7 @@
   }
 
   .carousel + .specs {
+    margin-top: 20px;
     display: block;
   }
 
@@ -14,9 +15,10 @@
   }
 
   .title {
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
     text-align: center;
     padding-right: 0;
+    position: relative;
 
     &-block {
       order: 1;

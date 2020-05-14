@@ -1,7 +1,7 @@
 <div class="nomenclature-card" itemtype="http://schema.org/Product" itemprop="itemListElement" itemscope="itemscope">
   <a class="link" itemprop="url" [routerLink]="['/product/' + nomenclature.id]">
     <span class="cover">
-      <img itemprop="image" src="{{nomenclature.imageUrl || '/assets/img/tmp/no_photo.png'}}" alt="{{nomenclature.productName}}" title="{{nomenclature.productName}}">
+      <img itemprop="image" src="{{imageUrl}}" alt="{{nomenclature.productName}}" title="{{nomenclature.productName}}">
     </span>
     <span class="body">
       <span class="title" itemprop="name">
