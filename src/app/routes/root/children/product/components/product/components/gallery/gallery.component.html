@@ -24,7 +24,7 @@
     </div>
 
     <nz-carousel *ngIf="nomenclature.imageUrls?.length > 1" [nzAutoPlay]="true">
-      <div nz-carousel-content *ngFor="let item of nomenclature.imageUrls">
+      <div nz-carousel-content *ngFor="let item of imageUrls">
         <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + imageUrl(item) + ')'}"></div>
       </div>
     </nz-carousel>

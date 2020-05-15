@@ -14,6 +14,14 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   @Input() nomenclature: NomenclatureModel;
 
+  get imageUrls(): string[] {
+    if (this.nomenclature.imageUrls.length > 10) {
+      // todo Чтобы не переделывать компанент карусели, решили что будем ПОКА отображать максимум 10 изображений
+      return this.nomenclature.imageUrls.slice(0, 10);
+    }
+    return this.nomenclature.imageUrls;
+  }
+
   ngOnDestroy(): void {
   }
 

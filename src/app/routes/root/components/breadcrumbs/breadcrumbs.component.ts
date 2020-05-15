@@ -7,6 +7,7 @@ import { BreadcrumbsService } from './breadcrumbs.service';
   templateUrl: './breadcrumbs.component.html',
   styleUrls: [
     './breadcrumbs.component.scss',
+    './breadcrumbs.component-992.scss',
     './breadcrumbs.component-768.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
