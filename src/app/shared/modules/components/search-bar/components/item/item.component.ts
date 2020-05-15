@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { absoluteImagePath, isAssetsImg } from '#shared/utils/get-image';
 
 @Component({
   selector: 'my-search-bar-item',
@@ -25,6 +26,13 @@ export class SearchBarItemComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  imageUrl(img): string {
+    if (isAssetsImg(img)) {
+      return img;
+    }
+    return img ? absoluteImagePath(img) : absoluteImagePath(null);
   }
 
 }

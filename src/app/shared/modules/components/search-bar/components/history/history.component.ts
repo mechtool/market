@@ -1,7 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { LocalStorageService, SuggestionService, TypeOfSearch } from '../../../../common-services';
-import { SuggestionSearchQueryHistoryItemModel } from '../../../../common-services/models';
+import {
+  LocalStorageService,
+  SuggestionSearchQueryHistoryItemModel,
+  SuggestionService,
+  TypeOfSearch
+} from '../../../../common-services';
 import { Router } from '@angular/router';
 
 @Component({
@@ -51,5 +55,4 @@ export class SearchBarHistoryComponent implements OnInit, OnDestroy {
 
     }
   }
-
 }

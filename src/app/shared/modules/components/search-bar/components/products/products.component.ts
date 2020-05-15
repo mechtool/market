@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
+  LocalStorageService,
   SuggestionCategoryItemModel,
   SuggestionProductItemImageLinkModel,
   SuggestionProductItemModel,
   TypeOfSearch,
-} from '../../../../common-services/models';
+} from '../../../../common-services';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../../../common-services/local-storage.service';
 
 @Component({
   selector: 'my-search-bar-products',
