@@ -1,14 +1,8 @@
-import {
-  Component,
-  Injector,
-  HostBinding,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, HostBinding, Injector, OnDestroy, OnInit, } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { UserService } from '#shared/modules/common-services/user.service';
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';

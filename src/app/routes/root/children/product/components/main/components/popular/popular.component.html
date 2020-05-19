@@ -7,8 +7,8 @@
 
   <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
 
-    <my-nomenclature-card *ngFor="let nomenclature of nomenclatures"
-      [nomenclature]="nomenclature"
+    <my-nomenclature-card *ngFor="let product of productOffers"
+                          [product]="product"
     ></my-nomenclature-card>
 
     <!-- <my-banner-card

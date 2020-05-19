@@ -1,19 +1,14 @@
-<div class="catalog_item">
-  <div class="catalog_item-link">
-    <span class="catalog_item-img product_supplier-type" [style]="{'background-color': argb}"></span>
-    <span class="catalog_item-descr">
-          <span class="catalog_item-title">
-              {{supplier.name}}
-          </span>
-          <span class="catalog_item-about">
-              {{supplier.description}}
-          </span>
+<div class="catalog_item__inner">
+  <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
+  <span class="catalog_item__descr">
+        <span class="catalog_item__title">
+            {{supplier.name}}
+        </span>
+        <span class="catalog_item__about">
+            {{supplier.description}}
+        </span>
+        <span class="catalog_item__btns">
+            <a (click)="clickSupplier()" class="btn btn-gray-bordered btn-outer-shop">В магазин</a>
+        </span>
     </span>
-
-    <div class="supplier_btns">
-      <button nz-button type="submit" nzType="primary"
-              (click)="clickSupplier()">В магазин
-      </button>
-    </div>
-  </div>
 </div>

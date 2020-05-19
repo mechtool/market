@@ -1,63 +1,66 @@
 @media all and (max-width: 576px) {
-  .catalog_item {
-    min-width: 280px;
-    margin: 5px 0 10px;
+  :host {
+    max-width: none;
+    margin: 7px 0;
+    padding: 0;
+  }
 
-    &-link {
+  .catalog_item {
+
+    &__link,
+    &__inner {
+      padding: 20px;
       flex-direction: row;
       align-items: stretch;
     }
 
-    &-img {
+    &__img {
       height: 100%;
-      width: 40px;
-      padding: 0;
+      width: 80px;
+      padding: 10px 0 0 0;
       margin-bottom: 0;
       margin-right: 40px;
       flex-shrink: 0;
       display: flex;
       justify-content: center;
+      align-items: flex-start;
     }
 
-    &-title {
+    &__title {
       min-height: auto;
       font-size: var(--font-size-12);
       line-height: 15px;
-
-      & + .tooltip_wrap {
-        margin-top: -10px;
-        margin-bottom: 7px;
-      }
     }
 
-    &-descr {
+    &__descr {
       flex-grow: 1;
     }
 
-    &-about {
-      font-size: var(--font-size-12);
-      line-height: 15px;
-      margin-bottom: 25px;
-
-      & + .tooltip_wrap {
-        margin-top: -21px;
-      }
+    &__img {
+      position: absolute;
+      right: 20px;
+      top: 16px;
+      margin-right: 0;
+      margin-bottom: 0;
+      width: 34px;
+      height: 35px;
     }
-  }
 
-  a.catalog_item-link .tooltip_wrap {
-    display: none;
-  }
+    &__title {
+      height: 35px;
+      display: flex;
+      align-items: center;
+      padding-right: 40px;
+    }
 
-  .catalog_suppliers .catalog_item-title {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-medium);
-    margin-bottom: 15px;
-  }
+    &__about {
+      margin-bottom: 15px;
+      margin-right: 0;
+    }
 
-  .supplier_btns {
-    position: absolute;
-    margin-top: 225px;
-    margin-left: 60px;
+    &__btns {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 }

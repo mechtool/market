@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/
 import { Subject } from 'rxjs';
 import {
   LocalStorageService,
-  SuggestionSearchQueryHistoryItemModel,
+  SuggestionSearchQueryHistoryModel,
   SuggestionService,
   TypeOfSearch
 } from '../../../../common-services';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class SearchBarHistoryComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  searchQueriesHistory: SuggestionSearchQueryHistoryItemModel[];
+  searchQueriesHistory: SuggestionSearchQueryHistoryModel[];
 
   constructor(
     private _suggestionService: SuggestionService,
@@ -39,7 +39,7 @@ export class SearchBarHistoryComponent implements OnInit, OnDestroy {
     this._unsubscriber$.complete();
   }
 
-  clickSearchQuery(searchQuery: SuggestionSearchQueryHistoryItemModel) {
+  clickSearchQuery(searchQuery: SuggestionSearchQueryHistoryModel) {
     this._localStorageService.putSearchQuery(searchQuery);
     if (searchQuery.typeOfSearch === TypeOfSearch.PRODUCT) {
 

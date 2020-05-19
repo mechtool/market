@@ -43,7 +43,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   MIN_QUERY_LENGTH = 3;
   MAX_QUERY_LENGTH = 20;
   userLocation: LocationModel;
-  @Input() query = '';
+  @Input() query: string;
   @Input() placeholder = 'Поиск товаров';
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() sort = SortModel.ASC;
@@ -58,6 +58,13 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   get searchQuery() {
     return this.form.get('query').value;
+  }
+
+  get isShowSuggestions(): boolean {
+    return !this.suggestionsOff &&
+      (!!this.productsSuggestions ||
+        !!this.categoriesSuggestions ||
+        this._localStorageService.hasSearchQueriesHistory());
   }
 
   constructor(
@@ -101,7 +108,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   cleanQuery() {
-    this._updateForm();
+    this.form.patchValue({ query: '' });
+    this.submitClick.emit({ query: undefined });
   }
 
   changeFilterButton($event: boolean) {

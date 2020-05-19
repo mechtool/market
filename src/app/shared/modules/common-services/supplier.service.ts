@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
-import { SupplierInfoModel } from '#shared/modules/common-services/models/supplier-info.model';
+import { SuppliersResponseModel } from '#shared/modules';
 
 @Injectable()
 export class SupplierService {
@@ -9,11 +9,11 @@ export class SupplierService {
   constructor(private _bnetService: BNetService) {
   }
 
-  getAllSuppliers(page: number, size: number): Observable<SupplierInfoModel[]> {
-    return this._bnetService.getSuppliers(undefined, page.toString(), size.toString());
+  getAllSuppliers(_page: number, _size: number): Observable<SuppliersResponseModel> {
+    return this._bnetService.searchSuppliers({ page: _page, size: _size });
   }
 
-  findSuppliersBy(query: string): Observable<SupplierInfoModel[]> {
-    return this._bnetService.getSuppliers(query);
+  findSuppliersBy(query: string, _page: number, _size: number): Observable<SuppliersResponseModel> {
+    return this._bnetService.searchSuppliers({ q: query, page: _page, size: _size });
   }
 }

@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="suppliers">
 
   <h3>Поставщики</h3><br>
 
@@ -13,13 +13,13 @@
 
   <div class="catalog_header">
     <div class="catalog_header__count">
-      <span class="catalog_header__title">Всего найдено</span><strong>{{suppliers.length}}</strong> поставщиков
+      <span class="catalog_header__title">Всего найдено</span><strong>{{suppliers.page?.totalElements}}</strong> поставщиков
     </div>
   </div>
 
   <div class="catalog catalog_suppliers">
 
-    <my-supplier-card *ngFor="let item of suppliers"
+    <my-supplier-card *ngFor="let item of suppliers._embedded.suppliers"
                       [supplier]="item"
     ></my-supplier-card>
 

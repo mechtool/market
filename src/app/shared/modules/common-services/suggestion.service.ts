@@ -1,6 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { SuggestionModel } from './models';
+import { SuggestionResponseModel } from './models';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
 
@@ -11,11 +11,11 @@ export class SuggestionService {
               private localStorageService: LocalStorageService) {
   }
 
-  searchSuggestions(query: string): Observable<SuggestionModel> {
+  searchSuggestions(query: string): Observable<SuggestionResponseModel> {
     return this._bnetService.searchSuggestions(query);
   }
 
-  getHistoricalSuggestions(): Observable<SuggestionModel> {
+  getHistoricalSuggestions(): Observable<SuggestionResponseModel> {
     return of(this.localStorageService.getSearchQueriesHistoryList());
   }
 

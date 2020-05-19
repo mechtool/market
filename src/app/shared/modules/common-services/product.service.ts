@@ -3,9 +3,9 @@ import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
-  NomenclatureCardModel,
-  NomenclatureOffersModel,
-  OfferFilterQueryModel
+  ProductOffersCardModel,
+  ProductOfferResponseModel,
+  ProductOfferRequestModel, ProductOffersCardWithProductsTotalModel
 } from './models';
 import { BNetService } from './bnet.service';
 
@@ -15,61 +15,66 @@ export class ProductService {
   constructor(private _bnetService: BNetService) {
   }
 
-  getNomenclature(id: string, filterQuery?: OfferFilterQueryModel): Observable<NomenclatureOffersModel> {
+  getNomenclature(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     return this._bnetService.getNomenclature(id, filterQuery);
   }
 
-  getPopularNomenclatureCards(): Observable<NomenclatureCardModel[]> {
-    return this._bnetService.searchNomenclatures({ priceFrom: 1, onlyWithImages: true })
+  getPopularProductOffers(): Observable<ProductOffersCardWithProductsTotalModel> {
+    return this._bnetService.searchNomenclatures({ categoryId: '3335', onlyWithImages: true })
       .pipe(
-        map((res) => {
-          return res?._embedded?.items?.map((nom) => {
-            return new NomenclatureCardModel({
-              id: nom.id,
-              productName: nom.productName,
-              imageUrl: nom.imageUrls?.[0],
+        map((productOffers) => {
+          const products = new ProductOffersCardWithProductsTotalModel();
+          products.productOffers = productOffers?._embedded.productOffers.map((productOffer) => {
+            const product = productOffer.product;
+            return new ProductOffersCardModel({
+              id: product.id,
+              productName: product.productName,
+              imageUrl: product.images?.[0].href,
               offersSummary: {
-                minPrice: nom.offersSummary.minPrice,
-                totalOffers: nom.offersSummary.totalOffers,
+                minPrice: productOffer.offersMinPrice,
+                totalOffers: productOffer.offersTotal,
               },
             });
           });
+          products.productsTotal = productOffers?.page?.totalElements;
+          return products;
         })
       );
   }
 
-  searchNomenclatureCards(filters: AllGroupQueryFiltersModel): Observable<any> {
+  searchProductOffers(filters: AllGroupQueryFiltersModel): Observable<ProductOffersCardWithProductsTotalModel> {
     const searchQuery = {
-      textQuery: filters.query,
+      q: filters.query,
       categoryId: filters.categoryId,
       priceFrom: filters.availableFilters.priceFrom,
       priceTo: filters.availableFilters.priceTo,
       suppliers: [filters.availableFilters.supplier],
       tradeMarks: [filters.availableFilters.trademark],
-      onlyInStock: filters.availableFilters.inStock,
+      inStock: filters.availableFilters.inStock,
       onlyWithImages: filters.availableFilters.onlyWithImages,
-      deliveryLocationFiasCode: filters.availableFilters.delivery,
-      pickupLocationFiasCode: filters.availableFilters.pickup,
+      deliveryArea: filters.availableFilters.delivery,
+      pickupArea: filters.availableFilters.pickup,
       sort: filters.sort,
     };
 
     return this._bnetService.searchNomenclatures(searchQuery)
       .pipe(
-        map((res) => {
-          // TODO
-          const data = JSON.parse(JSON.stringify(res));
-          data._embedded.items = res?._embedded?.items?.map((nom) => {
-            return new NomenclatureCardModel({
-              id: nom.id,
-              productName: nom.productName,
-              imageUrl: nom.imageUrls?.[0],
+        map((productOffers) => {
+          const products = new ProductOffersCardWithProductsTotalModel();
+          products.productOffers = productOffers?._embedded.productOffers.map((productOffer) => {
+            const product = productOffer.product;
+            return new ProductOffersCardModel({
+              id: product.id,
+              productName: product.productName,
+              imageUrl: product.images?.[0].href,
               offersSummary: {
-                minPrice: nom.offersSummary.minPrice,
-                totalOffers: nom.offersSummary.totalOffers,
+                minPrice: productOffer.offersMinPrice,
+                totalOffers: productOffer.offersTotal,
               },
             });
           });
-          return data;
+          products.productsTotal = productOffers?.page?.totalElements;
+          return products;
         })
       );
   }

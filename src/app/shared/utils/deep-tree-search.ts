@@ -1,8 +1,4 @@
-export function deepTreeSearch(
-  object: any,
-  key: string,
-  predicate: (x: any, y: any) => boolean
-) {
+export function deepTreeSearch(object: any, key: string, predicate: (x: any, y: any) => boolean) {
   if (object.hasOwnProperty(key) && predicate(key, object[key]) === true) {
     return object;
   }

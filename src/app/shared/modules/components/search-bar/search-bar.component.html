@@ -28,18 +28,20 @@
     </ng-template>
 
     <nz-autocomplete #auto nzOverlayClassName="autocomplete" nzBackfill>
-  <!--todo возможно стоит весь контент из my-search-bar-history и my-search-bar-products вынести сюда и отображать через *ngFor-->
-      <nz-auto-option [nzValue]="form.controls['query'].value">
-        <my-search-bar-history
-          *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
-        ></my-search-bar-history>
+      <!--todo возможно стоит весь контент из my-search-bar-history и my-search-bar-products вынести сюда и отображать через *ngFor-->
+      <ng-container *ngIf="isShowSuggestions">
+        <nz-auto-option [nzValue]="form.controls['query'].value">
+          <my-search-bar-history
+            *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
+          ></my-search-bar-history>
 
-        <my-search-bar-products
-          [products]="productsSuggestions"
-          [categories]="categoriesSuggestions"
-          *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"
-        ></my-search-bar-products>
-      </nz-auto-option>
+          <my-search-bar-products
+            [products]="productsSuggestions"
+            [categories]="categoriesSuggestions"
+            *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"
+          ></my-search-bar-products>
+        </nz-auto-option>
+      </ng-container>
     </nz-autocomplete>
 
     <div class="buttons">

@@ -2,14 +2,14 @@
 
   <div class="title">
     <strong>Результаты поиска</strong>
-    <span>найдено {{totalNomenclaturesCount}} товаров</span>
+    <span>найдено {{productsTotal}} товаров</span>
   </div>
 
   <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
 
     <my-nomenclature-card
-      *ngFor="let nomenclature of nomenclatures"
-      [nomenclature]="nomenclature"
+      *ngFor="let product of productOffers"
+      [product]="product"
     ></my-nomenclature-card>
 
   </div>

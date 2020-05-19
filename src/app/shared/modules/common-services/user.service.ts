@@ -1,7 +1,7 @@
-import { Observable, of, throwError, BehaviorSubject } from 'rxjs';
-import { map, catchError, tap, delay } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { UserOrganizationModel, AuthResponseModel, CategoryModel } from './models';
+import { AuthResponseModel, CategoryModel, CategoryResponseModel, UserOrganizationModel } from './models';
 import { OrganizationsService } from './organizations.service';
 import { convertListToTree } from '#shared/utils';
 import { BNetService } from './bnet.service';
@@ -15,7 +15,8 @@ export class UserService {
   constructor(
     private _organizationsService: OrganizationsService,
     private _bnetService: BNetService,
-  ) {}
+  ) {
+  }
 
   setUserData(data: any, fromNextTick = true): void {
     if (fromNextTick) {
@@ -48,7 +49,7 @@ export class UserService {
         console.error('error', err);
         return throwError(false);
       }),
-      map((res: { categories: CategoryModel[] }) => {
+      map((res: CategoryResponseModel) => {
         const tree = convertListToTree(res.categories);
         this.userCategories$.next(tree);
         return true;

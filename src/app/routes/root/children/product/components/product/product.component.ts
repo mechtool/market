@@ -92,8 +92,8 @@ export class ProductComponent implements OnInit, OnDestroy {
         id: offer.id,
         description: 'Описание специальных условия от поставщика, которые у него находятся в специальной вкладке' +
           ' и выводится первые четыре строки этой инфы',
-        price: offer.price / 100,
-        stock: 679,
+        price: offer.price,
+        stock: 679, // todo пока негде взять!!!
         supplierId: offer.supplier.id,
         supplierName: offer.supplier.name,
         isSpecialPrice: true,

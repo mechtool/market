@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { NomenclatureCardModel } from '#shared/modules/common-services/models';
+import { ProductOffersCardModel } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'my-search-results',
@@ -14,8 +14,8 @@ import { NomenclatureCardModel } from '#shared/modules/common-services/models';
 })
 export class SearchResultComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() nomenclatures: NomenclatureCardModel[];
-  @Input() totalNomenclaturesCount: number;
+  @Input() productOffers: ProductOffersCardModel[];
+  @Input() productsTotal: number;
 
   constructor() {
   }

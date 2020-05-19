@@ -1,46 +1,41 @@
-import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { ApiService } from "./api.service";
-import { environment } from "#environments/environment";
+import { Injectable } from '@angular/core';
+import { ApiService } from './api.service';
+import { environment } from '#environments/environment';
+import { Observable } from 'rxjs';
 import {
+  CategoryResponseModel,
   LocationModel,
-  NomenclatureOffersModel,
-  NomenclaturesListResponseModel,
-  NomenclaturesSearchQueryModel,
-  OfferFilterQueryModel,
-  SuggestionModel,
-  UserOrganizationModel,
-  CategoryModel,
-} from "./models";
-import { HttpParams } from "@angular/common/http";
-import {
-  SupplierInfoModel,
-  TEMPORARY_SUPPLIER_LIST,
-} from "#shared/modules/common-services/models/supplier-info.model";
+  ProductOfferResponseModel,
+  ProductOfferRequestModel,
+  ProductOffersRequestModel,
+  SuggestionResponseModel,
+  SuppliersRequestModel,
+  SuppliersResponseModel,
+  UserOrganizationModel
+} from './models';
+import { HttpParams } from '@angular/common/http';
+import { ProductOffersListResponseModel } from '#shared/modules/common-services/models/product-offers-list-response.model';
 
 const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(private _apiService: ApiService) {}
 
-  getNomenclature(
-    id: string,
-    filterQuery?: OfferFilterQueryModel
-  ): Observable<NomenclatureOffersModel> {
+  constructor(private _apiService: ApiService) {
+  }
+
+  getNomenclature(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
-    return this._apiService.get(`${API_URL}/nomenclatures/${id}`, { params });
+    return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }
 
-  searchNomenclatures(
-    searchQuery: NomenclaturesSearchQueryModel
-  ): Observable<NomenclaturesListResponseModel> {
+  searchNomenclatures(searchQuery: ProductOffersRequestModel): Observable<ProductOffersListResponseModel> {
     const params = this._params(searchQuery);
-    return this._apiService.get(`${API_URL}/nomenclatures/search`, { params });
+    return this._apiService.get(`${API_URL}/product-offers`, { params });
   }
 
-  searchSuggestions(query: string): Observable<SuggestionModel> {
-    const params = new HttpParams().set("q", query);
+  searchSuggestions(query: string): Observable<SuggestionResponseModel> {
+    const params = new HttpParams().set('q', query);
     return this._apiService.get(`${API_URL}/suggestions`, { params });
   }
 
@@ -49,33 +44,20 @@ export class BNetService {
   }
 
   searchLocations(textQuery: string): Observable<LocationModel[]> {
-    const params = new HttpParams().set("textQuery", textQuery);
+    const params = new HttpParams().set('textQuery', textQuery);
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  getSuppliers(
-    query?: string,
-    page?: string,
-    size?: string
-  ): Observable<SupplierInfoModel[]> {
-    // const params = new HttpParams().set('page', page).set('size', size);
-    // todo Изменить после того как появится реализация данного метода
-    // return this._apiService.get(`${API_URL}/suppliers`, { params });
-    if (query?.length) {
-      return of(
-        TEMPORARY_SUPPLIER_LIST.filter(
-          (supplier) => supplier.name === query || supplier.inn === query
-        )
-      );
-    }
-    return of(TEMPORARY_SUPPLIER_LIST);
+  searchSuppliers(query: SuppliersRequestModel): Observable<SuppliersResponseModel> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/suppliers`, { params });
   }
 
-  getCategories(): Observable<{ categories: CategoryModel[] }> {
+  getCategories(): Observable<CategoryResponseModel> {
     return this._apiService.get(`${API_URL}/categories`);
   }
 
-  _params(searchQuery: any): HttpParams {
+  private _params(searchQuery: any): HttpParams {
     if (searchQuery) {
       let params = new HttpParams();
       Object.keys(searchQuery).forEach((queryParam) => {

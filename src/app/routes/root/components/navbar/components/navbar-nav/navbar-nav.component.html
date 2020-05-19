@@ -74,7 +74,7 @@
                 </div>
                 <ul class="sub_category__list">
                     <li class="sub_category__item" *ngFor="let subSubCategoryItem of subCategoryItem.children">
-                        <a [routerLink]="['/category/' + subSubCategoryItem.id]" class="sub_category__link" >{{subSubCategoryItem.name}}</a>
+                        <a [routerLink]="['/category/' + subSubCategoryItem.id]" class="sub_category__link" (click)="hideCategories()">{{subSubCategoryItem.name}}</a>
                     </li>
                 </ul>
             </div>

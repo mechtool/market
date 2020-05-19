@@ -1,4 +1,4 @@
-export class SuggestionSearchQueryHistoryItemModel {
+export class SuggestionSearchQueryHistoryModel {
   id?: number;
   searchText: string;
   imageUrl?: string;

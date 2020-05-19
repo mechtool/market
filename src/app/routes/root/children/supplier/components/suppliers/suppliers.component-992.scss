@@ -1,7 +1,11 @@
 @media all and (max-width: 992px) {
 
+  .content-wrapper {
+    order: 3;
+  }
   .catalog_header {
     flex-direction: column;
+    margin-bottom: 5px;
 
     &__count {
       margin-right: 0;

@@ -1,8 +1,4 @@
-export function deepTreeParentsSearch(
-  object: any,
-  key: string,
-  keyValue: string
-) {
+export function deepTreeParentsSearch(object: any, key: string, keyValue: string) {
   if (object[key] === keyValue) {
     return [];
   }

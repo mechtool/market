@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subject } from 'rxjs';
-import { AllGroupQueryFiltersModel } from '#shared/modules';
-import { SupplierInfoModel } from '#shared/modules/common-services/models/supplier-info.model';
+import { AllGroupQueryFiltersModel, SuppliersResponseModel } from '#shared/modules';
 import { SupplierService } from '#shared/modules/common-services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 
 @Component({
   templateUrl: './suppliers.component.html',
@@ -17,15 +17,17 @@ import { switchMap } from 'rxjs/operators';
 })
 export class SupplierListComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  query = '';
-  suppliers: SupplierInfoModel[];
+  query: string;
+  suppliers: SuppliersResponseModel;
 
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _supplierService: SupplierService
+    private _supplierService: SupplierService,
+    private _breadcrumbsService: BreadcrumbsService,
   ) {
     this._initForm();
+    this._initBreadcrumbs();
   }
 
   ngOnInit() {
@@ -37,16 +39,11 @@ export class SupplierListComponent implements OnInit, OnDestroy {
   }
 
   queryParametersChange($event: AllGroupQueryFiltersModel) {
+    this.query = $event.query;
     this._router.navigate(['/supplier'], {
       queryParams: {
         q: $event.query,
       }
-    });
-
-    this._supplierService.findSuppliersBy($event.query).subscribe((suppliers) => {
-      this.suppliers = suppliers;
-    }, (err) => {
-      console.error('error', err);
     });
   }
 
@@ -59,16 +56,28 @@ export class SupplierListComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(([queryParams]) => {
           this.query = queryParams.q;
-          if (this.query?.length === 0) {
+          if (!this.query || this.query?.length === 0) {
             // todo пока так, переделать!
-            return this._supplierService.getAllSuppliers(0, 8);
+            return this._supplierService.getAllSuppliers(0, 20);
           }
           // todo пока так, переделать!
-          return this._supplierService.findSuppliersBy(this.query);
+          return this._supplierService.findSuppliersBy(this.query, 0, 20);
         })
       )
       .subscribe((suppliers) => {
-        this.suppliers = suppliers;
+        this.suppliers = this._map(suppliers);
       });
+  }
+
+  private _initBreadcrumbs() {
+    this._breadcrumbsService.setVisible(false);
+  }
+
+  private _map(suppliers: SuppliersResponseModel) {
+    // todo временно добавляем описание, так как пока на бэке его нет. НЕ ЗАБЫТЬ УБРАТЬ!!!
+    suppliers._embedded.suppliers
+      .forEach(supplier => supplier.description =
+        `Описание всех возможностей и преимуществ организации ${supplier.name}, являющейся поставщиком на площадке 1С:Бизнес-Сеть.`);
+    return suppliers;
   }
 }

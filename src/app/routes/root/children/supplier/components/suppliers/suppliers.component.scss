@@ -9,18 +9,17 @@
     margin-right: 20px;
 
     strong {
-      font-weight: var(--font-medium);
+      font-weight: var(--font-weight-medium);
       letter-spacing: 0.11em;
     }
   }
 
   &__title {
-    font-weight: var(--font-demi);
-    letter-spacing: 0.11em;
+    font-weight: var(--font-weight-demi);
 
     &:after {
       content: " – ";
-      font-weight: var(--font-light);
+      font-weight: var(--font-weight-light);
     }
   }
 }

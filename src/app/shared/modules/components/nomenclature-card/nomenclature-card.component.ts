@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { NomenclatureCardModel } from '#shared/modules/common-services/models';
+import { ProductOffersCardModel } from '#shared/modules/common-services/models';
 import { absoluteImagePath } from '#shared/utils/get-image';
 
 
@@ -16,10 +16,10 @@ import { absoluteImagePath } from '#shared/utils/get-image';
 })
 export class NomenclatureCardComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() nomenclature: NomenclatureCardModel;
+  @Input() product: ProductOffersCardModel;
 
   get imageUrl() {
-    return absoluteImagePath(this.nomenclature.imageUrl || null);
+    return absoluteImagePath(this.product.imageUrl || null);
   }
 
   constructor() {

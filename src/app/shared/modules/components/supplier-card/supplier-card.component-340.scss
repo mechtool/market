@@ -1,0 +1,19 @@
+@media all and (max-width: 340px) {
+  .catalog_item {
+    &__title {
+      letter-spacing: 0.05em;
+    }
+
+    &__img {
+      margin-right: 10px;
+    }
+
+    &__count,
+    &__inner &__count.tooltip,
+    &__link &__count.tooltip {
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 3px;
+      width: 100%;
+    }
+  }
+}

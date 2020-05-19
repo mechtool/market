@@ -2,9 +2,9 @@ import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import {
   SuggestionCategoryItemModel,
-  SuggestionModel,
+  SuggestionResponseModel,
   SuggestionProductItemModel,
-  SuggestionSearchQueryHistoryItemModel,
+  SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
   LocationModel,
 } from '../common-services/models';
@@ -18,14 +18,18 @@ export class LocalStorageService {
   constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {
   }
 
-  getSearchQueriesHistoryList(): SuggestionModel {
+  getSearchQueriesHistoryList(): SuggestionResponseModel {
     const _searchQueries = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
     return {
       searchQueriesHistory: _searchQueries.reverse()
     };
   }
 
-  putSearchQuery(searchQuery: SuggestionSearchQueryHistoryItemModel): void {
+  hasSearchQueriesHistory(): boolean {
+    return this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) !== undefined;
+  }
+
+  putSearchQuery(searchQuery: SuggestionSearchQueryHistoryModel): void {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
     const filterHistoryList = historyList.filter(res => res.searchText !== searchQuery.searchText);
     const query = {

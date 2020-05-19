@@ -1,15 +1,15 @@
 <div class="nomenclature-card" itemtype="http://schema.org/Product" itemprop="itemListElement" itemscope="itemscope">
-  <a class="link" itemprop="url" [routerLink]="['/product/' + nomenclature.id]">
+  <a class="link" itemprop="url" [routerLink]="['/product/' + product.id]">
     <span class="cover">
-      <img itemprop="image" src="{{imageUrl}}" alt="{{nomenclature.productName}}" title="{{nomenclature.productName}}">
+      <img itemprop="image" src="{{imageUrl}}" alt="{{product.productName}}" title="{{product.productName}}">
     </span>
     <span class="body">
       <span class="title" itemprop="name">
-        {{nomenclature.productName}}
+        {{product.productName}}
       </span>
       <span class="meta" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-        <span class="count">{{nomenclature.offersSummary.totalOffers | number:'1.0-0'}}</span>
-        <span class="price"><span itemprop="price">{{nomenclature.offersSummary.minPrice | myMultiplier:'.01' | currency:'RUB':'symbol':'1.0-0'}}</span></span>
+        <span class="count">{{product.offersSummary.totalOffers | number:'1.0-0'}}</span>
+        <span class="price"><span itemprop="price">{{product.offersSummary.minPrice | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span></span>
         <meta itemprop="priceCurrency" content="RUB" />
         <link itemprop="availability" href="https://schema.org/InStock" content="В наличии" />
       </span>

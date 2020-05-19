@@ -16,7 +16,8 @@
             *ngIf="tradeOffer.stock">{{tradeOffer.stock}} шт.</span>
 
       <span class="catalog_item__price"
-            *ngIf="tradeOffer.price">{{tradeOffer.price}} ₽</span>
+            *ngIf="tradeOffer.price">{{tradeOffer.price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+
     </span>
   </span>
 

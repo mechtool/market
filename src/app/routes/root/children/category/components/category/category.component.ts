@@ -6,7 +6,7 @@ import {
   BreadcrumbItemModel,
   CategoryModel,
   DefaultSearchAvailableModel,
-  NomenclatureCardModel,
+  ProductOffersCardModel,
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,8 +24,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
   query = '';
   categoryId: string;
   searchFilters: DefaultSearchAvailableModel;
-  searchedNomenclatures: NomenclatureCardModel[];
-  totalSearchedNomenclaturesCount: number;
+  productOffers: ProductOffersCardModel[];
+  productsTotal: number;
   sort: SortModel;
 
   constructor(
@@ -108,7 +108,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         // todo: поменять логику когда сделаем дерево категорий
         this.categoryModel = res.find(cat => cat.id === this.categoryId);
         this.refreshBreadcrumbs(res);
-        return this._productService.searchNomenclatureCards({
+        return this._productService.searchProductOffers({
           query: this.query,
           categoryId: this.categoryId,
           availableFilters: this.searchFilters,
@@ -119,9 +119,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
         console.error('error', err);
         return throwError(err);
       }),
-    ).subscribe((res) => {
-      this.searchedNomenclatures = res._embedded.items;
-      this.totalSearchedNomenclaturesCount = res.page?.totalElements;
+    ).subscribe((product) => {
+      this.productOffers = product.productOffers;
+      this.productsTotal = product.productsTotal;
     }, (err) => {
       console.error('error', err);
     });

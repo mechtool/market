@@ -4,7 +4,7 @@ import { ProductService } from '#shared/modules/common-services/product.service'
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
-  NomenclatureCardModel,
+  ProductOffersCardModel,
   SortModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
@@ -20,8 +20,8 @@ import { BreadcrumbsService } from '../../components/breadcrumbs/breadcrumbs.ser
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  searchedNomenclatures: NomenclatureCardModel[];
-  totalSearchedNomenclaturesCount: number;
+  productOffers: ProductOffersCardModel[];
+  productsTotal: number;
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
   availableFilters: DefaultSearchAvailableModel;
@@ -42,7 +42,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       availableFilters: this.availableFilters,
       sort: this.sort,
     });
-
   }
 
   ngOnInit() {
@@ -65,49 +64,67 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
-    const availableFilters = filters.availableFilters;
     this._router.navigate(['/search'], {
-      queryParams: {
-        q: filters.query,
-        supplier: availableFilters.supplier,
-        trademark: availableFilters.trademark,
-        deliveryMethod: availableFilters.deliveryMethod,
-        delivery: availableFilters.delivery,
-        pickup: availableFilters.pickup,
-        inStock: availableFilters.inStock,
-        onlyWithImages: availableFilters.onlyWithImages,
-        priceFrom: availableFilters.priceFrom,
-        priceTo: availableFilters.priceTo,
-        sort: filters.sort,
-      }
+      queryParams: this._getQueryParams(filters)
     });
   }
 
+  private _getQueryParams(filters: AllGroupQueryFiltersModel) {
+    const queryParams: any = {};
+    const availableFilters = filters.availableFilters;
+
+    queryParams.q = filters.query;
+    queryParams.sort = filters.sort;
+
+    if (availableFilters) {
+      queryParams.supplier = availableFilters.supplier;
+      queryParams.trademark = availableFilters.trademark;
+      queryParams.deliveryMethod = availableFilters.deliveryMethod;
+      queryParams.delivery = availableFilters.delivery;
+      queryParams.pickup = availableFilters.pickup;
+      queryParams.inStock = availableFilters.inStock;
+      queryParams.onlyWithImages = availableFilters.onlyWithImages;
+      queryParams.priceFrom = availableFilters.priceFrom;
+      queryParams.priceTo = availableFilters.priceTo;
+    }
+
+    return queryParams;
+  }
+
+
   private _searchNomenclatures(filters: AllGroupQueryFiltersModel): void {
-    this._productService.searchNomenclatureCards(filters)
-      .subscribe((res) => {
-        this.searchedNomenclatures = res._embedded.items;
-        this.totalSearchedNomenclaturesCount = res.page?.totalElements;
-      }, (err) => {
-        console.log('error');
-      });
+    let productOffers;
+    if (filters.query === undefined && filters.availableFilters === undefined) {
+      // todo Если пользователь напрямую перешел в поиск, то параметры пустые, поэтому показываем популярные товары
+      productOffers = this._productService.getPopularProductOffers();
+    } else {
+      productOffers = this._productService.searchProductOffers(filters);
+    }
+    productOffers.subscribe((products) => {
+      this.productOffers = products.productOffers;
+      this.productsTotal = products.productsTotal;
+    }, (err) => {
+      console.log('error');
+    });
   }
 
   private _initQueryParams() {
     this._route.queryParams.subscribe((queryParams) => {
-      this.query = queryParams.q;
-      this.availableFilters = {
-        supplier: queryParams.supplier,
-        trademark: queryParams.trademark,
-        deliveryMethod: queryParams.deliveryMethod,
-        delivery: queryParams.delivery,
-        pickup: queryParams.pickup,
-        inStock: queryParams.inStock,
-        onlyWithImages: queryParams.onlyWithImages,
-        priceFrom: queryParams.priceFrom,
-        priceTo: queryParams.priceTo,
-      };
-      this.sort = queryParams.sort;
+      if (Object.keys(queryParams).length) {
+        this.query = queryParams.q;
+        this.availableFilters = {
+          supplier: queryParams.supplier,
+          trademark: queryParams.trademark,
+          deliveryMethod: queryParams.deliveryMethod,
+          delivery: queryParams.delivery,
+          pickup: queryParams.pickup,
+          inStock: queryParams.inStock,
+          onlyWithImages: queryParams.onlyWithImages,
+          priceFrom: queryParams.priceFrom,
+          priceTo: queryParams.priceTo,
+        };
+        this.sort = queryParams.sort;
+      }
     });
   }
 

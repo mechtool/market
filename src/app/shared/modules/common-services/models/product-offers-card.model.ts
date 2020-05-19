@@ -1,4 +1,4 @@
-export class NomenclatureCardModel {
+export class ProductOffersCardModel {
   id: string;
   productName: string;
   imageUrl: string;

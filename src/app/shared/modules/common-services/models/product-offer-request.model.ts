@@ -1,4 +1,4 @@
-export class OfferFilterQueryModel {
+export class ProductOfferRequestModel {
   priceFrom: number;
   priceTo: number;
   suppliers: string[];

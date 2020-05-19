@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
-import { NomenclatureCardModel } from '#shared/modules/common-services/models';
+import { ProductOffersCardModel } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'my-main-popular',
@@ -14,7 +14,7 @@ import { NomenclatureCardModel } from '#shared/modules/common-services/models';
 })
 export class MainPopularComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  nomenclatures: NomenclatureCardModel[];
+  productOffers: ProductOffersCardModel[];
 
   constructor(private _productService: ProductService) {}
 
@@ -28,9 +28,9 @@ export class MainPopularComponent implements OnInit, OnDestroy {
   }
 
   private _getPopularNomenclatures(): void {
-    this._productService.getPopularNomenclatureCards()
-      .subscribe((res) => {
-        this.nomenclatures = res;
+    this._productService.getPopularProductOffers()
+      .subscribe((products) => {
+        this.productOffers = products.productOffers;
       }, (err) => {
         console.log('error');
       });
