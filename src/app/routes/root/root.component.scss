@@ -9,6 +9,14 @@
 
 .content {
   flex: 1;
-  padding: 15px 100px 70px 50px;
-  border-left: 1px solid #e6e6e6;
+  padding: 15px 100px 70px 370px;
+
+  &.wide {
+    padding-left: 110px;
+  }
+
+  &.scrollblock {
+    overflow: hidden;
+    height: calc(100vh - 20px);
+  }
 }

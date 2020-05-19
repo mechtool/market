@@ -8,5 +8,9 @@
     margin: 0;
     display: flex;
     flex-direction: column;
+
+    &.wide {
+      padding: 0 20px 40px;
+    }
   }
 }

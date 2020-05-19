@@ -1,4 +1,76 @@
 @media all and (max-width: 992px) {
+  :host {
+    background: #fff;
+    padding: 25px 25px 0;
+
+    .logo {
+      margin: 0;
+      padding: 0;
+
+      &:hover {
+        cursor: default;
+        .opener {
+          background: #f24e43;
+        }
+      }
+
+      .opener {
+        background: #f24e43;
+      }
+
+      .label {
+        font-size: var(--font-size-18);
+        font-weight: var(--font-weight-demi);
+        line-height: 23px;
+        letter-spacing: -0.01em;
+      }
+
+      .btn_close {
+        display: block;
+        cursor: pointer;
+        margin-left: auto;
+        background: url(../../../../../../../assets/img/svg/icon__close.svg)
+          no-repeat center center;
+        min-width: 40px;
+
+        &:hover {
+          background-color: var(--color-accent);
+          border-color: var(--color-accent);
+        }
+      }
+    }
+
+    .panel {
+      .label {
+        display: block;
+      }
+
+      .item {
+        a {
+          padding-left: 0;
+          color: #060606;
+
+          &.active {
+            background-color: #f1f0f0;
+          }
+        }
+      }
+
+      .icon {
+        margin-right: 20px;
+      }
+    }
+
+    .categories {
+      &.showed {
+        left: 0;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media all and (max-width: 992px) {
   .categories-mobive-nav {
     display: flex;
     flex-direction: row;
@@ -6,30 +78,34 @@
     width: 100%;
     padding: 25px 20px;
 
-    .opener {
-      cursor: pointer;
-      background: #3e3e3e;
-      width: 40px;
-      display: flex;
-      justify-content: center;
-      border-radius: 7px;
-      height: 40px;
-      align-items: center;
-
-      &:hover {
-        background: #f24e43;
-      }
-    }
-
     .logo {
       display: flex;
       align-items: center;
+
+      .opener {
+        cursor: pointer;
+        background: #3e3e3e;
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        border-radius: 7px;
+        height: 40px;
+        align-items: center;
+      }
+
+      &:hover {
+        cursor: pointer;
+        .opener {
+          background: #f24e43;
+        }
+      }
 
       .opener {
         display: inline-flex;
       }
 
       .label {
+        font-size: var(--font-size-20);
         margin: 0 0 0 15px;
 
         &::first-letter {
@@ -43,6 +119,23 @@
       align-items: center;
       * + * {
         margin: 0 0 0 10px;
+      }
+
+      .counter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 20px;
+        min-width: 9px;
+        padding: 0 3px;
+        background-color: var(--color-accent);
+        border-radius: 2px;
+        color: #3a3a3a;
+        font-size: var(--font-size-10);
+        font-weight: var(--font-weight-medium);
+        margin-left: 8px;
+        padding-left: 6px;
+        padding-right: 6px;
       }
 
       .btn_mobile-menu span {
@@ -68,70 +161,6 @@
           position: relative;
           bottom: -3px;
         }
-      }
-    }
-  }
-
-  :host(.expanded) {
-    .categories {
-      &.showed {
-        left: 0;
-        width: 100%;
-      }
-    }
-  }
-
-  :host(.expanded) {
-    width: 320px;
-    background: #fff;
-    padding: 25px 25px 0;
-
-    .logo {
-      margin: 0;
-      padding: 0;
-
-      .opener {
-        background: #f24e43;
-      }
-
-      .label {
-        font-size: var(--font-size-18);
-        font-weight: var(--font-weight-demi);
-        line-height: 23px;
-        letter-spacing: -0.01em;
-      }
-
-      .btn_close {
-        display: block;
-        cursor: pointer;
-        margin-left: auto;
-        background: url(../../../../../../../assets/img/svg/icon__close.svg)
-          no-repeat center center;
-        min-width: 40px;
-
-        &:hover {
-          background-color: var(--color-accent);
-        }
-      }
-    }
-
-    .panel {
-      .label {
-        display: block;
-      }
-
-      .item {
-        a {
-          padding-left: 0;
-
-          &.active {
-            background-color: #f1f0f0;
-          }
-        }
-      }
-
-      .icon {
-        margin-right: 20px;
       }
     }
   }

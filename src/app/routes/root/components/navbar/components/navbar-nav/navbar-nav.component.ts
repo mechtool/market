@@ -1,4 +1,10 @@
-import { Component, HostBinding, Injector, OnDestroy, OnInit, } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  Injector,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
@@ -13,7 +19,6 @@ import { CategoryModel } from '#shared/modules/common-services/models/category.m
   templateUrl: './navbar-nav.component.html',
   styleUrls: [
     './navbar-nav.component.scss',
-    './navbar-nav.component-1300.scss',
     './navbar-nav.component-992.scss',
     './navbar-nav.component-768.scss',
     './navbar-nav.component-576.scss',
@@ -25,6 +30,7 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   private _userService: UserService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
+  isMinified = false;
 
   get areCategoriesShowed(): boolean {
     return this._navService.areCategoriesShowed;
@@ -38,31 +44,18 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     return this._userService.userCategories$.asObservable();
   }
 
-  @HostBinding('class.expanded')
-  get isExpandedMenu(): boolean {
-    if (
-      window.innerWidth > 992 &&
-      window.innerWidth <= 1300 &&
-      this._navService.isMenuOpened
-    ) {
-      return true;
-    }
-    if (window.innerWidth > 1300 || window.innerWidth <= 992) {
-      return true;
-    }
-    return false;
+  @HostBinding('class.minified')
+  get isNavBarMinified(): boolean {
+    return this._navService.isNavBarMinified && !this._navService.isMenuOpened;
   }
 
   constructor(
     private injector: Injector,
     private _location: Location,
-    private _router: Router
+    private _router: Router,
   ) {
     this._navService = this.injector.get(NavigationService);
     this._userService = this.injector.get(UserService);
-    this.categoryItems$.subscribe((res) => {
-      this.setMainCategorySelectedId(res[0].id);
-    });
   }
 
   ngOnInit() {
@@ -98,17 +91,6 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   }
 
   navigateNavItem(navItem: NavItemModel): void {
-    if (navItem.label !== 'Категории товаров') {
-      this.hideCategories();
-      if (
-        this._navService.overlayRef &&
-        this._navService.overlayRef.hasAttached()
-      ) {
-        this._navService.overlayRef.dispose();
-        this.closeMenu();
-      }
-    }
-
     if (navItem.items?.length) {
       navItem.expanded = !navItem.expanded;
     }
@@ -140,7 +122,7 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   }
 
   closeMenuWithCategories() {
-    this.hideCategories();
+    this._navService.closeCategoriesLayer();
     this.closeMenu();
   }
 
@@ -152,16 +134,24 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     this._navService.closeMenu();
   }
 
-  hideCategories(): void {
-    this._navService.hideCategories();
+  closeCategoriesLayer(navItem: NavItemModel): void {
+    this._navService.closeCategoriesLayer([`/category/${navItem.id}`]);
   }
 
   handleCategories(): void {
-    this._navService.hideCategories();
-    this.setMainCategorySelectedId('1'); // TODO
+    this._navService.closeCategoriesLayer();
+    this._navService.setInitialMainCategorySelectedId();
   }
 
   setMainCategorySelectedId(id: string): void {
     this._navService.setMainCategorySelectedId(id);
+  }
+
+  handleOpenerClick() {
+    this._navService.handleOpenerClick();
+  }
+
+  goToRoot() {
+    this._navService.goTo();
   }
 }

@@ -16,4 +16,8 @@ export class NavbarMobileNavComponent {
   openMenu() {
     this._navService.openMenu();
   }
+
+  goToRoot() {
+    this._navService.goTo();
+  }
 }

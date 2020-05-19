@@ -2,17 +2,39 @@
   display: none;
 }
 
-.opener {
-  cursor: pointer;
-  background: #3e3e3e;
-  width: 40px;
-  display: flex;
-  justify-content: center;
-  border-radius: 7px;
-  height: 40px;
-  align-items: center;
-
+.logo {
   &:hover {
-    background: #f24e43;
+    cursor: pointer;
+    .opener {
+      background: #f24e43;
+    }
   }
+
+  .opener {
+    cursor: pointer;
+    background: #3e3e3e;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    border-radius: 7px;
+    height: 40px;
+    align-items: center;
+  }
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  min-width: 9px;
+  padding: 0 3px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+  color: #3a3a3a;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-medium);
+  margin-left: 8px;
+  padding-left: 6px;
+  padding-right: 6px;
 }

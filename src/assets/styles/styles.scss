@@ -85,12 +85,19 @@ button.btn {
 
   &:hover {
     background-color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 }
 
 .btn_square {
   width: 40px;
   border-radius: 10px;
+}
+
+.btn_bordered,
+a.btn_bordered,
+button.btn_bordered {
+  border-radius: 6px;
 }
 
 .overlay-backdrop-dark {

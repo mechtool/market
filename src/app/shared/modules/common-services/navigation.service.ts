@@ -6,18 +6,20 @@ import {
 } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { Subject, fromEvent } from 'rxjs';
-import { map, takeUntil, debounceTime } from 'rxjs/operators';
-import { NavItemModel } from './models';
+import { Subject, fromEvent, BehaviorSubject } from 'rxjs';
+import { map, takeUntil, debounceTime, filter, pairwise } from 'rxjs/operators';
+import { NavItemModel, CategoryModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Injectable()
 export class NavigationService implements OnDestroy {
+  private _isNavBarMinified = false;
   private _isMenuOpened = false;
-  private _areCategoriesShowed = false;
   private _mainCategorySelectedId: string = null;
+  private _userCategories: CategoryModel[];
   private _componentPortal: ComponentPortal<NavbarNavComponent>;
   selectedPortal: Portal<any> | null;
   overlayRef: OverlayRef;
@@ -29,15 +31,19 @@ export class NavigationService implements OnDestroy {
     this._viewContainerRef = vcr;
   }
 
-  get isMenuOpened() {
+  get isNavBarMinified(): boolean {
+    return this._isNavBarMinified;
+  }
+
+  get isMenuOpened(): boolean {
     return this._isMenuOpened;
   }
 
-  get areCategoriesShowed() {
-    return this._areCategoriesShowed;
+  get areCategoriesShowed(): boolean {
+    return !!this._activatedRoute.snapshot.queryParamMap.get('showCategories');
   }
 
-  get mainCategorySelectedId() {
+  get mainCategorySelectedId(): string {
     return this._mainCategorySelectedId;
   }
 
@@ -54,7 +60,7 @@ export class NavigationService implements OnDestroy {
         label: 'Категории товаров',
         icon: 'category',
         command: () => {
-          this.toggleCategories();
+          this.toggleCategoriesLayer();
         },
       },
       {
@@ -104,7 +110,7 @@ export class NavigationService implements OnDestroy {
         label: 'Категории товаров',
         icon: 'category',
         command: () => {
-          this.toggleCategories();
+          this.toggleCategoriesLayer();
         },
       },
       {
@@ -157,55 +163,22 @@ export class NavigationService implements OnDestroy {
   constructor(
     private _userService: UserService,
     private _authService: AuthService,
-    private _overlay: Overlay
+    private _overlay: Overlay,
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute
   ) {
     this._componentPortal = new ComponentPortal(NavbarNavComponent);
-    this.updateOnResolutionChanges();
-    setTimeout(() => {
-      if (window.innerWidth > 992) {
-        this.selectedPortal = this._componentPortal;
-      }
-    }, 0);
+    this._setUserCategories();
+    this.setInitialMainCategorySelectedId();
+    this._updateLayoutOnResolutionChanges();
+    this._renderInitialNavBar();
+    this._setInitialNavBarType();
+    this._closeCategoriesLayerOnNavigation();
   }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
-  }
-
-  updateOnResolutionChanges() {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(10))
-      .subscribe(
-        (evt: any) => {
-          if (evt.target.innerWidth > 1300) {
-            this.selectedPortal = this._componentPortal;
-            if (this.overlayRef && this.overlayRef.hasAttached()) {
-              this.overlayRef.dispose();
-            }
-          }
-          if (evt.target.innerWidth > 992 && evt.target.innerWidth <= 1300) {
-            if (this._isMenuOpened) {
-              this.overlayRef.dispose();
-              this.openMenu();
-              this.selectedPortal = null;
-            }
-            if (!this._isMenuOpened) {
-              this.selectedPortal = this._componentPortal;
-            }
-          }
-          if (evt.target.innerWidth <= 992) {
-            this.selectedPortal = null;
-            if (this._isMenuOpened) {
-              this.overlayRef.dispose();
-              this.openMenu();
-            }
-          }
-        },
-        (err) => {
-          console.log('error');
-        }
-      );
   }
 
   screenWidthGreaterThan(val: number): boolean {
@@ -232,6 +205,7 @@ export class NavigationService implements OnDestroy {
     const config = new OverlayConfig({
       hasBackdrop: true,
       backdropClass: 'overlay-backdrop-dark',
+      panelClass: 'nav-menu',
       scrollStrategy: this._overlay.scrollStrategies.block(),
     });
 
@@ -242,6 +216,7 @@ export class NavigationService implements OnDestroy {
 
     this._isMenuOpened = true;
     this.overlayRef.backdropClick().subscribe(() => {
+      this._isNavBarMinified = true;
       this._isMenuOpened = false;
       this.overlayRef.dispose();
       if (window.innerWidth > 992) {
@@ -258,19 +233,134 @@ export class NavigationService implements OnDestroy {
     }
   }
 
-  showCategories() {
-    this._areCategoriesShowed = true;
+  openCategoriesLayer(route: string[] = []): void {
+    this._router.navigate(route, {
+      relativeTo: !route.length ? this._activatedRoute : null,
+      queryParams: { showCategories: 'true' },
+      queryParamsHandling: 'merge',
+    });
   }
 
-  hideCategories() {
-    this._areCategoriesShowed = false;
+  closeCategoriesLayer(route: string[] = []): void {
+    this._router.navigate(route, {
+      relativeTo: !route.length ? this._activatedRoute : null,
+      queryParams: { showCategories: null },
+      queryParamsHandling: 'merge',
+    });
   }
 
-  toggleCategories() {
-    this._areCategoriesShowed = !this._areCategoriesShowed;
+  toggleCategoriesLayer(): void {
+    setTimeout(() => {
+      if (!this.areCategoriesShowed) {
+        this.openCategoriesLayer();
+      }
+      if (this.areCategoriesShowed) {
+        this.closeCategoriesLayer();
+      }
+    }, 0);
   }
 
   setMainCategorySelectedId(id: string) {
     this._mainCategorySelectedId = id;
+  }
+
+  handleOpenerClick() {
+    if (this.screenWidthLessThan(1300) && this.screenWidthGreaterThan(992)) {
+      this._isNavBarMinified = true;
+      if (!this.isMenuOpened) {
+        this.openMenu();
+      } else {
+        this.closeMenu();
+      }
+    }
+
+    if (this.screenWidthGreaterThan(1300)) {
+      this._isNavBarMinified = !this._isNavBarMinified;
+    }
+  }
+
+  goTo(route: string[] = ['/']) {
+    this._router.navigate(route);
+  }
+
+  private _setUserCategories(): void {
+    this._userService.userCategories$.subscribe((res) => {
+      this._userCategories = res;
+    });
+  }
+
+  setInitialMainCategorySelectedId(): void {
+    this.setMainCategorySelectedId(
+      this.screenWidthLessThan(768) ? null : this._userCategories[0].id
+    );
+  }
+
+  private _updateLayoutOnResolutionChanges(): void {
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(10))
+      .subscribe(
+        (evt: any) => {
+          this.setMainCategorySelectedId(this._userCategories[0].id);
+          if (evt.target.innerWidth > 1300) {
+            this._isNavBarMinified = false;
+            this.selectedPortal = this._componentPortal;
+            if (this.overlayRef && this.overlayRef.hasAttached()) {
+              this.overlayRef.dispose();
+            }
+          }
+          if (evt.target.innerWidth > 992 && evt.target.innerWidth <= 1300) {
+            this._isNavBarMinified = true;
+            if (this._isMenuOpened) {
+              this.overlayRef.dispose();
+              this.openMenu();
+              this.selectedPortal = null;
+            }
+            if (!this._isMenuOpened) {
+              this.selectedPortal = this._componentPortal;
+            }
+          }
+          if (evt.target.innerWidth <= 992) {
+            this._isNavBarMinified = false;
+            this.selectedPortal = null;
+            if (this._isMenuOpened) {
+              this.overlayRef.dispose();
+              this.openMenu();
+            }
+          }
+          if (evt.target.innerWidth <= 768) {
+            this.setMainCategorySelectedId(null);
+          }
+        },
+        (err) => {
+          console.log('error');
+        }
+      );
+  }
+
+  private _renderInitialNavBar(): void {
+    setTimeout(() => {
+      if (window.innerWidth > 992) {
+        this.selectedPortal = this._componentPortal;
+      }
+    }, 0);
+  }
+
+  private _setInitialNavBarType(): void {
+    this._isNavBarMinified = !!(
+      this.screenWidthGreaterThan(992) && this.screenWidthLessThan(1300)
+    );
+  }
+
+  private _closeCategoriesLayerOnNavigation(): void {
+    this._router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        pairwise()
+      )
+      .subscribe((event: any[]) => {
+        if (event[0].url.includes('showCategories')) {
+          this.closeCategoriesLayer();
+        }
+      });
   }
 }

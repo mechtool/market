@@ -1,8 +1,8 @@
 <div class="root">
   <my-navbar></my-navbar>
-  <main class="content">
+  <main class="content" [ngClass]="{'wide': isNavBarMinified, 'scrollblock': areCategoriesShowed}">
     <my-breadcrumbs [items]="breadcrumbsItems$ | async"></my-breadcrumbs>
     <router-outlet></router-outlet>
   </main>
-
 </div>
+
