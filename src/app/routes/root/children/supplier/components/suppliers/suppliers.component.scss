@@ -24,6 +24,12 @@
   }
 }
 
+.suppliers_infinite_scroll {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
 .catalog {
   display: flex;
   flex-wrap: wrap;
@@ -44,4 +50,10 @@
 
 .product_supplier-name .product_supplier-type {
   margin-right: 5px;
+}
+
+.icon_scroll {
+  position: fixed;
+  font-size: 50px;
+  color: var(--color-accent-light);
 }

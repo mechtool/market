@@ -3,7 +3,7 @@ import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NomenclatureModel, OffersModel, SortModel, TradeOfferInfoModel } from '#shared/modules';
+import { TradeOffersModel, ProductModel, SortModel, TradeOfferInfoModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -12,8 +12,8 @@ import { catchError, switchMap } from 'rxjs/operators';
 })
 export class ProductComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  nomenclature: NomenclatureModel;
-  offers: OffersModel[];
+  product: ProductModel;
+  offers: TradeOffersModel[];
   tradeOffers: TradeOfferInfoModel[];
   sort: SortModel;
 
@@ -40,7 +40,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   sortChange($event: SortModel) {
     this.sort = $event;
-    this._router.navigate([`/product/${this.nomenclature.id}`], {
+    this._router.navigate([`/product/${this.product.id}`], {
       queryParams: {
         sort: $event,
       }
@@ -51,8 +51,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     combineLatest([this._activatedRoute.params])
       .pipe(
         switchMap(([params]) => {
-          const nomenclatureId = params.id;
-          return this._productService.getNomenclature(nomenclatureId);
+          const productId = params.id;
+          return this._productService.getProductOffer(productId);
         }),
         catchError((err) => {
           console.error('error', err);
@@ -61,7 +61,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       )
       .subscribe((model) => {
         this.tradeOffers = this._mapOffers(model.offers);
-        this.nomenclature = model.nomenclature;
+        this.product = model.product;
         this.offers = model.offers;
         this._initBreadcrumbs();
       }, (err) => {
@@ -80,13 +80,13 @@ export class ProductComponent implements OnInit, OnDestroy {
         label: 'Продукты',
       },
       {
-        label: this.nomenclature.productName,
-        routerLink: `/product/${this.nomenclature.id}`
+        label: this.product.productName,
+        routerLink: `/product/${this.product.id}`
       },
     ]);
   }
 
-  private _mapOffers(offers: OffersModel[]): TradeOfferInfoModel[] {
+  private _mapOffers(offers: TradeOffersModel[]): TradeOfferInfoModel[] {
     return offers.map((offer) => {
       return {
         id: offer.id,

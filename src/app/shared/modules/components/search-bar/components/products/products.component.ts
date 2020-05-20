@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@a
 import { Subject } from 'rxjs';
 import {
   LocalStorageService,
+  ImagesLinkModel,
   SuggestionCategoryItemModel,
-  SuggestionProductItemImageLinkModel,
   SuggestionProductItemModel,
   TypeOfSearch,
 } from '../../../../common-services';
@@ -46,7 +46,7 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
     this._router.navigate([`./category/${category.id}`]);
   }
 
-  imageUrl(image: SuggestionProductItemImageLinkModel[]): string {
+  imageUrl(image: ImagesLinkModel[]): string {
     return image ? image[0].href : 'assets/img/tmp/no_photo.png';
   }
 

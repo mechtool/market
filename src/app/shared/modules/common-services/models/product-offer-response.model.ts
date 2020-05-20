@@ -1,7 +1,7 @@
-import { NomenclatureModel } from './nomenclature.model';
-import { OffersModel } from './offers.model';
+import { TradeOffersModel } from './trade-offers.model';
+import { ProductModel } from './product.model';
 
 export class ProductOfferResponseModel {
-  nomenclature: NomenclatureModel;
-  offers: OffersModel[];
+  product: ProductModel;
+  offers: TradeOffersModel[];
 }

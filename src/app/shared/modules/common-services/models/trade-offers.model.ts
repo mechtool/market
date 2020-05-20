@@ -1,12 +1,9 @@
-export class OffersModel {
+export class TradeOffersModel {
   id: string;
   price: number;
   stock: Stock;
-  supplier: OffersSupplierModel;
+  supplier: TradeOffersSupplierModel;
   orderPlacingReference: string;
-  _links: {
-    offer: OfferHrefModel;
-  };
 }
 
 export enum Stock {
@@ -16,13 +13,10 @@ export enum Stock {
   HIGH = 'HIGH'
 }
 
-export class OffersSupplierModel {
+export class TradeOffersSupplierModel {
   id: string;
+  name: string;
+  legalId: string;
   inn: string;
   kpp: string;
-  name: string;
-}
-
-export class OfferHrefModel {
-  href: string;
 }

@@ -1,4 +1,4 @@
-<div *ngIf="suppliers">
+<div *ngIf="supplierData">
 
   <h3>Поставщики</h3><br>
 
@@ -13,15 +13,22 @@
 
   <div class="catalog_header">
     <div class="catalog_header__count">
-      <span class="catalog_header__title">Всего найдено</span><strong>{{suppliers.page?.totalElements}}</strong> поставщиков
+      <span class="catalog_header__title">Всего найдено</span>
+      <strong>{{supplierData.page?.totalElements}}</strong>{{supplierData.page?.totalElements | myDeclension: ' поставщик': ' поставщика': ' поставщиков'}}
     </div>
   </div>
 
   <div class="catalog catalog_suppliers">
 
-    <my-supplier-card *ngFor="let item of suppliers._embedded.suppliers"
-                      [supplier]="item"
-    ></my-supplier-card>
+    <ng-template #indicatorTemplate>
+      <em class="icon_scroll" nz-icon nzType="loading"></em>
+    </ng-template>
+
+    <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
+      <div class="suppliers_infinite_scroll" infiniteScroll (scrolled)="supplierLoading()">
+        <my-supplier-card *ngFor="let item of suppliers" [supplier]="item"></my-supplier-card>
+      </div>
+    </nz-spin>
 
   </div>
 

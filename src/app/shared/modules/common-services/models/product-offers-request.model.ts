@@ -8,7 +8,7 @@ export class ProductOffersRequestModel {
   public tradeMarks?: string[];
   public inStock?: boolean;
   public inSales?: boolean;
-  public onlyWithImages?: boolean;
+  public withImages?: boolean;
   public country?: string;
   public deliveryArea?: string;
   public pickupArea?: string;

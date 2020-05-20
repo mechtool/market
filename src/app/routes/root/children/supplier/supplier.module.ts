@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupplierRoutingModule } from './supplier-routing.module';
 import { SupplierListComponent, SupplierProductComponent, SupplierSingleComponent } from './components';
-import { SearchBarModule, SupplierCardModule } from '#shared/modules';
+import { PipesModule, SearchBarModule, SupplierCardModule } from '#shared/modules';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @NgModule({
   imports: [
@@ -12,6 +15,10 @@ import { SearchBarModule, SupplierCardModule } from '#shared/modules';
     SupplierRoutingModule,
     SearchBarModule,
     SupplierCardModule,
+    InfiniteScrollModule,
+    NzSpinModule,
+    NzIconModule,
+    PipesModule,
   ],
   declarations: [
     SupplierListComponent,

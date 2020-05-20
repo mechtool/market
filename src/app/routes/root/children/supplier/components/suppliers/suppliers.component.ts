@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { combineLatest, Subject } from 'rxjs';
-import { AllGroupQueryFiltersModel, SuppliersResponseModel } from '#shared/modules';
+import { AllGroupQueryFiltersModel, SuppliersItemModel, SuppliersResponseModel } from '#shared/modules';
 import { SupplierService } from '#shared/modules/common-services/supplier.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+
+const PAGE_SIZE = 20;
 
 @Component({
   templateUrl: './suppliers.component.html',
@@ -18,7 +20,9 @@ import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrum
 export class SupplierListComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   query: string;
-  suppliers: SuppliersResponseModel;
+  supplierData: SuppliersResponseModel;
+  suppliers: SuppliersItemModel[];
+  isLoading = false;
 
   constructor(
     private _router: Router,
@@ -51,22 +55,44 @@ export class SupplierListComponent implements OnInit, OnDestroy {
     this.query = $event;
   }
 
+  supplierLoading() {
+    const nextPage = this.supplierData.page.number + 1;
+    const totalPages = this.supplierData.page.totalPages;
+
+    if (nextPage < totalPages) {
+      this.isLoading = true;
+
+      this._getSuppliers(nextPage).subscribe((res) => {
+        this.supplierData = this._map(res);
+        this.suppliers.push(...this.supplierData._embedded.suppliers);
+      });
+
+      setTimeout(() => {
+        // секундная задержка чтобы спинер покрутился
+        this.isLoading = false;
+      }, 1000);
+    }
+  }
+
   private _initForm() {
     combineLatest([this._activatedRoute.queryParams])
       .pipe(
         switchMap(([queryParams]) => {
           this.query = queryParams.q;
-          if (!this.query || this.query?.length === 0) {
-            // todo пока так, переделать!
-            return this._supplierService.getAllSuppliers(0, 20);
-          }
-          // todo пока так, переделать!
-          return this._supplierService.findSuppliersBy(this.query, 0, 20);
+          return this._getSuppliers(0);
         })
       )
       .subscribe((suppliers) => {
-        this.suppliers = this._map(suppliers);
+        this.supplierData = this._map(suppliers);
+        this.suppliers = this.supplierData._embedded.suppliers;
       });
+  }
+
+  private _getSuppliers(page: number) {
+    if (!this.query || this.query?.length === 0) {
+      return this._supplierService.getAllSuppliers(page, PAGE_SIZE);
+    }
+    return this._supplierService.findSuppliersBy(this.query, page, PAGE_SIZE);
   }
 
   private _initBreadcrumbs() {

@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { NomenclatureModel } from '#shared/modules';
+import { ImagesLinkModel, ProductModel } from '#shared/modules';
 import { absoluteImagePath } from '#shared/utils/get-image';
 
 @Component({
@@ -12,14 +12,14 @@ import { absoluteImagePath } from '#shared/utils/get-image';
 })
 export class GalleryComponent implements OnInit, OnDestroy {
 
-  @Input() nomenclature: NomenclatureModel;
+  @Input() product: ProductModel;
 
-  get imageUrls(): string[] {
-    if (this.nomenclature.imageUrls.length > 10) {
+  get images(): ImagesLinkModel[] {
+    if (this.product.images.length > 10) {
       // todo Чтобы не переделывать компанент карусели, решили что будем ПОКА отображать максимум 10 изображений
-      return this.nomenclature.imageUrls.slice(0, 10);
+      return this.product.images.slice(0, 10);
     }
-    return this.nomenclature.imageUrls;
+    return this.product.images;
   }
 
   ngOnDestroy(): void {
@@ -28,8 +28,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
-  firstImageUrl(imgs: string[]) {
-    return imgs ? this.imageUrl(imgs[0]) : this.imageUrl(null);
+  firstImageUrl(imgs: ImagesLinkModel[]) {
+    return imgs ? this.imageUrl(imgs[0].href) : this.imageUrl(null);
   }
 
   imageUrl(img: string): string {

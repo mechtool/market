@@ -24,7 +24,7 @@ export class BNetService {
   constructor(private _apiService: ApiService) {
   }
 
-  getNomenclature(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
+  getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
     return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }

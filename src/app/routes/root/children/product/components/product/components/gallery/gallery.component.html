@@ -1,48 +1,48 @@
-<div class="product-base" *ngIf="nomenclature">
+<div class="product-base" *ngIf="product">
   <div class="title-block">
-    <h2 class="title">{{nomenclature.productName}}</h2>
+    <h2 class="title">{{product.productName}}</h2>
     <div class="specs">
-      <div class="specs__item" *ngIf="nomenclature.manufacturer?.tradeMark">
+      <div class="specs__item" *ngIf="product.manufacturer?.tradeMark">
         <span class="specs__item__label">Наименование бренда:</span>
-        <span class="specs__item__value">{{nomenclature.manufacturer?.tradeMark}}</span>
+        <span class="specs__item__value">{{product.manufacturer?.tradeMark}}</span>
       </div>
-      <div class="specs__item" *ngIf="nomenclature.productPartNumber">
+      <div class="specs__item" *ngIf="product.productPartNumber">
         <span class="specs__item__label">Артикул:</span>
-        <span class="specs__item__value">{{nomenclature.productPartNumber}}</span>
+        <span class="specs__item__value">{{product.productPartNumber}}</span>
       </div>
-      <div class="specs__item" *ngIf="nomenclature.productBarCodes?.length">
+      <div class="specs__item" *ngIf="product.productBarCodes?.length">
         <span class="specs__item__label">Штрихкоды:</span>
-        <span class="specs__item__value">{{nomenclature.productBarCodes}}</span>
+        <span class="specs__item__value">{{product.productBarCodes}}</span>
       </div>
     </div>
   </div>
 
   <div class="carousel">
 
-    <div class="pic" *ngIf="!nomenclature.imageUrls || nomenclature.imageUrls?.length === 1">
-      <img src="{{firstImageUrl(nomenclature.imageUrls)}}" alt="">
+    <div class="pic" *ngIf="!product.images || product.images?.length === 1">
+      <img src="{{firstImageUrl(product.images)}}" alt="">
     </div>
 
-    <nz-carousel *ngIf="nomenclature.imageUrls?.length > 1" [nzAutoPlay]="true">
-      <div nz-carousel-content *ngFor="let item of imageUrls">
-        <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + imageUrl(item) + ')'}"></div>
+    <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
+      <div nz-carousel-content *ngFor="let item of images">
+        <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + imageUrl(item.href) + ')'}"></div>
       </div>
     </nz-carousel>
 
   </div>
 
   <div class="specs">
-    <div class="specs__item" *ngIf="nomenclature.manufacturer?.tradeMark">
+    <div class="specs__item" *ngIf="product.manufacturer?.tradeMark">
       <span class="specs__item__label">Наименование бренда:</span>
-      <span class="specs__item__value">{{nomenclature.manufacturer?.tradeMark}}</span>
+      <span class="specs__item__value">{{product.manufacturer?.tradeMark}}</span>
     </div>
-    <div class="specs__item" *ngIf="nomenclature.productPartNumber">
+    <div class="specs__item" *ngIf="product.productPartNumber">
       <span class="specs__item__label">Артикул:</span>
-      <span class="specs__item__value">{{nomenclature.productPartNumber}}</span>
+      <span class="specs__item__value">{{product.productPartNumber}}</span>
     </div>
-    <div class="specs__item" *ngIf="nomenclature.productBarCodes?.length">
+    <div class="specs__item" *ngIf="product.productBarCodes?.length">
       <span class="specs__item__label">Штрихкоды:</span>
-      <span class="specs__item__value">{{nomenclature.productBarCodes}}</span>
+      <span class="specs__item__value">{{product.productBarCodes}}</span>
     </div>
   </div>
 </div>

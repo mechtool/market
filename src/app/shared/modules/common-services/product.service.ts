@@ -15,12 +15,12 @@ export class ProductService {
   constructor(private _bnetService: BNetService) {
   }
 
-  getNomenclature(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
-    return this._bnetService.getNomenclature(id, filterQuery);
+  getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
+    return this._bnetService.getProductOffer(id, filterQuery);
   }
 
   getPopularProductOffers(): Observable<ProductOffersCardWithProductsTotalModel> {
-    return this._bnetService.searchNomenclatures({ categoryId: '3335', onlyWithImages: true })
+    return this._bnetService.searchNomenclatures({ categoryId: '3335', withImages: true })
       .pipe(
         map((productOffers) => {
           const products = new ProductOffersCardWithProductsTotalModel();
