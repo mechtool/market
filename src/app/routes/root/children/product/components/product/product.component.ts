@@ -3,8 +3,9 @@ import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TradeOffersModel, ProductModel, SortModel, TradeOfferInfoModel } from '#shared/modules';
+import { ProductModel, SortModel, TradeOfferInfoModel, TradeOffersModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
+import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 
 @Component({
   templateUrl: './product.component.html',
@@ -17,12 +18,20 @@ export class ProductComponent implements OnInit, OnDestroy {
   tradeOffers: TradeOfferInfoModel[];
   sort: SortModel;
 
+  get hasProductDescription(): boolean {
+    return !(!!this.product.productDescription || !!this.product.features);
+  }
+
+  get offerTotal(): string {
+    return this.tradeOffers ? this._offerTotal(this.tradeOffers.length) : '0 предложений';
+  }
 
   constructor(
     private _breadcrumbsService: BreadcrumbsService,
     private _productService: ProductService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
+    private _declensionPipe: DeclensionPipe,
   ) {
     this._activatedRoute.queryParams.subscribe((param) => {
       this.sort = param.sort ? param.sort : SortModel.ASC;
@@ -67,6 +76,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       }, (err) => {
         console.error('error', err);
       });
+  }
+
+  private _offerTotal(value: number): string {
+    return `${value} ${this._declensionPipe.transform(value, 'предложение', 'предложения', 'предложений')}`;
   }
 
   private _initBreadcrumbs() {

@@ -65,12 +65,8 @@ export class SupplierListComponent implements OnInit, OnDestroy {
       this._getSuppliers(nextPage).subscribe((res) => {
         this.supplierData = this._map(res);
         this.suppliers.push(...this.supplierData._embedded.suppliers);
-      });
-
-      setTimeout(() => {
-        // секундная задержка чтобы спинер покрутился
         this.isLoading = false;
-      }, 1000);
+      });
     }
   }
 

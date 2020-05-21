@@ -17,11 +17,13 @@ import {
   BannerCardModule,
   NomenclatureCardModule,
   PipesModule,
+  ProductDescriptionModule,
   SearchBarModule,
   SearchResultsModule,
   TradeOfferCardModule
 } from '#shared/modules';
-import { NzCarouselModule, NzDropDownModule } from 'ng-zorro-antd';
+import { NzCarouselModule, NzDropDownModule, NzTabsModule } from 'ng-zorro-antd';
+import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { NzCarouselModule, NzDropDownModule } from 'ng-zorro-antd';
     NzCarouselModule,
     TradeOfferCardModule,
     NzDropDownModule,
+    NzTabsModule,
     PipesModule,
+    ProductDescriptionModule,
   ],
   declarations: [
     Code404Component,
@@ -50,6 +54,9 @@ import { NzCarouselModule, NzDropDownModule } from 'ng-zorro-antd';
     ProductComponent,
     TradeOfferCardsListComponent,
   ],
+  providers: [
+    DeclensionPipe
+  ]
 })
 export class ProductModule {
 }
