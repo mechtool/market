@@ -3,9 +3,9 @@ import { Subject } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 
 @Component({
-  templateUrl: './404.component.html',
+  templateUrl: './500.component.html',
 })
-export class Code404Component implements OnInit, OnDestroy {
+export class Code500Component implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
 
   constructor(private _breadcrumbsService: BreadcrumbsService) {

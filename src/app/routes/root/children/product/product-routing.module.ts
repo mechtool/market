@@ -4,6 +4,7 @@ import {
   MainComponent,
   ProductComponent,
   Code404Component,
+  Code500Component,
 } from './components';
 
 const routes: Routes = [
@@ -13,6 +14,9 @@ const routes: Routes = [
   }, {
     path: '404',
     component: Code404Component,
+  }, {
+    path: '500',
+    component: Code500Component,
   }, {
     path: 'product/:id',
     component: ProductComponent,

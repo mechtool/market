@@ -1,0 +1,23 @@
+<nz-alert
+  [ngClass]="{'error-code': true}"
+  nzType="error"
+  [nzMessage]="content"
+  [nzCloseText]="close"
+  nzCloseable>
+</nz-alert>
+<ng-template #content>
+  <div class="page_error">
+    <div class="page_error__img">
+      <img *ngFor="let codeChar of codeArray" src="{{'assets/img/svg/num_' + codeChar + '.svg'}}" alt="{{codeChar}}">
+    </div>
+    <div class="page_error__text">
+      <div class="page_error__title">{{title}}</div>
+      <p class="page_error__text__bg">{{descriptionBg}}</p>
+      <p class="page_error__text__sm">{{descriptionSm}}</p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #close>
+  <span>Закрыть</span>
+  <img src="assets/img/svg/icon__close.svg" alt="×">
+</ng-template>

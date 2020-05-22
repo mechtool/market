@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductRoutingModule } from './product-routing.module';
 import {
   Code404Component,
+  Code500Component,
   GalleryComponent,
   MainBannersBannerComponent,
   MainBannersComponent,
@@ -20,11 +21,16 @@ import {
   ProductDescriptionModule,
   SearchBarModule,
   SearchResultsModule,
-  TradeOfferCardModule
+  TradeOfferCardModule,
+  ErrorCodeAlertModule,
 } from '#shared/modules';
-import { NzCarouselModule, NzDropDownModule, NzTabsModule } from 'ng-zorro-antd';
+import {
+  NzCarouselModule,
+  NzDropDownModule,
+  NzTabsModule,
+  NzAlertModule,
+} from 'ng-zorro-antd';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
-
 
 @NgModule({
   imports: [
@@ -39,13 +45,16 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
     SearchBarModule,
     NzCarouselModule,
     TradeOfferCardModule,
+    ErrorCodeAlertModule,
     NzDropDownModule,
     NzTabsModule,
+    NzAlertModule,
     PipesModule,
     ProductDescriptionModule,
   ],
   declarations: [
     Code404Component,
+    Code500Component,
     GalleryComponent,
     MainBannersBannerComponent,
     MainBannersComponent,
@@ -54,9 +63,6 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
     ProductComponent,
     TradeOfferCardsListComponent,
   ],
-  providers: [
-    DeclensionPipe
-  ]
+  providers: [DeclensionPipe],
 })
-export class ProductModule {
-}
+export class ProductModule {}

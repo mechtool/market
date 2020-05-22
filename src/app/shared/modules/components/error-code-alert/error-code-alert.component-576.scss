@@ -1,0 +1,37 @@
+::ng-deep .error-code > .ant-alert {
+  @media all and (max-width: 576px) {
+    padding: 10px 35px 10px 15px;
+
+    .page_error__img {
+      margin-right: 15px;
+    }
+    .page_error__img img {
+      max-height: 25px;
+      margin-right: 5px;
+    }
+    .page_error__text,
+    .page_error__title {
+      font-size: var(--font-size-12);
+      line-height: 15px;
+    }
+    .page_error__title {
+      margin-bottom: 3px;
+    }
+    .page_error__text p {
+      line-height: 15px;
+    }
+    .ant-alert-close-icon span {
+      display: none;
+    }
+    .ant-alert-close-icon {
+      right: 15px;
+      top: 10px;
+    }
+    .page_error__text__bg {
+      display: none;
+    }
+    .page_error__text__sm {
+      display: block;
+    }
+  }
+}

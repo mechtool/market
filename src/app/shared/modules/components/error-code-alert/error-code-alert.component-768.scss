@@ -1,0 +1,10 @@
+::ng-deep .error-code > .ant-alert {
+  @media all and (max-width: 768px) {
+    .page_error {
+      align-items: center;
+    }
+    .page_error__img img {
+      max-height: 60px;
+    }
+  }
+}

@@ -1,0 +1,63 @@
+::ng-deep .error-code > .ant-alert {
+  background: inherit;
+  position: relative;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  padding: 15px 130px 15px 25px;
+  margin-bottom: 25px;
+  font-size: 15px;
+
+  .ant-alert-close-icon {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    cursor: pointer;
+
+    span {
+      font-size: 15px;
+    }
+  }
+
+  .page_error {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .page_error__img {
+    display: flex;
+    align-items: flex-start;
+    margin-right: 30px;
+    flex-shrink: 0;
+  }
+
+  .page_error__img img {
+    margin-right: 15px;
+  }
+
+  .page_error__text {
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .page_error__text p {
+    line-height: 19px;
+    margin: 0;
+  }
+
+  .page_error__text__sm {
+    display: none;
+  }
+
+  .page_error__title {
+    font-weight: var(--font-weight-demi);
+    font-size: var(--font-size-18);
+    margin-bottom: 15px;
+  }
+
+  .ant-alert-close-icon span {
+    margin-right: 10px;
+  }
+}
