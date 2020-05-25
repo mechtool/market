@@ -1,0 +1,10 @@
+@media all and (max-width: 1580px) {
+  :host {
+    width: 50%;
+    flex-basis: 50%;
+  }
+
+  .banner_item__last {
+    display: none;
+  }
+}

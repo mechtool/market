@@ -1,14 +1,14 @@
-<div class="banner">
-  <div class="banner-meta">
+<div class="banner_item banner_item__big">
+  <div class="banner__info">
     <h3>{{title}}</h3>
-    <div class="banner-descr">
-      <p><ng-content></ng-content></p>
+    <div class="banner__descr">
+      <p><ng-content select=".description"></ng-content></p>
     </div>
-    <div class="banner-btn">
-      <a href="{{btnLink}}" class="btn">{{btnText}}</a>
+    <div class="banner__btn">
+      <a href="{{btnLink}}" class="btn btn_std">{{btnText}}</a>
     </div>
   </div>
-  <div class="banner-cover">
-    <img src="assets/img/tmp/{{img}}" alt="" title="">
+  <div class="banner__img">
+    <ng-content select=".cover"></ng-content>
   </div>
 </div>

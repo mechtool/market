@@ -1,0 +1,19 @@
+@media all and (max-width: 768px) {
+  :host {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .banner_item__last {
+    display: flex;
+  }
+
+  .banner_item {
+    margin-right: 0;
+  }
+
+  .banner_item__big .banner__info {
+    max-width: none;
+    margin-top: 0;
+  }
+}

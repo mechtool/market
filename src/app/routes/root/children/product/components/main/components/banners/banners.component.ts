@@ -6,12 +6,15 @@ import { Subject } from 'rxjs';
   templateUrl: './banners.component.html',
   styleUrls: [
     './banners.component.scss',
-    './banners.component-1680.scss',
+    './banners.component-1580.scss',
     './banners.component-992.scss',
+    './banners.component-768.scss',
+    './banners.component-576.scss',
   ],
 })
 export class MainBannersComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
+  array = [1, 2, 3, 4];
 
   constructor() {}
 
@@ -23,3 +26,4 @@ export class MainBannersComponent implements OnInit, OnDestroy {
   }
 
 }
+

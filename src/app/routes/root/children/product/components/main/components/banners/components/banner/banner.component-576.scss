@@ -1,32 +1,35 @@
 @media all and (max-width: 576px) {
+  .banner_item {
+    padding-top: 30px;
+    padding-bottom: 20px;
 
-	.banner-meta {
-		margin-top: 0;
-	}
+    .banner__img {
+      display: none;
+    }
 
-	h3 {
-		font-size: var(--font-size-16);
-		line-height: 21px;
-		letter-spacing: 0.11em;
-	}
+    .banner__info {
+      margin-top: 0;
+      padding-right: 0;
+    }
 
-	.banner-descr {
-		font-size: var(--font-size-14);
-		line-height: 18px;
-	}
+    h3 {
+      font-size: var(--font-size-16);
+      line-height: 21px;
+      margin: 0 0 10px;
+    }
 
-	.btn {
-		max-width: 120px;
-	}
+    .banner__descr {
+      font-size: var(--font-size-14);
+      line-height: 18px;
+    }
 
-	.banner-cover {
-		max-width: 60px;
-		justify-content: flex-end;
-		align-items: flex-end;
-		position: absolute;
-		right: 20px;
-		bottom: 20px;
-	}
+    .banner__btn {
+      margin-top: 20px;
+      margin-bottom: 0;
+    }
 
+    .btn {
+      max-width: 120px;
+    }
+  }
 }
-

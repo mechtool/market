@@ -117,28 +117,33 @@ span.ant-radio + * {
   }
 }
 
-.ant-carousel .slick-dots {
-  position: inherit;
-  margin-top: -10px;
-  z-index: 0;
-  width: 30px;
-  margin-left: 80px;;
-
-  li {
-    & button {
-      width: 7px;
-      height: 7px;
-      border-radius: 7px;
-      background: var(--color-background-base);
-      margin-top: 2px;
-      border: 1px solid #9b9b9b;
+// Carousel
+.ant-carousel {
+  .slick-dots {
+    &-bottom {
+      bottom: 7px;
     }
 
-    &.slick-active button {
-      width: 8px;
-      height: 8px;
-      border-radius: 8px;
-      background: #9b9b9b;
+    li {
+      width: 7px;
+      margin-right: 4px;
+      margin-left: 4px;
+      button {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #fff;
+        margin-top: 2px;
+        border: 1px solid #9b9b9b;
+        opacity: 1;
+      }
+
+      &.slick-active {
+        width: 7px;
+        button {
+          background: #9b9b9b;
+        }
+      }
     }
   }
 }
@@ -191,7 +196,7 @@ span.ant-radio + * {
   text-align: center;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f9f9f9
+  border: 1px solid #f9f9f9;
 }
 
 .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
@@ -206,7 +211,8 @@ span.ant-radio + * {
     letter-spacing: 0.05em;
   }
 
-  .ant-tabs-tab-prev.ant-tabs-tab-arrow-show, .ant-tabs-tab-next.ant-tabs-tab-arrow-show {
+  .ant-tabs-tab-prev.ant-tabs-tab-arrow-show,
+  .ant-tabs-tab-next.ant-tabs-tab-arrow-show {
     opacity: 0;
   }
 

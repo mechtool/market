@@ -1,8 +1,9 @@
 @media all and (max-width: 992px) {
+  .banner__descr br {
+    display: none;
+  }
 
-	.banner {
-		margin-right: 0;
-		width: 100%;
-	}
-
+  .banner_item {
+    padding-right: 15px;
+  }
 }
