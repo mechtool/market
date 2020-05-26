@@ -1,9 +1,66 @@
+:host {
+  width: 12.5%;
+  flex-basis: 12.5%;
+  padding: 10px;
+}
+
+@media (max-width: 2601px) {
+  :host {
+    width: 16.66666%;
+    flex-basis: 16.66666%;
+  }
+}
+
+@media (max-width: 1880px) {
+  :host {
+    width: 20%;
+    flex-basis: 20%;
+  }
+}
+
+@media (max-width: 1600px) {
+  :host {
+    width: 25%;
+    flex-basis: 25%;
+  }
+}
+
+@media (max-width: 1380px) {
+  :host {
+    width: 25%;
+    flex-basis: 25%;
+  }
+}
+
+@media (max-width: 880px) {
+  :host {
+    width: 33.33333%;
+    flex-basis: 33.33333%;
+  }
+}
+
+@media (max-width: 680px) {
+  :host {
+    width: 50%;
+    flex-basis: 50%;
+  }
+}
+
+@media (max-width: 576px) {
+  :host {
+    width: 100%;
+    flex-basis: 100%;
+    margin: 7px 0;
+    padding: 0;
+  }
+}
+
+//
+
 .nomenclature-card {
   display: flex;
-	margin: 10px;
 	width: 100%;
 	flex-basis: 100%;
-	max-width: 222px;
 }
 
 .link {
@@ -40,8 +97,7 @@
 .title {
 	display: block;
 	font-weight: var(--font-weight-medium);
-	font-size: var(--font-size-13);
-	line-height: 17px;
+	line-height: 19px;
 	min-height: 68px;
 	margin-bottom: 15px;
 }
@@ -50,11 +106,7 @@
 	justify-self: flex-end;
 	margin-top: auto;
 	display: flex;
-	font-size: var(--font-size-13);
-	overflow: hidden;
-	box-shadow: 0px 1px 2px rgba(0, 0, 0, .08), 0px -1px 2px rgba(0, 0, 0, .05);
 	transition: box-shadow .3s;
-	border-radius: 3px;
 }
 
 .count {
@@ -63,8 +115,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f9f9f9;
-	transition: background-color .3s;
+	background-color: #ffffff;
+  transition: background-color .3s;
+  border: 1px solid #E0E0E0;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  color: var(--color-main);
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-medium);
 }
 
 .price {
@@ -73,8 +133,14 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f2f2f2;
-	transition: background-color .3s;
+	background-color: #f5f5f5;
+  transition: background-color .3s;
+  font-weight: var(--font-weight-medium);
+  border: 1px solid #E0E0E0;
+  border-left: none;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  white-space: nowrap;
 }
 
 .nomenclature-card:hover .meta {
@@ -83,11 +149,13 @@
 
 .nomenclature-card:hover .count {
 	background-color: var(--color-accent-lighter);
-	color: #060606;
+  color: #060606;
+  border: var(--color-accent-lighter);
 }
 
 .nomenclature-card:hover .price {
 	background-color: var(--color-accent);
 	color: #060606;
+  border-color: var(--color-accent);
 }
 

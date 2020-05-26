@@ -8,6 +8,7 @@ import { ProductOffersCardModel } from '#shared/modules/common-services/models';
   templateUrl: './popular.component.html',
   styleUrls: [
     './popular.component.scss',
+    './popular.component-992.scss',
     './popular.component-768.scss',
     './popular.component-576.scss',
   ],
