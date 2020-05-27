@@ -52,7 +52,7 @@ export class NavigationService implements OnDestroy {
   get navItems$() {
     const notAuthedNavItems: NavItemModel[] = [
       {
-        label: 'Поиск товаров',
+        label: 'Товары',
         icon: 'search',
         routerLink: ['/search'],
       },
@@ -102,7 +102,7 @@ export class NavigationService implements OnDestroy {
     ];
     const authedNavItems: NavItemModel[] = [
       {
-        label: 'Поиск товаров',
+        label: 'Товары',
         icon: 'search',
         routerLink: ['/search'],
       },
@@ -127,7 +127,6 @@ export class NavigationService implements OnDestroy {
       {
         label: 'Личный кабинет',
         icon: 'personal',
-        styleClass: 'delimiter',
         items: [
           {
             label: 'Мои заказы',

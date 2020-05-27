@@ -1,6 +1,7 @@
 import {
   Component,
   HostBinding,
+  HostListener,
   Injector,
   OnDestroy,
   OnInit,
@@ -47,6 +48,12 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   @HostBinding('class.minified')
   get isNavBarMinified(): boolean {
     return this._navService.isNavBarMinified && !this._navService.isMenuOpened;
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeyDownHandler(event: KeyboardEvent) {
+    if (this.areCategoriesShowed) {
+      this.closeCategoriesLayer();
+    }
   }
 
   constructor(
@@ -134,8 +141,13 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     this._navService.closeMenu();
   }
 
-  closeCategoriesLayer(navItem: NavItemModel): void {
-    this._navService.closeCategoriesLayer([`/category/${navItem.id}`]);
+  closeCategoriesLayer(navItem?: NavItemModel): void {
+    if (navItem) {
+      this._navService.closeCategoriesLayer([`/category/${navItem.id}`]);
+    }
+    if (!navItem) {
+      this._navService.closeCategoriesLayer();
+    }
   }
 
   handleCategories(): void {

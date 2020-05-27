@@ -185,6 +185,25 @@
         padding: 0 10px;
       }
     }
+
+    .list-secondary {
+      .item {
+
+        a {
+          display: flex;
+          justify-content: center;
+          padding: 0;
+        }
+        .icon-point {
+          display: block;
+          width: 6px;
+          height: 6px;
+          margin-right: 0;
+          background: #3a3a3a;
+          border-radius: 50%;
+        }
+      }
+    }
   }
 
   .categories {
