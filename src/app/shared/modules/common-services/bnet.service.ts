@@ -5,36 +5,38 @@ import { Observable } from 'rxjs';
 import {
   CategoryResponseModel,
   LocationModel,
-  ProductOfferResponseModel,
+  OrganizationResponseModel,
   ProductOfferRequestModel,
+  ProductOfferResponseModel,
+  ProductOffersListResponseModel,
   ProductOffersRequestModel,
   SuggestionResponseModel,
   SuppliersRequestModel,
   SuppliersResponseModel,
+  TradeOfferResponseModel,
   UserOrganizationModel,
 } from './models';
 import { HttpParams } from '@angular/common/http';
-import { ProductOffersListResponseModel } from '#shared/modules/common-services/models/product-offers-list-response.model';
 
 const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(private _apiService: ApiService) {}
+  constructor(private _apiService: ApiService) {
+  }
 
-  getProductOffer(
-    id: string,
-    filterQuery?: ProductOfferRequestModel
-  ): Observable<ProductOfferResponseModel> {
+  getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
     return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }
 
-  searchNomenclatures(
-    searchQuery: ProductOffersRequestModel
-  ): Observable<ProductOffersListResponseModel> {
+  searchNomenclatures(searchQuery: ProductOffersRequestModel): Observable<ProductOffersListResponseModel> {
     const params = this._params(searchQuery);
     return this._apiService.get(`${API_URL}/product-offers`, { params });
+  }
+
+  getTradeOffer(id: string): Observable<TradeOfferResponseModel> {
+    return this._apiService.get(`${API_URL}/trade-offers/${id}`);
   }
 
   searchSuggestions(query: string): Observable<SuggestionResponseModel> {
@@ -46,14 +48,16 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/organizations/user-organizations`);
   }
 
+  getOrganization(id: string): Observable<OrganizationResponseModel> {
+    return this._apiService.get(`${API_URL}/organizations/${id}`);
+  }
+
   searchLocations(textQuery: string): Observable<LocationModel[]> {
     const params = new HttpParams().set('textQuery', textQuery);
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  searchSuppliers(
-    query: SuppliersRequestModel
-  ): Observable<SuppliersResponseModel> {
+  searchSuppliers(query: SuppliersRequestModel): Observable<SuppliersResponseModel> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/suppliers`, { params });
   }

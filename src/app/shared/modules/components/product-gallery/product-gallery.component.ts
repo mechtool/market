@@ -1,18 +1,21 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ImagesLinkModel, ProductModel } from '#shared/modules';
-import { absoluteImagePath } from '#shared/utils/get-image';
+import { absoluteImagePath, mapStock } from '#shared/utils';
 
 @Component({
-  selector: 'my-gallery',
-  templateUrl: './gallery.component.html',
+  selector: 'my-product-gallery',
+  templateUrl: './product-gallery.component.html',
   styleUrls: [
-    './gallery.component.scss',
-    './gallery.component-768.scss'
+    './product-gallery.component.scss',
+    './product-gallery.component-768.scss'
   ],
 })
-export class GalleryComponent implements OnInit, OnDestroy {
+export class ProductGalleryComponent implements OnInit, OnDestroy {
 
   @Input() product: ProductModel;
+  @Input() supplierName: string;
+  @Input() stock: string;
+  @Input() supplierLogo: string;
 
   get images(): ImagesLinkModel[] {
     if (this.product.images.length > 10) {
@@ -20,6 +23,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return this.product.images.slice(0, 10);
     }
     return this.product.images;
+  }
+
+  get stockLevel() {
+    return mapStock(this.stock);
+  }
+
+  constructor() {
   }
 
   ngOnDestroy(): void {

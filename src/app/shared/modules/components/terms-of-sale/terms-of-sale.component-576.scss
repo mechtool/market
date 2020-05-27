@@ -1,0 +1,23 @@
+@media all and (max-width: 576px) {
+  .info_group {
+    &__small,
+    &__supplier {
+      width: 100%;
+      max-width: none;
+    }
+
+    &__label {
+      flex-grow: 1;
+      width: 50%;
+    }
+
+    &__value {
+      width: 50%;
+      text-align: left;
+      font-size: var(--font-size-13);
+      font-weight: var(--font-weight-medium);
+    }
+  }
+}
+
+

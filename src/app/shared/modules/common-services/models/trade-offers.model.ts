@@ -1,16 +1,11 @@
+import { TradeOfferStockEnumModel } from '#shared/modules/common-services/models/trade-offer-stock-enum.model';
+
 export class TradeOffersModel {
   id: string;
   price: number;
-  stock: Stock;
+  stock: TradeOfferStockEnumModel;
   supplier: TradeOffersSupplierModel;
   orderPlacingReference: string;
-}
-
-export enum Stock {
-  OUT_OF_STOCK = 'OUT_OF_STOCK',
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH'
 }
 
 export class TradeOffersSupplierModel {

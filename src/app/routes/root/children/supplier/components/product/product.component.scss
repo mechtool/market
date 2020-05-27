@@ -1,0 +1,12 @@
+.product {
+  display: flex;
+
+  &_gallery_tabs {
+    display: flex;
+    flex-direction: column;
+
+    .product_side {
+      display: none;
+    }
+  }
+}

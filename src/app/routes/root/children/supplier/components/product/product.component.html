@@ -1,4 +1,56 @@
-<div class="product">
+<div class="product" *ngIf="product && supplier && tradeOffer">
 
-  PRODUCT
+  <div class="product_gallery_tabs">
+    <div class="product_gallery">
+      <ng-container *ngTemplateOutlet="product_gallery"></ng-container>
+    </div>
+    <div class="product_side">
+      <ng-container *ngTemplateOutlet="product_side"></ng-container>
+    </div>
+    <div class="product_tabs">
+      <ng-container *ngTemplateOutlet="product_tabs"></ng-container>
+    </div>
+  </div>
+  <div class="product_side">
+    <ng-container *ngTemplateOutlet="product_side"></ng-container>
+  </div>
+
 </div>
+
+<ng-template #product_gallery>
+  <my-product-gallery
+    [product]="product"
+    [supplierName]="supplier.name"
+    [stock]="tradeOffer.stock?.stockBalanceSummary?.level"
+    [supplierLogo]="supplierLogo"
+  ></my-product-gallery>
+</ng-template>
+
+<ng-template #product_tabs>
+  <nz-tabset nzTabPosition="top" nzType="card">
+    <nz-tab nzTitle="Условия продажи">
+      <my-terms-of-sale
+        [tradeOffer]="tradeOffer"
+      ></my-terms-of-sale>
+    </nz-tab>
+
+    <nz-tab nzTitle="Описание товара" [nzDisabled]="hasProductDescription">
+      <my-product-description
+        [product]="product"
+      ></my-product-description>
+    </nz-tab>
+
+    <nz-tab nzTitle="О поставщике">
+      <my-about-supplier
+        [supplier]="supplier"
+        [supplierLogo]="supplierLogo"
+      ></my-about-supplier>
+    </nz-tab>
+  </nz-tabset>
+</ng-template>
+
+<ng-template #product_side>
+  <my-product-order
+    [tradeOffer]="tradeOffer"
+  ></my-product-order>
+</ng-template>

@@ -18,7 +18,7 @@
   }
 }
 
-.carousel + .specs {
+.carousel + .product_specs {
   display: none;
 }
 
@@ -51,7 +51,7 @@
   }
 }
 
-.specs {
+.product_specs {
   font-size: var(--font-size-12);
   line-height: 15px;
   order: 3;
@@ -67,6 +67,12 @@
       opacity: 0.6;
       flex-shrink: 0;
       font-weight: var(--font-weight-medium);
+    }
+
+    & .supplier_image {
+      width: 15px;
+      height: 15px;
+      border-radius: 2px;
     }
   }
 }

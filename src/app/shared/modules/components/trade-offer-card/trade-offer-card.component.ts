@@ -17,6 +17,10 @@ export class TradeOfferCardComponent implements OnInit, OnDestroy {
 
   @Input() tradeOffer: TradeOfferInfoModel;
 
+  get argb() {
+    return randomARGB();
+  }
+
   constructor() {
   }
 
@@ -24,9 +28,5 @@ export class TradeOfferCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-  }
-
-  get argb() {
-    return randomARGB();
   }
 }

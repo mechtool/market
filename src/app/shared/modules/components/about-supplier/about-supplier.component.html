@@ -1,0 +1,46 @@
+<div class="section_paragraph" *ngIf="supplier">
+  <h3>Поставщик</h3>
+  <div class="supplier_title info_group">
+    <span class="supplier_image" [style]="{'background-color': supplierLogo}"></span>
+    <span class="supplier_name">{{supplier.name}}</span>
+  </div>
+  <div class="info_group__supplier">
+    <div class="info_group">
+      <span class="info_group__label">ИНН</span>
+      <span class="info_group__value">{{supplier.inn}}</span>
+    </div>
+    <div class="info_group" *ngIf="supplier.kpp">
+      <span class="info_group__label">КПП</span>
+      <span class="info_group__value">{{supplier.kpp}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="supplier.phone || supplier.email">
+    <h3>Контакная информация</h3>
+    <div class="info_group__supplier">
+      <div class="info_group" *ngIf="supplier.personName">
+        <span class="info_group__label">Контактное лицо</span>
+        <span class="info_group__value">{{supplier.personName}}</span>
+      </div>
+      <div class="info_group" *ngIf="supplier.phone">
+        <span class="info_group__label">Телефон</span>
+        <span class="info_group__value">{{supplier.phone}}</span>
+      </div>
+      <div class="info_group" *ngIf="supplier.email">
+        <span class="info_group__label">E-mail</span>
+        <span class="info_group__value"><a href="mailto:{{supplier.email}}">{{supplier.email}}</a></span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="supplier.description">
+    <h3>Описание поставщика</h3>
+    <p>{{supplier.description}}</p>
+  </div>
+</div>
+
+<div class="section_paragraph">
+  <div class="section__btns">
+    <a [routerLink]="['/supplier/' + supplier.id + '/product']" class="btn btn-gray">В магазин поставщика</a>
+  </div>
+</div>

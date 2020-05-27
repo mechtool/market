@@ -1,0 +1,42 @@
+<div class="section_paragraph">
+  <h3>Особенности предложения</h3>
+  <div class="info_group__small">
+    <div class="info_group" *ngIf="tradeOffer.stock?.stockBalanceSummary?.level">
+      <span class="info_group__label">В наличие</span>
+      <span class="info_group__value">{{stockLevel}}</span>
+    </div>
+    <div class="info_group">
+      <span class="info_group__label">В упаковке</span>
+      <span class="info_group__value">{{packaging}}</span>
+    </div>
+    <div class="info_group" *ngIf="orderRestrictions">
+      <span class="info_group__label">Минимальая сумма заказа</span>
+      <span class="info_group__value">{{orderRestrictions | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="offerDescription">
+    <h3>Описание предложения</h3>
+    <p>{{offerDescription}}</p>
+  </div>
+
+</div>
+
+<div class="section_paragraph">
+  <div class="info_group__small">
+    <div class="info_group" *ngIf="maxDaysForShipment">
+      <span class="info_group__label">Срок поставки</span>
+      <span
+        class="info_group__value">{{maxDaysForShipment}} {{maxDaysForShipment | myDeclension: 'день': 'дня': 'дней'}}</span>
+    </div>
+    <div class="info_group" *ngIf="deliveryMethod">
+      <span class="info_group__label">Способ доставки</span>
+      <span class="info_group__value">{{deliveryMethod}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="delivery">
+    <h3>Регионы доставки</h3>
+    <p>{{delivery}}</p>
+  </div>
+</div>

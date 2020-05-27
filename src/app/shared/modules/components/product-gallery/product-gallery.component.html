@@ -1,0 +1,66 @@
+<div class="product-base" *ngIf="product">
+  <div class="title-block">
+    <h2 class="title">{{product.productName}}</h2>
+    <div class="product_specs">
+      <div class="product_specs__item" *ngIf="product.manufacturer?.tradeMark">
+        <span class="product_specs__item__label">Наименование бренда:</span>
+        <span class="product_specs__item__value">{{product.manufacturer?.tradeMark}}</span>
+      </div>
+      <div class="product_specs__item" *ngIf="product.productPartNumber">
+        <span class="product_specs__item__label">Артикул:</span>
+        <span class="product_specs__item__value">{{product.productPartNumber}}</span>
+      </div>
+      <div class="product_specs__item" *ngIf="product.productBarCodes?.length">
+        <span class="product_specs__item__label">Штрихкоды:</span>
+        <span class="product_specs__item__value">{{product.productBarCodes}}</span>
+      </div>
+      <div class="product_specs__item" *ngIf="supplierName">
+        <span class="product_specs__item__label">Поставщик:</span>
+        <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
+        <span class="product_specs__item__value"><strong>&nbsp;&nbsp;{{supplierName}}</strong></span>
+      </div>
+      <div class="product_specs__item" *ngIf="stock">
+        <span class="product_specs__item__label">Наличие:</span>
+        <span class="product_specs__item__value"><strong>{{stockLevel}}</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel">
+
+    <div class="pic" *ngIf="!product.images || product.images?.length === 1">
+      <img src="{{firstImageUrl(product.images)}}" alt="">
+    </div>
+
+    <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
+      <div nz-carousel-content *ngFor="let item of images">
+        <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + imageUrl(item.href) + ')'}"></div>
+      </div>
+    </nz-carousel>
+
+  </div>
+
+  <div class="product_specs">
+    <div class="product_specs__item" *ngIf="product.manufacturer?.tradeMark">
+      <span class="product_specs__item__label">Наименование бренда:</span>
+      <span class="product_specs__item__value">{{product.manufacturer?.tradeMark}}</span>
+    </div>
+    <div class="product_specs__item" *ngIf="product.productPartNumber">
+      <span class="product_specs__item__label">Артикул:</span>
+      <span class="product_specs__item__value">{{product.productPartNumber}}</span>
+    </div>
+    <div class="product_specs__item" *ngIf="product.productBarCodes?.length">
+      <span class="product_specs__item__label">Штрихкоды:</span>
+      <span class="product_specs__item__value">{{product.productBarCodes}}</span>
+    </div>
+    <div class="product_specs__item" *ngIf="supplierName">
+      <span class="product_specs__item__label">Поставщик:</span>
+      <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
+      <span class="product_specs__item__value"><strong>&nbsp;&nbsp;{{supplierName}}</strong></span>
+    </div>
+    <div class="product_specs__item" *ngIf="stock">
+      <span class="product_specs__item__label">Наличие:</span>
+      <span class="product_specs__item__value"><strong>{{stock}}</strong></span>
+    </div>
+  </div>
+</div>

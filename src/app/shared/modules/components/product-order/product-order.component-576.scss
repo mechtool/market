@@ -1,0 +1,15 @@
+@media all and (max-width: 576px) {
+  .product_side {
+    .to_cart__wrap {
+      width: 100%;
+    }
+
+    .price_matrix {
+      display: none;
+    }
+  }
+
+  .to_cart__wrap .price_matrix__btn {
+    display: block;
+  }
+}

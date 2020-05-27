@@ -8,6 +8,6 @@ export function getQueryStringWithoutParam(paramName: string): string {
     },
   );
   delete objURL[paramName];
-  // tslint:disable-next-line: max-line-length
+  // tslint:disable-next-line:max-line-length prefer-template
   return Object.keys(objURL).map(key => key + '=' + objURL[key]).join('&') ? `?${Object.keys(objURL).map(key => key + '=' + objURL[key]).join('&')}` : '';
 }

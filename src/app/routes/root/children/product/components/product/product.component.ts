@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductModel, SortModel, TradeOfferInfoModel, TradeOffersModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
+import { mapStock } from '#shared/utils';
 
 @Component({
   templateUrl: './product.component.html',
@@ -14,12 +15,11 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 export class ProductComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   product: ProductModel;
-  offers: TradeOffersModel[];
   tradeOffers: TradeOfferInfoModel[];
   sort: SortModel;
 
   get hasProductDescription(): boolean {
-    return !(!!this.product.productDescription || !!this.product.features);
+    return !(this.product.productDescription || this.product.features?.length);
   }
 
   get offerTotal(): string {
@@ -36,7 +36,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this._activatedRoute.queryParams.subscribe((param) => {
       this.sort = param.sort ? param.sort : SortModel.ASC;
     });
-    this._initNomenclature();
+    this._initProductOffers();
   }
 
   ngOnInit() {
@@ -56,7 +56,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _initNomenclature() {
+  private _initProductOffers() {
     combineLatest([this._activatedRoute.params])
       .pipe(
         switchMap(([params]) => {
@@ -71,7 +71,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       .subscribe((model) => {
         this.tradeOffers = this._mapOffers(model.offers);
         this.product = model.product;
-        this.offers = model.offers;
         this._initBreadcrumbs();
       }, (err) => {
         console.error('error', err);
@@ -90,7 +89,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         routerLink: '/'
       },
       {
-        label: 'Продукты',
+        label: 'Товары',
       },
       {
         label: this.product.productName,
@@ -104,12 +103,12 @@ export class ProductComponent implements OnInit, OnDestroy {
       return {
         id: offer.id,
         description: 'Описание специальных условия от поставщика, которые у него находятся в специальной вкладке' +
-          ' и выводится первые четыре строки этой инфы',
+          ' и выводится первые четыре строки этой инфы', // todo пока негде взять!!!
         price: offer.price,
-        stock: 679, // todo пока негде взять!!!
+        stock: mapStock(offer.stock),
         supplierId: offer.supplier.id,
         supplierName: offer.supplier.name,
-        isSpecialPrice: true,
+        isSpecialPrice: true, // todo пока негде взять!!!
       };
     });
   }

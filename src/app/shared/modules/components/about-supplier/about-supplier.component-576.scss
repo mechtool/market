@@ -1,0 +1,25 @@
+@media all and (max-width: 576px) {
+  .info_group__small,
+  .info_group__supplier {
+    width: 100%;
+    max-width: none;
+  }
+
+  .info_group__label {
+    flex-grow: 1;
+    width: 50%;
+  }
+
+  .info_group__value {
+    width: 50%;
+    text-align: left;
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .section__btns .btn {
+    background-color: var(--color-accent-light);
+  }
+}
+
+

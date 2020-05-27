@@ -1,9 +1,9 @@
-<div class="section_paragraph" *ngIf="product.productDescription">
+<div class="section_paragraph" *ngIf="product?.productDescription">
   <h3>О товаре</h3>
   <p itemprop="description">{{product.productDescription}}</p>
 </div>
 
-<div class="section_paragraph" *ngIf="product.features">
+<div class="section_paragraph" *ngIf="product?.features?.length">
   <h3>Краткие характеристики</h3>
   <ul>
     <li *ngFor="let item of product.features">{{feature(item)}}</li>

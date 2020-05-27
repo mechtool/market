@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit, HostBinding } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { NavigationService, ResponsiveService } from '#shared/modules';
-import { filter, takeUntil } from 'rxjs/operators';
 import { BreadcrumbsService } from './components/breadcrumbs/breadcrumbs.service';
 
 @Component({
@@ -39,7 +38,8 @@ export class RootComponent implements OnInit, OnDestroy {
     this._responsiveService.init();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();

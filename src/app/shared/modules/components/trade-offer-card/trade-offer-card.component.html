@@ -13,7 +13,7 @@
     <span class="catalog_item__info">
 
       <span class="catalog_item__count tooltip" nz-tooltip nzTooltipTitle="Наличие товара"
-            *ngIf="tradeOffer.stock">{{tradeOffer.stock}} шт.</span>
+            *ngIf="tradeOffer.stock">{{tradeOffer.stock}}</span>
 
       <span class="catalog_item__price"
             *ngIf="tradeOffer.price">{{tradeOffer.price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>

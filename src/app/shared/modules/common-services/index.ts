@@ -12,3 +12,5 @@ export * from './local-storage.service';
 export * from './location.service';
 export * from './category.service';
 export * from './models';
+export * from './trade-offers.service';
+export * from './product.service';
