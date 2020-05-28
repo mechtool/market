@@ -10,7 +10,10 @@ import {
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, LocalStorageService } from '#shared/modules/common-services';
+import {
+  CategoryService,
+  LocalStorageService,
+} from '#shared/modules/common-services';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
@@ -34,13 +37,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _productService: ProductService,
     private _categoryService: CategoryService,
-    private _localStorageService: LocalStorageService,
+    private _localStorageService: LocalStorageService
   ) {
     this._watchUrlChanges();
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this._unsubscriber$.next();
@@ -63,20 +65,25 @@ export class CategoryComponent implements OnInit, OnDestroy {
         priceFrom: availableFilters.priceFrom,
         priceTo: availableFilters.priceTo,
         sort: filters.sort,
-      }
+      },
     });
   }
 
   refreshBreadcrumbs($event: CategoryModel[]): void {
-    const breadcrumbs = $event.reduce((accum, curr) => {
-      accum.push({
-        label: curr.name,
-        routerLink: `/category/${curr.id}`
-      });
-      return accum;
-    }, <BreadcrumbItemModel[]>[{
-      label: 'Категории товаров',
-    }]);
+    const breadcrumbs = $event.reduce(
+      (accum, curr) => {
+        accum.push({
+          label: curr.name,
+          routerLink: `/category/${curr.id}`,
+        });
+        return accum;
+      },
+      <BreadcrumbItemModel[]>[
+        {
+          label: 'Каталог',
+        },
+      ]
+    );
     this._setBreadcrumbs(breadcrumbs);
   }
 
@@ -84,47 +91,52 @@ export class CategoryComponent implements OnInit, OnDestroy {
     combineLatest([
       this._activatedRoute.params,
       this._activatedRoute.queryParams,
-    ]).pipe(
-      tap(([params, queryParams]) => {
-        this.query = queryParams.q;
-        this.searchFilters = {
-          supplier: queryParams.supplier,
-          trademark: queryParams.trademark,
-          deliveryMethod: queryParams.deliveryMethod,
-          delivery: queryParams.delivery,
-          pickup: queryParams.pickup,
-          inStock: queryParams.inStock,
-          onlyWithImages: queryParams.onlyWithImages,
-          priceFrom: queryParams.priceFrom,
-          priceTo: queryParams.priceTo,
-        };
-        this.sort = queryParams.sort;
-      }),
-      switchMap(([params, queryParams]) => {
-        this.categoryId = params.id;
-        return this._categoryService.getCategoryTree(this.categoryId);
-      }),
-      switchMap((res) => {
-        // todo: поменять логику когда сделаем дерево категорий
-        this.categoryModel = res.find(cat => cat.id === this.categoryId);
-        this.refreshBreadcrumbs(res);
-        return this._productService.searchProductOffers({
-          query: this.query,
-          categoryId: this.categoryId,
-          availableFilters: this.searchFilters,
-          sort: this.sort,
-        });
-      }),
-      catchError((err) => {
-        console.error('error', err);
-        return throwError(err);
-      }),
-    ).subscribe((product) => {
-      this.productOffers = product.productOffers;
-      this.productsTotal = product.productsTotal;
-    }, (err) => {
-      console.error('error', err);
-    });
+    ])
+      .pipe(
+        tap(([params, queryParams]) => {
+          this.query = queryParams.q;
+          this.searchFilters = {
+            supplier: queryParams.supplier,
+            trademark: queryParams.trademark,
+            deliveryMethod: queryParams.deliveryMethod,
+            delivery: queryParams.delivery,
+            pickup: queryParams.pickup,
+            inStock: queryParams.inStock,
+            onlyWithImages: queryParams.onlyWithImages,
+            priceFrom: queryParams.priceFrom,
+            priceTo: queryParams.priceTo,
+          };
+          this.sort = queryParams.sort;
+        }),
+        switchMap(([params, queryParams]) => {
+          this.categoryId = params.id;
+          return this._categoryService.getCategoryTree(this.categoryId);
+        }),
+        switchMap((res) => {
+          // todo: поменять логику когда сделаем дерево категорий
+          this.categoryModel = res.find((cat) => cat.id === this.categoryId);
+          this.refreshBreadcrumbs(res);
+          return this._productService.searchProductOffers({
+            query: this.query,
+            categoryId: this.categoryId,
+            availableFilters: this.searchFilters,
+            sort: this.sort,
+          });
+        }),
+        catchError((err) => {
+          console.error('error', err);
+          return throwError(err);
+        })
+      )
+      .subscribe(
+        (product) => {
+          this.productOffers = product.productOffers;
+          this.productsTotal = product.productsTotal;
+        },
+        (err) => {
+          console.error('error', err);
+        }
+      );
   }
 
   private _setBreadcrumbs(breadcrumbs: BreadcrumbItemModel[]): void {

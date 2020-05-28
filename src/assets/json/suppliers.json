@@ -1,0 +1,132 @@
+{
+  "page":{
+    "size":20,
+    "totalElements":49,
+    "totalPages":3,
+    "number":0
+  },
+  "_embedded":{
+    "suppliers":[
+      {
+        "id":"c00dbfdd-3be2-481b-a751-53847c16f773",
+        "name":"ООО 1С-Софт",
+        "legalId":"7730643014:771301001",
+        "description":null
+      },
+      {
+        "id":"cf1dd3bb-16b9-4e86-aa7b-c7b14373587f",
+        "name":"ООО \"БЕТХОВЕН_test\"",
+        "legalId":"7734168747:774201001",
+        "description":null
+      },
+      {
+        "id":"91ef3066-1d8a-4476-8909-5b3c84ec380f",
+        "name":"ОАО \"ВОТКИНСКАЯ ПРОМЫШЛЕННАЯ КОМПАНИЯ\"",
+        "legalId":"1828011980:182801001",
+        "description":null
+      },
+      {
+        "id":"5d4f094c-a078-4961-935c-1a1a5f1a8e96",
+        "name":"ООО ГИБИСКУС",
+        "legalId":"7342148725:632101001",
+        "description":null
+      },
+      {
+        "id":"521ed78d-f787-4329-aa41-6b4c3b401664",
+        "name":"ООО ГИБИСКУС1_6_2",
+        "legalId":"0845512142:257045056",
+        "description":null
+      },
+      {
+        "id":"8efb7fbe-8aad-47cd-b978-5221ec6304e5",
+        "name":"ООО ГИБИСКУС1_6_4",
+        "legalId":"6372549037:854544837",
+        "description":null
+      },
+      {
+        "id":"11ea5884-9119-4d83-adbc-9f755c393e06",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372622811:854544837",
+        "description":null
+      },
+      {
+        "id":"1b853d5a-be84-4580-bbfd-ec5adc763ca6",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372551438:854544837",
+        "description":null
+      },
+      {
+        "id":"2ac0aaae-f6a0-42de-b8d6-329f065f5be4",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372579710:854544837",
+        "description":null
+      },
+      {
+        "id":"629bec58-2d0b-46ac-bd31-c632515b02ac",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372605598:854544837",
+        "description":null
+      },
+      {
+        "id":"63d48eb0-756e-4423-afbb-9ee864da8a60",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372549179:854544837",
+        "description":null
+      },
+      {
+        "id":"673eb16b-f758-45a3-8cd7-7c8aae032835",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372555868:854544837",
+        "description":null
+      },
+      {
+        "id":"7bbed254-402c-4407-9c08-f27738dd0f4b",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372561287:854544837",
+        "description":null
+      },
+      {
+        "id":"7f6e29fc-517b-4b41-9a85-2d29c5f2d7f3",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372596912:854544837",
+        "description":null
+      },
+      {
+        "id":"94fe3a33-5435-4932-8c63-b105f4d703f8",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372614247:854544837",
+        "description":null
+      },
+      {
+        "id":"95166cf8-340d-4717-aacf-62515fb88327",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372363750:854544837",
+        "description":null
+      },
+      {
+        "id":"9afd40c9-1d69-474f-820b-93f63a066392",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372571063:854544837",
+        "description":null
+      },
+      {
+        "id":"9dd5dd4e-0a21-46a8-a65e-fa9b9870767b",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372550063:854544837",
+        "description":null
+      },
+      {
+        "id":"9f9a2c22-860d-4d2f-aa7e-bc2358e09868",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372588400:854544837",
+        "description":null
+      },
+      {
+        "id":"b5025d40-4c6b-4cba-a4e3-542d3419dc7a",
+        "name":"ООО ГИБИСКУС1_7_1",
+        "legalId":"6372372336:854544837",
+        "description":null
+      }
+    ]
+  }
+}

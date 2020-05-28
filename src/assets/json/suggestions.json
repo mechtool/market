@@ -1,0 +1,100 @@
+{
+  "products":[
+    {
+      "id":"70ecf6f1-b2e6-4315-96cc-a66506148099",
+      "name":"Разрыхлитель для теста ARO, 12г",
+      "offers":1,
+      "highlight":"Разрыхлитель для <em>теста</em> ARO, 12г",
+      "images":[
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        }
+      ]
+    },
+    {
+      "id":"e6284a6e-ec28-4d04-b194-e5cc44a6b967",
+      "name":"Разрыхлитель теста Dr.Oetker,10г",
+      "offers":1,
+      "highlight":"Разрыхлитель <em>теста</em> Dr.Oetker,10г",
+      "images":[
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        },
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        }
+      ]
+    },
+    {
+      "id":"641d4c2d-7f98-4f66-b988-ddccdffda4ed",
+      "name":"Тарталетки FINE LIFE из слоеного теста, 135 г",
+      "offers":1,
+      "highlight":"Тарталетки FINE LIFE из слоеного <em>теста</em>, 135 г"
+    },
+    {
+      "id":"34640575-0ea2-43e4-a768-18547be21183",
+      "name":"Тарталетки FINE LIFE из слоеного теста, 200 г",
+      "offers":1,
+      "highlight":"Тарталетки FINE LIFE из слоеного <em>теста</em>, 200 г"
+    },
+    {
+      "id":"70cc8f8c-26a2-473a-b27a-9ffdac744575",
+      "name":"Тарталетки Metro Chef маленькие из песочного теста 80штук, 600г",
+      "offers":1,
+      "highlight":"Тарталетки Metro Chef маленькие из песочного <em>теста</em> 80штук, 600г",
+      "images":[
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        }
+      ]
+    },
+    {
+      "id":"7ffa14d8-c991-48e4-96ea-5a46d0af13e5",
+      "name":"Тарталетки Metro Chef большие из песочного теста 27штук, 560г",
+      "offers":1,
+      "highlight":"Тарталетки Metro Chef большие из песочного <em>теста</em> 27штук, 560г",
+      "images":[
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        }
+      ]
+    },
+    {
+      "id":"cb97ca3d-d2f6-41c8-81c9-33a5fc5275f8",
+      "name":"Тарталетки Metro Chef большие из слоеного теста 27штук, 450г",
+      "offers":1,
+      "highlight":"Тарталетки Metro Chef большие из слоеного <em>теста</em> 27штук, 450г",
+      "images":[
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        }
+      ]
+    },
+    {
+      "id":"6cc5a934-a030-46c5-a708-e440873e3750",
+      "name":"Тарталетки Metro Chef маленькие из слоеного теста 100штук, 600г",
+      "offers":1,
+      "highlight":"Тарталетки Metro Chef маленькие из слоеного <em>теста</em> 100штук, 600г",
+      "images":[
+        {
+          "href":"https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
+        }
+      ]
+    },
+    {
+      "id":"add66e74-db37-444c-bcb4-599fb7b1c3a8",
+      "name":"350Г ЛАПША ДОМАШН.ШИРОК ТЕСТОВ *",
+      "offers":1,
+      "highlight":"350Г ЛАПША ДОМАШН.ШИРОК <em>ТЕСТОВ</em> *"
+    },
+    {
+      "id":"40401bd5-5532-4cd7-b891-7fc288b9ee57",
+      "name":"350Г ЛАПША ДОМАШН.ТОНК. ТЕСТОВ *",
+      "offers":1,
+      "highlight":"<em>ТЕСТОВ</em> *"
+    }
+  ],
+  "categories":[
+
+  ]
+}

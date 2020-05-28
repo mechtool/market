@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:remote": "ng serve --configuration=remote",
     "build:dev": "ng build --configuration=dev",
     "build:stage": "ng build --configuration=stage",
     "build:prod": "ng build --configuration=production",
+    "build:remote": "ng build --configuration=remote",
     "build": "npm run build:dev && npm run build:stage && npm run build:prod",
     "test": "ng test",
     "lint": "ng lint",

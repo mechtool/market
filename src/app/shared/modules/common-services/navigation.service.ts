@@ -57,7 +57,7 @@ export class NavigationService implements OnDestroy {
         routerLink: ['/search'],
       },
       {
-        label: 'Категории товаров',
+        label: 'Каталог',
         icon: 'category',
         command: () => {
           this.toggleCategoriesLayer();
@@ -107,7 +107,7 @@ export class NavigationService implements OnDestroy {
         routerLink: ['/search'],
       },
       {
-        label: 'Категории товаров',
+        label: 'Каталог',
         icon: 'category',
         command: () => {
           this.toggleCategoriesLayer();

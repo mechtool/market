@@ -52,7 +52,7 @@
       <button class="categories__btn_close btn_close" (click)="handleCategories()"></button>
     </div>
     <div class="categories_list">
-      <div class="categories_header">Категории товаров</div>
+      <div class="categories_header">Каталог</div>
       <nav>
           <ul class="nav_list">
               <li *ngFor="let categoryItem of categoryItems$ | async">
@@ -64,7 +64,7 @@
       </nav>
     </div>
     <div class="categories_panel" [ngClass]="{'main-category-selected': mainCategorySelectedId}">
-      <div class="categories__mobile_back" (click)="setMainCategorySelectedId(null)">Категории товаров</div>
+      <div class="categories__mobile_back" (click)="setMainCategorySelectedId(null)">Каталог</div>
       <ng-container *ngFor="let categoryItem of categoryItems$ | async">
         <div class="category_item" [ngClass]="{'showed': categoryItem.id == mainCategorySelectedId}">
           <div class="categories_header">{{categoryItem.name}}</div>

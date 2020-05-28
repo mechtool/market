@@ -127,6 +127,36 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "remote": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.remote.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "outputPath": "dist/remote",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": true,
+              "aot": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "4mb",
+                  "maximumError": "10mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
             }
           }
         },
@@ -143,8 +173,9 @@
             "sslCert": "ssl/server.crt"
           },
           "configurations": {
-            "test": {
-              "browserTarget": "mynew:build:test"
+            "remote": {
+              "browserTarget": "mynew:build:remote",
+              "proxyConfig": "./proxy-remote.conf.js"
             },
             "dev": {
               "browserTarget": "mynew:build:dev"
