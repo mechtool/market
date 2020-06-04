@@ -40,10 +40,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   isInputFocused = false;
   visibleFilterForm = false;
   visibleLocationForm = false;
-  MIN_QUERY_LENGTH = 3;
-  MAX_QUERY_LENGTH = 20;
   userLocation: LocationModel;
   @Input() query: string;
+  @Input() minQueryLength = 3;
+  @Input() maxQueryLength = 20;
   @Input() placeholder = 'Поиск товаров';
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() sort = SortModel.ASC;
@@ -102,7 +102,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
       availableFilters: this.availableFilters || new DefaultSearchAvailableModel(),
       sort: this.sort,
     };
-    if (queryParam.length >= this.MIN_QUERY_LENGTH) {
+    if (queryParam.length >= this.minQueryLength) {
       this.submitClick.emit(groupAllQueryFilters);
     }
   }
@@ -147,7 +147,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   private _initForm(): void {
     this._initUserLocation();
     this.form = this._fb.group({
-      query: ['', [Validators.required, Validators.minLength(this.MIN_QUERY_LENGTH)]]
+      query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]]
     });
   }
 
@@ -163,7 +163,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.form.get('query').valueChanges
       .pipe(
         takeUntil(this._unsubscriber$),
-        filter(res => res.length >= this.MIN_QUERY_LENGTH && res.length <= this.MAX_QUERY_LENGTH),
+        filter(res => res.length >= this.minQueryLength && res.length <= this.maxQueryLength),
       )
       .subscribe((res) => {
         this.queryChange.emit(res);

@@ -32,13 +32,13 @@
       <ng-container *ngIf="isShowSuggestions">
         <nz-auto-option [nzValue]="form.controls['query'].value">
           <my-search-bar-history
-            *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < MIN_QUERY_LENGTH)"
+            *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < minQueryLength)"
           ></my-search-bar-history>
 
           <my-search-bar-products
             [products]="productsSuggestions"
             [categories]="categoriesSuggestions"
-            *ngIf="searchQuery.length >= MIN_QUERY_LENGTH"
+            *ngIf="searchQuery.length >= minQueryLength"
           ></my-search-bar-products>
         </nz-auto-option>
       </ng-container>
