@@ -6,6 +6,10 @@
   min-height: 100vh;
   transition: width 0.1s;
 
+  a:hover {
+    text-decoration: none;
+  }
+
   .logo {
     display: flex;
     align-items: center;
@@ -64,7 +68,7 @@
       a {
         cursor: pointer;
         display: flex;
-        color: #3a3a3a;
+        color: var(--color-secondary);
         align-items: center;
         height: 50px;
         padding-left: 20px;
@@ -72,6 +76,7 @@
         transition: background-color 0.2s, padding-left 0.1s;
 
         &.active {
+          color: var(--color-primary);
           background-color: #fbfbfb;
         }
         &:hover {
@@ -113,7 +118,7 @@
       padding: 0 3px;
       background-color: #fdc82f;
       border-radius: 2px;
-      color: #3a3a3a;
+      color: var(--color-secondary);
       margin-left: 8px;
     }
 
@@ -199,7 +204,7 @@
           width: 6px;
           height: 6px;
           margin-right: 0;
-          background: #3a3a3a;
+          background: var(--color-secondary);
           border-radius: 50%;
         }
       }

@@ -1,4 +1,4 @@
-<div class="catalog_item__inner">
+<div class="catalog_item__inner"  (click)="clickSupplier()" >
   <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
   <span class="catalog_item__descr">
         <span class="catalog_item__title">
@@ -6,9 +6,6 @@
         </span>
         <span class="catalog_item__about">
             {{supplier.description}}
-        </span>
-        <span class="catalog_item__btns">
-            <a (click)="clickSupplier()" class="btn btn-gray-bordered btn-outer-shop">В магазин</a>
         </span>
     </span>
 </div>

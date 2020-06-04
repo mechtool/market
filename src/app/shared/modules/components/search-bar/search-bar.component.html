@@ -1,4 +1,4 @@
-<div class="search" [ngClass]="{'hovered': isInputHovered, 'focused': isInputFocused}">
+<div class="search" [ngClass]="{'focused': isInputFocused}">
   <form [formGroup]="form" (ngSubmit)="submit()">
 
     <!-- todo: Переделать input и nz-autocomplete, так же поправить отрисовку дропдауна при изменении размера страницы!!! -->
@@ -12,8 +12,6 @@
         name="query"
         formControlName="query"
         [nzAutocomplete]="auto"
-        (mouseenter)="isInputHovered = true"
-        (mouseleave)="isInputHovered = false"
         (focus)="isInputFocused = true;"
         (blur)="isInputFocused = false"/>
 

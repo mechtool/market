@@ -1,7 +1,5 @@
 <div *ngIf="supplierData">
 
-  <h3>Поставщики</h3><br>
-
   <my-search-bar
     [query]="query"
     placeholder="Поиск поставщиков"
@@ -15,8 +13,8 @@
 
   <div class="catalog_header">
     <div class="catalog_header__count">
-      <span class="catalog_header__title">Всего найдено</span>
-      <strong>{{supplierData.page?.totalElements}}</strong>{{supplierData.page?.totalElements | myDeclension: ' поставщик': ' поставщика': ' поставщиков'}}
+      <span class="catalog_header__title">Все поставщики</span>
+      {{supplierData.page?.totalElements}}{{supplierData.page?.totalElements | myDeclension: ' поставщик': ' поставщика': ' поставщиков'}}
     </div>
   </div>
 

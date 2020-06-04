@@ -140,17 +140,21 @@
   }
 
   & .tooltip {
-    border-color: #fdc82f;
+    border-color: #d7d7d7;
     font-weight: bold;
     letter-spacing: 0.2px;
     color: #70706f;
     padding: 0 3px;
+
+    &:hover {
+      background-color: var(--color-accent);
+    }
   }
 
   &:hover {
+    cursor: pointer;
 
     & .tooltip {
-      background-color: #fdc82f;
       border-color: #fdc82f;
     }
 

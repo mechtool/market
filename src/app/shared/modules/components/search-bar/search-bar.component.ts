@@ -36,7 +36,6 @@ import { Router } from '@angular/router';
 export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   private _unsubscriber$: Subject<any> = new Subject();
   form: FormGroup;
-  isInputHovered = false;
   isInputFocused = false;
   visibleFilterForm = false;
   visibleLocationForm = false;

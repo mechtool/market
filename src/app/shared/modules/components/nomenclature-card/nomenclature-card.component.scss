@@ -9,26 +9,60 @@
     width: 16.66666%;
     flex-basis: 16.66666%;
   }
+  :host-context(main.content.wide) {
+    width: 14.285%;
+    flex-basis: 14.285%;
+  }
 }
 
 @media (max-width: 1880px) {
   :host {
+    width: 16.66666%;
+    flex-basis: 16.66666%;
+  }
+}
+
+@media (max-width: 1700px) {
+  :host {
+    width: 20%;
+    flex-basis: 20%;
+  }
+  :host-context(main.content.wide) {
+    width: 16.66666%;
+    flex-basis: 16.66666%;
+  }
+}
+
+@media (max-width: 1500px) {
+  :host {
+    width: 25%;
+    flex-basis: 25%;
+  }
+  :host-context(main.content.wide) {
     width: 20%;
     flex-basis: 20%;
   }
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1300px) {
+  :host {
+    width: 20%;
+    flex-basis: 20%;
+  }
+  :host-context(main.content.wide) {
+    width: 16.66666%;
+    flex-basis: 16.66666%;
+  }
+}
+
+@media (max-width: 1200px) {
   :host {
     width: 25%;
     flex-basis: 25%;
   }
-}
-
-@media (max-width: 1380px) {
-  :host {
-    width: 25%;
-    flex-basis: 25%;
+  :host-context(main.content.wide) {
+    width: 20%;
+    flex-basis: 20%;
   }
 }
 
@@ -54,8 +88,6 @@
     padding: 0;
   }
 }
-
-//
 
 .nomenclature-card {
   display: flex;

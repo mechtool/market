@@ -7,11 +7,6 @@
     font-size: var(--font-size-18);
     line-height: 23px;
     margin-right: 20px;
-
-    strong {
-      font-weight: var(--font-weight-medium);
-      letter-spacing: 0.11em;
-    }
   }
 
   &__title {
@@ -27,7 +22,6 @@
 .suppliers_infinite_scroll {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -10px;
 }
 
 .catalog {
