@@ -4,6 +4,13 @@
   margin-bottom: 20px;
   margin-top: 20px;
 
+  nz-breadcrumb-item {
+    font-weight: var(--font-weight-light);
+    line-height: 19px;
+    color: #908d8d;
+    font-size: var(--font-size-15);
+  }
+
   span {
     list-style: none none;
     display: inline-block;
@@ -11,12 +18,8 @@
   }
 
   a {
-    font-weight: var(--font-weight-light);
-    line-height: 19px;
-    color: #908D8D;
-    font-size: var(--font-size-15);
-
     &:hover {
+      color: inherit;
       text-decoration: underline;
     }
   }

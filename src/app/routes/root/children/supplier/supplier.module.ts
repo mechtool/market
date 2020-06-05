@@ -11,7 +11,8 @@ import {
   ProductOrderModule,
   SearchBarModule,
   SupplierCardModule,
-  TermsOfSaleModule
+  TermsOfSaleModule,
+  CardModule,
 } from '#shared/modules';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -35,6 +36,7 @@ import { NzTabsModule } from 'ng-zorro-antd';
     TermsOfSaleModule,
     AboutSupplierModule,
     ProductOrderModule,
+    CardModule,
   ],
   declarations: [
     SupplierListComponent,

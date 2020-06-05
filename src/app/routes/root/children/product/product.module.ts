@@ -23,6 +23,7 @@ import {
   SearchBarModule,
   SearchResultsModule,
   TradeOfferCardModule,
+  CardModule,
 } from '#shared/modules';
 import { NzAlertModule, NzCarouselModule, NzDropDownModule, NzTabsModule, } from 'ng-zorro-antd';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
@@ -47,6 +48,7 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
     ProductDescriptionModule,
     ProductGalleryModule,
     NzCarouselModule,
+    CardModule,
   ],
   declarations: [
     Code404Component,

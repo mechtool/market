@@ -41,6 +41,11 @@
     .banner__descr {
       color: #000000;
     }
+
+    .btn_banner {
+      background-color: var(--color-accent-light);
+      border-color: var(--color-accent-light);
+    }
   }
 
   h3 {

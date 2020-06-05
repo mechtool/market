@@ -37,7 +37,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   private _unsubscriber$: Subject<any> = new Subject();
   form: FormGroup;
   isInputFocused = false;
-  visibleFilterForm = false;
+  isFilterFormVisible = false;
   visibleLocationForm = false;
   userLocation: LocationModel;
   @Input() query: string;
@@ -111,14 +111,14 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.submitClick.emit({ query: undefined });
   }
 
-  changeFilterButton($event: boolean) {
-    this.visibleFilterForm = $event;
+  changeFilterFormVisibility($event: boolean) {
+    this.isFilterFormVisible = $event;
   }
 
   recFilter($event: DefaultSearchAvailableModel) {
     this.availableFilters = $event;
     if ($event) {
-      this.visibleFilterForm = !this.visibleFilterForm;
+      this.isFilterFormVisible = !this.isFilterFormVisible;
     }
   }
 

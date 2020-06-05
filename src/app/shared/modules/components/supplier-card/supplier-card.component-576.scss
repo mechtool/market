@@ -1,15 +1,9 @@
 @media all and (max-width: 576px) {
-  :host {
-    max-width: none;
-    margin: 7px 0;
-    padding: 0;
-  }
 
   .catalog_item {
 
     &__link,
     &__inner {
-      padding: 20px;
       flex-direction: row;
       align-items: stretch;
     }

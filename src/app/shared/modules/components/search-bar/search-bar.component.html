@@ -18,11 +18,12 @@
     </nz-input-group>
 
     <ng-template #inputClearTpl>
-      <img class="search_input__clear"
-           src="assets/img/svg/icon__close.svg"
-           *ngIf="searchQuery.length"
-           alt=""
-           (click)="cleanQuery()">
+      <div class="input_clear">
+        <img src="assets/img/svg/icon__close.svg"
+            *ngIf="searchQuery.length"
+            alt=""
+            (click)="cleanQuery()">
+      </div>
     </ng-template>
 
     <nz-autocomplete #auto nzOverlayClassName="autocomplete" nzBackfill>
@@ -49,10 +50,14 @@
       <div class="buttons__item">
         <a class="btn btn_square btn_category"
            nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
-           [nzDropdownMenu]="filter_menu"
-           (nzVisibleChange)="changeFilterButton($event)" [(nzVisible)]="visibleFilterForm"></a>
+           [nzDropdownMenu]="filterMenu"
+           (nzVisibleChange)="changeFilterFormVisibility($event)"
+           [(nzVisible)]="isFilterFormVisible"></a>
 
-        <nz-dropdown-menu #filter_menu="nzDropdownMenu">
+        <nz-dropdown-menu #filterMenu="nzDropdownMenu">
+          <div class="closer">
+            <img src="assets/img/svg/icon__close.svg" (click)="changeFilterFormVisibility(false)">
+          </div>
           <my-search-bar-filter
             [availableFilters]="availableFilters"
             (stateAvailableFilters)="recFilter($event)"
@@ -64,10 +69,10 @@
 
   <div class="region">
     <a class="btn btn_region" nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
-       [nzDropdownMenu]="location_menu"
+       [nzDropdownMenu]="locationMenu"
        (nzVisibleChange)="changeLocationButton($event)" [(nzVisible)]="visibleLocationForm">{{userLocation.name}}</a>
 
-    <nz-dropdown-menu #location_menu="nzDropdownMenu">
+    <nz-dropdown-menu #locationMenu="nzDropdownMenu">
       <my-search-bar-location
         [cleanLocationForm]="visibleLocationForm"
         (stateLocationForm)="recLocation($event)"

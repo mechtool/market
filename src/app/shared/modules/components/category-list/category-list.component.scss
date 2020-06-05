@@ -4,26 +4,14 @@ a {
 }
 
 h2 {
-  margin: 0;
-}
-
-ul,
-ol {
-  margin: 0;
-  padding: 0;
+  font-weight: var(--font-weight-demi);
+  font-size: var(--font-size-18);
+  line-height: 23px;
+  margin-bottom: 15px;
+  margin-top: 35px;
 }
 
 .sub_category_ {
-
-  &_link {
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-13);
-    white-space: nowrap;
-
-    &:hover {
-      border-bottom: 1px solid #fedc7b;
-    }
-  }
 
   &_name {
     font-weight: var(--font-demi-bold);
@@ -39,19 +27,19 @@ ol {
   }
 
   &_item {
+    cursor: pointer;
     margin: 3px 20px 3px 0;
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-13);
     white-space: nowrap;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid var(--color-accent-light);
 
     &:hover {
-      border-bottom: 1px solid #fedc7b;
-      cursor: pointer;
+      border-bottom: 1px solid #ffffff;
     }
   }
 
   &_content {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
   }
 }

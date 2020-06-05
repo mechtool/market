@@ -56,12 +56,19 @@
   transition: background-color .2s;
   border: 1px solid #e0e0e0;
 
-  .search_input__clear {
-    margin-top: 7px;
-    opacity: 0.44;
+  .input_clear {
+    display: flex;
+    align-items: center;
+    height: 100%;
 
-    &:hover {
-      opacity: 1;
+    img {
+      cursor: pointer;
+      opacity: .44;
+      transition: opacity 0.2s;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
@@ -110,14 +117,13 @@
     color: var(--color-primary);
     font-size: var(--font-size-16);
     font-weight: var(--font-weight-medium);
-    line-height: 34px;
+    line-height: normal;
     outline: none;
 
     &::placeholder {
       color: var(--color-primary);
       font-size: var(--font-size-base);
       font-weight: var(--font-weight-medium);
-      line-height: 34px;
     }
   }
 
@@ -182,4 +188,16 @@
     font-size: var(--font-size-13);
     padding-left: 10px;
   }
+
+}
+
+.sort {
+  margin-right: 10px;
+}
+
+.closer {
+  cursor: pointer;
+  position: absolute;
+  right: 35px;
+  top: 30px;
 }

@@ -134,7 +134,7 @@
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #fedc7b;
+    background-color: var(--color-accent-light);
   }
 }
 

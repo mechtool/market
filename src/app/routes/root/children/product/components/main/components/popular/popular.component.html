@@ -7,9 +7,10 @@
 
   <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
 
-    <my-nomenclature-card *ngFor="let product of productOffers"
-                          [product]="product"
-    ></my-nomenclature-card>
+    <my-card *ngFor="let product of productOffers">
+      <my-nomenclature-card [product]="product"
+      ></my-nomenclature-card>
+    </my-card>
 
     <!-- <my-banner-card
       [routerLink]="['./product/100']"

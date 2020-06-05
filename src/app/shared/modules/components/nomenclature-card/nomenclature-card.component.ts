@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@a
 import { Subject } from 'rxjs';
 import { ProductOffersCardModel } from '#shared/modules/common-services/models';
 import { absoluteImagePath } from '#shared/utils/get-image';
+import { NavigationService } from '#shared/modules/common-services/navigation.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class NomenclatureCardComponent implements OnInit, OnDestroy {
     return absoluteImagePath(this.product.imageUrl || null);
   }
 
-  constructor() {
+  constructor(private _navService: NavigationService) {
   }
 
   ngOnInit() {
@@ -32,5 +33,10 @@ export class NomenclatureCardComponent implements OnInit, OnDestroy {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
   }
+
+  goToProduct() {
+    this._navService.goTo([`/product/${this.product?.id}`]);
+  }
+
 
 }

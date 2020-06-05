@@ -56,6 +56,18 @@
     .list {
       padding: 0;
       margin: 0;
+
+      &:hover .item a.active {
+        background-color: transparent;
+        color: var(--color-secondary);
+      }
+
+      &:hover .item a.active:hover,
+      .item a:hover {
+        color: var(--color-secondary);
+        background-color: #fbfbfb;
+        text-decoration: none;
+      }
     }
 
     .item {
@@ -78,9 +90,6 @@
         &.active {
           color: var(--color-primary);
           background-color: #fbfbfb;
-        }
-        &:hover {
-          background: #fedc7b;
         }
       }
     }
@@ -116,7 +125,7 @@
       justify-content: center;
       height: 20px;
       padding: 0 3px;
-      background-color: #fdc82f;
+      background-color: var(--color-accent-light);
       border-radius: 2px;
       color: var(--color-secondary);
       margin-left: 8px;
@@ -386,7 +395,7 @@
 }
 
 .sub_category__link:hover {
-  border-bottom: 1px solid #fedc7b;
+  border-bottom: 1px solid var(--color-accent-light);
 }
 
 .sub_category__name {

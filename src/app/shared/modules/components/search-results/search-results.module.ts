@@ -4,13 +4,15 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SearchResultComponent } from './search-results.component';
 import { NomenclatureCardModule } from '../nomenclature-card';
+import { CardModule } from '../card/card.module';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
-    NomenclatureCardModule
+    NomenclatureCardModule,
+    CardModule,
   ],
   declarations: [
     SearchResultComponent,

@@ -2,7 +2,7 @@ export * from './about-supplier';
 export * from './banner-card';
 export * from './category-list';
 export * from './error-code-alert';
-export * from './input-qty';
+export * from './card';
 export * from './nomenclature-card';
 export * from './product-description';
 export * from './product-gallery';

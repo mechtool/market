@@ -16,7 +16,7 @@ import {
   SetupServicesModule,
   PipesModule,
   CommonServicesModule,
-  InputQtyModule,
+  CardModule,
   NomenclatureCardModule,
   UserService,
 } from '#shared/modules';
@@ -70,7 +70,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
     OverlayModule,
     NzIconModule,
     PipesModule,
-    InputQtyModule,
+    CardModule,
     NomenclatureCardModule,
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
