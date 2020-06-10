@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import {
+  LocationModel,
   SuggestionCategoryItemModel,
-  SuggestionResponseModel,
   SuggestionProductItemModel,
+  SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
-  LocationModel,
 } from '../common-services/models';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'local_search_queries_history_list';
@@ -18,20 +18,34 @@ export class LocalStorageService {
   constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {
   }
 
-  getSearchQueriesHistoryList(): SuggestionResponseModel {
-    const _searchQueries = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
+  getSearchQueriesHistoryList(query?: string): SuggestionResponseModel {
+    let searchQueries;
+    if (query && query.trim().length) {
+      const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
+      const queryLowerCase = query.toLowerCase();
+      searchQueries = historyList.filter(res => res.searchText.toLowerCase().includes(queryLowerCase));
+    } else {
+      searchQueries = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
+    }
     return {
-      searchQueriesHistory: _searchQueries.reverse()
+      searchQueriesHistory: searchQueries.reverse()
     };
   }
 
   hasSearchQueriesHistory(): boolean {
-    return this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) !== undefined;
+    const history = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
+    return !!history;
+  }
+
+  removeSearchQuery(id: string): void {
+    const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
+    const filterHistoryList = historyList.filter(res => res.id !== id);
+    this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList.length ? filterHistoryList : undefined);
   }
 
   putSearchQuery(searchQuery: SuggestionSearchQueryHistoryModel): void {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.searchText !== searchQuery.searchText);
+    const filterHistoryList = historyList.filter(res => res.id !== searchQuery.id);
     const query = {
       id: searchQuery.id,
       imageUrl: searchQuery.imageUrl,
@@ -43,16 +57,19 @@ export class LocalStorageService {
   }
 
   putSearchText(_searchText: string): void {
-    const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.searchText !== _searchText);
-    const query = {
-      id: '',
-      imageUrl: 'assets/img/svg/quick_search_history.svg',
-      searchText: _searchText,
-      typeOfSearch: TypeOfSearch.SEARCH,
-    };
-    filterHistoryList.push(query);
-    this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
+    if (_searchText) {
+      const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
+      const hexId = this.toHexId(_searchText);
+      const filterHistoryList = historyList.filter(res => res.id !== hexId);
+      const query = {
+        id: hexId,
+        imageUrl: 'assets/img/svg/quick_search_history.svg',
+        searchText: _searchText,
+        typeOfSearch: TypeOfSearch.SEARCH,
+      };
+      filterHistoryList.push(query);
+      this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
+    }
   }
 
   putSearchProduct(product: SuggestionProductItemModel) {
@@ -98,4 +115,11 @@ export class LocalStorageService {
     this._storage.remove(USER_LOCATION_STORAGE_KEY);
   }
 
+  private toHexId(text: string): string {
+    let hex = '';
+    for (let i = 0; i < text.length; i++) {
+      hex += text.charCodeAt(i).toString(16);
+    }
+    return hex;
+  }
 }

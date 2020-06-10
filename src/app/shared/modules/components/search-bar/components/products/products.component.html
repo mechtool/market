@@ -11,7 +11,6 @@
       img="{{imageUrl(product.images)}}"
       imgAlt="{{product.name}}"
       offersCount="{{product.offers}}"
-      typeOfSearch="{{typeOfSearchProduct}}"
       type="productOffer"
       (click)="chooseProduct(product)"
     ><div [innerHTML]="product.highlight || product.name"></div></my-search-bar-item>
@@ -21,7 +20,6 @@
       img="assets/img/tmp/lightning.png"
       imgAlt="{{category.name}}"
       offersCount="{{category.offers}}"
-      typeOfSearch="{{typeOfSearchCategory}}"
       type="category"
       (click)="chooseCategory(category)"
     ><div [innerHTML]="category.highlight || category.name"></div></my-search-bar-item>

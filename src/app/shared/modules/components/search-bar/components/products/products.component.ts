@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
-  LocalStorageService,
   ImagesLinkModel,
+  LocalStorageService,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
-  TypeOfSearch,
 } from '../../../../common-services';
 import { Router } from '@angular/router';
 
@@ -19,8 +18,6 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   @Input() products: SuggestionProductItemModel[];
   @Input() categories: SuggestionCategoryItemModel[];
-  typeOfSearchProduct: TypeOfSearch.PRODUCT;
-  typeOfSearchCategory: TypeOfSearch.CATEGORY;
 
   constructor(
     private _router: Router,

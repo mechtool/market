@@ -39,6 +39,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   isInputFocused = false;
   isFilterFormVisible = false;
   visibleLocationForm = false;
+  visibleSuggestions: boolean;
   userLocation: LocationModel;
   @Input() query: string;
   @Input() minQueryLength = 3;
@@ -56,13 +57,12 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   @Output() submitClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
 
   get searchQuery() {
-    return this.form.get('query').value;
+    return this.form.get('query').value.trim();
   }
 
   get isShowSuggestions(): boolean {
     return !this.suggestionsOff &&
-      (!!this.productsSuggestions ||
-        !!this.categoriesSuggestions ||
+      ((this.searchQuery.length >= this.minQueryLength && (!!this.productsSuggestions || !!this.categoriesSuggestions)) ||
         this._localStorageService.hasSearchQueriesHistory());
   }
 
@@ -89,20 +89,22 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.query) {
+      this._cleanSuggestions();
       this._updateForm();
     }
   }
 
   submit() {
-    const queryParam = this.form.get('query').value;
+    const queryText = this.searchQuery;
     const groupAllQueryFilters = {
-      query: queryParam,
+      query: queryText,
       categoryId: this.categoryId,
       availableFilters: this.availableFilters || new DefaultSearchAvailableModel(),
       sort: this.sort,
     };
-    if (queryParam.length >= this.minQueryLength) {
+    if (queryText.length >= this.minQueryLength) {
       this.submitClick.emit(groupAllQueryFilters);
+      this.visibleSuggestions = false;
     }
   }
 
@@ -162,10 +164,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.form.get('query').valueChanges
       .pipe(
         takeUntil(this._unsubscriber$),
-        filter(res => res.length >= this.minQueryLength && res.length <= this.maxQueryLength),
+        filter(res => res.trim().length >= this.minQueryLength && res.trim().length <= this.maxQueryLength),
       )
       .subscribe((res) => {
-        this.queryChange.emit(res);
+        this.queryChange.emit(res.trim());
       }, (err) => {
         console.log('error');
       });
@@ -173,5 +175,11 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   private _updateForm() {
     this.form.patchValue({ query: this.query || '' });
+  }
+
+  private _cleanSuggestions(): void {
+    this.visibleSuggestions = false;
+    this.productsSuggestions = null;
+    this.categoriesSuggestions = null;
   }
 }

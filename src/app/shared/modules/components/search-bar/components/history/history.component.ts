@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { combineLatest, Subject } from 'rxjs';
 import {
   LocalStorageService,
   SuggestionSearchQueryHistoryModel,
   SuggestionService,
   TypeOfSearch
 } from '../../../../common-services';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'my-search-bar-history',
@@ -14,24 +14,25 @@ import { Router } from '@angular/router';
   styleUrls: ['./history.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarHistoryComponent implements OnInit, OnDestroy {
+export class SearchBarHistoryComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() query: string;
   private _unsubscriber$: Subject<any> = new Subject();
   searchQueriesHistory: SuggestionSearchQueryHistoryModel[];
 
   constructor(
     private _suggestionService: SuggestionService,
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _localStorageService: LocalStorageService,
   ) {
   }
 
   ngOnInit() {
-    this._suggestionService.getHistoricalSuggestions()
-      .subscribe((res) => {
-        this.searchQueriesHistory = res.searchQueriesHistory;
-      }, (err) => {
-        console.log('error', err);
-      });
+    this._initHistoricalSuggestions();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this._initHistoricalSuggestions();
   }
 
   ngOnDestroy() {
@@ -54,5 +55,27 @@ export class SearchBarHistoryComponent implements OnInit, OnDestroy {
       this._router.navigate([`./search`], { queryParams: { q: searchQuery.searchText } });
 
     }
+  }
+
+  cleanHistory(id: string) {
+    this._localStorageService.removeSearchQuery(id);
+    this._initHistoricalSuggestions();
+  }
+
+  private _initHistoricalSuggestions(): void {
+    combineLatest([
+      this._suggestionService.getHistoricalSuggestions(this.query),
+      this._activatedRoute.queryParams
+    ])
+      .subscribe(
+        (res) => {
+          const suggestion = res[0];
+          const queryParams = res[1];
+          this.searchQueriesHistory = suggestion.searchQueriesHistory.filter(history => history.searchText !== queryParams.q);
+        },
+        (err) => {
+          console.error('error', err);
+        }
+      );
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { absoluteImagePath, isAssetsImg } from '#shared/utils/get-image';
 
@@ -15,7 +15,8 @@ export class SearchBarItemComponent implements OnInit, OnDestroy {
   @Input() imgAlt: string;
   @Input() offersCount: string | number;
   @Input() type: string;
-  @Input() typeOfSearch: string;
+  @Input() historicalSuggestionId: string;
+  @Output() cleanHistory: EventEmitter<string> = new EventEmitter();
 
   constructor() {
   }
@@ -35,4 +36,7 @@ export class SearchBarItemComponent implements OnInit, OnDestroy {
     return img ? absoluteImagePath(img) : absoluteImagePath(null);
   }
 
+  removeHistoricalSuggestion() {
+    this.cleanHistory.emit(this.historicalSuggestionId);
+  }
 }

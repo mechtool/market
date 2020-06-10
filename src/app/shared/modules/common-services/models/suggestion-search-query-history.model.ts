@@ -1,7 +1,7 @@
 export class SuggestionSearchQueryHistoryModel {
-  id?: number;
+  id: string;
   searchText: string;
-  imageUrl?: string;
+  imageUrl: string;
   typeOfSearch: TypeOfSearch;
 }
 

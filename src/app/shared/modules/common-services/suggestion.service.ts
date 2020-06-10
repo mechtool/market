@@ -15,8 +15,8 @@ export class SuggestionService {
     return this._bnetService.searchSuggestions(query);
   }
 
-  getHistoricalSuggestions(): Observable<SuggestionResponseModel> {
-    return of(this.localStorageService.getSearchQueriesHistoryList());
+  getHistoricalSuggestions(query?: string): Observable<SuggestionResponseModel> {
+    return of(this.localStorageService.getSearchQueriesHistoryList(query));
   }
 
 }

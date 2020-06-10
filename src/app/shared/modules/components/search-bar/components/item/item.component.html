@@ -10,7 +10,7 @@
 
   <div class="meta">
     <ng-container *ngIf="type === 'searchQueryHistory'">
-      {{typeOfSearch}}
+       <span (click)="removeHistoricalSuggestion(); $event.stopPropagation()">Удалить</span>
     </ng-container>
     <ng-container *ngIf="type === 'productOffer'">
       {{offersCount}} предложений

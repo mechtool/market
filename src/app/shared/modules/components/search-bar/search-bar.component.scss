@@ -2,9 +2,16 @@
   // todo: избавиться от ::ng-deep
 
   .autocomplete {
-    left: -21px;
-    margin-top: 20px;
-    width: calc(100% + 130px);
+    margin-left: -33px;
+    margin-top: 24px;
+    width: calc(100% + 170px);
+    background-color: #ffffff;
+    box-shadow: 2px 4px 23px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    z-index: 99;
+    transition: opacity 0.3s;
+    padding-bottom: 15px;
+    padding-top: 10px;
 
     ::-webkit-resizer {
       display: none;

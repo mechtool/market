@@ -1,47 +1,56 @@
 <div class="search" [ngClass]="{'focused': isInputFocused}">
   <form [formGroup]="form" (ngSubmit)="submit()">
 
-    <!-- todo: Переделать input и nz-autocomplete, так же поправить отрисовку дропдауна при изменении размера страницы!!! -->
     <nz-input-group [nzSuffix]="inputClearTpl">
 
       <input
         nz-input
         placeholder="{{placeholder}}"
-        (keyup.enter)="submit()"
         autocomplete="off"
         name="query"
         formControlName="query"
-        [nzAutocomplete]="auto"
+        nz-dropdown
+        nzTrigger="click"
+        [nzDropdownMenu]="menu"
+        [(nzVisible)]="visibleSuggestions"
         (focus)="isInputFocused = true;"
         (blur)="isInputFocused = false"/>
+
 
     </nz-input-group>
 
     <ng-template #inputClearTpl>
       <div class="input_clear">
         <img src="assets/img/svg/icon__close.svg"
-            *ngIf="searchQuery.length"
-            alt=""
-            (click)="cleanQuery()">
+             *ngIf="searchQuery.length"
+             alt=""
+             (click)="cleanQuery()">
       </div>
     </ng-template>
 
-    <nz-autocomplete #auto nzOverlayClassName="autocomplete" nzBackfill>
-      <!--todo возможно стоит весь контент из my-search-bar-history и my-search-bar-products вынести сюда и отображать через *ngFor-->
-      <ng-container *ngIf="isShowSuggestions">
-        <nz-auto-option [nzValue]="form.controls['query'].value">
-          <my-search-bar-history
-            *ngIf="useBrowserStorage && (!searchQuery || searchQuery && searchQuery.length < minQueryLength)"
-          ></my-search-bar-history>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
 
-          <my-search-bar-products
-            [products]="productsSuggestions"
-            [categories]="categoriesSuggestions"
-            *ngIf="searchQuery.length >= minQueryLength"
-          ></my-search-bar-products>
-        </nz-auto-option>
+      <ng-container *ngIf="isShowSuggestions">
+      <div class="autocomplete">
+
+        <my-search-bar-history
+          [query]="searchQuery"
+          *ngIf="useBrowserStorage && (!searchQuery || searchQuery?.length < minQueryLength)"
+        ></my-search-bar-history>
+
+        <my-search-bar-products
+          [products]="productsSuggestions"
+          [categories]="categoriesSuggestions"
+          *ngIf="searchQuery.length >= minQueryLength"
+        ></my-search-bar-products>
+
+      </div>
+
       </ng-container>
-    </nz-autocomplete>
+
+    </nz-dropdown-menu>
+
+
 
     <div class="buttons">
       <div class="buttons__item">
@@ -56,7 +65,7 @@
 
         <nz-dropdown-menu #filterMenu="nzDropdownMenu">
           <div class="closer">
-            <img src="assets/img/svg/icon__close.svg" (click)="changeFilterFormVisibility(false)">
+            <img src="assets/img/svg/icon__close.svg" alt="" (click)="changeFilterFormVisibility(false)">
           </div>
           <my-search-bar-filter
             [availableFilters]="availableFilters"
