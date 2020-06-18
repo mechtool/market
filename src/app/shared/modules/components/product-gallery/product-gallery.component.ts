@@ -1,7 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ImagesLinkModel, ProductDto } from '#shared/modules/common-services/models';
 import { absoluteImagePath, mapStock } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-product-gallery',
   templateUrl: './product-gallery.component.html',
@@ -10,7 +12,7 @@ import { absoluteImagePath, mapStock } from '#shared/utils';
     './product-gallery.component-768.scss'
   ],
 })
-export class ProductGalleryComponent implements OnInit, OnDestroy {
+export class ProductGalleryComponent {
 
   @Input() product: ProductDto;
   @Input() supplierName: string;
@@ -30,12 +32,6 @@ export class ProductGalleryComponent implements OnInit, OnDestroy {
   }
 
   constructor() {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   firstImageUrl(imgs: ImagesLinkModel[]) {

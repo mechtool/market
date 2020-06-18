@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils/get-image';
 
 @Component({
@@ -8,8 +7,7 @@ import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils
   styleUrls: ['./item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarItemComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SearchBarItemComponent {
   @Input() routerLink: string[];
   @Input() img: string;
   @Input() imgAlt: string;
@@ -19,14 +17,6 @@ export class SearchBarItemComponent implements OnInit, OnDestroy {
   @Output() cleanHistory: EventEmitter<string> = new EventEmitter();
 
   constructor() {
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   imageUrl(img): string {

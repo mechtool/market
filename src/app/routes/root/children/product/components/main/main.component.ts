@@ -1,5 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
   SuggestionCategoryItemModel,
@@ -7,9 +6,10 @@ import {
 } from '#shared/modules/common-services/models';
 import { LocalStorageService, SuggestionService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { queryParamsFrom } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-main',
   templateUrl: './main.component.html',
@@ -18,8 +18,7 @@ import { queryParamsFrom } from '#shared/utils';
     './main.component-768.scss'
   ],
 })
-export class MainComponent implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class MainComponent {
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
 
@@ -27,15 +26,7 @@ export class MainComponent implements OnDestroy {
     private _router: Router,
     private _suggestionService: SuggestionService,
     private _localStorageService: LocalStorageService,
-    private _breadcrumbsService: BreadcrumbsService,
-  ) {
-    this._breadcrumbsService.setVisible(false);
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
+  ) {}
 
   searchSuggestions(query: string) {
     this._suggestionService.searchSuggestions(query)

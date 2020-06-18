@@ -118,3 +118,43 @@ button.btn_bordered {
     opacity: 1;
   }
 }
+
+.ant-tabs-nav {
+  box-shadow: none;
+}
+
+
+.ant-dropdown.upclose {
+  margin-top: 0;
+  margin-bottom: 0;
+
+  .ant-dropdown-menu {
+    padding: 0;
+    border-radius: 0;
+
+    .ant-dropdown-menu-item {
+      display: flex;
+      padding: 5px 9px;
+      font-size: var(--font-size-12);
+      font-weight: var(--font-weight-medium);
+      min-height: 30px;
+      line-height: 1;
+      white-space: normal;
+
+      &:hover {
+        background-color: var(--color-accent-light);
+      }
+    }
+  }
+}
+
+
+input[type=number] {
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

@@ -1,9 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
-import { combineLatest, Subject, throwError } from 'rxjs';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { Component } from '@angular/core';
+import { combineLatest, throwError } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
-  BreadcrumbItemModel,
   CategoryModel,
   DefaultSearchAvailableModel,
   ProductOffersListResponseModel,
@@ -15,13 +13,14 @@ import { CategoryService, LocalStorageService, } from '#shared/modules/common-se
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { catchError, switchMap } from 'rxjs/operators';
 import { queryParamsFrom } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
 })
-export class CategoryComponent implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class CategoryComponent {
   categoryModel: CategoryModel;
   query = '';
   categoryId: string;
@@ -35,7 +34,6 @@ export class CategoryComponent implements OnDestroy {
 
 
   constructor(
-    private _breadcrumbsService: BreadcrumbsService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _productService: ProductService,
@@ -43,11 +41,6 @@ export class CategoryComponent implements OnDestroy {
     private _localStorageService: LocalStorageService
   ) {
     this._init();
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
@@ -82,24 +75,6 @@ export class CategoryComponent implements OnDestroy {
     }
   }
 
-  refreshBreadcrumbs($event: CategoryModel[]): void {
-    const breadcrumbs = $event.reduce(
-      (accum, curr) => {
-        accum.push({
-          label: curr.name,
-          routerLink: `/category/${curr.id}`,
-        });
-        return accum;
-      },
-      <BreadcrumbItemModel[]>[
-        {
-          label: 'Каталог',
-        },
-      ]
-    );
-    this._setBreadcrumbs(breadcrumbs);
-  }
-
   private _init(): void {
     combineLatest([
       this._activatedRoute.params,
@@ -126,7 +101,6 @@ export class CategoryComponent implements OnDestroy {
         }),
         switchMap((categoryModel) => {
           this.categoryModel = categoryModel.find(category => category.id === this.categoryId);
-          this.refreshBreadcrumbs(categoryModel);
           return this._productService.searchProductOffers({
             query: this.query,
             availableFilters: this.availableFilters,
@@ -151,8 +125,4 @@ export class CategoryComponent implements OnDestroy {
       );
   }
 
-  private _setBreadcrumbs(breadcrumbs: BreadcrumbItemModel[]): void {
-    this._breadcrumbsService.setVisible(true);
-    this._breadcrumbsService.setItems(breadcrumbs);
-  }
 }

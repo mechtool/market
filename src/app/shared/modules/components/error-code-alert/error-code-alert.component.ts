@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subject } from 'rxjs';
-import { BreadcrumbsService } from '../../../../routes/root/components/breadcrumbs/breadcrumbs.service';
+import { Component, Input } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-error-code-alert',
   templateUrl: './error-code-alert.component.html',
@@ -12,7 +12,7 @@ import { BreadcrumbsService } from '../../../../routes/root/components/breadcrum
     './error-code-alert.component-340.scss',
   ],
 })
-export class ErrorCodeAlertComponent implements OnInit, OnDestroy {
+export class ErrorCodeAlertComponent {
   codeArray: string[];
   @Input()
   set code(codeString: string) {
@@ -21,16 +21,7 @@ export class ErrorCodeAlertComponent implements OnInit, OnDestroy {
   @Input() title: string;
   @Input() descriptionBg: string;
   @Input() descriptionSm: string;
-  private _unsubscriber$: Subject<any> = new Subject();
 
-  constructor(private _breadcrumbsService: BreadcrumbsService) {
-    this._breadcrumbsService.setVisible(false);
-  }
+  constructor() {}
 
-  ngOnInit() {}
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 }

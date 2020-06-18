@@ -10,16 +10,16 @@ import {
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent,
+    component: MainComponent
   }, {
     path: '404',
-    component: Code404Component,
+    component: Code404Component
   }, {
     path: '500',
-    component: Code500Component,
+    component: Code500Component
   }, {
     path: 'product/:id',
-    component: ProductComponent,
+    component: ProductComponent
   }
 ];
 

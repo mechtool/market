@@ -62,8 +62,7 @@ export class SearchBarLocationComponent {
         })
       )
       .subscribe(([city, cities]) => {
-        // todo:  Избавиться от лага с двойным кликом по выбранному городу
-        this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city));
+        this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
       }, (err) => {
         console.error(err);
       });

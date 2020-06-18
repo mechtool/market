@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { of, Subject, throwError } from 'rxjs';
+import { Component } from '@angular/core';
+import { of, throwError } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
@@ -13,16 +13,16 @@ import {
 import { SuggestionService } from '#shared/modules/common-services/suggestion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
-import { BreadcrumbsService } from '../../components/breadcrumbs/breadcrumbs.service';
 import { catchError, switchMap } from 'rxjs/operators';
 import { queryParamsFrom } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SearchComponent {
   productOffersList: ProductOffersListResponseModel;
   productOffers: ProductOffersModel[];
   productsTotal: number;
@@ -40,7 +40,6 @@ export class SearchComponent implements OnDestroy {
     private _suggestionService: SuggestionService,
     private _router: Router,
     private _localStorageService: LocalStorageService,
-    private _breadcrumbsService: BreadcrumbsService,
   ) {
     this._init();
   }
@@ -50,10 +49,6 @@ export class SearchComponent implements OnDestroy {
       !!(this.availableFilters?.supplier || this.availableFilters?.trademark || this.availableFilters?.categoryId);
   }
 
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 
   searchSuggestions(query: string) {
     this._suggestionService.searchSuggestions(query)
@@ -138,7 +133,6 @@ export class SearchComponent implements OnDestroy {
         })
       )
       .subscribe((productOffers) => {
-        this._initBreadcrumbs();
         this.productOffersList = productOffers;
         this.productOffers = this.productOffersList._embedded?.productOffers || [];
         this.productsTotal = this.productOffersList.page?.totalElements || 0;
@@ -148,9 +142,6 @@ export class SearchComponent implements OnDestroy {
       });
   }
 
-  private _initBreadcrumbs() {
-    this._breadcrumbsService.setVisible(false);
-  }
 
   private _cleanFilters(filters: AllGroupQueryFiltersModel) {
     if (!filters?.query) {

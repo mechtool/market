@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { CategoryModel } from '../../common-services/models/category.model';
-import { CategoryService } from '../../../modules/common-services/category.service';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { CategoryModel, CategoryService } from '#shared/modules/common-services';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-category-list',
   templateUrl: './category-list.component.html',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
     './category-list.component.scss'
   ]
 })
-export class CategoryListComponent implements OnInit, OnDestroy, OnChanges {
+export class CategoryListComponent implements OnChanges {
 
   categories: CategoryModel[];
   @Input() category: CategoryModel;
@@ -19,14 +20,7 @@ export class CategoryListComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private _categoryService: CategoryService,
     private _router: Router,
-  ) {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-  }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this._categoryService.getCategoriesChildren(this.category.id)
@@ -46,6 +40,5 @@ export class CategoryListComponent implements OnInit, OnDestroy, OnChanges {
         console.error('error', err);
       });
     this._router.navigate([`./category/${category.id}`]);
-    this.ngOnInit();
   }
 }

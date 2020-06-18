@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './auth.guard';
 import { SsoTicketGuard } from './sso-ticket.guard';
+import { BreadcrumbsGuard } from './breadcrumbs.guard';
 import { DelayedPreloadingStrategy } from './preloading-strategy';
 import { ApiInterceptor } from './api-interceptor';
 
@@ -13,6 +14,7 @@ export class SetupServicesModule {
       providers: [
         AuthGuard,
         SsoTicketGuard,
+        BreadcrumbsGuard,
         DelayedPreloadingStrategy,
         {
           provide: HTTP_INTERCEPTORS,

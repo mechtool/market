@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ProductDto, ProductFeatureModel, ValueTypeEnum } from '#shared/modules/common-services/models';
 
 @Component({
@@ -10,15 +10,9 @@ import { ProductDto, ProductFeatureModel, ValueTypeEnum } from '#shared/modules/
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductDescriptionComponent implements OnInit, OnDestroy {
+export class ProductDescriptionComponent {
 
   @Input() product: ProductDto;
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-  }
 
   feature(item: ProductFeatureModel) {
     if (item.valueType === ValueTypeEnum.ENUMERATION) {

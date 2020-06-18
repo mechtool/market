@@ -5,7 +5,7 @@
       <input nz-input type="text" autocomplete="off" id="formUserRegionLocation" name="city" placeholder="Введите город" formControlName="city"/>
     </div>
     <ul class="choose-city_list">
-      <li class="choose-city_item" *ngFor="let item of foundCities" (click)="chooseCity(item)">{{item.fullName}}</li>
+      <li class="choose-city_item" *ngFor="let item of foundCities" (mousedown)="chooseCity(item)">{{item.fullName}}</li>
     </ul>
   </form>
 </div>

@@ -2,20 +2,21 @@ import {
   Injectable,
   ViewContainerRef,
   ComponentRef,
-  OnDestroy,
 } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { Subject, fromEvent, BehaviorSubject } from 'rxjs';
-import { map, takeUntil, debounceTime, filter, pairwise } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { map, debounceTime, filter, pairwise } from 'rxjs/operators';
 import { NavItemModel, CategoryModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Injectable()
-export class NavigationService implements OnDestroy {
+export class NavigationService {
   private _isNavBarMinified = false;
   private _isMenuOpened = false;
   private _mainCategorySelectedId: string = null;
@@ -46,8 +47,6 @@ export class NavigationService implements OnDestroy {
   get mainCategorySelectedId(): string {
     return this._mainCategorySelectedId;
   }
-
-  private _unsubscriber$: Subject<any> = new Subject();
 
   get navItems$() {
     const notAuthedNavItems: NavItemModel[] = [
@@ -120,9 +119,10 @@ export class NavigationService implements OnDestroy {
       },
       {
         label: 'Корзина',
-        icon: 'basket',
         styleClass: 'delimiter',
         routerLink: ['/cart'],
+        icon: 'basket',
+        counter: 99,
       },
       {
         label: 'Личный кабинет',
@@ -154,7 +154,6 @@ export class NavigationService implements OnDestroy {
       },
     ];
     return this._userService.userData$.asObservable().pipe(
-      takeUntil(this._unsubscriber$),
       map((res) => (res ? authedNavItems : notAuthedNavItems))
     );
   }
@@ -173,11 +172,6 @@ export class NavigationService implements OnDestroy {
     this._renderInitialNavBar();
     this._setInitialNavBarType();
     this._closeCategoriesLayerOnNavigation();
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   screenWidthGreaterThan(val: number): boolean {

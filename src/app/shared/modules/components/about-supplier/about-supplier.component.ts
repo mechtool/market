@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { SuppliersItemModel } from '#shared/modules';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-about-supplier',
   templateUrl: './about-supplier.component.html',
@@ -12,7 +14,7 @@ import { SuppliersItemModel } from '#shared/modules';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class AboutSupplierComponent implements OnInit, OnDestroy {
+export class AboutSupplierComponent {
 
   @Input() supplier: SuppliersItemModel;
   @Input() supplierLogo: string;
@@ -21,9 +23,4 @@ export class AboutSupplierComponent implements OnInit, OnDestroy {
   constructor() {
   }
 
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-  }
 }

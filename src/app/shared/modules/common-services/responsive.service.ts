@@ -1,20 +1,11 @@
-import {
-  Injectable,
-  OnDestroy,
-} from '@angular/core';
-import {
-  Subject,
-  BehaviorSubject,
-  fromEvent,
-} from 'rxjs';
-import {
-  takeUntil,
-  debounceTime,
-} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Injectable()
-export class ResponsiveService implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class ResponsiveService {
   public screenWidth$: BehaviorSubject<number> = new BehaviorSubject(null);
   public mediaBreakpoint$: BehaviorSubject<string> = new BehaviorSubject(null);
 
@@ -26,18 +17,12 @@ export class ResponsiveService implements OnDestroy {
     fromEvent(window, 'resize')
       .pipe(
         debounceTime(1000),
-        takeUntil(this._unsubscriber$)
       ).subscribe((evt: any) => {
         this._setScreenWidth(evt.target.innerWidth);
         this._setMediaBreakpoint(evt.target.innerWidth);
       }, (err) => {
         console.log('error');
       });
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   public screenWidthGreaterThan(val: number): boolean {

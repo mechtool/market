@@ -7,10 +7,16 @@ import {
   SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
+  CartDataOrderExtendedModel,
+  CartDataOrderModel,
+  CartDataExtendedModel,
+  CartDataModel,
 } from '../common-services/models';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'local_search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'local_user_location';
+const CART_LOCATION_STORAGE_KEY = 'cart_location';
+const CART_DATA_STORAGE_KEY = 'cart_data';
 
 @Injectable()
 export class LocalStorageService {
@@ -98,7 +104,6 @@ export class LocalStorageService {
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
   }
 
-
   getUserLocation(): LocationModel {
     return this._storage.get(USER_LOCATION_STORAGE_KEY);
   }
@@ -113,6 +118,53 @@ export class LocalStorageService {
 
   removeUserLocation(): void {
     this._storage.remove(USER_LOCATION_STORAGE_KEY);
+  }
+
+  getCartLocation(): string {
+    return this._storage.get(CART_LOCATION_STORAGE_KEY);
+  }
+
+  putCartLocation(catLocation: string): void {
+    this._storage.set(CART_LOCATION_STORAGE_KEY, catLocation);
+  }
+
+  removeCartLocation(): void {
+    this._storage.remove(CART_LOCATION_STORAGE_KEY);
+  }
+
+  getCartData(): CartDataExtendedModel | CartDataModel {
+    return this._storage.get(CART_DATA_STORAGE_KEY);
+  }
+
+  putCartData(data: any): void {
+    this._storage.set(CART_DATA_STORAGE_KEY, data);
+  }
+
+  removeCartData(): void {
+    this._storage.remove(CART_DATA_STORAGE_KEY);
+  }
+
+  patchCartDataByOrder(orderData: CartDataOrderExtendedModel): void {
+    const currentCartData = this.getCartData();
+    let foundInd;
+
+    if (currentCartData && orderData) {
+      const currentDataContent = currentCartData?.content;
+      const orderRelationRef = orderData._links['https://rels.1cbn.ru/marketplace/make-order'].href;
+      const orderFoundInCurrentDataContent = currentDataContent?.find((item, ind) => {
+        if (item._links['https://rels.1cbn.ru/marketplace/make-order'].href === orderRelationRef) {
+          foundInd = ind;
+          return true;
+        } else {
+          return false
+        }
+      });
+      const newOrder = JSON.parse(JSON.stringify(orderFoundInCurrentDataContent));
+      newOrder.consumer = orderFoundInCurrentDataContent ? orderData.consumer || null : null;
+      currentCartData?.content.splice(foundInd, 1, newOrder);
+      this._storage.set(CART_DATA_STORAGE_KEY, currentCartData);
+    }
+
   }
 
   private toHexId(text: string): string {

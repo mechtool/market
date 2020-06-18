@@ -1,5 +1,7 @@
 import { Component, Input, HostBinding } from '@angular/core';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
+import { CartService } from '#shared/modules/common-services/cart.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'my-mobile-nav',
@@ -11,7 +13,15 @@ import { NavigationService } from '#shared/modules/common-services/navigation.se
   ],
 })
 export class NavbarMobileNavComponent {
-  constructor(private _navService: NavigationService) {}
+
+  get getCartCounter$(): any {
+    return this._cartService.getCartData$().pipe(map(res => res?.content?.length));
+  }
+
+  constructor(
+    private _navService: NavigationService,
+    private _cartService: CartService,
+  ) {}
 
   openMenu() {
     this._navService.openMenu();

@@ -1,7 +1,8 @@
+import { RelationModel } from './models/relation.model';
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   CategoryRequestModel,
   CategoryResponseModel,
@@ -18,8 +19,13 @@ import {
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
   UserOrganizationModel,
+  CartAddItemModel,
+  MakeOrderModel,
+  CartUpdateItemQuantityModel,
+  CartDataModel,
 } from './models';
-import { HttpParams } from '@angular/common/http';
+import { HttpParams, HttpHeaders } from '@angular/common/http';
+import { RelationContentModel } from './models/relation-content.model';
 
 const API_URL = environment.apiUrl;
 
@@ -80,7 +86,48 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/categories`, { params });
   }
 
-  private _params(searchQuery: any): HttpParams {
+  createCart(): Observable<string> {
+    // TODO: Использовать реальный сервис
+    return of('https://api.1cbn.ru/trade-offers/shopping-carts/3071d88f-4fe8-418d-be46-7822d247cd91');
+  }
+
+  getCartDataByCartLocation(cartLocation: string): Observable<CartDataModel> {
+    // TODO: Использовать реальный сервис
+    return this._apiService.get(`/assets/json/raw/cart_data.json`);
+  }
+
+  addItemToCart(relationHref: string, data: CartAddItemModel): Observable<any> {
+    // let headers = new HttpHeaders({ 'Content-Type': 'application/vnd.1cbn.v1+json' });
+    // let options = { headers: headers };
+    // return this._apiService.post(relationHref, data, options);
+    return this._apiService.get('/assets/json/raw/cart_add-item.json');
+  }
+
+  makeOrder(relationHref: string, data: MakeOrderModel): Observable<any> {
+    // let headers = new HttpHeaders({ 'Content-Type': 'application/vnd.1cbn.v1+json' });
+    // let options = { headers: headers };
+    // return this._apiService.post(relationHref, data, options);
+    return this._apiService.get(`/assets/json/raw/make-order.json`);
+  }
+
+  updateItemQuantityInCart(relationHref: string, data: CartUpdateItemQuantityModel): Observable<any> {
+    // let headers = new HttpHeaders({ 'Content-Type': 'application/vnd.1cbn.v1+json' });
+    // let options = { headers: headers };
+    // return this._apiService.post(relationHref, data, options);
+    return this._apiService.get(`/assets/json/raw/cart_update-item-quantity.json`);
+  }
+
+  removeItemFromCart(relationHref: string): Observable<any> {
+    // return this._apiService.delete(relationHref);
+    return this._apiService.get(`/assets/json/raw/cart_remove-item.json`);
+  }
+
+  getTradeOfferFromCart(relationHref: string): Observable<any> {
+    // return this._apiService.get(relationHref);
+    return this._apiService.get(`/assets/json/raw/trade-offer-view.json`);
+  }
+
+  _params(searchQuery: any): HttpParams {
     if (searchQuery) {
       let params = new HttpParams();
       Object.keys(searchQuery).forEach((queryParam) => {
@@ -98,3 +145,5 @@ export class BNetService {
     }
   }
 }
+
+

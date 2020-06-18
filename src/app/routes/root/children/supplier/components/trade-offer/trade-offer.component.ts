@@ -1,18 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, throwError } from 'rxjs';
+import { Component } from '@angular/core';
+import { throwError } from 'rxjs';
 import {
   ProductDto,
   SuppliersItemModel,
   TradeOfferResponseModel,
   TradeOfferSupplierModel
 } from '#shared/modules/common-services/models';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { OrganizationsService, ProductService, TradeOffersService, } from '#shared/modules/common-services';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { randomARGB } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
-
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './trade-offer.component.html',
   styleUrls: [
@@ -20,8 +20,7 @@ import { randomARGB } from '#shared/utils';
     './trade-offer.component-992.scss',
   ],
 })
-export class TradeOfferComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class TradeOfferComponent {
   product: ProductDto;
   supplier: SuppliersItemModel;
   supplierLogo: string;
@@ -32,7 +31,6 @@ export class TradeOfferComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private _breadcrumbsService: BreadcrumbsService,
     private _productService: ProductService,
     private _tradeOffersService: TradeOffersService,
     private _organizationsService: OrganizationsService,
@@ -40,14 +38,6 @@ export class TradeOfferComponent implements OnInit, OnDestroy {
   ) {
     this.supplierLogo = randomARGB();
     this._initTradeOffer();
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   private _initTradeOffer() {
@@ -66,28 +56,9 @@ export class TradeOfferComponent implements OnInit, OnDestroy {
         this.tradeOffer = tradeOffer;
         this.product = ProductDto.fromTradeOffer(tradeOffer);
         this.supplier = this._mapSupplier(tradeOffer.supplier);
-        this._initBreadcrumbs();
       }, (err) => {
         console.error('error', err);
       });
-  }
-
-  private _initBreadcrumbs() {
-    this._breadcrumbsService.setVisible(true);
-    this._breadcrumbsService.setItems([
-      {
-        label: 'Поставщики',
-        routerLink: '/supplier'
-      },
-      {
-        label: `${this.supplier.name}`,
-        routerLink: `/supplier/${this.supplier.id}`
-      },
-      {
-        label: this.product?.productName,
-        routerLink: `/supplier/${this.supplier.id}/offer/${this.tradeOffer.id}`
-      },
-    ]);
   }
 
   private _mapSupplier(supplier: TradeOfferSupplierModel): SuppliersItemModel {

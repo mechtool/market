@@ -1,21 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { Component } from '@angular/core';
 
 @Component({
   templateUrl: './404.component.html',
 })
-export class Code404Component implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class Code404Component {
 
-  constructor(private _breadcrumbsService: BreadcrumbsService) {
-    this._breadcrumbsService.setVisible(false);
-  }
+  constructor() {}
 
-  ngOnInit() {}
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 }

@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Subject, throwError } from 'rxjs';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { Component } from '@angular/core';
+import { combineLatest, throwError } from 'rxjs';
 import {
   OrganizationResponseModel,
   OrganizationsService,
@@ -15,7 +14,9 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { SupplierService } from '#shared/modules/common-services/supplier.service';
 import { randomARGB } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './supplier.component.html',
   styleUrls: [
@@ -24,8 +25,7 @@ import { randomARGB } from '#shared/utils';
     './supplier.component-768.scss',
   ],
 })
-export class SupplierSingleComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SupplierSingleComponent {
   supplier: SuppliersItemModel;
   request: TradeOffersRequestModel;
   tradeOffersList: TradeOffersListResponseModel;
@@ -37,7 +37,6 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
   query: string;
 
   constructor(
-    private _breadcrumbsService: BreadcrumbsService,
     private _productService: ProductService,
     private _tradeOffersService: TradeOffersService,
     private _supplierService: SupplierService,
@@ -46,14 +45,6 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
   ) {
     this.supplierLogo = randomARGB();
     this._initData();
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   loadTradeOffers(nextPage: number) {
@@ -91,7 +82,6 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
         }),
         switchMap((organization) => {
           this.supplier = this._mapSupplier(organization);
-          this._initBreadcrumbs();
           this.request.supplierInn = this.supplier.inn;
           return this._tradeOffersService.search(this.request);
         }),
@@ -142,19 +132,5 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
       website: organization.contacts?.website,
       address: organization.contacts?.address,
     };
-  }
-
-  private _initBreadcrumbs() {
-    this._breadcrumbsService.setVisible(true);
-    this._breadcrumbsService.setItems([
-      {
-        label: 'Поставщики',
-        routerLink: '/supplier'
-      },
-      {
-        label: `${this.supplier.name}`,
-        routerLink: `/supplier/${this.supplier.id}`
-      },
-    ]);
   }
 }

@@ -1,22 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
 })
-export class CategoriesComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class CategoriesComponent {
 
   constructor() {
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
 }

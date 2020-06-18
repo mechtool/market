@@ -244,7 +244,7 @@
 
         <ul class="choose-city_list">
           <li class="choose-city_item" *ngFor="let item of foundCities"
-              (click)="chooseCity(item)">{{item.fullName}}</li>
+              (mousedown)="chooseCity(item)">{{item.fullName}}</li>
         </ul>
 
       </div>

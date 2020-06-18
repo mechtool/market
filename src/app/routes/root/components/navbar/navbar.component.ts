@@ -1,8 +1,9 @@
-import { Component, OnDestroy, ViewContainerRef } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, ViewContainerRef } from '@angular/core';
 import { NavigationService } from '#shared/modules';
 import { Portal } from '@angular/cdk/portal';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-navbar',
   templateUrl: './navbar.component.html',
@@ -11,8 +12,7 @@ import { Portal } from '@angular/cdk/portal';
     './navbar.component-992.scss',
   ],
 })
-export class NavbarComponent implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class NavbarComponent {
 
   get selectedPortal(): Portal<any> | null {
     return this._navService.selectedPortal;
@@ -23,11 +23,6 @@ export class NavbarComponent implements OnDestroy {
     private _navService: NavigationService
   ) {
     this._navService.viewContainerRef = this._viewContainerRef;
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   openMenu() {

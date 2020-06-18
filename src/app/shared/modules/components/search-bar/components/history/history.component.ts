@@ -1,22 +1,23 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { combineLatest, Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { combineLatest } from 'rxjs';
 import {
   LocalStorageService,
   SuggestionSearchQueryHistoryModel,
   SuggestionService,
-  TypeOfSearch
-} from '../../../../common-services';
+  TypeOfSearch,
+} from '#shared/modules/common-services';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-search-bar-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarHistoryComponent implements OnInit, OnChanges, OnDestroy {
+export class SearchBarHistoryComponent implements OnInit, OnChanges {
   @Input() query: string;
-  private _unsubscriber$: Subject<any> = new Subject();
   searchQueriesHistory: SuggestionSearchQueryHistoryModel[];
 
   constructor(
@@ -33,11 +34,6 @@ export class SearchBarHistoryComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     this._initHistoricalSuggestions();
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   clickSearchQuery(searchQuery: SuggestionSearchQueryHistoryModel) {

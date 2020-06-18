@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BreadcrumbItemModel } from '#shared/modules/common-services';
+import { BreadcrumbItemModel } from './models';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class BreadcrumbsService {
   private items$: BehaviorSubject<BreadcrumbItemModel[]> = new BehaviorSubject(null);
   private visibleBreadcrumbs$: BehaviorSubject<boolean> = new BehaviorSubject(false);

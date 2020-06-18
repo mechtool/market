@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParametersForRequest } from '#shared/utils';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-search-results',
   templateUrl: './search-results.component.html',
@@ -14,8 +15,7 @@ import { containParametersForRequest } from '#shared/utils';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchResultComponent implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SearchResultComponent {
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
   @Input() page: number;
@@ -29,11 +29,6 @@ export class SearchResultComponent implements OnDestroy {
       this.isRequestFulfilled = containParametersForRequest(queryParams);
     });
 
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   productOffersLoading(nextPage: number) {

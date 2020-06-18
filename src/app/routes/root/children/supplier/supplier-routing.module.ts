@@ -9,13 +9,13 @@ import {
 const routes: Routes = [
   {
     path: '',
-    component: SupplierListComponent,
+    component: SupplierListComponent
   }, {
     path: ':id',
     children: [
       {
         path: '',
-        component: SupplierSingleComponent,
+        component: SupplierSingleComponent
       }, {
         path: 'offer/:tradeOfferId',
         component: TradeOfferComponent,

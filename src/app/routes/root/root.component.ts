@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { NavigationService, ResponsiveService } from '#shared/modules';
-import { BreadcrumbsService } from './components/breadcrumbs/breadcrumbs.service';
+import { Component } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { NavigationService, ResponsiveService, BreadcrumbsService } from '#shared/modules';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './root.component.html',
   styleUrls: [
@@ -11,8 +11,7 @@ import { BreadcrumbsService } from './components/breadcrumbs/breadcrumbs.service
     './root.component-992.scss',
   ],
 })
-export class RootComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class RootComponent {
 
   get isNavBarMinified(): boolean {
     return this._navService.isNavBarMinified;
@@ -38,11 +37,4 @@ export class RootComponent implements OnInit, OnDestroy {
     this._responsiveService.init();
   }
 
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 }

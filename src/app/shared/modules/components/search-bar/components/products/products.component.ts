@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {
   ImagesLinkModel,
   LocalStorageService,
@@ -15,8 +14,7 @@ import { absoluteImagePath } from '#shared/utils';
   styleUrls: ['./products.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarProductsComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SearchBarProductsComponent {
   @Input() products: SuggestionProductItemModel[];
   @Input() categories: SuggestionCategoryItemModel[];
 
@@ -24,14 +22,6 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _localStorageService: LocalStorageService,
   ) {
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   chooseProduct(product: SuggestionProductItemModel) {

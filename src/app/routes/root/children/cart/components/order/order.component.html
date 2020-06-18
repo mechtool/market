@@ -1,0 +1,348 @@
+<nz-modal #modal nzWrapClassName="my_modal" [(nzVisible)]="isModalVisible" [nzFooter]="null" (nzOnCancel)="isModalVisible = false">
+
+  <ng-container *ngIf="modalType === 'registerOrAuth'">
+    <ng-container *ngTemplateOutlet="registerOrAuthModal"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="modalType === 'addOrganization'">
+    <ng-container *ngTemplateOutlet="addOrganizationModal"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="modalType === 'orderSent'">
+    <ng-container *ngTemplateOutlet="orderSentModal"></ng-container>
+  </ng-container>
+
+</nz-modal>
+
+<ng-template #registerOrAuthModal>
+  <div class="modal_content order_modal">
+    <div class="modal_title">Необходимо пройти авторизацию</div>
+    <p class="order_modal__text">Чтобы оформить заказ необходимо<br> зарегистрироваться или войти в свой аккаунт в 1С.<br> Не переживайте: данные в корзине сохранятся.</p>
+    <div class="order_modal__btns">
+      <a class="btn btn_std btn-yellow" (click)="register()">Регистрация</a>
+      <a class="btn btn_std btn-gray" (click)="login()">Вход</a>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #addOrganizationModal>
+  <div class="modal_content order_modal">
+    <div class="modal_title">Необходимо зарегистрировать организацию</div>
+    <p class="order_modal__text">Чтобы оформить заказ необходимо<br> иметь хотя бы одну зарегистрированную организацию.</p>
+    <div class="order_modal__btns">
+      <a class="btn btn_std btn-yellow" [routerLink]="['/my/organizations']">Мои организации</a>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #orderSentModal>
+  <div class="modal_content order_modal">
+    <div class="modal_title">Заказ #{{orderNum}} отправлен поставщику</div>
+    <p class="order_modal__text">Отслеживать статус заказов<br> вы можете в разделе Мои заказы.</p>
+    <div class="order_modal__btns">
+      <a class="btn btn_std btn-yellow" [routerLink]="['/my/orders']">Мои заказы</a>
+    </div>
+  </div>
+</ng-template>
+
+
+<div class="order">
+  {{isUserAuthed | json}}
+  {{form.value | json}}
+  <form class="form__order" action="" [formGroup]="form" (submit)="makeOrder()">
+
+    <div class="order_info">
+      <div class="order_spec">
+        <div class="order_label">Заказ:</div>
+        <div class="order_value">#{{orderNum}}</div>
+      </div>
+      <div class="order_spec" *ngIf="isUserAuthed && availableUserOrganizations">
+        <div class="order_label">Доступный заказчик:</div>
+        <div class="order__customer dropdown dropdown_selectable">
+          <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'" [nzDisabled]="availableUserOrganizations?.length === 1">
+            <div class="supplier_title">
+              <div class="supplier_image">
+                <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(consumerName)}"></div>
+              </div>
+              <div class="supplier_name">
+                {{consumerName}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <nz-dropdown-menu #organizationsList="nzDropdownMenu">
+          <ul nz-menu style="width: 290px">
+            <li nz-menu-item *ngFor="let organization of availableUserOrganizations" (click)="setConsumer(organization)">
+              <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
+                <div class="supplier_image">
+                  <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(organization?.organizationName)}"></div>
+                </div>
+                <div class="supplier_name">
+                  {{organization?.organizationName}}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+      <div class="order_spec">
+        <div class="order_label">Поставщик:</div>
+        <div class="order_value supplier_title">
+          <span class="supplier_image">
+            <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(supplierName)}"></div>
+          </span>
+          <span class="supplier_name">
+            {{supplierName}}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <nz-tabset class="" nzTabPosition="top" nzType="card">
+
+      <nz-tab nzTitle="Товары">
+        <div class="tab-content">
+          <ng-container *ngTemplateOutlet="tableProducts"></ng-container>
+        </div>
+      </nz-tab>
+
+      <nz-tab nzTitle="Данные для заказа">
+        <div class="tab-content">
+          <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
+        </div>
+      </nz-tab>
+
+      <nz-tab nzTitle="Поставщик">
+        <div class="tab-content">
+          <ng-container *ngTemplateOutlet="supplierData"></ng-container>
+        </div>
+      </nz-tab>
+
+    </nz-tabset>
+
+  <ng-template #tableProducts>
+    <section id="section_tab__products" class="section_tab section_tab__moving" formArrayName="items">
+      <div class="section_tab__title">
+        <div class="section_tab__back">Назад</div>
+        <h2>Товары в заказе #{{orderNum}}</h2>
+        <p>Всего {{totalItems}}{{totalItems | myDeclension: ' товар': ' товара': ' товаров'}}<br> на сумму {{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</p>
+      </div>
+      <div class="table_list table_list__products table_list__basket">
+        <div class="table_row table_header">
+          <div class="cell_right">
+            <div class="table_cell cell_title">
+              Наименование товара
+            </div>
+            <div class="table_cell cell_article">
+              Артикул
+            </div>
+            <div class="table_cell cell_available">
+              Доступность
+            </div>
+            <div class="table_cell cell_count" data-title="Количество:">
+              Количество
+            </div>
+            <div class="table_cell cell_price_one">
+              Цена за штуку
+            </div>
+            <div class="table_cell cell_sum" data-title="Сумма с НДС:">
+              Сумма с НДС
+            </div>
+          </div>
+        </div>
+        <div class="table_row" *ngFor="let item of form.get('items')['controls']; let i = index">
+          <ng-container [formGroupName]="i">
+            <div class="cell_left">
+              <div class="cell_image">
+                <img src="{{form.get('items')['controls'][i].controls.imageUrl.value}}" alt="" title="">
+              </div>
+            </div>
+            <div class="cell_right">
+              <div class="table_cell cell_title">
+                <span title="Браслет Honor Band 5 четвертая версия">{{form.get('items')['controls'][i].controls.productName.value}}</span>
+              </div>
+              <div class="table_cell cell_article" data-title="Артикул:">
+                {{form.get('items')['controls'][i].controls.partNumber.value}}
+              </div>
+              <div class="table_cell cell_available" data-title="Доступность:">
+                {{form.get('items')['controls'][i].controls.availabilityStatus.value}}
+              </div>
+              <div class="table_cell cell_count" data-title="Количество:">
+                <my-cart-order-qty-counter formControlName="quantity"></my-cart-order-qty-counter>
+              </div>
+              <div class="table_cell cell_price_one">
+                <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+              </div>
+              <div class="table_cell cell_sum" data-title="Стоимость:">
+                <span class="price">{{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+                <span class="cell_nds">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
+              </div>
+              <div class="table_cell cell_more">
+                <div class="table_cell__inner more_actions__dropdown dropdown">
+                  <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown [nzDropdownMenu]="itemModal"><span></span></button>
+                  <nz-dropdown-menu #itemModal="nzDropdownMenu">
+                    <div class="dropdown_block">
+                      <div class="dropdown_item dropdown_item__hover" (click)="removeFromOrder(form.get('items')['controls'][i].controls)">Удалить из заказа</div>
+                    </div>
+                  </nz-dropdown-menu>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </section>
+  </ng-template>
+
+  <ng-template #orderDetails>
+    <section id="section_tab__information" class="section_tab section_tab__limited">
+      <!-- TODO: для мобильного вида -->
+      <div class="section_tab__title">
+        <div class="section_tab__back">Назад</div>
+        <h2>Данные для заказа<br> #3672832</h2>
+        <p>
+          Заполните поля доставки <br> и контактов вашего представителя,<br> чтобы отправить заказ
+        </p>
+      </div>
+      <div class="section_paragraph">
+        <h3>Доставка</h3>
+        <p>{{deliveryDescription}}</p>
+        <div class="info_group__small">
+          <div class="info_group">
+            <span class="info_group__label">Срок поставки</span>
+            <span class="info_group__value">{{deliveryTime}}</span>
+          </div>
+          <div class="info_group">
+            <span class="info_group__label">Способ доставки</span>
+            <span class="info_group__value">{{deliveryOptions | myArrayJoiner: 'label'}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="section_paragraph">
+        <div class="order__shipping">
+          <div class="form-group_title">Укажите cпособ доставки</div>
+          <div class="form-group_radio order__shipping_type">
+            <nz-radio-group formControlName="deliveryMethod">
+              <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
+            </nz-radio-group>
+          </div>
+          <div class="order__shipping_type order__shipping_pickup showed">
+            <p><strong>Адреса самовывоза:</strong> {{pickupPoints | myArrayJoiner: 'name':'; '}}</p>
+            <p><strong>Время работы:</strong> {{workingHours}}</p>
+          </div>
+          <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
+            <div class="form-group form-group-long">
+              <label for="formAddress">Укажите адрес доставки *</label>
+              <input type="text" placeholder="" [ngClass]="{'error': form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)}" nz-input [nzAutocomplete]="auto" formControlName="deliveryArea">
+              <nz-autocomplete nzBackfill [compareWith]="locationsCompareFun" #auto>
+                <nz-auto-option *ngFor="let location of foundLocations" [nzValue]="location" [nzLabel]="location.fullName">{{ location.fullName }}</nz-auto-option>
+              </nz-autocomplete>
+              <div class="input_error" *ngIf="form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)">Заполните это поле</div>
+            </div>
+
+            <div class="order__shipping_time">
+              <div class="form-group form-group-std order__shipping_date">
+                <label for="formDate">Желаемая дата доставки</label>
+                <input type="text" name="address" id="formDate" formControlName="deliveryDesirableDate">
+              </div>
+              <div class="order__shipping_interval__wrap">
+                <div class="form-group_title">Интервал времени</div>
+                <div class="form-group_radio order__shipping_interval">
+                  <nz-radio-group formControlName="deliveryDesirableTimeInterval">
+                    <label nz-radio [nzValue]="interval.value" *ngFor="let interval of deliveryTimeIntervals">{{ interval.label }}</label>
+                  </nz-radio-group>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="order__shipping_form__title">Контактное лицо с вашей стороны</div>
+          <div class="form-group form-group-long">
+            <label for="formFIO">ФИО *</label>
+            <input type="text" name="fio" id="formFIO" [ngClass]="{'error': form.controls.contactName.errors?.required && (form.controls.contactName.touched || form.controls.contactName.dirty)}" formControlName="contactName">
+            <div class="input_error" *ngIf="form.controls.contactName.errors?.required && (form.controls.contactName.touched || form.controls.contactName.dirty)">Заполните это поле</div>
+          </div>
+          <div class="form-group form-group-long">
+            <label for="formPhone">Телефон *</label>
+            <input type="text" name="phone" id="formPhone" [ngClass]="{'error': form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}" class="phone_mask" formControlName="contactPhone">
+            <div class="input_error" *ngIf="form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">Заполните это поле</div>
+          </div>
+          <div class="form-group form-group-long">
+            <label for="formEmail">Электронная почта *</label>
+            <input type="email" name="email" id="formEmail" [ngClass]="{'error': form.controls.contactEmail.errors?.required && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}" formControlName="contactEmail">
+            <div class="input_error" *ngIf="form.controls.contactEmail.errors?.required && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">Заполните это поле</div>
+          </div>
+          <div class="form-group">
+            <label for="formComment">Комментарий для поставщика</label>
+            <div class="textarea-wrap">
+              <textarea name="about" id="formComment" rows="6" formControlName="commentForSupplier"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-template>
+
+  <ng-template #supplierData>
+    <section id="section_tab__supplier" class="section_tab section_tab__supplier section_tab__limited">
+      <!-- TODO: для мобильного вида -->
+      <div class="section_tab__title">
+        <div class="section_tab__back">Назад</div>
+        <h2>Данные поставщика<br> для заказа #{{orderNum}}</h2>
+      </div>
+      <div class="section_paragraph">
+        <h3>Поставщик</h3>
+        <p class="supplier_title">
+          <span class="supplier_image">
+            <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(supplierName)}"></div>
+          </span>
+          <span class="supplier_name">
+            {{supplierName}}
+          </span>
+
+          <span class="tooltip_wrap" [ngStyle]="{'display': hasSupplierApprovedDeals ? 'block' : 'none'}">
+            <span class="tooltip tooltip_fill"
+                  nz-tooltip
+                  nzTooltipTitle="У поставщика есть подтвержденные сделки на торговой площадке">Были сделки</span>
+          </span>
+
+        </p>
+        <div class="info_group__supplier">
+          <div class="info_group">
+            <span class="info_group__label">ИНН</span>
+            <span class="info_group__value">{{supplierINN}}</span>
+          </div>
+          <div class="info_group">
+            <span class="info_group__label">КПП</span>
+            <span class="info_group__value">{{supplierKPP}}</span>
+          </div>
+        </div>
+        <h3>Контакная информация</h3>
+        <div class="info_group__supplier">
+          <div class="info_group">
+            <span class="info_group__label">Телефон</span>
+            <span class="info_group__value">{{supplierPhone}}</span>
+          </div>
+          <div class="info_group">
+            <span class="info_group__label">E-mail</span>
+            <span class="info_group__value">{{supplierEmail}}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-template>
+
+  <div class="order__total">
+    <div class="order__total_price">
+      <div class="order__total_label">Итого:</div>
+      <div class="order__total_value">{{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
+    </div>
+    <div class="order__total_nds">Включая налог НДС {{vat / 100 | percent}}</div>
+    <div class="order__total_btn">
+      <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Оформить заказ</button>
+    </div>
+  </div>
+
+  </form>
+
+</div>

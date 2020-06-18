@@ -1,18 +1,18 @@
-import { Component, OnDestroy } from '@angular/core';
-import { combineLatest, Subject, throwError } from 'rxjs';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { Component } from '@angular/core';
+import { combineLatest, throwError } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDto, SortModel, TradeOfferDto, TradeOffersModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
 })
-export class ProductComponent implements OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class ProductComponent {
   productId: string;
   product: ProductDto;
   tradeOffers: TradeOfferDto[];
@@ -27,7 +27,6 @@ export class ProductComponent implements OnDestroy {
   }
 
   constructor(
-    private _breadcrumbsService: BreadcrumbsService,
     private _productService: ProductService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
@@ -39,10 +38,6 @@ export class ProductComponent implements OnDestroy {
     this._initProductOffers();
   }
 
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 
   sortChange($event: SortModel) {
     this.sort = $event;
@@ -68,7 +63,6 @@ export class ProductComponent implements OnDestroy {
       .subscribe((model) => {
         this.tradeOffers = this._mapOffers(model.offers);
         this.product = ProductDto.fromProductOffer(model.product);
-        this._initBreadcrumbs();
       }, (err) => {
         console.error('error', err);
       });
@@ -76,24 +70,6 @@ export class ProductComponent implements OnDestroy {
 
   private _offerTotal(value: number): string {
     return `${value} ${this._declensionPipe.transform(value, 'предложение', 'предложения', 'предложений')}`;
-  }
-
-  private _initBreadcrumbs() {
-    this._breadcrumbsService.setVisible(true);
-    this._breadcrumbsService.setItems([
-      {
-        label: 'Личный кабинет',
-        routerLink: '/'
-      },
-      {
-        label: 'Товары',
-        routerLink: `/search`
-      },
-      {
-        label: this.product.productName,
-        routerLink: `/product/${this.productId}`
-      },
-    ]);
   }
 
   private _mapOffers(offers: TradeOffersModel[]): TradeOfferDto[] {

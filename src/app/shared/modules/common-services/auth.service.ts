@@ -1,7 +1,7 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, filter, switchMap, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import {
   redirectTo,

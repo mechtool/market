@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { CacheService } from './cache.service';
 import { CategoryService } from './category.service';
 import { NavigationService } from './navigation.service';
+import { BreadcrumbsService } from './breadcrumbs.service';
 import { ResponsiveService } from './responsive.service';
 import { SuggestionService } from './suggestion.service';
 import { ProductService } from './product.service';
@@ -15,6 +16,7 @@ import { LocalStorageService } from './local-storage.service';
 import { LocationService } from './location.service';
 import { SupplierService } from './supplier.service';
 import { TradeOffersService } from './trade-offers.service';
+import { CartService } from './cart.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -30,6 +32,7 @@ export class CommonServicesModule {
         CacheService,
         CategoryService,
         NavigationService,
+        BreadcrumbsService,
         LocalStorageService,
         ResponsiveService,
         SuggestionService,
@@ -39,6 +42,7 @@ export class CommonServicesModule {
         LocationService,
         SupplierService,
         TradeOffersService,
+        CartService,
       ],
     };
   }

@@ -5,7 +5,7 @@ import { CheckoutComponent } from './checkout.component';
 const routes: Routes = [
   {
     path: '',
-    component: CheckoutComponent,
+    component: CheckoutComponent
   },
 ];
 

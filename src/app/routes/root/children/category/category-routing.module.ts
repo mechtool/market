@@ -8,7 +8,7 @@ const routes: Routes = [
     component: CategoriesComponent,
   }, {
     path: ':id',
-    component: CategoryComponent,
+    component: CategoryComponent
   }, {
     path: '**',
     redirectTo: '',

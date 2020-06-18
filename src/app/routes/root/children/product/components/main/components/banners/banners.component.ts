@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-main-banners',
   templateUrl: './banners.component.html',
@@ -12,18 +13,10 @@ import { Subject } from 'rxjs';
     './banners.component-576.scss',
   ],
 })
-export class MainBannersComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class MainBannersComponent {
   array = [1, 2, 3, 4];
 
   constructor() {}
-
-  ngOnInit() {}
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 
 }
 

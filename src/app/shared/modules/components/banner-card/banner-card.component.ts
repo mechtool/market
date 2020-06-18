@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-banner-card',
   templateUrl: './banner-card.component.html',
@@ -11,19 +12,11 @@ import { Subject } from 'rxjs';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BannerCardComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class BannerCardComponent {
   @Input() routerLink: string[];
   @Input() imageUrl : string;
   @Input() imgAlt : string;
 
   constructor() {}
-
-  ngOnInit() {}
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 
 }

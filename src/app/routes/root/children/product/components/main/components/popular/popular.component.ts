@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 // TODO ВЫНЕСТИ В SHARED ПАПКУ!!!!!!!!!!!!!!!!!!!!!!!
-
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-main-popular',
   templateUrl: './popular.component.html',
@@ -15,8 +15,7 @@ import { ProductOffersModel } from '#shared/modules/common-services/models';
     './popular.component-576.scss',
   ],
 })
-export class MainPopularComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class MainPopularComponent implements OnInit {
   productOffers: ProductOffersModel[];
 
   constructor(private _productService: ProductService) {
@@ -26,10 +25,6 @@ export class MainPopularComponent implements OnInit, OnDestroy {
     this._getPopularNomenclatures();
   }
 
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
-  }
 
   private _getPopularNomenclatures(): void {
     this._productService.getPopularProductOffers()

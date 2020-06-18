@@ -1,17 +1,19 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NzModalRef } from 'ng-zorro-antd';
+import { fromEvent } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import {
   TradeOfferPriceMatrixModel,
   TradeOfferResponseModel,
   TradeOfferStockEnumModel,
   TradeOfferVatEnumModel
-} from '#shared/modules/common-services/models';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd';
-import { fromEvent } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+} from '#shared/modules/common-services';
 
 enum OrderStatus { NOT_AVAILABLE, TO_CART, IN_CART }
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-product-order',
   templateUrl: './product-order.component.html',
@@ -21,7 +23,7 @@ enum OrderStatus { NOT_AVAILABLE, TO_CART, IN_CART }
     './product-order.component-576.scss',
   ],
 })
-export class ProductOrderComponent implements OnInit, OnDestroy {
+export class ProductOrderComponent {
 
   @Input() tradeOffer: TradeOfferResponseModel;
   @ViewChild('matrixModal') ref: NzModalRef;
@@ -73,12 +75,6 @@ export class ProductOrderComponent implements OnInit, OnDestroy {
     this._initOrderStatus();
     this.vat = this._vat();
     this._closeModalOnResolutionChanges();
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   order() {

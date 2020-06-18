@@ -1,0 +1,5 @@
+<div class="switch_count color_scheme_grey" [formGroup]="form">
+  <button type="button" class="switch_count__decrease" (click)="decrement()" [disabled]="value <= min"></button>
+  <input type="number" class="switch_count__value" (keypress)="onlyNumberKey($event)" (blur)="resetToZeroIfNull()" formControlName="val">
+  <button type="button" class="switch_count__increase" (click)="increment()" [disabled]="value >= max"></button>
+</div>

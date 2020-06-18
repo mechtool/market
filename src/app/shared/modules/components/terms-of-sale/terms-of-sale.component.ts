@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { TradeOfferResponseModel } from '#shared/modules';
 import { mapStock } from '#shared/utils';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-terms-of-sale',
   templateUrl: './terms-of-sale.component.html',
@@ -12,7 +14,7 @@ import { mapStock } from '#shared/utils';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TermsOfSaleComponent implements OnInit, OnDestroy {
+export class TermsOfSaleComponent {
 
   @Input() tradeOffer: TradeOfferResponseModel;
 
@@ -97,9 +99,4 @@ export class TermsOfSaleComponent implements OnInit, OnDestroy {
   constructor() {
   }
 
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-  }
 }

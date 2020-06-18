@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { randomARGB } from '#shared/utils/get-color';
 import { SuppliersItemModel } from '#shared/modules';
 
-
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-supplier-card',
   templateUrl: './supplier-card.component.html',
@@ -15,17 +16,11 @@ import { SuppliersItemModel } from '#shared/modules';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SupplierCardComponent implements OnInit, OnDestroy {
+export class SupplierCardComponent {
 
   @Input() supplier: SuppliersItemModel;
 
   constructor(private _router: Router) {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   clickSupplier() {

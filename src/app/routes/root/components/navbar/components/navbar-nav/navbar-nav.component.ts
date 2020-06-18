@@ -3,18 +3,20 @@ import {
   HostBinding,
   HostListener,
   Injector,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { UserService } from '#shared/modules/common-services/user.service';
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { CategoryModel } from '#shared/modules/common-services/models/category.model';
+import { CartService } from '#shared/modules/common-services/cart.service';
+import { map } from 'rxjs/operators';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-navbar-nav',
   templateUrl: './navbar-nav.component.html',
@@ -25,10 +27,10 @@ import { CategoryModel } from '#shared/modules/common-services/models/category.m
     './navbar-nav.component-576.scss',
   ],
 })
-export class NavbarNavComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class NavbarNavComponent implements OnInit {
   private _navService: NavigationService;
   private _userService: UserService;
+  private _cartService: CartService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
   isMinified = false;
@@ -43,6 +45,10 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
 
   get categoryItems$(): Observable<CategoryModel[]> {
     return this._userService.userCategories$.asObservable();
+  }
+
+  get getCartCounter$(): any {
+    return this._cartService.getCartData$().pipe(map(res => res?.content?.length));
   }
 
   @HostBinding('class.minified')
@@ -63,10 +69,11 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   ) {
     this._navService = this.injector.get(NavigationService);
     this._userService = this.injector.get(UserService);
+    this._cartService = this.injector.get(CartService);
   }
 
   ngOnInit() {
-    this._navService.navItems$.pipe(takeUntil(this._unsubscriber$)).subscribe(
+    this._navService.navItems$.subscribe(
       (res) => {
         this.navItems = res;
         // TODO: оптимизировать проход по элементам меню
@@ -90,11 +97,6 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
         console.log('error');
       }
     );
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   navigateNavItem(navItem: NavItemModel): void {

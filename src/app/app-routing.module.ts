@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard, SsoTicketGuard } from '#shared/modules';
 import { RootComponent } from './routes/root/root.component';
-import { DelayedPreloadingStrategy } from '#shared/modules/setup-services';
+import { DelayedPreloadingStrategy, BreadcrumbsGuard } from '#shared/modules/setup-services';
 
 const routes: Routes = [
   {
@@ -11,7 +11,8 @@ const routes: Routes = [
     loadChildren: () => import('./routes/login/login.module').then(m => m.LoginModule),
   }, {
     path: '',
-    canActivate: [SsoTicketGuard],
+    canActivate: [BreadcrumbsGuard, SsoTicketGuard],
+    runGuardsAndResolvers: 'always',
     component: RootComponent,
     children: [
       {

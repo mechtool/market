@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { BreadcrumbItemModel } from '#shared/modules/common-services';
-import { BreadcrumbsService } from './breadcrumbs.service';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { BreadcrumbItemModel, BreadcrumbsService } from '#shared/modules';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
@@ -12,7 +13,7 @@ import { BreadcrumbsService } from './breadcrumbs.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BreadcrumbsComponent implements OnInit, OnDestroy {
+export class BreadcrumbsComponent {
 
   @Input() items: BreadcrumbItemModel[];
 
@@ -20,13 +21,6 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     return this._breadcrumbsService.istVisible();
   }
 
-  constructor(private _breadcrumbsService: BreadcrumbsService) {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-  }
+  constructor(private _breadcrumbsService: BreadcrumbsService) {}
 
 }

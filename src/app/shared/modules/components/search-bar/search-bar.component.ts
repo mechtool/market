@@ -4,13 +4,11 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnDestroy,
   Output,
   SimpleChanges
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -21,8 +19,9 @@ import {
 } from '../../common-services';
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
-
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-search-bar',
   templateUrl: './search-bar.component.html',
@@ -33,8 +32,7 @@ import { ActivatedRoute, Params } from '@angular/router';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarComponent implements OnDestroy, OnChanges {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SearchBarComponent implements OnChanges {
   private _filterCount: number;
   form: FormGroup;
   isInputFocused = false;
@@ -90,11 +88,6 @@ export class SearchBarComponent implements OnDestroy, OnChanges {
     if (!this.suggestionsOff) {
       this._subscribeOnQueryChanges();
     }
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -197,7 +190,6 @@ export class SearchBarComponent implements OnDestroy, OnChanges {
   private _subscribeOnQueryChanges(): void {
     this.form.get('query').valueChanges
       .pipe(
-        takeUntil(this._unsubscriber$),
         filter(res => res.trim().length >= this.minQueryLength && res.trim().length <= this.maxQueryLength),
       )
       .subscribe((res) => {

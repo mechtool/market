@@ -10,12 +10,12 @@
       &:hover {
         cursor: default;
         .opener {
-          background: #f24e43;
+          background: var(--color-accent-secondary);
         }
       }
 
       .opener {
-        background: #f24e43;
+        background: var(--color-accent-secondary);
       }
 
       .label {
@@ -96,7 +96,7 @@
       &:hover {
         cursor: pointer;
         .opener {
-          background: #f24e43;
+          background: var(--color-accent-secondary);
         }
       }
 
@@ -179,7 +179,7 @@
 
   .categories_list .nav_item {
     padding-left: 40px;
-    font-size: var(--font-size-main);
+    font-size: var(--font-size-base);
   }
 
   .categories_list:after {

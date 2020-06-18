@@ -190,7 +190,7 @@ button.btn:hover {
 }
 
 .price {
-  font-size: var(--font-size-main);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   line-height: 19px;
   color: #000000;
@@ -198,7 +198,7 @@ button.btn:hover {
 }
 
 .cell_nds {
-  font-size: var(--font-size-main);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-light);
   margin-left: 7px;
   opacity: 0.8;

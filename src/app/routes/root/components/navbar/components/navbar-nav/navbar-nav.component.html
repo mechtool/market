@@ -13,7 +13,7 @@
           <img src="assets/img/svg/icon__{{item.icon}}.svg" alt="{{item.label}}" title="{{item.label}}" >
         </span>
         <span class="label">{{item.label}}</span>
-        <span class="counter" *ngIf="item.counter">{{item.counter}}</span>
+        <span class="counter" *ngIf="item.label === 'Корзина' && item.counter && (getCartCounter$ | async) as cartCounter">{{cartCounter}}</span>
         <span [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
       </a>
       <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
@@ -39,7 +39,7 @@
     <div class="nav-btns">
         <a class="btn btn_bordered">
           <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
-          <span class="counter">99</span>
+          <span class="counter" *ngIf="getCartCounter$ | async as cartCounter">{{cartCounter}}</span>
         </a>
         <a class="btn btn_bordered btn_mobile-menu" (click)="closeMenuWithCategories()">
           <span></span>

@@ -1,13 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Subject } from 'rxjs';
-import { AllGroupQueryFiltersModel, SuppliersItemModel, SuppliersResponseModel } from '#shared/modules';
-import { SupplierService } from '#shared/modules/common-services/supplier.service';
+import { Component } from '@angular/core';
+import { combineLatest } from 'rxjs';
+import {
+  AllGroupQueryFiltersModel,
+  SuppliersItemModel,
+  SuppliersResponseModel,
+  SupplierService,
+} from '#shared/modules';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 const PAGE_SIZE = 20;
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './suppliers.component.html',
   styleUrls: [
@@ -17,8 +22,7 @@ const PAGE_SIZE = 20;
     './suppliers.component-576.scss',
   ],
 })
-export class SupplierListComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class SupplierListComponent {
   query: string;
   supplierData: SuppliersResponseModel;
   suppliers: SuppliersItemModel[];
@@ -28,18 +32,8 @@ export class SupplierListComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _supplierService: SupplierService,
-    private _breadcrumbsService: BreadcrumbsService,
   ) {
     this._initForm();
-    this._initBreadcrumbs();
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   queryParametersChange($event: AllGroupQueryFiltersModel) {
@@ -95,10 +89,6 @@ export class SupplierListComponent implements OnInit, OnDestroy {
       return this._supplierService.getAllSuppliers(page, PAGE_SIZE);
     }
     return this._supplierService.findSuppliersBy(this.query, page, PAGE_SIZE);
-  }
-
-  private _initBreadcrumbs() {
-    this._breadcrumbsService.setVisible(false);
   }
 
   private _map(suppliers: SuppliersResponseModel) {

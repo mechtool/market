@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { absoluteImagePath } from '#shared/utils/get-image';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
@@ -15,8 +14,7 @@ import { NavigationService } from '#shared/modules/common-services/navigation.se
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NomenclatureCardComponent implements OnInit, OnDestroy {
-  private _unsubscriber$: Subject<any> = new Subject();
+export class NomenclatureCardComponent {
   @Input() productOffer: ProductOffersModel;
 
   get imageUrl() {
@@ -25,14 +23,6 @@ export class NomenclatureCardComponent implements OnInit, OnDestroy {
   }
 
   constructor(private _navService: NavigationService) {
-  }
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-    this._unsubscriber$.next();
-    this._unsubscriber$.complete();
   }
 
   goToProduct() {
