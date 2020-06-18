@@ -26,7 +26,6 @@
 
     <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
       <div class="suppliers_infinite_scroll" infiniteScroll (scrolled)="supplierLoading()">
-        <!-- <my-supplier-card *ngFor="let item of suppliers" [supplier]="item"></my-supplier-card> -->
         <my-card *ngFor="let item of suppliers">
           <my-supplier-card [supplier]="item"></my-supplier-card>
         </my-card>

@@ -7,6 +7,7 @@ import {
   SuggestionProductItemModel,
 } from '../../../../common-services';
 import { Router } from '@angular/router';
+import { absoluteImagePath } from '#shared/utils';
 
 @Component({
   selector: 'my-search-bar-products',
@@ -43,8 +44,8 @@ export class SearchBarProductsComponent implements OnInit, OnDestroy {
     this._router.navigate([`./category/${category.id}`]);
   }
 
-  imageUrl(image: ImagesLinkModel[]): string {
-    return image ? image[0].href : 'assets/img/tmp/no_photo.png';
+  imageUrl(images: ImagesLinkModel[]): string {
+    return images ? absoluteImagePath(images[0].href) : absoluteImagePath(null);
   }
 
 }

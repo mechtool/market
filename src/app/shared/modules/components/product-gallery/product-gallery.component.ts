@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ImagesLinkModel, ProductModel } from '#shared/modules';
+import { ImagesLinkModel, ProductDto } from '#shared/modules/common-services/models';
 import { absoluteImagePath, mapStock } from '#shared/utils';
 
 @Component({
@@ -12,7 +12,7 @@ import { absoluteImagePath, mapStock } from '#shared/utils';
 })
 export class ProductGalleryComponent implements OnInit, OnDestroy {
 
-  @Input() product: ProductModel;
+  @Input() product: ProductDto;
   @Input() supplierName: string;
   @Input() stock: string;
   @Input() supplierLogo: string;

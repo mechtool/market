@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, throwError } from 'rxjs';
 import {
-  ProductModel,
+  ProductDto,
   SuppliersItemModel,
   TradeOfferResponseModel,
   TradeOfferSupplierModel
@@ -11,18 +11,19 @@ import { OrganizationsService, ProductService, TradeOffersService, } from '#shar
 import { ActivatedRoute } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { randomARGB } from '#shared/utils';
+import { mapTradeOffer } from '#shared/utils/transform-product';
 
 
 @Component({
-  templateUrl: './product.component.html',
+  templateUrl: './trade-offer.component.html',
   styleUrls: [
-    './product.component.scss',
-    './product.component-992.scss',
+    './trade-offer.component.scss',
+    './trade-offer.component-992.scss',
   ],
 })
-export class SupplierProductComponent implements OnInit, OnDestroy {
+export class TradeOfferComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  product: ProductModel;
+  product: ProductDto;
   supplier: SuppliersItemModel;
   supplierLogo: string;
   tradeOffer: TradeOfferResponseModel;
@@ -54,15 +55,8 @@ export class SupplierProductComponent implements OnInit, OnDestroy {
     this._activatedRoute.params
       .pipe(
         switchMap((params) => {
-          const productId = params.productId;
-          const supplierId = params.id;
-          console.log('supplierId', supplierId);
-          return this._productService.getProductOffer(productId, { suppliers: [supplierId] });
-        }),
-        switchMap((productOffer) => {
-          this.product = productOffer.product;
-          const tradeOfferId = productOffer.offers[0].id;
-          return this._tradeOffersService.getTradeOffer(tradeOfferId);
+          const tradeOfferId = params.tradeOfferId;
+          return this._tradeOffersService.get(tradeOfferId);
         }),
         catchError((err) => {
           console.error('error', err);
@@ -71,6 +65,7 @@ export class SupplierProductComponent implements OnInit, OnDestroy {
       )
       .subscribe((tradeOffer) => {
         this.tradeOffer = tradeOffer;
+        this.product = mapTradeOffer(tradeOffer);
         this.supplier = this._mapSupplier(tradeOffer.supplier);
         this._initBreadcrumbs();
       }, (err) => {
@@ -87,11 +82,11 @@ export class SupplierProductComponent implements OnInit, OnDestroy {
       },
       {
         label: `${this.supplier.name}`,
-        routerLink: `/supplier/${this.supplier.id}/product`
+        routerLink: `/supplier/${this.supplier.id}/offer`
       },
       {
         label: this.product?.productName,
-        routerLink: `/supplier/${this.supplier.id}/product/${this.product.id}`
+        routerLink: `/supplier/${this.supplier.id}/offer/${this.tradeOffer.id}`
       },
     ]);
   }

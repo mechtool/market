@@ -52,8 +52,8 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     return this.availableFiltersForm.get('inStock').value;
   }
 
-  get onlyWithImages() {
-    return this.availableFiltersForm.get('onlyWithImages').value;
+  get withImages() {
+    return this.availableFiltersForm.get('withImages').value;
   }
 
   save() {
@@ -83,7 +83,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     }
 
     this.availableFilters.inStock = this.availableFiltersForm.get('inStock').value;
-    this.availableFilters.onlyWithImages = this.availableFiltersForm.get('onlyWithImages').value;
+    this.availableFilters.withImages = this.availableFiltersForm.get('withImages').value;
 
     const priceFrom = this.availableFiltersForm.get('priceFrom').value;
     if (priceFrom) {
@@ -111,9 +111,9 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     this.availableFiltersForm = this._fb.group({
       supplier: this.availableFilters.supplier,
       trademark: this.availableFilters.trademark,
-      deliveryMethod: this.availableFilters.deliveryMethod,
+      deliveryMethod: this.availableFilters.deliveryMethod || DeliveryMethod.ANY,
       inStock: this.availableFilters.inStock,
-      onlyWithImages: this.availableFilters.onlyWithImages,
+      withImages: this.availableFilters.withImages,
       // todo: добавить валидацию на отрицательное число и запретить в форме отрицательные числа
       priceFrom: this.availableFilters.priceFrom,
       priceTo: this.availableFilters.priceTo,

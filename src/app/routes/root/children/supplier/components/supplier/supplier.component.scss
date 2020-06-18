@@ -1,0 +1,22 @@
+.page_header {
+  //margin-top: 30px;
+  //margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.page_header .tooltip_wrap {
+  margin-left: 17px;
+}
+
+.supplier_image {
+  display: flex;
+  align-items: center;
+  margin-right: 7px;
+
+  width: 20px;
+  height: 20px;
+
+  border-radius: 3px;
+
+}

@@ -60,7 +60,7 @@ export class MainComponent implements OnInit, OnDestroy {
         delivery: filters.availableFilters.delivery,
         pickup: filters.availableFilters.pickup,
         inStock: filters.availableFilters.inStock,
-        onlyWithImages: filters.availableFilters.onlyWithImages,
+        withImages: filters.availableFilters.withImages,
         priceFrom: filters.availableFilters.priceFrom,
         priceTo: filters.availableFilters.priceTo,
         sort: filters.sort,

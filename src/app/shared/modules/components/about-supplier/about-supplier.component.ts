@@ -16,6 +16,7 @@ export class AboutSupplierComponent implements OnInit, OnDestroy {
 
   @Input() supplier: SuppliersItemModel;
   @Input() supplierLogo: string;
+  @Input() showStoreButton: boolean;
 
   constructor() {
   }

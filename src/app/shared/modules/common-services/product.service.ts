@@ -3,9 +3,11 @@ import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
-  ProductOffersCardModel,
+  ProductOfferRequestModel,
   ProductOfferResponseModel,
-  ProductOfferRequestModel, ProductOffersCardWithProductsTotalModel
+  ProductOffersCardModel,
+  ProductOffersCardWithProductsTotalModel,
+  ProductOffersListResponseModel
 } from './models';
 import { BNetService } from './bnet.service';
 
@@ -20,7 +22,7 @@ export class ProductService {
   }
 
   getPopularProductOffers(): Observable<ProductOffersCardWithProductsTotalModel> {
-    return this._bnetService.searchNomenclatures({ categoryId: '3335', withImages: true })
+    return this._bnetService.searchProductOffers({ categoryId: '3335', withImages: true })
       .pipe(
         map((productOffers) => {
           const products = new ProductOffersCardWithProductsTotalModel();
@@ -51,13 +53,13 @@ export class ProductService {
       suppliers: [filters.availableFilters.supplier],
       tradeMarks: [filters.availableFilters.trademark],
       inStock: filters.availableFilters.inStock,
-      onlyWithImages: filters.availableFilters.onlyWithImages,
+      withImages: filters.availableFilters.withImages,
       deliveryArea: filters.availableFilters.delivery,
       pickupArea: filters.availableFilters.pickup,
       sort: filters.sort,
     };
 
-    return this._bnetService.searchNomenclatures(searchQuery)
+    return this._bnetService.searchProductOffers(searchQuery)
       .pipe(
         map((productOffers) => {
           const products = new ProductOffersCardWithProductsTotalModel();
@@ -77,6 +79,23 @@ export class ProductService {
           return products;
         })
       );
+  }
+
+  searchProductOffers2(filters: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {
+    const searchQuery = {
+      q: filters.query,
+      categoryId: filters.categoryId,
+      priceFrom: filters.availableFilters.priceFrom,
+      priceTo: filters.availableFilters.priceTo,
+      suppliers: [filters.availableFilters.supplier],
+      tradeMarks: [filters.availableFilters.trademark],
+      inStock: filters.availableFilters.inStock,
+      withImages: filters.availableFilters.withImages,
+      deliveryArea: filters.availableFilters.delivery,
+      pickupArea: filters.availableFilters.pickup,
+      sort: filters.sort,
+    };
+    return this._bnetService.searchProductOffers(searchQuery);
   }
 
 }

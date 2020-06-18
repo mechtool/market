@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {
   SupplierListComponent,
   SupplierSingleComponent,
-  SupplierProductComponent
+  TradeOfferComponent
 } from './components';
 
 const routes: Routes = [
@@ -14,11 +14,12 @@ const routes: Routes = [
     path: ':id',
     children: [
       {
-        path: 'product',
+        path: '',
         component: SupplierSingleComponent,
       }, {
-        path: 'product/:productId',
-        component: SupplierProductComponent,
+        path: 'offer/:tradeOfferId',
+        component: TradeOfferComponent,
+        // todo вынести этот, чтобы он был типа https://bnet-mynew-stage.1c.ru/offer/{:tradeOfferId} задача BNET-2955
       }, {
         path: '**',
         redirectTo: 'product',

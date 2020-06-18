@@ -1,0 +1,22 @@
+@media all and (max-width: 992px) {
+  .search-wrapper {
+    order: 2;
+  }
+  .content-wrapper {
+    order: 3;
+  }
+  .catalog_header {
+    flex-direction: column;
+    margin-bottom: 5px;
+  }
+  .catalog_header__count {
+    margin-right: 0;
+    text-align: center;
+  }
+  .catalog_header__count + .catalog_header__btns {
+    margin-top: 10px;
+  }
+  .breadcrumbs {
+    margin: 0;
+  }
+}

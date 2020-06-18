@@ -3,10 +3,11 @@ import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductModel, SortModel, TradeOfferInfoModel, TradeOffersModel } from '#shared/modules';
+import { ProductDto, SortModel, TradeOfferInfoModel, TradeOffersModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 import { mapStock } from '#shared/utils';
+import { mapProductOffer } from '#shared/utils/transform-product';
 
 @Component({
   templateUrl: './product.component.html',
@@ -14,7 +15,8 @@ import { mapStock } from '#shared/utils';
 })
 export class ProductComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  product: ProductModel;
+  productId: string;
+  product: ProductDto;
   tradeOffers: TradeOfferInfoModel[];
   sort: SortModel;
 
@@ -49,7 +51,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   sortChange($event: SortModel) {
     this.sort = $event;
-    this._router.navigate([`/product/${this.product.id}`], {
+    this._router.navigate([`/product/${this.productId}`], {
       queryParams: {
         sort: $event,
       }
@@ -60,8 +62,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     combineLatest([this._activatedRoute.params])
       .pipe(
         switchMap(([params]) => {
-          const productId = params.id;
-          return this._productService.getProductOffer(productId);
+          this.productId = params.id;
+          return this._productService.getProductOffer(this.productId);
         }),
         catchError((err) => {
           console.error('error', err);
@@ -70,7 +72,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       )
       .subscribe((model) => {
         this.tradeOffers = this._mapOffers(model.offers);
-        this.product = model.product;
+        this.product = mapProductOffer(model.product);
         this._initBreadcrumbs();
       }, (err) => {
         console.error('error', err);
@@ -93,7 +95,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       },
       {
         label: this.product.productName,
-        routerLink: `/product/${this.product.id}`
+        routerLink: `/product/${this.productId}`
       },
     ]);
   }

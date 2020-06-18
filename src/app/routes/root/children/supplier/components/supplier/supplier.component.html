@@ -1,4 +1,32 @@
-<div class="single">
+<div class="content-wrapper page_inner">
 
-  SINGLE
+  <div class="page_header" *ngIf="supplier">
+    <span class="supplier_image" [style]="{'background-color': supplierLogo}"></span>
+    <h2>{{supplier.name}}</h2>
+  </div>
+
+  <nz-tabset nzTabPosition="top" nzType="card">
+
+    <nz-tab nzTitle="Товары">
+      <my-supplier-trade-offers-list
+        [supplier]="supplier"
+        [tradeOffers]="tradeOffers"
+        [tradeOffersTotal]="tradeOffersTotal"
+        [isLoading]="isLoading"
+        [page]="page"
+        [query]="query"
+        (loadTradeOffers)="loadTradeOffers($event)"
+        (searchTradeOffers)="searchTradeOffers($event)"
+      ></my-supplier-trade-offers-list>
+    </nz-tab>
+
+    <nz-tab nzTitle="О поставщике">
+      <my-about-supplier
+        [supplier]="supplier"
+        [supplierLogo]="supplierLogo"
+        [showStoreButton]="false"
+      ></my-about-supplier>
+    </nz-tab>
+  </nz-tabset>
+
 </div>

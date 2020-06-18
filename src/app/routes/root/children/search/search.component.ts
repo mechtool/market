@@ -83,7 +83,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       queryParams.delivery = availableFilters.delivery;
       queryParams.pickup = availableFilters.pickup;
       queryParams.inStock = availableFilters.inStock;
-      queryParams.onlyWithImages = availableFilters.onlyWithImages;
+      queryParams.withImages = availableFilters.withImages;
       queryParams.priceFrom = availableFilters.priceFrom;
       queryParams.priceTo = availableFilters.priceTo;
     }
@@ -119,7 +119,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           delivery: queryParams.delivery,
           pickup: queryParams.pickup,
           inStock: queryParams.inStock,
-          onlyWithImages: queryParams.onlyWithImages,
+          withImages: queryParams.withImages,
           priceFrom: queryParams.priceFrom,
           priceTo: queryParams.priceTo,
         };

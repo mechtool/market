@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ProductFeatureModel, ProductModel, ValueType } from '#shared/modules/common-services/models';
+import { ProductDto, ProductFeatureModel, ValueType } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'my-product-description',
@@ -12,7 +12,7 @@ import { ProductFeatureModel, ProductModel, ValueType } from '#shared/modules/co
 })
 export class ProductDescriptionComponent implements OnInit, OnDestroy {
 
-  @Input() product: ProductModel;
+  @Input() product: ProductDto;
 
   ngOnDestroy(): void {
   }

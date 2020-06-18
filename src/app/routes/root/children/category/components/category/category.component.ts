@@ -10,10 +10,7 @@ import {
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  CategoryService,
-  LocalStorageService,
-} from '#shared/modules/common-services';
+import { CategoryService, LocalStorageService, } from '#shared/modules/common-services';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
@@ -42,7 +39,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this._watchUrlChanges();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnDestroy() {
     this._unsubscriber$.next();
@@ -61,7 +59,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         delivery: availableFilters.delivery,
         pickup: availableFilters.pickup,
         inStock: availableFilters.inStock,
-        onlyWithImages: availableFilters.onlyWithImages,
+        withImages: availableFilters.withImages,
         priceFrom: availableFilters.priceFrom,
         priceTo: availableFilters.priceTo,
         sort: filters.sort,
@@ -102,7 +100,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
             delivery: queryParams.delivery,
             pickup: queryParams.pickup,
             inStock: queryParams.inStock,
-            onlyWithImages: queryParams.onlyWithImages,
+            withImages: queryParams.withImages,
             priceFrom: queryParams.priceFrom,
             priceTo: queryParams.priceTo,
           };
@@ -112,10 +110,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
           this.categoryId = params.id;
           return this._categoryService.getCategoryTree(this.categoryId);
         }),
-        switchMap((res) => {
+        switchMap((categoryModel) => {
           // todo: поменять логику когда сделаем дерево категорий
-          this.categoryModel = res.find((cat) => cat.id === this.categoryId);
-          this.refreshBreadcrumbs(res);
+          this.categoryModel = categoryModel.find(category => category.id === this.categoryId);
+          this.refreshBreadcrumbs(categoryModel);
           return this._productService.searchProductOffers({
             query: this.query,
             categoryId: this.categoryId,

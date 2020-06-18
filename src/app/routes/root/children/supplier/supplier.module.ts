@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupplierRoutingModule } from './supplier-routing.module';
-import { SupplierListComponent, SupplierProductComponent, SupplierSingleComponent } from './components';
+import { SupplierListComponent, TradeOfferComponent, SupplierSingleComponent } from './components';
 import {
   AboutSupplierModule,
+  CardModule,
   PipesModule,
   ProductDescriptionModule,
   ProductGalleryModule,
@@ -12,12 +13,12 @@ import {
   SearchBarModule,
   SupplierCardModule,
   TermsOfSaleModule,
-  CardModule,
 } from '#shared/modules';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTabsModule } from 'ng-zorro-antd';
+import { SupplierTradeOffersListModule } from '#shared/modules/components/supplier-trade-offers-list';
 
 @NgModule({
   imports: [
@@ -37,11 +38,12 @@ import { NzTabsModule } from 'ng-zorro-antd';
     AboutSupplierModule,
     ProductOrderModule,
     CardModule,
+    SupplierTradeOffersListModule,
   ],
   declarations: [
     SupplierListComponent,
     SupplierSingleComponent,
-    SupplierProductComponent,
+    TradeOfferComponent,
   ],
 })
 export class SupplierModule {

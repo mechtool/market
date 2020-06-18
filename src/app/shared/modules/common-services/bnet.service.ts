@@ -14,6 +14,8 @@ import {
   SuppliersRequestModel,
   SuppliersResponseModel,
   TradeOfferResponseModel,
+  TradeOffersListResponseModel,
+  TradeOffersRequestModel,
   UserOrganizationModel,
 } from './models';
 import { HttpParams } from '@angular/common/http';
@@ -22,25 +24,26 @@ const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(private _apiService: ApiService) {}
+  constructor(private _apiService: ApiService) {
+  }
 
-  getProductOffer(
-    id: string,
-    filterQuery?: ProductOfferRequestModel
-  ): Observable<ProductOfferResponseModel> {
+  getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
     return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }
 
-  searchNomenclatures(
-    searchQuery: ProductOffersRequestModel
-  ): Observable<ProductOffersListResponseModel> {
+  searchProductOffers(searchQuery: ProductOffersRequestModel): Observable<ProductOffersListResponseModel> {
     const params = this._params(searchQuery);
     return this._apiService.get(`${API_URL}/product-offers`, { params });
   }
 
   getTradeOffer(id: string): Observable<TradeOfferResponseModel> {
-    return this._apiService.get(`${API_URL}/trade-offers/${id}`);
+    return this._apiService.get(`${API_URL}/trade-offers/find/${id}`);
+  }
+
+  searchTradeOffers(query: TradeOffersRequestModel): Observable<TradeOffersListResponseModel> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/trade-offers/search`, { params });
   }
 
   searchSuggestions(query: string): Observable<SuggestionResponseModel> {
@@ -62,9 +65,7 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  searchSuppliers(
-    query: SuppliersRequestModel
-  ): Observable<SuppliersResponseModel> {
+  searchSuppliers(query: SuppliersRequestModel): Observable<SuppliersResponseModel> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/suppliers`, { params });
   }

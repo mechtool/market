@@ -39,8 +39,8 @@
   </div>
 </div>
 
-<div class="section_paragraph">
+<div class="section_paragraph" *ngIf="showStoreButton && supplier">
   <div class="section__btns">
-    <a [routerLink]="['/supplier/' + supplier.id + '/product']" class="btn btn-gray">В магазин поставщика</a>
+    <a [routerLink]="['/supplier/' + supplier.id]" class="btn btn-gray">В магазин поставщика</a>
   </div>
 </div>

@@ -1,4 +1,8 @@
-import { TradeOfferStockEnumModel } from './trade-offer-stock-enum.model';
+import { TradeOfferVatEnumModel } from './trade-offer-vat-enum.model';
+import { TradeOfferPriceMatrixModel } from './trade-offer-price-matrix.model';
+import { TradeOfferPackagingModel } from './trade-offer-packaging.model';
+import { TradeOfferSockModel } from './trade-offer-sock.model';
+import { TradeOfferSupplierModel } from './trade-offer-supplier.model';
 
 export class TradeOfferResponseModel {
   id: string;
@@ -78,30 +82,8 @@ export class TradeOffer1SnRequisitesModel {
   value: any;
 }
 
-export class TradeOfferSupplierModel {
-  bnetInternalId: string;
-  inn: string;
-  kpp: string;
-  name: string;
-  contactPerson: {
-    name: string;
-    phone: string;
-    email: string;
-  };
-}
-
-export class TradeOfferSockModel {
-  stockBalanceSummary: {
-    level: TradeOfferStockEnumModel;
-  };
-}
-
 export class TradeOfferTermsOfSaleModel {
-  packaging: {
-    description: string;
-    unitsNumerator: number;
-    unitsDenominator: number;
-  };
+  packaging: TradeOfferPackagingModel;
   maxDaysForShipment: number;
   price: {
     currencyCode: string;
@@ -142,19 +124,7 @@ export class TradeOfferRequestedPriceProjectionModel {
   matrix: TradeOfferPriceMatrixModel[];
 }
 
-export class TradeOfferPriceMatrixModel {
-  fromPackages: number;
-  price: number;
-  description: string;
-}
-
 export class TradeOfferParentCategoriesModel {
   categoryId: string;
   categoryName: string;
-}
-
-export enum TradeOfferVatEnumModel {
-  VAT_10 = 'VAT_10',
-  VAT_20 = 'VAT_20',
-  VAT_WITHOUT = 'VAT_WITHOUT',
 }

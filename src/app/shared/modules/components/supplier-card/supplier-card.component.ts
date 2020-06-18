@@ -29,7 +29,7 @@ export class SupplierCardComponent implements OnInit, OnDestroy {
   }
 
   clickSupplier() {
-    this._router.navigate([`./supplier/${this.supplier.id}/product`]);
+    this._router.navigate([`./supplier/${this.supplier.id}`]);
   }
 
   get argb() {

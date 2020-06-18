@@ -1,18 +1,13 @@
+import { DeliveryMethod } from './delivery-method-enum.model';
+
 export class DefaultSearchAvailableModel {
-  supplier?: string; // inn or name
+  supplier?: string;
   trademark?: string; // name brand or company
-  deliveryMethod?: DeliveryMethod = DeliveryMethod.ANY;
+  deliveryMethod?: DeliveryMethod;
   delivery?: string;
   pickup?: string;
-  inStock = true;
-  onlyWithImages = true;
+  inStock?: boolean;
+  withImages?: boolean;
   priceFrom?: number;
   priceTo?: number;
 }
-
-export enum DeliveryMethod {
-  ANY = 'any',
-  DELIVERY = 'delivery',
-  PICKUP = 'pickup'
-}
-

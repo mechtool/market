@@ -64,6 +64,7 @@ export class SupplierListComponent implements OnInit, OnDestroy {
 
       this._getSuppliers(nextPage).subscribe((res) => {
         this.supplierData = this._map(res);
+        // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
         this.suppliers.push(...this.supplierData._embedded.suppliers);
         this.isLoading = false;
       });
