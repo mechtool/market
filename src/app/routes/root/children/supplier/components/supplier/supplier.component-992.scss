@@ -1,3 +1,5 @@
-.content-wrapper.page_inner {
-  margin-top: 20px;
+@media all and (max-width: 992px) {
+  .content-wrapper.page_inner {
+    margin-top: 20px;
+  }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -29,7 +29,7 @@ import { absoluteImagePath, mapStock } from '#shared/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class SupplierTradeOffersListComponent implements OnInit, OnDestroy {
+export class SupplierTradeOffersListComponent {
 
   @Input() supplier: SuppliersItemModel;
   @Input() tradeOffers: TradeOfferSummaryModel[];
@@ -47,12 +47,6 @@ export class SupplierTradeOffersListComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _localStorageService: LocalStorageService,
   ) {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
@@ -83,7 +77,7 @@ export class SupplierTradeOffersListComponent implements OnInit, OnDestroy {
   }
 
   price(price: number) {
-    return price ? price / 100 : '';
+    return Number.isInteger(price) ? price / 100 : '';
   }
 
   vat(price: TradeOfferSummaryPriceModel) {

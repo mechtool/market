@@ -1,11 +1,15 @@
 @media all and (max-width: 360px) {
-  .table_list__products .table_row {
-    padding: 15px 15px 20px 15px;
-  }
-  .table_list__products .cell_right {
-    margin-right: 10px;
-  }
-  .table_list__products .btn__product_link {
-    margin-left: 20px;
+  .table_list__products {
+    .table_row {
+      padding: 15px 15px 20px 15px;
+    }
+
+    .cell_right {
+      margin-right: 10px;
+    }
+
+    .btn__product_link {
+      margin-left: 20px;
+    }
   }
 }

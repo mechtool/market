@@ -78,10 +78,10 @@
             <div class="table_cell cell_price">
               <span class="price">{{price(tradeOffer.priceProjection.price)}} ₽</span>
               <span class="cell_nds">{{vat(tradeOffer.price)}}</span>
-              <div class="tooltip_wrap">
-            <span class="tooltip"
-                  nz-tooltip
-                  nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
+              <div class="tooltip_wrap" *ngIf="tradeOffer.targetedOffer">
+                <span class="tooltip"
+                      nz-tooltip
+                      nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
               </div>
             </div>
           </div>

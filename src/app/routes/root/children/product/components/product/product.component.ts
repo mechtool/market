@@ -7,7 +7,6 @@ import { ProductDto, SortModel, TradeOfferInfoModel, TradeOffersModel } from '#s
 import { catchError, switchMap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 import { mapStock } from '#shared/utils';
-import { mapProductOffer } from '#shared/utils/transform-product';
 
 @Component({
   templateUrl: './product.component.html',
@@ -72,7 +71,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       )
       .subscribe((model) => {
         this.tradeOffers = this._mapOffers(model.offers);
-        this.product = mapProductOffer(model.product);
+        this.product = ProductDto.fromProductOffer(model.product);
         this._initBreadcrumbs();
       }, (err) => {
         console.error('error', err);
@@ -92,6 +91,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       },
       {
         label: 'Товары',
+        routerLink: `/search`
       },
       {
         label: this.product.productName,

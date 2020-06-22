@@ -11,7 +11,6 @@ import { OrganizationsService, ProductService, TradeOffersService, } from '#shar
 import { ActivatedRoute } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { randomARGB } from '#shared/utils';
-import { mapTradeOffer } from '#shared/utils/transform-product';
 
 
 @Component({
@@ -65,7 +64,7 @@ export class TradeOfferComponent implements OnInit, OnDestroy {
       )
       .subscribe((tradeOffer) => {
         this.tradeOffer = tradeOffer;
-        this.product = mapTradeOffer(tradeOffer);
+        this.product = ProductDto.fromTradeOffer(tradeOffer);
         this.supplier = this._mapSupplier(tradeOffer.supplier);
         this._initBreadcrumbs();
       }, (err) => {

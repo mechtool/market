@@ -14,6 +14,7 @@ export class TradeOfferResponseModel {
   stock: TradeOfferSockModel;
   deliveryDescription: TradeOfferDeliveryDescriptionModel;
   requestedPriceProjection: TradeOfferRequestedPriceProjectionModel;
+  targetedOffer: boolean;
 }
 
 export class TradeOfferDescriptionModel {

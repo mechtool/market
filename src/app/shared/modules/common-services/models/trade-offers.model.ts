@@ -6,6 +6,7 @@ export class TradeOffersModel {
   stock: TradeOfferStockEnumModel;
   supplier: TradeOffersSupplierModel;
   orderPlacingReference: string;
+  targetedOffer: boolean;
 }
 
 export class TradeOffersSupplierModel {
