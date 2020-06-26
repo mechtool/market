@@ -6,8 +6,7 @@ import {
   ProductOfferRequestModel,
   ProductOfferResponseModel,
   ProductOffersCardModel,
-  ProductOffersCardWithProductsTotalModel,
-  ProductOffersListResponseModel
+  ProductOffersCardWithProductsTotalModel
 } from './models';
 import { BNetService } from './bnet.service';
 
@@ -47,7 +46,7 @@ export class ProductService {
   searchProductOffers(filters: AllGroupQueryFiltersModel): Observable<ProductOffersCardWithProductsTotalModel> {
     const searchQuery = {
       q: filters.query,
-      categoryId: filters.categoryId,
+      categoryId: filters.availableFilters.categories ? filters.availableFilters.categories.values().next().value : undefined,
       priceFrom: filters.availableFilters.priceFrom,
       priceTo: filters.availableFilters.priceTo,
       suppliers: [filters.availableFilters.supplier],
@@ -80,22 +79,4 @@ export class ProductService {
         })
       );
   }
-
-  searchProductOffers2(filters: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {
-    const searchQuery = {
-      q: filters.query,
-      categoryId: filters.categoryId,
-      priceFrom: filters.availableFilters.priceFrom,
-      priceTo: filters.availableFilters.priceTo,
-      suppliers: [filters.availableFilters.supplier],
-      tradeMarks: [filters.availableFilters.trademark],
-      inStock: filters.availableFilters.inStock,
-      withImages: filters.availableFilters.withImages,
-      deliveryArea: filters.availableFilters.delivery,
-      pickupArea: filters.availableFilters.pickup,
-      sort: filters.sort,
-    };
-    return this._bnetService.searchProductOffers(searchQuery);
-  }
-
 }

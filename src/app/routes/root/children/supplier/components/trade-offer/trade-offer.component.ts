@@ -81,7 +81,7 @@ export class TradeOfferComponent implements OnInit, OnDestroy {
       },
       {
         label: `${this.supplier.name}`,
-        routerLink: `/supplier/${this.supplier.id}/offer`
+        routerLink: `/supplier/${this.supplier.id}`
       },
       {
         label: this.product?.productName,

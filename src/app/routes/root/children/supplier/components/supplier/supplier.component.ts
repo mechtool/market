@@ -56,20 +56,6 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
     this._unsubscriber$.complete();
   }
 
-  searchTradeOffers(params: any) {
-    this.request = {};
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        this.request[key] = value;
-      }
-    });
-
-    this._tradeOffersService.search(this.request)
-      .subscribe((tradeOffers) => {
-        this._init(tradeOffers);
-      });
-  }
-
   loadTradeOffers(page: number) {
     const nextPage = this.tradeOffersList.page.number + 1;
     const totalPages = this.tradeOffersList.page.totalPages;
@@ -105,7 +91,7 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
           this.supplier = this._mapSupplier(organization);
           this._initBreadcrumbs();
           this.request.supplierInn = this.supplier.inn;
-          this.request.withImages = true; // todo!!!!
+          this.request.withImages = true; // todo пока так, для красоты!!!!
           return this._tradeOffersService.search(this.request);
         }),
         catchError((err) => {
@@ -121,17 +107,18 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
   }
 
   private _collectRequest(queryParams: Params): void {
-    this.request = {};
     this.query = queryParams.q;
-    Object.entries(queryParams).forEach(([key, value]) => {
-      if (key === 'delivery' && value) {
-        this.request.deliveryArea = value;
-      } else if (key === 'pickup' && value) {
-        this.request.pickupArea = value;
-      } else if (key !== 'deliveryMethod' && key !== 'supplier' && value) {
-        this.request[key] = value;
-      }
-    });
+    this.request = {
+      q: queryParams.q,
+      priceFrom: queryParams.priceFrom,
+      priceTo: queryParams.priceTo,
+      inStock: queryParams.inStock,
+      withImages: queryParams.withImages,
+      deliveryArea: queryParams.delivery,
+      pickupArea: queryParams.pickup,
+      categoryIds: queryParams.categories,
+      sort: queryParams.sort,
+    };
   }
 
 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
@@ -13,6 +13,7 @@ import { SuggestionService } from '#shared/modules/common-services/suggestion.se
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 import { BreadcrumbsService } from '../../components/breadcrumbs/breadcrumbs.service';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './search.component.html',
@@ -28,20 +29,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   query: string;
   sort: SortModel;
 
-  constructor(private _route: ActivatedRoute,
+  constructor(private _activatedRoute: ActivatedRoute,
               private _productService: ProductService,
               private _suggestionService: SuggestionService,
               private _router: Router,
               private _localStorageService: LocalStorageService,
               private _breadcrumbsService: BreadcrumbsService,
   ) {
-    this._initBreadcrumbs();
-    this._initQueryParams();
-    this._searchNomenclatures({
-      query: this.query,
-      availableFilters: this.availableFilters,
-      sort: this.sort,
-    });
+    this._init();
   }
 
   ngOnInit() {
@@ -69,6 +64,52 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _init() {
+    this._activatedRoute.queryParams
+      .pipe(
+        switchMap((queryParams) => {
+          if (Object.keys(queryParams).length) {
+            this.query = queryParams.q;
+            this.availableFilters = {
+              supplier: queryParams.supplier,
+              trademark: queryParams.trademark,
+              deliveryMethod: queryParams.deliveryMethod,
+              delivery: queryParams.delivery,
+              pickup: queryParams.pickup,
+              inStock: queryParams.inStock,
+              withImages: queryParams.withImages,
+              priceFrom: queryParams.priceFrom,
+              priceTo: queryParams.priceTo,
+              categories: this._categories(queryParams.categories),
+            };
+            this.sort = queryParams.sort;
+          }
+          return of({
+            query: this.query,
+            availableFilters: this.availableFilters,
+            sort: this.sort,
+          });
+        }),
+        switchMap((filters) => {
+          if (filters.query === undefined && filters.availableFilters === undefined) {
+            return this._productService.getPopularProductOffers();
+          }
+          return this._productService.searchProductOffers(filters);
+        }),
+        catchError((err) => {
+          console.error('error', err);
+          return throwError(err);
+        })
+      )
+      .subscribe((products) => {
+        this._initBreadcrumbs();
+        this.productOffers = products.productOffers;
+        this.productsTotal = products.productsTotal;
+      }, (err) => {
+        console.log('error');
+      });
+  }
+
   private _getQueryParams(filters: AllGroupQueryFiltersModel) {
     const queryParams: any = {};
     const availableFilters = filters.availableFilters;
@@ -86,49 +127,23 @@ export class SearchComponent implements OnInit, OnDestroy {
       queryParams.withImages = availableFilters.withImages;
       queryParams.priceFrom = availableFilters.priceFrom;
       queryParams.priceTo = availableFilters.priceTo;
+      queryParams.categories = availableFilters.categories ? Array.from(availableFilters.categories) : undefined;
     }
 
     return queryParams;
   }
 
-
-  private _searchNomenclatures(filters: AllGroupQueryFiltersModel): void {
-    let productOffers;
-    if (filters.query === undefined && filters.availableFilters === undefined) {
-      // todo Если пользователь напрямую перешел в поиск, то параметры пустые, поэтому показываем популярные товары
-      productOffers = this._productService.getPopularProductOffers();
-    } else {
-      productOffers = this._productService.searchProductOffers(filters);
-    }
-    productOffers.subscribe((products) => {
-      this.productOffers = products.productOffers;
-      this.productsTotal = products.productsTotal;
-    }, (err) => {
-      console.log('error');
-    });
-  }
-
-  private _initQueryParams() {
-    this._route.queryParams.subscribe((queryParams) => {
-      if (Object.keys(queryParams).length) {
-        this.query = queryParams.q;
-        this.availableFilters = {
-          supplier: queryParams.supplier,
-          trademark: queryParams.trademark,
-          deliveryMethod: queryParams.deliveryMethod,
-          delivery: queryParams.delivery,
-          pickup: queryParams.pickup,
-          inStock: queryParams.inStock,
-          withImages: queryParams.withImages,
-          priceFrom: queryParams.priceFrom,
-          priceTo: queryParams.priceTo,
-        };
-        this.sort = queryParams.sort;
-      }
-    });
-  }
-
   private _initBreadcrumbs() {
     this._breadcrumbsService.setVisible(false);
+  }
+
+  private _categories(categories: any) {
+    if (categories && Array.isArray(categories)) {
+      return new Set(categories);
+    }
+    if (categories) {
+      return new Set([categories]);
+    }
+    return undefined;
   }
 }

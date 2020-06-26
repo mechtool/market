@@ -54,15 +54,16 @@ export class MainComponent implements OnInit, OnDestroy {
     this._router.navigate(['/search'], {
       queryParams: {
         q: filters.query,
-        supplier: filters.availableFilters.supplier,
-        trademark: filters.availableFilters.trademark,
-        deliveryMethod: filters.availableFilters.deliveryMethod,
-        delivery: filters.availableFilters.delivery,
-        pickup: filters.availableFilters.pickup,
-        inStock: filters.availableFilters.inStock,
-        withImages: filters.availableFilters.withImages,
-        priceFrom: filters.availableFilters.priceFrom,
-        priceTo: filters.availableFilters.priceTo,
+        supplier: filters.availableFilters?.supplier,
+        trademark: filters.availableFilters?.trademark,
+        deliveryMethod: filters.availableFilters?.deliveryMethod,
+        delivery: filters.availableFilters?.delivery,
+        pickup: filters.availableFilters?.pickup,
+        inStock: filters.availableFilters?.inStock,
+        withImages: filters.availableFilters?.withImages,
+        priceFrom: filters.availableFilters?.priceFrom,
+        priceTo: filters.availableFilters?.priceTo,
+        categories: filters.availableFilters?.categories ? Array.from(filters.availableFilters?.categories) : undefined,
         sort: filters.sort,
       }
     });

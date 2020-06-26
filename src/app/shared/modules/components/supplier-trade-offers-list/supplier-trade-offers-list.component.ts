@@ -39,7 +39,6 @@ export class SupplierTradeOffersListComponent {
   @Input() query: string;
   @Input() sort: SortModel;
   @Output() loadTradeOffers: EventEmitter<number> = new EventEmitter();
-  @Output() searchTradeOffers: EventEmitter<any> = new EventEmitter();
 
   availableFilters: DefaultSearchAvailableModel;
 
@@ -52,6 +51,7 @@ export class SupplierTradeOffersListComponent {
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     this.availableFilters = filters.availableFilters;
+    this.sort = filters.sort;
     this._router.navigate([`/supplier/${this.supplier.id}`], {
       queryParams: {
         q: filters.query,
@@ -64,12 +64,10 @@ export class SupplierTradeOffersListComponent {
         withImages: this.availableFilters?.withImages,
         priceFrom: this.availableFilters?.priceFrom,
         priceTo: this.availableFilters?.priceTo,
+        categories: this.availableFilters?.categories ? Array.from(this.availableFilters?.categories) : undefined,
         sort: filters.sort,
       },
     });
-    this.sort = filters.sort;
-    const query = this._collectRequest(filters);
-    this.searchTradeOffers.emit(query);
   }
 
   imageUrl(images: string[]) {
@@ -105,20 +103,4 @@ export class SupplierTradeOffersListComponent {
   tradeOffersLoading(nextPage: number) {
     this.loadTradeOffers.emit(nextPage);
   }
-
-  private _collectRequest(filters: AllGroupQueryFiltersModel) {
-    return {
-      q: filters.query,
-      priceFrom: filters.availableFilters?.priceFrom,
-      priceTo: filters.availableFilters?.priceTo,
-      inStock: filters.availableFilters?.inStock,
-      withImages: filters.availableFilters?.withImages,
-      supplierInn: this.supplier.inn,
-      deliveryArea: filters.availableFilters?.delivery,
-      pickupArea: filters.availableFilters?.pickup,
-      // categoryIds: string[],
-      sort: filters.sort,
-    };
-  }
-
 }

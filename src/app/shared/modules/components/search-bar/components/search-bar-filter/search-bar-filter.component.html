@@ -1,12 +1,8 @@
-<div class="dropdown_block filter_wrap">
+<div class="dropdown_block filter_wrap" *ngIf="categories">
 
-  <!--
-  todo: Нужна стратегия по валидации данной формы, что делаем если введены не кооректные значения или условия, блокируем дальнейший ввод или ругаемся?
-  -->
+  <form nz-form id="formFilter" class="form_filter" [formGroup]="availableFiltersForm">
 
-  <p class="filter_title">Фильтр для поиска</p>
-
-  <form nz-form id="formFilter" [formGroup]="availableFiltersForm">
+    <p class="filter_title">Фильтр для поиска</p>
 
     <div class="form-group">
       <nz-form-item class="margin-cleared">
@@ -45,7 +41,8 @@
     <div class="form-group_title">Цена</div>
 
     <div class="range_wrap range_price">
-      <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween" nzTooltipVisible="{{false}}"></nz-slider>
+      <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween"
+                 nzTooltipVisible="{{false}}"></nz-slider>
 
       <div class="range_inputs">
 
@@ -81,5 +78,41 @@
               (click)="reset()">Сбросить
       </button>
     </div>
+  </form>
+
+  <form nz-form id="formCategory" class="form_category" [formGroup]="categoryFiltersForm">
+
+    <p class="filter_title">Фильтр категорий</p>
+
+    <div class="form-group">
+      <nz-form-item class="margin-cleared">
+        <nz-form-control>
+          <nz-form-label nzFor="formFilterCategory">Поиск категории</nz-form-label>
+          <input nz-input type="text"
+                 name="formFilterCategory"
+                 id="formFilterCategory"
+                 placeholder="Укажите название категорию"
+                 autocomplete="off"
+                 formControlName="categoryName">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="filter_category__list scrollbar">
+
+      <div class="form-group_checkbox">
+        <nz-checkbox-wrapper>
+          <div class="magic" [ngClass]="{'visible': category.visible}"
+               *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
+            <label nz-checkbox [formControlName]="i">
+              <span class="filter_category__name">{{category.name}}</span>
+              <span class="filter_category__count">({{category.offers}})</span>
+            </label><br/>
+          </div>
+        </nz-checkbox-wrapper>
+      </div>
+
+    </div>
+
   </form>
 </div>

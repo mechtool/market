@@ -3,6 +3,7 @@ import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
 import { Observable } from 'rxjs';
 import {
+  CategoryRequestModel,
   CategoryResponseModel,
   LocationModel,
   OrganizationResponseModel,
@@ -70,8 +71,9 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/suppliers`, { params });
   }
 
-  getCategories(): Observable<CategoryResponseModel> {
-    return this._apiService.get(`${API_URL}/categories`);
+  getCategories(query?: CategoryRequestModel): Observable<CategoryResponseModel> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/categories`, { params });
   }
 
   private _params(searchQuery: any): HttpParams {
@@ -79,7 +81,13 @@ export class BNetService {
       let params = new HttpParams();
       Object.keys(searchQuery).forEach((queryParam) => {
         if (searchQuery[queryParam]?.toString()) {
-          params = params.append(queryParam, searchQuery[queryParam]);
+          if (Array.isArray(searchQuery[queryParam])) {
+            searchQuery[queryParam].forEach((value) => {
+              params = params.append(`${queryParam}[]`, value);
+            });
+          } else {
+            params = params.append(queryParam, searchQuery[queryParam]);
+          }
         }
       });
       return params;

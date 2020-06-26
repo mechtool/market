@@ -12,7 +12,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService, LocalStorageService, } from '#shared/modules/common-services';
 import { ProductService } from '#shared/modules/common-services/product.service';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './category.component.html',
@@ -91,8 +91,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
       this._activatedRoute.queryParams,
     ])
       .pipe(
-        tap(([params, queryParams]) => {
+        switchMap(([params, queryParams]) => {
+          this.categoryId = params.id;
           this.query = queryParams.q;
+          this.sort = queryParams.sort;
           this.searchFilters = {
             supplier: queryParams.supplier,
             trademark: queryParams.trademark,
@@ -103,20 +105,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
             withImages: queryParams.withImages,
             priceFrom: queryParams.priceFrom,
             priceTo: queryParams.priceTo,
+            categories: new Set([this.categoryId]),
           };
-          this.sort = queryParams.sort;
-        }),
-        switchMap(([params, queryParams]) => {
-          this.categoryId = params.id;
+
           return this._categoryService.getCategoryTree(this.categoryId);
         }),
         switchMap((categoryModel) => {
-          // todo: поменять логику когда сделаем дерево категорий
           this.categoryModel = categoryModel.find(category => category.id === this.categoryId);
           this.refreshBreadcrumbs(categoryModel);
           return this._productService.searchProductOffers({
             query: this.query,
-            categoryId: this.categoryId,
             availableFilters: this.searchFilters,
             sort: this.sort,
           });

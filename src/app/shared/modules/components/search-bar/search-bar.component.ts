@@ -51,8 +51,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() suggestionsOff = false;
-  @Input() categoryId: string;
   @Input() useBrowserStorage = true;
+  @Input() filterVisible = true;
   @Output() queryChange: EventEmitter<string> = new EventEmitter();
   @Output() submitClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
 
@@ -64,6 +64,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     return !this.suggestionsOff &&
       ((this.searchQuery.length >= this.minQueryLength && (!!this.productsSuggestions || !!this.categoriesSuggestions)) ||
         this._localStorageService.hasSearchQueriesHistory());
+  }
+
+  get filterIsEmpty(): boolean {
+    return !this.availableFilters;
   }
 
   constructor(
@@ -97,12 +101,13 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   submit() {
     const queryText = this.searchQuery;
     const groupAllQueryFilters = {
-      query: queryText,
-      categoryId: this.categoryId,
+      query: queryText.length >= this.minQueryLength ? queryText : undefined,
       availableFilters: this.availableFilters || new DefaultSearchAvailableModel(),
       sort: this.sort,
     };
-    if (queryText.length >= this.minQueryLength) {
+
+    if (queryText.length >= this.minQueryLength || (!queryText.length && this.availableFilters)) {
+
       this.submitClick.emit(groupAllQueryFilters);
       this.visibleSuggestions = false;
     }

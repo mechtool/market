@@ -54,9 +54,10 @@
 
     <div class="buttons">
       <div class="buttons__item">
-        <button class="btn btn_square btn_search" [disabled]="form.invalid"></button>
+        <button class="btn btn_square btn_search" [disabled]="form.invalid && filterIsEmpty"></button>
       </div>
-      <div class="buttons__item">
+
+      <div class="buttons__item" *ngIf="filterVisible">
         <a class="btn btn_square btn_category"
            nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
            [nzDropdownMenu]="filterMenu"

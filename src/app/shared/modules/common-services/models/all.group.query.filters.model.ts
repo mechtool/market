@@ -3,7 +3,6 @@ import { SortModel } from './sort.model';
 
 export class AllGroupQueryFiltersModel {
   query?: string;
-  categoryId?: string;
   availableFilters?: DefaultSearchAvailableModel;
   sort?: SortModel;
 }

@@ -4,6 +4,7 @@ export class CategoryModel {
   isLeaf: boolean;
   products: number;
   offers: number;
-  parentId?: string; // TODO: убрать когда будут заменены getCategoryTree2 и getCategoriesChildren2 
+  parentId?: string; // TODO: убрать когда будут заменены getCategoryTree2 и getCategoriesChildren2
   children?: CategoryModel[];
+  visible?: boolean;
 }

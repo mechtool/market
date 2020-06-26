@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserService } from './user.service';
-import { CategoryModel } from './models';
+import { CategoryModel, CategoryRequestModel } from './models';
 import { map } from 'rxjs/operators';
 import { deepTreeParentsSearch, deepTreeSearch } from '#shared/utils';
+import { BNetService } from './bnet.service';
 
 @Injectable()
 export class CategoryService {
-  constructor(private _userService: UserService) {
+  constructor(
+    private _bnetService: BNetService,
+    private _userService: UserService
+  ) {
   }
 
   getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
@@ -25,6 +29,14 @@ export class CategoryService {
       map((res) => {
         const foundCategory = deepTreeSearch(res, 'id', (k, v) => v === categoryId);
         return foundCategory?.children;
+      })
+    );
+  }
+
+  getAllSupplierCategories(query?: CategoryRequestModel): Observable<CategoryModel[]> {
+    return this._bnetService.getCategories(query).pipe(
+      map((res) => {
+        return res.categories;
       })
     );
   }
