@@ -3,6 +3,7 @@ import { TradeOfferPriceMatrixModel } from './trade-offer-price-matrix.model';
 import { TradeOfferPackagingModel } from './trade-offer-packaging.model';
 import { TradeOfferSockModel } from './trade-offer-sock.model';
 import { TradeOfferSupplierModel } from './trade-offer-supplier.model';
+import { AudienceModel } from '#shared/modules/common-services/models/audience-model';
 
 export class TradeOfferResponseModel {
   id: string;
@@ -14,7 +15,7 @@ export class TradeOfferResponseModel {
   stock: TradeOfferSockModel;
   deliveryDescription: TradeOfferDeliveryDescriptionModel;
   requestedPriceProjection: TradeOfferRequestedPriceProjectionModel;
-  targetedOffer: boolean;
+  audience: AudienceModel[];
 }
 
 export class TradeOfferDescriptionModel {

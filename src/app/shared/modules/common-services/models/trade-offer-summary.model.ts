@@ -3,6 +3,7 @@ import { TradeOfferPriceMatrixModel } from './trade-offer-price-matrix.model';
 import { TradeOfferPackagingModel } from './trade-offer-packaging.model';
 import { TradeOfferSockModel } from './trade-offer-sock.model';
 import { TradeOfferSupplierModel } from './trade-offer-supplier.model';
+import { AudienceModel } from './audience-model';
 
 export class TradeOfferSummaryModel {
   id: string;
@@ -23,7 +24,7 @@ export class TradeOfferSummaryModel {
   ref1cNomenclatureCharacteristicId: string;
   supplierNomenclatureSpecificationId: string;
   barCodes: string[];
-  targetedOffer: boolean;
+  audience: AudienceModel[];
   supplier: TradeOfferSupplierModel;
   imageUrls: string[];
 }
