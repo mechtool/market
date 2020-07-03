@@ -58,19 +58,23 @@
       </div>
 
       <div class="buttons__item" *ngIf="filterVisible">
-        <a class="btn btn_square btn_category"
+        <a class="btn btn_square btn_filter"
+           [attr.filter_count]="filterCount"
            nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
            [nzDropdownMenu]="filterMenu"
            (nzVisibleChange)="changeFilterFormVisibility($event)"
-           [(nzVisible)]="isFilterFormVisible"></a>
+           [(nzVisible)]="isFilterFormVisible"
+           [nzOverlayClassName]="'form_filter_mobile'"
+        ></a>
 
         <nz-dropdown-menu #filterMenu="nzDropdownMenu">
-          <div class="closer">
-            <img src="assets/img/svg/icon__close.svg" alt="" (click)="changeFilterFormVisibility(false)">
-          </div>
           <my-search-bar-filter
             [availableFilters]="availableFilters"
+            [city]="userLocation.name"
+            (stateLocationForm)="recLocationFromMobileForm($event)"
             (stateAvailableFilters)="recFilter($event)"
+            (closeFilter)="changeFilterFormVisibility($event)"
+            (filtersCount)="recFiltersCount($event)"
           ></my-search-bar-filter>
         </nz-dropdown-menu>
       </div>

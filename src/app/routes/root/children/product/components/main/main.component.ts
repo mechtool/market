@@ -63,7 +63,7 @@ export class MainComponent implements OnInit, OnDestroy {
         withImages: filters.availableFilters?.withImages,
         priceFrom: filters.availableFilters?.priceFrom,
         priceTo: filters.availableFilters?.priceTo,
-        categories: filters.availableFilters?.categories ? Array.from(filters.availableFilters?.categories) : undefined,
+        categoryId: filters.availableFilters?.categoryId,
         sort: filters.sort,
       }
     });

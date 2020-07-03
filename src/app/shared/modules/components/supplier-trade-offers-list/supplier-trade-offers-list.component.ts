@@ -64,7 +64,7 @@ export class SupplierTradeOffersListComponent {
         withImages: this.availableFilters?.withImages,
         priceFrom: this.availableFilters?.priceFrom,
         priceTo: this.availableFilters?.priceTo,
-        categories: this.availableFilters?.categories ? Array.from(this.availableFilters?.categories) : undefined,
+        categoryId: this.availableFilters?.categoryId,
         sort: filters.sort,
       },
     });

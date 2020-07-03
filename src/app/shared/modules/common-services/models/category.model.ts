@@ -7,4 +7,5 @@ export class CategoryModel {
   parentId?: string; // TODO: убрать когда будут заменены getCategoryTree2 и getCategoriesChildren2
   children?: CategoryModel[];
   visible?: boolean;
+  disabled?: boolean;
 }

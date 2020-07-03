@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { LocalStorageService, LocationService } from '../../../../common-services';
 import { LocationModel, Megacity } from '../../../../common-services/models/location.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { filter, switchMap, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { filter, switchMap } from 'rxjs/operators';
+import { combineLatest, of, Subject } from 'rxjs';
 
 @Component({
   selector: 'my-search-bar-location',
@@ -62,19 +62,16 @@ export class SearchBarLocationComponent implements OnInit, OnDestroy {
   }
 
   private _subscribeOnCityRequest(): void {
-    this.locationForm.get('city').valueChanges
+    this.locationForm.controls.city.valueChanges
       .pipe(
-        takeUntil(this._unsubscriber$),
         filter(cityName => cityName.length > 1),
         switchMap((cityName) => {
-          return this._locationService.searchLocations(cityName);
+          return combineLatest([of(cityName), this._locationService.searchLocations(cityName)]);
         })
       )
-      .subscribe((cities: any[]) => {
-        setTimeout(() => {
-          const city = this.locationForm.get('city').value.toLowerCase();
-          this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city));
-        }, 0); // todo:  Пересмотреть
+      .subscribe(([city, cities]) => {
+        // todo:  Избавиться от лага сдвойным кликом по выбранному городу
+        this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city));
       }, (err) => {
         console.error(err);
       });

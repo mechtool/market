@@ -10,5 +10,5 @@ export class DefaultSearchAvailableModel {
   withImages?: boolean;
   priceFrom?: number;
   priceTo?: number;
-  categories?: Set<string>;
+  categoryId?: string;
 }

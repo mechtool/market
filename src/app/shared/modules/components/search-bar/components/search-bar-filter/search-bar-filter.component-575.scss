@@ -1,0 +1,7 @@
+@media (max-width: 575px) {
+  //todo Переопределяем свойство ng-zorro чтобы не преносил input с фильтрами для цен на новую строку при разрешении 575px
+  .ant-form .ant-form-item .ant-form-item-control {
+    flex: 1 1 0;
+    max-width: 100%;
+  }
+}

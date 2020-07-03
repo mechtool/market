@@ -4,7 +4,7 @@
 
     <p class="filter_title">Фильтр для поиска</p>
 
-    <div class="form-group">
+    <div class="form-group" *ngIf="searchByInn">
       <nz-form-item class="margin-cleared">
         <nz-form-control>
           <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
@@ -82,7 +82,10 @@
 
   <form nz-form id="formCategory" class="form_category" [formGroup]="categoryFiltersForm">
 
-    <p class="filter_title">Фильтр категорий</p>
+    <p class="filter_title">
+      <span>Фильтр категорий</span>
+      <button type="button" class="dropdown_close" (click)="close()"></button>
+    </p>
 
     <div class="form-group">
       <nz-form-item class="margin-cleared">
@@ -91,7 +94,7 @@
           <input nz-input type="text"
                  name="formFilterCategory"
                  id="formFilterCategory"
-                 placeholder="Укажите название категорию"
+                 placeholder="Укажите название категории"
                  autocomplete="off"
                  formControlName="categoryName">
         </nz-form-control>
@@ -99,20 +102,198 @@
     </div>
 
     <div class="filter_category__list scrollbar">
-
       <div class="form-group_checkbox">
         <nz-checkbox-wrapper>
           <div class="magic" [ngClass]="{'visible': category.visible}"
                *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
-            <label nz-checkbox [formControlName]="i">
+            <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
               <span class="filter_category__name">{{category.name}}</span>
               <span class="filter_category__count">({{category.offers}})</span>
             </label><br/>
           </div>
         </nz-checkbox-wrapper>
       </div>
+    </div>
+
+  </form>
+
+  <form nz-form id="formFilterMobile" class="form_filter_mobile" [formGroup]="availableFiltersForm">
+
+    <div class="available__filter" [ngClass]="{'not_visible': notShowFilter}">
+
+      <p class="filter_title">
+        <span>Фильтр для поиска</span>
+        <button type="button" class="dropdown_close" (click)="close()"></button>
+      </p>
+
+      <div class="filter__choose_city" (click)="clickFilterChooseCity()">
+        Регион: <span class="user_location">{{city}}</span>
+      </div>
+
+      <div class="filter__choose_category" (click)="clickFilterChooseCategory()">
+        Категории товаров
+      </div>
+
+      <div class="form-group" *ngIf="searchByInn">
+        <nz-form-item class="margin-cleared">
+          <nz-form-control>
+            <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
+            <input nz-input type="text" name="formFilterInnMobile" id="formFilterInnMobile"
+                   placeholder="Укажите поставщика"
+                   formControlName="supplier">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-group">
+        <nz-form-item class="margin-cleared">
+          <nz-form-control>
+            <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
+            <input nz-input type="text" name="formFilterBrandMobile" id="formFilterBrandMobile"
+                   placeholder="Укажите бренд"
+                   formControlName="trademark">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-group_title">Способ доставки</div>
+      <div class="form-group_radio">
+        <nz-radio-group formControlName="deliveryMethod">
+          <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
+        </nz-radio-group>
+      </div>
+
+      <div class="form-group_title">Параметры поиска</div>
+      <div class="form-group_checkbox">
+        <label nz-checkbox formControlName="inStock">Только товары в наличии</label>
+        <br/>
+        <label nz-checkbox formControlName="withImages">Только с картинками</label>
+      </div>
+
+      <div class="form-group_title">Цена</div>
+
+      <div class="range_wrap range_price">
+        <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween"
+                   nzTooltipVisible="{{false}}"></nz-slider>
+
+        <div class="range_inputs">
+
+          <nz-form-item>
+            <div class="range_inputs-text">От</div>
+
+            <nz-form-control>
+              <input nz-input type="number" name="price_from" id="formPriceFromMobile"
+                     class="range_input range_from price_from"
+                     placeholder="{{MIN_PRICE}} ₽" autocomplete="off" formControlName="priceFrom"/>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <nz-form-item>
+            <div class="range_inputs-text range_inputs-delimiter">До</div>
+
+            <nz-form-control>
+              <input nz-input type="number" name="price_to" id="formPriceToMobile"
+                     class="range_input range_to price_to"
+                     placeholder="{{MAX_PRICE}} ₽" autocomplete="off" formControlName="priceTo"/>
+            </nz-form-control>
+          </nz-form-item>
+
+        </div>
+      </div>
+
+      <div class="filter_btns">
+        <button nz-button type="submit" nzType="primary"
+                (click)="save()">Сохранить
+        </button>
+        <button nz-button type="button" nzType="link"
+                (click)="reset()">Сбросить
+        </button>
+      </div>
+
+
+    </div>
+
+    <div class="city__filter" [ngClass]="{'visible': showFilterWithCities}" [formGroup]="locationForm">
+
+      <div class="choose__return_wrap">
+        <span>Назад к фильтрам для поиска</span>
+        <button type="button" class="dropdown_close" (click)="backToFilter()"></button>
+      </div>
+
+      <p class="filter_title">
+        <span>Выбор региона</span>
+      </p>
+
+      <input nz-input type="text"
+             autocomplete="off"
+             id="formUserRegionLocationMobile"
+             name="formUserRegionLocationMobile"
+             placeholder="Введите город"
+             formControlName="city"/>
+
+      <div class="filter_city__list scrollbar">
+
+        <ul class="choose-city_list">
+          <li class="choose-city_item" *ngFor="let item of foundCities"
+              (click)="chooseCity(item)">{{item.fullName}}</li>
+        </ul>
+
+      </div>
+
+
+      <div class="filter_btns">
+        <button nz-button type="submit" nzType="primary"
+                (click)="saveLocation()">Сохранить
+        </button>
+      </div>
+
+
+    </div>
+
+    <div class="category__filter" [ngClass]="{'visible': showFilterWithCategories}" [formGroup]="categoryFiltersForm">
+
+      <div class="choose__return_wrap">
+        <span>Назад к фильтрам для поиска</span>
+        <button type="button" class="dropdown_close" (click)="backToFilter()"></button>
+      </div>
+
+      <p class="filter_title">
+        <span>Фильтр категорий</span>
+      </p>
+
+      <input nz-input type="text"
+             name="formFilterCategoryMobile"
+             id="formFilterCategoryMobile"
+             placeholder="Укажите название категории"
+             autocomplete="off"
+             formControlName="categoryName">
+
+      <div class="filter_category__list scrollbar">
+        <div class="form-group_checkbox">
+          <nz-checkbox-wrapper>
+            <div class="magic" [ngClass]="{'visible': category.visible}"
+                 *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
+              <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
+                <span class="filter_category__name">{{category.name}}</span>
+                <span class="filter_category__count">({{category.offers}})</span>
+              </label><br/>
+            </div>
+          </nz-checkbox-wrapper>
+        </div>
+      </div>
+
+      <div class="filter_btns">
+        <button nz-button type="submit" nzType="primary"
+                (click)="saveCategory()">Сохранить
+        </button>
+        <button nz-button type="button" nzType="link"
+                (click)="reset()">Сбросить
+        </button>
+      </div>
 
     </div>
 
   </form>
+
 </div>

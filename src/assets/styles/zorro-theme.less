@@ -36,6 +36,7 @@
 span.ant-radio + * {
   padding-right: 0;
   padding-left: 6px;
+  color: var(--color-primary);
 }
 
 .@{radio-prefix-cls} {
@@ -59,7 +60,7 @@ span.ant-radio + * {
 @checkbox-color: @accent-color;
 @checkbox-check-color: #fff;
 @checkbox-check-bg: @checkbox-check-color;
-@checkbox-border-width: @border-width-base;
+@checkbox-border-width: 2px;
 .@{checkbox-prefix-cls}-wrapper {
   color: @label-color;
 }
@@ -68,6 +69,35 @@ span.ant-radio + * {
   padding-right: 8px;
   padding-left: 16px;
 }
+
+.ant-checkbox {
+  .ant-checkbox-input:focus + .ant-checkbox-inner {
+    border-color: #d9d9d9;
+  }
+
+  &.ant-checkbox-checked {
+    .ant-checkbox-input:focus + .ant-checkbox-inner {
+      border-color: @accent-color;
+    }
+
+    .ant-checkbox-inner {
+      background-color: @checkbox-check-color;
+
+      &::after {
+        position: absolute;
+        display: table;
+        border: 2px solid @label-color;
+        border-top: 0;
+        border-left: 0;
+        transform: rotate(45deg) scale(1) translate(-50%, -50%);
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+        content: ' ';
+      }
+    }
+  }
+}
+
 
 // SLIDER
 @slider-prefix-cls: ~"@{ant-prefix}-slider";
@@ -157,8 +187,36 @@ span.ant-radio + * {
 @btn-primary-color: #454545;
 @btn-primary-bg: @accent-color;
 @btn-padding-horizontal-base: 40px;
+.ant-btn-primary {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 19px;
+  width: 162px;
+  background-color: @outline-color;
+
+  &:active {
+    background-color: @accent-color;
+  }
+}
+
 .ant-btn-link {
   color: #454545;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 19px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  &:active {
+    color: #454545;
+    background-color: @accent-color;
+  }
+
+  &:focus {
+    color: #454545;
+  }
 }
 
 // nz-auto-option

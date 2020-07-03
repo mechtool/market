@@ -11,7 +11,7 @@ export class TradeOffersRequestModel {
   public supplierInn?: string;
   public deliveryArea?: string;
   public pickupArea?: string;
-  public categoryIds?: string[];
+  public categoryId?: string;
   public sort?: string;
   public page?: number;
   public size?: number;

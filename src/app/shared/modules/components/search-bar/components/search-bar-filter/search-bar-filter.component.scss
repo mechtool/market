@@ -116,7 +116,14 @@ input[type="text"] {
 }
 
 .filter_category__list {
-  height: 395px;
+  height: 400px;
+  overflow-y: auto;
+  padding-right: 13px;
+  margin-top: 15px;
+}
+
+.filter_city__list {
+  height: 432px;
   overflow-y: auto;
   padding-right: 13px;
   margin-top: 15px;
@@ -212,7 +219,7 @@ input[type="text"] {
 .range_inputs {
   display: flex;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 15px;
 
   &-text {
     padding: 8px;
@@ -231,7 +238,8 @@ input[type="text"] {
 
 .filter_btns {
   display: flex;
-  margin-top: 10px;
+  margin-top: auto;
+  margin-left: 10px;
 }
 
 .filter_category__count {
@@ -291,3 +299,19 @@ input[type="text"] {
   }
 }
 
+.form_filter_mobile {
+  display: none;
+}
+
+.form_category .dropdown_close {
+  position: absolute;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: url(../../../../../../../assets/img/svg/icon__close.svg) no-repeat center center;
+  width: 20px;
+  height: 20px;
+  right: 30px;
+  top: auto;
+  margin-left: auto;
+}

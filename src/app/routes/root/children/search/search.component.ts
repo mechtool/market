@@ -80,7 +80,7 @@ export class SearchComponent implements OnInit, OnDestroy {
               withImages: queryParams.withImages,
               priceFrom: queryParams.priceFrom,
               priceTo: queryParams.priceTo,
-              categories: this._categories(queryParams.categories),
+              categoryId: queryParams.categoryId,
             };
             this.sort = queryParams.sort;
           }
@@ -127,7 +127,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       queryParams.withImages = availableFilters.withImages;
       queryParams.priceFrom = availableFilters.priceFrom;
       queryParams.priceTo = availableFilters.priceTo;
-      queryParams.categories = availableFilters.categories ? Array.from(availableFilters.categories) : undefined;
+      queryParams.categoryId = availableFilters.categoryId;
     }
 
     return queryParams;
@@ -135,15 +135,5 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private _initBreadcrumbs() {
     this._breadcrumbsService.setVisible(false);
-  }
-
-  private _categories(categories: any) {
-    if (categories && Array.isArray(categories)) {
-      return new Set(categories);
-    }
-    if (categories) {
-      return new Set([categories]);
-    }
-    return undefined;
   }
 }

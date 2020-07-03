@@ -93,7 +93,7 @@
       border-color: var(--color-accent-light);
     }
 
-    .btn_category {
+    .btn_filter {
       border-color: var(--color-accent-light);
     }
 
@@ -160,8 +160,20 @@
         background: #ffffff url("../../../../../assets/img/svg/icon__search.svg") no-repeat center center;
       }
 
-      .btn_category {
+      .btn_filter {
         background: #ffffff url("../../../../../assets/img/svg/icon__filter.svg") no-repeat center center;
+
+        &:after {
+          content: attr(filter_count);
+          display: inline-block;
+          line-height: 20px;
+          padding: 0 6px;
+          background-color: var(--color-accent-secondary);
+          border-radius: 2px;
+          color: #ffffff;
+          font-size: var(--font-size-10);
+          font-weight: var(--font-weight-medium);
+        }
       }
     }
   }
@@ -202,9 +214,4 @@
   margin-right: 10px;
 }
 
-.closer {
-  cursor: pointer;
-  position: absolute;
-  right: 35px;
-  top: 30px;
-}
+

@@ -105,7 +105,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
             withImages: queryParams.withImages,
             priceFrom: queryParams.priceFrom,
             priceTo: queryParams.priceTo,
-            categories: new Set([this.categoryId]),
+            categoryId: this.categoryId,
           };
 
           return this._categoryService.getCategoryTree(this.categoryId);

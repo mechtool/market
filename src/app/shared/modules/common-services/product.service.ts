@@ -46,7 +46,7 @@ export class ProductService {
   searchProductOffers(filters: AllGroupQueryFiltersModel): Observable<ProductOffersCardWithProductsTotalModel> {
     const searchQuery = {
       q: filters.query,
-      categoryId: filters.availableFilters.categories ? filters.availableFilters.categories.values().next().value : undefined,
+      categoryId: filters.availableFilters.categoryId,
       priceFrom: filters.availableFilters.priceFrom,
       priceTo: filters.availableFilters.priceTo,
       suppliers: [filters.availableFilters.supplier],

@@ -29,12 +29,14 @@ import { Router } from '@angular/router';
   templateUrl: './search-bar.component.html',
   styleUrls: [
     './search-bar.component.scss',
+    './search-bar.component-768.scss',
     './search-bar.component-576.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   private _unsubscriber$: Subject<any> = new Subject();
+  private _filterCount: number;
   form: FormGroup;
   isInputFocused = false;
   isFilterFormVisible = false;
@@ -68,6 +70,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   get filterIsEmpty(): boolean {
     return !this.availableFilters;
+  }
+
+  get filterCount(): number {
+    return this._filterCount > 0 ? this._filterCount : undefined;
   }
 
   constructor(
@@ -106,8 +112,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
       sort: this.sort,
     };
 
-    if (queryText.length >= this.minQueryLength || (!queryText.length && this.availableFilters)) {
 
+    if (queryText.length >= this.minQueryLength || (!queryText.length && this.availableFilters)) {
       this.submitClick.emit(groupAllQueryFilters);
       this.visibleSuggestions = false;
     }
@@ -126,6 +132,18 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.availableFilters = $event;
     if ($event) {
       this.isFilterFormVisible = !this.isFilterFormVisible;
+    }
+  }
+
+  recLocationFromMobileForm($event: LocationModel) {
+    this.userLocation = $event;
+    if (this.availableFilters) {
+      if (this.availableFilters.delivery) {
+        this.availableFilters.delivery = $event.fias;
+      }
+      if (this.availableFilters.pickup) {
+        this.availableFilters.pickup = $event.fias;
+      }
     }
   }
 
@@ -148,6 +166,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   sortChange($event: SortModel) {
     this.sort = $event;
+  }
+
+  recFiltersCount($event: number) {
+    this._filterCount = $event;
   }
 
   private _initForm(): void {

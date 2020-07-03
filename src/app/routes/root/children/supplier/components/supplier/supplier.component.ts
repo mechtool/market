@@ -91,7 +91,6 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
           this.supplier = this._mapSupplier(organization);
           this._initBreadcrumbs();
           this.request.supplierInn = this.supplier.inn;
-          this.request.withImages = true; // todo пока так, для красоты!!!!
           return this._tradeOffersService.search(this.request);
         }),
         catchError((err) => {
@@ -116,7 +115,7 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
       withImages: queryParams.withImages,
       deliveryArea: queryParams.delivery,
       pickupArea: queryParams.pickup,
-      categoryIds: queryParams.categories,
+      categoryId: queryParams.categoryId,
       sort: queryParams.sort,
     };
   }
