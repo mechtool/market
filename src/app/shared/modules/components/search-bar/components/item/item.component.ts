@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { absoluteImagePath, isAssetsImg } from '#shared/utils/get-image';
+import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils/get-image';
 
 @Component({
   selector: 'my-search-bar-item',
@@ -30,7 +30,7 @@ export class SearchBarItemComponent implements OnInit, OnDestroy {
   }
 
   imageUrl(img): string {
-    if (isAssetsImg(img)) {
+    if (isAssetsImg(img) || isAbsolutePathImg(img)) {
       return img;
     }
     return img ? absoluteImagePath(img) : absoluteImagePath(null);

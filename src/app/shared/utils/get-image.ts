@@ -17,5 +17,9 @@ export function absoluteImagePath(img: string): string {
 }
 
 export function isAssetsImg(img: string): boolean {
-  return img.includes(NO_PHOTO) || img.includes(QUICK_SEARCH_HISTORY) || img.includes(LIGHTNING);
+  return img ? img.includes(NO_PHOTO) || img.includes(QUICK_SEARCH_HISTORY) || img.includes(LIGHTNING) : false;
+}
+
+export function isAbsolutePathImg(img: string): boolean {
+  return img ? img.includes(IMG_URL) || img.includes(CATALOG_PIC) : false;
 }
