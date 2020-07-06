@@ -3,7 +3,8 @@ import { TradeOfferPriceMatrixModel } from './trade-offer-price-matrix.model';
 import { TradeOfferPackagingModel } from './trade-offer-packaging.model';
 import { TradeOfferSockModel } from './trade-offer-sock.model';
 import { TradeOfferSupplierModel } from './trade-offer-supplier.model';
-import { AudienceModel } from '#shared/modules/common-services/models/audience-model';
+import { AudienceModel } from './audience-model';
+import { ValueTypeEnum } from './value-type.enum';
 
 export class TradeOfferResponseModel {
   id: string;
@@ -76,7 +77,7 @@ export class TradeOffer1cRequisitesModel {
   name: string;
   value: any;
   valueName: string;
-  valueType: string;
+  valueType: ValueTypeEnum;
 }
 
 export class TradeOffer1SnRequisitesModel {

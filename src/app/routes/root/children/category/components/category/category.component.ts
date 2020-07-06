@@ -6,7 +6,8 @@ import {
   BreadcrumbItemModel,
   CategoryModel,
   DefaultSearchAvailableModel,
-  ProductOffersCardModel,
+  ProductOffersListResponseModel,
+  ProductOffersModel,
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,10 +24,14 @@ export class CategoryComponent implements OnInit, OnDestroy {
   categoryModel: CategoryModel;
   query = '';
   categoryId: string;
-  searchFilters: DefaultSearchAvailableModel;
-  productOffers: ProductOffersCardModel[];
+  availableFilters: DefaultSearchAvailableModel;
+  productOffersList: ProductOffersListResponseModel;
+  productOffers: ProductOffersModel[];
   productsTotal: number;
   sort: SortModel;
+  isLoadingProducts = false;
+  page: number;
+
 
   constructor(
     private _breadcrumbsService: BreadcrumbsService,
@@ -36,7 +41,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private _categoryService: CategoryService,
     private _localStorageService: LocalStorageService
   ) {
-    this._watchUrlChanges();
+    this._init();
   }
 
   ngOnInit() {
@@ -67,6 +72,31 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadProducts(nextPage: number) {
+    if (nextPage === (this.productOffersList.page.number + 1) && nextPage < this.productOffersList.page.totalPages) {
+      this.page = nextPage;
+      this.isLoadingProducts = true;
+
+      this._productService.searchProductOffers({
+        query: this.query,
+        availableFilters: this.availableFilters,
+        page: nextPage,
+        sort: this.sort,
+      })
+        .subscribe(
+          (productOffers) => {
+            this.productOffersList = productOffers;
+            this.productOffers.push(...this.productOffersList._embedded.productOffers);
+            this.productsTotal = this.productOffersList.page.totalElements;
+            this.isLoadingProducts = false;
+          },
+          (err) => {
+            this.isLoadingProducts = false;
+            console.error('error', err);
+          });
+    }
+  }
+
   refreshBreadcrumbs($event: CategoryModel[]): void {
     const breadcrumbs = $event.reduce(
       (accum, curr) => {
@@ -85,7 +115,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this._setBreadcrumbs(breadcrumbs);
   }
 
-  private _watchUrlChanges(): void {
+  private _init(): void {
     combineLatest([
       this._activatedRoute.params,
       this._activatedRoute.queryParams,
@@ -95,7 +125,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
           this.categoryId = params.id;
           this.query = queryParams.q;
           this.sort = queryParams.sort;
-          this.searchFilters = {
+          this.availableFilters = {
             supplier: queryParams.supplier,
             trademark: queryParams.trademark,
             deliveryMethod: queryParams.deliveryMethod,
@@ -115,7 +145,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
           this.refreshBreadcrumbs(categoryModel);
           return this._productService.searchProductOffers({
             query: this.query,
-            availableFilters: this.searchFilters,
+            availableFilters: this.availableFilters,
             sort: this.sort,
           });
         }),
@@ -125,9 +155,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(
-        (product) => {
-          this.productOffers = product.productOffers;
-          this.productsTotal = product.productsTotal;
+        (productOffers) => {
+          this.productOffersList = productOffers;
+          this.productOffers = this.productOffersList._embedded.productOffers;
+          this.productsTotal = this.productOffersList.page.totalElements;
+          this.page = this.productOffersList.page.number;
         },
         (err) => {
           console.error('error', err);

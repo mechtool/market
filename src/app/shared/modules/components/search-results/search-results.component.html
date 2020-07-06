@@ -5,12 +5,23 @@
     <span>найдено {{productsTotal}} товаров</span>
   </div>
 
-  <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
+  <div class="content" itemscope="itemscope">
 
-    <my-card *ngFor="let product of productOffers">
-      <my-nomenclature-card [product]="product"
-      ></my-nomenclature-card>
-    </my-card>
+    <ng-template #indicatorTemplate>
+      <em class="icon_scroll" nz-icon nzType="loading"></em>
+    </ng-template>
+
+    <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
+
+      <div class="product_infinite_scroll" infiniteScroll (scrolled)="productOffersLoading(page + 1)">
+        <my-card *ngFor="let productOffer of productOffers">
+          <my-nomenclature-card
+            [productOffer]="productOffer"
+          ></my-nomenclature-card>
+        </my-card>
+      </div>
+
+    </nz-spin>
 
   </div>
 </div>

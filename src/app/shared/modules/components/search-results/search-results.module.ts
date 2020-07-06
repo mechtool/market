@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { SearchResultComponent } from './search-results.component';
 import { NomenclatureCardModule } from '../nomenclature-card';
 import { CardModule } from '../card/card.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
 
 @NgModule({
   imports: [
@@ -13,6 +15,9 @@ import { CardModule } from '../card/card.module';
     FormsModule,
     NomenclatureCardModule,
     CardModule,
+    InfiniteScrollModule,
+    NzSpinModule,
+    NzIconModule,
   ],
   declarations: [
     SearchResultComponent,

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ProductOffersCardModel } from '#shared/modules/common-services/models';
+import { ProductOffersModel } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'my-search-results',
@@ -14,8 +14,11 @@ import { ProductOffersCardModel } from '#shared/modules/common-services/models';
 })
 export class SearchResultComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() productOffers: ProductOffersCardModel[];
+  @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
+  @Input() page: number;
+  @Input() isLoading: boolean;
+  @Output() loadProducts: EventEmitter<number> = new EventEmitter();
 
   constructor() {
   }
@@ -26,5 +29,9 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
+  }
+
+  productOffersLoading(nextPage: number) {
+    this.loadProducts.emit(nextPage);
   }
 }

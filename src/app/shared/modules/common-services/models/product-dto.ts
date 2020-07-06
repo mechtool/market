@@ -1,4 +1,5 @@
 import { ProductFeatureModel, ProductModel, TradeOfferProductModel, TradeOfferResponseModel } from '#shared/modules';
+import { ValueTypeEnum } from './value-type.enum';
 
 export class ProductDto {
   id?: string;
@@ -65,14 +66,6 @@ export class ImagesLinkDto {
   href: string;
 }
 
-export enum ValueTypeEnum {
-  BOOLEAN = 'boolean',
-  NUMBER = 'number',
-  ENUMERATION = 'enumeration',
-  STRING = 'string',
-  DATE = 'date'
-}
-
 function _mapFeatures(features: ProductFeatureModel[]): ProductFeatureDto[] {
   return features.map((req) => {
     return {
@@ -80,7 +73,7 @@ function _mapFeatures(features: ProductFeatureModel[]): ProductFeatureDto[] {
       featureName: req.featureName,
       value: req.value,
       valueName: req.valueName,
-      valueType: ValueTypeEnum[req.valueType],
+      valueType: req.valueType,
     };
   });
 }
@@ -93,7 +86,7 @@ function _mapRequisites(product: TradeOfferProductModel): ProductFeatureDto[] {
         featureName: req.name,
         value: req.value,
         valueName: req.valueName,
-        valueType: ValueTypeEnum[req.valueType],
+        valueType: req.valueType,
       };
     });
 

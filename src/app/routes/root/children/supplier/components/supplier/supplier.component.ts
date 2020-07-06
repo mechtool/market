@@ -31,7 +31,7 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
   tradeOffersList: TradeOffersListResponseModel;
   tradeOffers: TradeOfferSummaryModel[];
   supplierLogo: string;
-  isLoading = false;
+  isLoadingTradeOffers = false;
   tradeOffersTotal: number;
   page: number;
   query: string;
@@ -56,23 +56,25 @@ export class SupplierSingleComponent implements OnInit, OnDestroy {
     this._unsubscriber$.complete();
   }
 
-  loadTradeOffers(page: number) {
-    const nextPage = this.tradeOffersList.page.number + 1;
-    const totalPages = this.tradeOffersList.page.totalPages;
-
-    if (page === nextPage && nextPage < totalPages) {
-      this.page = page;
-      this.isLoading = true;
+  loadTradeOffers(nextPage: number) {
+    if (nextPage === this.tradeOffersList.page.number + 1 && nextPage < this.tradeOffersList.page.totalPages) {
+      this.page = nextPage;
+      this.isLoadingTradeOffers = true;
       this.request.page = nextPage;
 
       this._tradeOffersService.search(this.request)
-        .subscribe((tradeOffers) => {
-          this.tradeOffersList = tradeOffers;
-          // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
-          this.tradeOffers.push(...this.tradeOffersList._embedded.items);
-          this.tradeOffersTotal = this.tradeOffersList.page.totalElements;
-          this.isLoading = false;
-        });
+        .subscribe(
+          (tradeOffers) => {
+            this.tradeOffersList = tradeOffers;
+            // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
+            this.tradeOffers.push(...this.tradeOffersList._embedded.items);
+            this.tradeOffersTotal = this.tradeOffersList.page.totalElements;
+            this.isLoadingTradeOffers = false;
+          },
+          (err) => {
+            this.isLoadingTradeOffers = false;
+            console.error('error', err);
+          });
     }
   }
 

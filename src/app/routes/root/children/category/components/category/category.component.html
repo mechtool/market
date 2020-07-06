@@ -16,6 +16,9 @@
   <my-search-results
     [productOffers]="productOffers"
     [productsTotal]="productsTotal"
+    [page]="page"
+    [isLoading]="isLoadingProducts"
+    (loadProducts)="loadProducts($event)"
   ></my-search-results>
 
 </div>

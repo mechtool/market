@@ -61,7 +61,7 @@
 </ng-template>
 
 <ng-template #price_matrix>
-  <div class="price_matrix">
+  <div class="price_matrix" *ngIf="matrix">
     <h3>Матрица цен</h3>
     <div class="price_matrix__group" *ngFor="let item of matrix">
       <span class="price_matrix__label">От {{item.fromPackages}} шт.</span>

@@ -8,19 +8,10 @@
   <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
 
     <my-card *ngFor="let product of productOffers">
-      <my-nomenclature-card [product]="product"
+      <my-nomenclature-card
+        [productOffer]="product"
       ></my-nomenclature-card>
     </my-card>
-
-    <!-- <my-banner-card
-      [routerLink]="['./product/100']"
-      imageUrl="/assets/img/tmp/catalog_banner_popular.png"
-      imgAlt="Умная колонка с Алисой"
-    >
-      <span class="banner-card-title">Умная колонка<br> с Алисой</span>
-      <span class="banner-card-body">И другие товары Яндекса</span>
-    </my-banner-card> -->
-
   </div>
 
 </div>

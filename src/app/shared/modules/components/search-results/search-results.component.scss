@@ -19,3 +19,14 @@
   flex-wrap: wrap;
   margin: 0 -10px;
 }
+
+.product_infinite_scroll {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon_scroll {
+  position: fixed;
+  font-size: 50px;
+  color: var(--color-accent-light);
+}

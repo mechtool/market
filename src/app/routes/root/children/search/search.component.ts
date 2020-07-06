@@ -3,8 +3,8 @@ import { of, Subject, throwError } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
-  DefaultSearchAvailableModel,
-  ProductOffersCardModel,
+  DefaultSearchAvailableModel, ProductOffersListResponseModel,
+  ProductOffersModel,
   SortModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
@@ -21,13 +21,16 @@ import { catchError, switchMap } from 'rxjs/operators';
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  productOffers: ProductOffersCardModel[];
+  productOffersList: ProductOffersListResponseModel;
+  productOffers: ProductOffersModel[];
   productsTotal: number;
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
   availableFilters: DefaultSearchAvailableModel;
   query: string;
   sort: SortModel;
+  page: number;
+  isLoadingProducts = false;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _productService: ProductService,
@@ -62,6 +65,34 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._router.navigate(['/search'], {
       queryParams: this._getQueryParams(filters)
     });
+  }
+
+  loadProducts(nextPage: number) {
+    if (this.query || this.availableFilters) {
+
+      if (nextPage === (this.productOffersList.page.number + 1) && nextPage < this.productOffersList.page.totalPages) {
+        this.page = nextPage;
+        this.isLoadingProducts = true;
+
+        this._productService.searchProductOffers({
+          query: this.query,
+          availableFilters: this.availableFilters,
+          page: nextPage,
+          sort: this.sort,
+        })
+          .subscribe(
+            (productOffers) => {
+              this.productOffersList = productOffers;
+              this.productOffers.push(...this.productOffersList._embedded.productOffers);
+              this.productsTotal = this.productOffersList.page.totalElements;
+              this.isLoadingProducts = false;
+            },
+            (err) => {
+              this.isLoadingProducts = false;
+              console.error('error', err);
+            });
+      }
+    }
   }
 
   private _init() {
@@ -101,10 +132,12 @@ export class SearchComponent implements OnInit, OnDestroy {
           return throwError(err);
         })
       )
-      .subscribe((products) => {
+      .subscribe((productOffers) => {
         this._initBreadcrumbs();
-        this.productOffers = products.productOffers;
-        this.productsTotal = products.productsTotal;
+        this.productOffersList = productOffers;
+        this.productOffers = this.productOffersList._embedded.productOffers;
+        this.productsTotal = this.productOffersList.page.totalElements;
+        this.page = this.productOffersList.page.number;
       }, (err) => {
         console.log('error');
       });

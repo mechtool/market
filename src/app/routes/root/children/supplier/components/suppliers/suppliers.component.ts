@@ -57,17 +57,22 @@ export class SupplierListComponent implements OnInit, OnDestroy {
 
   supplierLoading() {
     const nextPage = this.supplierData.page.number + 1;
-    const totalPages = this.supplierData.page.totalPages;
 
-    if (nextPage < totalPages) {
+    if (nextPage < this.supplierData.page.totalPages) {
       this.isLoading = true;
 
-      this._getSuppliers(nextPage).subscribe((res) => {
-        this.supplierData = this._map(res);
-        // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
-        this.suppliers.push(...this.supplierData._embedded.suppliers);
-        this.isLoading = false;
-      });
+      this._getSuppliers(nextPage).subscribe(
+        (suppliers) => {
+          this.supplierData = this._map(suppliers);
+          // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
+          this.suppliers.push(...this.supplierData._embedded.suppliers);
+          this.isLoading = false;
+        },
+        (err) => {
+          this.isLoading = false;
+          console.error('error', err);
+        }
+      );
     }
   }
 

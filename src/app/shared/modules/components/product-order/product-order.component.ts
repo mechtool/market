@@ -31,23 +31,20 @@ export class ProductOrderComponent implements OnInit, OnDestroy {
   isVisible = false;
 
   get price(): number {
-    const total = this.form.get('totalPositions').value === 0 ? 1 : this.form.get('totalPositions').value;
-    if (this.tradeOffer.requestedPriceProjection.matrix.length > 1) {
-      // todo внимательнее проверить вычисление на ошибки!!!
-      const find = this.tradeOffer.requestedPriceProjection.matrix
-        .find((price, index, array) => {
-          price.fromPackages && price.fromPackages >= total
-          && array.find((otherPrice) => {
-            price.fromPackages <= otherPrice.fromPackages;
-          });
-        });
-      if (find) {
-        return find.price / find.fromPackages * total;
-      }
+    const total = this.form.get('totalPositions').value === null ||
+    this.form.get('totalPositions').value <= 0 ? 1 : this.form.get('totalPositions').value;
+
+    if (this.tradeOffer.requestedPriceProjection?.matrix.length === 1) {
+      return this.tradeOffer.requestedPriceProjection.matrix[0].price * total;
     }
 
-    return this.tradeOffer.requestedPriceProjection.matrix[0].price /
-      this.tradeOffer.requestedPriceProjection.matrix[0].fromPackages * total;
+    if (this.tradeOffer.requestedPriceProjection?.matrix.length > 1) {
+      if (this.matrix) {
+        const findPrice = this._closest(this.matrix, total);
+        return findPrice * total;
+      }
+    }
+    return null;
   }
 
   get vatInfo() {
@@ -65,7 +62,8 @@ export class ProductOrderComponent implements OnInit, OnDestroy {
   }
 
   get matrix(): TradeOfferPriceMatrixModel[] {
-    return this.tradeOffer.requestedPriceProjection.matrix;
+    return this.tradeOffer.requestedPriceProjection?.matrix
+      .sort((one, two) => one.fromPackages - two.fromPackages);
   }
 
   constructor(private _fb: FormBuilder) {
@@ -90,13 +88,17 @@ export class ProductOrderComponent implements OnInit, OnDestroy {
 
   decrease() {
     this.form.patchValue({ totalPositions: this.form.get('totalPositions').value - 1 });
-    if (this.form.get('totalPositions').value === 0) {
+    if (this.form.get('totalPositions').value <= 0) {
       this.orderStatus = OrderStatus.TO_CART;
     }
   }
 
   increase() {
-    this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + 1 });
+    if (this.form.get('totalPositions').value === null || this.form.get('totalPositions').value <= 0) {
+      this.form.patchValue({ totalPositions: 1 });
+    } else {
+      this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + 1 });
+    }
   }
 
   private _closeModalOnResolutionChanges(): void {
@@ -136,5 +138,28 @@ export class ProductOrderComponent implements OnInit, OnDestroy {
     } else {
       this.orderStatus = OrderStatus.TO_CART;
     }
+  }
+
+  private _closest(matrix: TradeOfferPriceMatrixModel[], total: number): number {
+    let result;
+    let difference = 0;
+
+    for (let i = 0; i < matrix.length; i++) {
+      if (matrix[i].fromPackages <= total && ((total - matrix[i].fromPackages <= difference) || difference === 0)) {
+        difference = total - matrix[i].fromPackages;
+        result = matrix[i].price;
+      }
+    }
+
+    if (!result) {
+      for (let i = 0; i < matrix.length; i++) {
+        if (matrix[i].fromPackages > total && ((matrix[i].fromPackages - total <= difference) || difference === 0)) {
+          difference = total - matrix[i].fromPackages;
+          result = matrix[i].price;
+        }
+      }
+    }
+
+    return result;
   }
 }

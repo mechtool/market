@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ProductOffersCardModel } from '#shared/modules/common-services/models';
+import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { absoluteImagePath } from '#shared/utils/get-image';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 
@@ -17,10 +17,11 @@ import { NavigationService } from '#shared/modules/common-services/navigation.se
 })
 export class NomenclatureCardComponent implements OnInit, OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
-  @Input() product: ProductOffersCardModel;
+  @Input() productOffer: ProductOffersModel;
 
   get imageUrl() {
-    return absoluteImagePath(this.product.imageUrl || null);
+    const img = this.productOffer.product?.images?.length ? this.productOffer.product.images[0].href : null;
+    return absoluteImagePath(img);
   }
 
   constructor(private _navService: NavigationService) {
@@ -35,7 +36,7 @@ export class NomenclatureCardComponent implements OnInit, OnDestroy {
   }
 
   goToProduct() {
-    this._navService.goTo([`/product/${this.product?.id}`]);
+    this._navService.goTo([`/product/${this.productOffer?.product.id}`]);
   }
 
 

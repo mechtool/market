@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ProductDto, ProductFeatureModel, ValueType } from '#shared/modules/common-services/models';
+import { ProductDto, ProductFeatureModel, ValueTypeEnum } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'my-product-description',
@@ -21,11 +21,11 @@ export class ProductDescriptionComponent implements OnInit, OnDestroy {
   }
 
   feature(item: ProductFeatureModel) {
-    if (item.valueType === ValueType.ENUMERATION) {
+    if (item.valueType === ValueTypeEnum.ENUMERATION) {
       return `${item.featureName}: ${item.valueName}`;
     }
 
-    if (item.valueType === ValueType.BOOLEAN) {
+    if (item.valueType === ValueTypeEnum.BOOLEAN) {
       return `${item.featureName}: ${item.value ? 'Да' : 'Нет'}`;
     }
 
