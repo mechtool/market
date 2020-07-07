@@ -3,7 +3,8 @@ import { of, Subject, throwError } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
-  DefaultSearchAvailableModel, ProductOffersListResponseModel,
+  DefaultSearchAvailableModel,
+  ProductOffersListResponseModel,
   ProductOffersModel,
   SortModel,
   SuggestionCategoryItemModel,

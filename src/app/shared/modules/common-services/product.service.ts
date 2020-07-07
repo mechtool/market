@@ -19,7 +19,7 @@ export class ProductService {
   }
 
   getPopularProductOffers(): Observable<ProductOffersListResponseModel> {
-    return this._bnetService.searchProductOffers({ categoryId: '3335', withImages: true });
+    return this._bnetService.getPopularProducts();
   }
 
   searchProductOffers(filters: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {

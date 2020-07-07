@@ -33,6 +33,10 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }
 
+  getPopularProducts(): Observable<ProductOffersListResponseModel> {
+    return this._apiService.get(`${API_URL}/product-offers/popular`);
+  }
+
   searchProductOffers(searchQuery: ProductOffersRequestModel): Observable<ProductOffersListResponseModel> {
     const params = this._params(searchQuery);
     return this._apiService.get(`${API_URL}/product-offers`, { params });
