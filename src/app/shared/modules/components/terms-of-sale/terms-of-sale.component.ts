@@ -70,12 +70,25 @@ export class TermsOfSaleComponent implements OnInit, OnDestroy {
       let deliveryRegions = '';
       this.tradeOffer.deliveryDescription.deliveryRegions
         .forEach((tradeOfferDelivery, index, array) => {
-          if (index + 1 < array.length) {
-            deliveryRegions += `${tradeOfferDelivery.name}, `;
-          } else {
-            deliveryRegions += tradeOfferDelivery.name;
+          if (tradeOfferDelivery.name) {
+            if (index + 1 < array.length) {
+              deliveryRegions += `${tradeOfferDelivery.name}, `;
+            } else {
+              deliveryRegions += tradeOfferDelivery.name;
+            }
           }
         });
+
+      if (!deliveryRegions.length) {
+        // todo пересмотреть, нужно ли в этом месте завязывать логику на коды всего мира
+        this.tradeOffer.deliveryDescription.deliveryRegions
+          .forEach((tradeOfferDelivery) => {
+            if (tradeOfferDelivery.countryOksmCode === '643') {
+              deliveryRegions = 'Доставка осуществляется по всей Росии';
+            }
+          });
+      }
+
       return deliveryRegions;
     }
     return null;

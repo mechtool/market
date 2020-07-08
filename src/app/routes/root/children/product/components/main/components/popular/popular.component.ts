@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 
+// TODO ВЫНЕСТИ В SHARED ПАПКУ!!!!!!!!!!!!!!!!!!!!!!!
+
 @Component({
   selector: 'my-main-popular',
   templateUrl: './popular.component.html',

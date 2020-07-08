@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'my-search-results',
@@ -12,7 +13,7 @@ import { ProductOffersModel } from '#shared/modules/common-services/models';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchResultComponent implements OnInit, OnDestroy {
+export class SearchResultComponent implements OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
@@ -20,10 +21,13 @@ export class SearchResultComponent implements OnInit, OnDestroy {
   @Input() isLoading: boolean;
   @Output() loadProducts: EventEmitter<number> = new EventEmitter();
 
-  constructor() {
-  }
+  isRequestFulfilled: boolean;
 
-  ngOnInit() {
+  constructor(private _activatedRoute: ActivatedRoute) {
+    this._activatedRoute.queryParams.subscribe((queryParams) => {
+      this.isRequestFulfilled = !!Object.keys(queryParams).length;
+    });
+
   }
 
   ngOnDestroy() {

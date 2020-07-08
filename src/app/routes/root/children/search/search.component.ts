@@ -33,14 +33,20 @@ export class SearchComponent implements OnInit, OnDestroy {
   page: number;
   isLoadingProducts = false;
 
-  constructor(private _activatedRoute: ActivatedRoute,
-              private _productService: ProductService,
-              private _suggestionService: SuggestionService,
-              private _router: Router,
-              private _localStorageService: LocalStorageService,
-              private _breadcrumbsService: BreadcrumbsService,
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+    private _productService: ProductService,
+    private _suggestionService: SuggestionService,
+    private _router: Router,
+    private _localStorageService: LocalStorageService,
+    private _breadcrumbsService: BreadcrumbsService,
   ) {
     this._init();
+  }
+
+  get requestParametersSelected(): boolean {
+    return !!this.query ||
+      !!(this.availableFilters?.supplier || this.availableFilters?.trademark || this.availableFilters?.categoryId);
   }
 
   ngOnInit() {
@@ -63,13 +69,14 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
+    this._cleanFilters(filters);
     this._router.navigate(['/search'], {
       queryParams: this._getQueryParams(filters)
     });
   }
 
   loadProducts(nextPage: number) {
-    if (this.query || this.availableFilters) {
+    if (this.requestParametersSelected) {
 
       if (nextPage === (this.productOffersList.page.number + 1) && nextPage < this.productOffersList.page.totalPages) {
         this.page = nextPage;
@@ -123,10 +130,10 @@ export class SearchComponent implements OnInit, OnDestroy {
           });
         }),
         switchMap((filters) => {
-          if (filters.query === undefined && filters.availableFilters === undefined) {
-            return this._productService.getPopularProductOffers();
+          if (this.requestParametersSelected) {
+            return this._productService.searchProductOffers(filters);
           }
-          return this._productService.searchProductOffers(filters);
+          return of(new ProductOffersListResponseModel());
         }),
         catchError((err) => {
           console.error('error', err);
@@ -136,9 +143,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe((productOffers) => {
         this._initBreadcrumbs();
         this.productOffersList = productOffers;
-        this.productOffers = this.productOffersList._embedded.productOffers;
-        this.productsTotal = this.productOffersList.page.totalElements;
-        this.page = this.productOffersList.page.number;
+        this.productOffers = this.productOffersList._embedded?.productOffers || [];
+        this.productsTotal = this.productOffersList.page?.totalElements || 0;
+        this.page = this.productOffersList.page?.number || 0;
       }, (err) => {
         console.log('error');
       });
@@ -169,5 +176,14 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private _initBreadcrumbs() {
     this._breadcrumbsService.setVisible(false);
+  }
+
+  private _cleanFilters(filters: AllGroupQueryFiltersModel) {
+    if (!filters?.query) {
+      this.query = null;
+    }
+    if (!filters?.availableFilters) {
+      this.availableFilters = null;
+    }
   }
 }

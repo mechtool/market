@@ -7,7 +7,7 @@
     (submitClick)="queryParametersChange($event)"
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
-    [visibleSort]="true"
+    [visibleSort]="productsTotal > 0"
   ></my-search-bar>
 
   <my-search-results
@@ -17,6 +17,11 @@
     [isLoading]="isLoadingProducts"
     (loadProducts)="loadProducts($event)"
   ></my-search-results>
+
+  <my-main-popular
+    *ngIf="productsTotal === 0"
+  ></my-main-popular>
+
 </div>
 
 

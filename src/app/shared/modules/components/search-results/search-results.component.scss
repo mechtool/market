@@ -1,16 +1,16 @@
 .title {
-  font-weight: var(--font-weight-light);
   font-size: var(--font-size-18);
   line-height: 23px;
   margin: 0 20px 10px 0;
 
-  strong {
-    font-weight: var(--font-weight-medium);
-    letter-spacing: .11em;
-  }
-
   span::before {
     content: " – ";
+  }
+
+  &.info_not_found {
+    margin-bottom: 45px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #918C8C;
   }
 }
 

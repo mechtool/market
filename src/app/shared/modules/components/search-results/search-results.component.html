@@ -1,11 +1,17 @@
-<div class="result">
+<div class="result" *ngIf="productOffers">
 
-  <div class="title">
+  <div class="title" *ngIf="productOffers.length">
     <strong>Результаты поиска</strong>
-    <span>найдено {{productsTotal}} товаров</span>
+    <span>найдено <strong>{{productsTotal}}</strong> товаров</span>
   </div>
 
-  <div class="content" itemscope="itemscope">
+  <div class="title info_not_found" *ngIf="!productOffers?.length && isRequestFulfilled">
+    <strong>Результаты поиска</strong>
+    <span>По вашему запросу ничего не найдено.<br/>Попробуйте изменить параметры поиска и поискать заново.</span>
+  </div>
+
+
+  <div class="content" itemscope="itemscope" *ngIf="productOffers.length">
 
     <ng-template #indicatorTemplate>
       <em class="icon_scroll" nz-icon nzType="loading"></em>

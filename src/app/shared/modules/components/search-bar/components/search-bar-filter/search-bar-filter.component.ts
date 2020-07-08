@@ -103,7 +103,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     this.categoryId = undefined;
     this.stateAvailableFilters.emit(this.availableFilters);
     this.activeFilters.clear();
-    this.filtersCount.emit(undefined);
+    this.filtersCount.emit(0);
     this._initForms();
     this._resetCategories();
     this._categoryChangesControl();
@@ -154,8 +154,8 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(([params, queryParams]) => {
           const supplierId = params.id;
-          if (queryParams.category) {
-            this.categoryId = queryParams.category;
+          if (queryParams.categoryId) {
+            this.categoryId = queryParams.categoryId;
           }
           if (supplierId) {
             this.searchByInn = false;
@@ -409,6 +409,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
       }
     });
     this.availableFiltersForm.controls.deliveryMethod.valueChanges.subscribe((deliveryMethod) => {
+      // todo не забыть переделать когда deliveryMethod станут checkbox
       if (deliveryMethod) {
         this._addActiveFilter('deliveryMethod');
       } else {

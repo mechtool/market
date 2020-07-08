@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchRoutingModule } from './search-routing.module';
 import { SearchComponent } from './search.component';
 import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
+import { ProductModule } from '../product';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { BannerCardModule, NomenclatureCardModule, SearchBarModule, SearchResult
     BannerCardModule,
     SearchBarModule,
     SearchResultsModule,
+    ProductModule,
   ],
   declarations: [
     SearchComponent,

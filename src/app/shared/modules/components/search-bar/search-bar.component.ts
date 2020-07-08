@@ -21,7 +21,7 @@ import {
   SortModel
 } from '../../common-services';
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 
 @Component({
@@ -69,7 +69,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get filterIsEmpty(): boolean {
-    return !this.availableFilters;
+    return !this.availableFilters?.categoryId && !this.availableFilters?.trademark && !this.availableFilters?.supplier;
   }
 
   get filterCount(): number {
@@ -80,7 +80,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     private _localStorageService: LocalStorageService,
     private _responsiveService: ResponsiveService,
     private _fb: FormBuilder,
-    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
   ) {
     this._initForm();
 
@@ -121,7 +121,11 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
 
   cleanQuery() {
     this.form.patchValue({ query: '' });
-    this.submitClick.emit({ query: undefined });
+    this.submitClick.emit({
+      query: undefined,
+      availableFilters: this.availableFilters,
+      sort: this.sort
+    });
   }
 
   changeFilterFormVisibility($event: boolean) {
@@ -132,6 +136,13 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.availableFilters = $event;
     if ($event) {
       this.isFilterFormVisible = !this.isFilterFormVisible;
+    }
+    if (!$event) {
+      this.submitClick.emit({
+        query: this.searchQuery.length >= this.minQueryLength ? this.searchQuery : undefined,
+        availableFilters: $event,
+        sort: this.sort
+      });
     }
   }
 
@@ -177,6 +188,8 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]]
     });
+    this._activatedRoute.queryParams
+      .subscribe(queryParams => this.countNumberOfFilters(queryParams));
   }
 
   private _initUserLocation(): void {
@@ -208,5 +221,31 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.visibleSuggestions = false;
     this.productsSuggestions = null;
     this.categoriesSuggestions = null;
+  }
+
+  private countNumberOfFilters(queryParams: Params) {
+    this._filterCount = 0;
+    if (queryParams.supplier) {
+      this._filterCount++;
+    }
+    if (queryParams.trademark) {
+      this._filterCount++;
+    }
+    if (queryParams.deliveryMethod) {
+      // todo не забыть переделать когда deliveryMethod станут checkbox
+      this._filterCount++;
+    }
+    if (queryParams.inStock) {
+      this._filterCount++;
+    }
+    if (queryParams.withImages) {
+      this._filterCount++;
+    }
+    if (queryParams.priceFrom || queryParams.priceTo) {
+      this._filterCount++;
+    }
+    if (queryParams.categoryId) {
+      this._filterCount++;
+    }
   }
 }

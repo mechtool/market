@@ -62,6 +62,9 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
     TradeOfferCardsListComponent,
   ],
   providers: [DeclensionPipe],
+  exports: [
+    MainPopularComponent
+  ]
 })
 export class ProductModule {
 }
