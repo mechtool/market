@@ -25,7 +25,11 @@ export class SearchResultComponent implements OnDestroy {
 
   constructor(private _activatedRoute: ActivatedRoute) {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
-      this.isRequestFulfilled = !!Object.keys(queryParams).length;
+      if (Object.keys(queryParams).length === 1 && queryParams.sort) {
+        this.isRequestFulfilled = false;
+      } else {
+        this.isRequestFulfilled = !!Object.keys(queryParams).length;
+      }
     });
 
   }
