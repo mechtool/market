@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Out
 import { Subject } from 'rxjs';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
+import { containParametersForRequest } from '#shared/utils';
 
 @Component({
   selector: 'my-search-results',
@@ -25,11 +26,7 @@ export class SearchResultComponent implements OnDestroy {
 
   constructor(private _activatedRoute: ActivatedRoute) {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
-      if (Object.keys(queryParams).length === 1 && queryParams.sort) {
-        this.isRequestFulfilled = false;
-      } else {
-        this.isRequestFulfilled = !!Object.keys(queryParams).length;
-      }
+      this.isRequestFulfilled = containParametersForRequest(queryParams);
     });
 
   }

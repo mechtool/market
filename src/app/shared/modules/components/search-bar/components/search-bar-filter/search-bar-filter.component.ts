@@ -1,11 +1,10 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
   CategoryService,
   CountryCode,
   DefaultSearchAvailableModel,
-  DeliveryMethod,
   LocalStorageService,
   LocationModel,
   LocationService,
@@ -27,8 +26,7 @@ import { combineLatest, of, throwError } from 'rxjs';
     './search-bar-filter.component-360.scss',
   ],
 })
-export class SearchBarFilterComponent implements OnInit, OnDestroy {
-
+export class SearchBarFilterComponent {
   MIN_PRICE = 0;
   MAX_PRICE = 1000000;
   availableFiltersForm: FormGroup;
@@ -37,21 +35,12 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
   categoryId: string;
   categories: CategoryModel[];
   searchByInn = true;
-
   showFilterWithCities = false;
   showFilterWithCategories = false;
   notShowFilter = false;
-
   foundCities: LocationModel[] = [];
   megacities = Megacity.ALL;
-
   activeFilters = new Set<string>();
-
-  deliveryOptions = [
-    { label: 'Любой', value: DeliveryMethod.ANY },
-    { label: 'Самовывоз', value: DeliveryMethod.PICKUP },
-    { label: 'Доставка', value: DeliveryMethod.DELIVERY },
-  ];
 
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() city: string;
@@ -69,12 +58,6 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
   ) {
     this._init();
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   get inStock() {
@@ -189,7 +172,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
   }
 
   private _saveFilters() {
-    if (this.availableFilters === undefined) {
+    if (!this.availableFilters) {
       this.availableFilters = new DefaultSearchAvailableModel();
     }
 
@@ -202,17 +185,12 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
       this.availableFilters.trademark = trademark;
     }
 
-    const deliveryMethod = this.availableFiltersForm.controls.deliveryMethod.value;
-    if (deliveryMethod) {
-      this.availableFilters.deliveryMethod = deliveryMethod;
-      if (deliveryMethod === DeliveryMethod.ANY) {
-        this.availableFilters.delivery = this.userLocation;
-        this.availableFilters.pickup = this.userLocation;
-      } else if (deliveryMethod === DeliveryMethod.DELIVERY) {
-        this.availableFilters.delivery = this.userLocation;
-      } else if (deliveryMethod === DeliveryMethod.PICKUP) {
-        this.availableFilters.pickup = this.userLocation;
-      }
+    if (this.availableFiltersForm.controls.isDelivery.value) {
+      this.availableFilters.delivery = this.userLocation;
+    }
+
+    if (this.availableFiltersForm.controls.isPickup.value) {
+      this.availableFilters.pickup = this.userLocation;
     }
 
     this.availableFilters.inStock = this.availableFiltersForm.controls.inStock.value;
@@ -269,7 +247,8 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
     this.availableFiltersForm = this._fb.group({
       supplier: this.availableFilters?.supplier,
       trademark: this.availableFilters?.trademark,
-      deliveryMethod: this.availableFilters?.deliveryMethod,
+      isDelivery: !!this.availableFilters?.delivery,
+      isPickup: !!this.availableFilters?.pickup,
       inStock: this.availableFilters?.inStock,
       withImages: this.availableFilters?.withImages,
       priceFrom: this.availableFilters?.priceFrom,
@@ -375,7 +354,7 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(([city, cities]) => {
-        // todo:  Избавиться от лага сдвойным кликом по выбранному городу
+        // todo:  Избавиться от лага с двойным кликом по выбранному городу
         this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city));
       }, (err) => {
         console.error(err);
@@ -408,14 +387,23 @@ export class SearchBarFilterComponent implements OnInit, OnDestroy {
         this._removeActiveFilter('trademark');
       }
     });
-    this.availableFiltersForm.controls.deliveryMethod.valueChanges.subscribe((deliveryMethod) => {
-      // todo не забыть переделать когда deliveryMethod станут checkbox
-      if (deliveryMethod) {
-        this._addActiveFilter('deliveryMethod');
+
+    this.availableFiltersForm.controls.isDelivery.valueChanges.subscribe((isDelivery) => {
+      if (isDelivery) {
+        this._addActiveFilter('isDelivery');
       } else {
-        this._removeActiveFilter('deliveryMethod');
+        this._removeActiveFilter('isDelivery');
       }
     });
+
+    this.availableFiltersForm.controls.isPickup.valueChanges.subscribe((isPickup) => {
+      if (isPickup) {
+        this._addActiveFilter('isPickup');
+      } else {
+        this._removeActiveFilter('isPickup');
+      }
+    });
+
     this.availableFiltersForm.controls.inStock.valueChanges.subscribe((inStock) => {
       if (inStock) {
         this._addActiveFilter('inStock');

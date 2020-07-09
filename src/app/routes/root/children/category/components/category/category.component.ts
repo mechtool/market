@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import {
@@ -14,12 +14,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService, LocalStorageService, } from '#shared/modules/common-services';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { catchError, switchMap } from 'rxjs/operators';
+import { queryParamsFrom } from '#shared/utils';
 
 @Component({
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
 })
-export class CategoryComponent implements OnInit, OnDestroy {
+export class CategoryComponent implements OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   categoryModel: CategoryModel;
   query = '';
@@ -44,9 +45,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this._init();
   }
 
-  ngOnInit() {
-  }
-
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
@@ -54,21 +52,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
-    const availableFilters = filters.availableFilters;
     this._router.navigate([`/category/${this.categoryId}`], {
-      queryParams: {
-        q: filters.query,
-        supplier: availableFilters.supplier,
-        trademark: availableFilters.trademark,
-        deliveryMethod: availableFilters.deliveryMethod,
-        delivery: availableFilters.delivery,
-        pickup: availableFilters.pickup,
-        inStock: availableFilters.inStock,
-        withImages: availableFilters.withImages,
-        priceFrom: availableFilters.priceFrom,
-        priceTo: availableFilters.priceTo,
-        sort: filters.sort,
-      },
+      queryParams: queryParamsFrom(filters),
     });
   }
 
@@ -128,7 +113,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
           this.availableFilters = {
             supplier: queryParams.supplier,
             trademark: queryParams.trademark,
-            deliveryMethod: queryParams.deliveryMethod,
             delivery: queryParams.delivery,
             pickup: queryParams.pickup,
             inStock: queryParams.inStock,

@@ -7,7 +7,6 @@ export * from './category.model';
 export * from './category-response.model';
 export * from './category-request.model';
 export * from './default-search-available.model';
-export * from './delivery-method-enum.model';
 export * from './images-link.model';
 export * from './location.model';
 export * from './nav-item.model';

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { SortModel } from '../../../../common-services/models';
 
 
@@ -13,7 +13,7 @@ import { SortModel } from '../../../../common-services/models';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SorterComponent implements OnInit, OnDestroy {
+export class SorterComponent {
 
   sortTypes = [
     { type: SortModel.ASC, label: 'По возрастанию цены' },
@@ -31,12 +31,6 @@ export class SorterComponent implements OnInit, OnDestroy {
       return this.sortTypes.find(type => type.type === this.sort);
     }
     return this.sortTypes[0];
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   chooseSort(item: any) {

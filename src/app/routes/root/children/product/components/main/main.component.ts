@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
@@ -8,6 +8,7 @@ import {
 import { LocalStorageService, SuggestionService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
+import { queryParamsFrom } from '#shared/utils';
 
 @Component({
   selector: 'my-main',
@@ -17,7 +18,7 @@ import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrum
     './main.component-768.scss'
   ],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent implements OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
@@ -29,9 +30,6 @@ export class MainComponent implements OnInit, OnDestroy {
     private _breadcrumbsService: BreadcrumbsService,
   ) {
     this._breadcrumbsService.setVisible(false);
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -52,20 +50,7 @@ export class MainComponent implements OnInit, OnDestroy {
   navigateToSearchRoute(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     this._router.navigate(['/search'], {
-      queryParams: {
-        q: filters.query,
-        supplier: filters.availableFilters?.supplier,
-        trademark: filters.availableFilters?.trademark,
-        deliveryMethod: filters.availableFilters?.deliveryMethod,
-        delivery: filters.availableFilters?.delivery,
-        pickup: filters.availableFilters?.pickup,
-        inStock: filters.availableFilters?.inStock,
-        withImages: filters.availableFilters?.withImages,
-        priceFrom: filters.availableFilters?.priceFrom,
-        priceTo: filters.availableFilters?.priceTo,
-        categoryId: filters.availableFilters?.categoryId,
-        sort: filters.sort,
-      }
+      queryParams: queryParamsFrom(filters),
     });
   }
 }

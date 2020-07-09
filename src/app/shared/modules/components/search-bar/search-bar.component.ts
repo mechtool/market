@@ -5,7 +5,6 @@ import {
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
@@ -34,7 +33,7 @@ import { ActivatedRoute, Params } from '@angular/router';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
+export class SearchBarComponent implements OnDestroy, OnChanges {
   private _unsubscriber$: Subject<any> = new Subject();
   private _filterCount: number;
   form: FormGroup;
@@ -62,6 +61,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     return this.form.get('query').value.trim();
   }
 
+  get queryOrNull() {
+    return this.searchQuery.length >= this.minQueryLength ? this.searchQuery : null;
+  }
+
   get isShowSuggestions(): boolean {
     return !this.suggestionsOff &&
       ((this.searchQuery.length >= this.minQueryLength && (!!this.productsSuggestions || !!this.categoriesSuggestions)) ||
@@ -73,7 +76,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get filterCount(): number {
-    return this._filterCount > 0 ? this._filterCount : undefined;
+    return this._filterCount > 0 ? this._filterCount : null;
   }
 
   constructor(
@@ -89,9 +92,6 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnInit() {
-  }
-
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
@@ -105,16 +105,12 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   submit() {
-    const queryText = this.searchQuery;
-    const groupAllQueryFilters = {
-      query: queryText.length >= this.minQueryLength ? queryText : undefined,
-      availableFilters: this.availableFilters || new DefaultSearchAvailableModel(),
-      sort: this.sort,
-    };
-
-
-    if (queryText.length >= this.minQueryLength || (!queryText.length && this.availableFilters)) {
-      this.submitClick.emit(groupAllQueryFilters);
+    if (this.queryOrNull || !this.filterIsEmpty) {
+      this.submitClick.emit({
+        query: this.queryOrNull,
+        availableFilters: this.availableFilters,
+        sort: this.sort,
+      });
       this.visibleSuggestions = false;
     }
   }
@@ -122,65 +118,63 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
   cleanQuery() {
     this.form.patchValue({ query: '' });
     this.submitClick.emit({
-      query: undefined,
+      query: null,
       availableFilters: this.availableFilters,
-      sort: this.sort
+      sort: this.availableFilters ? this.sort : null,
     });
   }
 
-  changeFilterFormVisibility($event: boolean) {
-    this.isFilterFormVisible = $event;
-  }
-
-  recFilter($event: DefaultSearchAvailableModel) {
-    this.availableFilters = $event;
-    if ($event) {
-      this.isFilterFormVisible = !this.isFilterFormVisible;
+  recFilter(filters: DefaultSearchAvailableModel) {
+    this.availableFilters = filters;
+    if (filters) {
+      this.changeFilterFormVisibility(!this.isFilterFormVisible);
     }
-    if (!$event) {
+    if (!filters) {
       this.submitClick.emit({
-        query: this.searchQuery.length >= this.minQueryLength ? this.searchQuery : undefined,
-        availableFilters: $event,
-        sort: this.sort
+        query: this.queryOrNull,
+        availableFilters: null,
+        sort: this.queryOrNull ? this.sort : null,
       });
     }
   }
 
-  recLocationFromMobileForm($event: LocationModel) {
-    this.userLocation = $event;
-    if (this.availableFilters) {
-      if (this.availableFilters.delivery) {
-        this.availableFilters.delivery = $event.fias;
-      }
-      if (this.availableFilters.pickup) {
-        this.availableFilters.pickup = $event.fias;
-      }
-    }
+  changeFilterFormVisibility(isVisible: boolean) {
+    this.isFilterFormVisible = isVisible;
   }
 
-  recLocation($event: LocationModel) {
-    this.userLocation = $event;
+  changeAndCloseLocation(location: LocationModel) {
+    this.changeLocation(location);
     this.visibleLocationForm = !this.visibleLocationForm;
-    if (this.availableFilters) {
-      if (this.availableFilters.delivery) {
-        this.availableFilters.delivery = $event.fias;
-      }
-      if (this.availableFilters.pickup) {
-        this.availableFilters.pickup = $event.fias;
-      }
+  }
+
+  changeLocation(location: LocationModel) {
+    this.userLocation = location;
+    if (this.availableFilters?.delivery) {
+      this.availableFilters.delivery = location.fias;
+    }
+    if (this.availableFilters?.pickup) {
+      this.availableFilters.pickup = location.fias;
     }
   }
 
-  changeLocationButton($event: boolean) {
-    this.visibleLocationForm = $event;
+
+  changeLocationButton(isVisible: boolean) {
+    this.visibleLocationForm = isVisible;
   }
 
-  sortChange($event: SortModel) {
-    this.sort = $event;
+  sortChange(sort: SortModel) {
+    this.sort = sort;
+    if (this.queryOrNull || !this.filterIsEmpty) {
+      this.submitClick.emit({
+        query: this.queryOrNull,
+        availableFilters: this.availableFilters,
+        sort: this.sort,
+      });
+    }
   }
 
-  recFiltersCount($event: number) {
-    this._filterCount = $event;
+  recFiltersCount(filterCount: number) {
+    this._filterCount = filterCount;
   }
 
   private _initForm(): void {
@@ -189,7 +183,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
       query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]]
     });
     this._activatedRoute.queryParams
-      .subscribe(queryParams => this.countNumberOfFilters(queryParams));
+      .subscribe(queryParams => this._activeFiltersCount(queryParams));
   }
 
   private _initUserLocation(): void {
@@ -223,7 +217,7 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     this.categoriesSuggestions = null;
   }
 
-  private countNumberOfFilters(queryParams: Params) {
+  private _activeFiltersCount(queryParams: Params) {
     this._filterCount = 0;
     if (queryParams.supplier) {
       this._filterCount++;
@@ -231,8 +225,10 @@ export class SearchBarComponent implements OnInit, OnDestroy, OnChanges {
     if (queryParams.trademark) {
       this._filterCount++;
     }
-    if (queryParams.deliveryMethod) {
-      // todo не забыть переделать когда deliveryMethod станут checkbox
+    if (queryParams.delivery) {
+      this._filterCount++;
+    }
+    if (queryParams.pickup) {
       this._filterCount++;
     }
     if (queryParams.inStock) {

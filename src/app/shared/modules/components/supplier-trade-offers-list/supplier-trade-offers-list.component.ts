@@ -10,8 +10,8 @@ import {
   TradeOfferSummaryPriceModel,
   TradeOfferVatEnumModel
 } from '#shared/modules';
-import { Router } from '@angular/router';
-import { absoluteImagePath, mapStock } from '#shared/utils';
+import { ActivatedRoute, Router } from '@angular/router';
+import { absoluteImagePath, containParametersForRequest, mapStock, queryParamsFrom } from '#shared/utils';
 
 @Component({
   selector: 'my-supplier-trade-offers-list',
@@ -41,11 +41,16 @@ export class SupplierTradeOffersListComponent {
   @Output() loadTradeOffers: EventEmitter<number> = new EventEmitter();
 
   availableFilters: DefaultSearchAvailableModel;
+  visibleSort: boolean;
 
   constructor(
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _localStorageService: LocalStorageService,
   ) {
+    this._activatedRoute.queryParams.subscribe((queryParams) => {
+      this.visibleSort = containParametersForRequest(queryParams);
+    });
   }
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
@@ -53,20 +58,7 @@ export class SupplierTradeOffersListComponent {
     this.availableFilters = filters.availableFilters;
     this.sort = filters.sort;
     this._router.navigate([`/supplier/${this.supplier.id}`], {
-      queryParams: {
-        q: filters.query,
-        supplier: this.availableFilters?.supplier,
-        trademark: this.availableFilters?.trademark,
-        deliveryMethod: this.availableFilters?.deliveryMethod,
-        delivery: this.availableFilters?.delivery,
-        pickup: this.availableFilters?.pickup,
-        inStock: this.availableFilters?.inStock,
-        withImages: this.availableFilters?.withImages,
-        priceFrom: this.availableFilters?.priceFrom,
-        priceTo: this.availableFilters?.priceTo,
-        categoryId: this.availableFilters?.categoryId,
-        sort: filters.sort,
-      },
+      queryParams: queryParamsFrom(filters),
     });
   }
 

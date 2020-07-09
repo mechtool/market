@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LocalStorageService, LocationService } from '../../../../common-services';
 import { LocationModel, Megacity } from '../../../../common-services/models/location.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { filter, switchMap } from 'rxjs/operators';
-import { combineLatest, of, Subject } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 
 @Component({
   selector: 'my-search-bar-location',
@@ -13,36 +13,28 @@ import { combineLatest, of, Subject } from 'rxjs';
   ],
 })
 
-export class SearchBarLocationComponent implements OnInit, OnDestroy {
+export class SearchBarLocationComponent {
+
+  locationForm: FormGroup;
+  foundCities: LocationModel[] = [];
+  megacities = Megacity.ALL;
+  @Output() stateLocationForm: EventEmitter<LocationModel> = new EventEmitter();
+
+  @Input()
+  set cleanLocationForm(visible: boolean) {
+    if (!visible) {
+      this._initForm();
+      this._subscribeOnCityRequest();
+    }
+  }
 
   constructor(
     private _locationService: LocationService,
     private _localStorageService: LocalStorageService,
     private _fb: FormBuilder,
   ) {
-  }
-
-  private _unsubscriber$: Subject<any> = new Subject();
-
-  @Output() stateLocationForm: EventEmitter<LocationModel> = new EventEmitter();
-
-  locationForm: FormGroup;
-  foundCities: LocationModel[] = [];
-  megacities = Megacity.ALL;
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
     this._initForm();
     this._subscribeOnCityRequest();
-  }
-
-  @Input()
-  set cleanLocationForm(visible: boolean) {
-    if (!visible) {
-      this.ngOnInit();
-    }
   }
 
   private _initForm() {
@@ -70,7 +62,7 @@ export class SearchBarLocationComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(([city, cities]) => {
-        // todo:  Избавиться от лага сдвойным кликом по выбранному городу
+        // todo:  Избавиться от лага с двойным кликом по выбранному городу
         this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city));
       }, (err) => {
         console.error(err);

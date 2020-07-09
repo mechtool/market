@@ -1,5 +1,3 @@
-import { DeliveryMethod } from './delivery-method-enum.model';
-
 export class TradeOffersRequestModel {
   public q?: string;
   public tradeMark?: string;
@@ -15,6 +13,4 @@ export class TradeOffersRequestModel {
   public sort?: string;
   public page?: number;
   public size?: number;
-
-  public deliveryMethod?: DeliveryMethod = DeliveryMethod.ANY;
 }

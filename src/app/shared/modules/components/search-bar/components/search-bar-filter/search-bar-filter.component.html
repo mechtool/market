@@ -25,10 +25,10 @@
     </div>
 
     <div class="form-group_title">Способ доставки</div>
-    <div class="form-group_radio">
-      <nz-radio-group formControlName="deliveryMethod">
-        <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
-      </nz-radio-group>
+    <div class="form-group_checkbox">
+      <label nz-checkbox formControlName="isPickup">Самовывоз</label>
+      <br/>
+      <label nz-checkbox formControlName="isDelivery">Доставка</label>
     </div>
 
     <div class="form-group_title">Параметры поиска</div>
@@ -157,10 +157,10 @@
       </div>
 
       <div class="form-group_title">Способ доставки</div>
-      <div class="form-group_radio">
-        <nz-radio-group formControlName="deliveryMethod">
-          <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
-        </nz-radio-group>
+      <div class="form-group_checkbox">
+        <label nz-checkbox formControlName="isPickup">Самовывоз</label>
+        <br/>
+        <label nz-checkbox formControlName="isDelivery">Доставка</label>
       </div>
 
       <div class="form-group_title">Параметры поиска</div>

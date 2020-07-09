@@ -71,7 +71,7 @@
           <my-search-bar-filter
             [availableFilters]="availableFilters"
             [city]="userLocation.name"
-            (stateLocationForm)="recLocationFromMobileForm($event)"
+            (stateLocationForm)="changeLocation($event)"
             (stateAvailableFilters)="recFilter($event)"
             (closeFilter)="changeFilterFormVisibility($event)"
             (filtersCount)="recFiltersCount($event)"
@@ -89,7 +89,7 @@
     <nz-dropdown-menu #locationMenu="nzDropdownMenu">
       <my-search-bar-location
         [cleanLocationForm]="visibleLocationForm"
-        (stateLocationForm)="recLocation($event)"
+        (stateLocationForm)="changeAndCloseLocation($event)"
       ></my-search-bar-location>
     </nz-dropdown-menu>
   </div>

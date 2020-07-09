@@ -18,7 +18,6 @@ import {
   NzDropDownModule,
   NzFormModule,
   NzInputModule,
-  NzRadioModule,
   NzSliderModule,
 } from 'ng-zorro-antd';
 
@@ -33,7 +32,6 @@ import {
     NzDropDownModule,
     NzFormModule,
     NzInputModule,
-    NzRadioModule,
     NzSliderModule,
     NzAutocompleteModule,
   ],

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { of, Subject, throwError } from 'rxjs';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import {
@@ -15,12 +15,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 import { BreadcrumbsService } from '../../components/breadcrumbs/breadcrumbs.service';
 import { catchError, switchMap } from 'rxjs/operators';
+import { queryParamsFrom } from '#shared/utils';
 
 @Component({
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   productOffersList: ProductOffersListResponseModel;
   productOffers: ProductOffersModel[];
@@ -49,9 +50,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       !!(this.availableFilters?.supplier || this.availableFilters?.trademark || this.availableFilters?.categoryId);
   }
 
-  ngOnInit() {
-  }
-
   ngOnDestroy() {
     this._unsubscriber$.next();
     this._unsubscriber$.complete();
@@ -71,7 +69,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this._localStorageService.putSearchText(filters.query);
     this._cleanFilters(filters);
     this._router.navigate(['/search'], {
-      queryParams: this._getQueryParams(filters)
+      queryParams: queryParamsFrom(filters),
     });
   }
 
@@ -112,7 +110,6 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.availableFilters = {
               supplier: queryParams.supplier,
               trademark: queryParams.trademark,
-              deliveryMethod: queryParams.deliveryMethod,
               delivery: queryParams.delivery,
               pickup: queryParams.pickup,
               inStock: queryParams.inStock,
@@ -149,29 +146,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       }, (err) => {
         console.log('error');
       });
-  }
-
-  private _getQueryParams(filters: AllGroupQueryFiltersModel) {
-    const queryParams: any = {};
-    const availableFilters = filters.availableFilters;
-
-    queryParams.q = filters.query;
-    queryParams.sort = filters.sort;
-
-    if (availableFilters) {
-      queryParams.supplier = availableFilters.supplier;
-      queryParams.trademark = availableFilters.trademark;
-      queryParams.deliveryMethod = availableFilters.deliveryMethod;
-      queryParams.delivery = availableFilters.delivery;
-      queryParams.pickup = availableFilters.pickup;
-      queryParams.inStock = availableFilters.inStock;
-      queryParams.withImages = availableFilters.withImages;
-      queryParams.priceFrom = availableFilters.priceFrom;
-      queryParams.priceTo = availableFilters.priceTo;
-      queryParams.categoryId = availableFilters.categoryId;
-    }
-
-    return queryParams;
   }
 
   private _initBreadcrumbs() {
