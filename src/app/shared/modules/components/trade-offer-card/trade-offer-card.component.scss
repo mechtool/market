@@ -178,12 +178,15 @@
 }
 
 .tooltip {
+  // todo вынести в глобальный конфиг, много где дублируется
   position: relative;
-  border: 1px solid #f2f2f2;
+  border: 1px solid var(--color-accent-light);
   border-radius: 2px;
   font-size: var(--font-size-10);
+  font-weight: var(--font-weight-bold);
+  color: #70706f;
   line-height: 13px;
-  padding: 0 5px;
+  padding: 0 3px;
   background-color: #ffffff;
   white-space: nowrap;
   cursor: default;
@@ -191,82 +194,9 @@
   overflow: hidden;
   transition: background-color 0.3s, border-color 0.3s;
 
-  &_wrap {
-    display: block;
-  }
-
-  &.hovered {
+  &:hover {
     overflow: visible;
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent-light);
   }
-
-  & .tooltip_inner {
-    width: 220px;
-    min-height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    font-size: var(--font-size-12);
-    font-weight: var(--font-weight-normal);
-    line-height: 15px;
-    text-align: center;
-    background: #ffffff;
-    color: #444343;
-    right: 50%;
-    bottom: 100%;
-    transform: translateX(50%);
-    border-radius: 2px;
-    padding: 5px 7px;
-    margin-bottom: 7px;
-    white-space: normal;
-    box-shadow: 2px 1px 10px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s;
-
-    &.tooltip_hide {
-      position: fixed;
-    }
-
-    &.to_right {
-      right: 110px;
-
-      &:before {
-        right: 10px;
-      }
-    }
-
-    &.to_left {
-      right: auto;
-      left: 0;
-      transform: none;
-
-      &:before {
-        right: 90%;
-      }
-    }
-
-    &:before {
-      content: "";
-      width: 0;
-      height: 0;
-      position: absolute;
-      right: 50%;
-      transform: translateX(50%);
-      bottom: -8px;
-      border: 3px solid transparent;
-      border-top: 6px solid #ffffff;
-    }
-  }
-}
-
-.tooltip.hovered,
-.tooltip_fill {
-  background-color: #fdc82f;
-  border-color: #fdc82f;
-}
-
-.tooltip.hovered .tooltip_inner {
-  opacity: 1;
-  visibility: visible;
 }

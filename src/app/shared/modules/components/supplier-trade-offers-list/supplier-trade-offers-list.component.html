@@ -11,7 +11,7 @@
 
 <div class="catalog_header">
   <div class="catalog_header__count">
-    <span class="catalog_header__title">Товары</span> <strong>{{tradeOffersTotal}}</strong> предложений
+    <span class="catalog_header__title">Торговые предложения</span> <strong>{{tradeOffersTotal}}</strong>
   </div>
 </div>
 
@@ -78,7 +78,7 @@
             <div class="table_cell cell_price">
               <span class="price">{{price(tradeOffer.priceProjection.price)}} ₽</span>
               <span class="cell_nds">{{vat(tradeOffer.price)}}</span>
-              <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
+              <div class="tooltip_wrap" *ngIf="true">
                 <span class="tooltip"
                       nz-tooltip
                       nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { SortModel, TradeOfferInfoModel } from '#shared/modules';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { SortModel, TradeOfferDto } from '#shared/modules';
 
 @Component({
   selector: 'my-supplier-info-card-list',
@@ -12,7 +12,7 @@ import { SortModel, TradeOfferInfoModel } from '#shared/modules';
     './trade-offer-cards-list.component-576.scss',
   ],
 })
-export class TradeOfferCardsListComponent implements OnInit, OnDestroy, OnChanges {
+export class TradeOfferCardsListComponent implements OnChanges {
 
   sortTypes = [
     { type: SortModel.ASC, label: 'По возрастанию цены' },
@@ -20,7 +20,7 @@ export class TradeOfferCardsListComponent implements OnInit, OnDestroy, OnChange
   ];
 
   @Input() sort: SortModel;
-  @Input() tradeOffers: TradeOfferInfoModel[];
+  @Input() tradeOffers: TradeOfferDto[];
   @Output() sortChange: EventEmitter<SortModel> = new EventEmitter();
 
   constructor() {
@@ -31,12 +31,6 @@ export class TradeOfferCardsListComponent implements OnInit, OnDestroy, OnChange
       return this.sortTypes.find(type => type.type === this.sort);
     }
     return this.sortTypes[0];
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges): void {

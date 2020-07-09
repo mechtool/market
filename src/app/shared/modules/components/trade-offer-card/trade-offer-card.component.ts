@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { TradeOfferInfoModel } from '#shared/modules';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { TradeOfferDto } from '#shared/modules';
 import { randomARGB } from '#shared/utils/get-color';
 import { Router } from '@angular/router';
 
@@ -14,21 +14,15 @@ import { Router } from '@angular/router';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TradeOfferCardComponent implements OnInit, OnDestroy {
+export class TradeOfferCardComponent {
 
-  @Input() tradeOffer: TradeOfferInfoModel;
+  @Input() tradeOffer: TradeOfferDto;
 
   get argb() {
     return randomARGB();
   }
 
   constructor(private _router: Router) {
-  }
-
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
   }
 
   clickTradeOffer() {

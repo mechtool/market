@@ -1,22 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { combineLatest, Subject, throwError } from 'rxjs';
 import { BreadcrumbsService } from '../../../../components/breadcrumbs/breadcrumbs.service';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductDto, SortModel, TradeOfferInfoModel, TradeOffersModel } from '#shared/modules';
+import { ProductDto, SortModel, TradeOfferDto, TradeOffersModel } from '#shared/modules';
 import { catchError, switchMap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
-import { mapStock } from '#shared/utils';
 
 @Component({
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
 })
-export class ProductComponent implements OnInit, OnDestroy {
+export class ProductComponent implements OnDestroy {
   private _unsubscriber$: Subject<any> = new Subject();
   productId: string;
   product: ProductDto;
-  tradeOffers: TradeOfferInfoModel[];
+  tradeOffers: TradeOfferDto[];
   sort: SortModel;
 
   get hasProductDescription(): boolean {
@@ -38,9 +37,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.sort = param.sort ? param.sort : SortModel.ASC;
     });
     this._initProductOffers();
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -100,18 +96,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  private _mapOffers(offers: TradeOffersModel[]): TradeOfferInfoModel[] {
+  private _mapOffers(offers: TradeOffersModel[]): TradeOfferDto[] {
     return offers.map((offer) => {
-      return {
-        id: offer.id,
-        description: 'Описание специальных условия от поставщика, которые у него находятся в специальной вкладке' +
-          ' и выводится первые четыре строки этой инфы', // todo пока негде взять!!!
-        price: offer.price,
-        stock: mapStock(offer.stock),
-        supplierId: offer.supplier.id,
-        supplierName: offer.supplier.name,
-        isSpecialPrice: true, // todo пока негде взять!!!
-      };
+      return TradeOfferDto.fromTradeOffer(offer);
     });
   }
 }

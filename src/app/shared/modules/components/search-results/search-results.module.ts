@@ -7,6 +7,7 @@ import { NomenclatureCardModule } from '../nomenclature-card';
 import { CardModule } from '../card/card.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
+import { PipesModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
     InfiniteScrollModule,
     NzSpinModule,
     NzIconModule,
+    PipesModule,
   ],
   declarations: [
     SearchResultComponent,

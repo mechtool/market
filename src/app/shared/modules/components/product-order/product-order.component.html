@@ -23,6 +23,11 @@
         <span itemprop="price">{{price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
+      <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
+        <span class="tooltip"
+              nz-tooltip
+              nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
+      </div>
       <div class="price_matrix__btn attention-link" data-modal="modalPriceMatrix" (click)="isVisible = true">Матрица цен</div>
       <ng-container *ngTemplateOutlet="price_matrix_modal"></ng-container>
     </div>
@@ -47,6 +52,11 @@
         <span itemprop="price">{{price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
+      <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
+        <span class="tooltip"
+              nz-tooltip
+              nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
+      </div>
       <div class="price_matrix__btn attention-link" data-modal="modalPriceMatrix" (click)="isVisible = true">Матрица цен</div>
       <ng-container *ngTemplateOutlet="price_matrix_modal"></ng-container>
     </div>

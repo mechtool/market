@@ -17,7 +17,7 @@ export * from './suggestion-product-item.model';
 export * from './suggestion-search-query-history.model';
 export * from './suppliers-request.model';
 export * from './suppliers-response.model';
-export * from './trade-offer-info.model';
+export * from './trade-offer-dto';
 export * from './user-organization.model';
 export * from './trade-offers.model';
 export * from './trade-offer-response.model';

@@ -10,6 +10,34 @@
   }
 }
 
+.tooltip_wrap {
+  display: block;
+}
+
+.tooltip {
+  // todo вынести в глобальный конфиг, много где дублируется
+  position: relative;
+  border: 1px solid var(--color-accent-light);
+  border-radius: 2px;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-bold);
+  color: #70706f;
+  line-height: 13px;
+  padding: 0 3px;
+  background-color: #ffffff;
+  white-space: nowrap;
+  cursor: default;
+  z-index: 1;
+  overflow: hidden;
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover {
+    overflow: visible;
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent-light);
+  }
+}
+
 .to_cart__wrap {
   width: 220px;
   padding: 20px 10px 15px 10px;
