@@ -8,7 +8,11 @@
       <nz-form-item class="margin-cleared">
         <nz-form-control>
           <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
-          <input nz-input type="text" name="formFilterInn" id="formFilterInn" placeholder="Укажите поставщика"
+          <input nz-input type="text"
+                 autocomplete="off"
+                 name="formFilterInn"
+                 id="formFilterInn"
+                 placeholder="Укажите поставщика"
                  formControlName="supplier">
         </nz-form-control>
       </nz-form-item>
@@ -18,7 +22,11 @@
       <nz-form-item class="margin-cleared">
         <nz-form-control>
           <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
-          <input nz-input type="text" name="formFilterBrand" id="formFilterBrand" placeholder="Укажите бренд"
+          <input nz-input type="text"
+                 autocomplete="off"
+                 name="formFilterBrand"
+                 id="formFilterBrand"
+                 placeholder="Укажите бренд"
                  formControlName="trademark">
         </nz-form-control>
       </nz-form-item>

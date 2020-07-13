@@ -7,7 +7,7 @@ import { NomenclatureCardModule } from '../nomenclature-card';
 import { CardModule } from '../card/card.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
-import { PipesModule } from '#shared/modules';
+import { PipesModule } from '#shared/modules/pipes';
 
 @NgModule({
   imports: [

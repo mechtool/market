@@ -1,5 +1,6 @@
-import { TradeOfferStockEnumModel } from '#shared/modules/common-services/models/trade-offer-stock-enum.model';
+import { TradeOfferStockEnumModel } from './trade-offer-stock-enum.model';
 import { AudienceModel } from './audience-model';
+import { TradeOfferDescriptionModel } from './trade-offer-description.model';
 
 export class TradeOffersModel {
   id: string;
@@ -7,6 +8,7 @@ export class TradeOffersModel {
   stock: TradeOfferStockEnumModel;
   supplier: TradeOffersSupplierModel;
   orderPlacingReference: string;
+  offerDescription: TradeOfferDescriptionModel;
   audience: AudienceModel[];
 }
 

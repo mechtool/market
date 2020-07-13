@@ -5,6 +5,7 @@ import { TradeOfferSockModel } from './trade-offer-sock.model';
 import { TradeOfferSupplierModel } from './trade-offer-supplier.model';
 import { AudienceModel } from './audience-model';
 import { ValueTypeEnum } from './value-type.enum';
+import { TradeOfferDescriptionModel } from './trade-offer-description.model';
 
 export class TradeOfferResponseModel {
   id: string;
@@ -17,11 +18,6 @@ export class TradeOfferResponseModel {
   deliveryDescription: TradeOfferDeliveryDescriptionModel;
   requestedPriceProjection: TradeOfferRequestedPriceProjectionModel;
   audience: AudienceModel[];
-}
-
-export class TradeOfferDescriptionModel {
-  title: string;
-  description: string;
 }
 
 export class TradeOfferProductModel {

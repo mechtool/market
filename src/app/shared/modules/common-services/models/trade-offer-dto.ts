@@ -1,6 +1,6 @@
+import { AudienceModel } from './audience-model';
 import { TradeOffersModel } from './trade-offers.model';
 import { mapStock } from '#shared/utils';
-import { AudienceModel } from '#shared/modules/common-services/models/audience-model';
 
 export class TradeOfferDto {
   id: string;
@@ -14,8 +14,7 @@ export class TradeOfferDto {
   static fromTradeOffer(offer: TradeOffersModel): TradeOfferDto {
     return {
       id: offer.id,
-      description: 'Описание специальных условия от поставщика, которые у него находятся в специальной вкладке' +
-        ' и выводится первые четыре строки этой инфы', // todo пока негде взять!!!
+      description: offer.offerDescription?.title,
       price: offer.price,
       stock: mapStock(offer.stock),
       supplierId: offer.supplier.id,
