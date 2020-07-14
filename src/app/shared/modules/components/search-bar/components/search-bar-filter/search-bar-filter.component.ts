@@ -8,11 +8,17 @@ import {
   LocalStorageService,
   LocationModel,
   LocationService,
-  Megacity
+  Megacity,
+  OrganizationsService,
+  SupplierService,
+  SuppliersItemModel
 } from '../../../../common-services';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, filter, switchMap } from 'rxjs/operators';
 import { combineLatest, of, throwError } from 'rxjs';
+import { resizeBusinessStructure } from '#shared/utils';
+
+const PAGE_SIZE = 20;
 
 
 @Component({
@@ -39,8 +45,10 @@ export class SearchBarFilterComponent {
   showFilterWithCategories = false;
   notShowFilter = false;
   foundCities: LocationModel[] = [];
-  megacities = Megacity.ALL;
-  activeFilters = new Set<string>();
+  suppliers: SuppliersItemModel[];
+  private supplier: SuppliersItemModel;
+  private megacities = Megacity.ALL;
+  private activeFilters = new Set<string>();
 
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() city: string;
@@ -55,6 +63,8 @@ export class SearchBarFilterComponent {
     private _localStorageService: LocalStorageService,
     private _categoryService: CategoryService,
     private _activatedRoute: ActivatedRoute,
+    private _supplierService: SupplierService,
+    private _organizationsService: OrganizationsService,
     private _fb: FormBuilder,
   ) {
     this._init();
@@ -84,6 +94,7 @@ export class SearchBarFilterComponent {
   reset() {
     this.availableFilters = undefined;
     this.categoryId = undefined;
+    this.supplier = undefined;
     this.stateAvailableFilters.emit(this.availableFilters);
     this.activeFilters.clear();
     this.filtersCount.emit(0);
@@ -136,13 +147,22 @@ export class SearchBarFilterComponent {
     ])
       .pipe(
         switchMap(([params, queryParams]) => {
-          const supplierId = params.id;
           if (queryParams.categoryId) {
             this.categoryId = queryParams.categoryId;
           }
-          if (supplierId) {
+          if (queryParams.supplierId) {
+            this._organizationsService.getOrganization(queryParams.supplierId).subscribe((organization) => {
+              this.supplier = {
+                id: organization.id,
+                name: resizeBusinessStructure(organization.name),
+                inn: organization.legalRequisites.inn,
+                kpp: organization.legalRequisites.kpp,
+              };
+            });
+          }
+          if (params.supplierId) {
             this.searchByInn = false;
-            return this._categoryService.getAllSupplierCategories({ suppliers: [supplierId] });
+            return this._categoryService.getAllSupplierCategories({ suppliers: [params.supplierId] });
           }
           return this._categoryService.getAllSupplierCategories();
         }),
@@ -176,9 +196,8 @@ export class SearchBarFilterComponent {
       this.availableFilters = new DefaultSearchAvailableModel();
     }
 
-    const supplier = this.availableFiltersForm.controls.supplier.value;
-    if (supplier) {
-      this.availableFilters.supplier = supplier;
+    if (this.supplier) {
+      this.availableFilters.supplierId = this.supplier.id;
     }
     const trademark = this.availableFiltersForm.controls.trademark.value;
     if (trademark) {
@@ -245,7 +264,7 @@ export class SearchBarFilterComponent {
 
   private _initFormAvailableFilter() {
     this.availableFiltersForm = this._fb.group({
-      supplier: this.availableFilters?.supplier,
+      supplier: this.supplier?.name,
       trademark: this.availableFilters?.trademark,
       isDelivery: !!this.availableFilters?.delivery,
       isPickup: !!this.availableFilters?.pickup,
@@ -302,10 +321,9 @@ export class SearchBarFilterComponent {
     });
 
     this.availableFiltersForm.controls.priceBetween.valueChanges.subscribe((prices) => {
-      this.availableFiltersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false }
-      );
-      this.availableFiltersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false }
-      );
+      this.availableFiltersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
+      this.availableFiltersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
+      this.availableFiltersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], { onlySelf: true, emitEvent: false });
       if (prices) {
         this._addActiveFilter('price');
       } else {
@@ -322,6 +340,7 @@ export class SearchBarFilterComponent {
     });
 
     this.categoryFiltersForm.controls.selectedCategories.valueChanges.subscribe((indexCategories) => {
+      this.categoryFiltersForm.controls.selectedCategories.setValue(indexCategories, { onlySelf: true, emitEvent: false });
       if (this.categoryId) {
         indexCategories
           .forEach((value, i) => {
@@ -372,15 +391,27 @@ export class SearchBarFilterComponent {
   }
 
   private _filtersChangesControl(): void {
-
     this.availableFiltersForm.controls.supplier.valueChanges.subscribe((supplier) => {
-      if (supplier.length) {
-        this._addActiveFilter('supplier');
-      } else {
-        this._removeActiveFilter('supplier');
+      this.availableFiltersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
+      if (typeof supplier === 'string') {
+        this._removeActiveFilter('supplierId');
+        if (supplier.trim().length > 3) {
+          this._supplierService.findSuppliersBy(supplier, 0, PAGE_SIZE)
+            .subscribe((data) => {
+              this.suppliers = this._map(data._embedded.suppliers);
+            });
+        } else {
+          this.suppliers = null;
+        }
+      } else if (typeof supplier === 'object') {
+        this.supplier = supplier;
+        this.suppliers = null;
+        this._addActiveFilter('supplierId');
       }
     });
+
     this.availableFiltersForm.controls.trademark.valueChanges.subscribe((trademark) => {
+      this.availableFiltersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
       if (trademark.length) {
         this._addActiveFilter('trademark');
       } else {
@@ -389,6 +420,7 @@ export class SearchBarFilterComponent {
     });
 
     this.availableFiltersForm.controls.isDelivery.valueChanges.subscribe((isDelivery) => {
+      this.availableFiltersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
       if (isDelivery) {
         this._addActiveFilter('isDelivery');
       } else {
@@ -397,6 +429,7 @@ export class SearchBarFilterComponent {
     });
 
     this.availableFiltersForm.controls.isPickup.valueChanges.subscribe((isPickup) => {
+      this.availableFiltersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
       if (isPickup) {
         this._addActiveFilter('isPickup');
       } else {
@@ -405,6 +438,7 @@ export class SearchBarFilterComponent {
     });
 
     this.availableFiltersForm.controls.inStock.valueChanges.subscribe((inStock) => {
+      this.availableFiltersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
       if (inStock) {
         this._addActiveFilter('inStock');
       } else {
@@ -412,6 +446,7 @@ export class SearchBarFilterComponent {
       }
     });
     this.availableFiltersForm.controls.withImages.valueChanges.subscribe((withImages) => {
+      this.availableFiltersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
       if (withImages) {
         this._addActiveFilter('withImages');
       } else {
@@ -427,4 +462,10 @@ export class SearchBarFilterComponent {
     });
   }
 
+  private _map(suppliers: SuppliersItemModel[]) {
+    suppliers.forEach((supplier) => {
+      supplier.name = resizeBusinessStructure(supplier.name);
+    });
+    return suppliers;
+  }
 }

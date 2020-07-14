@@ -13,7 +13,7 @@ export function queryParamsFrom(filters: AllGroupQueryFiltersModel): Params {
   return {
     q: filters.query,
     categoryId: filters.availableFilters?.categoryId,
-    supplier: filters.availableFilters?.supplier,
+    supplierId: filters.availableFilters?.supplierId,
     trademark: filters.availableFilters?.trademark,
     delivery: filters.availableFilters?.delivery,
     pickup: filters.availableFilters?.pickup,

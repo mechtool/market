@@ -46,7 +46,7 @@ export class SearchComponent {
 
   get requestParametersSelected(): boolean {
     return !!this.query ||
-      !!(this.availableFilters?.supplier || this.availableFilters?.trademark || this.availableFilters?.categoryId);
+      !!(this.availableFilters?.supplierId || this.availableFilters?.trademark || this.availableFilters?.categoryId);
   }
 
 
@@ -103,7 +103,7 @@ export class SearchComponent {
           if (Object.keys(queryParams).length) {
             this.query = queryParams.q;
             this.availableFilters = {
-              supplier: queryParams.supplier,
+              supplierId: queryParams.supplierId,
               trademark: queryParams.trademark,
               delivery: queryParams.delivery,
               pickup: queryParams.pickup,

@@ -1,5 +1,5 @@
 export class DefaultSearchAvailableModel {
-  supplier?: string;
+  supplierId?: string;
   trademark?: string; // name brand or company
   delivery?: string;
   pickup?: string;

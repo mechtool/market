@@ -70,7 +70,7 @@ export class SearchBarComponent implements OnChanges {
   }
 
   get filterIsEmpty(): boolean {
-    return !this.availableFilters?.categoryId && !this.availableFilters?.trademark && !this.availableFilters?.supplier;
+    return !this.availableFilters?.categoryId && !this.availableFilters?.trademark && !this.availableFilters?.supplierId;
   }
 
   get filterCount(): number {
@@ -211,7 +211,7 @@ export class SearchBarComponent implements OnChanges {
 
   private _activeFiltersCount(queryParams: Params) {
     this._filterCount = 0;
-    if (queryParams.supplier) {
+    if (queryParams.supplierId) {
       this._filterCount++;
     }
     if (queryParams.trademark) {

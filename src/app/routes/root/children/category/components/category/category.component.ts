@@ -86,7 +86,7 @@ export class CategoryComponent {
           this.query = queryParams.q;
           this.sort = queryParams.sort;
           this.availableFilters = {
-            supplier: queryParams.supplier,
+            supplierId: queryParams.supplierId,
             trademark: queryParams.trademark,
             delivery: queryParams.delivery,
             pickup: queryParams.pickup,

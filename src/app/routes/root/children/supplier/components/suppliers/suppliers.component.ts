@@ -57,7 +57,7 @@ export class SupplierListComponent {
 
       this._getSuppliers(nextPage).subscribe(
         (suppliers) => {
-          this.supplierData = this._map(suppliers);
+          this.supplierData = suppliers;
           // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
           this.suppliers.push(...this.supplierData._embedded.suppliers);
           this.isLoading = false;
@@ -79,23 +79,15 @@ export class SupplierListComponent {
         })
       )
       .subscribe((suppliers) => {
-        this.supplierData = this._map(suppliers);
+        this.supplierData = suppliers;
         this.suppliers = this.supplierData._embedded.suppliers;
       });
   }
 
   private _getSuppliers(page: number) {
-    if (!this.query || this.query?.length === 0) {
-      return this._supplierService.getAllSuppliers(page, PAGE_SIZE);
+    if (this.query?.length) {
+      return this._supplierService.findSuppliersBy(this.query, page, PAGE_SIZE);
     }
-    return this._supplierService.findSuppliersBy(this.query, page, PAGE_SIZE);
-  }
-
-  private _map(suppliers: SuppliersResponseModel) {
-    // todo временно добавляем описание, так как пока на бэке его нет. НЕ ЗАБЫТЬ УБРАТЬ!!!
-    suppliers._embedded.suppliers
-      .forEach(supplier => supplier.description =
-        `Описание всех возможностей и преимуществ организации ${supplier.name}, являющейся поставщиком на площадке 1С:Бизнес-Сеть.`);
-    return suppliers;
+    return this._supplierService.getAllSuppliers(page, PAGE_SIZE);
   }
 }

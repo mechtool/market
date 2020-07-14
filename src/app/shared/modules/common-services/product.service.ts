@@ -28,7 +28,7 @@ export class ProductService {
       categoryId: filters.availableFilters?.categoryId,
       priceFrom: filters.availableFilters?.priceFrom,
       priceTo: filters.availableFilters?.priceTo,
-      suppliers: [filters.availableFilters?.supplier],
+      suppliers: [filters.availableFilters?.supplierId],
       tradeMarks: [filters.availableFilters?.trademark],
       inStock: filters.availableFilters?.inStock,
       withImages: filters.availableFilters?.withImages,

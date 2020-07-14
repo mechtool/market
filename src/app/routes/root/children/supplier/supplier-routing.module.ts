@@ -11,7 +11,7 @@ const routes: Routes = [
     path: '',
     component: SupplierListComponent
   }, {
-    path: ':id',
+    path: ':supplierId',
     children: [
       {
         path: '',

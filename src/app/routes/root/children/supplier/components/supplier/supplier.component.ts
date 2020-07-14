@@ -4,6 +4,7 @@ import {
   OrganizationResponseModel,
   OrganizationsService,
   ProductService,
+  SupplierService,
   SuppliersItemModel,
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
@@ -12,7 +13,6 @@ import {
 } from '#shared/modules';
 import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
-import { SupplierService } from '#shared/modules/common-services/supplier.service';
 import { randomARGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -77,7 +77,7 @@ export class SupplierSingleComponent {
       .pipe(
         switchMap(([params, queryParams]) => {
           this._collectRequest(queryParams);
-          const supplierId = params.id;
+          const supplierId = params.supplierId;
           return this._organizationsService.getOrganization(supplierId);
         }),
         switchMap((organization) => {

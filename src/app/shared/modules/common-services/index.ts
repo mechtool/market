@@ -6,6 +6,7 @@ export * from './cache.service';
 export * from './navigation.service';
 export * from './breadcrumbs.service';
 export * from './suggestion.service';
+export * from './supplier.service';
 export * from './organizations.service';
 export * from './responsive.service';
 export * from './user.service';
