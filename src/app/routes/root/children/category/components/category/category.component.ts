@@ -45,7 +45,12 @@ export class CategoryComponent {
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
-    this._router.navigate([`/category/${this.categoryId}`], {
+    const categoryId = filters.availableFilters?.categoryId || this.categoryId;
+    if (filters.availableFilters?.categoryId) {
+      // в данном компоненте категория часть пути, а не query string
+      filters.availableFilters.categoryId = undefined;
+    }
+    this._router.navigate([`/category/${categoryId}`], {
       queryParams: queryParamsFrom(filters),
     });
   }
@@ -82,7 +87,7 @@ export class CategoryComponent {
     ])
       .pipe(
         switchMap(([params, queryParams]) => {
-          this.categoryId = params.id;
+          this.categoryId = params.categoryId;
           this.query = queryParams.q;
           this.sort = queryParams.sort;
           this.availableFilters = {

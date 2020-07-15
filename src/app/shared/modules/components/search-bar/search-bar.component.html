@@ -2,7 +2,6 @@
   <form [formGroup]="form" (ngSubmit)="submit()">
 
     <nz-input-group [nzSuffix]="inputClearTpl">
-
       <input
         nz-input
         placeholder="{{placeholder}}"
@@ -15,8 +14,6 @@
         [(nzVisible)]="visibleSuggestions"
         (focus)="isInputFocused = true;"
         (blur)="isInputFocused = false"/>
-
-
     </nz-input-group>
 
     <ng-template #inputClearTpl>
@@ -29,10 +26,8 @@
     </ng-template>
 
     <nz-dropdown-menu #menu="nzDropdownMenu">
-
       <ng-container *ngIf="isShowSuggestions">
       <div class="autocomplete">
-
         <my-search-bar-history
           [query]="searchQuery"
           *ngIf="useBrowserStorage && (!searchQuery || searchQuery?.length < minQueryLength)"
@@ -43,18 +38,15 @@
           [categories]="categoriesSuggestions"
           *ngIf="searchQuery.length >= minQueryLength"
         ></my-search-bar-products>
-
       </div>
-
       </ng-container>
-
     </nz-dropdown-menu>
-
-
 
     <div class="buttons">
       <div class="buttons__item">
-        <button class="btn btn_square btn_search" [disabled]="form.invalid && filterIsEmpty"></button>
+        <button class="btn btn_square btn_search"
+                [ngClass]="{'disabled': form.invalid && filterIsEmpty}">
+        </button>
       </div>
 
       <div class="buttons__item" *ngIf="filterVisible">

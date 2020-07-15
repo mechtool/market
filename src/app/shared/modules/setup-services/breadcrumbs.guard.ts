@@ -40,10 +40,10 @@ export class BreadcrumbsGuard implements CanActivate {
     };
 
     const pathsObjectWithBreadcrumbs = {
-      '/category/:id': /^\/category\/(?:([^\/]+?))$/i,
+      '/category/:categoryId': /^\/category\/(?:([^\/]+?))$/i,
       '/product/:id': /^\/product\/(?:([^\/]+?))$/i,
-      '/supplier/:id': /^\/supplier\/(?:([^\/]+?))$/i,
-      '/supplier/:id/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
+      '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
+      '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
       '/about': /^\/about$/i,
       '/cart': /^\/cart$/i,
       '/my/orders': /^\/my\/orders$/i,
@@ -60,7 +60,7 @@ export class BreadcrumbsGuard implements CanActivate {
       this._breadcrumbsService.setVisible(true);
       const foundEntry = Object.entries(pathsObjectWithBreadcrumbs).find(entry => entry[1].test(urlWithoutQueryParams));
       switch(foundEntry[0]) {
-        case '/category/:id':
+        case '/category/:categoryId':
           const categoryId = urlSplitted[2];
           return this._categoryService.getCategoryTree(categoryId).pipe(
             map((res) => {

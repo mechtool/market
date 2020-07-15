@@ -20,6 +20,7 @@ import {
 import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { combineLatest } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -175,8 +176,10 @@ export class SearchBarComponent implements OnChanges {
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]]
     });
-    this._activatedRoute.queryParams
-      .subscribe(queryParams => this._activeFiltersCount(queryParams));
+    combineLatest([
+      this._activatedRoute.params,
+      this._activatedRoute.queryParams,
+    ]).subscribe(([params, queryParams]) => this._activeFiltersCount(params, queryParams));
   }
 
   private _initUserLocation(): void {
@@ -209,7 +212,7 @@ export class SearchBarComponent implements OnChanges {
     this.categoriesSuggestions = null;
   }
 
-  private _activeFiltersCount(queryParams: Params) {
+  private _activeFiltersCount(params: Params, queryParams: Params) {
     this._filterCount = 0;
     if (queryParams.supplierId) {
       this._filterCount++;
@@ -232,7 +235,7 @@ export class SearchBarComponent implements OnChanges {
     if (queryParams.priceFrom || queryParams.priceTo) {
       this._filterCount++;
     }
-    if (queryParams.categoryId) {
+    if (queryParams.categoryId || params.categoryId) {
       this._filterCount++;
     }
   }

@@ -167,9 +167,7 @@ export class SearchBarFilterComponent {
     ])
       .pipe(
         switchMap(([params, queryParams]) => {
-          if (queryParams.categoryId) {
-            this.categoryId = queryParams.categoryId;
-          }
+          this.categoryId = params.categoryId || queryParams.categoryId;
           if (queryParams.supplierId) {
             this._organizationsService.getOrganization(queryParams.supplierId).subscribe((organization) => {
               this.supplier = {
