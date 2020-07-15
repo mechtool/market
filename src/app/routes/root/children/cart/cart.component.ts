@@ -1,3 +1,4 @@
+import { AuthResponseModel } from './../../../../shared/modules/common-services/models/auth-response.model';
 import { CartDataExtendedModel } from '#shared/modules/common-services/models/cart-data-extended.model';
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -18,8 +19,8 @@ export class CartComponent {
   totalVat = 0;
   totalItems = 0;
 
-  get isUserAuthed$(): Observable<boolean> {
-    return this._userService.userData$.pipe(map(res => !!res));
+  get userData$(): Observable<AuthResponseModel> {
+    return this._userService.userData$;
   }
 
   get getCartData$(): Observable<CartDataExtendedModel> {

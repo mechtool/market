@@ -15,10 +15,6 @@ function init(
   userService: UserService,
   cartService: CartService,
 ) {
-
-  // TODO: для временно заполнения организациями
-  // userService.updateUserOrganizations();
-
   return new Promise((resolve, reject) => {
     return zip(
       setCart(cartService),

@@ -10,7 +10,7 @@
       от {{supplierCount}}{{supplierCount | myDeclension: ' поставщика': ' поставщиков': ' поставщиков'}}
       на сумму {{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}
     </p>
-    <my-cart-order *ngFor="let order of cartData?.content; let i = index" [order]="order" [orderNum]="i + 1" [isUserAuthed]="isUserAuthed$ | async"></my-cart-order>
+    <my-cart-order *ngFor="let order of cartData?.content; let i = index" [order]="order" [orderNum]="i + 1" [userData]="userData$ | async"></my-cart-order>
   </ng-container>
 
 </div>

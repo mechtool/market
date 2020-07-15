@@ -17,14 +17,14 @@ export class UserService {
     private _bnetService: BNetService,
   ) {
     // TODO: для теста (пока оставить)
-    setTimeout(() => {
-      console.log(1);
-      this.setUserData({da:1});
-    }, 1e4);
-    setTimeout(() => {
-      console.log(2);
-      this.userData$.next(null);
-    }, 15e3);
+    // setTimeout(() => {
+    //   console.log(1);
+    //   this.setUserData({da:1});
+    // }, 1e4);
+    // setTimeout(() => {
+    //   console.log(2);
+    //   this.userData$.next(null);
+    // }, 15e3);
   }
 
   setUserData(data: any, fromNextTick = true): void {

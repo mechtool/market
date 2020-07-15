@@ -47,7 +47,6 @@
 
 
 <div class="order">
-  {{isUserAuthed | json}}
   {{form.value | json}}
   <form class="form__order" action="" [formGroup]="form" (submit)="makeOrder()">
 
@@ -56,7 +55,7 @@
         <div class="order_label">Заказ:</div>
         <div class="order_value">#{{orderNum}}</div>
       </div>
-      <div class="order_spec" *ngIf="isUserAuthed && availableUserOrganizations">
+      <div class="order_spec" *ngIf="userData && availableUserOrganizations?.length">
         <div class="order_label">Доступный заказчик:</div>
         <div class="order__customer dropdown dropdown_selectable">
           <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'" [nzDisabled]="availableUserOrganizations?.length === 1">
@@ -205,13 +204,7 @@
         </p>
       </div>
       <div class="section_paragraph">
-        <h3>Доставка</h3>
-        <p>{{deliveryDescription}}</p>
         <div class="info_group__small">
-          <div class="info_group">
-            <span class="info_group__label">Срок поставки</span>
-            <span class="info_group__value">{{deliveryTime}}</span>
-          </div>
           <div class="info_group">
             <span class="info_group__label">Способ доставки</span>
             <span class="info_group__value">{{deliveryOptions | myArrayJoiner: 'label'}}</span>
@@ -228,13 +221,12 @@
           </div>
           <div class="order__shipping_type order__shipping_pickup showed">
             <p><strong>Адреса самовывоза:</strong> {{pickupPoints | myArrayJoiner: 'name':'; '}}</p>
-            <p><strong>Время работы:</strong> {{workingHours}}</p>
           </div>
           <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
             <div class="form-group form-group-long">
               <label for="formAddress">Укажите адрес доставки *</label>
               <input type="text" placeholder="" [ngClass]="{'error': form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)}" nz-input [nzAutocomplete]="auto" formControlName="deliveryArea">
-              <nz-autocomplete nzBackfill [compareWith]="locationsCompareFun" #auto>
+              <nz-autocomplete nzBackfill #auto>
                 <nz-auto-option *ngFor="let location of foundLocations" [nzValue]="location" [nzLabel]="location.fullName">{{ location.fullName }}</nz-auto-option>
               </nz-autocomplete>
               <div class="input_error" *ngIf="form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)">Заполните это поле</div>
@@ -299,13 +291,6 @@
           <span class="supplier_name">
             {{supplierName}}
           </span>
-
-          <span class="tooltip_wrap" [ngStyle]="{'display': hasSupplierApprovedDeals ? 'block' : 'none'}">
-            <span class="tooltip tooltip_fill"
-                  nz-tooltip
-                  nzTooltipTitle="У поставщика есть подтвержденные сделки на торговой площадке">Были сделки</span>
-          </span>
-
         </p>
         <div class="info_group__supplier">
           <div class="info_group">

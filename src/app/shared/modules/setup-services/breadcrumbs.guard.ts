@@ -47,7 +47,7 @@ export class BreadcrumbsGuard implements CanActivate {
       '/about': /^\/about$/i,
       '/cart': /^\/cart$/i,
       '/my/orders': /^\/my\/orders$/i,
-      '/my/organizations': /^\/my\/orders$/i,
+      '/my/organizations': /^\/my\/organizations$/i,
     };
 
     const isRouteWithoutBreadcrumb = Object.values(pathsObjectWithoutBreadcrumbs).some(regEx => regEx.test(urlWithoutQueryParams));

@@ -1,5 +1,5 @@
 import { CartDataOrderExtendedModel } from '#shared/modules/common-services/models/cart-data-order-extended.model';
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CartService, UserService, DeliveryMethod, LocationModel, LocationService, AuthService } from '#shared/modules';
@@ -14,10 +14,10 @@ import { deliveryAreaConditionValidator } from '../../validators/delivery-area-c
   styleUrls: ['./order.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartOrderComponent implements OnInit {
+export class CartOrderComponent implements OnInit, OnDestroy {
   @Input() order: CartDataOrderExtendedModel;
   @Input() orderNum: number; // TODO: дб идентификатор для клиента
-  @Input() isUserAuthed: boolean;
+  @Input() userData: boolean;
   form: FormGroup;
   availableUserOrganizations: any[];
   foundLocations: LocationModel[] = [];
@@ -29,14 +29,6 @@ export class CartOrderComponent implements OnInit {
     { label: '12-15', value: '12-15' },
     { label: '15-18', value: '15-18' },
   ];
-
-  // TODO: временно недоступен функционал
-  hasSupplierApprovedDeals = false;
-  deliveryDescription = 'Доставка осуществляется по Москве и Московской области. Желаемую дату доставки заказа укажите в комментарии к заказу.' +
-  'Для доставки на следующий день, заказ необходимо разместить до 15:30 текущего дня. ` Сб-Вс выходной (доставка не работает).' +
-  'Минимальная сумма заказа 8 000 руб. с НДС. В контактах, пожалуйста, указывайте прямой, по возможности, мобильный телефон контактного лица.';
-  deliveryTime = 'По запросу';
-  workingHours = 'понедельник-среда 14.00-15.00';
 
   deliveryOptions = [];
 
@@ -100,6 +92,10 @@ export class CartOrderComponent implements OnInit {
     this._watchDeliveryAreaUserChanges();
   }
 
+  ngOnDestroy() {
+    this._cartService.pullStorageCartData();
+  }
+
   createItem(product: any): FormGroup {
     const availabilityConverter =  {
       NoOfferAvailable: 'Нет в наличии',
@@ -144,7 +140,7 @@ export class CartOrderComponent implements OnInit {
 
   makeOrder() {
     this.isModalVisible = true;
-    if (this.isUserAuthed) {
+    if (!!this.userData) {
       if (this.availableUserOrganizations?.length) {
         const data = {
           customerOrganizationId: this.form.get('consumerId').value,
@@ -182,7 +178,7 @@ export class CartOrderComponent implements OnInit {
         return;
       }
     }
-    if (!this.isUserAuthed) {
+    if (!this.userData) {
       this.modalType = 'registerOrAuth';
       return;
     }
@@ -192,6 +188,7 @@ export class CartOrderComponent implements OnInit {
     // https://rels.1cbn.ru/marketplace/shopping-cart/remove-item
     this._cartService.handleRelation('https://rels.1cbn.ru/marketplace/shopping-cart/remove-item', orderItem._links.value['https://rels.1cbn.ru/marketplace/shopping-cart/remove-item'].href )
     .subscribe((res) => {
+      console.log(orderItem);
       // this.modalType ='orderSent';
       // this._cdr.detectChanges();
     });
@@ -216,28 +213,32 @@ export class CartOrderComponent implements OnInit {
       kpp: userOrganization.legalRequisites.kpp,
       id: userOrganization.organizationId,
     };
+    this._setConsumerFromOrder();
+    this._cartService.partiallyUpdateStorageByOrder(this.order);
+  }
+
+  private _setConsumerFromOrder() {
     this.form.patchValue({
       consumerName: this.order.consumer.name,
       consumerINN: this.order.consumer.inn,
       consumerKPP: this.order.consumer.kpp,
       consumerId: this.order.consumer.id,
     });
-    this._cartService.partiallyUpdateStorageByOrder(this.order);
   }
 
   private _initForm(): void {
     this.form = this._fb.group({
-      consumerName: new FormControl(this.order.consumer?.name || ''),
-      consumerINN: new FormControl(this.order.consumer?.inn || ''),
-      consumerKPP: new FormControl(this.order.consumer?.kpp || ''),
-      consumerId: new FormControl(this.order.consumer?.id || ''),
+      consumerName: new FormControl(''),
+      consumerINN: new FormControl(''),
+      consumerKPP: new FormControl(''),
+      consumerId: new FormControl(''),
       totalVat: new FormControl(this.order.costSummary.totalVat ),
       vat: new FormControl(this.order.costSummary.vat),
       deliveryMethod: new FormControl(this.deliveryOptions?.[0].value, [Validators.required]),
       deliveryArea: new FormControl(''),
-      contactName:  new FormControl('', [Validators.required]),
-      contactPhone:  new FormControl('', [Validators.required]),
-      contactEmail:  new FormControl('', [Validators.required]),
+      contactName:  new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
+      contactPhone:  new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
+      contactEmail:  new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required]),
       commentForSupplier:  new FormControl(''),
       deliveryDesirableDate:  new FormControl(''),
       deliveryDesirableTimeInterval:  new FormControl(''),
@@ -247,18 +248,11 @@ export class CartOrderComponent implements OnInit {
     }, { validator: deliveryAreaConditionValidator});
   }
 
-  locationsCompareFun = (o1: any | string, o2: any) => {
-    if (o1) {
-      return typeof o1 === 'string' ? o1 === o2.fullName : o1.fias === o2.fias;
-    }
-    return false;
-  };
-
   private _setAvailableOrganizationdAndInitConsumer() {
     this._userService.userOrganizations$.pipe(
       filter(res => !!res),
       map((res) => {
-        if (!Array.isArray(this.order.customersAudience) || !this.order.customersAudience.length) {
+        if (!this.order.customersAudience?.length) {
           this.availableUserOrganizations = res;
         }
         else {
@@ -266,8 +260,21 @@ export class CartOrderComponent implements OnInit {
             return this.order.customersAudience.includes(org.legalRequisites.inn + `${org.legalRequisites.kpp ? `:${org.legalRequisites.kpp}` : ''}`);
           })
         }
-        if (!this.order.consumer && this.availableUserOrganizations?.length) {
-          this.setConsumer(this.availableUserOrganizations[0]);
+        if (this.availableUserOrganizations?.length) {
+          if (!this.order.customersAudience?.length && !this.order.consumer) {
+            this.setConsumer(this.availableUserOrganizations[0]);
+          }
+          if (this.order.customersAudience?.length && !this.order.consumer) {
+            const found = this.availableUserOrganizations.find((org) => {
+              return this.order.customersAudience[0] === (org.legalRequisites.inn + `${org.legalRequisites.kpp ? `:${org.legalRequisites.kpp}` : ''}`);
+            });
+            if (found) {
+              this.setConsumer(found);
+            }
+          }
+          if (this.order.consumer) {
+            this._setConsumerFromOrder();
+          }
         }
         this._cdr.detectChanges();
       })
