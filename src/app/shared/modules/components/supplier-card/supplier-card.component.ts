@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { randomARGB } from '#shared/utils/get-color';
 import { SuppliersItemModel } from '#shared/modules';
+import { stringToRGB } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -28,6 +28,6 @@ export class SupplierCardComponent {
   }
 
   get argb() {
-    return randomARGB();
+    return stringToRGB(this.supplier?.id);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { LocalStorageService, LocationService } from '../../../../common-services';
 import { LocationModel, Megacity } from '../../../../common-services/models/location.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -32,6 +32,7 @@ export class SearchBarLocationComponent {
     private _locationService: LocationService,
     private _localStorageService: LocalStorageService,
     private _fb: FormBuilder,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this._initForm();
     this._subscribeOnCityRequest();
@@ -63,6 +64,7 @@ export class SearchBarLocationComponent {
       )
       .subscribe(([city, cities]) => {
         this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
+        this.changeDetector.detectChanges();
       }, (err) => {
         console.error(err);
       });

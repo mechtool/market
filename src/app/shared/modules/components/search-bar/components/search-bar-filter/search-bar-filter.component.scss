@@ -52,6 +52,13 @@ textarea {
   background-color: #ffffff;
   resize: none;
   border-radius: 2px;
+
+  &.error {
+    border-color: #f6837b;
+    border-width: 1px;
+    outline-color: #f6837b;
+    color: #6a6a6a;
+  }
 }
 
 input[type="text"] {

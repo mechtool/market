@@ -13,7 +13,7 @@ import {
 } from '#shared/modules';
 import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
-import { randomARGB } from '#shared/utils';
+import { stringToRGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -43,7 +43,6 @@ export class SupplierSingleComponent {
     private _organizationsService: OrganizationsService,
     private _activatedRoute: ActivatedRoute,
   ) {
-    this.supplierLogo = randomARGB();
     this._initData();
   }
 
@@ -78,6 +77,7 @@ export class SupplierSingleComponent {
         switchMap(([params, queryParams]) => {
           this._collectRequest(queryParams);
           const supplierId = params.supplierId;
+          this.supplierLogo = stringToRGB(supplierId);
           return this._organizationsService.getOrganization(supplierId);
         }),
         switchMap((organization) => {

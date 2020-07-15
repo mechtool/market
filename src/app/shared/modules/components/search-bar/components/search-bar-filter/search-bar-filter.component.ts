@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
@@ -17,10 +17,16 @@ import { ActivatedRoute } from '@angular/router';
 import { catchError, filter, switchMap } from 'rxjs/operators';
 import { combineLatest, of, throwError } from 'rxjs';
 import { resizeBusinessStructure } from '#shared/utils';
+import {
+  priceConditionValidator,
+  priceRangeConditionValidator,
+  supplierNameConditionValidator
+} from './search-bar-filter-conditions.validator';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 const PAGE_SIZE = 20;
 
-
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'my-search-bar-filter',
   templateUrl: './search-bar-filter.component.html',
@@ -66,8 +72,22 @@ export class SearchBarFilterComponent {
     private _supplierService: SupplierService,
     private _organizationsService: OrganizationsService,
     private _fb: FormBuilder,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this._init();
+  }
+
+  get isNotValidForm(): boolean {
+    return this.availableFiltersForm.invalid;
+  }
+
+  get focusIsNotFormFilterInn(): boolean {
+    return document.activeElement.attributes['formcontrolname']?.value !== 'supplier';
+  }
+
+  get focusIsNotFormFilterPrice(): boolean {
+    return document.activeElement.attributes['formcontrolname']?.value !== 'priceFrom' &&
+      document.activeElement.attributes['formcontrolname']?.value !== 'priceTo';
   }
 
   get inStock() {
@@ -264,15 +284,17 @@ export class SearchBarFilterComponent {
 
   private _initFormAvailableFilter() {
     this.availableFiltersForm = this._fb.group({
-      supplier: this.supplier?.name,
+      supplier: new FormControl(this.supplier?.name, [supplierNameConditionValidator]),
       trademark: this.availableFilters?.trademark,
       isDelivery: !!this.availableFilters?.delivery,
       isPickup: !!this.availableFilters?.pickup,
       inStock: this.availableFilters?.inStock,
       withImages: this.availableFilters?.withImages,
-      priceFrom: this.availableFilters?.priceFrom,
-      priceTo: this.availableFilters?.priceTo,
+      priceFrom: new FormControl(this.availableFilters?.priceFrom, [priceConditionValidator]),
+      priceTo: new FormControl(this.availableFilters?.priceTo, [priceConditionValidator]),
       priceBetween: new FormControl([this.availableFilters?.priceFrom || this.MIN_PRICE, this.availableFilters?.priceTo || this.MAX_PRICE]),
+    }, {
+      validator: [priceRangeConditionValidator]
     });
 
     if (this.availableFilters?.categoryId) {
@@ -323,7 +345,10 @@ export class SearchBarFilterComponent {
     this.availableFiltersForm.controls.priceBetween.valueChanges.subscribe((prices) => {
       this.availableFiltersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
       this.availableFiltersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
-      this.availableFiltersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], { onlySelf: true, emitEvent: false });
+      this.availableFiltersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
+        onlySelf: true,
+        emitEvent: false
+      });
       if (prices) {
         this._addActiveFilter('price');
       } else {
@@ -340,7 +365,10 @@ export class SearchBarFilterComponent {
     });
 
     this.categoryFiltersForm.controls.selectedCategories.valueChanges.subscribe((indexCategories) => {
-      this.categoryFiltersForm.controls.selectedCategories.setValue(indexCategories, { onlySelf: true, emitEvent: false });
+      this.categoryFiltersForm.controls.selectedCategories.setValue(indexCategories, {
+        onlySelf: true,
+        emitEvent: false
+      });
       if (this.categoryId) {
         indexCategories
           .forEach((value, i) => {
@@ -373,8 +401,8 @@ export class SearchBarFilterComponent {
         })
       )
       .subscribe(([city, cities]) => {
-        // todo:  Избавиться от лага с двойным кликом по выбранному городу
         this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
+        this.changeDetector.detectChanges();
       }, (err) => {
         console.error(err);
       });
@@ -399,6 +427,7 @@ export class SearchBarFilterComponent {
           this._supplierService.findSuppliersBy(supplier, 0, PAGE_SIZE)
             .subscribe((data) => {
               this.suppliers = this._map(data._embedded.suppliers);
+              this.changeDetector.detectChanges();
             });
         } else {
           this.suppliers = null;

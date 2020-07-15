@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TradeOfferDto } from '#shared/modules';
-import { randomARGB } from '#shared/utils/get-color';
 import { Router } from '@angular/router';
+import { stringToRGB } from '#shared/utils';
 
 @Component({
   selector: 'my-trade-offer-info-card',
@@ -19,7 +19,7 @@ export class TradeOfferCardComponent {
   @Input() tradeOffer: TradeOfferDto;
 
   get argb() {
-    return randomARGB();
+    return stringToRGB(this.tradeOffer?.supplierId);
   }
 
   constructor(private _router: Router) {

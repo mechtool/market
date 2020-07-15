@@ -5,38 +5,35 @@
     <p class="filter_title">Фильтр для поиска</p>
 
     <div class="form-group" *ngIf="searchByInn">
-      <nz-form-item class="margin-cleared">
-        <nz-form-control>
-          <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
-          <input nz-input type="text"
-                 autocomplete="off"
-                 name="formFilterInn"
-                 id="formFilterInn"
-                 placeholder="Начните вводить"
-                 formControlName="supplier"
-                 [nzAutocomplete]="supplier">
+      <nz-form-control>
+        <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
+        <input nz-input type="text"
+               [ngClass]="{'error': availableFiltersForm.controls.supplier.errors && focusIsNotFormFilterInn}"
+               autocomplete="off"
+               name="formFilterInn"
+               id="formFilterInn"
+               placeholder="Начните вводить"
+               formControlName="supplier"
+               [nzAutocomplete]="supplier">
 
-          <nz-autocomplete nzBackfill #supplier>
-            <nz-auto-option *ngFor="let supplier of suppliers"
-                            [nzValue]="supplier"
-                            [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </nz-form-item>
+        <nz-autocomplete nzBackfill #supplier>
+          <nz-auto-option *ngFor="let supplier of suppliers"
+                          [nzValue]="supplier"
+                          [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
     </div>
 
     <div class="form-group">
-      <nz-form-item class="margin-cleared">
-        <nz-form-control>
-          <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
-          <input nz-input type="text"
-                 autocomplete="off"
-                 name="formFilterBrand"
-                 id="formFilterBrand"
-                 placeholder="Укажите бренд"
-                 formControlName="trademark">
-        </nz-form-control>
-      </nz-form-item>
+      <nz-form-control>
+        <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
+        <input nz-input type="text"
+               autocomplete="off"
+               name="formFilterBrand"
+               id="formFilterBrand"
+               placeholder="Укажите бренд"
+               formControlName="trademark">
+      </nz-form-control>
     </div>
 
     <div class="form-group_title">Способ доставки</div>
@@ -60,14 +57,18 @@
                  nzTooltipVisible="{{false}}"></nz-slider>
 
       <div class="range_inputs">
-
         <nz-form-item>
           <div class="range_inputs-text">От</div>
 
           <nz-form-control>
-            <input nz-input type="number" name="price_from" id="formPriceFrom"
+            <input nz-input type="number"
+                   [ngClass]="{'error': focusIsNotFormFilterPrice && (availableFiltersForm.controls.priceFrom.errors || availableFiltersForm.errors)}"
+                   name="price_from"
+                   id="formPriceFrom"
                    class="range_input range_from price_from"
-                   placeholder="{{MIN_PRICE}} ₽" autocomplete="off" formControlName="priceFrom"/>
+                   placeholder="{{MIN_PRICE}} ₽"
+                   autocomplete="off"
+                   formControlName="priceFrom"/>
           </nz-form-control>
         </nz-form-item>
 
@@ -76,17 +77,21 @@
           <div class="range_inputs-text range_inputs-delimiter">До</div>
 
           <nz-form-control>
-            <input nz-input type="number" name="price_to" id="formPriceTo"
+            <input nz-input type="number"
+                   [ngClass]="{'error': focusIsNotFormFilterPrice && (availableFiltersForm.controls.priceTo.errors || availableFiltersForm.errors)}"
+                   name="price_to"
+                   id="formPriceTo"
                    class="range_input range_to price_to"
-                   placeholder="{{MAX_PRICE}} ₽" autocomplete="off" formControlName="priceTo"/>
+                   placeholder="{{MAX_PRICE}} ₽"
+                   autocomplete="off"
+                   formControlName="priceTo"/>
           </nz-form-control>
         </nz-form-item>
-
       </div>
     </div>
 
     <div class="filter_btns">
-      <button nz-button type="submit" nzType="primary"
+      <button nz-button type="submit" nzType="primary" [disabled]="isNotValidForm"
               (click)="save()">Сохранить
       </button>
       <button nz-button type="button" nzType="link"
@@ -150,37 +155,34 @@
       </div>
 
       <div class="form-group" *ngIf="searchByInn">
-        <nz-form-item class="margin-cleared">
-          <nz-form-control>
-            <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
-            <input nz-input type="text"
-                   autocomplete="off"
-                   name="formFilterInnMobile"
-                   id="formFilterInnMobile"
-                   placeholder="Начните вводить"
-                   formControlName="supplier"
-                   [nzAutocomplete]="supplier">
+        <nz-form-control>
+          <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
+          <input nz-input type="text"
+                 [ngClass]="{'error': availableFiltersForm.controls.supplier.errors && focusIsNotFormFilterInn}"
+                 autocomplete="off"
+                 name="formFilterInnMobile"
+                 id="formFilterInnMobile"
+                 placeholder="Начните вводить"
+                 formControlName="supplier"
+                 [nzAutocomplete]="supplier">
 
-            <nz-autocomplete nzBackfill #supplier>
-              <nz-auto-option *ngFor="let supplier of suppliers"
-                              [nzValue]="supplier"
-                              [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
-            </nz-autocomplete>
-          </nz-form-control>
-        </nz-form-item>
+          <nz-autocomplete nzBackfill #supplier>
+            <nz-auto-option *ngFor="let supplier of suppliers"
+                            [nzValue]="supplier"
+                            [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-control>
       </div>
 
       <div class="form-group">
-        <nz-form-item class="margin-cleared">
-          <nz-form-control>
-            <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
-            <input nz-input type="text"
-                   name="formFilterBrandMobile"
-                   id="formFilterBrandMobile"
-                   placeholder="Укажите бренд"
-                   formControlName="trademark">
-          </nz-form-control>
-        </nz-form-item>
+        <nz-form-control>
+          <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
+          <input nz-input type="text"
+                 name="formFilterBrandMobile"
+                 id="formFilterBrandMobile"
+                 placeholder="Укажите бренд"
+                 formControlName="trademark">
+        </nz-form-control>
       </div>
 
       <div class="form-group_title">Способ доставки</div>
@@ -204,33 +206,38 @@
                    nzTooltipVisible="{{false}}"></nz-slider>
 
         <div class="range_inputs">
-
           <nz-form-item>
             <div class="range_inputs-text">От</div>
 
             <nz-form-control>
-              <input nz-input type="number" name="price_from" id="formPriceFromMobile"
+              <input nz-input type="number" name="price_from"
+                     [ngClass]="{'error': focusIsNotFormFilterPrice && (availableFiltersForm.controls.priceFrom.errors || availableFiltersForm.errors)}"
+                     id="formPriceFromMobile"
                      class="range_input range_from price_from"
-                     placeholder="{{MIN_PRICE}} ₽" autocomplete="off" formControlName="priceFrom"/>
+                     placeholder="{{MIN_PRICE}} ₽"
+                     autocomplete="off"
+                     formControlName="priceFrom"/>
             </nz-form-control>
           </nz-form-item>
-
 
           <nz-form-item>
             <div class="range_inputs-text range_inputs-delimiter">До</div>
 
             <nz-form-control>
-              <input nz-input type="number" name="price_to" id="formPriceToMobile"
+              <input nz-input type="number" name="price_to"
+                     [ngClass]="{'error': focusIsNotFormFilterPrice && (availableFiltersForm.controls.priceTo.errors || availableFiltersForm.errors)}"
+                     id="formPriceToMobile"
                      class="range_input range_to price_to"
-                     placeholder="{{MAX_PRICE}} ₽" autocomplete="off" formControlName="priceTo"/>
+                     placeholder="{{MAX_PRICE}} ₽"
+                     autocomplete="off"
+                     formControlName="priceTo"/>
             </nz-form-control>
           </nz-form-item>
-
         </div>
       </div>
 
       <div class="filter_btns">
-        <button nz-button type="submit" nzType="primary"
+        <button nz-button type="submit" nzType="primary" [disabled]="isNotValidForm"
                 (click)="save()">Сохранить
         </button>
         <button nz-button type="button" nzType="link"
@@ -260,22 +267,17 @@
              formControlName="city"/>
 
       <div class="filter_city__list scrollbar">
-
         <ul class="choose-city_list">
           <li class="choose-city_item" *ngFor="let item of foundCities"
               (mousedown)="chooseCity(item)">{{item.fullName}}</li>
         </ul>
-
       </div>
-
 
       <div class="filter_btns">
         <button nz-button type="submit" nzType="primary"
                 (click)="saveLocation()">Сохранить
         </button>
       </div>
-
-
     </div>
 
     <div class="category__filter" [ngClass]="{'visible': showFilterWithCategories}" [formGroup]="categoryFiltersForm">
@@ -318,7 +320,6 @@
                 (click)="reset()">Сбросить
         </button>
       </div>
-
     </div>
 
   </form>

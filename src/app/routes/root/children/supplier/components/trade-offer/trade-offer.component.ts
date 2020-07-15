@@ -9,7 +9,7 @@ import {
 import { OrganizationsService, ProductService, TradeOffersService, } from '#shared/modules/common-services';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
-import { randomARGB } from '#shared/utils';
+import { stringToRGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -36,7 +36,6 @@ export class TradeOfferComponent {
     private _organizationsService: OrganizationsService,
     private _activatedRoute: ActivatedRoute,
   ) {
-    this.supplierLogo = randomARGB();
     this._initTradeOffer();
   }
 
@@ -56,6 +55,7 @@ export class TradeOfferComponent {
         this.tradeOffer = tradeOffer;
         this.product = ProductDto.fromTradeOffer(tradeOffer);
         this.supplier = this._mapSupplier(tradeOffer.supplier);
+        this.supplierLogo = stringToRGB(this.supplier.id);
       }, (err) => {
         console.error('error', err);
       });

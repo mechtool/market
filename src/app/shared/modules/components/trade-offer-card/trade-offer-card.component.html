@@ -1,4 +1,4 @@
-<div class="catalog_item__link" (click)="clickTradeOffer()">
+<div class="catalog_item__link" (click)="clickTradeOffer()" *ngIf="tradeOffer">
   <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
 
   <span class="catalog_item__descr">
