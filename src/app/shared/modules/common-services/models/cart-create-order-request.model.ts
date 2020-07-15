@@ -1,4 +1,4 @@
-export class MakeOrderModel {
+export class CartCreateOrderRequestModel {
   customerOrganizationId: 'string';
   contacts: {
     name: 'string';

@@ -19,6 +19,7 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
 
   @Input() min = 0;
   @Input() max = 10000;
+  @Input() isDisabled = false;
 
   @Input()
   set value(val) {

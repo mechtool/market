@@ -3,7 +3,7 @@ import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
-import { RelationModel, CartAddItemModel, MakeOrderModel, CartUpdateItemQuantityModel, CartDataModel, CartDataExtendedModel, CartDataOrderExtendedModel } from './models';
+import { CartAddItemRequestModel, CartCreateOrderRequestModel, CartUpdateItemQuantityRequestModel, CartDataResponseModel, CartDataModel, CartDataOrderModel } from './models';
 
 @Injectable()
 export class CartService {
@@ -31,6 +31,7 @@ export class CartService {
   createCart(): Observable<string>  {
     return this._bnetService.createCart()
       .pipe(
+        map(res => res.headers.get('Location')),
         map((res) => {
           this.setCart(res);
           return res;
@@ -39,7 +40,7 @@ export class CartService {
   }
 
   // Мердж текущего содержимого корзины с содержимым от сервера TODO
-  setActualCartData(): Observable<CartDataExtendedModel>  {
+  setActualCartData(): Observable<CartDataModel>  {
     let currentCartData = null;
     return zip(
       this.getCart$(),
@@ -100,12 +101,12 @@ export class CartService {
   }
 
   // Регулирование релейшнов
-  handleRelation(relationType: string, relationHref: string, data?: CartAddItemModel | MakeOrderModel | CartUpdateItemQuantityModel | any): Observable<any> {
+  handleRelation(relationType: string, relationHref: string, data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any): Observable<any> {
     switch(relationType) {
       case 'https://rels.1cbn.ru/marketplace/shopping-cart/add-item':
         return this._bnetService.addItemToCart(relationHref, data);
       case 'https://rels.1cbn.ru/marketplace/make-order':
-        return this._bnetService.makeOrder(relationHref, data);
+        return this._bnetService.createOrder(relationHref, data);
       case 'https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity':
         return this._bnetService.updateItemQuantityInCart(relationHref, data);
       case 'https://rels.1cbn.ru/marketplace/shopping-cart/remove-item':
@@ -115,13 +116,20 @@ export class CartService {
     }
   }
 
+  // Для внешних компонентов
+  handleRelationAndUpdateData(relationType: string, relationHref: string, data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any): Observable<any> {
+    return this.handleRelation(relationType, relationHref, data).pipe(
+      switchMap(_ => this.setActualCartData())
+    );
+  }
+
   // Обновление содержимого корзины из сторейджа
   pullStorageCartData() {
     this._cartData$.next(this._localStorageService.getCartData());
   }
 
   // Частичное обновление сторейджа
-  partiallyUpdateStorageByOrder(cartDataOrder: CartDataOrderExtendedModel): void {
+  partiallyUpdateStorageByOrder(cartDataOrder: CartDataOrderModel): void {
     this._localStorageService.patchCartDataByOrder(cartDataOrder);
   }
 
@@ -138,7 +146,7 @@ export class CartService {
   }
 
   // Объединение двух моделей корзины
-  private _mergeCardDataCurrentWithResponse(data: CartDataModel, currentData: CartDataExtendedModel): CartDataExtendedModel {
+  private _mergeCardDataCurrentWithResponse(data: CartDataResponseModel, currentData: CartDataModel): CartDataModel {
     // TODO: пока только consumer
     let content = null;
     if (currentData) {

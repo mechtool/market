@@ -1,9 +1,10 @@
-import { CartDataOrderExtendedModel } from '#shared/modules/common-services/models/cart-data-order-extended.model';
+import { BNetService } from '#shared/modules/common-services/bnet.service';
+import { CartDataOrderModel } from '#shared/modules/common-services/models/cart-data-order.model';
 import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { CartService, UserService, DeliveryMethod, LocationModel, LocationService, AuthService } from '#shared/modules';
-import { map, switchMap, filter } from 'rxjs/operators';
+import { map, switchMap, filter, tap } from 'rxjs/operators';
 import { stringToHex, absoluteImagePath } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 
@@ -15,7 +16,7 @@ import { deliveryAreaConditionValidator } from '../../validators/delivery-area-c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartOrderComponent implements OnInit, OnDestroy {
-  @Input() order: CartDataOrderExtendedModel;
+  @Input() order: CartDataOrderModel;
   @Input() orderNum: number; // TODO: дб идентификатор для клиента
   @Input() userData: boolean;
   form: FormGroup;
@@ -29,6 +30,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     { label: '12-15', value: '12-15' },
     { label: '15-18', value: '15-18' },
   ];
+  private _availabilityConverter =  {
+    NoOfferAvailable: 'Нет в наличии',
+    TemporarilyOutOfSales: 'Временно снят с продажи',
+    AvailableForOrder: 'На складе',
+  };
+  isOrderLoading = false;
 
   deliveryOptions = [];
 
@@ -76,6 +83,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.deliveryMethod === DeliveryMethod.DELIVERY;
   }
 
+  get items(): FormArray {
+    return this.form.get('items') as FormArray;
+  }
+
+  get orderRelationHref(): string {
+    return this.order._links['https://rels.1cbn.ru/marketplace/make-order'].href;
+  }
+
   constructor(
     private _cdr: ChangeDetectorRef,
     private _fb: FormBuilder,
@@ -83,6 +98,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _userService: UserService,
     private _locationService: LocationService,
     private _authService: AuthService,
+    private _bnetService: BNetService,
   ) {}
 
   ngOnInit() {
@@ -90,38 +106,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this._initForm();
     this._setAvailableOrganizationdAndInitConsumer();
     this._watchDeliveryAreaUserChanges();
+    this._watchItemQuantityChanges();
   }
 
   ngOnDestroy() {
     this._cartService.pullStorageCartData();
-  }
-
-  createItem(product: any): FormGroup {
-    const availabilityConverter =  {
-      NoOfferAvailable: 'Нет в наличии',
-      TemporarilyOutOfSales: 'Временно снят с продажи',
-      AvailableForOrder: 'На складе',
-    };
-
-    return this._fb.group({
-      productName: product.productName,
-      productDescription: product.productDescription,
-      barCodes: this._fb.array(product.barCodes),
-      partNumber: product.partNumber,
-      packaging: product.packaging,
-      imageUrl: this._setImageUrl(product.imageUrls),
-      quantity: product.quantity,
-      price: product.price,
-      maxDaysForShipment: product.maxDaysForShipment,
-      availabilityStatus: availabilityConverter[product.availabilityStatus] || 'Нет в наличии',
-      vat: 20, // TODO: нет данных пока от бекенда
-      totalVat: 0, // TODO
-      _links: product._links,
-    });
-  }
-
-  private _setImageUrl(images: string[]): string {
-    return images ? absoluteImagePath(images[0]) : absoluteImagePath(null);
   }
 
   private _watchDeliveryAreaUserChanges() {
@@ -138,7 +127,65 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       });
   }
 
-  makeOrder() {
+  private _watchItemQuantityChanges() {
+    this.form.get('items')['controls'].forEach((res) => {
+      res.valueChanges.pipe(
+        tap(_ => this.isOrderLoading = true),
+        switchMap((res) => {
+          return this._cartService.handleRelation(
+            'https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity',
+            res['_links']['https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity'].href,
+            res['quantity']
+          )
+        }),
+        switchMap(_ => this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value))
+      ).subscribe((res) => {
+        let foundOrder = res.content.find((x) => {
+          return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
+        })
+        if (foundOrder) {
+          this.items.clear();
+          foundOrder.items.forEach((product) => {
+            this.items.push(this._createItem(product));
+          });
+          this._resetOrder(foundOrder);
+        }
+      })
+    })
+  }
+
+  removeItem(orderItem: any, i: any) {
+    if (this.isOrderLoading) {
+      return;
+    }
+    this._cartService.handleRelation('https://rels.1cbn.ru/marketplace/shopping-cart/remove-item', orderItem._links.value['https://rels.1cbn.ru/marketplace/shopping-cart/remove-item'].href)
+      .pipe(
+        tap(_ => this.isOrderLoading = true),
+        switchMap(res => this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value))
+      )
+      .subscribe((res) => {
+        let foundOrder = res.content.find((x) => {
+          return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
+        })
+        if (foundOrder) {
+          this.items.clear();
+          foundOrder.items.forEach((product) => {
+            this.items.push(this._createItem(product));
+          });
+          this._resetOrder(foundOrder);
+        }
+      });
+  }
+
+  private _resetOrder(order) {
+    this.order.items = order.items;
+    this._cartService.partiallyUpdateStorageByOrder(this.order);
+    this.isOrderLoading = false;
+    this._cdr.detectChanges();
+    this._watchItemQuantityChanges();
+  }
+
+  createOrder() {
     this.isModalVisible = true;
     if (!!this.userData) {
       if (this.availableUserOrganizations?.length) {
@@ -161,17 +208,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             } })
           }
         };
-        console.log(data);
-        this._cartService.handleRelation('https://rels.1cbn.ru/marketplace/make-order', this.order._links['https://rels.1cbn.ru/marketplace/make-order'].href ,data)
-          .subscribe((res) => {
+        this._cartService.handleRelation('https://rels.1cbn.ru/marketplace/make-order', this.orderRelationHref, data)
+          .pipe(
+            switchMap(_ => this._cartService.setActualCartData())
+          )
+          .subscribe((_) => {
             this.modalType ='orderSent';
             this._cdr.detectChanges();
           });
-        // this._cartService.handleRelation(this.order._links, data).pipe(
-        //   switchMap((res) => {
-        //     return this._cartService.setActualCartData();
-        //   })
-        // ).subscribe();
       }
       if (!this.availableUserOrganizations?.length) {
         this.modalType = 'addOrganization';
@@ -182,16 +226,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this.modalType = 'registerOrAuth';
       return;
     }
-  }
-
-  removeFromOrder(orderItem: any) {
-    // https://rels.1cbn.ru/marketplace/shopping-cart/remove-item
-    this._cartService.handleRelation('https://rels.1cbn.ru/marketplace/shopping-cart/remove-item', orderItem._links.value['https://rels.1cbn.ru/marketplace/shopping-cart/remove-item'].href )
-    .subscribe((res) => {
-      console.log(orderItem);
-      // this.modalType ='orderSent';
-      // this._cdr.detectChanges();
-    });
   }
 
   login(): void {
@@ -207,78 +241,22 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   setConsumer(userOrganization: any): void {
-    this.order.consumer = {
-      name: userOrganization.organizationName,
-      inn: userOrganization.legalRequisites.inn,
-      kpp: userOrganization.legalRequisites.kpp,
-      id: userOrganization.organizationId,
-    };
-    this._setConsumerFromOrder();
-    this._cartService.partiallyUpdateStorageByOrder(this.order);
-  }
-
-  private _setConsumerFromOrder() {
     this.form.patchValue({
-      consumerName: this.order.consumer.name,
-      consumerINN: this.order.consumer.inn,
-      consumerKPP: this.order.consumer.kpp,
-      consumerId: this.order.consumer.id,
+      consumerName: userOrganization.organizationName,
+      consumerINN: userOrganization.legalRequisites.inn,
+      consumerKPP: userOrganization.legalRequisites.kpp,
+      consumerId: userOrganization.organizationId,
     });
-  }
-
-  private _initForm(): void {
-    this.form = this._fb.group({
-      consumerName: new FormControl(''),
-      consumerINN: new FormControl(''),
-      consumerKPP: new FormControl(''),
-      consumerId: new FormControl(''),
-      totalVat: new FormControl(this.order.costSummary.totalVat ),
-      vat: new FormControl(this.order.costSummary.vat),
-      deliveryMethod: new FormControl(this.deliveryOptions?.[0].value, [Validators.required]),
-      deliveryArea: new FormControl(''),
-      contactName:  new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
-      contactPhone:  new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
-      contactEmail:  new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required]),
-      commentForSupplier:  new FormControl(''),
-      deliveryDesirableDate:  new FormControl(''),
-      deliveryDesirableTimeInterval:  new FormControl(''),
-      items: this._fb.array(this.order.items.map((res) => {
-        return this.createItem(res);
-      })),
-    }, { validator: deliveryAreaConditionValidator});
-  }
-
-  private _setAvailableOrganizationdAndInitConsumer() {
-    this._userService.userOrganizations$.pipe(
-      filter(res => !!res),
-      map((res) => {
-        if (!this.order.customersAudience?.length) {
-          this.availableUserOrganizations = res;
-        }
-        else {
-          this.availableUserOrganizations = res.filter((org) => {
-            return this.order.customersAudience.includes(org.legalRequisites.inn + `${org.legalRequisites.kpp ? `:${org.legalRequisites.kpp}` : ''}`);
-          })
-        }
-        if (this.availableUserOrganizations?.length) {
-          if (!this.order.customersAudience?.length && !this.order.consumer) {
-            this.setConsumer(this.availableUserOrganizations[0]);
-          }
-          if (this.order.customersAudience?.length && !this.order.consumer) {
-            const found = this.availableUserOrganizations.find((org) => {
-              return this.order.customersAudience[0] === (org.legalRequisites.inn + `${org.legalRequisites.kpp ? `:${org.legalRequisites.kpp}` : ''}`);
-            });
-            if (found) {
-              this.setConsumer(found);
-            }
-          }
-          if (this.order.consumer) {
-            this._setConsumerFromOrder();
-          }
-        }
-        this._cdr.detectChanges();
-      })
-    ).subscribe();
+    this._cartService.partiallyUpdateStorageByOrder({
+      ...this.order,
+      ...{
+        consumer: {
+          name: userOrganization.organizationName || null,
+          inn: userOrganization.legalRequisites?.inn || null,
+          kpp: userOrganization.legalRequisites?.kpp || null,
+          id: userOrganization.organizationId || null,
+        }},
+    });
   }
 
   private _setDeliveryOptions() {
@@ -288,6 +266,107 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (this.order.deliveryOptions?.deliveryZones?.length) {
       this.deliveryOptions.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
     }
+  }
+
+  private _initForm(): void {
+    this.form = this._fb.group({
+      consumerName: new FormControl(''),
+      consumerINN: new FormControl(''),
+      consumerKPP: new FormControl(''),
+      consumerId: new FormControl(''),
+      totalVat: new FormControl(this.order.costSummary.totalVat),
+      vat: new FormControl(this.order.costSummary.vat),
+      deliveryMethod: new FormControl(this.deliveryOptions?.[0].value, [Validators.required]),
+      deliveryArea: new FormControl(''),
+      contactName:  new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
+      contactPhone:  new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
+      contactEmail:  new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required]),
+      commentForSupplier:  new FormControl(''),
+      deliveryDesirableDate:  new FormControl(''),
+      deliveryDesirableTimeInterval:  new FormControl(''),
+      items: this._fb.array(this.order.items.map(res=> this._createItem(res))),
+    }, { validator: deliveryAreaConditionValidator});
+  }
+
+  private _createItem(product: any): FormGroup {
+    return this._fb.group({
+      productName: product.productName,
+      productDescription: product.productDescription,
+      barCodes: this._fb.array(product.barCodes),
+      partNumber: product.partNumber,
+      packaging: product.packaging,
+      imageUrl: this._setImageUrl(product.imageUrls),
+      quantity: product.quantity,
+      price: product.price,
+      maxDaysForShipment: product.maxDaysForShipment,
+      availabilityStatus: this._availabilityConverter[product.availabilityStatus] || 'Нет в наличии',
+      vat: product.costSummary.vat,
+      totalVat: product.costSummary.totalVat,
+      _links: product._links,
+    });
+  }
+
+  private _setImageUrl(images: string[]): string {
+    return images ? absoluteImagePath(images[0]) : absoluteImagePath(null);
+  }
+
+  private _setAvailableOrganizationdAndInitConsumer() {
+    this._userService.userOrganizations$.pipe(
+      filter(res => !!res),
+      map((res) => {
+        this._setAvailableOrganizations(res);
+        this._initConsumer();
+        this._cdr.detectChanges();
+      })
+    ).subscribe();
+  }
+
+  private _setAvailableOrganizations(userOrganizations: any[]) {
+    if (!this.order.customersAudience?.length) {
+      this.availableUserOrganizations = userOrganizations;
+    }
+    if (this.order.customersAudience?.length) {
+      this.availableUserOrganizations = userOrganizations.filter((org) => {
+        return this._checkAudienceForAvailability(this.order.customersAudience, org);
+      })
+    }
+  }
+
+  private _initConsumer() {
+    if (this.availableUserOrganizations?.length) {
+
+      if (!this.order.consumer) {
+        if (!this.order.customersAudience?.length) {
+          this.setConsumer(this.availableUserOrganizations[0]);
+        }
+        if (this.order.customersAudience?.length) {
+          const foundUserOrganization = this.availableUserOrganizations.find((org) => {
+            return this._checkAudienceForAvailability(this.order.customersAudience, org);
+          });
+          if (foundUserOrganization) {
+            this.setConsumer(foundUserOrganization);
+          }
+        }
+      }
+
+      if (this.order.consumer) {
+        this._setConsumerFromOrder();
+      }
+    }
+  }
+
+  private _checkAudienceForAvailability(audienceArray: string[], org: any) {
+    return audienceArray.includes(org.legalRequisites.inn + `${org.legalRequisites.kpp ? `:${org.legalRequisites.kpp}` : ''}`);
+  }
+
+  private _setConsumerFromOrder() {
+    this.form.patchValue({
+      consumerName: this.order.consumer.name,
+      consumerINN: this.order.consumer.inn,
+      consumerKPP: this.order.consumer.kpp,
+      consumerId: this.order.consumer.id,
+    });
+    this._cartService.partiallyUpdateStorageByOrder(this.order);
   }
 
 }

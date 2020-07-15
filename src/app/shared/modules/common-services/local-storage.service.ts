@@ -7,10 +7,10 @@ import {
   SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
-  CartDataOrderExtendedModel,
   CartDataOrderModel,
-  CartDataExtendedModel,
+  CartDataOrderResponseModel,
   CartDataModel,
+  CartDataResponseModel,
 } from '../common-services/models';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'local_search_queries_history_list';
@@ -132,7 +132,7 @@ export class LocalStorageService {
     this._storage.remove(CART_LOCATION_STORAGE_KEY);
   }
 
-  getCartData(): CartDataExtendedModel | CartDataModel {
+  getCartData(): CartDataModel | CartDataResponseModel {
     return this._storage.get(CART_DATA_STORAGE_KEY);
   }
 
@@ -144,7 +144,7 @@ export class LocalStorageService {
     this._storage.remove(CART_DATA_STORAGE_KEY);
   }
 
-  patchCartDataByOrder(orderData: CartDataOrderExtendedModel): void {
+  patchCartDataByOrder(orderData: CartDataOrderModel): void {
     const currentCartData = this.getCartData();
     let foundInd;
 
@@ -161,6 +161,7 @@ export class LocalStorageService {
       });
       const newOrder = JSON.parse(JSON.stringify(orderFoundInCurrentDataContent));
       newOrder.consumer = orderFoundInCurrentDataContent ? orderData.consumer || null : null;
+      newOrder.items = orderFoundInCurrentDataContent ? orderData.items || null : null;
       currentCartData?.content.splice(foundInd, 1, newOrder);
       this._storage.set(CART_DATA_STORAGE_KEY, currentCartData);
     }

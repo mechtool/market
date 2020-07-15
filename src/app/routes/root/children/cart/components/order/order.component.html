@@ -46,9 +46,9 @@
 </ng-template>
 
 
-<div class="order">
-  {{form.value | json}}
-  <form class="form__order" action="" [formGroup]="form" (submit)="makeOrder()">
+<div class="order" *ngIf="form.get('items')['controls'].length">
+
+  <form class="form__order" action="" [formGroup]="form" (submit)="createOrder()">
 
     <div class="order_info">
       <div class="order_spec">
@@ -121,11 +121,6 @@
 
   <ng-template #tableProducts>
     <section id="section_tab__products" class="section_tab section_tab__moving" formArrayName="items">
-      <div class="section_tab__title">
-        <div class="section_tab__back">Назад</div>
-        <h2>Товары в заказе #{{orderNum}}</h2>
-        <p>Всего {{totalItems}}{{totalItems | myDeclension: ' товар': ' товара': ' товаров'}}<br> на сумму {{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</p>
-      </div>
       <div class="table_list table_list__products table_list__basket">
         <div class="table_row table_header">
           <div class="cell_right">
@@ -167,21 +162,22 @@
                 {{form.get('items')['controls'][i].controls.availabilityStatus.value}}
               </div>
               <div class="table_cell cell_count" data-title="Количество:">
-                <my-cart-order-qty-counter formControlName="quantity"></my-cart-order-qty-counter>
+                <my-cart-order-qty-counter formControlName="quantity" [isDisabled]="isOrderLoading"></my-cart-order-qty-counter>
               </div>
               <div class="table_cell cell_price_one">
                 <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
               </div>
               <div class="table_cell cell_sum" data-title="Стоимость:">
-                <span class="price">{{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+                <span class="price">{{form.get('items')['controls'][i].controls.totalVat.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
                 <span class="cell_nds">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
               </div>
               <div class="table_cell cell_more">
                 <div class="table_cell__inner more_actions__dropdown dropdown">
-                  <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown [nzDropdownMenu]="itemModal"><span></span></button>
+                  <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span></button>
+                  <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
                   <nz-dropdown-menu #itemModal="nzDropdownMenu">
                     <div class="dropdown_block">
-                      <div class="dropdown_item dropdown_item__hover" (click)="removeFromOrder(form.get('items')['controls'][i].controls)">Удалить из заказа</div>
+                      <div class="dropdown_item dropdown_item__hover" (click)="removeItem(form.get('items')['controls'][i].controls, i)">Удалить из заказа</div>
                     </div>
                   </nz-dropdown-menu>
                 </div>
@@ -195,14 +191,6 @@
 
   <ng-template #orderDetails>
     <section id="section_tab__information" class="section_tab section_tab__limited">
-      <!-- TODO: для мобильного вида -->
-      <div class="section_tab__title">
-        <div class="section_tab__back">Назад</div>
-        <h2>Данные для заказа<br> #3672832</h2>
-        <p>
-          Заполните поля доставки <br> и контактов вашего представителя,<br> чтобы отправить заказ
-        </p>
-      </div>
       <div class="section_paragraph">
         <div class="info_group__small">
           <div class="info_group">
@@ -277,11 +265,6 @@
 
   <ng-template #supplierData>
     <section id="section_tab__supplier" class="section_tab section_tab__supplier section_tab__limited">
-      <!-- TODO: для мобильного вида -->
-      <div class="section_tab__title">
-        <div class="section_tab__back">Назад</div>
-        <h2>Данные поставщика<br> для заказа #{{orderNum}}</h2>
-      </div>
       <div class="section_paragraph">
         <h3>Поставщик</h3>
         <p class="supplier_title">

@@ -8,10 +8,12 @@ import {
   TradeOfferStockEnumModel,
   TradeOfferSummaryModel,
   TradeOfferSummaryPriceModel,
-  TradeOfferVatEnumModel
+  TradeOfferVatEnumModel,
+  CartService,
 } from '#shared/modules';
 import { ActivatedRoute, Router } from '@angular/router';
 import { absoluteImagePath, containParametersForRequest, mapStock, queryParamsFrom } from '#shared/utils';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'my-supplier-trade-offers-list',
@@ -47,10 +49,25 @@ export class SupplierTradeOffersListComponent {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _localStorageService: LocalStorageService,
+    private _cartService: CartService,
   ) {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
       this.visibleSort = containParametersForRequest(queryParams);
     });
+  }
+
+  addItemToCart(tradeOffer: TradeOfferSummaryModel) {
+    // TODO: Руслан поправь в нужных местах
+    const cartLocation = this._cartService.getCart$().value;
+    const data = {
+      tradeOfferId: tradeOffer.id,
+      quantity: 1, /* TODO < */
+    };
+    this._cartService.handleRelationAndUpdateData(
+      'https://rels.1cbn.ru/marketplace/shopping-cart/add-item',
+      `${cartLocation}/items`,
+      data,
+    ).subscribe();
   }
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {

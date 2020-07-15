@@ -1,99 +1,178 @@
+const fs = require('fs');
+const authData = fs.readFileSync('./src/assets/json/auth.json').toString();
+const cartData = fs.readFileSync('./src/assets/json/shopping-carts.json').toString();
+const categoriesData = fs.readFileSync('./src/assets/json/product-offers-categories.json').toString();
+const productOffersData = fs.readFileSync('./src/assets/json/product-offers.json').toString();
+const productOffersById = fs.readFileSync('./src/assets/json/product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json').toString();
+const locations = fs.readFileSync('./src/assets/json/locations__search.json').toString();
+const userOrganizations1 = fs.readFileSync('./src/assets/json/organizations__user-organizations-1.json').toString();
+const userOrganizations2 = fs.readFileSync('./src/assets/json/organizations__user-organizations-2.json').toString();
+const organizationsById = fs.readFileSync('./src/assets/json/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
+const suggestions = fs.readFileSync('./src/assets/json/suggestions.json').toString();
+const suppliers = fs.readFileSync('./src/assets/json/suppliers.json').toString();
+const tradeOffersById = fs.readFileSync('./src/assets/json/trade-offers__f524af2c-47a6-4f9b-86ab-df185f2a2767.json').toString();
+const tradeOffers = fs.readFileSync('./src/assets/json/trade-offers__search.json').toString();
+
+
 const PROXY_CONFIG = [
   {
-    context: '/proxifier/auth',
-    methods: ['POST'],
-    bypass: (req, res, proxyOptions) => {
-      if (req.originalUrl === '/proxifier/auth') {
-        const obj = {
-          "accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlZWRhODY4MS1iMzEwLTRhOTAtYTUwOC0yZTMzZjZmM2IxODkiLCJleHAiOjE1OTQ3MjMwNTUsInN1YiI6IjUxOTA2ZjA3LWE3MGMtNDU4NS05ZThkLWM4NTU3NGU5ZDUyZSIsImlhdCI6MTU5NDcyMjkzNSwiaXNzIjoiL2F1dGgvdG9rZW4vYnktaXRzLXNzby10aWNrZXQiLCJibi5zaWQiOiI5ZDIzNWQ3MS01ZjJiLTQyNmItYjZhMi00MWFiYzg4MmMxZGMiLCJibmV0Ijp7Imlhc2IiOm51bGwsIm9yZ3MiOm51bGwsInN1YnQiOiJ1c3IiLCJzc2lkIjoiOWQyMzVkNzEtNWYyYi00MjZiLWI2YTItNDFhYmM4ODJjMWRjIiwic3JscyI6bnVsbH0sIjFjLmxvZ2luLnVzZXJfaWQiOiI1MTkwNmYwNy1hNzBjLTQ1ODUtOWU4ZC1jODU1NzRlOWQ1MmUiLCJibi50dHlwIjoicHNuIn0.WmFt4G1mJ5AcucpZtfPvRk1aIEKOSHV-CpBtK4ShC4g",
-          "refreshToken":"eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIyZDFiY2NhMi05M2Q4LTQ5NzgtYmY3Mi0yYzc1NTI4MzEzOWMiLCJleHAiOjE1OTQ3MzAxMzUsImlhdCI6MTU5NDcyMjkzNSwiYm4uc2lkIjoiOWQyMzVkNzEtNWYyYi00MjZiLWI2YTItNDFhYmM4ODJjMWRjIn0.jdBV0Fj5J3a2T2nYZSn48hGCvNVWN3N6fjxgwk4yKSGBLgbR-qAb0VH7q4tMfSM9-E-pEhF-XitrzBJUdQOybFG8Uq_pVqAK_RFYYDN7fsBv0BKmH1dJVToEDrE1MPAuXURACjIZUGQWjBu_chwjE24TcGBp1auSywaah9H7WwLplu84U7TLf8DJuda_gvK8wnHtulnlKyMvEdyRrEEa0HqdbvgCpB5pp1orPx1zMvZV0L3_jBB-Pmii4ireUZIRdy6DjkmhrjSy74KE_6wzbgxRlTIj-WjxbuYpd44CpWXSot15d3fjhvuxMHLFKSNbyFCILUScrilFuaLffC5r4Q",
-          "accessTokenExpiration":119,
-          "refreshTokenExpiration":7199,
-          "userInfo":
-            {
-              "userId":"51906f07-a70c-4585-9e8d-c85574e9d52e",
-              "login":"ivan-remotov",
-              "fullName":"Ivan Remotov",
-              "phone":"",
-              "email":"remote@test1cbn.ru"
-            }
-        }
-        res.end(JSON.stringify(obj));
-        return true;
-      }
-    }
-  },
-  {
-    context: "/proxifier",
-    target: "https://my.1cbn.ru:4200/assets/json",
+    context: '/proxifier',
     secure: false,
     changeOrigin: true,
     logLevel: "debug",
-    pathRewrite: (path, req) => {
-      console.log(path);
-      if (path.includes("/proxifier/categories")) {
-        return "product-offers-categories.json";
+    methods: ['POST', 'GET', 'DELETE', 'PUT'],
+    bypass: (req, res, proxyOptions) => {
+
+      const pathsObject = {
+        '/proxifier/auth': /^\/proxifier\/auth\/?$/i,
+        '/proxifier/categories': /^\/proxifier\/categories\/?$/i,
+        '/proxifier/product-offers/popular': /^\/proxifier\/product-offers\/popular\/?$/i,
+        '/proxifier/product-offers': /^\/proxifier\/product-offers\/?$/i,
+        '/proxifier/product-offers/:id': /^\/proxifier\/product-offers\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/locations/search': /^\/proxifier\/locations\/search\/?$/i,
+        '/proxifier/organizations': /^\/proxifier\/organizations\/?$/i,
+        '/proxifier/organizations/:id': /^\/proxifier\/organizations\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/organizations/user-organizations': /^\/proxifier\/organizations\/user-organizations\/?$/i,
+        '/proxifier/suggestions': /^\/proxifier\/suggestions\/?$/i,
+        '/proxifier/suppliers': /^\/proxifier\/suppliers\/?$/i,
+        '/proxifier/trade-offers/:id': /^\/proxifier\/trade-offers\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/trade-offers/search': /^\/proxifier\/trade-offers\/search\/?$/i,
+        '/proxifier/trade-offers/find/:id': /^\/proxifier\/trade-offers\/find\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/shopping-carts': /^\/proxifier\/shopping-carts\/?$/i,
+        '/proxifier/shopping-carts/:id': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/shopping-carts/:id/items': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/items\/?$/i,
+        '/proxifier/shopping-carts/:id/items/:itemId': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/items\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/shopping-carts/:id/items/:itemId/quantity': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/items\/(?:([^\/]+?))\/quantity\/?$/i,
+        '/proxifier/shopping-carts/:id/order/:orderId': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/order\/(?:([^\/]+?))\/?$/i,
+      };
+
+      if (req.method === 'POST' && pathsObject['/proxifier/auth'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end(authData);
+        return true;
       }
-      if (path.includes("/proxifier/product-offers/popular")) {
-        return "product-offers.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/categories'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(categoriesData);
+        return true;
       }
-      if (path.includes("/proxifier/product-offers/")) {
-        return "product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/product-offers/popular'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(productOffersData);
+        return true;
       }
-      if (path.includes("/proxifier/product-offers")) {
-        return "product-offers.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/product-offers'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(productOffersData);
+        return true;
       }
-      if (path.includes("/proxifier/locations/search")) {
-        return "locations__search.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/product-offers/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(productOffersById);
+        return true;
       }
-      if (path.includes("/proxifier/organizations/user-organizations")) {
+
+      if (req.method === 'GET' && pathsObject['/proxifier/locations/search'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(locations);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('user-organizations')) {
+        res.status(200);
+        res.end(organizationsById);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/user-organizations'].test(req.originalUrl.split('?')[0])) {
         const randomNum = Math.floor(Math.random() * 2) + 1;
-        return `organizations__user-organizations-${randomNum}.json`;
+        res.status(200);
+        res.end(randomNum < 2 ? userOrganizations1 : userOrganizations2);
+        return true;
       }
-      if (path.includes("/proxifier/organizations/")) {
-        return "organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/suggestions'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(suggestions);
+        return true;
       }
-      if (path.includes("/proxifier/suggestions")) {
-        return "suggestions.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/suppliers'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(suppliers);
+        return true;
       }
-      if (path.includes("/proxifier/suppliers")) {
-        return "suppliers.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/trade-offers/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('search')) {
+        res.status(200);
+        res.end(tradeOffersById);
+        return true;
       }
-      if (path.includes("/proxifier/trade-offers/search")) {
-        return "trade-offers__search.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/trade-offers/find/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('search')) {
+        res.status(200);
+        res.end(tradeOffersById);
+        return true;
       }
-      if (path.includes("/proxifier/trade-offers/")) {
-        return "trade-offers__f524af2c-47a6-4f9b-86ab-df185f2a2767.json";
+
+      if (req.method === 'GET' && pathsObject['/proxifier/trade-offers/search'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(tradeOffers);
+        return true;
       }
+
+      if (req.method === 'POST' && pathsObject['/proxifier/shopping-carts'].test(req.originalUrl.split('?')[0])) {
+        res.set('Location', 'https://my.1cbn.ru:4200/proxifier/shopping-carts/777888999');
+        res.status(201);
+        res.end(null);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/shopping-carts/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(cartData);
+        return true;
+      }
+
+      if (req.method === 'DELETE' && pathsObject['/proxifier/shopping-carts/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(204);
+        res.end(null);
+        return true;
+      }
+
+      if (req.method === 'POST' && pathsObject['/proxifier/shopping-carts/:id/items'].test(req.originalUrl.split('?')[0])) {
+        res.set('Location', 'https://my.1cbn.ru:4200/proxifier/shopping-carts/777888999/items/9999999');
+        res.status(201);
+        res.end(null);
+        return true;
+      }
+
+      if (req.method === 'DELETE' && pathsObject['/proxifier/shopping-carts/:id/items/:itemId'].test(req.originalUrl.split('?')[0])) {
+        res.status(204);
+        res.end(null);
+        return true;
+      }
+
+      if (req.method === 'PUT' && pathsObject['/proxifier/shopping-carts/:id/items/:itemId/quantity'].test(req.originalUrl.split('?')[0])) {
+        res.status(204);
+        res.end(null);
+        return true;
+      }
+
+      if (req.method === 'POST' && pathsObject['/proxifier/shopping-carts/:id/order/:orderId'].test(req.originalUrl.split('?')[0])) {
+        res.set('Location', 'https://todo-api.1cbn.ru/edi/v1/documents/33333');
+        res.status(201);
+        res.end(null);
+        return true;
+      }
+
     },
-  }
+  },
+
 ];
 
 module.exports = PROXY_CONFIG;
-
-// {
-//   context: ['/proxifier/auth'],
-//   methods: ['POST'],
-//   // target: 'http://my.1cbn.ru:4200',
-//   pathRewrite: {
-//     "^/proxifier/auth": ""
-//   },
-//   bypass: function (req, res, proxyOptions) {
-    // const obj = {
-    //   "accessToken":"eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlZWRhODY4MS1iMzEwLTRhOTAtYTUwOC0yZTMzZjZmM2IxODkiLCJleHAiOjE1OTQ3MjMwNTUsInN1YiI6IjUxOTA2ZjA3LWE3MGMtNDU4NS05ZThkLWM4NTU3NGU5ZDUyZSIsImlhdCI6MTU5NDcyMjkzNSwiaXNzIjoiL2F1dGgvdG9rZW4vYnktaXRzLXNzby10aWNrZXQiLCJibi5zaWQiOiI5ZDIzNWQ3MS01ZjJiLTQyNmItYjZhMi00MWFiYzg4MmMxZGMiLCJibmV0Ijp7Imlhc2IiOm51bGwsIm9yZ3MiOm51bGwsInN1YnQiOiJ1c3IiLCJzc2lkIjoiOWQyMzVkNzEtNWYyYi00MjZiLWI2YTItNDFhYmM4ODJjMWRjIiwic3JscyI6bnVsbH0sIjFjLmxvZ2luLnVzZXJfaWQiOiI1MTkwNmYwNy1hNzBjLTQ1ODUtOWU4ZC1jODU1NzRlOWQ1MmUiLCJibi50dHlwIjoicHNuIn0.WmFt4G1mJ5AcucpZtfPvRk1aIEKOSHV-CpBtK4ShC4g",
-    //   "refreshToken":"eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIyZDFiY2NhMi05M2Q4LTQ5NzgtYmY3Mi0yYzc1NTI4MzEzOWMiLCJleHAiOjE1OTQ3MzAxMzUsImlhdCI6MTU5NDcyMjkzNSwiYm4uc2lkIjoiOWQyMzVkNzEtNWYyYi00MjZiLWI2YTItNDFhYmM4ODJjMWRjIn0.jdBV0Fj5J3a2T2nYZSn48hGCvNVWN3N6fjxgwk4yKSGBLgbR-qAb0VH7q4tMfSM9-E-pEhF-XitrzBJUdQOybFG8Uq_pVqAK_RFYYDN7fsBv0BKmH1dJVToEDrE1MPAuXURACjIZUGQWjBu_chwjE24TcGBp1auSywaah9H7WwLplu84U7TLf8DJuda_gvK8wnHtulnlKyMvEdyRrEEa0HqdbvgCpB5pp1orPx1zMvZV0L3_jBB-Pmii4ireUZIRdy6DjkmhrjSy74KE_6wzbgxRlTIj-WjxbuYpd44CpWXSot15d3fjhvuxMHLFKSNbyFCILUScrilFuaLffC5r4Q",
-    //   "accessTokenExpiration":119,
-    //   "refreshTokenExpiration":7199,
-    //   "userInfo":
-    //     {
-    //       "userId":"51906f07-a70c-4585-9e8d-c85574e9d52e",
-    //       "login":"ivan-remotov",
-    //       "fullName":"Ivan Remotov",
-    //       "phone":"",
-    //       "email":"remote@test1cbn.ru"
-    //     }
-    // }
-    // res.end(JSON.stringify(obj));
-//     return true;
-//   }
-// },

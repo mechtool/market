@@ -1,4 +1,3 @@
-import { RelationModel } from './models/relation.model';
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
@@ -19,20 +18,23 @@ import {
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
   UserOrganizationModel,
-  CartAddItemModel,
-  MakeOrderModel,
-  CartUpdateItemQuantityModel,
-  CartDataModel,
+  CartAddItemRequestModel,
+  CartCreateOrderRequestModel,
+  CartUpdateItemQuantityRequestModel,
+  CartDataResponseModel,
 } from './models';
-import { HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpParams, HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { RelationContentModel } from './models/relation-content.model';
+import { map } from 'rxjs/operators';
 
 const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(private _apiService: ApiService) {
-  }
+  constructor(
+    private _apiService: ApiService,
+    private _http: HttpClient,
+  ) {}
 
   getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
@@ -66,7 +68,6 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/organizations/user-organizations`);
   }
 
-  // TODO: метод возвращает 404
   getOrganization(id: string): Observable<OrganizationResponseModel> {
     return this._apiService.get(`${API_URL}/organizations/${id}`);
   }
@@ -86,45 +87,32 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/categories`, { params });
   }
 
-  createCart(): Observable<string> {
-    // TODO: Использовать реальный сервис
-    return of('https://api.1cbn.ru/trade-offers/shopping-carts/3071d88f-4fe8-418d-be46-7822d247cd91');
+  createCart(): Observable<HttpResponse<any>> {
+    return this._http.post(`${API_URL}/shopping-carts`, null, { observe: 'response' });
   }
 
-  getCartDataByCartLocation(cartLocation: string): Observable<CartDataModel> {
-    // TODO: Использовать реальный сервис
-    return this._apiService.get(`/assets/json/raw/cart_data.json`);
+  getCartDataByCartLocation(cartLocation: string): Observable<CartDataResponseModel> {
+    return this._apiService.get(cartLocation);
   }
 
-  addItemToCart(relationHref: string, data: CartAddItemModel): Observable<any> {
-    // let headers = new HttpHeaders({ 'Content-Type': 'application/vnd.1cbn.v1+json' });
-    // let options = { headers: headers };
-    // return this._apiService.post(relationHref, data, options);
-    return this._apiService.get('/assets/json/raw/cart_add-item.json');
-  }
-
-  makeOrder(relationHref: string, data: MakeOrderModel): Observable<any> {
-    // let headers = new HttpHeaders({ 'Content-Type': 'application/vnd.1cbn.v1+json' });
-    // let options = { headers: headers };
-    // return this._apiService.post(relationHref, data, options);
-    return this._apiService.get(`/assets/json/raw/make-order.json`);
-  }
-
-  updateItemQuantityInCart(relationHref: string, data: CartUpdateItemQuantityModel): Observable<any> {
-    // let headers = new HttpHeaders({ 'Content-Type': 'application/vnd.1cbn.v1+json' });
-    // let options = { headers: headers };
-    // return this._apiService.post(relationHref, data, options);
-    return this._apiService.get(`/assets/json/raw/cart_update-item-quantity.json`);
+  addItemToCart(relationHref: string, data: CartAddItemRequestModel): Observable<any> {
+    return this._apiService.post(relationHref, data);
   }
 
   removeItemFromCart(relationHref: string): Observable<any> {
-    // return this._apiService.delete(relationHref);
-    return this._apiService.get(`/assets/json/raw/cart_remove-item.json`);
+    return this._apiService.delete(relationHref);
+  }
+
+  updateItemQuantityInCart(relationHref: string, data: CartUpdateItemQuantityRequestModel): Observable<any> {
+    return this._apiService.put(relationHref, data);
+  }
+
+  createOrder(relationHref: string, data: CartCreateOrderRequestModel): Observable<any> {
+    return this._apiService.post(relationHref, data);
   }
 
   getTradeOfferFromCart(relationHref: string): Observable<any> {
-    // return this._apiService.get(relationHref);
-    return this._apiService.get(`/assets/json/raw/trade-offer-view.json`);
+    return this._apiService.get(relationHref);
   }
 
   _params(searchQuery: any): HttpParams {

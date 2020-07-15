@@ -1,5 +1,5 @@
-import { AuthResponseModel } from './../../../../shared/modules/common-services/models/auth-response.model';
-import { CartDataExtendedModel } from '#shared/modules/common-services/models/cart-data-extended.model';
+import { AuthResponseModel } from '#shared/modules/common-services/models/auth-response.model';
+import { CartDataModel } from '#shared/modules/common-services/models/cart-data.model';
 import { Component } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CartService, UserService } from '#shared/modules';
@@ -23,7 +23,7 @@ export class CartComponent {
     return this._userService.userData$;
   }
 
-  get getCartData$(): Observable<CartDataExtendedModel> {
+  get getCartData$(): Observable<CartDataModel> {
     return this._cartService.getCartData$().pipe(
       tap((res) => {
         this.supplierCount = res?.content?.length;

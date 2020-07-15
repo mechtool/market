@@ -2,13 +2,14 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd';
 import { fromEvent } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { debounceTime, filter, switchMap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import {
   TradeOfferPriceMatrixModel,
   TradeOfferResponseModel,
   TradeOfferStockEnumModel,
-  TradeOfferVatEnumModel
+  TradeOfferVatEnumModel,
+  CartService
 } from '#shared/modules/common-services';
 
 enum OrderStatus { NOT_AVAILABLE, TO_CART, IN_CART }
@@ -68,7 +69,10 @@ export class ProductOrderComponent {
       .sort((one, two) => one.fromPackages - two.fromPackages);
   }
 
-  constructor(private _fb: FormBuilder) {
+  constructor(
+    private _fb: FormBuilder,
+    private _cartService: CartService,
+  ) {
     this.form = this._fb.group({
       totalPositions: 0
     });
@@ -78,6 +82,18 @@ export class ProductOrderComponent {
   }
 
   order() {
+    // TODO: Руслан поправь в нужных местах
+    const cartLocation = this._cartService.getCart$().value;
+    const data = {
+      tradeOfferId: this.tradeOffer.id,
+      quantity: 1, /* TODO < */
+    };
+    this._cartService.handleRelationAndUpdateData(
+      'https://rels.1cbn.ru/marketplace/shopping-cart/add-item',
+      `${cartLocation}/items`,
+      data,
+    ).subscribe();
+
     this.orderStatus = OrderStatus.IN_CART;
     this.increase();
   }
