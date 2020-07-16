@@ -15,6 +15,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 export class ProductGalleryComponent {
 
   @Input() product: ProductDto;
+  @Input() supplierId: string;
   @Input() supplierName: string;
   @Input() stock: string;
   @Input() supplierLogo: string;

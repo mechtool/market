@@ -69,6 +69,12 @@
       font-weight: var(--font-weight-medium);
     }
 
+    &__value {
+      a {
+        color: var(--color-black);
+      }
+    }
+
     & .supplier_image {
       width: 15px;
       height: 15px;
