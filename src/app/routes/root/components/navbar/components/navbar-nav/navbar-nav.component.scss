@@ -33,11 +33,10 @@
     }
 
     .opener {
-      display: inline-flex;
+      display: flex;
       cursor: pointer;
       background: #3e3e3e;
       width: 40px;
-      display: flex;
       justify-content: center;
       border-radius: 7px;
       height: 40px;
