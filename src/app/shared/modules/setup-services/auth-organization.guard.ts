@@ -7,7 +7,7 @@ import { UserService } from '#shared/modules/common-services';
 import { AuthModalService } from './auth-modal.service';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthOrganizationGuard implements CanActivate {
   constructor(
     private _userService: UserService,
     private _authModalService: AuthModalService,
@@ -16,11 +16,16 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-    return this._userService.userData$
+    return this._userService.userOrganizations$
       .pipe(
-        switchMap(auth => !!auth ? of(true) : of(this._authModalService.openNotAuthRouterModal(state, this.location.path()))),
-        catchError((e) => {
-          console.log('error');
+        switchMap((organizations) => {
+          if (organizations?.length) {
+            return of(true);
+          }
+          return of(this._authModalService.openNotOrganizationsRouterModal(state, this.location.path()));
+        }),
+        catchError((err) => {
+          console.log('error', err);
           return of(false);
         }),
       );

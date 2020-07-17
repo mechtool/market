@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  SupplierListComponent,
-  SupplierSingleComponent,
-  TradeOfferComponent
-} from './components';
+import { SupplierListComponent, SupplierSingleComponent, TradeOfferComponent } from './components';
+import { AuthOrganizationGuard } from '#shared/modules/setup-services/auth-organization.guard';
 
 const routes: Routes = [
   {
@@ -12,6 +9,7 @@ const routes: Routes = [
     component: SupplierListComponent
   }, {
     path: ':supplierId',
+    canActivate: [AuthOrganizationGuard],
     children: [
       {
         path: '',
@@ -42,4 +40,5 @@ const routes: Routes = [
     RouterModule,
   ],
 })
-export class SupplierRoutingModule {}
+export class SupplierRoutingModule {
+}

@@ -1,26 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  registerLocaleData,
-  LocationStrategy,
-  PathLocationStrategy,
-} from '@angular/common';
+import { LocationStrategy, PathLocationStrategy, registerLocaleData, } from '@angular/common';
 import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
 import {
-  SetupServicesModule,
-  PipesModule,
-  CommonServicesModule,
   CardModule,
-  NomenclatureCardModule,
-  UserService,
   CartService,
-  LocalStorageService,
+  CommonServicesModule,
+  NomenclatureCardModule,
+  PipesModule,
+  SetupServicesModule,
+  UserService,
 } from '#shared/modules';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -34,7 +29,7 @@ import {
   NavbarNavComponent,
 } from './routes/root/components';
 
-import { NzIconModule, NZ_ICONS } from 'ng-zorro-antd/icon';
+import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -43,9 +38,7 @@ registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
-  (key) => antDesignIcons[key]
-);
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
 
 @NgModule({
   entryComponents: [
@@ -92,4 +85,5 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

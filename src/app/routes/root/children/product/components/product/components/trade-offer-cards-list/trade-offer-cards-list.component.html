@@ -1,40 +1,36 @@
-<main class="content-main" *ngIf="tradeOffers">
+<div class="content-main content-wrapper page-product page-inner" *ngIf="tradeOffers">
+  <div class="product_content">
+    <div class="product_main">
+      <div class="product_about">
+        <div class="catalog-wrapper">
+          <div class="catalog_header">
 
-  <div class="content-wrapper page-product page-inner">
-    <div class="product_content">
-      <div class="product_main">
-        <div class="product_about">
-          <div class="catalog-wrapper">
-            <div class="catalog_header">
+            <div class="catalog_header__count">
+              <span class="catalog_header__title">Наличие и цены у поставщиков</span> найдено
+              <strong>{{tradeOffers.length}}</strong>{{tradeOffers.length | myDeclension: ' торговое предложение': ' торговых предложения': ' торговых предложений'}}
+            </div>
 
-              <div class="catalog_header__count">
-                <span class="catalog_header__title">Наличие и цены у поставщиков</span> найдено
-                <strong>{{tradeOffers.length}}</strong>{{tradeOffers.length | myDeclension: ' торговое предложение': ' торговых предложения': ' торговых предложений'}}
-              </div>
-
-              <div class="catalog_header__btns">
-
-                <div class="dropdown catalog_sort">
+            <div class="catalog_header__btns" *ngIf="tradeOffers.length > 1">
+              <div class="dropdown catalog_sort">
                     <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
                       <span class="dropdown_control catalog_sort__control">{{currentSortType.label}}</span>
                     </span>
 
-                  <nz-dropdown-menu #menu="nzDropdownMenu">
-                    <ul nz-menu nzSelectable>
-                      <li class="catalog_sort__item" nz-menu-item *ngFor="let item of sortTypes"
-                          (click)="chooseSort(item)">{{item.label}}</li>
-                    </ul>
-                  </nz-dropdown-menu>
-
-                </div>
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                  <ul nz-menu nzSelectable>
+                    <li class="catalog_sort__item" nz-menu-item *ngFor="let item of sortTypes"
+                        (click)="chooseSort(item)">{{item.label}}</li>
+                  </ul>
+                </nz-dropdown-menu>
               </div>
             </div>
-            <div class="catalog catalog_suppliers">
-              <my-trade-offer-info-card *ngFor="let item of tradeOffers" [tradeOffer]="item"></my-trade-offer-info-card>
-            </div>
+
+          </div>
+          <div class="catalog catalog_suppliers">
+            <my-trade-offer-info-card *ngFor="let item of tradeOffers" [tradeOffer]="item"></my-trade-offer-info-card>
           </div>
         </div>
       </div>
     </div>
   </div>
-</main>
+</div>
