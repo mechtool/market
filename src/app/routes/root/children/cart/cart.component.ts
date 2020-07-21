@@ -16,7 +16,7 @@ import { tap, map } from 'rxjs/operators';
 })
 export class CartComponent {
   supplierCount = 0;
-  totalVat = 0;
+  totalCost = 0;
   totalItems = 0;
 
   get userData$(): Observable<AuthResponseModel> {
@@ -27,8 +27,8 @@ export class CartComponent {
     return this._cartService.getCartData$().pipe(
       tap((res) => {
         this.supplierCount = res?.content?.length;
-        this.totalVat = res?.content?.reduce((accum, curr, item) => {
-          accum += curr.costSummary.totalVat
+        this.totalCost = res?.content?.reduce((accum, curr, item) => {
+          accum += curr.costSummary.totalCost;
           return accum;
         }, 0);
         this.totalItems = res?.content?.reduce((accum, curr, item) => {

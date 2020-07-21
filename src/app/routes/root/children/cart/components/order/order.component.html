@@ -144,6 +144,7 @@
             </div>
           </div>
         </div>
+
         <div class="table_row" *ngFor="let item of form.get('items')['controls']; let i = index">
           <ng-container [formGroupName]="i">
             <div class="cell_left">
@@ -163,12 +164,13 @@
               </div>
               <div class="table_cell cell_count" data-title="Количество:">
                 <my-cart-order-qty-counter formControlName="quantity" [isDisabled]="isOrderLoading"></my-cart-order-qty-counter>
+                <!-- <input  formControlName="quantity"> -->
               </div>
               <div class="table_cell cell_price_one">
                 <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
               </div>
               <div class="table_cell cell_sum" data-title="Стоимость:">
-                <span class="price">{{form.get('items')['controls'][i].controls.totalVat.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+                <span class="price">{{form.get('items')['controls'][i].controls.totalCost.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
                 <span class="cell_nds">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
               </div>
               <div class="table_cell cell_more">
@@ -303,7 +305,7 @@
   <div class="order__total">
     <div class="order__total_price">
       <div class="order__total_label">Итого:</div>
-      <div class="order__total_value">{{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
+      <div class="order__total_value">{{totalCost | myMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
     </div>
     <div class="order__total_nds">Включая налог НДС {{vat / 100 | percent}}</div>
     <div class="order__total_btn">
