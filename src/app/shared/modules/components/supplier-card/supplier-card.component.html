@@ -1,11 +1,11 @@
-<div class="catalog_item__inner"  (click)="clickSupplier()" *ngIf="supplier">
+<div class="catalog_item__inner" (click)="clickSupplier()" *ngIf="supplier">
   <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
   <span class="catalog_item__descr">
         <span class="catalog_item__title">
-            {{supplier.name}}
+            {{name}}
         </span>
         <span class="catalog_item__about">
-            {{supplier.description}}
+            {{description}}
         </span>
     </span>
 </div>

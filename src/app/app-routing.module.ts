@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard, SsoTicketGuard } from '#shared/modules';
 import { RootComponent } from './routes/root/root.component';
-import { DelayedPreloadingStrategy, BreadcrumbsGuard } from '#shared/modules/setup-services';
+import { BreadcrumbsGuard, DelayedPreloadingStrategy } from '#shared/modules/setup-services';
 
 const routes: Routes = [
   {

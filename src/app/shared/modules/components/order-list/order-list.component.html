@@ -1,0 +1,48 @@
+<ng-template #indicatorTemplate>
+  <em class="icon_scroll" nz-icon nzType="loading"></em>
+</ng-template>
+
+<nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
+  <div class="documents_infinite_scroll" infiniteScroll (scrolled)="documentsLoading(page + 1)">
+    <div class="table_list table_list__orders">
+
+      <div class="table_row table_header">
+        <div class="table_cell cell_title">
+          <span>Поставщик</span>
+        </div>
+        <div class="table_cell cell_number">
+          <span>Номер заказа</span>
+        </div>
+        <div class="table_cell cell_date">
+          <span>Дата</span>
+        </div>
+        <div class="table_cell cell_sum">
+          <span>Сумма</span>
+        </div>
+      </div>
+
+      <div class="table_row" *ngFor="let document of documents">
+        <div class="table_cell cell_title" data-title="Поставщик:">
+          <div class="supplier_title">
+            <span class="supplier_image" [style]="{'background-color': orgLogo(document.party)}"></span>
+            <span class="supplier_name">{{name(document.party)}}</span>
+          </div>
+        </div>
+        <div class="table_cell cell_number" data-title="Заказ:">
+          {{document.orderNumber}}
+        </div>
+        <div class="table_cell cell_date" data-title="Дата:">
+          {{viewDate(document.orderDate)}}
+        </div>
+        <div class="table_cell cell_sum" data-title="Сумма:">
+          <span class="price">{{viewPrice(document.price)}} ₽</span>
+        </div>
+        <div class="table_cell cell_action">
+          <button type="button" class="btn btn-gray btn_long">Посмотреть заказ</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</nz-spin>

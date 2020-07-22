@@ -1,0 +1,90 @@
+@media all and (max-width: 768px) {
+
+  .table {
+    &_list {
+      display: block;
+      border-bottom: none;
+
+      &__orders {
+        .table_cell {
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+
+        .cell_number {
+          order: 1;
+          font-weight: var(--font-weight-medium);
+          width: auto;
+        }
+
+        .cell_date {
+          order: 2;
+          font-weight: var(--font-weight-medium);
+          width: auto;
+        }
+
+        .cell_title {
+          order: 3;
+          font-weight: var(--font-weight-medium);
+          width: auto;
+        }
+
+        .cell_sum {
+          order: 5;
+          font-weight: var(--font-weight-medium);
+          width: auto;
+        }
+
+        .cell_action {
+          order: 7;
+          display: block;
+          margin-top: 10px;
+        }
+      }
+    }
+
+    &_row {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #BDBDBD;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      padding: 20px 20px 25px 20px;
+
+      &.table_header {
+        display: none;
+      }
+    }
+
+    &_cell {
+      display: flex;
+      align-items: flex-start;
+      border-top: none;
+      height: auto;
+    }
+  }
+
+  .table_cell[data-title]:before {
+    content: attr(data-title);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-12);
+    color: var(--color-main);
+    opacity: 0.6;
+    width: 70px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .table_list__orders .table_cell[data-title]:before {
+    width: auto;
+  }
+  .table_list__orders .cell_number[data-title]:before,
+  .table_list__orders .cell_title[data-title]:before,
+  .table_list__orders .cell_date[data-title]:before,
+  .table_list__orders .cell_sum[data-title]:before {
+    width: 80px;
+  }
+  .table_list__orders .price {
+    font-size: var(--font-size-12);
+  }
+}

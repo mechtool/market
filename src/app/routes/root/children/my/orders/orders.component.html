@@ -1,4 +1,25 @@
-<div class="orders">
+<div class="content-wrapper page-orders page_inner">
+  <div class="page_header">
+    <h2>Мои заказы</h2>
+  </div>
 
-  ORDERS
+  <nz-tabset nzTabPosition="top" nzType="card">
+    <nz-tab nzTitle="Заказы">
+      <my-order-list
+        [documents]="orderDocuments"
+        [isLoading]="isLoadingOrderDocuments"
+        [page]="pageOrderDocuments"
+        (loadDocuments)="loadOrderDocuments($event)"
+      ></my-order-list>
+    </nz-tab>
+
+    <nz-tab nzTitle="Счета">
+      <my-account-list
+        [documents]="accountDocuments"
+        [isLoading]="isLoadingAccountDocuments"
+        [page]="pageAccountDocuments"
+        (loadDocuments)="loadAccountDocuments($event)"
+      ></my-account-list>
+    </nz-tab>
+  </nz-tabset>
 </div>

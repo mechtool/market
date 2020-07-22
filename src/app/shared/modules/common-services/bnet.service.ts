@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
+  CartAddItemRequestModel,
+  CartCreateOrderRequestModel,
+  CartDataResponseModel,
+  CartUpdateItemQuantityRequestModel,
   CategoryRequestModel,
   CategoryResponseModel,
+  DocumentResponseModel,
+  EdiRequestModel,
   LocationModel,
   OrganizationResponseModel,
   ProductOfferRequestModel,
@@ -18,14 +24,8 @@ import {
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
   UserOrganizationModel,
-  CartAddItemRequestModel,
-  CartCreateOrderRequestModel,
-  CartUpdateItemQuantityRequestModel,
-  CartDataResponseModel,
 } from './models';
-import { HttpParams, HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
-import { RelationContentModel } from './models/relation-content.model';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
 const API_URL = environment.apiUrl;
 
@@ -34,7 +34,8 @@ export class BNetService {
   constructor(
     private _apiService: ApiService,
     private _http: HttpClient,
-  ) {}
+  ) {
+  }
 
   getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
@@ -115,7 +116,17 @@ export class BNetService {
     return this._apiService.get(relationHref);
   }
 
-  _params(searchQuery: any): HttpParams {
+  getOrders(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/edi/orders`, { params });
+  }
+
+  getAccounts(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/edi/accounts`, { params });
+  }
+
+  private _params(searchQuery: any): HttpParams {
     if (searchQuery) {
       let params = new HttpParams();
       Object.keys(searchQuery).forEach((queryParam) => {

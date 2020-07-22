@@ -30,7 +30,8 @@ export class AuthService {
 
 
   logout(path: string = '/') {
-    redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${path}`);
+    const routePath = path.includes('/supplier') ? '/' : path;
+    redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
   }
 
   login(path: string = '/'): Observable<any> {

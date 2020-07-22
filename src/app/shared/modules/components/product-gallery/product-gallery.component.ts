@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ImagesLinkModel, ProductDto } from '#shared/modules/common-services/models';
-import { absoluteImagePath, mapStock } from '#shared/utils';
+import { absoluteImagePath, mapStock, resizeBusinessStructure } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -30,6 +30,10 @@ export class ProductGalleryComponent {
 
   get stockLevel() {
     return mapStock(this.stock);
+  }
+
+  get name() {
+    return resizeBusinessStructure(this.supplierName);
   }
 
   constructor() {

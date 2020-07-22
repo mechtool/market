@@ -1,0 +1,134 @@
+.table_list {
+  display: table;
+  width: 100%;
+  border-bottom: 1px solid #ededed;
+  margin-top: 15px;
+
+  &__orders {
+    .cell_title {
+      width: 250px;
+      min-width: 180px;
+      font-weight: var(--font-weight-medium);
+    }
+
+    .cell_number {
+      width: 170px;
+    }
+
+    .cell_date {
+      width: 140px;
+    }
+
+    .cell_sum {
+      width: 105px;
+    }
+
+    .cell_action {
+      display: none;
+    }
+  }
+}
+
+
+.table {
+  &_row {
+    display: table-row;
+    position: relative;
+  }
+
+  &_header {
+    opacity: 0.6;
+
+    .table_cell {
+      vertical-align: top;
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-12);
+      line-height: 15px;
+      border-top: none;
+      height: 45px;
+    }
+  }
+
+  &_cell {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 6px 10px 6px 5px;
+    height: 55px;
+    font-size: var(--font-size-13);
+    line-height: 17px;
+    border-top: 1px solid #ededed;
+  }
+
+}
+
+.cell_title {
+  flex-wrap: wrap;
+}
+
+.supplier_title {
+  display: flex;
+  align-items: center;
+}
+
+.supplier_image {
+  display: flex;
+  align-items: center;
+  margin-right: 7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+}
+
+.price {
+  font-size: var(--font-size-main);
+  font-weight: var(--font-weight-bold);
+  line-height: 19px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.btn,
+button.btn {
+  color: var(--color-main);
+  font-size: var(--font-size-main);
+  font-family: "Futura", serif;
+  font-weight: var(--font-weight-medium);
+  border-radius: 2px;
+  background-color: #ffffff;
+  min-height: 38px;
+  line-height: 38px;
+  border: 1px solid #E0E0E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.2s, border 0.2s;
+}
+
+.btn-gray,
+button.btn-gray {
+  background-color: #F2F2F2;
+  border-color: #F2F2F2;
+}
+
+.btn:hover,
+button.btn:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.btn_long {
+  width: 200px;
+}
+
+
+.icon_scroll {
+  position: fixed;
+  font-size: 50px;
+  color: var(--color-accent-light);
+}

@@ -17,6 +17,7 @@ import { LocationService } from './location.service';
 import { SupplierService } from './supplier.service';
 import { TradeOffersService } from './trade-offers.service';
 import { CartService } from './cart.service';
+import { EdiService } from './edi.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -43,6 +44,7 @@ export class CommonServicesModule {
         SupplierService,
         TradeOffersService,
         CartService,
+        EdiService,
       ],
     };
   }

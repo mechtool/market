@@ -19,6 +19,7 @@ export class AuthOrganizationGuard implements CanActivate {
     return this._userService.userOrganizations$
       .pipe(
         switchMap((organizations) => {
+          console.log('################', organizations); // todo !!!!!! Тут иногда приходит null
           if (organizations?.length) {
             return of(true);
           }

@@ -13,7 +13,7 @@ import {
 } from '#shared/modules';
 import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
-import { stringToRGB } from '#shared/utils';
+import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -35,6 +35,10 @@ export class SupplierSingleComponent {
   tradeOffersTotal: number;
   page: number;
   query: string;
+
+  get name() {
+    return resizeBusinessStructure(this.supplier?.name);
+  }
 
   constructor(
     private _productService: ProductService,

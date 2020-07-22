@@ -14,13 +14,13 @@
         <span class="product_specs__item__label">Штрихкоды:</span>
         <span class="product_specs__item__value">{{product.productBarCodes}}</span>
       </div>
-      <div class="product_specs__item" *ngIf="supplierName">
+      <div class="product_specs__item" *ngIf="name">
         <span class="product_specs__item__label">Поставщик:</span>
         <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
 
         <span class="product_specs__item__value">
             <a [routerLink]="['/supplier/' + supplierId]">
-              <strong>&nbsp;&nbsp;{{supplierName}}</strong>
+              <strong>&nbsp;&nbsp;{{name}}</strong>
             </a>
         </span>
       </div>
@@ -58,10 +58,10 @@
       <span class="product_specs__item__label">Штрихкоды:</span>
       <span class="product_specs__item__value">{{product.productBarCodes}}</span>
     </div>
-    <div class="product_specs__item" *ngIf="supplierName">
+    <div class="product_specs__item" *ngIf="name">
       <span class="product_specs__item__label">Поставщик:</span>
       <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
-      <span class="product_specs__item__value"><strong>&nbsp;&nbsp;{{supplierName}}</strong></span>
+      <span class="product_specs__item__value"><strong>&nbsp;&nbsp;{{name}}</strong></span>
     </div>
     <div class="product_specs__item" *ngIf="stock">
       <span class="product_specs__item__label">Наличие:</span>

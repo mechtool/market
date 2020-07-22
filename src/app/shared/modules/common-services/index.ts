@@ -3,6 +3,7 @@ export * from './api.service';
 export * from './bnet.service';
 export * from './auth.service';
 export * from './cache.service';
+export * from './edi.service';
 export * from './navigation.service';
 export * from './breadcrumbs.service';
 export * from './suggestion.service';
