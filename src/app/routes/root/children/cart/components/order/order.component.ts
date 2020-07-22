@@ -1,10 +1,10 @@
 import { BNetService } from '#shared/modules/common-services/bnet.service';
 import { CartDataOrderModel } from '#shared/modules/common-services/models/cart-data-order.model';
-import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { CartService, UserService, DeliveryMethod, LocationModel, LocationService, AuthService } from '#shared/modules';
-import { map, switchMap, filter, tap, catchError, pairwise, startWith } from 'rxjs/operators';
+import { map, switchMap, filter, tap, catchError, pairwise, startWith, take } from 'rxjs/operators';
 import { stringToHex, absoluteImagePath } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 import { throwError, of } from 'rxjs';
@@ -18,8 +18,9 @@ import { throwError, of } from 'rxjs';
 })
 export class CartOrderComponent implements OnInit, OnDestroy {
   @Input() order: CartDataOrderModel;
-  @Input() orderNum: number; // TODO: дб идентификатор для клиента
+  @Input() orderNum = Math.random().toString(36).slice(-6);
   @Input() userData: boolean;
+  @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
   form: FormGroup;
   availableUserOrganizations: any[];
   foundLocations: LocationModel[] = [];
@@ -129,7 +130,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _watchItemQuantityChanges() {
-
     this.form.get('items')['controls'].forEach((ctrl, ind) => {
 
       const quantityControl = ctrl.controls.quantity;
@@ -147,37 +147,43 @@ export class CartOrderComponent implements OnInit, OnDestroy {
               {
                 quantity: res,
               }
-            )
+            );
           }),
-          catchError((err) => {
+          catchError((_) => {
             return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
               tap((res) => {
-                let foundOrder = res.content.find((x) => {
+                this.cartDataChange.emit(res);
+                const foundOrder = res.content.find((x) => {
                   return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
-                })
+                });
                 this._resetOrder(foundOrder);
               })
-            )
+            );
           }),
           switchMap((res) => {
-            if (!res) {
-              return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value)
-            }
-            return of(null);
+            return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
           }),
         )
         .subscribe((res) => {
           if (res) {
-            let foundOrder = res.content.find((x) => {
+            this.cartDataChange.emit(res);
+            const foundOrder = res.content.find((x) => {
               return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
-            })
-            this._resetOrder(foundOrder);
+            });
+            if (!foundOrder) {
+              this.items.clear();
+              this._cartService.setActualCartData().pipe(take(1)).subscribe();
+              this._cdr.detectChanges();
+            }
+            if (foundOrder) {
+              this._resetOrder(foundOrder);
+            }
           }
-        }, (e) => {
+        }, (_) => {
           this.isOrderLoading = false;
           this._cdr.detectChanges();
         });
-      });
+    });
   }
 
   removeItem(orderItem: any, i: any) {
@@ -193,25 +199,24 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         catchError((err) => {
           return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
             tap((res) => {
-              let foundOrder = res.content.find((x) => {
+              this.cartDataChange.emit(res);
+              const foundOrder = res.content.find((x) => {
                 return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
-              })
+              });
               this._resetOrder(foundOrder);
             })
-          )
+          );
         }),
         switchMap((res) => {
-          if (!res) {
-            return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value)
-          }
-          return of(null);
+          return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
         })
       )
       .subscribe((res) => {
+        this.cartDataChange.emit(res);
         if (res) {
-          let foundOrder = res.content.find((x) => {
+          const foundOrder = res.content.find((x) => {
             return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
-          })
+          });
           this._resetOrder(foundOrder);
         }
         if (!this.items?.length) {
@@ -239,13 +244,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       });
       this._cdr.detectChanges();
     }
+    if (!order) {
+      this.items.clear();
+      this._cdr.detectChanges();
+    }
   }
 
   createOrder() {
-    this.isModalVisible = true;
     if (!!this.userData) {
       if (this.availableUserOrganizations?.length) {
         const data = {
+          documentNumber: this.orderNum,
           customerOrganizationId: this.form.get('consumerId').value,
           contacts: {
             name: this.form.get('contactName').value,
@@ -268,17 +277,24 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           .pipe(
             switchMap(_ => this._cartService.setActualCartData())
           )
-          .subscribe((_) => {
-            this.modalType ='orderSent';
+          .subscribe((res) => {
+            this.isModalVisible = true;
+            this.modalType = 'orderSent';
+            this.cartDataChange.emit(res);
+            this.items.clear();
             this._cdr.detectChanges();
+          }, (e) => {
+            console.log(e);
           });
       }
       if (!this.availableUserOrganizations?.length) {
+        this.isModalVisible = true;
         this.modalType = 'addOrganization';
         return;
       }
     }
     if (!this.userData) {
+      this.isModalVisible = true;
       this.modalType = 'registerOrAuth';
       return;
     }
