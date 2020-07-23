@@ -9,7 +9,10 @@ export class LocationService {
   constructor(private _bnetService: BNetService) {}
 
   searchLocations(textQuery: string): Observable<LocationModel[]> {
-    return this._bnetService.searchLocations(textQuery);
+    if (textQuery.length) {
+      return this._bnetService.searchLocations(textQuery);
+    }
+    return null;
   }
 
 }

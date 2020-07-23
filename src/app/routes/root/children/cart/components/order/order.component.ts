@@ -1,13 +1,15 @@
+import { RelationEnumModel } from '#shared/modules/common-services/models/relation-enum.model';
 import { BNetService } from '#shared/modules/common-services/bnet.service';
 import { CartDataOrderModel } from '#shared/modules/common-services/models/cart-data-order.model';
 import { Component, OnInit, OnDestroy, Input, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { CartService, UserService, DeliveryMethod, LocationModel, LocationService, AuthService } from '#shared/modules';
-import { map, switchMap, filter, tap, catchError, pairwise, startWith, take } from 'rxjs/operators';
+import { CartService, UserService, DeliveryMethod, LocationModel, LocationService, AuthService, TradeOffersService } from '#shared/modules';
+import { map, switchMap, filter, tap, catchError, pairwise, startWith, take, mergeMap } from 'rxjs/operators';
 import { stringToHex, absoluteImagePath } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
-import { throwError, of } from 'rxjs';
+import { throwError, of, iif } from 'rxjs';
+import { Router } from '@angular/router';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -32,17 +34,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     { label: '12-15', value: '12-15' },
     { label: '15-18', value: '15-18' },
   ];
-  private _availabilityConverter =  {
-    NoOfferAvailable: 'Нет в наличии',
-    TemporarilyOutOfSales: 'Временно снят с продажи',
-    AvailableForOrder: 'На складе',
-  };
   isOrderLoading = false;
 
   deliveryOptions = [];
 
   get consumerName(): string {
-    return this.form.get('consumerName').value.trim();
+    return this.form.get('consumerName').value?.trim();
   }
 
   get supplierName(): string {
@@ -69,12 +66,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return +this.form.get('totalCost').value;
   }
 
-  get vat(): number {
-    return +this.form.get('vat').value;
+  get totalVat(): number {
+    return +this.form.get('totalVat').value;
   }
 
   get deliveryMethod(): string {
-    return this.form.get('deliveryMethod').value.trim();
+    return this.form.get('deliveryMethod').value?.trim();
   }
 
   get pickupPoints(): any[] {
@@ -90,7 +87,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get orderRelationHref(): string {
-    return this.order._links['https://rels.1cbn.ru/marketplace/make-order'].href;
+    return this.order._links[RelationEnumModel.ORDER_CREATE].href;
   }
 
   constructor(
@@ -101,6 +98,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _locationService: LocationService,
     private _authService: AuthService,
     private _bnetService: BNetService,
+    private _router: Router,
+    private _tradeOffersService: TradeOffersService,
   ) {}
 
   ngOnInit() {
@@ -119,14 +118,32 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.get('deliveryArea').valueChanges
       .pipe(
         filter(res => typeof res === 'string'),
-        switchMap(res => this._locationService.searchLocations(res))
+        mergeMap((v) => {
+          return iif(() => {
+            return !this.order.deliveryOptions.deliveryZones;
+          }, this._locationService.searchLocations(v), this._searchInDeliveryZones(v));
+        }),
       )
       .subscribe((res) => {
+        console.log(this.form);
         this.foundLocations = res;
         this._cdr.detectChanges();
       }, (err) => {
         console.error(err);
       });
+  }
+
+  private _searchInDeliveryZones(val: string) {
+    const mapped = this.order.deliveryOptions.deliveryZones?.map((zone) => {
+      return {
+        fias: zone.fiasCode,
+        name: zone.title,
+        fullName: zone.title,
+      };
+    });
+    return of(mapped?.filter((zone) => {
+      return zone.fullName.toLowerCase().includes(val.toLowerCase());
+    }));
   }
 
   private _watchItemQuantityChanges() {
@@ -138,12 +155,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           tap(_ => this.isOrderLoading = true),
           switchMap((res) => {
             return res === 0 ? this._cartService.handleRelation(
-              'https://rels.1cbn.ru/marketplace/shopping-cart/remove-item',
-              ctrl.value['_links']['https://rels.1cbn.ru/marketplace/shopping-cart/remove-item'].href
+              RelationEnumModel.ITEM_REMOVE,
+              ctrl.value['_links'][RelationEnumModel.ITEM_REMOVE].href
             ) :
             this._cartService.handleRelation(
-              'https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity',
-              ctrl.value['_links']['https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity'].href,
+              RelationEnumModel.ITEM_UPDATE_QUANTITY,
+              ctrl.value['_links'][RelationEnumModel.ITEM_UPDATE_QUANTITY].href,
               {
                 quantity: res,
               }
@@ -154,7 +171,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
               tap((res) => {
                 this.cartDataChange.emit(res);
                 const foundOrder = res.content.find((x) => {
-                  return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
+                  return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
                 });
                 this._resetOrder(foundOrder);
               })
@@ -168,7 +185,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           if (res) {
             this.cartDataChange.emit(res);
             const foundOrder = res.content.find((x) => {
-              return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
+              return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
             });
             if (!foundOrder) {
               this.items.clear();
@@ -192,8 +209,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     }
     this.isOrderLoading = true;
     this._cartService.handleRelation(
-      'https://rels.1cbn.ru/marketplace/shopping-cart/remove-item',
-      orderItem._links.value['https://rels.1cbn.ru/marketplace/shopping-cart/remove-item'].href
+      RelationEnumModel.ITEM_REMOVE,
+      orderItem._links.value[RelationEnumModel.ITEM_REMOVE].href
     )
       .pipe(
         catchError((err) => {
@@ -201,7 +218,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             tap((res) => {
               this.cartDataChange.emit(res);
               const foundOrder = res.content.find((x) => {
-                return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
+                return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
               });
               this._resetOrder(foundOrder);
             })
@@ -215,7 +232,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         this.cartDataChange.emit(res);
         if (res) {
           const foundOrder = res.content.find((x) => {
-            return x._links['https://rels.1cbn.ru/marketplace/make-order'].href === this.orderRelationHref;
+            return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
           });
           this._resetOrder(foundOrder);
         }
@@ -273,7 +290,23 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             } })
           }
         };
-        this._cartService.handleRelation('https://rels.1cbn.ru/marketplace/make-order', this.orderRelationHref, data)
+        let comments = '';
+        if (this.form.get('deliveryDesirableDate').value) {
+          comments += `Желаемая дата доставки: ${this.form.get('deliveryDesirableDate').value}
+          `;
+        }
+        if (this.form.get('deliveryDesirableTimeInterval').value) {
+          comments += `Желаемый временной интервал: ${this.form.get('deliveryDesirableTimeInterval').value}
+          `;
+        }
+        if (this.form.get('commentForSupplier').value) {
+          comments += `Комментарий: ${this.form.get('commentForSupplier').value}
+          `;
+        }
+        if (comments) {
+          data['comments'] = comments;
+        }
+        this._cartService.handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
           .pipe(
             switchMap(_ => this._cartService.setActualCartData())
           )
@@ -331,11 +364,34 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
+  goToTradeOffer(tradeOfferRelationHref: string) {
+    if (tradeOfferRelationHref) {
+      const splittedTradeOfferRelationHref = tradeOfferRelationHref.split('/');
+      const tradeOfferId = splittedTradeOfferRelationHref[splittedTradeOfferRelationHref.length - 1];
+      this._tradeOffersService.get(tradeOfferId)
+        .subscribe((res) => {
+          const supplierId = res.supplier?.bnetInternalId;
+          if (supplierId) {
+            this._router.navigate([`./supplier/${supplierId}/offer/${tradeOfferId}`]);
+          }
+          if (!supplierId) {
+            console.log('Не удалось получить поставщика по ТП');
+          }
+        });
+    }
+    if (!tradeOfferRelationHref) {
+      console.log('Отсутствует идентификатор ТП');
+    }
+  }
+
   private _setDeliveryOptions() {
     if (this.order.deliveryOptions?.pickupPoints?.length) {
       this.deliveryOptions.push({ label: 'Самовывоз', value: DeliveryMethod.PICKUP });
     }
     if (this.order.deliveryOptions?.deliveryZones?.length) {
+      this.deliveryOptions.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
+    }
+    if (!this.deliveryOptions?.length) {
       this.deliveryOptions.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
     }
   }
@@ -347,8 +403,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       consumerKPP: new FormControl(''),
       consumerId: new FormControl(''),
       totalCost: new FormControl(this.order.costSummary.totalCost),
-      vat: new FormControl(this.order.costSummary.vat),
-      deliveryMethod: new FormControl(this.deliveryOptions?.[0].value, [Validators.required]),
+      totalVat: new FormControl(this.order.costSummary.totalVat),
+      deliveryMethod: new FormControl(this.deliveryOptions?.[0]?.value, [Validators.required]),
       deliveryArea: new FormControl(''),
       contactName:  new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
       contactPhone:  new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
@@ -364,14 +420,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this._fb.group({
       productName: product.productName,
       productDescription: product.productDescription,
-      barCodes: this._fb.array(product.barCodes),
+      barCodes: this._fb.array(product?.barCodes || []),
       partNumber: product.partNumber,
       packaging: product.packaging,
       imageUrl: this._setImageUrl(product.imageUrls),
       quantity: product.quantity,
       price: product.price,
       maxDaysForShipment: product.maxDaysForShipment,
-      availabilityStatus: this._availabilityConverter[product.availabilityStatus] || 'Нет в наличии',
+      availabilityStatus: product.availabilityStatus,
       vat: product.costSummary.vat,
       totalCost: product.costSummary.totalCost,
       _links: product._links,

@@ -10,6 +10,7 @@ import {
   TradeOfferSummaryPriceModel,
   TradeOfferVatEnumModel,
   CartService,
+  RelationEnumModel,
 } from '#shared/modules';
 import { ActivatedRoute, Router } from '@angular/router';
 import { absoluteImagePath, containParametersForRequest, mapStock, queryParamsFrom } from '#shared/utils';
@@ -57,14 +58,13 @@ export class SupplierTradeOffersListComponent {
   }
 
   addItemToCart(tradeOffer: TradeOfferSummaryModel) {
-    // TODO: Руслан поправь в нужных местах
     const cartLocation = this._cartService.getCart$().value;
     const data = {
       tradeOfferId: tradeOffer.id,
-      quantity: 1, /* TODO < */
+      quantity: 1,
     };
     this._cartService.handleRelationAndUpdateData(
-      'https://rels.1cbn.ru/marketplace/shopping-cart/add-item',
+      RelationEnumModel.ITEM_ADD,
       `${cartLocation}/items`,
       data,
     ).subscribe();

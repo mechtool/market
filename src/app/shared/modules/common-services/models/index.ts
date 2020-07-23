@@ -8,6 +8,7 @@ export * from './category-response.model';
 export * from './category-request.model';
 export * from './default-search-available.model';
 export * from './delivery-method-enum.model';
+export * from './relation-enum.model';
 export * from './document-response.model';
 export * from './document-dto';
 export * from './images-link.model';

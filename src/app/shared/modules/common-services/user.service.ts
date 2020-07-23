@@ -16,26 +16,10 @@ export class UserService {
     private _organizationsService: OrganizationsService,
     private _bnetService: BNetService,
   ) {
-    // TODO: для теста (пока оставить)
-    // setTimeout(() => {
-    //   console.log(1);
-    //   this.setUserData({da:1});
-    // }, 1e4);
-    // setTimeout(() => {
-    //   console.log(2);
-    //   this.userData$.next(null);
-    // }, 15e3);
   }
 
-  setUserData(data: any, fromNextTick = true): void {
-    if (fromNextTick) {
-      setTimeout(() => {
-        this.userData$.next(data);
-      }, 0);
-    }
-    if (!fromNextTick) {
-      this.userData$.next(data);
-    }
+  setUserData(data: any): void {
+    this.userData$.next(data);
   }
 
   // TODO: может позже рефакторнуть - убрать логику лишнюю

@@ -35,12 +35,12 @@ export class CartDataOrderResponseModel {
   deliveryOptions: {
     pickupPoints?: {
       fiasCode: string;
-      name: string;
+      title: string;
       countryOksmCode: string;
     }[];
     deliveryZones?: {
       fiasCode: string;
-      name: string;
+      title: string;
       countryOksmCode: string;
     }[];
   };

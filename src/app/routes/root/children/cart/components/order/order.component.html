@@ -149,22 +149,22 @@
           <ng-container [formGroupName]="i">
             <div class="cell_left">
               <div class="cell_image">
-                <img src="{{form.get('items')['controls'][i].controls.imageUrl.value}}" alt="" title="">
+                <img src="{{form.get('items')['controls'][i].controls.imageUrl.value}}" alt="{{form.get('items')['controls'][i].controls.productName.value}}" title="{{form.get('items')['controls'][i].controls.productName.value}}">
               </div>
             </div>
             <div class="cell_right">
-              <div class="table_cell cell_title">
-                <span title="Браслет Honor Band 5 четвертая версия">{{form.get('items')['controls'][i].controls.productName.value}}</span>
+              <div class="table_cell cell_title" (click)="goToTradeOffer(form.get('items')['controls'][i].controls._links.value['https://rels.1cbn.ru/marketplace/trade-offer-view'].href)">
+                <span title="{{form.get('items')['controls'][i].controls.productName.value}}">{{form.get('items')['controls'][i].controls.productName.value}}
+                </span>
               </div>
               <div class="table_cell cell_article" data-title="Артикул:">
                 {{form.get('items')['controls'][i].controls.partNumber.value}}
               </div>
               <div class="table_cell cell_available" data-title="Доступность:">
-                {{form.get('items')['controls'][i].controls.availabilityStatus.value}}
+                {{form.get('items')['controls'][i].controls.availabilityStatus.value | myAvailability}}
               </div>
-              <div class="table_cell cell_count" data-title="Количество:">
+              <div class="table_cell cell_count" data-title="Количество:" [ngClass]="{'not_clickable': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}">
                 <my-cart-order-qty-counter formControlName="quantity" [isDisabled]="isOrderLoading"></my-cart-order-qty-counter>
-                <!-- <input  formControlName="quantity"> -->
               </div>
               <div class="table_cell cell_price_one">
                 <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
@@ -196,7 +196,7 @@
       <div class="section_paragraph">
         <div class="info_group__small">
           <div class="info_group">
-            <span class="info_group__label">Способ доставки</span>
+            <span class="info_group__label">Доступные способы доставки</span>
             <span class="info_group__value">{{deliveryOptions | myArrayJoiner: 'label'}}</span>
           </div>
         </div>
@@ -210,7 +210,7 @@
             </nz-radio-group>
           </div>
           <div class="order__shipping_type order__shipping_pickup showed">
-            <p><strong>Адреса самовывоза:</strong> {{pickupPoints | myArrayJoiner: 'name':'; '}}</p>
+            <p><strong>Адреса самовывоза:</strong> {{pickupPoints | myArrayJoiner: 'title':'; '}}</p>
           </div>
           <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
             <div class="form-group form-group-long">
@@ -307,7 +307,7 @@
       <div class="order__total_label">Итого:</div>
       <div class="order__total_value">{{totalCost | myMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
     </div>
-    <div class="order__total_nds">Включая налог НДС {{vat / 100 | percent}}</div>
+    <div class="order__total_nds">Включая НДС {{totalVat | myMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
     <div class="order__total_btn">
       <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Оформить заказ</button>
     </div>

@@ -1,3 +1,7 @@
+.not_clickable {
+  pointer-events: none;
+}
+
 .d-none {
   display: none;
 }
@@ -225,6 +229,7 @@ button.btn:hover {
 }
 
 .table_list__products .cell_title {
+  cursor: pointer;
   width: 265px;
   font-weight: var(--font-weight-medium);
   padding-right: 30px;
@@ -232,6 +237,7 @@ button.btn:hover {
 }
 
 .table_list__products .table_header .cell_title {
+  cursor: default;
   padding-left: 0;
 }
 
@@ -325,7 +331,10 @@ button.btn:hover {
 }
 
 .table_list__basket .cell_sum {
-  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   min-width: 100px;
   white-space: nowrap;
   flex-wrap: wrap;
@@ -1226,6 +1235,8 @@ textarea:focus {
   }
   .table_list__basket .cell_sum {
     flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
   }
   .table_list__basket .cell_sum[data-title]:before {
     width: 100%;

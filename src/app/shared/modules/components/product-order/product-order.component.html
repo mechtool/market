@@ -17,7 +17,7 @@
     <div class="to_cart__wrap">
       <h3>Добавить товар в корзину</h3>
       <div class="to_cart__btn_wrap">
-        <button type="button" class="btn btn-yellow to_cart__btn" (click)="order()"></button>
+        <button type="button" class="btn btn-yellow to_cart__btn" (click)="addToCart()"></button>
       </div>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
         <span itemprop="price">{{price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>

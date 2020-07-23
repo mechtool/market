@@ -1,15 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import {
-  CartDataModel,
-  CartDataOrderModel,
-  CartDataResponseModel,
   LocationModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
   SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
+  CartDataOrderModel,
+  CartDataModel,
+  CartDataResponseModel,
+  RelationEnumModel,
 } from '../common-services/models';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
@@ -150,9 +151,9 @@ export class LocalStorageService {
 
     if (currentCartData && orderData) {
       const currentDataContent = currentCartData?.content;
-      const orderRelationRef = orderData._links['https://rels.1cbn.ru/marketplace/make-order'].href;
+      const orderRelationRef = orderData._links[RelationEnumModel.ORDER_CREATE].href;
       const orderFoundInCurrentDataContent = currentDataContent?.find((item, ind) => {
-        if (item._links['https://rels.1cbn.ru/marketplace/make-order'].href === orderRelationRef) {
+        if (item._links[RelationEnumModel.ORDER_CREATE].href === orderRelationRef) {
           foundInd = ind;
           return true;
         }

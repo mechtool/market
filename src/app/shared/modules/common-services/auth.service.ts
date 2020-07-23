@@ -46,7 +46,7 @@ export class AuthService {
       return this.auth({ ticket, serviceName })
         .pipe(
           map((authResponse: AuthResponseModel) => {
-            this._userService.setUserData(authResponse, false);
+            this._userService.setUserData(authResponse);
             this._userService.updateUserOrganizations();
             this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
             return true;

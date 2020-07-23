@@ -1,15 +1,16 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd';
 import { fromEvent } from 'rxjs';
-import { debounceTime, filter, switchMap } from 'rxjs/operators';
+import { debounceTime, filter, switchMap, map } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import {
   TradeOfferPriceMatrixModel,
   TradeOfferResponseModel,
   TradeOfferStockEnumModel,
   TradeOfferVatEnumModel,
-  CartService
+  CartService,
+  RelationEnumModel
 } from '#shared/modules/common-services';
 
 enum OrderStatus { NOT_AVAILABLE, TO_CART, IN_CART }
@@ -24,7 +25,7 @@ enum OrderStatus { NOT_AVAILABLE, TO_CART, IN_CART }
     './product-order.component-576.scss',
   ],
 })
-export class ProductOrderComponent {
+export class ProductOrderComponent implements OnInit {
 
   @Input() tradeOffer: TradeOfferResponseModel;
   @ViewChild('matrixModal') ref: NzModalRef;
@@ -69,6 +70,10 @@ export class ProductOrderComponent {
       .sort((one, two) => one.fromPackages - two.fromPackages);
   }
 
+  get cartData$() {
+    return this._cartService.getCartData$();
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _cartService: CartService,
@@ -76,41 +81,83 @@ export class ProductOrderComponent {
     this.form = this._fb.group({
       totalPositions: 0
     });
+  }
+
+  ngOnInit() {
     this._initOrderStatus();
-    this.vat = this._vat();
+    this.vat = this._getVat();
     this._closeModalOnResolutionChanges();
+    this.cartData$.subscribe((res) => {
+      const tradeOfferId = this.tradeOffer.id;
+      const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
+        return [...curr.items, ...accum];
+      }, []);
+      const foundTradeOffer = cartTradeOffers.find((x) => {
+        const hrefSplitted = x._links[RelationEnumModel.TRADEOFFER_VIEW].href.split('/');
+        return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
+      });
+      if (foundTradeOffer) {
+        this.orderStatus = OrderStatus.IN_CART;
+        this.form.patchValue({ totalPositions: foundTradeOffer.quantity });
+      }
+      if (!foundTradeOffer) {
+        this.orderStatus = OrderStatus.TO_CART;
+        this.form.patchValue({ totalPositions: null });
+      }
+    });
   }
 
-  order() {
-    // TODO: Руслан поправь в нужных местах
-    const cartLocation = this._cartService.getCart$().value;
-    const data = {
-      tradeOfferId: this.tradeOffer.id,
-      quantity: 1, /* TODO < */
-    };
-    this._cartService.handleRelationAndUpdateData(
-      'https://rels.1cbn.ru/marketplace/shopping-cart/add-item',
-      `${cartLocation}/items`,
-      data,
-    ).subscribe();
-
-    this.orderStatus = OrderStatus.IN_CART;
-    this.increase();
-  }
-
-  decrease() {
-    this.form.patchValue({ totalPositions: this.form.get('totalPositions').value - 1 });
-    if (this.form.get('totalPositions').value <= 0) {
+  private _initOrderStatus() {
+    if (this.tradeOffer?.termsOfSale.temporarilyOutOfSales ||
+      this.tradeOffer?.stock?.stockBalanceSummary?.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
+      this.orderStatus = OrderStatus.NOT_AVAILABLE;
+    } else {
       this.orderStatus = OrderStatus.TO_CART;
     }
   }
 
-  increase() {
-    if (this.form.get('totalPositions').value === null || this.form.get('totalPositions').value <= 0) {
-      this.form.patchValue({ totalPositions: 1 });
-    } else {
-      this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + 1 });
+  addToCart() {
+    const cartLocation = this._cartService.getCart$().value;
+    const data = {
+      tradeOfferId: this.tradeOffer.id,
+      quantity: 1,
+    };
+    this._cartService.handleRelationAndUpdateData(
+      RelationEnumModel.ITEM_ADD,
+      `${cartLocation}/items`,
+      data,
+    ).subscribe();
+  }
+
+  decrease() {
+    const cartLocation = this._cartService.getCart$().value;
+    const data = {
+      quantity: this.form.get('totalPositions').value - 1,
+    };
+    if (data.quantity <= 0) {
+      this._cartService.handleRelationAndUpdateData(
+        RelationEnumModel.ITEM_REMOVE,
+        `${cartLocation}/items/${this.tradeOffer.id}`,
+      ).subscribe();
+      return;
     }
+    this._cartService.handleRelationAndUpdateData(
+      RelationEnumModel.ITEM_UPDATE_QUANTITY,
+      `${cartLocation}/items/${this.tradeOffer.id}/quantity`,
+      data,
+    ).subscribe();
+  }
+
+  increase() {
+    const cartLocation = this._cartService.getCart$().value;
+    const data = {
+      quantity: this.form.get('totalPositions').value + 1,
+    };
+    this._cartService.handleRelationAndUpdateData(
+      RelationEnumModel.ITEM_UPDATE_QUANTITY,
+      `${cartLocation}/items/${this.tradeOffer.id}/quantity`,
+      data,
+    ).subscribe();
   }
 
   private _closeModalOnResolutionChanges(): void {
@@ -129,7 +176,7 @@ export class ProductOrderComponent {
     );
   }
 
-  private _vat() {
+  private _getVat() {
     if (this.tradeOffer?.termsOfSale.price && this.tradeOffer?.termsOfSale.price.includesVAT) {
       switch (this.tradeOffer.termsOfSale.price.vat) {
         case TradeOfferVatEnumModel.VAT_10:
@@ -141,15 +188,6 @@ export class ProductOrderComponent {
       }
     }
     return 'Без НДС';
-  }
-
-  private _initOrderStatus() {
-    if (this.tradeOffer?.termsOfSale?.temporarilyOutOfSales ||
-      this.tradeOffer?.stock?.stockBalanceSummary?.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
-      this.orderStatus = OrderStatus.NOT_AVAILABLE;
-    } else {
-      this.orderStatus = OrderStatus.TO_CART;
-    }
   }
 
   private _closest(matrix: TradeOfferPriceMatrixModel[], total: number): number {

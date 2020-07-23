@@ -3,7 +3,7 @@ import { catchError, map, tap, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
-import { CartAddItemRequestModel, CartCreateOrderRequestModel, CartUpdateItemQuantityRequestModel, CartDataResponseModel, CartDataModel, CartDataOrderModel } from './models';
+import { CartAddItemRequestModel, CartCreateOrderRequestModel, CartUpdateItemQuantityRequestModel, CartDataResponseModel, CartDataModel, CartDataOrderModel, RelationEnumModel } from './models';
 
 @Injectable()
 export class CartService {
@@ -101,23 +101,31 @@ export class CartService {
   }
 
   // Регулирование релейшнов
-  handleRelation(relationType: string, relationHref: string, data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any): Observable<any> {
-    switch(relationType) {
-      case 'https://rels.1cbn.ru/marketplace/shopping-cart/add-item':
+  handleRelation(
+    relationType: string,
+    relationHref: string,
+    data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any,
+  ): Observable<any> {
+    switch (relationType) {
+      case RelationEnumModel.ITEM_ADD:
         return this._bnetService.addItemToCart(relationHref, data);
-      case 'https://rels.1cbn.ru/marketplace/make-order':
+      case RelationEnumModel.ORDER_CREATE:
         return this._bnetService.createOrder(relationHref, data);
-      case 'https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity':
+      case RelationEnumModel.ITEM_UPDATE_QUANTITY:
         return this._bnetService.updateItemQuantityInCart(relationHref, data);
-      case 'https://rels.1cbn.ru/marketplace/shopping-cart/remove-item':
+      case RelationEnumModel.ITEM_REMOVE:
         return this._bnetService.removeItemFromCart(relationHref);
-      case 'https://rels.1cbn.ru/marketplace/trade-offer-view':
+      case RelationEnumModel.TRADEOFFER_VIEW:
         return this._bnetService.getTradeOfferFromCart(relationHref);
     }
   }
 
   // Для внешних компонентов
-  handleRelationAndUpdateData(relationType: string, relationHref: string, data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any): Observable<any> {
+  handleRelationAndUpdateData(
+    relationType: string,
+    relationHref: string,
+    data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any,
+  ): Observable<any> {
     return this.handleRelation(relationType, relationHref, data).pipe(
       switchMap(_ => this.setActualCartData())
     );
@@ -147,13 +155,14 @@ export class CartService {
 
   // Объединение двух моделей корзины
   private _mergeCardDataCurrentWithResponse(data: CartDataResponseModel, currentData: CartDataModel): CartDataModel {
-    // TODO: пока только consumer
     let content = null;
     if (currentData) {
       const currentDataContent = currentData?.content;
       content =  data.content.reduce((accum, curr) => {
-        const orderRelationRef = curr._links['https://rels.1cbn.ru/marketplace/make-order'].href;
-        const orderFoundInCurrentDataContent = currentDataContent?.find(item => item._links['https://rels.1cbn.ru/marketplace/make-order'].href === orderRelationRef);
+        const orderRelationRef = curr._links[RelationEnumModel.ORDER_CREATE].href;
+        const orderFoundInCurrentDataContent = currentDataContent?.find((item) => {
+          return item._links[RelationEnumModel.ORDER_CREATE].href === orderRelationRef;
+        });
         const newOrder = JSON.parse(JSON.stringify(curr));
         newOrder.consumer = orderFoundInCurrentDataContent?.consumer || null;
         accum.push(newOrder);
