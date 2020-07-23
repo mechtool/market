@@ -3,21 +3,21 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { environment } from '#environments/environment';
-import {
-  redirectTo,
-  getQueryStringWithoutParam,
-  getParamFromQueryString
-} from '#shared/utils';
+import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
-import {
-  AuthRequestModel,
-  AuthRefreshRequestModel,
-  AuthResponseModel,
-} from './models';
+import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel, } from './models';
 import { UserService } from './user.service';
 
 const API_URL = environment.apiUrl;
 const ITS_URL = environment.itsUrl;
+/**
+ * URL пути находящиеся под аутентификацией
+ */
+const pathsWithAuth = [
+  /^\/supplier$/i,
+  /^\/my\/organizations$/i,
+  /^\/my\/orders$/i,
+];
 
 @Injectable()
 export class AuthService {
@@ -26,11 +26,11 @@ export class AuthService {
     private _apiService: ApiService,
     private _userService: UserService,
     private _router: Router,
-  ) {}
-
+  ) {
+  }
 
   logout(path: string = '/') {
-    const routePath = path.includes('/supplier') ? '/' : path;
+    const routePath = this.isPathWithAuth(path) ? '/' : path;
     redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
   }
 
@@ -78,5 +78,9 @@ export class AuthService {
     location.assign(`${ITS_URL}/login?service=${url}`);
   }
 
+  private isPathWithAuth(currentUrl: string): boolean {
+    const urlWithoutQueryParams = currentUrl.split('?')[0];
+    return pathsWithAuth.some(regEx => regEx.test(urlWithoutQueryParams));
+  }
 
 }

@@ -25,7 +25,6 @@ const routes: Routes = [
         loadChildren: () => import('./routes/root/children/search/search.module').then(m => m.SearchModule),
       }, {
         path: 'supplier',
-        canActivate: [AuthGuard],
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/supplier/supplier.module').then(m => m.SupplierModule),
       }, {

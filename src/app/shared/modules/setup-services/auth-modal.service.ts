@@ -3,36 +3,51 @@ import { NzModalService } from 'ng-zorro-antd';
 import { AuthService } from '#shared/modules/common-services';
 import { RouterStateSnapshot } from '@angular/router';
 
+/**
+ * URL пути находящиеся под аутентификацией
+ */
+const pathsWithAuth = [
+  /^\/supplier$/i,
+  /^\/my\/organizations$/i,
+  /^\/my\/orders$/i,
+];
+
 @Injectable()
 export class AuthModalService {
 
-  private suppliersUrlPathMatcher = /supplier/i;
-  private supplierDataUrlPathMatcher = /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$|^\/supplier\/(?:([^\/]+?))$/i;
-
   constructor(
-    private modal: NzModalService,
+    private _modalService: NzModalService,
     private _authService: AuthService,
   ) {
   }
 
   openNotAuthRouterModal(state: RouterStateSnapshot, currentUrl: string) {
-    this.modal.confirm({
-      nzTitle: '<b>Раздел доступен авторизованным пользователям</b>',
-      nzContent: '<i>Для продолжения необходимо зарегистрироваться или войти в свой 1С аккаунт</i>',
+    this._modalService.confirm({
+      nzWidth: 530,
+      nzTitle: '<b>Авторизуйтесь</b>',
+      nzContent: '<i>Раздел доступен авторизованным пользователям. ' +
+        'Для продолжения необходимо зарегистрироваться или войти в свой аккаунт 1C.</i>',
       nzOkText: 'Вход',
       nzOnOk: () => this._authService.login(state.url),
-      nzOnCancel: () => this._authService.goTo(currentUrl.match(this.suppliersUrlPathMatcher) ? '/' : currentUrl),
+      nzOnCancel: () => this._authService.goTo(this.isPathWithAuth(currentUrl) ? '/' : currentUrl),
     });
   }
 
   openNotOrganizationsRouterModal(state: RouterStateSnapshot, currentUrl: string) {
-    this.modal.confirm({
-      nzTitle: '<b>Раздел доступен для пользователей зарегистрировавших свою организацию</b>',
-      nzContent: '<i>Для продолжения необходимо зарегистрировать свою организацию в 1C:Бизнес-сеть</i>',
+    this._modalService.confirm({
+      nzWidth: 575,
+      nzTitle: '<b>Зарегистрируйте свою организацию</b>',
+      nzContent: '<i>Раздел доступен пользователям зарегистрировавшим организацию. ' +
+        'Для продолжения необходимо зарегистрировать свою организацию в 1C:Бизнес-сеть.</i>',
       nzOkText: 'Зарегистрировать',
       nzOnOk: () => this._authService.goTo('/my/organizations/new'),
-      nzOnCancel: () => this._authService.goTo(currentUrl.match(this.supplierDataUrlPathMatcher) ? '/supplier' : currentUrl),
+      nzOnCancel: () => this._authService.goTo(currentUrl),
     });
+  }
+
+  private isPathWithAuth(currentUrl: string): boolean {
+    const urlWithoutQueryParams = currentUrl.split('?')[0];
+    return pathsWithAuth.some(regEx => regEx.test(urlWithoutQueryParams));
   }
 
 }
