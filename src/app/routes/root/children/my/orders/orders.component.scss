@@ -4,3 +4,16 @@
   display: flex;
   align-items: center;
 }
+
+.account:after {
+  content: attr(new-accounts);
+  display: inline-block;
+  line-height: 20px;
+  padding: 0 5px;
+  background-color: var(--color-accent-secondary);
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-medium);
+  margin-left: 3px;
+}

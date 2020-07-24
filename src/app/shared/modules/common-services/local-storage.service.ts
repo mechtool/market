@@ -1,20 +1,20 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import {
+  CartDataModel,
+  CartDataOrderModel,
+  CartDataResponseModel,
   LocationModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
   SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
-  CartDataOrderModel,
-  CartDataOrderResponseModel,
-  CartDataModel,
-  CartDataResponseModel,
 } from '../common-services/models';
 
-const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'local_search_queries_history_list';
-const USER_LOCATION_STORAGE_KEY = 'local_user_location';
+const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
+const USER_LOCATION_STORAGE_KEY = 'user_location';
+const LAST_DATE_USER_ACCOUNT_STORAGE_KEY = 'last_date_user_account';
 const CART_LOCATION_STORAGE_KEY = 'cart_location';
 const CART_DATA_STORAGE_KEY = 'cart_data';
 
@@ -155,9 +155,8 @@ export class LocalStorageService {
         if (item._links['https://rels.1cbn.ru/marketplace/make-order'].href === orderRelationRef) {
           foundInd = ind;
           return true;
-        } else {
-          return false
         }
+        return false;
       });
       const newOrder = JSON.parse(JSON.stringify(orderFoundInCurrentDataContent));
       newOrder.consumer = orderFoundInCurrentDataContent ? orderData.consumer || null : null;
@@ -165,7 +164,17 @@ export class LocalStorageService {
       currentCartData?.content.splice(foundInd, 1, newOrder);
       this._storage.set(CART_DATA_STORAGE_KEY, currentCartData);
     }
+  }
 
+  getLastDateUserAccount(uin: string): number {
+    const lastDates = this._storage.get(LAST_DATE_USER_ACCOUNT_STORAGE_KEY) || {};
+    return lastDates[uin];
+  }
+
+  putLastDateUserAccount(uin: string, newLastDate: number) {
+    const lastDates = this._storage.get(LAST_DATE_USER_ACCOUNT_STORAGE_KEY) || {};
+    lastDates[uin] = newLastDate;
+    this._storage.set(LAST_DATE_USER_ACCOUNT_STORAGE_KEY, lastDates);
   }
 
   private toHexId(text: string): string {

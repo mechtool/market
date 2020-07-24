@@ -26,14 +26,6 @@ export class OrderListComponent {
     return resizeBusinessStructure(name);
   }
 
-  viewDate(date: number) {
-    return new Date(date).toLocaleString();
-  }
-
-  viewPrice(price: number) {
-    return price / 100;
-  }
-
   orgLogo(name: string) {
     return stringToRGB(name);
   }

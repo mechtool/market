@@ -32,17 +32,15 @@
           {{document.orderNumber}}
         </div>
         <div class="table_cell cell_date" data-title="Дата:">
-          {{viewDate(document.orderDate)}}
+          {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
         </div>
         <div class="table_cell cell_sum" data-title="Сумма:">
-          <span class="price">{{viewPrice(document.price)}} ₽</span>
+          <span class="price">{{document.price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
         </div>
         <div class="table_cell cell_action">
           <button type="button" class="btn btn-gray btn_long">Посмотреть заказ</button>
         </div>
       </div>
-
     </div>
-
   </div>
 </nz-spin>

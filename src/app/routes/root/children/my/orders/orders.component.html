@@ -13,7 +13,11 @@
       ></my-order-list>
     </nz-tab>
 
-    <nz-tab nzTitle="Счета">
+    <ng-template #account>
+      <div class="account" [attr.new-accounts]="newAccounts">Счета</div>
+    </ng-template>
+
+    <nz-tab [nzTitle]="account">
       <my-account-list
         [documents]="accountDocuments"
         [isLoading]="isLoadingAccountDocuments"

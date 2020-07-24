@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { AccountListComponent } from './account-list.component';
 import { NzIconModule, NzSpinModule, NzTableModule } from 'ng-zorro-antd';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { PipesModule } from '#shared/modules/pipes';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     NzSpinModule,
     NzIconModule,
     InfiniteScrollModule,
+    PipesModule,
   ],
   exports: [AccountListComponent],
   declarations: [AccountListComponent],

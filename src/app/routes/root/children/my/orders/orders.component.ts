@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { DocumentDto } from '#shared/modules/common-services/models';
-import { EdiService } from '#shared/modules/common-services';
+import { EdiService, LocalStorageService, UserService } from '#shared/modules/common-services';
 
 const PAGE_SIZE = 20;
 
@@ -14,35 +14,28 @@ const PAGE_SIZE = 20;
     './orders.component-992.scss',
   ],
 })
-export class OrdersComponent {
+export class OrdersComponent implements OnDestroy {
   orderDocuments: DocumentDto[];
   isLoadingOrderDocuments = false;
-  isNotEmptyOrderDocumentsResponse = true;
   pageOrderDocuments = 1;
+  private isNotEmptyOrderDocumentsResponse = true;
+
   accountDocuments: DocumentDto[];
   isLoadingAccountDocuments = false;
-  isNotEmptyAccountDocumentsResponse = true;
   pageAccountDocuments = 1;
+  private isNotEmptyAccountDocumentsResponse = true;
+  newAccounts: number;
 
-  constructor(private _ediService: EdiService) {
+  constructor(
+    private _ediService: EdiService,
+    private _userService: UserService,
+    private _localStorageService: LocalStorageService,
+  ) {
     this._init();
   }
 
-  private _init() {
-    this._ediService.getOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe((documents) => {
-      if (documents?.length) {
-        this.orderDocuments = documents.map(doc => DocumentDto.forOrder(doc));
-      } else {
-        this.isNotEmptyOrderDocumentsResponse = false;
-      }
-    });
-    this._ediService.getAccounts(this.pageAccountDocuments, PAGE_SIZE).subscribe((documents) => {
-      if (documents?.length) {
-        this.accountDocuments = documents.map(doc => DocumentDto.forAccount(doc));
-      } else {
-        this.isNotEmptyAccountDocumentsResponse = false;
-      }
-    });
+  ngOnDestroy(): void {
+    this._localStorageService.putLastDateUserAccount(this._userService.userData$.getValue()?.userInfo.userId, new Date().valueOf());
   }
 
   loadOrderDocuments(nextPage: number) {
@@ -69,5 +62,33 @@ export class OrdersComponent {
         }
       });
     }
+  }
+
+  private _init() {
+    this._ediService.getOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe((documents) => {
+      if (documents?.length) {
+        this.orderDocuments = documents.map(doc => DocumentDto.forOrder(doc));
+      } else {
+        this.isNotEmptyOrderDocumentsResponse = false;
+      }
+    });
+    this._ediService.getAccounts(this.pageAccountDocuments, PAGE_SIZE).subscribe((documents) => {
+      if (documents?.length) {
+        this.accountDocuments = documents.map(doc => DocumentDto.forAccount(doc));
+        this.newAccounts = this._countNewAccounts(this.accountDocuments);
+      } else {
+        this.isNotEmptyAccountDocumentsResponse = false;
+      }
+    });
+  }
+
+  private _countNewAccounts(documents: DocumentDto[]) {
+    const uin = this._userService.userData$.getValue()?.userInfo.userId;
+    const lastVisitDate = this._localStorageService.getLastDateUserAccount(uin);
+    if (lastVisitDate) {
+      const newAccounts = documents.filter(doc => doc.orderDate > lastVisitDate).length;
+      return newAccounts > 0 ? newAccounts : null;
+    }
+    return null;
   }
 }
