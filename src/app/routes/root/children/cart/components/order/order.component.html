@@ -1,4 +1,4 @@
-<nz-modal #modal nzWrapClassName="my_modal" [(nzVisible)]="isModalVisible" [nzFooter]="null" (nzOnCancel)="isModalVisible = false" (nzOnCancel)="handleCancel()" [nzCloseOnNavigation]="false">
+<nz-modal #modal nzWrapClassName="my_modal" [(nzVisible)]="isModalVisible" [nzFooter]="null" (nzOnCancel)="isModalVisible = false" [nzCloseOnNavigation]="false">
 
   <ng-container *ngIf="modalType === 'registerOrAuth'">
     <ng-container *ngTemplateOutlet="registerOrAuthModal"></ng-container>
