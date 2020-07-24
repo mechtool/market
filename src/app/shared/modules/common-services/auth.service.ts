@@ -1,12 +1,13 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
 import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel, } from './models';
 import { UserService } from './user.service';
+import { OrganizationsService } from './organizations.service';
 
 const API_URL = environment.apiUrl;
 const ITS_URL = environment.itsUrl;
@@ -25,6 +26,7 @@ export class AuthService {
   constructor(
     private _apiService: ApiService,
     private _userService: UserService,
+    private _organizationsService: OrganizationsService,
     private _router: Router,
   ) {
   }
@@ -45,9 +47,10 @@ export class AuthService {
       const serviceName = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
       return this.auth({ ticket, serviceName })
         .pipe(
-          map((authResponse: AuthResponseModel) => {
-            this._userService.setUserData(authResponse);
-            this._userService.updateUserOrganizations();
+          tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
+          switchMap(_ => this._organizationsService.getUserOrganizations()),
+          tap(res => this._userService.setUserOrganizations(res)),
+          map(() => {
             this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
             return true;
           }),
