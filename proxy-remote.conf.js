@@ -1,17 +1,17 @@
 const fs = require('fs');
-const authData = fs.readFileSync('./src/assets/json/auth.json').toString();
-const cartData = fs.readFileSync('./src/assets/json/shopping-carts.json').toString();
-const categoriesData = fs.readFileSync('./src/assets/json/product-offers-categories.json').toString();
-const productOffersData = fs.readFileSync('./src/assets/json/product-offers.json').toString();
-const productOffersById = fs.readFileSync('./src/assets/json/product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json').toString();
-const locations = fs.readFileSync('./src/assets/json/locations__search.json').toString();
-const userOrganizations1 = fs.readFileSync('./src/assets/json/organizations__user-organizations-1.json').toString();
-const userOrganizations2 = fs.readFileSync('./src/assets/json/organizations__user-organizations-2.json').toString();
-const organizationsById = fs.readFileSync('./src/assets/json/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
-const suggestions = fs.readFileSync('./src/assets/json/suggestions.json').toString();
-const suppliers = fs.readFileSync('./src/assets/json/suppliers.json').toString();
-const tradeOffersById = fs.readFileSync('./src/assets/json/trade-offers__f524af2c-47a6-4f9b-86ab-df185f2a2767.json').toString();
-const tradeOffers = fs.readFileSync('./src/assets/json/trade-offers__search.json').toString();
+const authData = fs.readFileSync('./proxy-remote-assets/json/auth.json').toString();
+const cartData = fs.readFileSync('./proxy-remote-assets/json/shopping-carts.json').toString();
+const categoriesData = fs.readFileSync('./proxy-remote-assets/json/product-offers-categories.json').toString();
+const productOffersData = fs.readFileSync('./proxy-remote-assets/json/product-offers.json').toString();
+const productOffersById = fs.readFileSync('./proxy-remote-assets/json/product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json').toString();
+const locations = fs.readFileSync('./proxy-remote-assets/json/locations__search.json').toString();
+const userOrganizations1 = fs.readFileSync('./proxy-remote-assets/json/organizations__user-organizations-1.json').toString();
+const userOrganizations2 = fs.readFileSync('./proxy-remote-assets/json/organizations__user-organizations-2.json').toString();
+const organizationsById = fs.readFileSync('./proxy-remote-assets/json/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
+const suggestions = fs.readFileSync('./proxy-remote-assets/json/suggestions.json').toString();
+const suppliers = fs.readFileSync('./proxy-remote-assets/json/suppliers.json').toString();
+const tradeOffersById = fs.readFileSync('./proxy-remote-assets/json/trade-offers__f524af2c-47a6-4f9b-86ab-df185f2a2767.json').toString();
+const tradeOffers = fs.readFileSync('./proxy-remote-assets/json/trade-offers__search.json').toString();
 
 
 const PROXY_CONFIG = [
@@ -126,7 +126,7 @@ const PROXY_CONFIG = [
       }
 
       if (req.method === 'POST' && pathsObject['/proxifier/shopping-carts'].test(req.originalUrl.split('?')[0])) {
-        res.set('Location', 'https://my.1cbn.ru:4200/proxifier/shopping-carts/777888999');
+        res.set('Location', 'proxifier/shopping-carts/777888999');
         res.status(201);
         res.end(null);
         return true;
@@ -145,7 +145,7 @@ const PROXY_CONFIG = [
       }
 
       if (req.method === 'POST' && pathsObject['/proxifier/shopping-carts/:id/items'].test(req.originalUrl.split('?')[0])) {
-        res.set('Location', 'https://my.1cbn.ru:4200/proxifier/shopping-carts/777888999/items/9999999');
+        res.set('Location', 'proxifier/shopping-carts/777888999/items/9999999');
         res.status(201);
         res.end(null);
         return true;

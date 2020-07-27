@@ -1,0 +1,249 @@
+.search_bar {
+  margin-top: 20px;
+}
+
+.table_list__products {
+  display: block;
+  border-bottom: none;
+
+  .table_row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .table_cell {
+    display: flex;
+    align-items: center;
+    border-top: none;
+  }
+
+  .cell_title {
+    width: 265px;
+    font-weight: var(--font-weight-medium);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-right: 30px;
+    padding-left: 55px;
+    word-break: break-word;
+
+    a {
+      display: -webkit-box;
+      overflow: hidden;
+    }
+  }
+
+  .table_header .cell_title {
+    padding-left: 0;
+  }
+
+  .cell_image {
+    width: 55px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 6px;
+
+    img {
+      max-width: 40px;
+      max-height: 40px;
+    }
+  }
+
+  .cell_article {
+    width: 100px;
+    height: 55px;
+  }
+
+  .cell_packaging {
+    width: 120px;
+  }
+
+  .cell_available {
+    width: 145px;
+  }
+
+  .cell_price {
+    width: 180px;
+    flex-wrap: wrap;
+  }
+
+  .btn__product_link {
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-base);
+    width: 120px;
+    margin-left: 35px;
+    display: none;
+  }
+}
+
+.table_row {
+  display: table-row;
+  position: relative;
+}
+
+.table_header {
+  opacity: 0.6;
+
+  .table_cell {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-12);
+    line-height: 15px;
+    border-top: none;
+  }
+}
+
+.cell_pre {
+  display: flex;
+  align-items: center;
+}
+
+.cell_left,
+.cell_right {
+  display: flex;
+  align-items: center;
+}
+
+.table_cell {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 6px 10px 6px 5px;
+  font-size: var(--font-size-13);
+  line-height: 17px;
+  border-top: 1px solid #ededed;
+}
+
+.cell_buy {
+  width: 130px;
+}
+
+.cell_buy .to_cart__btn {
+  max-width: 120px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.btn-yellow,
+button.btn-yellow {
+  background-color: var(--color-accent-light);
+  border-color: var(--color-accent-light);
+}
+
+.to_cart__btn {
+  width: 120px;
+  background-image: url(../../../../../assets/img/svg/icon__basket.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.to_cart__btn:disabled,
+.to_cart__btn:disabled:hover {
+  background-color: #f9f9f9;
+  border-color: #f9f9f9;
+  cursor: not-allowed;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.btn-gray,
+a.btn-gray {
+  background-color: #f2f2f2;
+  border-color: #f2f2f2;
+}
+
+.btn:hover,
+a.btn:hover,
+button.btn:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+
+.catalog_header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  &__count {
+    font-size: var(--font-size-18);
+    line-height: 23px;
+    margin-right: 20px;
+
+    strong {
+      font-weight: var(--font-weight-demi);
+    }
+  }
+
+  &__title {
+    font-weight: var(--font-weight-bold);
+
+    &:after {
+      content: " – ";
+      font-weight: var(--font-weight-light);
+    }
+  }
+}
+
+.price {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  line-height: 19px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.cell_nds {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-light);
+  margin-left: 7px;
+  opacity: 0.8;
+  white-space: nowrap;
+  color: #000000;
+}
+
+.tooltip_wrap {
+  display: block;
+}
+
+.tooltip {
+  // todo вынести в глобальный конфиг, много где дублируется
+  position: relative;
+  border: 1px solid var(--color-accent-light);
+  border-radius: 2px;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-bold);
+  color: #70706f;
+  line-height: 13px;
+  padding: 0 3px;
+  background-color: #ffffff;
+  white-space: nowrap;
+  cursor: default;
+  z-index: 1;
+  overflow: hidden;
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover {
+    overflow: visible;
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent-light);
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.icon_scroll {
+  position: fixed;
+  font-size: 50px;
+  color: var(--color-accent-light);
+}
+
+//.to_cart__wrap {
+//  width: 220px;
+//}

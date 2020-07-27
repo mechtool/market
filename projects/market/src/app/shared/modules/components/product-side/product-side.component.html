@@ -1,0 +1,23 @@
+<div [ngSwitch]="orderStatus">
+
+  <div class="to_cart__btn_wrap" *ngSwitchCase="0">
+    <button type="button" class="btn btn-yellow to_cart__btn" disabled></button>
+  </div>
+
+  <div class="to_cart__btn_wrap" *ngSwitchCase="1">
+    <button type="button" class="btn btn-yellow to_cart__btn" (click)="addToCart()"></button>
+  </div>
+
+  <div class="switch_count color_scheme_yellow" data-counter="basket__count_products" [formGroup]="form"
+       *ngSwitchCase="2">
+    <button class="switch_count__decrease" (click)="decrease()"></button>
+    <input
+      type="number"
+      step="1" min="0"
+      class="switch_count__value"
+      name="totalPositions"
+      formControlName="totalPositions">
+    <button class="switch_count__increase" (click)="increase()"></button>
+  </div>
+
+</div>

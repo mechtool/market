@@ -3,28 +3,28 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mynew": {
+    "market": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "",
-      "sourceRoot": "src",
+      "root": "projects/market",
+      "sourceRoot": "projects/market/src",
       "prefix": "my",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/default",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/market",
+            "index": "projects/market/src/index.html",
+            "main": "projects/market/src/main.ts",
+            "polyfills": "projects/market/src/polyfills.ts",
+            "tsConfig": "projects/market/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/assets",
+              "projects/market/src/assets",
               {
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
@@ -33,9 +33,9 @@
             ],
             "styles": [
               "node_modules/normalize.css/normalize.css",
-              "src/assets/styles/styles.less",
-              "src/assets/styles/_fonts.scss",
-              "src/assets/styles/styles.scss"
+              "projects/market/src/assets/styles/styles.less",
+              "projects/market/src/assets/styles/_fonts.scss",
+              "projects/market/src/assets/styles/styles.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
@@ -46,13 +46,13 @@
             "dev": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.dev.ts"
                 }
               ],
               "optimization": true,
               "outputHashing": "all",
-              "outputPath": "dist/dev",
+              "outputPath": "dist/market/dev",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": true,
@@ -76,13 +76,13 @@
             "stage": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.stage.ts"
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.stage.ts"
                 }
               ],
               "optimization": true,
               "outputHashing": "all",
-              "outputPath": "dist/stage",
+              "outputPath": "dist/market/stage",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": true,
@@ -106,13 +106,13 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
               "outputHashing": "all",
-              "outputPath": "dist/prod",
+              "outputPath": "dist/market/prod",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
@@ -136,13 +136,13 @@
             "remote": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.remote.ts"
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.remote.ts"
                 }
               ],
               "optimization": true,
               "outputHashing": "all",
-              "outputPath": "dist/remote",
+              "outputPath": "dist/market/remote",
               "sourceMap": true,
               "extractCss": true,
               "namedChunks": true,
@@ -169,9 +169,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "aot": true,
-            "browserTarget": "mynew:build",
+            "browserTarget": "market:build",
             "disableHostCheck": true,
             "host": "0.0.0.0",
+            "port": 4200,
             "proxyConfig": "./proxy.conf.js",
             "ssl": true,
             "sslKey": "ssl/server.key",
@@ -179,35 +180,35 @@
           },
           "configurations": {
             "remote": {
-              "browserTarget": "mynew:build:remote",
+              "browserTarget": "market:build:remote",
               "proxyConfig": "./proxy-remote.conf.js"
             },
             "dev": {
-              "browserTarget": "mynew:build:dev"
+              "browserTarget": "market:build:dev"
             },
             "stage": {
-              "browserTarget": "mynew:build:stage"
+              "browserTarget": "market:build:stage"
             },
             "production": {
-              "browserTarget": "mynew:build:production"
+              "browserTarget": "market:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mynew:build"
+            "browserTarget": "market:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
+            "main": "projects/market/src/test.ts",
+            "polyfills": "projects/market/src/polyfills.ts",
+            "tsConfig": "projects/market/tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/assets/styles/styles.scss"],
+            "assets": ["projects/market/src/favicon.ico", "projects/market/src/assets"],
+            "styles": ["projects/market/src/assets/styles/styles.scss"],
             "scripts": []
           }
         },
@@ -215,8 +216,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
+              "projects/market/tsconfig.app.json",
+              "projects/market/tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
             "exclude": ["**/node_modules/**"]
@@ -232,22 +233,22 @@
           "configurations": {
             "dev": {
               "devServerTarget": "",
-              "baseUrl": "http://mynew.legacy-api.dev.dept07"
+              "baseUrl": "http://market.legacy-api.dev.dept07"
             },
             "stage": {
               "devServerTarget": "",
-              "baseUrl": "https://bnet-mynew-stage.1c.ru"
+              "baseUrl": "https://bnet-market-stage.1c.ru"
             },
             "production": {
               "devServerTarget": "",
-              "baseUrl": "https://mynew.1cbn.ru"
+              "baseUrl": "https://market.1cbn.ru"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "mynew",
+  "defaultProject": "market",
   "cli": {
     "packageManager": "npm"
   }

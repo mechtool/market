@@ -1,0 +1,212 @@
+{
+  "content": [
+    {
+      "supplier": {
+        "name": "ИП Иванов Георгий Александрович",
+        "inn": "345001228795",
+        "kpp": "978654911",
+        "phone": "+23999999997",
+        "email": "ivanov@ivanov.ru"
+      },
+      "items": [
+        {
+          "productName": "ADIDAS SuperStar 2020",
+          "productDescription": "Кроссовки",
+          "barCodes": [
+            "8123231211333"
+          ],
+          "partNumber": "002DX-442",
+          "packaging": "Коробка",
+          "imageUrls": [
+            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg",
+            ""
+          ],
+          "unitOfMeasurement": {
+            "name": "шт.",
+            "okei": "796"
+          },
+          "quantity": 10,
+          "price": 1500000,
+          "priceIncludesVAT": "true",
+          "costSummary": {
+            "totalCost": 7000,
+            "vat": 20,
+            "totalVat": 8400,
+            "priceCurrency": "643"
+          },
+          "maxDaysForShipment": 30,
+          "availabilityStatus": "AvailableForOrder",
+          "_links": {
+            "https://rels.1cbn.ru/marketplace/trade-offer-view": {
+              "title": "Торговое предложение",
+              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
+            },
+            "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
+              "title": "Удалить товар из корзины",
+              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77"
+            },
+            "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
+              "title": "Установить количество товара",
+              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77/quantity"
+            }
+          }
+        },
+        {
+          "productName": "Reebok Pro1",
+          "productDescription": "Кроссовки",
+          "barCodes": [
+            "97232312113467"
+          ],
+          "partNumber": "002DX-442",
+          "packaging": "Коробка",
+          "imageUrls": [],
+          "unitOfMeasurement": {
+            "name": "шт.",
+            "okei": "796"
+          },
+          "quantity": 7,
+          "price": 81000,
+          "priceIncludesVAT": "true",
+          "costSummary": {
+            "totalCost": 3000,
+            "vat": 20,
+            "totalVat": 3600,
+            "priceCurrency": "643"
+          },
+          "maxDaysForShipment": 20,
+          "availabilityStatus": "TemporarilyOutOfSales",
+          "_links": {
+            "https://rels.1cbn.ru/marketplace/trade-offer-view": {
+              "title": "Торговое предложение",
+              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
+            },
+            "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
+              "title": "Удалить товар из корзины",
+              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85"
+            },
+            "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
+              "title": "Установить количество товара",
+              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85/quantity"
+            }
+          }
+        }
+      ],
+      "deliveryOptions": {
+        "pickupPoints": [
+          {
+            "fiasCode": "5ee84ac0-eb9a-4b42-b814-2f5f7c27c255",
+            "name": "г Москва, ул Сухонская, д 11",
+            "countryOksmCode": "643"
+          },
+          {
+            "fiasCode": "2763c110-cb8b-416a-9dac-ad28a55b4402",
+            "name": "Екатеринбург, Свердловская обл",
+            "countryOksmCode": "643"
+          }
+        ],
+        "deliveryZones": [
+          {
+            "fiasCode": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+            "name": "Москва",
+            "countryOksmCode": "643"
+          }
+        ]
+      },
+      "customersAudience": [
+        "180414879123"
+      ],
+      "costSummary": {
+        "totalCost": 10000,
+        "vat": 20,
+        "totalVat": 12000,
+        "priceCurrency": "643"
+      },
+      "_links": {
+        "https://rels.1cbn.ru/marketplace/make-order": {
+          "title": "Создание заказа",
+          "href": "proxifier/shopping-carts/777888999/order/44444"
+        }
+      }
+    },
+    {
+      "supplier": {
+        "name": "ООО 'Ромашка'",
+        "inn": "011001220011",
+        "kpp": "921391111",
+        "phone": "+99999999999",
+        "email": "sales@romashka.ru"
+      },
+      "items": [
+        {
+          "productName": "ADIDAS SuperStar 2020",
+          "productDescription": "Кроссовки",
+          "barCodes": [
+            "8123231211333"
+          ],
+          "partNumber": "002DX-442",
+          "packaging": "Коробка",
+          "imageUrls": [
+            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
+          ],
+          "unitOfMeasurement": {
+            "name": "шт.",
+            "okei": "796"
+          },
+          "quantity": 1,
+          "price": 1500000,
+          "priceIncludesVAT": "true",
+          "costSummary": {
+            "totalCost": 20000,
+            "vat": 10,
+            "totalVat": 22000,
+            "priceCurrency": "643"
+          },
+          "maxDaysForShipment": 17,
+          "availabilityStatus": "AvailableForOrder",
+          "_links": {
+            "https://rels.1cbn.ru/marketplace/trade-offer-view": {
+              "title": "Торговое предложение",
+              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
+            },
+            "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
+              "title": "Удалить товар из корзины",
+              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
+            },
+            "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
+              "title": "Установить количество товара",
+              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
+            }
+          }
+        }
+      ],
+      "deliveryOptions": {
+        "pickupPoints": [
+          {
+            "fiasCode": "6fdecb78-893a-4e3f-a5ba-aa062459463b",
+            "name": "Севастополь",
+            "countryOksmCode": "643"
+          }
+        ]
+      },
+      "customersAudience": [],
+      "costSummary": {
+        "totalCost": 20000,
+        "vat": 10,
+        "totalVat": 22000,
+        "priceCurrency": "643"
+      },
+      "_links": {
+        "https://rels.1cbn.ru/marketplace/make-order": {
+          "title": "Создание заказа",
+          "href": "proxifier/shopping-carts/777888999/order/555555"
+        }
+      }
+    }
+  ],
+  "_links": {
+    "https://rels.1cbn.ru/marketplace/shopping-cart/add-item": {
+      "title": "Добавить товар в корзину",
+      "href": "proxifier/shopping-carts/777888999/items"
+    }
+  }
+}
