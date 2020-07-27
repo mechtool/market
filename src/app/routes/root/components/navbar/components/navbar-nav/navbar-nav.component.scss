@@ -403,6 +403,11 @@
   margin-top: 18px;
 }
 
+.sub_category__name a:hover {
+  color: var(--color-primary);
+  border-bottom: 1px solid var(--color-accent-light);
+}
+
 .sub_category__list {
   list-style: none;
   display: flex;

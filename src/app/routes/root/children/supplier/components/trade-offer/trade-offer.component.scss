@@ -4,6 +4,7 @@
   &_gallery_tabs {
     display: flex;
     flex-direction: column;
+    flex: 1;
 
     .product_side {
       display: none;
