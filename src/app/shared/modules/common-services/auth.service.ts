@@ -40,7 +40,9 @@ export class AuthService {
     const pathName = path.split('?')[0];
     const ticket = getParamFromQueryString('ticket');
     const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
-    const url = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
+    const url = pathName === location.pathname ?
+      `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}` :
+      `${location.origin}${pathName}`;
     if (!ticket) {
       this.redirectExternalSsoAuth(url);
     } else {

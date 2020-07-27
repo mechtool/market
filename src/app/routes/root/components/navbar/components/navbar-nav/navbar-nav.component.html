@@ -71,11 +71,11 @@
           <div class="sub_categories scrollbar">
             <div class="sub_category" *ngFor="let subCategoryItem of categoryItem.children">
                 <div class="sub_category__name">
-                    <a [routerLink]="['/category/' + subCategoryItem.id]">{{subCategoryItem.name}}</a>
+                    <a [routerLink]="['/category/' + subCategoryItem.id]" [queryParams]="{}">{{subCategoryItem.name}}</a>
                 </div>
                 <ul class="sub_category__list">
                     <li class="sub_category__item" *ngFor="let subSubCategoryItem of subCategoryItem.children">
-                        <a [routerLink]="['/category/' + subSubCategoryItem.id]" class="sub_category__link" (click)="closeCategoriesLayer(subSubCategoryItem)">{{subSubCategoryItem.name}}</a>
+                        <a [routerLink]="['/category/' + subSubCategoryItem.id]"  [queryParams]="{}" class="sub_category__link">{{subSubCategoryItem.name}}</a>
                     </li>
                 </ul>
             </div>

@@ -25,7 +25,7 @@ export class AuthModalService {
     this._modalService.confirm({
       nzWidth: 530,
       nzTitle: '<b>Авторизуйтесь</b>',
-      nzContent: '<i>Раздел доступен авторизованным пользователям. ' +
+      nzContent: '<i>Раздел доступен только авторизованным пользователям. ' +
         'Для продолжения необходимо зарегистрироваться или войти в свой аккаунт 1C.</i>',
       nzOkText: 'Вход',
       nzOnOk: () => this._authService.login(state.url),

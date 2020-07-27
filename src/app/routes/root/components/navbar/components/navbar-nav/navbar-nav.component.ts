@@ -110,7 +110,7 @@ export class NavbarNavComponent implements OnInit {
       navItem.command();
     }
     if (navItem.routerLink) {
-      this._router.navigate(navItem.routerLink);
+      this._router.navigate(navItem.routerLink, {});
     }
     if (navItem.url) {
       location.assign(navItem.url);
