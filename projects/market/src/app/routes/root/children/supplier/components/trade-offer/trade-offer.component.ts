@@ -6,7 +6,12 @@ import {
   TradeOfferResponseModel,
   TradeOfferSupplierModel
 } from '#shared/modules/common-services/models';
-import { OrganizationsService, ProductService, TradeOffersService, } from '#shared/modules/common-services';
+import {
+  NotificationsService,
+  OrganizationsService,
+  ProductService,
+  TradeOffersService,
+} from '#shared/modules/common-services';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { stringToRGB } from '#shared/utils';
@@ -35,6 +40,7 @@ export class TradeOfferComponent {
     private _tradeOffersService: TradeOffersService,
     private _organizationsService: OrganizationsService,
     private _activatedRoute: ActivatedRoute,
+    private _notificationsService: NotificationsService,
   ) {
     this._initTradeOffer();
   }
@@ -47,18 +53,19 @@ export class TradeOfferComponent {
           return this._tradeOffersService.get(tradeOfferId);
         }),
         catchError((err) => {
-          console.error('error', err);
           return throwError(err);
         }),
       )
-      .subscribe((tradeOffer) => {
-        this.tradeOffer = tradeOffer;
-        this.product = ProductDto.fromTradeOffer(tradeOffer);
-        this.supplier = this._mapSupplier(tradeOffer.supplier);
-        this.supplierLogo = stringToRGB(this.supplier.id);
-      }, (err) => {
-        console.error('error', err);
-      });
+      .subscribe(
+        (tradeOffer) => {
+          this.tradeOffer = tradeOffer;
+          this.product = ProductDto.fromTradeOffer(tradeOffer);
+          this.supplier = this._mapSupplier(tradeOffer.supplier);
+          this.supplierLogo = stringToRGB(this.supplier.id);
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _mapSupplier(supplier: TradeOfferSupplierModel): SuppliersItemModel {

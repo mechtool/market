@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CategoryModel, CategoryService } from '#shared/modules/common-services';
+import { CategoryModel } from '#shared/modules/common-services/models';
+import { CategoryService, NotificationsService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -12,33 +13,29 @@ import { CategoryModel, CategoryService } from '#shared/modules/common-services'
   ]
 })
 export class CategoryListComponent implements OnChanges {
-
   categories: CategoryModel[];
   @Input() category: CategoryModel;
-  @Output() breadcrumbsForCategory: EventEmitter<CategoryModel[]> = new EventEmitter();
 
   constructor(
     private _categoryService: CategoryService,
+    private _notificationsService: NotificationsService,
     private _router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this._categoryService.getCategoriesChildren(this.category.id)
-      .subscribe((res) => {
-        this.categories = res;
-      }, (err) => {
-        console.error('error', err);
-      });
+      .subscribe(
+        (categories) => {
+          this.categories = categories;
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   chooseCategory(category: CategoryModel) {
     this.category = category;
-    this._categoryService.getCategoryTree(category.id)
-      .subscribe((res) => {
-        this.breadcrumbsForCategory.emit(res);
-      }, (err) => {
-        console.error('error', err);
-      });
     this._router.navigate([`./category/${category.id}`]);
   }
 }

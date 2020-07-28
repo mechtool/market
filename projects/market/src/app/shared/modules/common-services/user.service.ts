@@ -27,7 +27,6 @@ export class UserService {
   updateUserCategories(): Observable<boolean> {
     return this._bnetService.getCategories().pipe(
       catchError((err) => {
-        console.error('error', err);
         return throwError(false);
       }),
       map((res: CategoryResponseModel) => {

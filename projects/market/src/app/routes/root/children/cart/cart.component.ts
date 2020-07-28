@@ -1,10 +1,9 @@
 import { AuthResponseModel } from '#shared/modules/common-services/models/auth-response.model';
-import { CartDataModel } from '#shared/modules/common-services/models/cart-data.model';
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CartService, UserService } from '#shared/modules';
+import { CartService, NotificationsService, UserService } from '#shared/modules';
 import { Observable } from 'rxjs';
-import { tap, map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -27,14 +26,19 @@ export class CartComponent implements OnInit {
   constructor(
     private _cartService: CartService,
     private _userService: UserService,
-  ) {}
+    private _notificationsService: NotificationsService,
+  ) {
+  }
 
   ngOnInit() {
     this._cartService.getCartData$().pipe(
-        take(1)
-      )
-      .subscribe((res) => {
+      take(1)
+    ).subscribe(
+      (res) => {
         this.setProps(res);
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }
 

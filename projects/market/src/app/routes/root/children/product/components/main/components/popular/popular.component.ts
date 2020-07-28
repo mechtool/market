@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { NotificationsService } from '#shared/modules';
 
 // TODO ВЫНЕСТИ В SHARED ПАПКУ!!!!!!!!!!!!!!!!!!!!!!!
 @UntilDestroy({ checkProperties: true })
@@ -18,7 +19,10 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 export class MainPopularComponent implements OnInit {
   productOffers: ProductOffersModel[];
 
-  constructor(private _productService: ProductService) {
+  constructor(
+    private _productService: ProductService,
+    private _notificationsService: NotificationsService,
+  ) {
   }
 
   ngOnInit() {
@@ -31,7 +35,7 @@ export class MainPopularComponent implements OnInit {
       .subscribe((products) => {
         this.productOffers = products._embedded.productOffers;
       }, (err) => {
-        console.log('error');
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }
 

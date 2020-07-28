@@ -12,7 +12,7 @@ import {
   TradeOfferStockEnumModel,
   TradeOfferVatEnumModel
 } from '#shared/modules/common-services/models';
-import { CartService } from '#shared/modules/common-services';
+import { CartService, NotificationsService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -60,6 +60,7 @@ export class ProductOrderComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _cartService: CartService,
+    private _notificationsService: NotificationsService,
   ) {
     this.form = this._fb.group({
       totalPositions: 0
@@ -70,23 +71,28 @@ export class ProductOrderComponent implements OnInit {
     this._initOrderStatus();
     this.vat = this._getVat();
     this._closeModalOnResolutionChanges();
-    this._cartService.getCartData$().subscribe((res) => {
-      const tradeOfferId = this.tradeOffer.id;
-      const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
-        return [...curr.items, ...accum];
-      }, []);
-      const foundTradeOffer = cartTradeOffers.find((x) => {
-        const hrefSplitted = x._links[RelationEnumModel.TRADEOFFER_VIEW].href.split('/');
-        return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
-      });
-      if (foundTradeOffer) {
-        this._price = foundTradeOffer.costSummary?.totalCost;
-        this.orderStatus = OrderStatusModal.IN_CART;
-      } else {
-        this._price = null;
-        this.orderStatus = OrderStatusModal.TO_CART;
-      }
-    });
+    this._cartService.getCartData$()
+      .subscribe(
+        (res) => {
+          const tradeOfferId = this.tradeOffer.id;
+          const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
+            return [...curr.items, ...accum];
+          }, []);
+          const foundTradeOffer = cartTradeOffers.find((x) => {
+            const hrefSplitted = x._links[RelationEnumModel.TRADEOFFER_VIEW].href.split('/');
+            return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
+          });
+          if (foundTradeOffer) {
+            this._price = foundTradeOffer.costSummary?.totalCost;
+            this.orderStatus = OrderStatusModal.IN_CART;
+          } else {
+            this._price = null;
+            this.orderStatus = OrderStatusModal.TO_CART;
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _initOrderStatus() {
@@ -103,13 +109,14 @@ export class ProductOrderComponent implements OnInit {
       .pipe(
         debounceTime(10),
         filter(() => !!this.modalRef)
-      ).subscribe((evt: any) => {
+      ).subscribe(
+      (evt: any) => {
         if (evt.target.innerWidth > 576) {
           this.modalRef.close();
         }
       },
       (err) => {
-        console.log('error', err);
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       }
     );
   }

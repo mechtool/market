@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate {
       .pipe(
         switchMap(auth => !!auth ? of(true) : of(this._authModalService.openNotAuthRouterModal(state, this.location.path()))),
         catchError((e) => {
-          console.log('error');
           return of(false);
         }),
       );

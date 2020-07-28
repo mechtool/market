@@ -1,10 +1,4 @@
-import {
-  Component,
-  HostBinding,
-  HostListener,
-  Injector,
-  OnInit,
-} from '@angular/core';
+import { Component, HostBinding, HostListener, Injector, OnInit, } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -14,6 +8,7 @@ import { UserService } from '#shared/modules/common-services/user.service';
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { CategoryModel } from '#shared/modules/common-services/models/category.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
+import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { map } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
@@ -33,7 +28,6 @@ export class NavbarNavComponent implements OnInit {
   private _cartService: CartService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
-  isMinified = false;
 
   get areCategoriesShowed(): boolean {
     return this._navService.areCategoriesShowed;
@@ -66,6 +60,7 @@ export class NavbarNavComponent implements OnInit {
     private injector: Injector,
     private _location: Location,
     private _router: Router,
+    private _notificationsService: NotificationsService,
   ) {
     this._navService = this.injector.get(NavigationService);
     this._userService = this.injector.get(UserService);
@@ -79,8 +74,7 @@ export class NavbarNavComponent implements OnInit {
         // TODO: оптимизировать проход по элементам меню
         this.navItems.forEach((el, i, arr) => {
           if (el.items?.length) {
-            const subItem = el.items.find(
-              (subItem) => subItem.routerLink?.[0] === this._location.path()
+            const subItem = el.items.find(subItem => subItem.routerLink?.[0] === this._location.path()
             );
             if (subItem) {
               this.navItemActive = subItem;
@@ -94,7 +88,7 @@ export class NavbarNavComponent implements OnInit {
         });
       },
       (err) => {
-        console.log('error');
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       }
     );
   }

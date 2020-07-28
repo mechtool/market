@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { of, throwError } from 'rxjs';
-import { ProductService } from '#shared/modules/common-services/product.service';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -10,9 +9,13 @@ import {
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
 } from '#shared/modules/common-services/models';
-import { SuggestionService } from '#shared/modules/common-services/suggestion.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
+import {
+  LocalStorageService,
+  NotificationsService,
+  ProductService,
+  SuggestionService
+} from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
 import { queryParamsFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -40,6 +43,7 @@ export class SearchComponent {
     private _suggestionService: SuggestionService,
     private _router: Router,
     private _localStorageService: LocalStorageService,
+    private _notificationsService: NotificationsService,
   ) {
     this._init();
   }
@@ -56,7 +60,7 @@ export class SearchComponent {
         this.productsSuggestions = res.products;
         this.categoriesSuggestions = res.categories;
       }, (err) => {
-        console.log('error');
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }
 
@@ -90,7 +94,7 @@ export class SearchComponent {
             },
             (err) => {
               this.isLoadingProducts = false;
-              console.error('error', err);
+              this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
             });
       }
     }
@@ -128,7 +132,6 @@ export class SearchComponent {
           return of(new ProductOffersListResponseModel());
         }),
         catchError((err) => {
-          console.error('error', err);
           return throwError(err);
         })
       )
@@ -138,7 +141,7 @@ export class SearchComponent {
         this.productsTotal = this.productOffersList.page?.totalElements || 0;
         this.page = this.productOffersList.page?.number || 0;
       }, (err) => {
-        console.log('error');
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }
 

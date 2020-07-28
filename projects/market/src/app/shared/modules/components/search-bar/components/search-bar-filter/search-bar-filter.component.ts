@@ -2,17 +2,12 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
-  CategoryService,
   CountryCode,
   DefaultSearchAvailableModel,
-  LocalStorageService,
   LocationModel,
-  LocationService,
   Megacity,
-  OrganizationsService,
-  SupplierService,
   SuppliersItemModel
-} from '../../../../common-services';
+} from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, filter, switchMap } from 'rxjs/operators';
 import { combineLatest, of, throwError } from 'rxjs';
@@ -23,6 +18,13 @@ import {
   supplierNameConditionValidator
 } from './search-bar-filter-conditions.validator';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import {
+  CategoryService,
+  LocalStorageService,
+  LocationService, NotificationsService,
+  OrganizationsService,
+  SupplierService
+} from '#shared/modules/common-services';
 
 const PAGE_SIZE = 20;
 
@@ -73,6 +75,7 @@ export class SearchBarFilterComponent {
     private _organizationsService: OrganizationsService,
     private _fb: FormBuilder,
     private changeDetector: ChangeDetectorRef,
+    private _notificationsService: NotificationsService,
   ) {
     this._init();
   }
@@ -169,14 +172,20 @@ export class SearchBarFilterComponent {
         switchMap(([params, queryParams]) => {
           this.categoryId = params.categoryId || queryParams.categoryId;
           if (queryParams.supplierId) {
-            this._organizationsService.getOrganization(queryParams.supplierId).subscribe((organization) => {
-              this.supplier = {
-                id: organization.id,
-                name: resizeBusinessStructure(organization.name),
-                inn: organization.legalRequisites.inn,
-                kpp: organization.legalRequisites.kpp,
-              };
-            });
+            this._organizationsService.getOrganization(queryParams.supplierId)
+              .subscribe(
+                (organization) => {
+                  this.supplier = {
+                    id: organization.id,
+                    name: resizeBusinessStructure(organization.name),
+                    inn: organization.legalRequisites.inn,
+                    kpp: organization.legalRequisites.kpp,
+                  };
+                },
+                (err) => {
+                  this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+                }
+              );
           }
           if (params.supplierId) {
             this.searchByInn = false;
@@ -185,28 +194,32 @@ export class SearchBarFilterComponent {
           return this._categoryService.getAllSupplierCategories();
         }),
         catchError((err) => {
-          console.error('error', err);
           return throwError(err);
         })
       )
-      .subscribe((categories) => {
-        this.categories = categories;
-        if (this.categoryId) {
-          this.categories.forEach((category) => {
-            if (category.id !== this.categoryId) {
-              category.disabled = true;
-            }
-            category.visible = true;
-          });
-        } else {
-          this.categories.forEach((res) => {
-            res.visible = true;
-          });
-        }
+      .subscribe(
+        (categories) => {
+          this.categories = categories;
+          if (this.categoryId) {
+            this.categories.forEach((category) => {
+              if (category.id !== this.categoryId) {
+                category.disabled = true;
+              }
+              category.visible = true;
+            });
+          } else {
+            this.categories.forEach((res) => {
+              res.visible = true;
+            });
+          }
 
-        this._initForms();
-        this._categoryChangesControl();
-      });
+          this._initForms();
+          this._categoryChangesControl();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        }
+      );
   }
 
   private _saveFilters() {
@@ -316,78 +329,88 @@ export class SearchBarFilterComponent {
   }
 
   private _controlsPrices() {
-    this.availableFiltersForm.controls.priceFrom.valueChanges.subscribe((price) => {
-      this.availableFiltersForm.controls.priceFrom.setValue(+price, { onlySelf: true, emitEvent: false });
-      this.availableFiltersForm.controls.priceBetween.setValue(
-        [+price, this.availableFiltersForm.get('priceBetween').value[1]], { onlySelf: true, emitEvent: false }
-      );
-      if (price) {
-        this._addActiveFilter('price');
-      } else {
-        this._removeActiveFilter('price');
-      }
-    });
+    this.availableFiltersForm.controls.priceFrom.valueChanges
+      .subscribe(
+        (price) => {
+          this.availableFiltersForm.controls.priceFrom.setValue(+price, { onlySelf: true, emitEvent: false });
+          this.availableFiltersForm.controls.priceBetween.setValue(
+            [+price, this.availableFiltersForm.get('priceBetween').value[1]], { onlySelf: true, emitEvent: false }
+          );
+          if (price) {
+            this._addActiveFilter('price');
+          } else {
+            this._removeActiveFilter('price');
+          }
+        });
 
-    this.availableFiltersForm.controls.priceTo.valueChanges.subscribe((price) => {
-      this.availableFiltersForm.controls.priceTo.setValue(+price, { onlySelf: true, emitEvent: false });
-      this.availableFiltersForm.controls.priceBetween.setValue(
-        [this.availableFiltersForm.get('priceBetween').value[0], +price], { onlySelf: true, emitEvent: false }
-      );
-      if (price) {
-        this._addActiveFilter('price');
-      } else {
-        this._removeActiveFilter('price');
-      }
-    });
+    this.availableFiltersForm.controls.priceTo.valueChanges
+      .subscribe(
+        (price) => {
+          this.availableFiltersForm.controls.priceTo.setValue(+price, { onlySelf: true, emitEvent: false });
+          this.availableFiltersForm.controls.priceBetween.setValue(
+            [this.availableFiltersForm.get('priceBetween').value[0], +price], { onlySelf: true, emitEvent: false }
+          );
+          if (price) {
+            this._addActiveFilter('price');
+          } else {
+            this._removeActiveFilter('price');
+          }
+        });
 
-    this.availableFiltersForm.controls.priceBetween.valueChanges.subscribe((prices) => {
-      this.availableFiltersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
-      this.availableFiltersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
-      this.availableFiltersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
-        onlySelf: true,
-        emitEvent: false
-      });
-      if (prices) {
-        this._addActiveFilter('price');
-      } else {
-        this._removeActiveFilter('price');
-      }
-    });
+    this.availableFiltersForm.controls.priceBetween.valueChanges
+      .subscribe(
+        (prices) => {
+          this.availableFiltersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
+          this.availableFiltersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
+          this.availableFiltersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
+            onlySelf: true,
+            emitEvent: false
+          });
+          if (prices) {
+            this._addActiveFilter('price');
+          } else {
+            this._removeActiveFilter('price');
+          }
+        });
   }
 
   private _categoryChangesControl() {
-    this.categoryFiltersForm.controls.categoryName.valueChanges.subscribe((query) => {
-      this.categories.forEach((res) => {
-        res.visible = res.name.toLowerCase().includes(query);
-      });
-    });
+    this.categoryFiltersForm.controls.categoryName.valueChanges
+      .subscribe(
+        (query) => {
+          this.categories.forEach((res) => {
+            res.visible = res.name.toLowerCase().includes(query);
+          });
+        });
 
-    this.categoryFiltersForm.controls.selectedCategories.valueChanges.subscribe((indexCategories) => {
-      this.categoryFiltersForm.controls.selectedCategories.setValue(indexCategories, {
-        onlySelf: true,
-        emitEvent: false
-      });
-      if (this.categoryId) {
-        indexCategories
-          .forEach((value, i) => {
-            if (this.categoryId === this.categories[i].id) {
-              this.categoryId = undefined;
-              this._removeActiveFilter('categoryId');
-            }
-            this.categories[i].disabled = false;
+    this.categoryFiltersForm.controls.selectedCategories.valueChanges
+      .subscribe(
+        (indexCategories) => {
+          this.categoryFiltersForm.controls.selectedCategories.setValue(indexCategories, {
+            onlySelf: true,
+            emitEvent: false
           });
-      } else {
-        indexCategories
-          .forEach((value, i) => {
-            if (value) {
-              this.categoryId = this.categories[i].id;
-              this._addActiveFilter('categoryId');
-            } else {
-              this.categories[i].disabled = true;
-            }
-          });
-      }
-    });
+          if (this.categoryId) {
+            indexCategories
+              .forEach((value, i) => {
+                if (this.categoryId === this.categories[i].id) {
+                  this.categoryId = undefined;
+                  this._removeActiveFilter('categoryId');
+                }
+                this.categories[i].disabled = false;
+              });
+          } else {
+            indexCategories
+              .forEach((value, i) => {
+                if (value) {
+                  this.categoryId = this.categories[i].id;
+                  this._addActiveFilter('categoryId');
+                } else {
+                  this.categories[i].disabled = true;
+                }
+              });
+          }
+        });
   }
 
   private _cityChangesControl(): void {
@@ -398,12 +421,15 @@ export class SearchBarFilterComponent {
           return combineLatest([of(cityName), this._locationService.searchLocations(cityName)]);
         })
       )
-      .subscribe(([city, cities]) => {
-        this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
-        this.changeDetector.detectChanges();
-      }, (err) => {
-        console.error(err);
-      });
+      .subscribe(
+        ([city, cities]) => {
+          this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
+          this.changeDetector.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        }
+      );
   }
 
   private _addActiveFilter(value: string): void {
@@ -417,69 +443,83 @@ export class SearchBarFilterComponent {
   }
 
   private _filtersChangesControl(): void {
-    this.availableFiltersForm.controls.supplier.valueChanges.subscribe((supplier) => {
-      this.availableFiltersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
-      if (typeof supplier === 'string') {
-        this._removeActiveFilter('supplierId');
-        if (supplier.trim().length > 3) {
-          this._supplierService.findSuppliersBy(supplier, 0, PAGE_SIZE)
-            .subscribe((data) => {
-              this.suppliers = this._map(data._embedded.suppliers);
-              this.changeDetector.detectChanges();
-            });
-        } else {
-          this.suppliers = null;
+    this.availableFiltersForm.controls.supplier.valueChanges
+      .subscribe(
+        (supplier) => {
+          this.availableFiltersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
+          if (typeof supplier === 'string') {
+            this._removeActiveFilter('supplierId');
+            if (supplier.trim().length > 3) {
+              this._supplierService.findSuppliersBy(supplier, 0, PAGE_SIZE)
+                .subscribe((data) => {
+                  this.suppliers = this._map(data._embedded.suppliers);
+                  this.changeDetector.detectChanges();
+                });
+            } else {
+              this.suppliers = null;
+            }
+          } else if (typeof supplier === 'object') {
+            this.supplier = supplier;
+            this.suppliers = null;
+            this._addActiveFilter('supplierId');
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         }
-      } else if (typeof supplier === 'object') {
-        this.supplier = supplier;
-        this.suppliers = null;
-        this._addActiveFilter('supplierId');
-      }
-    });
+      );
 
-    this.availableFiltersForm.controls.trademark.valueChanges.subscribe((trademark) => {
-      this.availableFiltersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
-      if (trademark.length) {
-        this._addActiveFilter('trademark');
-      } else {
-        this._removeActiveFilter('trademark');
-      }
-    });
+    this.availableFiltersForm.controls.trademark.valueChanges
+      .subscribe(
+        (trademark) => {
+          this.availableFiltersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
+          if (trademark.length) {
+            this._addActiveFilter('trademark');
+          } else {
+            this._removeActiveFilter('trademark');
+          }
+        });
 
-    this.availableFiltersForm.controls.isDelivery.valueChanges.subscribe((isDelivery) => {
-      this.availableFiltersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
-      if (isDelivery) {
-        this._addActiveFilter('isDelivery');
-      } else {
-        this._removeActiveFilter('isDelivery');
-      }
-    });
+    this.availableFiltersForm.controls.isDelivery.valueChanges
+      .subscribe(
+        (isDelivery) => {
+          this.availableFiltersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
+          if (isDelivery) {
+            this._addActiveFilter('isDelivery');
+          } else {
+            this._removeActiveFilter('isDelivery');
+          }
+        });
 
-    this.availableFiltersForm.controls.isPickup.valueChanges.subscribe((isPickup) => {
-      this.availableFiltersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
-      if (isPickup) {
-        this._addActiveFilter('isPickup');
-      } else {
-        this._removeActiveFilter('isPickup');
-      }
-    });
+    this.availableFiltersForm.controls.isPickup.valueChanges
+      .subscribe(
+        (isPickup) => {
+          this.availableFiltersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
+          if (isPickup) {
+            this._addActiveFilter('isPickup');
+          } else {
+            this._removeActiveFilter('isPickup');
+          }
+        });
 
-    this.availableFiltersForm.controls.inStock.valueChanges.subscribe((inStock) => {
-      this.availableFiltersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
-      if (inStock) {
-        this._addActiveFilter('inStock');
-      } else {
-        this._removeActiveFilter('inStock');
-      }
-    });
-    this.availableFiltersForm.controls.withImages.valueChanges.subscribe((withImages) => {
-      this.availableFiltersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
-      if (withImages) {
-        this._addActiveFilter('withImages');
-      } else {
-        this._removeActiveFilter('withImages');
-      }
-    });
+    this.availableFiltersForm.controls.inStock.valueChanges
+      .subscribe((inStock) => {
+        this.availableFiltersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
+        if (inStock) {
+          this._addActiveFilter('inStock');
+        } else {
+          this._removeActiveFilter('inStock');
+        }
+      });
+    this.availableFiltersForm.controls.withImages.valueChanges
+      .subscribe((withImages) => {
+        this.availableFiltersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
+        if (withImages) {
+          this._addActiveFilter('withImages');
+        } else {
+          this._removeActiveFilter('withImages');
+        }
+      });
   }
 
   private _resetCategories(): void {

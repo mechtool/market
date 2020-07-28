@@ -4,7 +4,7 @@ import {
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
 } from '#shared/modules/common-services/models';
-import { LocalStorageService, SuggestionService } from '#shared/modules/common-services';
+import { LocalStorageService, NotificationsService, SuggestionService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
 import { queryParamsFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -26,16 +26,20 @@ export class MainComponent {
     private _router: Router,
     private _suggestionService: SuggestionService,
     private _localStorageService: LocalStorageService,
-  ) {}
+    private _notificationsService: NotificationsService,
+  ) {
+  }
 
   searchSuggestions(query: string) {
     this._suggestionService.searchSuggestions(query)
-      .subscribe((res) => {
-        this.productsSuggestions = res.products;
-        this.categoriesSuggestions = res.categories;
-      }, (err) => {
-        console.error('error', err);
-      });
+      .subscribe(
+        (res) => {
+          this.productsSuggestions = res.products;
+          this.categoriesSuggestions = res.categories;
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   navigateToSearchRoute(filters: AllGroupQueryFiltersModel) {

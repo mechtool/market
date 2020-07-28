@@ -9,8 +9,12 @@ import {
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, LocalStorageService, } from '#shared/modules/common-services';
-import { ProductService } from '#shared/modules/common-services/product.service';
+import {
+  CategoryService,
+  LocalStorageService,
+  NotificationsService,
+  ProductService,
+} from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
 import { queryParamsFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -38,7 +42,8 @@ export class CategoryComponent {
     private _router: Router,
     private _productService: ProductService,
     private _categoryService: CategoryService,
-    private _localStorageService: LocalStorageService
+    private _localStorageService: LocalStorageService,
+    private _notificationsService: NotificationsService,
   ) {
     this._init();
   }
@@ -75,7 +80,7 @@ export class CategoryComponent {
           },
           (err) => {
             this.isLoadingProducts = false;
-            console.error('error', err);
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
           });
     }
   }
@@ -113,7 +118,6 @@ export class CategoryComponent {
           });
         }),
         catchError((err) => {
-          console.error('error', err);
           return throwError(err);
         })
       )
@@ -125,9 +129,8 @@ export class CategoryComponent {
           this.page = this.productOffersList.page.number;
         },
         (err) => {
-          console.error('error', err);
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         }
       );
   }
-
 }

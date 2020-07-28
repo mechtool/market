@@ -2,19 +2,22 @@ import { Component } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
   OrganizationResponseModel,
-  OrganizationsService,
-  ProductService,
-  SupplierService,
   SuppliersItemModel,
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
-  TradeOffersService,
   TradeOfferSummaryModel
-} from '#shared/modules';
+} from '#shared/modules/common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import {
+  NotificationsService,
+  OrganizationsService,
+  ProductService,
+  SupplierService,
+  TradeOffersService
+} from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -46,6 +49,7 @@ export class SupplierSingleComponent {
     private _supplierService: SupplierService,
     private _organizationsService: OrganizationsService,
     private _activatedRoute: ActivatedRoute,
+    private _notificationsService: NotificationsService,
   ) {
     this._initData();
   }
@@ -67,7 +71,7 @@ export class SupplierSingleComponent {
           },
           (err) => {
             this.isLoadingTradeOffers = false;
-            console.error('error', err);
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
           });
     }
   }
@@ -90,14 +94,13 @@ export class SupplierSingleComponent {
           return this._tradeOffersService.search(this.request);
         }),
         catchError((err) => {
-          console.error('error', err);
           return throwError(err);
         }),
       )
       .subscribe((tradeOffers) => {
         this._init(tradeOffers);
       }, (err) => {
-        console.error('error', err);
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }
 

@@ -18,9 +18,14 @@ import { SupplierService } from './supplier.service';
 import { TradeOffersService } from './trade-offers.service';
 import { CartService } from './cart.service';
 import { EdiService } from './edi.service';
+import { NotificationsService } from './notifications.service';
+import { NzMessageModule } from 'ng-zorro-antd';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    NzMessageModule,
+  ],
 })
 export class CommonServicesModule {
   static forRoot(): ModuleWithProviders {
@@ -45,6 +50,7 @@ export class CommonServicesModule {
         TradeOffersService,
         CartService,
         EdiService,
+        NotificationsService,
       ],
     };
   }

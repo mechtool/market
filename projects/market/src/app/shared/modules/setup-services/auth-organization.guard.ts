@@ -25,7 +25,6 @@ export class AuthOrganizationGuard implements CanActivate {
           return of(this._authModalService.openNotOrganizationsRouterModal(state, this.location.path()));
         }),
         catchError((err) => {
-          console.log('error', err);
           return of(false);
         }),
       );

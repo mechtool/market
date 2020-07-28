@@ -4,11 +4,11 @@ import {
   AllGroupQueryFiltersModel,
   SuppliersItemModel,
   SuppliersResponseModel,
-  SupplierService,
-} from '#shared/modules';
+} from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { NotificationsService, SupplierService } from '#shared/modules/common-services';
 
 const PAGE_SIZE = 20;
 
@@ -32,6 +32,7 @@ export class SupplierListComponent {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _supplierService: SupplierService,
+    private _notificationsService: NotificationsService,
   ) {
     this._initForm();
   }
@@ -64,7 +65,7 @@ export class SupplierListComponent {
         },
         (err) => {
           this.isLoading = false;
-          console.error('error', err);
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         }
       );
     }
@@ -78,10 +79,14 @@ export class SupplierListComponent {
           return this._getSuppliers(0);
         })
       )
-      .subscribe((suppliers) => {
-        this.supplierData = suppliers;
-        this.suppliers = this.supplierData._embedded.suppliers;
-      });
+      .subscribe(
+        (suppliers) => {
+          this.supplierData = suppliers;
+          this.suppliers = this.supplierData._embedded.suppliers;
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _getSuppliers(page: number) {

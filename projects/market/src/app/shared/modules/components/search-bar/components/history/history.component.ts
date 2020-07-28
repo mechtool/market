@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleCha
 import { combineLatest } from 'rxjs';
 import {
   LocalStorageService,
-  SuggestionSearchQueryHistoryModel,
+  NotificationsService,
   SuggestionService,
   TypeOfSearch,
 } from '#shared/modules/common-services';
+import { SuggestionSearchQueryHistoryModel, } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -25,6 +26,7 @@ export class SearchBarHistoryComponent implements OnInit, OnChanges {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _localStorageService: LocalStorageService,
+    private _notificationsService: NotificationsService,
   ) {
   }
 
@@ -64,13 +66,11 @@ export class SearchBarHistoryComponent implements OnInit, OnChanges {
       this._activatedRoute.queryParams
     ])
       .subscribe(
-        (res) => {
-          const suggestion = res[0];
-          const queryParams = res[1];
-          this.searchQueriesHistory = suggestion.searchQueriesHistory.filter(history => history.searchText !== queryParams.q);
+        ([suggestions, queryParams]) => {
+          this.searchQueriesHistory = suggestions.searchQueriesHistory.filter(history => history.searchText !== queryParams.q);
         },
         (err) => {
-          console.error('error', err);
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         }
       );
   }

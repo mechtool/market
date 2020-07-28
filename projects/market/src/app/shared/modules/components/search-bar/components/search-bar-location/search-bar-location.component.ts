@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { LocalStorageService, LocationService } from '../../../../common-services';
-import { LocationModel, Megacity } from '../../../../common-services/models/location.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { filter, switchMap } from 'rxjs/operators';
 import { combineLatest, of } from 'rxjs';
+import { LocationModel, Megacity } from '#shared/modules/common-services/models';
+import { LocalStorageService, LocationService, NotificationsService } from '#shared/modules/common-services';
 
 @Component({
   selector: 'my-search-bar-location',
@@ -31,6 +31,7 @@ export class SearchBarLocationComponent {
   constructor(
     private _locationService: LocationService,
     private _localStorageService: LocalStorageService,
+    private _notificationsService: NotificationsService,
     private _fb: FormBuilder,
     private changeDetector: ChangeDetectorRef,
   ) {
@@ -62,12 +63,14 @@ export class SearchBarLocationComponent {
           return combineLatest([of(cityName), this._locationService.searchLocations(cityName)]);
         })
       )
-      .subscribe(([city, cities]) => {
-        this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
-        this.changeDetector.detectChanges();
-      }, (err) => {
-        console.error(err);
-      });
+      .subscribe(
+        ([city, cities]) => {
+          this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
+          this.changeDetector.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   chooseCity(location: LocationModel) {

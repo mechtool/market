@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  ViewContainerRef,
-  ComponentRef,
-} from '@angular/core';
+import { ComponentRef, Injectable, ViewContainerRef, } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { fromEvent } from 'rxjs';
@@ -154,7 +150,7 @@ export class NavigationService {
       },
     ];
     return this._userService.userData$.asObservable().pipe(
-      map((res) => (res ? authedNavItems : notAuthedNavItems))
+      map(auth => (auth ? authedNavItems : notAuthedNavItems))
     );
   }
 
@@ -163,7 +159,7 @@ export class NavigationService {
     private _authService: AuthService,
     private _overlay: Overlay,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
   ) {
     this._componentPortal = new ComponentPortal(NavbarNavComponent);
     this._setUserCategories();
@@ -347,7 +343,7 @@ export class NavigationService {
   private _closeCategoriesLayerOnNavigation(): void {
     this._router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
+        filter(event => event instanceof NavigationEnd),
         pairwise()
       )
       .subscribe((event: any[]) => {

@@ -22,7 +22,6 @@ export class SsoTicketGuard implements CanActivate {
         .login(`${location.pathname}${location.search}`)
         .pipe(
           catchError((e) => {
-            console.log('error');
             return of(false);
           })
         );

@@ -12,15 +12,15 @@ import { filter } from 'rxjs/operators';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
-  LocalStorageService,
   LocationModel,
-  ResponsiveService,
-  SortModel
-} from '../../common-services';
-import { SuggestionCategoryItemModel, SuggestionProductItemModel } from '../../common-services/models';
+  SortModel,
+  SuggestionCategoryItemModel,
+  SuggestionProductItemModel
+} from '../../common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { combineLatest } from 'rxjs';
+import { LocalStorageService, NotificationsService, ResponsiveService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -81,6 +81,7 @@ export class SearchBarComponent implements OnChanges {
   constructor(
     private _localStorageService: LocalStorageService,
     private _responsiveService: ResponsiveService,
+    private _notificationsService: NotificationsService,
     private _fb: FormBuilder,
     private _activatedRoute: ActivatedRoute,
   ) {
@@ -195,11 +196,13 @@ export class SearchBarComponent implements OnChanges {
       .pipe(
         filter(res => res.trim().length >= this.minQueryLength && res.trim().length <= this.maxQueryLength),
       )
-      .subscribe((res) => {
-        this.queryChange.emit(res.trim());
-      }, (err) => {
-        console.log('error');
-      });
+      .subscribe(
+        (query) => {
+          this.queryChange.emit(query.trim());
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _updateForm() {

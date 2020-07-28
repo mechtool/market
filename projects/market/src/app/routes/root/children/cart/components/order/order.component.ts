@@ -1,6 +1,3 @@
-import { RelationEnumModel } from '#shared/modules/common-services/models/relation-enum.model';
-import { BNetService } from '#shared/modules/common-services/bnet.service';
-import { CartDataOrderModel } from '#shared/modules/common-services/models/cart-data-order.model';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -14,19 +11,25 @@ import {
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  AuthService,
-  CartService,
+  CartDataOrderModel,
   DeliveryMethod,
   LocationModel,
-  LocationService,
-  TradeOffersService,
-  UserService
-} from '#shared/modules';
+  RelationEnumModel
+} from '#shared/modules/common-services/models';
 import { catchError, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { absoluteImagePath, stringToHex } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 import { iif, of } from 'rxjs';
 import { Router } from '@angular/router';
+import {
+  AuthService,
+  BNetService,
+  CartService,
+  LocationService,
+  NotificationsService,
+  TradeOffersService,
+  UserService,
+} from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -43,7 +46,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   form: FormGroup;
   availableUserOrganizations: any[];
   foundLocations: LocationModel[] = [];
-  totalItems = 0;
   isModalVisible = false;
   modalType: string = null;
   deliveryTimeIntervals = [
@@ -117,6 +119,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _bnetService: BNetService,
     private _router: Router,
     private _tradeOffersService: TradeOffersService,
+    private _notificationsService: NotificationsService,
   ) {
   }
 
@@ -142,13 +145,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           }, this._locationService.searchLocations(v), this._searchInDeliveryZones(v));
         }),
       )
-      .subscribe((res) => {
-        console.log(this.form);
-        this.foundLocations = res;
-        this._cdr.detectChanges();
-      }, (err) => {
-        console.error(err);
-      });
+      .subscribe(
+        (res) => {
+          this.foundLocations = res;
+          this._cdr.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _searchInDeliveryZones(val: string) {
@@ -199,25 +203,28 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
           }),
         )
-        .subscribe((res) => {
-          if (res) {
-            this.cartDataChange.emit(res);
-            const foundOrder = res.content.find((x) => {
-              return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
-            });
-            if (!foundOrder) {
-              this.items.clear();
-              this._cartService.setActualCartData().pipe(take(1)).subscribe();
-              this._cdr.detectChanges();
+        .subscribe(
+          (res) => {
+            if (res) {
+              this.cartDataChange.emit(res);
+              const foundOrder = res.content.find((x) => {
+                return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
+              });
+              if (!foundOrder) {
+                this.items.clear();
+                this._cartService.setActualCartData().pipe(take(1)).subscribe();
+                this._cdr.detectChanges();
+              }
+              if (foundOrder) {
+                this._resetOrder(foundOrder);
+              }
             }
-            if (foundOrder) {
-              this._resetOrder(foundOrder);
-            }
-          }
-        }, (_) => {
-          this.isOrderLoading = false;
-          this._cdr.detectChanges();
-        });
+          },
+          (err) => {
+            this.isOrderLoading = false;
+            this._cdr.detectChanges();
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          });
     });
   }
 
@@ -246,21 +253,24 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
         })
       )
-      .subscribe((res) => {
-        this.cartDataChange.emit(res);
-        if (res) {
-          const foundOrder = res.content.find((x) => {
-            return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
-          });
-          this._resetOrder(foundOrder);
-        }
-        if (!this.items?.length) {
-          this._cartService.setActualCartData().subscribe();
-        }
-      }, (e) => {
-        this.isOrderLoading = false;
-        this._cdr.detectChanges();
-      });
+      .subscribe(
+        (res) => {
+          this.cartDataChange.emit(res);
+          if (res) {
+            const foundOrder = res.content.find((x) => {
+              return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
+            });
+            this._resetOrder(foundOrder);
+          }
+          if (!this.items?.length) {
+            this._cartService.setActualCartData().subscribe();
+          }
+        },
+        (err) => {
+          this.isOrderLoading = false;
+          this._cdr.detectChanges();
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _resetOrder(order) {
@@ -332,15 +342,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           .pipe(
             switchMap(_ => this._cartService.setActualCartData())
           )
-          .subscribe((res) => {
-            this.isModalVisible = true;
-            this.modalType = 'orderSent';
-            this.cartDataChange.emit(res);
-            this.items.clear();
-            this._cdr.detectChanges();
-          }, (e) => {
-            console.log(e);
-          });
+          .subscribe(
+            (res) => {
+              this.isModalVisible = true;
+              this.modalType = 'orderSent';
+              this.cartDataChange.emit(res);
+              this.items.clear();
+              this._cdr.detectChanges();
+            },
+            (err) => {
+              this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+            });
       }
       if (!this.availableUserOrganizations?.length) {
         this.isModalVisible = true;
@@ -392,15 +404,19 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       const splittedTradeOfferRelationHref = tradeOfferRelationHref.split('/');
       const tradeOfferId = splittedTradeOfferRelationHref[splittedTradeOfferRelationHref.length - 1];
       this._tradeOffersService.get(tradeOfferId)
-        .subscribe((res) => {
-          const supplierId = res.supplier?.bnetInternalId;
-          if (supplierId) {
-            this._router.navigate([`./supplier/${supplierId}/offer/${tradeOfferId}`]);
-          }
-          if (!supplierId) {
-            console.log('Не удалось получить поставщика по ТП');
-          }
-        });
+        .subscribe(
+          (res) => {
+            const supplierId = res.supplier?.bnetInternalId;
+            if (supplierId) {
+              this._router.navigate([`./supplier/${supplierId}/offer/${tradeOfferId}`]);
+            }
+            if (!supplierId) {
+              console.log('Не удалось получить поставщика по ТП');
+            }
+          },
+          (err) => {
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          });
     }
     if (!tradeOfferRelationHref) {
       console.log('Отсутствует идентификатор ТП');

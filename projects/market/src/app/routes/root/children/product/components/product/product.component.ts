@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
-import { ProductService } from '#shared/modules/common-services/product.service';
+import { NotificationsService, ProductService } from '#shared/modules/common-services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductDto, SortModel, TradeOfferDto, TradeOffersModel } from '#shared/modules';
+import { ProductDto, SortModel, TradeOfferDto, TradeOffersModel } from '#shared/modules/common-services/models';
 import { catchError, switchMap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -31,10 +31,16 @@ export class ProductComponent {
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _declensionPipe: DeclensionPipe,
+    private _notificationsService: NotificationsService,
   ) {
-    this._activatedRoute.queryParams.subscribe((param) => {
-      this.sort = param.sort ? param.sort : SortModel.ASC;
-    });
+    this._activatedRoute.queryParams
+      .subscribe(
+        (param) => {
+          this.sort = param.sort ? param.sort : SortModel.ASC;
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
     this._initProductOffers();
   }
 
@@ -56,16 +62,17 @@ export class ProductComponent {
           return this._productService.getProductOffer(this.productId);
         }),
         catchError((err) => {
-          console.error('error', err);
           return throwError(err);
         }),
       )
-      .subscribe((model) => {
-        this.tradeOffers = this._mapOffers(model.offers);
-        this.product = ProductDto.fromProductOffer(model.product);
-      }, (err) => {
-        console.error('error', err);
-      });
+      .subscribe(
+        (model) => {
+          this.tradeOffers = this._mapOffers(model.offers);
+          this.product = ProductDto.fromProductOffer(model.product);
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   private _offerTotal(value: number): string {
