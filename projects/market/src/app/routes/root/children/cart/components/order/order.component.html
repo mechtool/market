@@ -137,7 +137,7 @@
               Количество
             </div>
             <div class="table_cell cell_price_one">
-              Цена за штуку
+              Цена
             </div>
             <div class="table_cell cell_sum" data-title="Сумма с НДС:">
               Сумма с НДС
@@ -160,18 +160,22 @@
               <div class="table_cell cell_article" data-title="Артикул:">
                 {{form.get('items')['controls'][i].controls.partNumber.value}}
               </div>
-              <div class="table_cell cell_available" data-title="Доступность:">
+              <div class="table_cell cell_available" [ngClass]="{'not-available': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}" data-title="Доступность:">
                 {{form.get('items')['controls'][i].controls.availabilityStatus.value | myAvailability}}
               </div>
               <div class="table_cell cell_count" data-title="Количество:" [ngClass]="{'not_clickable': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}">
-                <my-cart-order-qty-counter formControlName="quantity" [isDisabled]="isOrderLoading"></my-cart-order-qty-counter>
+                <my-cart-order-qty-counter
+                  formControlName="quantity"
+                  [isDisabled]="isOrderLoading"
+                ></my-cart-order-qty-counter>
               </div>
               <div class="table_cell cell_price_one">
                 <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
               </div>
               <div class="table_cell cell_sum" data-title="Стоимость:">
                 <span class="price">{{form.get('items')['controls'][i].controls.totalCost.value | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
-                <span class="cell_nds">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
+                <span class="cell_nds" *ngIf="form.get('items')['controls'][i].controls.vat.value !== 0">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
+                <span class="cell_nds" *ngIf="form.get('items')['controls'][i].controls.vat.value === 0">без НДС</span>
               </div>
               <div class="table_cell cell_more">
                 <div class="table_cell__inner more_actions__dropdown dropdown">

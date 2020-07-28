@@ -30,7 +30,7 @@
           "priceIncludesVAT": "true",
           "costSummary": {
             "totalCost": 7000,
-            "vat": 20,
+            "vat": 0,
             "totalVat": 8400,
             "priceCurrency": "643"
           },

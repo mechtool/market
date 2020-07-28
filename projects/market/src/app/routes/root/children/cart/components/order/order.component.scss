@@ -1,5 +1,9 @@
 .not_clickable {
   pointer-events: none;
+
+  my-cart-order-qty-counter {
+    opacity: .5;
+  }
 }
 
 .d-none {
@@ -256,6 +260,7 @@ button.btn:hover {
 .table_list__products .cell_image img {
   width: 40px;
   height: auto;
+  max-height: 40px;
 }
 
 .table_list__products .cell_image {
@@ -1158,8 +1163,9 @@ textarea:focus {
     justify-content: center;
   }
   .table_list__products .cell_image img {
+    width: 56px;
+    height: auto;
     max-height: 56px;
-    width: auto;
   }
   .table_list__products .cell_title {
     margin-top: 10px;

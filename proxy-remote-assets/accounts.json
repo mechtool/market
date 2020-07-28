@@ -1,0 +1,61 @@
+[
+  {
+     "id":36213,
+     "ancestorId":null,
+     "documentGuid":null,
+     "documentData":null,
+     "documentDataType":"v8.СчетНаОплату",
+     "documentTitle":"Счет на оплату 2 от 16.07.2020",
+     "documentPresentationData":null,
+     "documentPresentationDataType":"pdf",
+     "direction":"INBOUND",
+     "deliveryStatus":"SENT",
+     "sentDate":1594908176414,
+     "receivedDate":null,
+     "sourceOrganization":{
+        "inn":"7175295816",
+        "kpp":"452244434",
+        "title":"ООО Лето",
+        "titleFromFns":null,
+        "ogrn":null,
+        "site":null,
+        "email":null,
+        "address":null,
+        "phone":null,
+        "fax":null,
+        "description":null,
+        "tags":null,
+        "showOrganizationInfo":false,
+        "registrationDate":1594893964632
+     },
+     "destinationOrganization":{
+        "inn":"6735999615",
+        "kpp":"493044696",
+        "title":"Тест покупатель",
+        "titleFromFns":null,
+        "ogrn":null,
+        "site":null,
+        "email":"q@q.ru",
+        "address":"Уренгой",
+        "phone":"+79099090000",
+        "fax":null,
+        "description":null,
+        "tags":null,
+        "showOrganizationInfo":false,
+        "registrationDate":1594828412798
+     },
+     "destinationOrganizationDepartmentId":null,
+     "info":"",
+     "moneyAmount":51975,
+     "currency":null,
+     "metaData":null,
+     "person":{
+        "name":"Администратор",
+        "phone":null,
+        "email":null,
+        "notifyByEmail":false
+     },
+     "contextName":null,
+     "contextIds":null
+  }
+]

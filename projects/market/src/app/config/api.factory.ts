@@ -16,7 +16,6 @@ function init(
   userService: UserService,
   cartService: CartService,
 ) {
-  console.log(environment.projectName);
   return new Promise((resolve, reject) => {
     return zip(
       setCart(cartService),

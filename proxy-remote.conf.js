@@ -1,17 +1,19 @@
 const fs = require('fs');
-const authData = fs.readFileSync('./proxy-remote-assets/json/auth.json').toString();
-const cartData = fs.readFileSync('./proxy-remote-assets/json/shopping-carts.json').toString();
-const categoriesData = fs.readFileSync('./proxy-remote-assets/json/product-offers-categories.json').toString();
-const productOffersData = fs.readFileSync('./proxy-remote-assets/json/product-offers.json').toString();
-const productOffersById = fs.readFileSync('./proxy-remote-assets/json/product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json').toString();
-const locations = fs.readFileSync('./proxy-remote-assets/json/locations__search.json').toString();
-const userOrganizations1 = fs.readFileSync('./proxy-remote-assets/json/organizations__user-organizations-1.json').toString();
-const userOrganizations2 = fs.readFileSync('./proxy-remote-assets/json/organizations__user-organizations-2.json').toString();
-const organizationsById = fs.readFileSync('./proxy-remote-assets/json/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
-const suggestions = fs.readFileSync('./proxy-remote-assets/json/suggestions.json').toString();
-const suppliers = fs.readFileSync('./proxy-remote-assets/json/suppliers.json').toString();
-const tradeOffersById = fs.readFileSync('./proxy-remote-assets/json/trade-offers__f524af2c-47a6-4f9b-86ab-df185f2a2767.json').toString();
-const tradeOffers = fs.readFileSync('./proxy-remote-assets/json/trade-offers__search.json').toString();
+const authData = fs.readFileSync('./proxy-remote-assets/auth.json').toString();
+const cartData = fs.readFileSync('./proxy-remote-assets/shopping-carts.json').toString();
+const categoriesData = fs.readFileSync('./proxy-remote-assets/product-offers-categories.json').toString();
+const productOffersData = fs.readFileSync('./proxy-remote-assets/product-offers.json').toString();
+const productOffersById = fs.readFileSync('./proxy-remote-assets/product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json').toString();
+const locations = fs.readFileSync('./proxy-remote-assets/locations__search.json').toString();
+const userOrganizations1 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-1.json').toString();
+const userOrganizations2 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-2.json').toString();
+const organizationsById = fs.readFileSync('./proxy-remote-assets/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
+const suggestions = fs.readFileSync('./proxy-remote-assets/suggestions.json').toString();
+const suppliers = fs.readFileSync('./proxy-remote-assets/suppliers.json').toString();
+const tradeOffersById = fs.readFileSync('./proxy-remote-assets/trade-offers__f524af2c-47a6-4f9b-86ab-df185f2a2767.json').toString();
+const tradeOffers = fs.readFileSync('./proxy-remote-assets/trade-offers__search.json').toString();
+const accounts = fs.readFileSync('./proxy-remote-assets/accounts.json').toString();
+const orders = fs.readFileSync('./proxy-remote-assets/orders.json').toString();
 
 
 const PROXY_CONFIG = [
@@ -44,6 +46,8 @@ const PROXY_CONFIG = [
         '/proxifier/shopping-carts/:id/items/:itemId': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/items\/(?:([^\/]+?))\/?$/i,
         '/proxifier/shopping-carts/:id/items/:itemId/quantity': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/items\/(?:([^\/]+?))\/quantity\/?$/i,
         '/proxifier/shopping-carts/:id/order/:orderId': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/order\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/edi/orders': /^\/proxifier\/edi\/orders\/?$/i,
+        '/proxifier/edi/accounts': /^\/proxifier\/edi\/accounts\/?$/i
       };
 
       if (req.method === 'POST' && pathsObject['/proxifier/auth'].test(req.originalUrl.split('?')[0])) {
@@ -167,6 +171,18 @@ const PROXY_CONFIG = [
         res.set('Location', 'https://todo-api.1cbn.ru/edi/v1/documents/33333');
         res.status(201);
         res.end(null);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/edi/orders'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(orders);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/edi/accounts'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(accounts);
         return true;
       }
 

@@ -100,3 +100,7 @@ input[type=number]::-webkit-inner-spin-button {
   background-color: #F2F2F2;
   border: none;
 }
+
+.disabled {
+  opacity: .5;
+}
