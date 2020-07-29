@@ -1,0 +1,63 @@
+@media all and (max-width: 768px) {
+  .table_list {
+    display: block;
+    border-bottom: none;
+  }
+  .table_row {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #BDBDBD;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 20px 20px 25px 20px;
+  }
+  .table_cell {
+    display: flex;
+    align-items: flex-start;
+    border-top: none;
+    height: auto;
+  }
+  .table_cell[data-title]:before {
+    content: attr(data-title);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-12);
+    color: var(--color-primary);
+    opacity: 0.6;
+    width: 70px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  .table_list__organizations .table_cell[data-title]:before {
+    width: auto;
+  }
+  .table_row.table_header {
+    display: none;
+  }
+  .table_list__organizations .table_cell {
+    padding: 0;
+    width: 100%;
+    min-width: auto;
+  }
+  .table_list__organizations .cell_title {
+    font-size: var(--font-size-12);
+    margin-bottom: 10px;
+    padding-right: 40px;
+  }
+  .table_list__organizations .cell_status {
+    margin-bottom: 5px;
+    padding-right: 40px;
+    height: auto;
+    font-weight: var(--font-weight-medium);
+  }
+  .table_list__organizations .cell_action .table_cell__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .table_list__organizations .btn {
+    margin-top: 20px;
+  }
+  .table_list__organizations .btn_get_access-key {
+    margin-right: 0;
+    width: 100%;
+  }
+}

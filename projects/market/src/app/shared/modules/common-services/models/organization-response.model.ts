@@ -6,6 +6,12 @@ export class OrganizationResponseModel {
   description?: string;
   contacts?: OrganizationContactsModel;
   legalRequisites: OrganizationLegalRequisitesModel;
+  contactPerson?: {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    position?: string;
+  };
 }
 
 export class OrganizationContactsModel {

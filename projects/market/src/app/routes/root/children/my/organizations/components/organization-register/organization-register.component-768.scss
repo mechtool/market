@@ -1,0 +1,10 @@
+@media all and (max-width: 768px) {
+  .section_tab__title {
+    display: block;
+  }
+  .form__registration_org .input_attention {
+    position: static;
+    padding-left: 0;
+    margin-top: 5px;
+  }
+}

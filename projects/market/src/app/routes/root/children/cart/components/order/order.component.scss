@@ -258,9 +258,10 @@ button.btn:hover {
 }
 
 .table_list__products .cell_image img {
-  width: 40px;
-  height: auto;
+  max-width: 40px;
   max-height: 40px;
+  width: auto;
+  height: auto;
 }
 
 .table_list__products .cell_image {
@@ -690,7 +691,7 @@ input[type="number"].switch_count__value {
 .basket_order__conditions_current {
   width: 100%;
   height: 30px;
-  border: 1px solid #C4C4C4;
+  border: 1px solid #c4c4c4;
   border-radius: 2px;
   display: block;
   align-items: center;
@@ -888,7 +889,6 @@ input[type="email"],
 input[type="number"],
 textarea {
   font-size: var(--font-size-base);
-  font-family: "Futura", Arial, Helvetica, sans-serif;
   padding: 10px 15px;
   background-color: #ffffff;
   border: 1px solid #d6d6d6;
@@ -1163,9 +1163,10 @@ textarea:focus {
     justify-content: center;
   }
   .table_list__products .cell_image img {
-    width: 56px;
-    height: auto;
+    max-width: 56px;
     max-height: 56px;
+    width: auto;
+    height: auto;
   }
   .table_list__products .cell_title {
     margin-top: 10px;

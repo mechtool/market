@@ -1,13 +1,238 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
+import { filter, map, switchMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { OrganizationsService } from '#shared/modules/common-services/organizations.service';
+import { NotificationsService } from '#shared/modules/common-services/notifications.service';
+import { UserService } from '#shared/modules/common-services/user.service';
+import { innKppToLegalId } from '#shared/utils';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserOrganizationModel } from '#shared/modules/common-services/models/user-organization.model';
+import { AccessKeyComponent } from './components/access-key/access-key.component';
+import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
+import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
+
+type TabType = 'a'|'b'|'c';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './organizations.component.html',
-  styleUrls: ['./organizations.component.scss'],
+  styleUrls: [
+    './organizations.component.scss',
+    './organizations.component-768.scss',
+    './organizations.component-576.scss',
+  ],
 })
-export class OrganizationsComponent {
+export class OrganizationsComponent implements OnInit {
+  existingOrganization: OrganizationResponseModel = null;
+  checkedLegalRequisites = {};
+  private _activeTabType: TabType;
 
-  constructor() {}
+  get activeTabType(): TabType {
+    return this._activeTabType;
+  }
+
+  set activeTabType(val: TabType) {
+    this._activeTabType = val;
+    if (this._activeTabType === 'b') {
+      this._setUserParticipationRequests();
+    }
+  }
+
+  get userOrganizations$(): Observable<UserOrganizationModel[]> {
+    return this._userService.userOrganizations$;
+  }
+
+  get userParticipationRequests$(): Observable<ParticipationRequestResponseModel[]> {
+    return this._userService.userParticipationRequests$;
+  }
+
+  constructor(
+    private _modalService: NzModalService,
+    private _viewContainerRef: ViewContainerRef,
+    private _organizationsService: OrganizationsService,
+    private _notificationsService: NotificationsService,
+    private _userService: UserService,
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router,
+  ) {}
+
+  ngOnInit() {
+    this._setActiveTabType('a');
+    this._watchQueryParamsChanges();
+    this._setUserParticipationRequests();
+  }
+
+  sendParticipationRequest(data: any) {
+    const bodyData = {
+      organization: this.existingOrganization.id,
+      notes: `${data.fio} (${data.email}) создал заявку на присоединение к организации ${this.existingOrganization.name}. ${data.message}`
+    }
+    this._organizationsService.sendParticipationRequest(bodyData)
+      .subscribe((_) => {
+        this.existingOrganization = null;
+        this.goToTab('b');
+      }, (err) => {
+        this._notificationsService.error('Произошла ошибка при подаче заявки на добавление в организацию');
+      });
+  }
+
+  registerOrganization(data: any) {
+
+    const legalRequisites = {
+      inn: data.inn,
+      ...(data.kpp && { kpp: data.kpp }),
+    };
+
+    const contacts = {
+      ...(data.organizationEmail && { email: data.organizationEmail }),
+      ...(data.organizationPhone && { phone: data.organizationPhone }),
+      ...(data.organizationWebsite && { website: data.organizationWebsite }),
+      ...(data.organizationAddress && { address: data.organizationAddress }),
+    };
+
+    const contactPerson = {
+      email: data.contactEmail,
+      fullName: data.contactFio,
+      phone: data.contactPhone,
+      ...(data.contactRole && { position: data.contactRole }),
+    };
+
+    const regOrgData = {
+      legalRequisites,
+      contactPerson,
+      name: data.organizationName,
+      ...(Object.keys(contacts).length && { contacts }),
+      ...(data.organizationDescription && { description: data.organizationDescription }),
+    };
+
+    this._organizationsService.registerOrganization(regOrgData)
+      .subscribe(() => {
+        this.checkedLegalRequisites = null;
+        this.goToTab('a');
+      }, (err) => {
+        this._notificationsService.error('Произошла ошибка при регистрации организации');
+      })
+  }
+
+  goToTab(tabType: TabType) {
+
+    this._router.navigateByUrl(
+      this._router.url.split('?')[0],
+      { skipLocationChange: true }
+    )
+    .then(() => {
+      this._router.navigateByUrl(`my/organizations?tab=${tabType}`);
+    });
+
+  }
+
+  createAccessKeyModal(org: UserOrganizationModel) {
+
+    this._organizationsService.obtainAccessKey(org.organizationId)
+      .subscribe((res) => {
+        const modal = this._modalService.create({
+          nzContent: AccessKeyComponent,
+          nzViewContainerRef: this._viewContainerRef,
+          nzGetContainer: () => document.body,
+          nzComponentParams: {
+            organization: org,
+            accessKey: res,
+          },
+          nzFooter: null,
+          nzWidth: 480,
+        });
+
+      }, (err) => {
+        this._notificationsService.error('Произошла ошибка при получении ключа доступа');
+      });
+  }
+
+  private _watchQueryParamsChanges() {
+    this._activatedRoute.queryParams.pipe(
+      filter(res => res.tab)
+    )
+      .subscribe(
+        (res) => {
+          switch(res.tab) {
+            case 'a':
+              this._setActiveTabType('a')
+              break;
+            case 'b':
+              this._setActiveTabType('b');
+              break;
+            case 'c':
+              this._createRequisitesCheckerModal();
+              break;
+            default:
+              this._setActiveTabType('a')
+              break;
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
+  }
+
+  private _createRequisitesCheckerModal() {
+    this.checkedLegalRequisites = null;
+    const modal = this._modalService.create({
+      nzContent: RequisitesCheckerComponent,
+      nzViewContainerRef: this._viewContainerRef,
+      nzGetContainer: () => document.body,
+      nzFooter: null,
+      nzWidth: 480,
+    });
+    modal.afterClose.pipe(
+      switchMap((res) => {
+        if (!res) {
+          return of(null);
+        }
+        if (res) {
+          this.checkedLegalRequisites = {
+            inn: res.data?.inn,
+            kpp: res.data?.kpp,
+          };
+          const legalId = innKppToLegalId(res.data?.inn, res.data?.kpp);
+          return this._organizationsService.getOrganizationByLegalId(legalId).pipe(
+            map((res) => ({ data: res }))
+          )
+        }
+      })
+    )
+    .subscribe((res) => {
+      if (!res && this.activeTabType !== 'c') {
+        this.goToTab(this.activeTabType);
+      }
+      if (res) {
+        this.existingOrganization = null;
+        if (res.data?.id) {
+          this._setActiveTabType('c');
+          this.existingOrganization = res.data;
+        }
+        if (!res.data?.id) {
+          this._setActiveTabType('c');
+        }
+      }
+    }, (err) => {
+      this._notificationsService.error('Произошла ошибка при получении информации об организации');
+    });
+  }
+
+  private _setActiveTabType(tabType: TabType) {
+    this.activeTabType = tabType;
+  }
+
+  private _setUserParticipationRequests() {
+    this._organizationsService.getParticipationRequests()
+      .subscribe((res) => {
+        this._userService.userParticipationRequests$.next(res);
+      }, (err) => {
+        this._notificationsService.error('Произошла ошибка при получении запросов на присоединение');
+      });
+  }
 
 }
+

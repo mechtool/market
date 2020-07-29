@@ -80,7 +80,7 @@
 }
 
 .price {
-  font-size: var(--font-size-main);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   line-height: 19px;
   color: #000000;
@@ -89,8 +89,8 @@
 
 .btn,
 button.btn {
-  color: var(--color-main);
-  font-size: var(--font-size-main);
+  color: var(--color-primary);
+  font-size: var(--font-size-base);
   font-family: "Futura", serif;
   font-weight: var(--font-weight-medium);
   border-radius: 2px;

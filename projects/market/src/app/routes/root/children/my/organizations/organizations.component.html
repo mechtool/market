@@ -1,4 +1,52 @@
-<div class="organizations">
+<div class="content-wrapper page_inner">
 
-  ORGANIZATIONS
+  <div class="page_header">
+    <h2>Мои организации</h2>
+  </div>
+
+  <div class="tabs_wrap tabs_wrap__moving">
+
+    <span
+      class="tab_item tab_item__main"
+      [ngClass]="{'active': activeTabType == 'a'}"
+      (click)="goToTab('a')">
+        <span class="data_counter data_counter__gray" [attr.data_counter]="(userOrganizations$ | async)?.length || 0">Действующие</span>
+    </span>
+
+    <span
+      class="tab_item tab_long"
+      [ngClass]="{'active': activeTabType == 'b'}"
+      (click)="goToTab('b')">
+        <span class="data_counter" [attr.data_counter]="(userParticipationRequests$ | async)?.length">Отправленные запросы</span>
+    </span>
+
+    <span
+      class="tab_item tab_long"
+      [ngClass]="{'active': activeTabType == 'c'}"
+      (click)="goToTab('c')">Добавить организацию
+    </span>
+
+  </div>
+
+  <my-active-organizations
+    [organizations]="userOrganizations$ | async"
+    (getAccessKeyRequestChange)="createAccessKeyModal($event)"
+    *ngIf="activeTabType == 'a'"
+  ></my-active-organizations>
+
+  <my-sent-requests
+    [requests]="userParticipationRequests$ | async"
+    *ngIf="activeTabType == 'b'"
+  ></my-sent-requests>
+
+  <my-organization-register
+    [legalRequisites]="checkedLegalRequisites"
+    (registerOrganizationDataChange)="registerOrganization($event)"
+    *ngIf="activeTabType == 'c' && !existingOrganization"></my-organization-register>
+
+  <my-organization-exists
+    [organization]="existingOrganization"
+    (requestDataChange)="sendParticipationRequest($event)"
+    *ngIf="activeTabType == 'c' && existingOrganization"></my-organization-exists>
+
 </div>

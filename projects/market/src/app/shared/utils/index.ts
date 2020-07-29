@@ -10,3 +10,4 @@ export * from './get-query-string-without-param';
 export * from './get-stock';
 export * from './redirect-to';
 export * from './query-params';
+export * from './inn-kpp-to-legal-id';

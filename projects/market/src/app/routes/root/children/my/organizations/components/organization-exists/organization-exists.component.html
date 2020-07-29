@@ -1,0 +1,33 @@
+<div class="organization-exists">
+
+  <div class="section_tab__title">
+    <h2>Добавить организацию</h2>
+  </div>
+
+  <p class="title">
+    Организация с указанными реквизитами<br>
+    уже зарегистрирована. Вы можете<br>
+    подать заявку на присоединение.
+  </p>
+
+  <form [formGroup]="form" (submit)="send()">
+    <div class="form-group form-group-std">
+      <label for="formFio">Имя и фамилия *</label>
+      <input type="text" id="formFio" autocomplete="off" formControlName="fio">
+    </div>
+    <div class="form-group form-group-std">
+      <label for="formEmail">Электронная почта *</label>
+      <input type="text" id="formEmail" autocomplete="off" formControlName="email">
+    </div>
+    <div class="form-group">
+      <label for="formMessage">Сообщение администратору *</label>
+      <div class="textarea-wrap">
+        <textarea id="formMessage" rows="6" formControlName="message"></textarea>
+      </div>
+    </div>
+    <div class="form-group form-group-btn">
+      <button nz-button [nzType]="'primary'" [disabled]="!form.valid">Отправить</button>
+    </div>
+  </form>
+
+</div>

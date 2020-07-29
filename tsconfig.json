@@ -18,6 +18,14 @@
       "es2018",
       "dom"
     ],
+    "paths": {
+      "#environments/*": [
+        "projects/market/src/environments/*"
+      ],
+      "#shared/*": [
+        "projects/market/src/app/shared/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

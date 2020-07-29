@@ -38,6 +38,7 @@ const pathsObjectWithBreadcrumbs = {
   '/cart': /^\/cart$/i,
   '/my/orders': /^\/my\/orders$/i,
   '/my/organizations': /^\/my\/organizations$/i,
+  '/my/organizations/:id': /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
 };
 
 /**
@@ -52,6 +53,7 @@ const pathsWithAuthentication = [
  */
 const pathsWithAuthorization = [
   /^\/my\/organizations$/i,
+  /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
   /^\/my\/orders$/i,
 ];
 
@@ -203,6 +205,22 @@ export class BreadcrumbsGuard implements CanActivate {
           },
           {
             label: 'Мои организации',
+            routerLink: '/my/organizations',
+            queryParams: { tab: 'a' },
+          }
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/organizations/:id':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/'
+          },
+          {
+            label: 'Мои организации',
+            routerLink: '/my/organizations',
+            queryParams: { tab: 'a' },
           }
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);

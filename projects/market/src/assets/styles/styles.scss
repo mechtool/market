@@ -46,7 +46,7 @@ a.attention-link:hover,
 .attention-link:hover{
 	text-decoration: none;
 	color: #000000;
-	border-bottom: 1px solid var(--color-yellow);
+	border-bottom: 1px solid var(--color-accent);
 }
 
 h1,
@@ -68,6 +68,24 @@ ol {
   margin: 0;
   padding: 0;
   list-style-type: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea {
+  font-size: var(--font-size-base);
+  padding: 10px 15px;
+  background-color: #ffffff;
+  border: 1px solid #d6d6d6;
+  outline: var(--color-accent);
+  resize: none;
+  border-radius: 2px;
+  &.error {
+    border-color: #f6837b;
+    outline-color: #f6837b;
+    color: #6a6a6a;
+  }
 }
 
 .no-selection {

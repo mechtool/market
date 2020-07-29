@@ -4,7 +4,7 @@
     <h2>Корзина</h2>
   </div>
 
-  <ng-container *ngIf="cartData; else emptyCart">
+  <ng-container *ngIf="cartData?.content?.length; else emptyCart">
     <p class="total" *ngIf="cartData?.content?.length">
       Всего {{totalItems}}{{totalItems | myDeclension: ' товар': ' товара': ' товаров'}}
       от {{supplierCount}}{{supplierCount | myDeclension: ' поставщика': ' поставщиков': ' поставщиков'}}
@@ -15,6 +15,16 @@
 
 </div>
 
+
 <ng-template #emptyCart>
-  Корзина пуста
+  <div class="empty">
+    <nz-empty
+      nzNotFoundImage="./assets/img/svg/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      >
+      <ng-template #contentTpl>
+        <span>Корзина пуста</span>
+      </ng-template>
+    </nz-empty>
+  </div>
 </ng-template>

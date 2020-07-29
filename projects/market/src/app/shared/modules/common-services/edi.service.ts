@@ -3,6 +3,7 @@ import { CommerceMlDocumentResponseModel, DocumentResponseModel } from '#shared/
 import { Observable, of } from 'rxjs';
 import { BNetService } from '#shared/modules/common-services/bnet.service';
 import { UserService } from '#shared/modules/common-services/user.service';
+import { innKppToLegalId } from '#shared/utils';
 
 @Injectable()
 export class EdiService {
@@ -49,10 +50,8 @@ export class EdiService {
     const userOrganizations = this._userService.userOrganizations$.getValue();
     if (userOrganizations) {
       return userOrganizations.map((org) => {
-        if (org.legalRequisites.kpp) {
-          return `${org.legalRequisites.inn}:${org.legalRequisites.kpp}`;
-        }
-        return org.legalRequisites.inn;
+        const legalId = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
+        return legalId;
       });
     }
     return null;

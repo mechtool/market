@@ -1,0 +1,38 @@
+[
+  {
+    "requestId": "640f4992-7b34-47c0-be4d-af380dc66b20",
+    "requesterNotes": "Прошу добавить Иванова И.И.",
+    "requestDate": "2020-07-31T13:34:44.446",
+    "requestStatus": {
+      "resolutionStatus": "PENDING",
+      "resolutionDate": null,
+      "resolutionNotes": null
+    },
+    "organization": {
+      "id": "33e41c12-3b6c-4984-ae33-87314b5f9809",
+      "name": "ООО \"РОКСИ\"",
+      "legalRequisites": {
+        "inn": "7810578297",
+        "kpp": "781001001"
+      }
+    }
+  },
+  {
+    "requestId": "c12f1e6e-9218-42a8-8dda-e5b0098b0295",
+    "requesterNotes": "Прошу добавить Иванова И.И.",
+    "requestDate": "2020-07-31T16:20:03.339",
+    "requestStatus": {
+      "resolutionStatus": "PENDING",
+      "resolutionDate": null,
+      "resolutionNotes": null
+    },
+    "organization": {
+      "id": "4809869b-94d6-4d1c-8c83-4401b5ccce19",
+      "name": "Общество с ограниченной ответственностью \"ПРЕМЬЕРАВИА\"",
+      "legalRequisites": {
+        "inn": "7204176291",
+        "kpp": "720301001"
+      }
+    }
+  }
+]

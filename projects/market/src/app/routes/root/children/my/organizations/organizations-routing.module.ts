@@ -1,14 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OrganizationsComponent } from './organizations.component';
-import { AuthOrganizationGuard } from '#shared/modules/setup-services/auth-organization.guard';
+import { SingleOrganizationComponent } from './components/single-organization/single-organization.component';
 
 const routes: Routes = [
   {
     path: '',
     component: OrganizationsComponent,
-    canActivate: [AuthOrganizationGuard],
-  },
+  }, {
+    path: ':id',
+    component: SingleOrganizationComponent,
+  }, {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  }
 ];
 
 @NgModule({

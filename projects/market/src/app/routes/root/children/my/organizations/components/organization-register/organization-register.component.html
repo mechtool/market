@@ -1,0 +1,104 @@
+<div class="organization-register">
+  <div class="section_tab__title">
+    <h2>Добавить организацию</h2>
+  </div>
+
+  <p class="form_title">Чтобы продолжить работу, <br>укажите данные организации:</p>
+
+  <form class="form__registration_org" [formGroup]="form" (submit)="send()">
+
+    <div class="form-group form-group-std">
+      <label for="inn">ИНН</label>
+      <input type="text" id="inn" autocomplete="off" formControlName="inn">
+    </div>
+
+    <div class="form-group form-group-std" *ngIf="form.get('kpp').value">
+      <label for="kpp">КПП</label>
+      <input type="text" id="kpp" autocomplete="off" formControlName="kpp">
+    </div>
+
+    <div
+      class="form-group form-group-std"
+      [ngClass]="{'error': form.controls.organizationName.errors?.required && (form.controls.organizationName.touched || form.controls.organizationName.dirty)}">
+        <label for="organizationName">Наименование юр. лица *</label>
+        <input type="text" id="organizationName" autocomplete="off" formControlName="organizationName">
+        <div class="input_attention" *ngIf="form.controls.organizationName.errors?.required && (form.controls.organizationName.touched || form.controls.organizationName.dirty)">Заполните это поле</div>
+    </div>
+
+    <div class="form-group">
+      <label for="organizationDescription">Описание компании</label>
+      <div class="textarea-wrap">
+        <textarea id="organizationDescription" rows="6" formControlName="organizationDescription"></textarea>
+      </div>
+    </div>
+
+    <div
+      class="form-group form-group-std"
+      [ngClass]="{'error': form.controls.organizationEmail.errors?.email && (form.controls.organizationName.touched || form.controls.organizationName.dirty)}">
+        <label for="organizationEmail">E-mail</label>
+        <input type="text" id="organizationEmail" autocomplete="off" formControlName="organizationEmail">
+        <div class="input_attention" *ngIf="form.controls.organizationEmail.errors?.email && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)">Некорректно заполнено поле</div>
+    </div>
+
+    <div class="form-group form-group-std">
+      <label for="organizationPhone">Телефон</label>
+      <input type="text" id="organizationPhone" autocomplete="off" formControlName="organizationPhone">
+    </div>
+
+    <div class="form-group form-group-std">
+      <label for="organizationWebsite">Сайт компании</label>
+      <input type="text" id="organizationWebsite" autocomplete="off" formControlName="organizationWebsite">
+    </div>
+
+    <div class="form-group form-group-std">
+      <label for="organizationAddress">Адрес компании</label>
+      <input type="text" id="organizationAddress" autocomplete="off" formControlName="organizationAddress">
+    </div>
+
+    <p class="form_title form_title__inner">Укажите контакты менеджера,<br> для связи поддержкой 1С:Бизнес-сеть:</p>
+
+    <div
+      class="form-group form-group-std"
+      [ngClass]="{'error': form.controls.contactFio.errors?.required && (form.controls.contactFio.touched || form.controls.contactFio.dirty)}">
+        <label for="contactFio">Имя и фамилия *</label>
+        <input type="text" id="contactFio" autocomplete="off" formControlName="contactFio">
+        <div class="input_attention" *ngIf="form.controls.contactFio.errors?.required && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">Заполните это поле</div>
+    </div>
+
+    <div class="form-group form-group-std">
+      <label for="contactRole">Должность</label>
+      <input type="text" id="contactRole" autocomplete="off" formControlName="contactRole">
+    </div>
+
+    <div
+      class="form-group form-group-std"
+      [ngClass]="{'error': (form.controls.contactEmail.errors?.required || form.controls.contactEmail.errors?.email) && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}">
+        <label for="contactEmail>">E-mail *</label>
+        <input type="text" id="contactEmail" autocomplete="off" formControlName="contactEmail">
+        <div class="input_attention" *ngIf="form.controls.contactEmail.errors?.required && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">Заполните это поле</div>
+        <div class="input_attention" *ngIf="form.controls.contactEmail.errors?.email && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">Некорректно заполнено поле</div>
+    </div>
+
+    <div
+      class="form-group form-group-std"
+      [ngClass]="{'error': form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}">
+        <label for="contactPhone>">Телефон *</label>
+        <input type="text" id="contactPhone" autocomplete="off" formControlName="contactPhone">
+        <div class="input_attention" *ngIf="form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">Заполните это поле</div>
+    </div>
+
+    <div class="form-group form-group-agree">
+      <label nz-checkbox formControlName="agree" style="display: flex; align-items: flex-start;">
+        <span class="checkbox-agree-text">Я являюсь уполномоченным представителем регистрируемой<br/>организации и принимаю условия
+          <a class="attention-link" href="https://1cbn.ru/agreement/" target="_blank" (click)="$event.stopPropagation()">пользовательского соглашения</a>
+        </span>
+      </label>
+    </div>
+
+    <div class="form-group">
+      <button nz-button nzType="primary" [disabled]="!form.valid">Продолжить</button>
+    </div>
+
+  </form>
+
+</div>

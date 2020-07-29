@@ -1,0 +1,50 @@
+<ng-container *ngIf="organizations?.length; else emptyOrganizations">
+  <div class="table_list table_list__organizations">
+    <div class="table_row table_header">
+      <div class="table_cell cell_title">
+        <span>Наименование организации</span>
+      </div>
+      <div class="table_cell cell_status">
+        <span>Ваш статус</span>
+      </div>
+      <div class="table_cell cell_action">
+        <span>Действие</span>
+      </div>
+    </div>
+    <div class="table_row" *ngFor="let org of organizations">
+      <div class="table_cell cell_title">
+        <a class="supplier_title" [routerLink]="['/my/organizations/' + org.organizationId]">
+          <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(org.organizationName)}"></span>
+          <span class="supplier_name">
+            {{org.organizationName}}
+          </span>
+        </a>
+      </div>
+      <div class="table_cell cell_status" data-title="Ваш статус:">
+        {{org.userGrants.isAdmin ? 'Администратор' : 'Менеджер'}}
+      </div>
+      <div class="table_cell cell_action">
+        <div class="table_cell__inner" *ngIf="org.userGrants.isAdmin">
+          <button
+            class="btn btn-gray btn_get_access-key btn_long"
+            (click)="emitRequestAccessKey(org)">
+            Получить пароль
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #emptyOrganizations>
+  <div class="empty">
+    <nz-empty
+      nzNotFoundImage="./assets/img/svg/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      >
+      <ng-template #contentTpl>
+        <span>Список действующих организаций пуст</span>
+      </ng-template>
+    </nz-empty>
+  </div>
+</ng-template>

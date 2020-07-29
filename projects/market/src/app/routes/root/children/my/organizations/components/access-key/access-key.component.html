@@ -1,0 +1,49 @@
+<ng-container *ngIf="accessKey; else noAccessKey">
+
+  <div class="access-key">
+
+    <div class="title">
+      Одноразовый пароль для подключения<br>
+      к {{organizationName}}
+    </div>
+    <div class="info_group__access-key">
+      <div class="info_group">
+        <span class="info_group__label">ИНН</span>
+        <span class="info_group__value">{{inn}}</span>
+      </div>
+      <div class="info_group" *ngIf="kpp">
+        <span class="info_group__label">КПП</span>
+        <span class="info_group__value">{{kpp}}</span>
+      </div>
+      <div class="info_group">
+        <strong class="info_group__label">Одноразовый пароль</strong>
+        <strong class="info_group__value">{{accessCode}}</strong>
+      </div>
+    </div>
+    <div class="get_access-code__copy">
+      <button nz-button [nzType]="'primary'" (click)="copyAccessCodeToClipboard()">Скопировать пароль</button>
+    </div>
+    <p class="get_access-code__copy_success" *ngIf="isAccessCodeCopied">Пароль скопирован в буфер обмена.</p>
+    <div class="get_access-code__note">
+      <p>Скопируйте и введите пароль в подключаемую систему.</p>
+      <p>Использовать до {{accessCodeExpirationDate | date:'dd MMMM yyyy г.'}}</p>
+    </div>
+
+  </div>
+
+</ng-container>
+
+
+<ng-template #noAccessKey>
+  <div class="empty">
+    <nz-empty
+      nzNotFoundImage="./assets/img/svg/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      >
+      <ng-template #contentTpl>
+        <span>Отсутствует ключ доступа</span>
+      </ng-template>
+    </nz-empty>
+  </div>
+</ng-template>
+

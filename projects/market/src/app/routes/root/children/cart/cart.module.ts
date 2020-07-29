@@ -10,6 +10,7 @@ import {
   NzRadioModule,
   NzButtonModule,
   NzAutocompleteModule,
+  NzEmptyModule,
 } from 'ng-zorro-antd';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
@@ -29,6 +30,7 @@ import { CartOrderComponent, CartOrderQtyCounterComponent } from './components';
     NzButtonModule,
     NzAutocompleteModule,
     NzModalModule,
+    NzEmptyModule,
     CartRoutingModule,
     PipesModule,
   ],

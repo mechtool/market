@@ -80,8 +80,11 @@ export class AuthService {
     return this._apiService.post(`${API_URL}/auth/refresh`, authRefreshRequest);
   }
 
-  goTo(url: string): any {
-    this._router.navigateByUrl(url);
+  goTo(url: string): void {
+    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true })
+      .then(() => {
+        this._router.navigateByUrl(url)
+      });
   }
 
   redirectExternalSsoAuth(url: string): void {

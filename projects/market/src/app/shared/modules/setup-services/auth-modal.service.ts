@@ -40,7 +40,7 @@ export class AuthModalService {
       nzContent: '<i>Раздел доступен пользователям зарегистрировавшим организацию. ' +
         'Для продолжения необходимо зарегистрировать свою организацию в 1C:Бизнес-сеть.</i>',
       nzOkText: 'Зарегистрировать',
-      nzOnOk: () => this._authService.goTo('/my/organizations/new'),
+      nzOnOk: () => this._authService.goTo('my/organizations?tab=c'),
       nzOnCancel: () => this._authService.goTo(currentUrl),
     });
   }

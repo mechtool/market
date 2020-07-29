@@ -17,7 +17,7 @@ import {
   RelationEnumModel
 } from '#shared/modules/common-services/models';
 import { catchError, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
-import { absoluteImagePath, stringToHex } from '#shared/utils';
+import { absoluteImagePath, stringToHex, innKppToLegalId } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 import { iif, of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -523,7 +523,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _checkAudienceForAvailability(audienceArray: string[], org: any) {
-    const innKpp = `${org.legalRequisites.inn}${org.legalRequisites.kpp ? `:${org.legalRequisites.kpp}` : ''}`;
+    const innKpp = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
     return audienceArray.includes(innKpp);
   }
 

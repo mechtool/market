@@ -11,6 +11,7 @@ import { UserStatusEnumModel } from './models/user-status-enum.model';
 @Injectable()
 export class UserService {
   userOrganizations$: BehaviorSubject<UserOrganizationModel[]> = new BehaviorSubject(null);
+  userParticipationRequests$: BehaviorSubject<any[]> = new BehaviorSubject(null);
   userCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   userData$: BehaviorSubject<AuthResponseModel> = new BehaviorSubject(null);
 
@@ -18,6 +19,10 @@ export class UserService {
     private _bnetService: BNetService,
     private _cookieService: CookieService,
   ) {}
+
+  setUserParticipationRequests(data: any): void {
+    this.userParticipationRequests$.next(data);
+  }
 
   setUserData(data: any): void {
     this.userData$.next(data);

@@ -25,6 +25,10 @@ import {
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
   UserOrganizationModel,
+  OrganizationAdminResponseModel,
+  AccessKeyResponseModel,
+  ParticipationRequestResponseModel,
+  RegisterOrganizationRequestModel,
 } from './models';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
@@ -72,6 +76,30 @@ export class BNetService {
 
   getOrganization(id: string): Observable<OrganizationResponseModel> {
     return this._apiService.get(`${API_URL}/organizations/${id}`);
+  }
+
+  getOrganizationAdminsByLegalId(legalId: string): Observable<OrganizationAdminResponseModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/admins/${legalId}`);
+  }
+
+  getOrganizationByLegalId(legalId: string): Observable<OrganizationResponseModel> {
+    return this._apiService.get(`${API_URL}/organizations/by-legal-id/${legalId}`);
+  }
+
+  sendParticipationRequest(data: any): Observable<any> {
+    return this._apiService.post(`${API_URL}/organizations/participation-requests`, data);
+  }
+
+  getParticipationRequests(): Observable<ParticipationRequestResponseModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/participation-requests`);
+  }
+
+  obtainAccessKey(orgId: string): Observable<AccessKeyResponseModel> {
+    return this._apiService.post(`${API_URL}/organizations/access-keys/obtain`, { organizationId: orgId });
+  }
+
+  registerOrganization(data: RegisterOrganizationRequestModel): Observable<any> {
+    return this._apiService.post(`${API_URL}/organizations`, data);
   }
 
   searchLocations(textQuery: string): Observable<LocationModel[]> {
