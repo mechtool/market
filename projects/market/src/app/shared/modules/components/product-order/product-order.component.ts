@@ -35,7 +35,7 @@ export class ProductOrderComponent implements OnInit {
   private _price: number;
 
   get price(): number {
-    return this._price ? this._price : this._closest(this.matrix, 0);
+    return this._price ? this._price : this._closest(this.matrix, 1);
   }
 
   get vatInfo() {

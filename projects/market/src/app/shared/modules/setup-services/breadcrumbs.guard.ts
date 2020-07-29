@@ -7,10 +7,53 @@ import {
   CategoryService,
   OrganizationsService,
   ProductService,
-  TradeOffersService
+  TradeOffersService,
+  UserService
 } from '#shared/modules/common-services';
 import { BreadcrumbItemModel } from '#shared/modules/common-services/models';
 import { of } from 'rxjs';
+
+/**
+ * URL пути страниц без breadcrumbs
+ * Регекспы по роутингу {@link http://forbeslindesay.github.io/express-route-tester/}
+ */
+const pathsObjectWithoutBreadcrumbs = {
+  '/': /^\/$/i,
+  '/404': /^\/404$/i,
+  '/500': /^\/500$/i,
+  '/search': /^\/search$/i,
+  '/supplier': /^\/supplier$/i,
+};
+
+/**
+ * URL пути страниц с breadcrumbs
+ * Регекспы по роутингу {@link http://forbeslindesay.github.io/express-route-tester/}
+ */
+const pathsObjectWithBreadcrumbs = {
+  '/category/:categoryId': /^\/category\/(?:([^\/]+?))$/i,
+  '/product/:id': /^\/product\/(?:([^\/]+?))$/i,
+  '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
+  '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
+  '/about': /^\/about$/i,
+  '/cart': /^\/cart$/i,
+  '/my/orders': /^\/my\/orders$/i,
+  '/my/organizations': /^\/my\/organizations$/i,
+};
+
+/**
+ * URL пути находящиеся под аутентификацией
+ */
+const pathsWithAuthentication = [
+  /^\/supplier$/i,
+];
+
+/**
+ * URL пути находящиеся под авторизацией
+ */
+const pathsWithAuthorization = [
+  /^\/my\/organizations$/i,
+  /^\/my\/orders$/i,
+];
 
 @Injectable()
 export class BreadcrumbsGuard implements CanActivate {
@@ -20,6 +63,7 @@ export class BreadcrumbsGuard implements CanActivate {
     private _productService: ProductService,
     private _organizationsService: OrganizationsService,
     private _tradeOffersService: TradeOffersService,
+    private _userService: UserService,
   ) {
   }
 
@@ -28,27 +72,11 @@ export class BreadcrumbsGuard implements CanActivate {
     const urlSplitted = urlWithoutQueryParams.split('/');
     let breadcrumbsItems = [];
 
-    // Регекспы по роутингу http://forbeslindesay.github.io/express-route-tester/
-    const pathsObjectWithoutBreadcrumbs = {
-      '/': /^\/$/i,
-      '/404': /^\/404$/i,
-      '/500': /^\/500$/i,
-      '/search': /^\/search$/i,
-      '/supplier': /^\/supplier$/i,
-    };
-
-    const pathsObjectWithBreadcrumbs = {
-      '/category/:categoryId': /^\/category\/(?:([^\/]+?))$/i,
-      '/product/:id': /^\/product\/(?:([^\/]+?))$/i,
-      '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
-      '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
-      '/about': /^\/about$/i,
-      '/cart': /^\/cart$/i,
-      '/my/orders': /^\/my\/orders$/i,
-      '/my/organizations': /^\/my\/organizations$/i,
-    };
-
     const isRouteWithoutBreadcrumb = Object.values(pathsObjectWithoutBreadcrumbs).some(regEx => regEx.test(urlWithoutQueryParams));
+
+    if (this.nextPageWithAuth(urlWithoutQueryParams)) {
+      return true;
+    }
 
     if (isRouteWithoutBreadcrumb) {
       this._breadcrumbsService.setVisible(false);
@@ -197,6 +225,13 @@ export class BreadcrumbsGuard implements CanActivate {
       },
       <BreadcrumbItemModel[]>[]
     );
+  }
+
+  private nextPageWithAuth(urlWithoutQueryParams: string): boolean {
+    const nextPageWithAuthentication = pathsWithAuthentication.some(regEx => regEx.test(urlWithoutQueryParams));
+    const nextPageWithAuthorization = pathsWithAuthorization.some(regEx => regEx.test(urlWithoutQueryParams));
+    return (nextPageWithAuthentication && !this._userService.userData$.getValue()) ||
+      (nextPageWithAuthorization && !this._userService.userOrganizations$.getValue()?.length);
   }
 }
 

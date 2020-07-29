@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SearchComponent } from './search.component';
-import { BreadcrumbsGuard } from '#shared/modules';
 
 const routes: Routes = [
   {
@@ -18,4 +17,5 @@ const routes: Routes = [
     RouterModule,
   ],
 })
-export class SearchRoutingModule {}
+export class SearchRoutingModule {
+}
