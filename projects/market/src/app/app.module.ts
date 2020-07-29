@@ -10,12 +10,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
 import {
   CardModule,
+  UserService,
   CartService,
+  AuthService,
+  CookieService,
   CommonServicesModule,
   NomenclatureCardModule,
   PipesModule,
   SetupServicesModule,
-  UserService,
 } from '#shared/modules';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -79,7 +81,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
-      deps: [UserService, CartService],
+      deps: [UserService, CartService, AuthService, CookieService],
       multi: true,
     },
   ],

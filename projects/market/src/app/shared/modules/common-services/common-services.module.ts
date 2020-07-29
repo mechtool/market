@@ -13,6 +13,7 @@ import { ProductService } from './product.service';
 import { OrganizationsService } from './organizations.service';
 import { UserService } from './user.service';
 import { LocalStorageService } from './local-storage.service';
+import { CookieService } from './cookie.service';
 import { LocationService } from './location.service';
 import { SupplierService } from './supplier.service';
 import { TradeOffersService } from './trade-offers.service';
@@ -40,6 +41,7 @@ export class CommonServicesModule {
         NavigationService,
         BreadcrumbsService,
         LocalStorageService,
+        CookieService,
         ResponsiveService,
         SuggestionService,
         ProductService,

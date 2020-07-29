@@ -33,6 +33,7 @@ export class AuthService {
 
   logout(path: string = '/') {
     const routePath = this.isPathWithAuth(path) ? '/' : path;
+    this._userService.setUserData(null);
     redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
   }
 

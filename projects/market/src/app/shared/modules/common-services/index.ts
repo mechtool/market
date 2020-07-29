@@ -12,6 +12,7 @@ export * from './organizations.service';
 export * from './responsive.service';
 export * from './user.service';
 export * from './local-storage.service';
+export * from './cookie.service';
 export * from './location.service';
 export * from './category.service';
 export * from './models';

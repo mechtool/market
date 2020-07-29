@@ -1,9 +1,12 @@
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map, tap, pairwise } from 'rxjs/operators';
 import { AuthResponseModel, CategoryModel, CategoryResponseModel, UserOrganizationModel } from './models';
 import { convertListToTree } from '#shared/utils';
 import { BNetService } from './bnet.service';
+import { CookieService } from './cookie.service';
+import { UserStatusEnumModel } from './models/user-status-enum.model';
+
 
 @Injectable()
 export class UserService {
@@ -13,8 +16,8 @@ export class UserService {
 
   constructor(
     private _bnetService: BNetService,
-  ) {
-  }
+    private _cookieService: CookieService,
+  ) {}
 
   setUserData(data: any): void {
     this.userData$.next(data);
@@ -36,5 +39,11 @@ export class UserService {
       })
     );
   }
-}
 
+  watchUserDataChangesForUserStatusCookie() {
+    this.userData$
+    .subscribe((res) => {
+      this._cookieService.setUserStatusCookie((res) ? UserStatusEnumModel.AUTHED : UserStatusEnumModel.NOT_AUTHED);
+    })
+  }
+}

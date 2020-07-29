@@ -1,25 +1,34 @@
-import { switchMap, map } from 'rxjs/operators';
-import { UserService, CartService } from '#shared/modules/common-services';
+import { switchMap, map, tap } from 'rxjs/operators';
+import { UserService, CartService, AuthService, CookieService } from '#shared/modules/common-services';
 import { zip, of } from 'rxjs';
-import { environment } from '#environments/environment';
 
 export function ApiFactory(
   userService: UserService,
   cartService: CartService,
+  authService: AuthService,
+  cookieService: CookieService,
 ): () => Promise<any> {
   return (): Promise<any> => {
-    return init(userService, cartService);
+    return init(userService, cartService, authService, cookieService);
   };
 }
 
 function init(
   userService: UserService,
   cartService: CartService,
+  authService: AuthService,
+  cookieService: CookieService,
 ) {
   return new Promise((resolve, reject) => {
     return zip(
       setCart(cartService),
       userService.updateUserCategories(),
+    ).pipe(
+      map(res => cookieService.isUserStatusCookieAuthed),
+      switchMap((res) => {
+        userService.watchUserDataChangesForUserStatusCookie();
+        return res ? authService.login(location.pathname) : of(null);
+      })
     ).subscribe(resolve, reject);
   });
 }
