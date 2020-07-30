@@ -27,9 +27,16 @@ function init(
       map(res => cookieService.isUserStatusCookieAuthed),
       switchMap((res) => {
         userService.watchUserDataChangesForUserStatusCookie();
-        return res ? authService.login(location.pathname) : of(null);
+        return res ? authService.login(location.pathname, false) : of(null);
       })
-    ).subscribe(resolve, reject);
+    ).subscribe((res) => {
+      if (res) {
+        authService.redirectExternalSsoAuth(res);
+      }
+      if (!res) {
+        resolve();
+      }
+    }, reject);
   });
 }
 

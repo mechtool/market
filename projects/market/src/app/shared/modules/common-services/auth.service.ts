@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, tap, switchMap } from 'rxjs/operators';
@@ -37,16 +37,14 @@ export class AuthService {
     redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
   }
 
-  login(path: string = '/'): Observable<any> {
+  login(path: string = '/', redirectable = true): Observable<any> {
     const pathName = path.split('?')[0];
     const ticket = getParamFromQueryString('ticket');
     const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
     const url = pathName === location.pathname ?
       `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}` :
       `${location.origin}${pathName}`;
-    if (!ticket) {
-      this.redirectExternalSsoAuth(url);
-    } else {
+    if (ticket) {
       const serviceName = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
       return this.auth({ ticket, serviceName })
         .pipe(
@@ -55,9 +53,15 @@ export class AuthService {
           tap(res => this._userService.setUserOrganizations(res)),
           map(() => {
             this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
-            return true;
+            return null;
           }),
         );
+    }
+    if (!ticket && redirectable) {
+      this.redirectExternalSsoAuth(url);
+    }
+    if (!ticket && !redirectable) {
+      return of(url);
     }
   }
 
@@ -80,7 +84,7 @@ export class AuthService {
     this._router.navigateByUrl(url);
   }
 
-  private redirectExternalSsoAuth(url: string): void {
+  redirectExternalSsoAuth(url: string): void {
     location.assign(`${ITS_URL}/login?service=${url}`);
   }
 

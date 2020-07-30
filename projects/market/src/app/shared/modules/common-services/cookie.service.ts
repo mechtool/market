@@ -26,7 +26,7 @@ export class CookieService {
         USER_STATUS,
         statusName,
         null,
-        null,
+        '/',
         this._routeDomain
       );
     }
