@@ -9,6 +9,7 @@ import {
   CartUpdateItemQuantityRequestModel,
   CategoryRequestModel,
   CategoryResponseModel,
+  CommerceMlDocumentResponseModel,
   DocumentResponseModel,
   EdiRequestModel,
   LocationModel,
@@ -121,9 +122,17 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/edi/orders`, { params });
   }
 
+  getOrderDocument(id: number): Observable<CommerceMlDocumentResponseModel> {
+    return this._apiService.get(`${API_URL}/edi/orders/${id}`);
+  }
+
   getAccounts(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/edi/accounts`, { params });
+  }
+
+  getAccountDocument(id: number): Observable<CommerceMlDocumentResponseModel> {
+    return this._apiService.get(`${API_URL}/edi/accounts/${id}`);
   }
 
   private _params(searchQuery: any): HttpParams {

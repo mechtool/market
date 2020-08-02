@@ -236,6 +236,10 @@ button.btn:hover {
 a {
   color: inherit;
   text-decoration: none;
+
+  &:hover {
+    color: var(--color-black);
+  }
 }
 
 .icon_scroll {
@@ -243,7 +247,3 @@ a {
   font-size: 50px;
   color: var(--color-accent-light);
 }
-
-//.to_cart__wrap {
-//  width: 220px;
-//}

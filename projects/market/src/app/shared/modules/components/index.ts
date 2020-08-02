@@ -6,6 +6,7 @@ export * from './error-code-alert';
 export * from './card';
 export * from './nomenclature-card';
 export * from './order-list';
+export * from './payment-document';
 export * from './product-description';
 export * from './product-gallery';
 export * from './product-order';

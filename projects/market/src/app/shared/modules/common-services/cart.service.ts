@@ -115,7 +115,7 @@ export class CartService {
         return this._bnetService.updateItemQuantityInCart(relationHref, data);
       case RelationEnumModel.ITEM_REMOVE:
         return this._bnetService.removeItemFromCart(relationHref);
-      case RelationEnumModel.TRADEOFFER_VIEW:
+      case RelationEnumModel.TRADE_OFFER_VIEW:
         return this._bnetService.getTradeOfferFromCart(relationHref);
     }
   }

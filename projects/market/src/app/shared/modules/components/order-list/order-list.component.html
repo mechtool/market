@@ -29,7 +29,9 @@
           </div>
         </div>
         <div class="table_cell cell_number" data-title="Заказ:">
-          {{document.orderNumber}}
+          <a (click)="openDocument(payment_document)">
+            {{document.orderNumber}}
+          </a>
         </div>
         <div class="table_cell cell_date" data-title="Дата:">
           {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
@@ -38,8 +40,14 @@
           <span class="price">{{document.price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
         </div>
         <div class="table_cell cell_action">
-          <button type="button" class="btn btn-gray btn_long">Посмотреть заказ</button>
+          <button type="button" class="btn btn-gray btn_long" (click)="openDocument(payment_document)">Посмотреть заказ</button>
         </div>
+        <ng-template #payment_document>
+          <my-payment-document
+            [documentId]="document.id"
+            [documentType]="'ORDER'"
+          ></my-payment-document>
+        </ng-template>
       </div>
     </div>
   </div>

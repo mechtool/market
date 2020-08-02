@@ -24,11 +24,6 @@ export class ProductSideComponent implements OnInit {
     private _cartService: CartService,
     private _notificationsService: NotificationsService,
   ) {
-    if (this.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
-      this.orderStatus = OrderStatusModal.NOT_AVAILABLE;
-    } else {
-      this.orderStatus = OrderStatusModal.TO_CART;
-    }
     this.form = this._fb.group({
       totalPositions: 0,
     });
@@ -45,7 +40,7 @@ export class ProductSideComponent implements OnInit {
             return [...curr.items, ...accum];
           }, []);
           const foundTradeOffer = cartTradeOffers.find((x) => {
-            const hrefSplitted = x._links[RelationEnumModel.TRADEOFFER_VIEW].href.split('/');
+            const hrefSplitted = x._links[RelationEnumModel.TRADE_OFFER_VIEW].href.split('/');
             return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
           });
           if (foundTradeOffer) {
@@ -54,6 +49,9 @@ export class ProductSideComponent implements OnInit {
           } else {
             this.orderStatus = OrderStatusModal.TO_CART;
             this.form.controls.totalPositions.setValue(null, { onlySelf: true, emitEvent: false });
+          }
+          if (this.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
+            this.orderStatus = OrderStatusModal.NOT_AVAILABLE;
           }
         },
         (err) => {

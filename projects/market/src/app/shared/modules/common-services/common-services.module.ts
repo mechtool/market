@@ -20,12 +20,14 @@ import { TradeOffersService } from './trade-offers.service';
 import { CartService } from './cart.service';
 import { EdiService } from './edi.service';
 import { NotificationsService } from './notifications.service';
-import { NzMessageModule } from 'ng-zorro-antd';
+import { NzMessageModule, NzModalModule } from 'ng-zorro-antd';
+import { PaymentDocumentModalService } from './payment-document-modal.service';
 
 @NgModule({
   imports: [
     CommonModule,
     NzMessageModule,
+    NzModalModule,
   ],
 })
 export class CommonServicesModule {
@@ -53,6 +55,7 @@ export class CommonServicesModule {
         CartService,
         EdiService,
         NotificationsService,
+        PaymentDocumentModalService,
       ],
     };
   }

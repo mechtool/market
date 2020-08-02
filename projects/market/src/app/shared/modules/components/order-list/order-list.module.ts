@@ -5,6 +5,7 @@ import { OrderListComponent } from './order-list.component';
 import { NzIconModule, NzSpinModule, NzTableModule } from 'ng-zorro-antd';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PipesModule } from '#shared/modules/pipes';
+import { PaymentDocumentModule } from '#shared/modules/components/payment-document';
 
 @NgModule({
   imports: [
@@ -12,9 +13,10 @@ import { PipesModule } from '#shared/modules/pipes';
     RouterModule,
     NzTableModule,
     NzSpinModule,
-    InfiniteScrollModule,
     NzIconModule,
+    InfiniteScrollModule,
     PipesModule,
+    PaymentDocumentModule,
   ],
   exports: [OrderListComponent],
   declarations: [OrderListComponent],

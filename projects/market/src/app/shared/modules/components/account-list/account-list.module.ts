@@ -5,6 +5,7 @@ import { AccountListComponent } from './account-list.component';
 import { NzIconModule, NzSpinModule, NzTableModule } from 'ng-zorro-antd';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PipesModule } from '#shared/modules/pipes';
+import { PaymentDocumentModule } from '#shared/modules/components/payment-document';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { PipesModule } from '#shared/modules/pipes';
     NzIconModule,
     InfiniteScrollModule,
     PipesModule,
+    PaymentDocumentModule,
   ],
   exports: [AccountListComponent],
   declarations: [AccountListComponent],

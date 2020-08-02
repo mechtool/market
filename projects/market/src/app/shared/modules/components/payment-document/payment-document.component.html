@@ -1,0 +1,45 @@
+<div class="payment-document" *ngIf="document">
+  <p class="title">{{document.typeOperation}} №{{document.numberOperation}}
+    от {{ document.dateOperation | date:'dd MMMM yyyy г.' }}</p>
+
+  <hr>
+
+  <p>{{document.sender.role}}: {{name(document.sender.name)}},
+    ИНН {{document.sender.inn}}{{kpp(document.sender.kpp)}}</p>
+
+  <p>{{document.recipient.role}}: {{name(document.recipient.name)}},
+    ИНН {{document.recipient.inn}}{{kpp(document.recipient.kpp)}}</p>
+
+  <table>
+    <tr>
+      <th scope="col">№</th>
+      <th scope="col">Артикул</th>
+      <th scope="col">Товары (работы, услуги)</th>
+      <th scope="col">Количество</th>
+      <th scope="col">Цена</th>
+      <th scope="col">Сумма</th>
+    </tr>
+    <tr *ngFor="let product of document.products; let i = index">
+      <td>{{i + 1}}</td>
+      <td>{{product.partNumber}}</td>
+      <td>{{product.productName}}</td>
+      <td>{{product.amount}} {{product.baseUnit.shortName}}.</td>
+      <td>{{product.price | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+      <td>{{product.totalPrice | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+    </tr>
+  </table>
+
+  <p class="right">Итого:  {{document.totalSum | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</p><br>
+
+  <p class="info">Всего наименований {{document.products?.length}}, на сумму
+    {{document.totalSum | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</p>
+  <p class="sum_letters">{{document.totalSum | mySumLetters}}</p>
+
+  <hr>
+
+  <p>Исполнитель: {{document.signatory}}</p>
+</div>
+
+<div class="error" *ngIf="isError">
+  <h3>Невозможно отобразить документ. Внутренняя ошибка сервера.</h3>
+</div>

@@ -1,0 +1,58 @@
+hr {
+  border: none;
+  background-color: var(--color-black);
+  color: var(--color-black);
+  height: 2px;
+  margin-bottom: 20px;
+}
+
+table {
+  border: 2px solid var(--color-black);
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+th, td {
+  color: var(--color-black);
+  font-size: var(--font-size-10);
+  border: 1px solid var(--color-black);
+}
+
+th {
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+}
+
+td {
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+p {
+  color: var(--color-black);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+}
+
+.title {
+  font-size: var(--font-size-15);
+  margin-right: 10px;
+}
+
+.info {
+  margin-top: 10px;
+}
+
+.sum_letters {
+  margin-top: -10px;
+  font-weight: var(--font-weight-bold);
+}
+
+.right {
+  position: absolute;
+  right: 30px;
+}
+
+.error {
+  text-align: center;
+}

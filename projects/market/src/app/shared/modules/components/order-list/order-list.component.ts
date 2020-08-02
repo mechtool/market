@@ -1,7 +1,8 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { DocumentDto } from '#shared/modules/common-services/models';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
+import { PaymentDocumentModalService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -15,12 +16,15 @@ import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderListComponent {
-
   @Input() documents: DocumentDto[];
   @Input() isLoading: boolean;
   @Input() page: number;
   @Output() loadDocuments: EventEmitter<number> = new EventEmitter();
 
+  constructor(
+    private _paymentDocumentService: PaymentDocumentModalService,
+  ) {
+  }
 
   name(name: string) {
     return resizeBusinessStructure(name);
@@ -32,5 +36,9 @@ export class OrderListComponent {
 
   documentsLoading(nextPage: number) {
     this.loadDocuments.emit(nextPage);
+  }
+
+  openDocument(template: TemplateRef<any>) {
+    this._paymentDocumentService.show(template);
   }
 }

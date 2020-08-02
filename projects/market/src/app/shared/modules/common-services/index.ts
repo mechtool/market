@@ -21,3 +21,4 @@ export * from './product.service';
 export * from './supplier.service';
 export * from './cart.service';
 export * from './notifications.service';
+export * from './payment-document-modal.service';

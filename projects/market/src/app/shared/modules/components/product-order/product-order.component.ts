@@ -79,7 +79,7 @@ export class ProductOrderComponent implements OnInit {
             return [...curr.items, ...accum];
           }, []);
           const foundTradeOffer = cartTradeOffers.find((x) => {
-            const hrefSplitted = x._links[RelationEnumModel.TRADEOFFER_VIEW].href.split('/');
+            const hrefSplitted = x._links[RelationEnumModel.TRADE_OFFER_VIEW].href.split('/');
             return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
           });
           if (foundTradeOffer) {
@@ -88,6 +88,9 @@ export class ProductOrderComponent implements OnInit {
           } else {
             this._price = null;
             this.orderStatus = OrderStatusModal.TO_CART;
+          }
+          if (this.tradeOffer.stock?.stockBalanceSummary?.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
+            this.orderStatus = OrderStatusModal.NOT_AVAILABLE;
           }
         },
         (err) => {

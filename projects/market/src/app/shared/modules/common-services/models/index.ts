@@ -6,6 +6,7 @@ export * from './breadcrumb-item.model';
 export * from './category.model';
 export * from './category-response.model';
 export * from './category-request.model';
+export * from './commerce-ml-document-response.model';
 export * from './default-search-available.model';
 export * from './delivery-method-enum.model';
 export * from './relation-enum.model';

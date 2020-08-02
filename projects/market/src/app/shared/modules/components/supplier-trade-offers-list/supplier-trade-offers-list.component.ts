@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
-  CartService,
   DefaultSearchAvailableModel,
   LocalStorageService,
-  RelationEnumModel,
   SortModel,
   SuppliersItemModel,
   TradeOfferStockEnumModel,
@@ -49,24 +47,10 @@ export class SupplierTradeOffersListComponent {
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _localStorageService: LocalStorageService,
-    private _cartService: CartService,
   ) {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
       this.visibleSort = containParametersForRequest(queryParams);
     });
-  }
-
-  addItemToCart(tradeOffer: TradeOfferSummaryModel) {
-    const cartLocation = this._cartService.getCart$().value;
-    const data = {
-      tradeOfferId: tradeOffer.id,
-      quantity: 1,
-    };
-    this._cartService.handleRelationAndUpdateData(
-      RelationEnumModel.ITEM_ADD,
-      `${cartLocation}/items`,
-      data,
-    ).subscribe();
   }
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
