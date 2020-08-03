@@ -71,17 +71,15 @@ export class SupplierTradeOffersListComponent {
   }
 
   vat(price: TradeOfferSummaryPriceModel) {
-    if (price && price.includesVAT) {
-      switch (price.vat) {
-        case TradeOfferVatEnumModel.VAT_10:
-          return 'НДС 10%';
-        case TradeOfferVatEnumModel.VAT_20:
-          return 'НДС 20%';
-        case TradeOfferVatEnumModel.VAT_WITHOUT:
-          return 'Без НДС';
-      }
+    const includesVAT = price.includesVAT;
+    switch (price?.vat) {
+      case TradeOfferVatEnumModel.VAT_10:
+        return includesVAT ? 'с НДС 10%' : 'без НДС 10%';
+      case TradeOfferVatEnumModel.VAT_20:
+        return includesVAT ? 'с НДС 20%' : 'без НДС 20%';
+      default:
+        return 'без НДС';
     }
-    return 'Без НДС';
   }
 
   stock(level: TradeOfferStockEnumModel) {

@@ -39,17 +39,15 @@ export class ProductOrderComponent implements OnInit {
   }
 
   get vatInfo() {
-    if (this.tradeOffer?.termsOfSale.price && this.tradeOffer?.termsOfSale.price.includesVAT) {
-      switch (this.tradeOffer.termsOfSale.price.vat) {
-        case TradeOfferVatEnumModel.VAT_10:
-          return 'Цена включает налог НДС 10%';
-        case TradeOfferVatEnumModel.VAT_20:
-          return 'Цена включает налог НДС 20%';
-        case TradeOfferVatEnumModel.VAT_WITHOUT:
-          return 'Цена не включает налог НДС';
-      }
+    const includesVAT = this.tradeOffer?.termsOfSale.price.includesVAT;
+    switch (this.tradeOffer?.termsOfSale.price.vat) {
+      case TradeOfferVatEnumModel.VAT_10:
+        return includesVAT ? 'Цена включает НДС 10%' : 'Цена не включает НДС 10%';
+      case TradeOfferVatEnumModel.VAT_20:
+        return includesVAT ? 'Цена включает НДС 20%' : 'Цена не включает НДС 20%';
+      default:
+        return 'Цена без НДС';
     }
-    return 'Цена не включает налог НДС';
   }
 
   get matrix(): TradeOfferPriceMatrixModel[] {
@@ -125,17 +123,15 @@ export class ProductOrderComponent implements OnInit {
   }
 
   private _getVat() {
-    if (this.tradeOffer?.termsOfSale.price && this.tradeOffer?.termsOfSale.price.includesVAT) {
-      switch (this.tradeOffer.termsOfSale.price.vat) {
-        case TradeOfferVatEnumModel.VAT_10:
-          return 'НДС 10%';
-        case TradeOfferVatEnumModel.VAT_20:
-          return 'НДС 20%';
-        case TradeOfferVatEnumModel.VAT_WITHOUT:
-          return 'Без НДС';
-      }
+    const includesVAT = this.tradeOffer?.termsOfSale.price.includesVAT;
+    switch (this.tradeOffer?.termsOfSale.price.vat) {
+      case TradeOfferVatEnumModel.VAT_10:
+        return includesVAT ? 'с НДС 10%' : 'без НДС 10%';
+      case TradeOfferVatEnumModel.VAT_20:
+        return includesVAT ? 'с НДС 20%' : 'без НДС 20%';
+      default:
+        return 'без НДС';
     }
-    return 'Без НДС';
   }
 
   private _closest(matrix: TradeOfferPriceMatrixModel[], total: number): number {

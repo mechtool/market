@@ -10,16 +10,10 @@
       <span class="info_group__value">{{packaging}}</span>
     </div>
     <div class="info_group" *ngIf="orderRestrictions">
-      <span class="info_group__label">Минимальая сумма заказа</span>
+      <span class="info_group__label">Минимальная общая сумма заказа</span>
       <span class="info_group__value">{{orderRestrictions | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
     </div>
   </div>
-
-  <div *ngIf="offerDescription">
-    <h3>Описание предложения</h3>
-    <p>{{offerDescription}}</p>
-  </div>
-
 </div>
 
 <div class="section_paragraph">
@@ -30,7 +24,7 @@
         class="info_group__value">{{maxDaysForShipment}} {{maxDaysForShipment | myDeclension: 'день': 'дня': 'дней'}}</span>
     </div>
     <div class="info_group" *ngIf="deliveryMethod">
-      <span class="info_group__label">Способ доставки</span>
+      <span class="info_group__label">Способ поставки</span>
       <span class="info_group__value">{{deliveryMethod}}</span>
     </div>
   </div>
@@ -38,5 +32,12 @@
   <div *ngIf="delivery">
     <h3>Регионы доставки</h3>
     <p>{{delivery}}</p>
+  </div>
+</div>
+
+<div class="section_paragraph">
+  <div *ngIf="offerDescription">
+    <h3>Описание предложения</h3>
+    <p>{{offerDescription}}</p>
   </div>
 </div>

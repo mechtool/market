@@ -86,7 +86,7 @@ export class TermsOfSaleComponent {
         this.tradeOffer.deliveryDescription.deliveryRegions
           .forEach((tradeOfferDelivery) => {
             if (tradeOfferDelivery.countryOksmCode === '643') {
-              deliveryRegions = 'Доставка осуществляется по всей Росии';
+              deliveryRegions = 'Доставка осуществляется по всей России';
             }
           });
       }
