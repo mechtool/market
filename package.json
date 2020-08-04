@@ -41,6 +41,7 @@
     "@angular/router": "~9.1.11",
     "@ngneat/until-destroy": "^7.1.6",
     "classlist.js": "^1.1.20150312",
+    "css-vars-ponyfill": "^2.3.2",
     "moment": "^2.24.0",
     "ng-zorro-antd": "^9.2.2",
     "ngx-cookie-service": "^10.0.0",
