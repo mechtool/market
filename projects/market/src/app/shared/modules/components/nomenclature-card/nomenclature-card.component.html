@@ -1,16 +1,22 @@
-<div class="nomenclature-card" itemtype="http://schema.org/Product" itemprop="itemListElement" itemscope="itemscope" (click)="goToProduct()">
+<div class="nomenclature-card" (click)="goToProduct()">
   <span class="cover">
-    <img itemprop="image" src="{{imageUrl}}" alt="{{productOffer.product.productName}}" title="{{productOffer.product.productName}}">
+
+    <span *ngIf="!imageUrl"
+          class="product_item__img"></span>
+
+    <img *ngIf="imageUrl"
+         src="{{imageUrl}}"
+         alt="{{productOffer.product.productName}}"
+         title="{{productOffer.product.productName}}">
   </span>
   <span class="body">
-    <span class="title" itemprop="name">
+    <span class="title">
       {{productOffer.product.productName}}
     </span>
-    <span class="meta" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+    <span class="meta">
       <span class="count">{{productOffer.offersTotal | number:'1.0-0'}}</span>
-      <span class="price"><span itemprop="price">{{productOffer.offersMinPrice | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span></span>
-      <meta itemprop="priceCurrency" content="RUB" />
-      <link itemprop="availability" href="https://schema.org/InStock" content="В наличии" />
+      <span
+        class="price"><span>{{productOffer.offersMinPrice | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span></span>
     </span>
   </span>
 </div>

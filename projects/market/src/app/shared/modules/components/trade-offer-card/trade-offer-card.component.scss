@@ -56,6 +56,9 @@
   &__info {
     justify-self: flex-end;
     display: flex;
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary);
   }
 
   &__price {
@@ -64,23 +67,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5;
-    font-size: 15px;
-    font-weight: var(--font-weight-medium);
-    border-top-right-radius: 2px;
+    background-color: var(--color-background-base);
     border-bottom-right-radius: 2px;
     border: 1px solid #e0e0e0;
     border-left: 0.5px;
+    border-top-right-radius: 2px;
     transition: background-color 0.3s;
   }
 
   &__about {
-    display: block;
+    display: -webkit-box;
     font-size: var(--font-size-12);
-    line-height: 15px;
-    margin-bottom: 17px;
-    margin-right: -18px;
-    margin-top: auto;
+    height: 80px;
+    max-lines: 4;
+    line-height: 20px;
+    overflow: hidden;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    margin-bottom: 10px;
   }
 }
 
@@ -93,9 +97,6 @@
   justify-content: center;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
-  color: var(--color-main);
-  font-size: 15px;
-  font-weight: var(--font-weight-medium);
   border-radius: 2px 0 0 2px;
   transition: background-color 0.3s, border 0.3s;
 }

@@ -15,6 +15,7 @@ import {
 } from './components';
 import {
   BannerCardModule,
+  CardModule,
   ErrorCodeAlertModule,
   NomenclatureCardModule,
   PipesModule,
@@ -23,7 +24,6 @@ import {
   SearchBarModule,
   SearchResultsModule,
   TradeOfferCardModule,
-  CardModule,
 } from '#shared/modules';
 import { NzAlertModule, NzCarouselModule, NzDropDownModule, NzTabsModule, } from 'ng-zorro-antd';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
@@ -63,7 +63,8 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
   ],
   providers: [DeclensionPipe],
   exports: [
-    MainPopularComponent
+    MainPopularComponent,
+    MainBannersComponent
   ]
 })
 export class ProductModule {

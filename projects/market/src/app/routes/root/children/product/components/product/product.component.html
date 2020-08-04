@@ -3,11 +3,11 @@
 
   <nz-tabset nzTabPosition="top" nzType="card">
     <nz-tab [nzTitle]="offerTotal">
-      <my-supplier-info-card-list
+      <my-trade-offer-cards-list
         [sort]="sort"
         [tradeOffers]="tradeOffers"
         (sortChange)="sortChange($event)"
-      ></my-supplier-info-card-list>
+      ></my-trade-offer-cards-list>
     </nz-tab>
 
     <nz-tab nzTitle="Описание товара" [nzDisabled]="hasProductDescription">

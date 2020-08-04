@@ -18,8 +18,10 @@ export class NomenclatureCardComponent {
   @Input() productOffer: ProductOffersModel;
 
   get imageUrl() {
-    const img = this.productOffer.product?.images?.length ? this.productOffer.product.images[0].href : null;
-    return absoluteImagePath(img);
+    if (this.productOffer.product?.images?.length) {
+      return absoluteImagePath(this.productOffer.product.images[0].href);
+    }
+    return null;
   }
 
   constructor(private _navService: NavigationService) {

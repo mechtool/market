@@ -18,6 +18,10 @@
     (loadProducts)="loadProducts($event)"
   ></my-search-results>
 
+  <my-main-banners
+    *ngIf="productsTotal === 0"
+  ></my-main-banners>
+
   <my-main-popular
     *ngIf="productsTotal === 0"
   ></my-main-popular>

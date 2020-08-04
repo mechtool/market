@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { SortModel, TradeOfferDto } from '#shared/modules';
 
 @Component({
-  selector: 'my-supplier-info-card-list',
+  selector: 'my-trade-offer-cards-list',
   templateUrl: './trade-offer-cards-list.component.html',
   styleUrls: [
     './trade-offer-cards-list.component.scss',
