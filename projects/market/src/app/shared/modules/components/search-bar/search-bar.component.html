@@ -63,6 +63,7 @@
           <my-search-bar-filter
             [availableFilters]="availableFilters"
             [city]="userLocation.name"
+            [scroll] = "isFilterFormVisible"
             (stateLocationForm)="changeLocation($event)"
             (stateAvailableFilters)="recFilter($event)"
             (closeFilter)="changeFilterFormVisibility($event)"
@@ -89,6 +90,7 @@
 </div>
 
 <div class="sort">
+  <!--todo Вынести в my-search-results!!!-->
   <my-results-sorter
     *ngIf="visibleSort"
     [sort]="sort"

@@ -21,7 +21,8 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import {
   CategoryService,
   LocalStorageService,
-  LocationService, NotificationsService,
+  LocationService,
+  NotificationsService,
   OrganizationsService,
   SupplierService
 } from '#shared/modules/common-services';
@@ -47,6 +48,7 @@ export class SearchBarFilterComponent {
   categoryFiltersForm: FormGroup;
   locationForm: FormGroup;
   categoryId: string;
+  categoryIndex: number;
   categories: CategoryModel[];
   searchByInn = true;
   showFilterWithCities = false;
@@ -65,6 +67,18 @@ export class SearchBarFilterComponent {
   @Output() closeFilter: EventEmitter<boolean> = new EventEmitter();
   @Output() stateLocationForm: EventEmitter<LocationModel> = new EventEmitter();
   @Output() filtersCount: EventEmitter<number> = new EventEmitter();
+
+  @Input()
+  set scroll($event) {
+    setTimeout(() => {
+      if ($event && this.categoryIndex) {
+        document.getElementById(`category-index-${this.categoryIndex}`).scrollIntoView({
+          block: 'center',
+          inline: 'nearest'
+        });
+      }
+    }, 1);
+  }
 
   constructor(
     private _locationService: LocationService,
@@ -134,6 +148,14 @@ export class SearchBarFilterComponent {
   clickFilterChooseCategory() {
     this.showFilterWithCategories = true;
     this.notShowFilter = true;
+    setTimeout(() => {
+      if (this.categoryIndex) {
+        document.getElementById(`category-mobile-index-${this.categoryIndex}`).scrollIntoView({
+          block: 'center',
+          inline: 'nearest'
+        });
+      }
+    }, 1);
   }
 
   backToFilter() {
@@ -201,9 +223,11 @@ export class SearchBarFilterComponent {
         (categories) => {
           this.categories = categories;
           if (this.categoryId) {
-            this.categories.forEach((category) => {
+            this.categories.forEach((category, index) => {
               if (category.id !== this.categoryId) {
                 category.disabled = true;
+              } else {
+                this.categoryIndex = index;
               }
               category.visible = true;
             });
@@ -395,6 +419,7 @@ export class SearchBarFilterComponent {
               .forEach((value, i) => {
                 if (this.categoryId === this.categories[i].id) {
                   this.categoryId = undefined;
+                  this.categoryIndex = undefined;
                   this._removeActiveFilter('categoryId');
                 }
                 this.categories[i].disabled = false;
@@ -404,6 +429,7 @@ export class SearchBarFilterComponent {
               .forEach((value, i) => {
                 if (value) {
                   this.categoryId = this.categories[i].id;
+                  this.categoryIndex = i;
                   this._addActiveFilter('categoryId');
                 } else {
                   this.categories[i].disabled = true;

@@ -121,10 +121,10 @@
       </nz-form-item>
     </div>
 
-    <div class="filter_category__list scrollbar">
+    <div class="filter_category__list scrollbar" id="filter_category_list_id">
       <div class="form-group_checkbox">
         <nz-checkbox-wrapper>
-          <div class="magic" [ngClass]="{'visible': category.visible}"
+          <div class="category" id="category-index-{{i}}" [ngClass]="{'visible': category.visible}"
                *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
             <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
               <span class="filter_category__name">{{category.name}}</span>
@@ -298,10 +298,10 @@
              autocomplete="off"
              formControlName="categoryName">
 
-      <div class="filter_category__list scrollbar">
+      <div class="filter_category__list scrollbar" id="filter_category_list_mobile_id">
         <div class="form-group_checkbox">
           <nz-checkbox-wrapper>
-            <div class="magic" [ngClass]="{'visible': category.visible}"
+            <div class="category" id="category-mobile-index-{{i}}" [ngClass]="{'visible': category.visible}"
                  *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
               <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
                 <span class="filter_category__name">{{category.name}}</span>

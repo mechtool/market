@@ -14,7 +14,7 @@ button.btn {
   background-color: #ffffff;
   min-height: 40px;
   line-height: 40px;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px -1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0px -1px 2px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,24 +92,26 @@ button.btn {
 
 .catalog_sort {
   &__control {
-    font-size: var(--font-size-12);
-    font-weight: var(--font-medium);
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+    &_lg {
+      font-size: var(--font-size-12);
+      font-weight: var(--font-weight-medium);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        margin-left: 3px;
+        border-style: solid;
+        border-width: 4px 3px 0 3px;
+        border-color: #454545 transparent transparent transparent;
+      }
+    }
 
     &_sm {
       display: none;
-    }
-
-    &::after {
-      content: '';
-      width: 0;
-      height: 0;
-      margin-left: 3px;
-      border-style: solid;
-      border-width: 4px 3px 0 3px;
-      border-color: #454545 transparent transparent transparent;
     }
   }
 

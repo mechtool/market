@@ -10,6 +10,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   templateUrl: './search-results.component.html',
   styleUrls: [
     './search-results.component.scss',
+    './search-results.component-992.scss',
     './search-results.component-768.scss',
     './search-results.component-576.scss',
   ],

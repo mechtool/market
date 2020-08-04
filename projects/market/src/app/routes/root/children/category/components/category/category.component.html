@@ -6,6 +6,7 @@
 
   <my-search-bar
     [query]="query"
+    [availableFilters]="availableFilters"
     [sort]="sort"
     (submitClick)="queryParametersChange($event)"
     [suggestionsOff]="true"

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { SortModel } from '../../../../common-services/models';
+import { SortModel } from '#shared/modules/common-services/models';
 
 
 @Component({
