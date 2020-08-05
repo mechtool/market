@@ -34,7 +34,7 @@ import { LocalStorageService, NotificationsService, ResponsiveService } from '#s
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBarComponent implements OnChanges {
-  private _filterCount: number;
+  activeFilters = new Set<string>();
   form: FormGroup;
   isInputFocused = false;
   isFilterFormVisible = false;
@@ -75,7 +75,7 @@ export class SearchBarComponent implements OnChanges {
   }
 
   get filterCount(): number {
-    return this._filterCount > 0 ? this._filterCount : null;
+    return this.activeFilters.size > 0 ? this.activeFilters.size : null;
   }
 
   constructor(
@@ -124,13 +124,11 @@ export class SearchBarComponent implements OnChanges {
     if (filters) {
       this.changeFilterFormVisibility(!this.isFilterFormVisible);
     }
-    if (!filters) {
-      this.submitClick.emit({
-        query: this.queryOrNull,
-        availableFilters: null,
-        sort: this.queryOrNull ? this.sort : null,
-      });
-    }
+    this.submitClick.emit({
+      query: this.queryOrNull,
+      availableFilters: this.availableFilters,
+      sort: this.queryOrNull || !this.filterIsEmpty ? this.sort : null,
+    });
   }
 
   changeFilterFormVisibility(isVisible: boolean) {
@@ -150,8 +148,10 @@ export class SearchBarComponent implements OnChanges {
     if (this.availableFilters?.pickup) {
       this.availableFilters.pickup = location.fias;
     }
+    if (this.availableFilters?.delivery || this.availableFilters?.pickup) {
+      this.submit();
+    }
   }
-
 
   changeLocationButton(isVisible: boolean) {
     this.visibleLocationForm = isVisible;
@@ -168,8 +168,8 @@ export class SearchBarComponent implements OnChanges {
     }
   }
 
-  recFiltersCount(filterCount: number) {
-    this._filterCount = filterCount;
+  recFiltersCount(filterCount: Set<string>) {
+    this.activeFilters = filterCount;
   }
 
   private _initForm(): void {
@@ -216,30 +216,30 @@ export class SearchBarComponent implements OnChanges {
   }
 
   private _activeFiltersCount(params: Params, queryParams: Params) {
-    this._filterCount = 0;
+    this.activeFilters.clear();
     if (queryParams.supplierId) {
-      this._filterCount++;
+      this.activeFilters.add('supplierId');
     }
     if (queryParams.trademark) {
-      this._filterCount++;
+      this.activeFilters.add('trademark');
     }
     if (queryParams.delivery) {
-      this._filterCount++;
+      this.activeFilters.add('isDelivery');
     }
     if (queryParams.pickup) {
-      this._filterCount++;
+      this.activeFilters.add('isPickup');
     }
     if (queryParams.inStock) {
-      this._filterCount++;
+      this.activeFilters.add('inStock');
     }
     if (queryParams.withImages) {
-      this._filterCount++;
+      this.activeFilters.add('withImages');
     }
     if (queryParams.priceFrom || queryParams.priceTo) {
-      this._filterCount++;
+      this.activeFilters.add('price');
     }
     if (queryParams.categoryId || params.categoryId) {
-      this._filterCount++;
+      this.activeFilters.add('categoryId');
     }
   }
 }

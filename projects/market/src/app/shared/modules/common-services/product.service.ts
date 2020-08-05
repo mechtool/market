@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
+  CountryCode,
   ProductOfferRequestModel,
   ProductOfferResponseModel,
   ProductOffersListResponseModel
@@ -23,6 +24,8 @@ export class ProductService {
   }
 
   searchProductOffers(filters: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {
+    const delivery = filters.availableFilters?.delivery === CountryCode.RUSSIA ? undefined : filters.availableFilters?.delivery;
+    const pickup = filters.availableFilters?.pickup === CountryCode.RUSSIA ? undefined : filters.availableFilters?.pickup;
     const searchQuery = {
       q: filters.query,
       categoryId: filters.availableFilters?.categoryId,
@@ -32,8 +35,8 @@ export class ProductService {
       tradeMarks: [filters.availableFilters?.trademark],
       inStock: filters.availableFilters?.inStock,
       withImages: filters.availableFilters?.withImages,
-      deliveryArea: filters.availableFilters?.delivery,
-      pickupArea: filters.availableFilters?.pickup,
+      deliveryArea: delivery,
+      pickupArea: pickup,
       page: filters.page,
       sort: filters.sort,
     };

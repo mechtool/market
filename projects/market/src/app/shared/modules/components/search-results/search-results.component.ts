@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
-import { containParametersForRequest } from '#shared/utils';
+import { containParameters } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -27,7 +27,7 @@ export class SearchResultComponent {
 
   constructor(private _activatedRoute: ActivatedRoute) {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
-      this.isRequestFulfilled = containParametersForRequest(queryParams);
+      this.isRequestFulfilled = containParameters(queryParams);
     });
 
   }

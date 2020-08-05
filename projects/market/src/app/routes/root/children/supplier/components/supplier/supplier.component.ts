@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
+  CountryCode,
   OrganizationResponseModel,
   SuppliersItemModel,
   TradeOffersListResponseModel,
@@ -106,14 +107,16 @@ export class SupplierSingleComponent {
 
   private _collectRequest(queryParams: Params): void {
     this.query = queryParams.q;
+    const delivery = queryParams.delivery === CountryCode.RUSSIA ? undefined : queryParams.delivery;
+    const pickup = queryParams.pickup === CountryCode.RUSSIA ? undefined : queryParams.pickup;
     this.request = {
       q: queryParams.q,
       priceFrom: queryParams.priceFrom,
       priceTo: queryParams.priceTo,
       inStock: queryParams.inStock,
       withImages: queryParams.withImages,
-      deliveryArea: queryParams.delivery,
-      pickupArea: queryParams.pickup,
+      deliveryArea: delivery,
+      pickupArea: pickup,
       categoryId: queryParams.categoryId,
       sort: queryParams.sort,
     };

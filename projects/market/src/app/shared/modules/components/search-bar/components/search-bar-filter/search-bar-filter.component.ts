@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
-  CountryCode,
   DefaultSearchAvailableModel,
   LocationModel,
   Megacity,
@@ -56,25 +55,24 @@ export class SearchBarFilterComponent {
   notShowFilter = false;
   foundCities: LocationModel[] = [];
   suppliers: SuppliersItemModel[];
-  private supplier: SuppliersItemModel;
+  private supplier: any;
   private megacities = Megacity.ALL;
-  private activeFilters = new Set<string>();
 
   @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() city: string;
+  @Input() activeFilters = new Set<string>();
   @Output() stateAvailableFilters: EventEmitter<DefaultSearchAvailableModel> = new EventEmitter();
   @Output() stateLocation: EventEmitter<LocationModel> = new EventEmitter();
   @Output() closeFilter: EventEmitter<boolean> = new EventEmitter();
   @Output() stateLocationForm: EventEmitter<LocationModel> = new EventEmitter();
-  @Output() filtersCount: EventEmitter<number> = new EventEmitter();
+  @Output() filtersCount: EventEmitter<Set<string>> = new EventEmitter();
 
   @Input()
   set scroll($event) {
     setTimeout(() => {
       if ($event && this.categoryIndex) {
         document.getElementById(`category-index-${this.categoryIndex}`).scrollIntoView({
-          block: 'center',
-          inline: 'nearest'
+          block: 'center'
         });
       }
     }, 1);
@@ -99,7 +97,7 @@ export class SearchBarFilterComponent {
   }
 
   get focusIsNotFormFilterInn(): boolean {
-    return document.activeElement.attributes['formcontrolname']?.value !== 'supplier';
+    return document.activeElement.attributes['formcontrolname']?.value !== 'name';
   }
 
   get focusIsNotFormFilterPrice(): boolean {
@@ -115,14 +113,6 @@ export class SearchBarFilterComponent {
     return this.availableFiltersForm.controls.withImages.value;
   }
 
-  get userLocation(): string {
-    if (this._localStorageService.hasUserLocation()) {
-      const fias = this._localStorageService.getUserLocation().fias;
-      return fias !== CountryCode.RUSSIA ? fias : null;
-    }
-    return null;
-  }
-
   save() {
     this._saveFilters();
     this.stateAvailableFilters.emit(this.availableFilters);
@@ -134,7 +124,7 @@ export class SearchBarFilterComponent {
     this.supplier = undefined;
     this.stateAvailableFilters.emit(this.availableFilters);
     this.activeFilters.clear();
-    this.filtersCount.emit(0);
+    this.filtersCount.emit(this.activeFilters);
     this._initForms();
     this._resetCategories();
     this._categoryChangesControl();
@@ -151,8 +141,7 @@ export class SearchBarFilterComponent {
     setTimeout(() => {
       if (this.categoryIndex) {
         document.getElementById(`category-mobile-index-${this.categoryIndex}`).scrollIntoView({
-          block: 'center',
-          inline: 'nearest'
+          block: 'center'
         });
       }
     }, 1);
@@ -185,6 +174,18 @@ export class SearchBarFilterComponent {
     this.backToFilter();
   }
 
+  supplierSelect(supplier: SuppliersItemModel) {
+    this.supplier = {
+      id: supplier.id,
+      name: supplier.name,
+      isSelected: true,
+    };
+    this.availableFiltersForm.controls.supplier.setValue(this.supplier, { onlySelf: true, emitEvent: false });
+    this.availableFiltersForm.controls.supplier.setErrors(null, { emitEvent: false });
+    this.suppliers = null;
+    this._addActiveFilter('supplierId');
+  }
+
   private _init() {
     combineLatest([
       this._activatedRoute.params,
@@ -200,8 +201,7 @@ export class SearchBarFilterComponent {
                   this.supplier = {
                     id: organization.id,
                     name: resizeBusinessStructure(organization.name),
-                    inn: organization.legalRequisites.inn,
-                    kpp: organization.legalRequisites.kpp,
+                    isSelected: true,
                   };
                 },
                 (err) => {
@@ -247,9 +247,7 @@ export class SearchBarFilterComponent {
   }
 
   private _saveFilters() {
-    if (!this.availableFilters) {
-      this.availableFilters = new DefaultSearchAvailableModel();
-    }
+    this.availableFilters = new DefaultSearchAvailableModel();
 
     if (this.supplier) {
       this.availableFilters.supplierId = this.supplier.id;
@@ -260,15 +258,20 @@ export class SearchBarFilterComponent {
     }
 
     if (this.availableFiltersForm.controls.isDelivery.value) {
-      this.availableFilters.delivery = this.userLocation;
+      this.availableFilters.delivery = this._localStorageService.getUserLocation().fias;
     }
 
     if (this.availableFiltersForm.controls.isPickup.value) {
-      this.availableFilters.pickup = this.userLocation;
+      this.availableFilters.pickup = this._localStorageService.getUserLocation().fias;
     }
 
-    this.availableFilters.inStock = this.availableFiltersForm.controls.inStock.value;
-    this.availableFilters.withImages = this.availableFiltersForm.controls.withImages.value;
+    if (this.availableFiltersForm.controls.inStock.value) {
+      this.availableFilters.inStock = this.availableFiltersForm.controls.inStock.value;
+    }
+
+    if (this.availableFiltersForm.controls.withImages.value) {
+      this.availableFilters.withImages = this.availableFiltersForm.controls.withImages.value;
+    }
 
     const priceFrom = this.availableFiltersForm.controls.priceFrom.value;
     if (priceFrom) {
@@ -319,7 +322,7 @@ export class SearchBarFilterComponent {
 
   private _initFormAvailableFilter() {
     this.availableFiltersForm = this._fb.group({
-      supplier: new FormControl(this.supplier?.name, [supplierNameConditionValidator]),
+      supplier: this.supplierForm(),
       trademark: this.availableFilters?.trademark,
       isDelivery: !!this.availableFilters?.delivery,
       isPickup: !!this.availableFilters?.pickup,
@@ -337,6 +340,17 @@ export class SearchBarFilterComponent {
     }
     this._controlsPrices();
     this._filtersChangesControl();
+  }
+
+  private supplierForm() {
+    return this._fb.group(
+      {
+        id: this.supplier?.id,
+        name: this.supplier?.name,
+        isSelected: this.supplier?.isSelected,
+      }, {
+        validator: [supplierNameConditionValidator]
+      });
   }
 
   private _addCheckboxes() {
@@ -460,35 +474,32 @@ export class SearchBarFilterComponent {
 
   private _addActiveFilter(value: string): void {
     this.activeFilters.add(value);
-    this.filtersCount.emit(this.activeFilters.size);
+    this.filtersCount.emit(this.activeFilters);
   }
 
   private _removeActiveFilter(value: string): void {
     this.activeFilters.delete(value);
-    this.filtersCount.emit(this.activeFilters.size);
+    this.filtersCount.emit(this.activeFilters);
   }
 
   private _filtersChangesControl(): void {
     this.availableFiltersForm.controls.supplier.valueChanges
       .subscribe(
         (supplier) => {
-          this.availableFiltersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
-          if (typeof supplier === 'string') {
-            this._removeActiveFilter('supplierId');
-            if (supplier.trim().length > 3) {
-              this._supplierService.findSuppliersBy(supplier, 0, PAGE_SIZE)
-                .subscribe((data) => {
-                  this.suppliers = this._map(data._embedded.suppliers);
-                  this.changeDetector.detectChanges();
-                });
-            } else {
-              this.suppliers = null;
-            }
-          } else if (typeof supplier === 'object') {
-            this.supplier = supplier;
+          supplier.isSelected = false;
+
+          this._removeActiveFilter('supplierId');
+          if (supplier.name.trim().length > 3) {
+            this._supplierService.findSuppliersBy(supplier.name, 0, PAGE_SIZE)
+              .subscribe((data) => {
+                this.suppliers = this._map(data._embedded.suppliers);
+                this.changeDetector.detectChanges();
+              });
+          } else {
             this.suppliers = null;
-            this._addActiveFilter('supplierId');
           }
+
+          this.availableFiltersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

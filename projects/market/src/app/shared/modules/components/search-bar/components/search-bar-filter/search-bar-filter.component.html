@@ -4,7 +4,7 @@
 
     <p class="filter_title">Фильтр для поиска</p>
 
-    <div class="form-group" *ngIf="searchByInn">
+    <div class="form-group" *ngIf="searchByInn" formGroupName="supplier">
       <nz-form-control>
         <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
         <input nz-input type="text"
@@ -13,12 +13,13 @@
                name="formFilterInn"
                id="formFilterInn"
                placeholder="Начните вводить"
-               formControlName="supplier"
-               [nzAutocomplete]="supplier">
+               formControlName="name"
+               [nzAutocomplete]="supplier_autocomplete">
 
-        <nz-autocomplete nzBackfill #supplier>
+        <nz-autocomplete nzBackfill #supplier_autocomplete>
           <nz-auto-option *ngFor="let supplier of suppliers"
-                          [nzValue]="supplier"
+                          (click)="supplierSelect(supplier)"
+                          [nzValue]="supplier.name"
                           [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
         </nz-autocomplete>
       </nz-form-control>
@@ -154,7 +155,7 @@
         Категории товаров
       </div>
 
-      <div class="form-group" *ngIf="searchByInn">
+      <div class="form-group" *ngIf="searchByInn" formGroupName="supplier">
         <nz-form-control>
           <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
           <input nz-input type="text"
@@ -163,11 +164,12 @@
                  name="formFilterInnMobile"
                  id="formFilterInnMobile"
                  placeholder="Начните вводить"
-                 formControlName="supplier"
-                 [nzAutocomplete]="supplier">
+                 formControlName="name"
+                 [nzAutocomplete]="supplier_autocomplete">
 
-          <nz-autocomplete nzBackfill #supplier>
+          <nz-autocomplete nzBackfill #supplier_autocomplete>
             <nz-auto-option *ngFor="let supplier of suppliers"
+                            (click)="supplierSelect(supplier)"
                             [nzValue]="supplier"
                             [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
           </nz-autocomplete>
@@ -244,8 +246,6 @@
                 (click)="reset()">Сбросить
         </button>
       </div>
-
-
     </div>
 
     <div class="city__filter" [ngClass]="{'visible': showFilterWithCities}" [formGroup]="locationForm">

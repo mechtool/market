@@ -9,6 +9,10 @@ export function containParametersForRequest(queryParams: Params): boolean {
   return !!queryParams.q || !!queryParams.categoryId || !!queryParams.supplier || !!queryParams.trademark;
 }
 
+export function containParameters(queryParams: Params): boolean {
+  return !!Object.keys(queryParams).length;
+}
+
 export function queryParamsFrom(filters: AllGroupQueryFiltersModel): Params {
   return {
     q: filters.query,

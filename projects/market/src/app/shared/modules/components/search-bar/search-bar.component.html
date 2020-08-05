@@ -64,6 +64,7 @@
             [availableFilters]="availableFilters"
             [city]="userLocation.name"
             [scroll] = "isFilterFormVisible"
+            [activeFilters]="activeFilters"
             (stateLocationForm)="changeLocation($event)"
             (stateAvailableFilters)="recFilter($event)"
             (closeFilter)="changeFilterFormVisibility($event)"
