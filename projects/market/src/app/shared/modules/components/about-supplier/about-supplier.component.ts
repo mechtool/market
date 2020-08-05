@@ -5,7 +5,7 @@ import { resizeBusinessStructure } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-about-supplier',
+  selector: 'market-about-supplier',
   templateUrl: './about-supplier.component.html',
   styleUrls: [
     './about-supplier.component.scss',

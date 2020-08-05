@@ -18,41 +18,41 @@
 </div>
 
 <ng-template #product_gallery>
-  <my-product-gallery
+  <market-product-gallery
     [product]="product"
     [supplierName]="supplier.name"
     [supplierId]="supplier.id"
     [stock]="tradeOffer.stock?.stockBalanceSummary?.level"
     [supplierLogo]="supplierLogo"
-  ></my-product-gallery>
+  ></market-product-gallery>
 </ng-template>
 
 <ng-template #product_tabs>
   <nz-tabset nzTabPosition="top" nzType="card">
     <nz-tab nzTitle="Условия продажи">
-      <my-terms-of-sale
+      <market-terms-of-sale
         [tradeOffer]="tradeOffer"
-      ></my-terms-of-sale>
+      ></market-terms-of-sale>
     </nz-tab>
 
     <nz-tab nzTitle="Описание товара" [nzDisabled]="hasProductDescription">
-      <my-product-description
+      <market-product-description
         [product]="product"
-      ></my-product-description>
+      ></market-product-description>
     </nz-tab>
 
     <nz-tab nzTitle="О поставщике">
-      <my-about-supplier
+      <market-about-supplier
         [supplier]="supplier"
         [supplierLogo]="supplierLogo"
         [showStoreButton]="true"
-      ></my-about-supplier>
+      ></market-about-supplier>
     </nz-tab>
   </nz-tabset>
 </ng-template>
 
 <ng-template #product_side>
-  <my-product-order
+  <market-product-order
     [tradeOffer]="tradeOffer"
-  ></my-product-order>
+  ></market-product-order>
 </ng-template>

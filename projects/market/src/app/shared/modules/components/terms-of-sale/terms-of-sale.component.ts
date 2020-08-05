@@ -5,7 +5,7 @@ import { mapStock } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-terms-of-sale',
+  selector: 'market-terms-of-sale',
   templateUrl: './terms-of-sale.component.html',
   styleUrls: [
     './terms-of-sale.component.scss',

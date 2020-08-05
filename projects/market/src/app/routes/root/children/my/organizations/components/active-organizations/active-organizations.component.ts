@@ -5,7 +5,7 @@ import { stringToHex } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-active-organizations',
+  selector: 'market-active-organizations',
   templateUrl: './active-organizations.component.html',
   styleUrls: [
     './active-organizations.component.scss',

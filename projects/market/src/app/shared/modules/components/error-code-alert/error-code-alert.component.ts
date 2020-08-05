@@ -3,7 +3,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-error-code-alert',
+  selector: 'market-error-code-alert',
   templateUrl: './error-code-alert.component.html',
   styleUrls: [
     './error-code-alert.component.scss',

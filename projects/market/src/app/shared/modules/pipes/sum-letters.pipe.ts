@@ -17,7 +17,7 @@ const NUMERIC_DIGITS = [
 ];
 
 @Pipe({
-  name: 'mySumLetters',
+  name: 'marketSumLetters',
 })
 export class SumLettersPipe implements PipeTransform {
   transform(value: number, ...args: any[]): any {

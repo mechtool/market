@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { stringToRGB } from '#shared/utils';
 
 @Component({
-  selector: 'my-trade-offer-info-card',
+  selector: 'market-trade-offer-info-card',
   templateUrl: './trade-offer-card.component.html',
   styleUrls: [
     './trade-offer-card.component.scss',

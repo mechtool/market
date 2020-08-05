@@ -1,19 +1,19 @@
 <div class="product" *ngIf="product">
-  <my-product-gallery [product]="product"></my-product-gallery>
+  <market-product-gallery [product]="product"></market-product-gallery>
 
   <nz-tabset nzTabPosition="top" nzType="card">
     <nz-tab [nzTitle]="offerTotal">
-      <my-trade-offer-cards-list
+      <market-trade-offer-cards-list
         [sort]="sort"
         [tradeOffers]="tradeOffers"
         (sortChange)="sortChange($event)"
-      ></my-trade-offer-cards-list>
+      ></market-trade-offer-cards-list>
     </nz-tab>
 
     <nz-tab nzTitle="Описание товара" [nzDisabled]="hasProductDescription">
-      <my-product-description
+      <market-product-description
         [product]="product"
-      ></my-product-description>
+      ></market-product-description>
     </nz-tab>
   </nz-tabset>
 </div>

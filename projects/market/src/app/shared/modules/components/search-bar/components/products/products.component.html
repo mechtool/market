@@ -6,23 +6,23 @@
 
   <div class="items">
 
-    <my-search-bar-item
+    <market-search-bar-item
       *ngFor="let product of products"
       img="{{imageUrl(product.images)}}"
       imgAlt="{{product.name}}"
       offersCount="{{product.offers}}"
       type="productOffer"
       (click)="chooseProduct(product)"
-    ><div [innerHTML]="product.highlight || product.name"></div></my-search-bar-item>
+    ><div [innerHTML]="product.highlight || product.name"></div></market-search-bar-item>
 
-    <my-search-bar-item
+    <market-search-bar-item
       *ngFor="let category of categories"
       img="assets/img/tmp/lightning.png"
       imgAlt="{{category.name}}"
       offersCount="{{category.offers}}"
       type="category"
       (click)="chooseCategory(category)"
-    ><div [innerHTML]="category.highlight || category.name"></div></my-search-bar-item>
+    ><div [innerHTML]="category.highlight || category.name"></div></market-search-bar-item>
 
   </div>
 </div>

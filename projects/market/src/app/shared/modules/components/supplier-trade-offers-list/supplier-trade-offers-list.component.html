@@ -1,12 +1,12 @@
 <div class="search_bar">
-  <my-search-bar
+  <market-search-bar
     [sort]="sort"
     [query]="query"
     (submitClick)="queryParametersChange($event)"
     [availableFilters]="availableFilters"
     [suggestionsOff]="true"
     [visibleSort]="visibleSort"
-  ></my-search-bar>
+  ></market-search-bar>
 </div>
 
 <div class="catalog_header">
@@ -87,10 +87,10 @@
           </div>
         </div>
         <div class="table_cell cell_buy">
-          <my-product-side
+          <market-product-side
             [tradeOfferId]="tradeOffer.id"
             [level]="tradeOffer.stock?.stockBalanceSummary?.level"
-          ></my-product-side>
+          ></market-product-side>
           <a (click)="route(tradeOffer.id)" class="btn btn-gray btn__product_link">О товаре</a>
         </div>
       </div>

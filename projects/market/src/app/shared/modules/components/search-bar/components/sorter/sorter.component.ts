@@ -3,7 +3,7 @@ import { SortModel } from '#shared/modules/common-services/models';
 
 
 @Component({
-  selector: 'my-results-sorter',
+  selector: 'market-results-sorter',
   templateUrl: './sorter.component.html',
   styleUrls: [
     './sorter.component.scss',

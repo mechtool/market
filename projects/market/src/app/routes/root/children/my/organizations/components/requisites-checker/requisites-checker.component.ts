@@ -5,7 +5,7 @@ import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms'
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-requisites-checker',
+  selector: 'market-requisites-checker',
   templateUrl: './requisites-checker.component.html',
   styleUrls: ['./requisites-checker.component.scss'],
 })

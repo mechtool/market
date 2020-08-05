@@ -16,7 +16,7 @@
       <h3>Добавить товар в корзину</h3>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">{{price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+        <span itemprop="price">{{price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
       <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
@@ -41,7 +41,7 @@
       <h3>Товар добавлен в корзину</h3>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span itemprop="price">{{price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+        <span itemprop="price">{{price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
       <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
@@ -73,15 +73,15 @@
     <h3>Матрица цен</h3>
     <div class="price_matrix__group" *ngFor="let item of matrix">
       <span class="price_matrix__label">От {{item.fromPackages}} шт.</span>
-      <span class="price_matrix__value">{{item.price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+      <span class="price_matrix__value">{{item.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
       <span class="price_matrix__nds">{{vat}}</span>
     </div>
   </div>
 </ng-template>
 
 <ng-template #product_side>
-  <my-product-side
+  <market-product-side
     [tradeOfferId]="tradeOffer.id"
     [level]="tradeOffer.stock?.stockBalanceSummary?.level"
-  ></my-product-side>
+  ></market-product-side>
 </ng-template>

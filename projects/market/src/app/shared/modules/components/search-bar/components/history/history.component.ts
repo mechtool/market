@@ -12,7 +12,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-search-bar-history',
+  selector: 'market-search-bar-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

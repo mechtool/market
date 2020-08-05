@@ -5,7 +5,7 @@ import { NavigationService } from '#shared/modules/common-services/navigation.se
 
 
 @Component({
-  selector: 'my-nomenclature-card',
+  selector: 'market-nomenclature-card',
   templateUrl: './nomenclature-card.component.html',
   styleUrls: [
     './nomenclature-card.component.scss',

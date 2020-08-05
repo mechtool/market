@@ -11,7 +11,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-main',
+  selector: 'market-main',
   templateUrl: './main.component.html',
   styleUrls: [
     './main.component.scss',

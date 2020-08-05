@@ -5,7 +5,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-navbar',
+  selector: 'market-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: [
     './navbar.component.scss',

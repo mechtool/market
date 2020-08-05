@@ -5,12 +5,12 @@
 
   <nz-tabset nzTabPosition="top" nzType="card">
     <nz-tab nzTitle="Заказы">
-      <my-order-list
+      <market-order-list
         [documents]="orderDocuments"
         [isLoading]="isLoadingOrderDocuments"
         [page]="pageOrderDocuments"
         (loadDocuments)="loadOrderDocuments($event)"
-      ></my-order-list>
+      ></market-order-list>
     </nz-tab>
 
     <ng-template #account>
@@ -18,12 +18,12 @@
     </ng-template>
 
     <nz-tab [nzTitle]="account">
-      <my-account-list
+      <market-account-list
         [documents]="accountDocuments"
         [isLoading]="isLoadingAccountDocuments"
         [page]="pageAccountDocuments"
         (loadDocuments)="loadAccountDocuments($event)"
-      ></my-account-list>
+      ></market-account-list>
     </nz-tab>
   </nz-tabset>
 </div>

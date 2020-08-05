@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'myArrayJoiner',
+  name: 'marketArrayJoiner',
 })
 export class ArrayJoinerPipe implements PipeTransform {
   transform(input: any[], prop?: string, sep = ', '): string {

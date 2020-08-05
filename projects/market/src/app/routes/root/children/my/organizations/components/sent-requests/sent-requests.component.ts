@@ -5,7 +5,7 @@ import { stringToHex } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-sent-requests',
+  selector: 'market-sent-requests',
   templateUrl: './sent-requests.component.html',
   styleUrls: [
     './sent-requests.component.scss',

@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, FormCo
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-cart-order-qty-counter',
+  selector: 'market-cart-order-qty-counter',
   templateUrl: './qty-counter.component.html',
   styleUrls: ['./qty-counter.component.scss'],
   providers: [{

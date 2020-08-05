@@ -4,7 +4,7 @@ import { BreadcrumbItemModel, BreadcrumbsService } from '#shared/modules';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-breadcrumbs',
+  selector: 'market-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
   styleUrls: [
     './breadcrumbs.component.scss',

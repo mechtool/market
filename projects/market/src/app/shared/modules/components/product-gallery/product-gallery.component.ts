@@ -5,7 +5,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-product-gallery',
+  selector: 'market-product-gallery',
   templateUrl: './product-gallery.component.html',
   styleUrls: [
     './product-gallery.component.scss',

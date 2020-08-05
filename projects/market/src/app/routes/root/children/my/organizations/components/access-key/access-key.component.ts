@@ -4,7 +4,7 @@ import { UserOrganizationModel, AccessKeyResponseModel } from '#shared/modules/c
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-access-key',
+  selector: 'market-access-key',
   templateUrl: './access-key.component.html',
   styleUrls: ['./access-key.component.scss'],
 })

@@ -6,7 +6,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-search-results',
+  selector: 'market-search-results',
   templateUrl: './search-results.component.html',
   styleUrls: [
     './search-results.component.scss',

@@ -43,11 +43,11 @@
             },
             "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
               "title": "Удалить товар из корзины",
-              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77"
             },
             "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
               "title": "Установить количество товара",
-              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77/quantity"
             }
           }
         },
@@ -82,11 +82,11 @@
             },
             "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
               "title": "Удалить товар из корзины",
-              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85"
             },
             "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
               "title": "Установить количество товара",
-              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85/quantity"
             }
           }
         }
@@ -170,11 +170,11 @@
             },
             "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
               "title": "Удалить товар из корзины",
-              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
             },
             "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
               "title": "Установить количество товара",
-              "href": "https://my.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
             }
           }
         }

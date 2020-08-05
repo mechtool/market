@@ -2,7 +2,7 @@
 
   <div class="title" *ngIf="productOffers.length">
     <strong>Результаты поиска</strong>
-    <span>найдено <b>{{productsTotal}}</b> {{productsTotal | myDeclension: 'товар': 'товара': 'товаров'}}</span>
+    <span>найдено <b>{{productsTotal}}</b> {{productsTotal | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
 
   </div>
 
@@ -21,11 +21,11 @@
     <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
 
       <div class="product_infinite_scroll" infiniteScroll (scrolled)="productOffersLoading(page + 1)">
-        <my-card *ngFor="let productOffer of productOffers">
-          <my-nomenclature-card
+        <market-card *ngFor="let productOffer of productOffers">
+          <market-nomenclature-card
             [productOffer]="productOffer"
-          ></my-nomenclature-card>
-        </my-card>
+          ></market-nomenclature-card>
+        </market-card>
       </div>
 
     </nz-spin>

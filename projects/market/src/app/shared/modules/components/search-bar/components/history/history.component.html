@@ -3,7 +3,7 @@
 
   <div class="items">
 
-    <my-search-bar-item
+    <market-search-bar-item
       *ngFor="let searchQuery of searchQueriesHistory"
       historicalSuggestionId="{{searchQuery.id}}"
       img="{{searchQuery.imageUrl}}"
@@ -11,7 +11,7 @@
       type="searchQueryHistory"
       (cleanHistory)="cleanHistory($event)"
       (click)="clickSearchQuery(searchQuery)"
-    ><div [innerHTML]="searchQuery.searchText"></div></my-search-bar-item>
+    ><div [innerHTML]="searchQuery.searchText"></div></market-search-bar-item>
 
   </div>
 </div>

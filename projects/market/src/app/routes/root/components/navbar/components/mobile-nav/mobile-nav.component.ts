@@ -4,7 +4,7 @@ import { CartService } from '#shared/modules/common-services/cart.service';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'my-mobile-nav',
+  selector: 'market-mobile-nav',
   templateUrl: './mobile-nav.component.html',
   styleUrls: [
     './mobile-nav.component.scss',

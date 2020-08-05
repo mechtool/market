@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { absoluteImagePath, containParametersForRequest, mapStock, queryParamsFrom } from '#shared/utils';
 
 @Component({
-  selector: 'my-supplier-trade-offers-list',
+  selector: 'market-supplier-trade-offers-list',
   templateUrl: './supplier-trade-offers-list.component.html',
   styleUrls: [
     './supplier-trade-offers-list.component.scss',

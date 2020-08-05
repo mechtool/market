@@ -1,7 +1,7 @@
 <div class="root">
-  <my-navbar></my-navbar>
+  <market-navbar></market-navbar>
   <main class="content" [ngClass]="{'wide': isNavBarMinified, 'scrollblock': areCategoriesShowed}">
-    <my-breadcrumbs [items]="breadcrumbsItems$ | async"></my-breadcrumbs>
+    <market-breadcrumbs [items]="breadcrumbsItems$ | async"></market-breadcrumbs>
     <router-outlet></router-outlet>
   </main>
 </div>

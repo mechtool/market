@@ -7,7 +7,7 @@ const  AVAILABILITY_CONVERTER =  {
 };
 
 @Pipe({
-  name: 'myAvailability',
+  name: 'marketAvailability',
 })
 export class AvailabilityPipe implements PipeTransform {
   transform(value: string): string {

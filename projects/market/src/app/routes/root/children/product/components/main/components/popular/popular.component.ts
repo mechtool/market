@@ -7,7 +7,7 @@ import { NotificationsService } from '#shared/modules';
 // TODO ВЫНЕСТИ В SHARED ПАПКУ!!!!!!!!!!!!!!!!!!!!!!!
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-main-popular',
+  selector: 'market-main-popular',
   templateUrl: './popular.component.html',
   styleUrls: [
     './popular.component.scss',

@@ -24,16 +24,16 @@
       <td>{{product.partNumber}}</td>
       <td>{{product.productName}}</td>
       <td>{{product.amount}} {{product.baseUnit.shortName}}.</td>
-      <td>{{product.price | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
-      <td>{{product.totalPrice | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+      <td>{{product.price | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+      <td>{{product.totalPrice | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
     </tr>
   </table>
 
-  <p class="right">Итого:  {{document.totalSum | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</p><br>
+  <p class="right">Итого:  {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p><br>
 
   <p class="info">Всего наименований {{document.products?.length}}, на сумму
-    {{document.totalSum | myMultiplier:'1.00' | currency:'RUB':'руб.'}}</p>
-  <p class="sum_letters">{{document.totalSum | mySumLetters}}</p>
+    {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p>
+  <p class="sum_letters">{{document.totalSum | marketSumLetters}}</p>
 
   <hr>
 

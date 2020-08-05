@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { absoluteImagePath } from '#shared/utils';
 
 @Component({
-  selector: 'my-search-bar-products',
+  selector: 'market-search-bar-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

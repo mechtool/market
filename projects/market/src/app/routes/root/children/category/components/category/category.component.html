@@ -1,24 +1,24 @@
 <div class="single">
 
-  <my-category-list
+  <market-category-list
     [category]="categoryModel"
-  ></my-category-list>
+  ></market-category-list>
 
-  <my-search-bar
+  <market-search-bar
     [query]="query"
     [availableFilters]="availableFilters"
     [sort]="sort"
     (submitClick)="queryParametersChange($event)"
     [suggestionsOff]="true"
     [visibleSort]="true"
-  ></my-search-bar>
+  ></market-search-bar>
 
-  <my-search-results
+  <market-search-results
     [productOffers]="productOffers"
     [productsTotal]="productsTotal"
     [page]="page"
     [isLoading]="isLoadingProducts"
     (loadProducts)="loadProducts($event)"
-  ></my-search-results>
+  ></market-search-results>
 
 </div>

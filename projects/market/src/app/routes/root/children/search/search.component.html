@@ -1,5 +1,5 @@
 <div class="search">
-  <my-search-bar
+  <market-search-bar
     [query]="query"
     [availableFilters]="availableFilters"
     [sort]="sort"
@@ -8,23 +8,23 @@
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
     [visibleSort]="productsTotal > 0"
-  ></my-search-bar>
+  ></market-search-bar>
 
-  <my-search-results
+  <market-search-results
     [productOffers]="productOffers"
     [productsTotal]="productsTotal"
     [page]="page"
     [isLoading]="isLoadingProducts"
     (loadProducts)="loadProducts($event)"
-  ></my-search-results>
+  ></market-search-results>
 
-  <my-main-banners
+  <market-main-banners
     *ngIf="productsTotal === 0"
-  ></my-main-banners>
+  ></market-main-banners>
 
-  <my-main-popular
+  <market-main-popular
     *ngIf="productsTotal === 0"
-  ></my-main-popular>
+  ></market-main-popular>
 
 </div>
 

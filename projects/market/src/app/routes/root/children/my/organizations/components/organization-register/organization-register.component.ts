@@ -4,7 +4,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-organization-register',
+  selector: 'market-organization-register',
   templateUrl: './organization-register.component.html',
   styleUrls: [
     './organization-register.component.scss',

@@ -6,7 +6,7 @@ import { PaymentDocumentModalService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-order-list',
+  selector: 'market-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: [
     './order-list.component.scss',

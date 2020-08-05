@@ -12,7 +12,7 @@
       },
       "root": "projects/market",
       "sourceRoot": "projects/market/src",
-      "prefix": "my",
+      "prefix": "market",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

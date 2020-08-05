@@ -7,11 +7,11 @@
 
   <div class="content" itemtype="http://schema.org/ItemList" itemscope="itemscope">
 
-    <my-card *ngFor="let product of productOffers">
-      <my-nomenclature-card
+    <market-card *ngFor="let product of productOffers">
+      <market-nomenclature-card
         [productOffer]="product"
-      ></my-nomenclature-card>
-    </my-card>
+      ></market-nomenclature-card>
+    </market-card>
   </div>
 
 </div>

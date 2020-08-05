@@ -3,17 +3,17 @@ import { by, element, ElementFinder } from 'protractor';
 export class AppPage {
 
   getNavbarElement(): ElementFinder {
-    const navbarElement = element(by.css('my-navbar'));
+    const navbarElement = element(by.css('market-navbar'));
     return navbarElement;
   }
 
   getNavbarContainerElement(): ElementFinder {
-    const navbarContainerElement = element(by.css('my-navbar .navbar'));
+    const navbarContainerElement = element(by.css('market-navbar .navbar'));
     return navbarContainerElement;
   }
 
   getNavbarLogoElement(): ElementFinder {
-    const navbarLogoElement = element(by.css('my-navbar my-navbar-logo'));
+    const navbarLogoElement = element(by.css('market-navbar market-navbar-logo'));
     return navbarLogoElement;
   }
 
@@ -39,7 +39,7 @@ export class AppPage {
 
 
   // async getTitleText(): Promise<string> {
-  //   const titleElement = element(by.css('my-app .content span'));
+  //   const titleElement = element(by.css('market-app .content span'));
   //   return await titleElement.getText();
   // }
 

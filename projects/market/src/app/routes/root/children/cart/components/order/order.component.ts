@@ -33,7 +33,7 @@ import {
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-cart-order',
+  selector: 'market-cart-order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

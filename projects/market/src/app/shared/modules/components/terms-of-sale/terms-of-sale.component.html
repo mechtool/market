@@ -11,7 +11,7 @@
     </div>
     <div class="info_group" *ngIf="orderRestrictions">
       <span class="info_group__label">Минимальная общая сумма заказа</span>
-      <span class="info_group__value">{{orderRestrictions | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+      <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
     </div>
   </div>
 </div>
@@ -21,7 +21,7 @@
     <div class="info_group" *ngIf="maxDaysForShipment">
       <span class="info_group__label">Срок поставки</span>
       <span
-        class="info_group__value">{{maxDaysForShipment}} {{maxDaysForShipment | myDeclension: 'день': 'дня': 'дней'}}</span>
+        class="info_group__value">{{maxDaysForShipment}} {{maxDaysForShipment | marketDeclension: 'день': 'дня': 'дней'}}</span>
     </div>
     <div class="info_group" *ngIf="deliveryMethod">
       <span class="info_group__label">Способ поставки</span>

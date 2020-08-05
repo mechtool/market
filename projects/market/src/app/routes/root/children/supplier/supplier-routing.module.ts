@@ -17,7 +17,7 @@ const routes: Routes = [
       }, {
         path: 'offer/:tradeOfferId',
         component: TradeOfferComponent,
-        // todo вынести этот, чтобы он был типа https://bnet-mynew-stage.1c.ru/offer/{:tradeOfferId} задача BNET-2955
+        // todo вынести этот, чтобы он был типа https://bnet-market-stage.1c.ru/offer/{:tradeOfferId} задача BNET-2955
       }, {
         path: '**',
         redirectTo: 'product',

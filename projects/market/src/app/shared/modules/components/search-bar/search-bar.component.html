@@ -28,16 +28,16 @@
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ng-container *ngIf="isShowSuggestions">
       <div class="autocomplete">
-        <my-search-bar-history
+        <market-search-bar-history
           [query]="searchQuery"
           *ngIf="useBrowserStorage && (!searchQuery || searchQuery?.length < minQueryLength)"
-        ></my-search-bar-history>
+        ></market-search-bar-history>
 
-        <my-search-bar-products
+        <market-search-bar-products
           [products]="productsSuggestions"
           [categories]="categoriesSuggestions"
           *ngIf="searchQuery.length >= minQueryLength"
-        ></my-search-bar-products>
+        ></market-search-bar-products>
       </div>
       </ng-container>
     </nz-dropdown-menu>
@@ -60,7 +60,7 @@
         ></a>
 
         <nz-dropdown-menu #filterMenu="nzDropdownMenu">
-          <my-search-bar-filter
+          <market-search-bar-filter
             [availableFilters]="availableFilters"
             [city]="userLocation.name"
             [scroll] = "isFilterFormVisible"
@@ -69,7 +69,7 @@
             (stateAvailableFilters)="recFilter($event)"
             (closeFilter)="changeFilterFormVisibility($event)"
             (filtersCount)="recFiltersCount($event)"
-          ></my-search-bar-filter>
+          ></market-search-bar-filter>
         </nz-dropdown-menu>
       </div>
     </div>
@@ -81,20 +81,20 @@
        (nzVisibleChange)="changeLocationButton($event)" [(nzVisible)]="visibleLocationForm">{{userLocation.name}}</a>
 
     <nz-dropdown-menu #locationMenu="nzDropdownMenu">
-      <my-search-bar-location
+      <market-search-bar-location
         [cleanLocationForm]="visibleLocationForm"
         (stateLocationForm)="changeAndCloseLocation($event)"
-      ></my-search-bar-location>
+      ></market-search-bar-location>
     </nz-dropdown-menu>
   </div>
 
 </div>
 
 <div class="sort">
-  <!--todo Вынести в my-search-results!!!-->
-  <my-results-sorter
+  <!--todo Вынести в market-search-results!!!-->
+  <market-results-sorter
     *ngIf="visibleSort"
     [sort]="sort"
     (sortChange)="sortChange($event)"
-  ></my-results-sorter>
+  ></market-results-sorter>
 </div>

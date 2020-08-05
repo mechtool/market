@@ -7,7 +7,7 @@ const STATUS_CONVERTER =  {
 };
 
 @Pipe({
-  name: 'myOrganizationRequestStatus',
+  name: 'marketOrganizationRequestStatus',
 })
 export class OrganizationRequestStatusPipe implements PipeTransform {
   transform(value: string): string {

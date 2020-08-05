@@ -28,25 +28,25 @@
 
   </div>
 
-  <my-active-organizations
+  <market-active-organizations
     [organizations]="userOrganizations$ | async"
     (getAccessKeyRequestChange)="createAccessKeyModal($event)"
     *ngIf="activeTabType == 'a'"
-  ></my-active-organizations>
+  ></market-active-organizations>
 
-  <my-sent-requests
+  <market-sent-requests
     [requests]="userParticipationRequests$ | async"
     *ngIf="activeTabType == 'b'"
-  ></my-sent-requests>
+  ></market-sent-requests>
 
-  <my-organization-register
+  <market-organization-register
     [legalRequisites]="checkedLegalRequisites"
     (registerOrganizationDataChange)="registerOrganization($event)"
-    *ngIf="activeTabType == 'c' && !existingOrganization"></my-organization-register>
+    *ngIf="activeTabType == 'c' && !existingOrganization"></market-organization-register>
 
-  <my-organization-exists
+  <market-organization-exists
     [organization]="existingOrganization"
     (requestDataChange)="sendParticipationRequest($event)"
-    *ngIf="activeTabType == 'c' && existingOrganization"></my-organization-exists>
+    *ngIf="activeTabType == 'c' && existingOrganization"></market-organization-exists>
 
 </div>

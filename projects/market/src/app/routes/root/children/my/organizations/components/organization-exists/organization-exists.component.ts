@@ -5,7 +5,7 @@ import { OrganizationResponseModel } from '#shared/modules/common-services/model
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-organization-exists',
+  selector: 'market-organization-exists',
   templateUrl: './organization-exists.component.html',
   styleUrls: [
     './organization-exists.component.scss',

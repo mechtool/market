@@ -3,7 +3,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-main-banners-banner',
+  selector: 'market-main-banners-banner',
   templateUrl: './banner.component.html',
   styleUrls: [
     './banner.component.scss',

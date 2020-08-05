@@ -16,7 +16,7 @@ import { CartService, NotificationsService } from '#shared/modules/common-servic
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-product-order',
+  selector: 'market-product-order',
   templateUrl: './product-order.component.html',
   styleUrls: [
     './product-order.component.scss',

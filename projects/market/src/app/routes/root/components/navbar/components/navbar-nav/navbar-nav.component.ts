@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-navbar-nav',
+  selector: 'market-navbar-nav',
   templateUrl: './navbar-nav.component.html',
   styleUrls: [
     './navbar-nav.component.scss',

@@ -6,7 +6,7 @@ import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-supplier-card',
+  selector: 'market-supplier-card',
   templateUrl: './supplier-card.component.html',
   styleUrls: [
     './supplier-card.component.scss',

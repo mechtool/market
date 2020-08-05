@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'myDeclension',
+  name: 'marketDeclension',
 })
 export class DeclensionPipe implements PipeTransform {
   transform(value: number, ...args: string[]): string {

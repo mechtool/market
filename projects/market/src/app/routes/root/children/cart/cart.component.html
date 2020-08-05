@@ -6,11 +6,11 @@
 
   <ng-container *ngIf="cartData?.content?.length; else emptyCart">
     <p class="total" *ngIf="cartData?.content?.length">
-      Всего {{totalItems}}{{totalItems | myDeclension: ' товар': ' товара': ' товаров'}}
-      от {{supplierCount}}{{supplierCount | myDeclension: ' поставщика': ' поставщиков': ' поставщиков'}}
-      на сумму {{totalCost | myMultiplier:'.01' | currency:'RUB':'symbol'}}
+      Всего {{totalItems}}{{totalItems | marketDeclension: ' товар': ' товара': ' товаров'}}
+      от {{supplierCount}}{{supplierCount | marketDeclension: ' поставщика': ' поставщиков': ' поставщиков'}}
+      на сумму {{totalCost | marketMultiplier:'.01' | currency:'RUB':'symbol'}}
     </p>
-    <my-cart-order *ngFor="let order of cartData?.content; let i = index" [order]="order" [userData]="userData$ | async" (cartDataChange)="setProps($event)"></my-cart-order>
+    <market-cart-order *ngFor="let order of cartData?.content; let i = index" [order]="order" [userData]="userData$ | async" (cartDataChange)="setProps($event)"></market-cart-order>
   </ng-container>
 
 </div>

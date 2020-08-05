@@ -6,7 +6,7 @@ import { LocationModel, Megacity } from '#shared/modules/common-services/models'
 import { LocalStorageService, LocationService, NotificationsService } from '#shared/modules/common-services';
 
 @Component({
-  selector: 'my-search-bar-location',
+  selector: 'market-search-bar-location',
   templateUrl: './search-bar-location.component.html',
   styleUrls: [
     './search-bar-location.component.scss',

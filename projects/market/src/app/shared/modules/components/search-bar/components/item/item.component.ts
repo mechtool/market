@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils/get-image';
 
 @Component({
-  selector: 'my-search-bar-item',
+  selector: 'market-search-bar-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

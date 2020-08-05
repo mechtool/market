@@ -37,16 +37,16 @@
           {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
         </div>
         <div class="table_cell cell_sum" data-title="Сумма:">
-          <span class="price">{{document.price | myMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+          <span class="price">{{document.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
         </div>
         <div class="table_cell cell_action">
           <button type="button" class="btn btn-gray btn_long" (click)="openDocument(payment_document)">Посмотреть заказ</button>
         </div>
         <ng-template #payment_document>
-          <my-payment-document
+          <market-payment-document
             [documentId]="document.id"
             [documentType]="'ORDER'"
-          ></my-payment-document>
+          ></market-payment-document>
         </ng-template>
       </div>
     </div>

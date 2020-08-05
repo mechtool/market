@@ -7,7 +7,7 @@
 
             <div class="catalog_header__count">
               <span class="catalog_header__title">Наличие и цены у поставщиков</span> найдено
-              <strong>{{tradeOffers.length}}</strong>{{tradeOffers.length | myDeclension: ' торговое предложение': ' торговых предложения': ' торговых предложений'}}
+              <strong>{{tradeOffers.length}}</strong>{{tradeOffers.length | marketDeclension: ' торговое предложение': ' торговых предложения': ' торговых предложений'}}
             </div>
 
             <div class="catalog_header__btns" *ngIf="tradeOffers.length > 1">
@@ -27,7 +27,7 @@
 
           </div>
           <div class="catalog catalog_suppliers">
-            <my-trade-offer-info-card *ngFor="let item of tradeOffers" [tradeOffer]="item"></my-trade-offer-info-card>
+            <market-trade-offer-info-card *ngFor="let item of tradeOffers" [tradeOffer]="item"></market-trade-offer-info-card>
           </div>
         </div>
       </div>

@@ -30,7 +30,7 @@ const PAGE_SIZE = 20;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-search-bar-filter',
+  selector: 'market-search-bar-filter',
   templateUrl: './search-bar-filter.component.html',
   styleUrls: [
     './search-bar-filter.component.scss',

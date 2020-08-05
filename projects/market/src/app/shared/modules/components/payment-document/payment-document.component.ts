@@ -7,7 +7,7 @@ enum DocumentType { ORDER = 'ORDER', ACCOUNT = 'ACCOUNT'}
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-payment-document',
+  selector: 'market-payment-document',
   templateUrl: './payment-document.component.html',
   styleUrls: [
     './payment-document.component.css'

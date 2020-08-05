@@ -24,7 +24,7 @@ import { LocalStorageService, NotificationsService, ResponsiveService } from '#s
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  selector: 'my-search-bar',
+  selector: 'market-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: [
     './search-bar.component.scss',

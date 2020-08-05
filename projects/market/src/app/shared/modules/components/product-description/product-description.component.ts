@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ProductDto, ProductFeatureModel, ValueTypeEnum } from '#shared/modules/common-services/models';
 
 @Component({
-  selector: 'my-product-description',
+  selector: 'market-product-description',
   templateUrl: './product-description.component.html',
   styleUrls: [
     './product-description.component.scss',

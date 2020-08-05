@@ -1,5 +1,5 @@
 {
-  "name": "bnet",
+  "name": "market",
   "version": "0.0.1-SNAPSHOT",
   "scripts": {
     "ng": "ng",
@@ -21,12 +21,12 @@
     "docker:build:prod": "npm run docker:image:build && npm run docker:container:build:prod && npm run docker:container:copy-to-dist && npm run docker:container:remove",
     "docker:build": "npm run docker:image:build && npm run docker:container:build && npm run docker:container:copy-to-dist && npm run docker:container:remove",
     "docker:image:build": "docker-compose build --no-cache app",
-    "docker:container:build:dev": "docker run --name mynew_app_container mynew_app npm run build:dev",
-    "docker:container:build:stage": "docker run --name mynew_app_container mynew_app npm run build:stage",
-    "docker:container:build:prod": "docker run --name mynew_app_container mynew_app npm run build:prod",
-    "docker:container:build": "docker run --name mynew_app_container mynew_app npm run build",
-    "docker:container:copy-to-dist": "docker cp mynew_app_container:/usr/src/app/dist/. ./dist",
-    "docker:container:remove": "docker container rm mynew_app_container --force"
+    "docker:container:build:dev": "docker run --name market_app_container market_app npm run build:dev",
+    "docker:container:build:stage": "docker run --name market_app_container market_app npm run build:stage",
+    "docker:container:build:prod": "docker run --name market_app_container market_app npm run build:prod",
+    "docker:container:build": "docker run --name market_app_container market_app npm run build",
+    "docker:container:copy-to-dist": "docker cp market_app_container:/usr/src/app/dist/. ./dist",
+    "docker:container:remove": "docker container rm market_app_container --force"
   },
   "private": true,
   "dependencies": {
