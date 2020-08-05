@@ -67,7 +67,7 @@ export class OrganizationsComponent implements OnInit {
 
   sendParticipationRequest(data: any) {
     const bodyData = {
-      organization: this.existingOrganization.id,
+      organizationId: this.existingOrganization.id,
       notes: `${data.fio} (${data.email}) создал заявку на присоединение к организации ${this.existingOrganization.name}. ${data.message}`
     }
     this._organizationsService.sendParticipationRequest(bodyData)
