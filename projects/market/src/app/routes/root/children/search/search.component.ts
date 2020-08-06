@@ -36,6 +36,7 @@ export class SearchComponent {
   sort: SortModel;
   page: number;
   isLoadingProducts = false;
+  isSearching: boolean;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -104,6 +105,7 @@ export class SearchComponent {
     this._activatedRoute.queryParams
       .pipe(
         switchMap((queryParams) => {
+          this.isSearching = true;
           if (Object.keys(queryParams).length) {
             this.query = queryParams.q;
             this.availableFilters = {
@@ -140,7 +142,9 @@ export class SearchComponent {
         this.productOffers = this.productOffersList._embedded?.productOffers || [];
         this.productsTotal = this.productOffersList.page?.totalElements || 0;
         this.page = this.productOffersList.page?.number || 0;
+        this.isSearching = false;
       }, (err) => {
+        this.isSearching = false;
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }

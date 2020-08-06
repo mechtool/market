@@ -10,21 +10,29 @@
     [visibleSort]="productsTotal > 0"
   ></market-search-bar>
 
-  <market-search-results
-    [productOffers]="productOffers"
-    [productsTotal]="productsTotal"
-    [page]="page"
-    [isLoading]="isLoadingProducts"
-    (loadProducts)="loadProducts($event)"
-  ></market-search-results>
+  <ng-template #indicatorTemplate>
+    <em class="icon_scroll" nz-icon nzType="loading"></em>
+  </ng-template>
 
-  <market-main-banners
-    *ngIf="productsTotal === 0"
-  ></market-main-banners>
+  <nz-spin [nzSpinning]="isSearching" [nzIndicator]="indicatorTemplate">
 
-  <market-main-popular
-    *ngIf="productsTotal === 0"
-  ></market-main-popular>
+    <my-search-results
+      [productOffers]="productOffers"
+      [productsTotal]="productsTotal"
+      [page]="page"
+      [isLoading]="isLoadingProducts"
+      (loadProducts)="loadProducts($event)"
+    ></my-search-results>
+
+    <my-main-banners
+      *ngIf="productsTotal === 0"
+    ></my-main-banners>
+
+    <my-main-popular
+      *ngIf="productsTotal === 0"
+    ></my-main-popular>
+
+  </nz-spin>
 
 </div>
 

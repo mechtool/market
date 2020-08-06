@@ -14,6 +14,7 @@ import {
   DefaultSearchAvailableModel,
   LocationModel,
   SortModel,
+  Megacity,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel
 } from '../../common-services/models';
@@ -187,6 +188,7 @@ export class SearchBarComponent implements OnChanges {
     if (this._localStorageService.hasUserLocation()) {
       this.userLocation = this._localStorageService.getUserLocation();
     } else {
+      this._localStorageService.putUserLocation(Megacity.ALL[0]);
       this.userLocation = { name: 'Россия' };
     }
   }
