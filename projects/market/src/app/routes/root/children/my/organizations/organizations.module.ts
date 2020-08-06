@@ -13,6 +13,7 @@ import { OrganizationRegisterComponent } from './components/organization-registe
 import { OrganizationExistsComponent } from './components/organization-exists/organization-exists.component';
 import { AccessKeyComponent } from './components/access-key/access-key.component';
 import { OrganizationRequestStatusPipe } from './pipes';
+import { SingleOrganizationGuard } from './guards';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { OrganizationRequestStatusPipe } from './pipes';
     AccessKeyComponent,
     OrganizationRequestStatusPipe,
   ],
+  providers: [SingleOrganizationGuard]
 })
 export class OrganizationsModule {
 }

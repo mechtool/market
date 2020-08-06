@@ -25,6 +25,18 @@ button.btn-gray {
   position: relative;
 }
 
+.table_row:not(.table_header) {
+  cursor: pointer;
+  display: table-row;
+  position: relative;
+
+  &:hover {
+    .btn_get_access-key {
+      display: block;
+    }
+  }
+}
+
 .table_header {
   opacity: .6;
 }
@@ -76,6 +88,7 @@ button.btn-gray {
 }
 
 .table_list__organizations .btn_get_access-key {
+  display: none;
   color: var(--color-primary);
   margin-right: 20px;
 }

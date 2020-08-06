@@ -21,31 +21,32 @@
             "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg",
             ""
           ],
-          "unitOfMeasurement": {
-            "name": "шт.",
-            "okei": "796"
+          "unitOkei": {
+            "code": "796",
+            "nsymb": "шт",
+            "name": "Штука"
           },
           "quantity": 10,
           "price": 1500000,
           "priceIncludesVAT": "true",
-          "costSummary": {
-            "totalCost": 7000,
-            "vat": 0,
+          "itemTotal": {
+            "total": 7000,
             "totalVat": 8400,
-            "priceCurrency": "643"
+            "currencyCode": "643"
           },
+          "vat": "VAT_WITHOUT",
           "maxDaysForShipment": 30,
           "availabilityStatus": "AvailableForOrder",
           "_links": {
-            "https://rels.1cbn.ru/marketplace/trade-offer-view": {
+            "marketplace:trade-offer-view": {
               "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
             },
-            "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
+            "marketplace:shopping-cart-remove-item": {
               "title": "Удалить товар из корзины",
               "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77"
             },
-            "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
+            "marketplace:shopping-cart-update-item-quantity": {
               "title": "Установить количество товара",
               "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77/quantity"
             }
@@ -60,31 +61,32 @@
           "partNumber": "002DX-442",
           "packaging": "Коробка",
           "imageUrls": [],
-          "unitOfMeasurement": {
-            "name": "шт.",
-            "okei": "796"
+          "unitOkei": {
+            "code": "796",
+            "nsymb": "шт",
+            "name": "Штука"
           },
           "quantity": 7,
           "price": 81000,
           "priceIncludesVAT": "true",
-          "costSummary": {
-            "totalCost": 3000,
-            "vat": 20,
+          "itemTotal": {
+            "total": 3000,
             "totalVat": 3600,
-            "priceCurrency": "643"
+            "currencyCode": "643"
           },
+          "vat": "VAT_10",
           "maxDaysForShipment": 20,
           "availabilityStatus": "TemporarilyOutOfSales",
           "_links": {
-            "https://rels.1cbn.ru/marketplace/trade-offer-view": {
+            "marketplace:trade-offer-view": {
               "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
             },
-            "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
+            "marketplace:shopping-cart-remove-item": {
               "title": "Удалить товар из корзины",
               "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85"
             },
-            "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
+            "marketplace:shopping-cart-update-item-quantity": {
               "title": "Установить количество товара",
               "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85/quantity"
             }
@@ -95,7 +97,7 @@
         "pickupPoints": [
           {
             "fiasCode": "5ee84ac0-eb9a-4b42-b814-2f5f7c27c255",
-            "name": "г Москва, ул Сухонская, д 11",
+            "title": "г Москва, ул Сухонская, д 11",
             "countryOksmCode": "643"
           },
           {
@@ -107,22 +109,30 @@
         "deliveryZones": [
           {
             "fiasCode": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
-            "name": "Москва",
+            "title": "Москва",
             "countryOksmCode": "643"
           }
         ]
       },
       "customersAudience": [
-        "180414879123"
+        {
+          "id": "180414879123",
+          "name": "ООО Брюква",
+          "legalId": "3672873648:774301001"
+        }
       ],
-      "costSummary": {
-        "totalCost": 10000,
-        "vat": 20,
+      "orderTotal": {
+        "total": 10000,
         "totalVat": 12000,
-        "priceCurrency": "643"
+        "currencyCode": "643"
       },
+      "orderConstraintViolations":[
+        {
+           "message": "Сумма заказа не может быть меньше 800000, сумма заказа - 10497"
+        }
+      ],
       "_links": {
-        "https://rels.1cbn.ru/marketplace/make-order": {
+        "marketplace:make-order": {
           "title": "Создание заказа",
           "href": "proxifier/shopping-carts/777888999/order/44444"
         }
@@ -148,31 +158,32 @@
           "imageUrls": [
             "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
           ],
-          "unitOfMeasurement": {
-            "name": "шт.",
-            "okei": "796"
+          "unitOkei": {
+            "code": "796",
+            "nsymb": "шт",
+            "name": "Штука"
           },
           "quantity": 1,
           "price": 1500000,
           "priceIncludesVAT": "true",
-          "costSummary": {
-            "totalCost": 20000,
-            "vat": 10,
+          "itemTotal": {
+            "total": 20000,
             "totalVat": 22000,
-            "priceCurrency": "643"
+            "currencyCode": "643"
           },
+          "vat": "VAT_20",
           "maxDaysForShipment": 17,
           "availabilityStatus": "AvailableForOrder",
           "_links": {
-            "https://rels.1cbn.ru/marketplace/trade-offer-view": {
+            "marketplace:trade-offer-view": {
               "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
             },
-            "https://rels.1cbn.ru/marketplace/shopping-cart/remove-item": {
+            "marketplace:shopping-cart-remove-item": {
               "title": "Удалить товар из корзины",
               "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
             },
-            "https://rels.1cbn.ru/marketplace/shopping-cart/update-item-quantity": {
+            "marketplace:shopping-cart-update-item-quantity": {
               "title": "Установить количество товара",
               "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
             }
@@ -183,20 +194,24 @@
         "pickupPoints": [
           {
             "fiasCode": "6fdecb78-893a-4e3f-a5ba-aa062459463b",
-            "name": "Севастополь",
+            "title": "Севастополь",
             "countryOksmCode": "643"
           }
         ]
       },
       "customersAudience": [],
-      "costSummary": {
-        "totalCost": 20000,
-        "vat": 10,
+      "orderTotal": {
+        "total": 20000,
         "totalVat": 22000,
-        "priceCurrency": "643"
+        "currencyCode": "643"
       },
+      "orderConstraintViolations":[
+        {
+           "message": "Сумма заказа не может быть меньше 10000, сумма заказа - 367"
+        }
+      ],
       "_links": {
-        "https://rels.1cbn.ru/marketplace/make-order": {
+        "marketplace:make-order": {
           "title": "Создание заказа",
           "href": "proxifier/shopping-carts/777888999/order/555555"
         }
@@ -204,7 +219,7 @@
     }
   ],
   "_links": {
-    "https://rels.1cbn.ru/marketplace/shopping-cart/add-item": {
+    "marketplace:shopping-cart-add-item": {
       "title": "Добавить товар в корзину",
       "href": "proxifier/shopping-carts/777888999/items"
     }

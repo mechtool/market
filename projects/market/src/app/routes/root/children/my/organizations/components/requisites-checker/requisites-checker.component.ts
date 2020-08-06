@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { NzModalRef } from 'ng-zorro-antd/modal';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @UntilDestroy({ checkProperties: true })
@@ -11,9 +10,9 @@ import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms'
 })
 export class RequisitesCheckerComponent implements OnInit {
   form: FormGroup;
+  @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private modal: NzModalRef,
     private _fb: FormBuilder,
   ) {}
 
@@ -34,7 +33,7 @@ export class RequisitesCheckerComponent implements OnInit {
       inn: this.form.get('inn').value,
       ...(this.form.get('kpp').value) && {kpp: this.form.get('kpp').value},
     };
-    this.modal.destroy({ data });
+    this.legalRequisitesChange.emit(data);
   }
 
 }

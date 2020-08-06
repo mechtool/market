@@ -1,5 +1,5 @@
-import { CartDataOrderUnitOfMeasureMentResponseModel } from './cart-data-order-unit-of-measurement-response.model';
 import { CartDataOrderRelationResponseModel } from './cart-data-order-relation-response.model'
+import { CartDataOrderOkeiResponseModel } from './cart-data-order-unit-okei-response.model';
 
 export class CartDataOrderResponseModel {
   supplier: {
@@ -17,16 +17,17 @@ export class CartDataOrderResponseModel {
       partNumber: string;
       packaging: string;
       imageUrls: string[];
-      unitOfMeasurement: CartDataOrderUnitOfMeasureMentResponseModel;
+      unitOkei: CartDataOrderOkeiResponseModel;
       quantity: number;
       price: number;
       priceIncludesVAT: boolean;
-      costSummary: {
-        totalCost: number;
-        vat: number;
+      itemTotal: {
+        total: number;
         totalVat: number;
-        priceCurrency: string;
+        currencyCode: string;
       };
+      vat: 'VAT_10' | 'VAT_20' | 'VAT_WITHOUT';
+      orderConstraintViolations: { message: string; }[];
       maxDaysForShipment: number;
       availabilityStatus: string;
       _links: CartDataOrderRelationResponseModel;
@@ -44,13 +45,17 @@ export class CartDataOrderResponseModel {
       countryOksmCode: string;
     }[];
   };
-  customersAudience: string[];
-  costSummary: {
-    totalCost: number;
-    vat: number;
+  customersAudience: {
+    id: string;
+    name: string;
+    legalId: string;
+  }[];
+  orderTotal: {
+    total: number;
     totalVat: number;
-    priceCurrency: string;
+    currencyCode: string;
   };
+  orderConstraintViolations: { message: string; }[];
   _links?: CartDataOrderRelationResponseModel;
 }
 

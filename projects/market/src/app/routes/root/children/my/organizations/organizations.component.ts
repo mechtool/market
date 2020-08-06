@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { OrganizationsService } from '#shared/modules/common-services/organizations.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
@@ -108,7 +108,10 @@ export class OrganizationsComponent implements OnInit {
       ...(data.organizationDescription && { description: data.organizationDescription }),
     };
 
-    this._organizationsService.registerOrganization(regOrgData)
+    this._organizationsService.registerOrganization(regOrgData).pipe(
+      switchMap(_ => this._organizationsService.getUserOrganizations()),
+      tap(res => this._userService.setUserOrganizations(res)),
+    )
       .subscribe(() => {
         this.checkedLegalRequisites = null;
         this.goToTab('a');
@@ -138,7 +141,9 @@ export class OrganizationsComponent implements OnInit {
           nzViewContainerRef: this._viewContainerRef,
           nzGetContainer: () => document.body,
           nzComponentParams: {
-            organization: org,
+            organizationName: org?.organizationName || null,
+            inn: org?.legalRequisites?.inn || null,
+            kpp: org?.legalRequisites?.kpp || null,
             accessKey: res,
           },
           nzFooter: null,
@@ -177,7 +182,7 @@ export class OrganizationsComponent implements OnInit {
   }
 
   private _createRequisitesCheckerModal() {
-    this.checkedLegalRequisites = null;
+    let localCheckedLegalRequisites = null;
     const modal = this._modalService.create({
       nzContent: RequisitesCheckerComponent,
       nzViewContainerRef: this._viewContainerRef,
@@ -185,37 +190,44 @@ export class OrganizationsComponent implements OnInit {
       nzFooter: null,
       nzWidth: 480,
     });
+
     modal.afterClose.pipe(
-      switchMap((res) => {
-        if (!res) {
-          return of(null);
-        }
-        if (res) {
-          this.checkedLegalRequisites = {
-            inn: res.data?.inn,
-            kpp: res.data?.kpp,
-          };
-          const legalId = innKppToLegalId(res.data?.inn, res.data?.kpp);
-          return this._organizationsService.getOrganizationByLegalId(legalId).pipe(
-            map((res) => ({ data: res }))
-          )
-        }
-      })
+      filter(res => !res && this.activeTabType !== 'c')
     )
-    .subscribe((res) => {
-      if (!res && this.activeTabType !== 'c') {
-        this.goToTab(this.activeTabType);
-      }
+    .subscribe(() => {
+      this.goToTab(this.activeTabType);
+    })
+
+    const subscription = modal.componentInstance.legalRequisitesChange.pipe(
+      switchMap((res) => {
+        localCheckedLegalRequisites = {
+          inn: res?.inn,
+          kpp: res?.kpp,
+        };
+        const legalId = innKppToLegalId(res?.inn, res?.kpp);
+        return this._organizationsService.getOrganizationByLegalId(legalId);
+      })
+    ).subscribe((res) => {
       if (res) {
-        this.existingOrganization = null;
-        if (res.data?.id) {
-          this._setActiveTabType('c');
-          this.existingOrganization = res.data;
+        const userOrganizationsIds = this._userService.userOrganizations$.value.map(org => org.organizationId) || [];
+        if (userOrganizationsIds.includes(res.id)) {
+          this._notificationsService.info('Вы уже имеете доступ к данной организации');
         }
-        if (!res.data?.id) {
+        if (!userOrganizationsIds.includes(res.id)) {
+          modal.destroy(true);
+          subscription.unsubscribe();
           this._setActiveTabType('c');
+          this.existingOrganization = res;
         }
       }
+      if (!res) {
+        modal.destroy(true);
+        subscription.unsubscribe();
+        this.existingOrganization = null;
+        this._setActiveTabType('c');
+        this.checkedLegalRequisites = localCheckedLegalRequisites;
+      }
+
     }, (err) => {
       this._notificationsService.error('Произошла ошибка при получении информации об организации');
     });

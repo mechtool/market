@@ -9,21 +9,11 @@ import { UserOrganizationModel, AccessKeyResponseModel } from '#shared/modules/c
   styleUrls: ['./access-key.component.scss'],
 })
 export class AccessKeyComponent implements OnInit {
-  @Input() organization: UserOrganizationModel;
+  @Input() organizationName: string;
+  @Input() inn: string;
+  @Input() kpp: string;
   @Input() accessKey: AccessKeyResponseModel;
   isAccessCodeCopied = false;
-
-  get organizationName(): string {
-    return this.organization?.organizationName || null;
-  }
-
-  get inn(): string {
-    return this.organization?.legalRequisites?.inn || null;
-  }
-
-  get kpp(): string {
-    return this.organization?.legalRequisites?.kpp || null;
-  }
 
   get accessCode(): string {
     return this.accessKey?.accessCode || null;

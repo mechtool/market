@@ -198,10 +198,6 @@ export class BreadcrumbsGuard implements CanActivate {
       case '/my/organizations':
         breadcrumbsItems = [
           {
-            label: 'Личный кабинет',
-            routerLink: '/'
-          },
-          {
             label: 'Мои организации',
             routerLink: '/my/organizations',
             queryParams: { tab: 'a' },
@@ -210,19 +206,28 @@ export class BreadcrumbsGuard implements CanActivate {
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
       case '/my/organizations/:id':
-        breadcrumbsItems = [
-          {
-            label: 'Личный кабинет',
-            routerLink: '/'
-          },
-          {
-            label: 'Мои организации',
-            routerLink: '/my/organizations',
-            queryParams: { tab: 'a' },
-          }
-        ];
-        this._breadcrumbsService.setItems(breadcrumbsItems);
-        return true;
+        const organizationId = urlSplitted[3];
+        return this._organizationsService.getOrganization(organizationId).pipe(
+          map((res) => {
+            this._breadcrumbsService.setItems([
+              {
+                label: 'Мои организации',
+                routerLink: '/my/organizations',
+                queryParams: { tab: 'a' },
+              },
+              {
+                label: `${res.name}`,
+                routerLink: `/my/organizations/${res.id}`
+              },
+            ]);
+            return true;
+          }),
+          catchError((err) => {
+            this._breadcrumbsService.setVisible(false);
+            this._breadcrumbsService.setItems([]);
+            return of(true);
+          })
+        );
       default:
         this._breadcrumbsService.setVisible(false);
         this._breadcrumbsService.setItems([]);

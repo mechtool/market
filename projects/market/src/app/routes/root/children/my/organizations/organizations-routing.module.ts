@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OrganizationsComponent } from './organizations.component';
 import { SingleOrganizationComponent } from './components/single-organization/single-organization.component';
+import { SingleOrganizationGuard } from './guards';
 
 const routes: Routes = [
   {
@@ -10,6 +11,7 @@ const routes: Routes = [
   }, {
     path: ':id',
     component: SingleOrganizationComponent,
+    canActivate: [SingleOrganizationGuard]
   }, {
     path: '**',
     redirectTo: '',

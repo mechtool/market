@@ -284,8 +284,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this.isOrderLoading = false;
       this._watchItemQuantityChanges();
       this.form.patchValue({
-        totalCost: order.costSummary.totalCost,
-        totalVat: order.costSummary.totalVat,
+        totalCost: order.orderTotal.total,
+        totalVat: order.orderTotal.totalVat,
       });
       this._cdr.detectChanges();
     }
@@ -308,13 +308,13 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           },
           deliveryOptions: {
             ...(this.deliveryAvailable ? {
-              deliveryZone: {
+              deliveryTo: {
                 fiasCode: this.form.get('deliveryArea').value.fias,
                 title: this.form.get('deliveryArea').value.fullName,
                 countryOksmCode: '643',
               }
             } : {
-              pickupPoint: {
+              pickupFrom: {
                 fiasCode: this.pickupPoints[0].fiasCode,
                 title: this.pickupPoints[0].name,
                 countryOksmCode: '643',
@@ -441,8 +441,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       consumerINN: new FormControl(''),
       consumerKPP: new FormControl(''),
       consumerId: new FormControl(''),
-      totalCost: new FormControl(this.order.costSummary.totalCost),
-      totalVat: new FormControl(this.order.costSummary.totalVat),
+      totalCost: new FormControl(this.order.orderTotal.total),
+      totalVat: new FormControl(this.order.orderTotal.totalVat),
       deliveryMethod: new FormControl(this.deliveryOptions?.[0]?.value, [Validators.required]),
       deliveryArea: new FormControl(''),
       contactName: new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
@@ -467,8 +467,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       price: product.price,
       maxDaysForShipment: product.maxDaysForShipment,
       availabilityStatus: product.availabilityStatus,
-      vat: product.costSummary?.vat,
-      totalCost: product.costSummary?.totalCost,
+      // vat: product.itemTotal?.vat, // TODO VAT_10 VAT_20 VAT_WITHOUT
+      vat: 0,
+      totalCost: product.itemTotal?.total,
       _links: product._links,
     });
   }
@@ -522,9 +523,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _checkAudienceForAvailability(audienceArray: string[], org: any) {
+  private _checkAudienceForAvailability(audienceArray: any[], org: any) {
     const innKpp = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
-    return audienceArray.includes(innKpp);
+    return audienceArray.map(aud => aud.id).includes(innKpp);
   }
 
   private _setConsumerFromOrder() {

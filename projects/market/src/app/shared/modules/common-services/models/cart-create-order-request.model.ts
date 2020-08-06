@@ -6,12 +6,12 @@ export class CartCreateOrderRequestModel {
     phone: 'string';
   };
   deliveryOptions: {
-    pickupPoint?: {
+    pickupFrom?: {
       fiasCode: 'string';
       title: 'string';
       countryOksmCode: 'string';
     };
-    deliveryZone?: {
+    deliveryTo?: {
       fiasCode: 'string';
       title: 'string';
       countryOksmCode: 'string';

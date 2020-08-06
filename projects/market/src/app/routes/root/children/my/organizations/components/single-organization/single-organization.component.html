@@ -1,3 +1,58 @@
-<div class="single">
-  SINGLE
+<div class="content-wrapper page_inner">
+
+  <div class="page_header">
+    <h2>ООО Рога и копыта</h2>
+  </div>
+
+  <div class="tabs_wrap tabs_wrap__moving">
+
+    <span
+      class="tab_item tab_item__main"
+      [ngClass]="{'active': activeTabType == 'a'}"
+      (click)="activeTabType = 'a'">Профиль
+    </span>
+
+    <span
+      class="tab_item tab_long"
+      [ngClass]="{'active': activeTabType == 'b'}"
+      (click)="activeTabType = 'b'">
+        <span class="data_counter data_counter__gray" [attr.data_counter]="users?.length || 0">Пользователи</span>
+    </span>
+
+    <span
+      class="tab_item tab_long"
+      [ngClass]="{'active': activeTabType == 'c'}"
+      (click)="activeTabType = 'c'">
+        <span class="data_counter data_counter__gray" [attr.data_counter]="participationRequests?.length || 0">Запросы</span>
+    </span>
+
+    <span
+      class="tab_item tab_long"
+      [ngClass]="{'active': activeTabType == 'd'}"
+      (click)="activeTabType = 'd'">Одноразовые пароли
+    </span>
+
+    <span
+      class="tab_item tab_long"
+      (click)="createAccessKeyModal()">Получить пароль
+    </span>
+
+  </div>
+
+  <div
+    *ngIf="activeTabType == 'a'"
+  >{{organizationData | json}}</div>
+
+  <div
+    *ngIf="activeTabType == 'b'"
+  >USERS</div>
+
+  <div
+    *ngIf="activeTabType == 'c'"
+  >REQUESTS</div>
+
+  <div
+    *ngIf="activeTabType == 'd'"
+  >ACCESS-KEYS</div>
+
 </div>

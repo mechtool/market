@@ -1,0 +1,66 @@
+@media all and (max-width: 768px) {
+
+  .page_header {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .page_header h2 {
+    font-size: var(--font-size-18);
+    font-weight: var(--font-weight-bold);
+    line-height: 23px;
+    text-align: center;
+  }
+
+  .tabs_wrap__moving {
+    flex-direction: column;
+    border-top: 1px solid #c4c4c4;
+    margin: 0 15px 23px;
+  }
+
+  .tabs_wrap__moving .tab_item,
+  .tabs_wrap__moving .tab_item.tab_long {
+    width: 100%;
+    height: 40px;
+    background-color: transparent;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding-left: 15px;
+    padding-right: 10px;
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-medium);
+    border-bottom: 1px solid #c4c4c4;
+  }
+
+  .tabs_wrap__moving .tab_item:after {
+    content: '';
+    width: 7px;
+    height: 13px;
+    background: url('../../../../../../../../assets/img/svg/icon__arrow_right.svg') no-repeat center center;
+    margin-left: auto;
+    margin-right: 1px;
+  }
+
+  .tabs_wrap__moving .tab_item__main {
+    display: none;
+  }
+
+  .tabs_wrap__moving {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .tabs_wrap__moving .tab_item.active {
+    background-color: #ffffff;
+  }
+
+  market-sent-requests, market-organization-register, market-organization-exists {
+    position: absolute;
+    top: 0;
+    background: #ffffff;
+    width: 100%;
+    min-height: 100%;
+  }
+}

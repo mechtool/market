@@ -81,7 +81,7 @@ export class ProductOrderComponent implements OnInit {
             return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
           });
           if (foundTradeOffer) {
-            this._price = foundTradeOffer.costSummary?.totalCost;
+            this._price = foundTradeOffer.itemTotal?.total;
             this.orderStatus = OrderStatusModal.IN_CART;
           } else {
             this._price = null;
