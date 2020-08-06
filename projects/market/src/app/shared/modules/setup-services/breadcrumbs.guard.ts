@@ -52,8 +52,6 @@ const pathsWithAuthentication = [
  * URL пути находящиеся под авторизацией
  */
 const pathsWithAuthorization = [
-  /^\/my\/organizations$/i,
-  /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
   /^\/my\/orders$/i,
 ];
 
