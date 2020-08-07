@@ -1,9 +1,17 @@
-import { BehaviorSubject, Observable, throwError, zip } from 'rxjs';
-import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, zip } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
-import { CartAddItemRequestModel, CartCreateOrderRequestModel, CartUpdateItemQuantityRequestModel, CartDataResponseModel, CartDataModel, CartDataOrderModel, RelationEnumModel } from './models';
+import {
+  CartAddItemRequestModel,
+  CartCreateOrderRequestModel,
+  CartDataModel,
+  CartDataOrderModel,
+  CartDataResponseModel,
+  CartUpdateItemQuantityRequestModel,
+  RelationEnumModel
+} from './models';
 
 @Injectable()
 export class CartService {
@@ -28,19 +36,20 @@ export class CartService {
   }
 
   // Создание корзины
-  createCart(): Observable<string>  {
+  createCart(): Observable<string> {
     return this._bnetService.createCart()
       .pipe(
         map(res => res.headers.get('Location')),
-        map((res) => {
-          this.setCart(res);
-          return res;
-        },
-      ));
+        map(
+          (res) => {
+            this.setCart(res);
+            return res;
+          },
+        ));
   }
 
   // Мердж текущего содержимого корзины с содержимым от сервера TODO
-  setActualCartData(): Observable<CartDataModel>  {
+  setActualCartData(): Observable<CartDataModel> {
     let currentCartData = null;
     return zip(
       this.getCart$(),
@@ -50,9 +59,21 @@ export class CartService {
         currentCartData = cartData;
         return cartLocation;
       }),
-      switchMap(res => this._bnetService.getCartDataByCartLocation(res)),
+      switchMap((href) => {
+        return this._bnetService.getCartDataByCartLocation(href);
+      }),
+      catchError((error) => {
+        // todo Нужно докрутить логики на различные типы ошибок (404, 500 и т.д) Возможно должно быть разное поведение
+        return this.createCart();
+      }),
+      switchMap((res: any) => {
+        if (typeof res === 'string') {
+          return this._bnetService.getCartDataByCartLocation(res);
+        }
+        return of(res);
+      }),
       map((res) => {
-        return this._mergeCardDataCurrentWithResponse(res, currentCartData)
+        return this._mergeCardDataCurrentWithResponse(res, currentCartData);
       }),
       tap((res => this.setCartData(res)))
     );
@@ -158,7 +179,7 @@ export class CartService {
     let content = null;
     if (currentData) {
       const currentDataContent = currentData?.content;
-      content =  data.content.reduce((accum, curr) => {
+      content = data.content.reduce((accum, curr) => {
         const orderRelationRef = curr._links[RelationEnumModel.ORDER_CREATE].href;
         const orderFoundInCurrentDataContent = currentDataContent?.find((item) => {
           return item._links[RelationEnumModel.ORDER_CREATE].href === orderRelationRef;
