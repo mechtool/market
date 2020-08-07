@@ -6,7 +6,8 @@ import {
   OrganizationAdminResponseModel,
   AccessKeyResponseModel,
   ParticipationRequestResponseModel,
-  RegisterOrganizationRequestModel
+  RegisterOrganizationRequestModel,
+  AccessKeyModel
 } from './models';
 import { BNetService } from './bnet.service';
 
@@ -40,7 +41,7 @@ export class OrganizationsService {
     return this._bnetService.getParticipationRequests();
   }
 
-  obtainAccessKey(orgId: string): Observable<AccessKeyResponseModel> {
+  obtainAccessKey(orgId: string): Observable<AccessKeyModel> {
     return this._bnetService.obtainAccessKey(orgId);
   }
 

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { UserOrganizationModel, AccessKeyResponseModel } from '#shared/modules/common-services/models';
+import { UserOrganizationModel, AccessKeyModel } from '#shared/modules/common-services/models';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -12,7 +12,7 @@ export class AccessKeyComponent implements OnInit {
   @Input() organizationName: string;
   @Input() inn: string;
   @Input() kpp: string;
-  @Input() accessKey: AccessKeyResponseModel;
+  @Input() accessKey: AccessKeyModel;
   isAccessCodeCopied = false;
 
   get accessCode(): string {

@@ -29,6 +29,7 @@ import {
   AccessKeyResponseModel,
   ParticipationRequestResponseModel,
   RegisterOrganizationRequestModel,
+  AccessKeyModel,
 } from './models';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
@@ -94,7 +95,7 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/organizations/participation-requests`);
   }
 
-  obtainAccessKey(orgId: string): Observable<AccessKeyResponseModel> {
+  obtainAccessKey(orgId: string): Observable<AccessKeyModel> {
     return this._apiService.post(`${API_URL}/organizations/access-keys/obtain`, { organizationId: orgId });
   }
 

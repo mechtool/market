@@ -61,4 +61,5 @@ export * from './cart-update-item-quantity-request.model';
 export * from './cart-create-order-request.model';
 export * from './participation-request-response.model';
 export * from './register-organization-request.model';
+export * from './access-key.model';
 export * from './access-key-response.model';

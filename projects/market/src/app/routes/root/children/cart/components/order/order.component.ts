@@ -456,6 +456,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _createItem(product: any): FormGroup {
+    const vatConverter = {
+      VAT_10: 10,
+      VAT_20: 20,
+      VAT_WITHOUT: 0,
+    };
     return this._fb.group({
       productName: product.productName,
       productDescription: product.productDescription,
@@ -467,8 +472,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       price: product.price,
       maxDaysForShipment: product.maxDaysForShipment,
       availabilityStatus: product.availabilityStatus,
-      // vat: product.itemTotal?.vat, // TODO VAT_10 VAT_20 VAT_WITHOUT
-      vat: 0,
+      vat: vatConverter[product.vat] || 0,
       totalCost: product.itemTotal?.total,
       _links: product._links,
     });
