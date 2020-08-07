@@ -1,0 +1,56 @@
+<ng-container *ngIf="users?.length; else emptyUsers">
+  <div class="table_list table_list__organizations">
+    <div class="table_row table_header">
+      <div class="table_cell cell_title">
+        <span>Имя и фамилия</span>
+      </div>
+      <div class="table_cell cell_status">
+        <span>Статус</span>
+      </div>
+      <div class="table_cell cell_action">
+        <span>E-mail</span>
+      </div>
+      <div class="table_cell cell_action">
+        <span>Действие</span>
+      </div>
+    </div>
+    <div class="table_row" *ngFor="let user of users">
+      <div class="table_cell cell_title">
+        <span class="supplier_title" >
+          <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(user?.person?.personName)}"></span>
+          <span class="supplier_name">
+            {{user?.person?.personName}}
+          </span>
+        </span>
+      </div>
+      <div class="table_cell cell_status" data-title="Статус:">
+        {{user.userGrants.isAdmin ? 'Администратор' : 'Менеджер'}}
+      </div>
+      <div class="table_cell cell_status" data-title="Email:">
+        {{user?.person?.userEmail}}
+      </div>
+      <div class="table_cell cell_action">
+        <div class="table_cell__inner">
+          <button
+            class="btn btn-gray btn_get_access-key btn_long"
+            (click)="emitRemoveUserRequestChange(user.uin)">
+            Удалить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #emptyUsers>
+  <div class="empty">
+    <nz-empty
+      nzNotFoundImage="./assets/img/svg/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      >
+      <ng-template #contentTpl>
+        <span>Список пользователей пуст</span>
+      </ng-template>
+    </nz-empty>
+  </div>
+</ng-template>

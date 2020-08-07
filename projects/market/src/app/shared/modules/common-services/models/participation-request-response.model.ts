@@ -2,6 +2,7 @@ import { OrganizationResponseModel } from './organization-response.model';
 
 export class ParticipationRequestResponseModel {
   requestId: string;
+  requesterUin?: string;
   requesterNotes: string;
   requestDate: string;
   requestStatus: ParticipationRequestStatusResponseModel;

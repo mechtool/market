@@ -1,9 +1,9 @@
 <div class="organization-register">
   <div class="section_tab__title">
-    <h2>Добавить организацию</h2>
+    <h2>{{ operationType === 'register' ? 'Добавить организацию' : 'Редактировать профиль организации'}}</h2>
   </div>
 
-  <p class="form_title">Чтобы продолжить работу, <br>укажите данные организации:</p>
+  <p class="form_title" *ngIf="operationType === 'register'">Чтобы продолжить работу, <br>укажите данные организации:</p>
 
   <form class="form__registration_org" [formGroup]="form" (submit)="send()">
 
@@ -87,7 +87,7 @@
         <div class="input_attention" *ngIf="form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">Заполните это поле</div>
     </div>
 
-    <div class="form-group form-group-agree">
+    <div class="form-group form-group-agree" *ngIf="operationType === 'register'">
       <label nz-checkbox formControlName="agree" style="display: flex; align-items: flex-start;">
         <span class="checkbox-agree-text">Я являюсь уполномоченным представителем регистрируемой<br/>организации и принимаю условия
           <a class="attention-link" href="https://1cbn.ru/agreement/" target="_blank" (click)="$event.stopPropagation()">пользовательского соглашения</a>
@@ -95,8 +95,8 @@
       </label>
     </div>
 
-    <div class="form-group">
-      <button nz-button nzType="primary" [disabled]="!form.valid">Продолжить</button>
+    <div class="form-group" style="margin-top: 25px">
+      <button nz-button nzType="primary" [disabled]="!form.valid">{{ operationType === 'register' ? 'Продолжить' : 'Сохранить' }}</button>
     </div>
 
   </form>

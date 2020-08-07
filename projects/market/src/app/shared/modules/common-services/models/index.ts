@@ -28,6 +28,8 @@ export * from './user-organization.model';
 export * from './organization-response.model';
 export * from './organization-admin-response.model';
 export * from './organization-user-response.model';
+export * from './update-organization-request.model';
+export * from './update-organization-contact-person-request.model';
 export * from './access-key-response.model';
 export * from './trade-offers.model';
 export * from './trade-offer-response.model';

@@ -1,0 +1,32 @@
+[
+  {
+    "uin": "51906f07-a70c-4585-9e8d-c85574e9d52e",
+    "userGrants": {
+      "isAdmin": true
+    },
+    "person": {
+      "personName": "Иванов Иван Иванович",
+      "userEmail": "ivanov.ii@example.com"
+    }
+  },
+  {
+    "uin": "2e0f58a6-c675-4f95-93b5-049bcb0173d3",
+    "userGrants": {
+      "isAdmin": false
+    },
+    "person": {
+      "personName": "Селихов Геворг Иванович",
+      "userEmail": "sl@iop.com"
+    }
+  },
+  {
+    "uin": "7a0f58a6-c675-4f95-93b5-049bcb0174e1",
+    "userGrants": {
+      "isAdmin": true
+    },
+    "person": {
+      "personName": "Байхов Артемий Иванович",
+      "userEmail": "bb@mail.com"
+    }
+  }
+]

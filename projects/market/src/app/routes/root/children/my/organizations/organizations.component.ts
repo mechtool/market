@@ -238,7 +238,7 @@ export class OrganizationsComponent implements OnInit {
   }
 
   private _setUserParticipationRequests() {
-    this._organizationsService.getParticipationRequests()
+    this._organizationsService.getOwnParticipationRequests()
       .subscribe((res) => {
         this._userService.userParticipationRequests$.next(res);
       }, (err) => {

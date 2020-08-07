@@ -1,5 +1,6 @@
 [
   {
+    "requesterUin": "e33f126e-9218-42a8-8dda-e5b0098b0295",
     "requestId": "640f4992-7b34-47c0-be4d-af380dc66b20",
     "requesterNotes": "Прошу добавить Иванова И.И.",
     "requestDate": "2020-07-31T13:34:44.446",
@@ -9,7 +10,7 @@
       "resolutionNotes": null
     },
     "organization": {
-      "id": "33e41c12-3b6c-4984-ae33-87314b5f9809",
+      "id": "343e0cf1-751e-4312-b326-dfe8bb1d7ed6",
       "name": "ООО \"РОКСИ\"",
       "legalRequisites": {
         "inn": "7810578297",
@@ -18,16 +19,36 @@
     }
   },
   {
+    "requesterUin": "d14f1e6e-9218-42a8-8dda-e5b0098b0344",
     "requestId": "c12f1e6e-9218-42a8-8dda-e5b0098b0295",
-    "requesterNotes": "Прошу добавить Иванова И.И.",
-    "requestDate": "2020-07-31T16:20:03.339",
+    "requesterNotes": "Прошу добавить Срамова И.И.",
+    "requestDate": "2020-08-01T13:21:04.219",
     "requestStatus": {
-      "resolutionStatus": "PENDING",
-      "resolutionDate": null,
+      "resolutionStatus": "ACCEPTED",
+      "resolutionDate": "2020-08-12T09:42:48.837",
       "resolutionNotes": null
     },
     "organization": {
-      "id": "4809869b-94d6-4d1c-8c83-4401b5ccce19",
+      "id": "343e0cf1-751e-4312-b326-dfe8bb1d7ed6",
+      "name": "Общество с ограниченной ответственностью \"ПРЕМЬЕРАВИА\"",
+      "legalRequisites": {
+        "inn": "7204176291",
+        "kpp": "720301001"
+      }
+    }
+  },
+  {
+    "requesterUin": "d23f1e6e-9218-42a8-8dda-e5b0098b0361",
+    "requestId": "e44f1e6e-9218-42a8-8dda-e5b0098b0332",
+    "requesterNotes": "Прошу добавить Иваночкина В.В.",
+    "requestDate": "2020-08-02T14:13:04.219",
+    "requestStatus": {
+      "resolutionStatus": "REJECTED",
+      "resolutionDate": "2020-08-12T09:42:48.837",
+      "resolutionNotes": null
+    },
+    "organization": {
+      "id": "23b975fe-3cce-4b72-bde6-90c255759aff",
       "name": "Общество с ограниченной ответственностью \"ПРЕМЬЕРАВИА\"",
       "legalRequisites": {
         "inn": "7204176291",
@@ -36,3 +57,4 @@
     }
   }
 ]
+

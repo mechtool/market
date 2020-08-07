@@ -1,0 +1,12 @@
+<div class="user-removal-verifier">
+
+  <div class="title">Удаление пользователя</div>
+  <div class="description">Вы действительно хотите удалить<br>пользователя <strong>{{personName}}</strong> из организации</div>
+
+  <div class="remove_user__btns">
+    <button nz-button [nzType]="'primary'" nzDanger (click)="remove(userId)">Удалить</button>
+    <button nz-button (click)="destroy()" nzType="link">Отмена</button>
+  </div>
+
+</div>
+

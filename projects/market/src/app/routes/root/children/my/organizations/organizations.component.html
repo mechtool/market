@@ -39,10 +39,11 @@
     *ngIf="activeTabType == 'b'"
   ></market-sent-requests>
 
-  <market-organization-register
+  <market-organization-operate
+    operationType="register"
     [legalRequisites]="checkedLegalRequisites"
-    (registerOrganizationDataChange)="registerOrganization($event)"
-    *ngIf="activeTabType == 'c' && !existingOrganization"></market-organization-register>
+    (organizationDataChange)="registerOrganization($event)"
+    *ngIf="activeTabType == 'c' && !existingOrganization"></market-organization-operate>
 
   <market-organization-exists
     [organization]="existingOrganization"

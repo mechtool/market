@@ -8,6 +8,12 @@
     "website": "https://www.metro-cc.ru",
     "address": "г. Москва пр-т Мира 211, стр.1 "
   },
+  "contactPerson": {
+    "fullName": "Денис",
+    "email": "d@d",
+    "phone": "112",
+    "position": null
+  },
   "legalRequisites":{
     "inn": "1615012919",
     "kpp": "161501001"

@@ -1,0 +1,30 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.user-removal-verifier {
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-weight: var(--font-weight-demi);
+  text-align: center;
+  margin-top: 20px;
+}
+
+.description {
+  font-size: var(--font-size-18);
+  line-height: 23px;
+  text-align: center;
+  margin: 10px 0 20px;
+}
+
+.remove_user__btns {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

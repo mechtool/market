@@ -1,0 +1,32 @@
+@media all and (max-width: 576px) {
+  .info_group__label {
+    flex-grow: 1;
+    width: 50%;
+  }
+  .info_group__value {
+    width: 50%;
+    text-align: left;
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-medium);
+  }
+  .info_group__supplier_group .info_group__value {
+    margin-left: 0;
+    max-width: none;
+  }
+  .section_paragraph__btns {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .section_paragraph__btns button {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  .supplier_title {
+    justify-content: flex-start;
+  }
+  .supplier_name {
+    margin-left: inherit;
+  }
+}
+
+

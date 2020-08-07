@@ -1,0 +1,36 @@
+[
+  {
+    "keyId": "c6b59c6a-68a5-41c6-9bfc-69ab5b4f2221",
+    "status": "Issued",
+    "creationDate": "2020-08-11T11:33:02.353Z",
+    "activationDate": "2020-08-11T11:33:02.353Z",
+    "accessCode": "A213FGT11R",
+    "accessCodeExpirationDate": "2020-08-11",
+    "organization": {
+      "id": "ce6d5dde-93a5-4d01-9ea4-5773054effa6",
+      "name": "ООО \"Ромашка\"",
+      "inn": "011001220011",
+      "kpp": "921391111"
+    },
+    "notes": "string",
+    "cid": "2af08bcc-188c-4870-a901-53eb968e0847",
+    "app": "1C:ERPv8.1/ЭДОv1.34.1"
+  },
+  {
+    "keyId": "b3c49c6a-68a5-41c6-9bfc-69ab5b4f3345",
+    "status": "Issued",
+    "creationDate": "2020-08-10T09:33:02.353Z",
+    "activationDate": "2020-08-10T09:33:02.353Z",
+    "accessCode": "A213FGT11R",
+    "accessCodeExpirationDate": "2020-08-11",
+    "organization": {
+      "id": "23b975fe-3cce-4b72-bde6-90c255759aff",
+      "name": "ООО \"Ромашка\"",
+      "inn": "011001220011",
+      "kpp": "921391111"
+    },
+    "notes": "string",
+    "cid": "3ef08bcc-188c-4870-a901-53eb968e0993",
+    "app": "1C:ERPv8.1/ЭДОv1.34.1"
+  }
+]

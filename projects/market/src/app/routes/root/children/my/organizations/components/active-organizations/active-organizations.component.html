@@ -13,7 +13,7 @@
     </div>
     <div class="table_row" *ngFor="let org of organizations">
       <div class="table_cell cell_title">
-        <a class="supplier_title">
+        <a class="supplier_title" [routerLink]="['/my/organizations/' + org.organizationId]">
           <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(org.organizationName)}"></span>
           <span class="supplier_name">
             {{org.organizationName}}

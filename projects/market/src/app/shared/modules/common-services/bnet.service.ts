@@ -30,6 +30,9 @@ import {
   ParticipationRequestResponseModel,
   RegisterOrganizationRequestModel,
   AccessKeyModel,
+  UpdateOrganizationRequestModel,
+  UpdateOrganizationContactPersonRequestModel,
+  OrganizationUserResponseModel,
 } from './models';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
@@ -79,6 +82,10 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/organizations/${id}`);
   }
 
+  getOrganizationProfile(id: string): Observable<OrganizationResponseModel> {
+    return this._apiService.get(`${API_URL}/organizations/profiles/${id}`);
+  }
+
   getOrganizationAdminsByLegalId(legalId: string): Observable<OrganizationAdminResponseModel[]> {
     return this._apiService.get(`${API_URL}/organizations/admins/${legalId}`);
   }
@@ -91,16 +98,60 @@ export class BNetService {
     return this._apiService.post(`${API_URL}/organizations/participation-requests`, data);
   }
 
-  getParticipationRequests(): Observable<ParticipationRequestResponseModel[]> {
-    return this._apiService.get(`${API_URL}/organizations/participation-requests`);
+  getOwnParticipationRequests(): Observable<ParticipationRequestResponseModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/own-participation-requests`);
+  }
+
+  getParticipationRequests(orgId: string): Observable<ParticipationRequestResponseModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/participation-requests?organizationId=${orgId}`);
+  }
+
+  acceptParticipationRequestById(id: string): Observable<any> {
+    return this._apiService.get(`${API_URL}/organizations/participation-requests/${id}/accept`);
+  }
+
+  rejectParticipationRequestById(id: string): Observable<any> {
+    return this._apiService.get(`${API_URL}/organizations/participation-requests/${id}/reject`);
   }
 
   obtainAccessKey(orgId: string): Observable<AccessKeyModel> {
     return this._apiService.post(`${API_URL}/organizations/access-keys/obtain`, { organizationId: orgId });
   }
 
+  getAccessKeys(): Observable<AccessKeyResponseModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/access-keys`);
+  }
+
   registerOrganization(data: RegisterOrganizationRequestModel): Observable<any> {
     return this._apiService.post(`${API_URL}/organizations`, data);
+  }
+
+  updateOrganization(id: string, data: UpdateOrganizationRequestModel): Observable<any> {
+    return this._apiService.patch(`${API_URL}/organizations/${id}`, data);
+  }
+
+  updateOrganizationContact(id: string, data: UpdateOrganizationContactPersonRequestModel): Observable<any> {
+    return this._apiService.put(`${API_URL}/organizations/${id}/contact`, data);
+  }
+
+  acceptParticipationRequest(requestId: string): Observable<any> {
+    return this._apiService.put(`${API_URL}/organizations/participation-requests/${requestId}/accept`);
+  }
+
+  rejectParticipationRequest(requestId: string): Observable<any> {
+    return this._apiService.put(`${API_URL}/organizations/participation-requests/${requestId}/reject`);
+  }
+
+  deleteUserFromOrganization(id: string, userId: string): Observable<any> {
+    return this._apiService.delete(`${API_URL}/organizations/${id}/users/${userId}`);
+  }
+
+  deleteAccessKey(accessKeyId: string): Observable<any> {
+    return this._apiService.delete(`${API_URL}/organizations/access-keys/${accessKeyId}`);
+  }
+
+  getOrganizationUsers(id: string): Observable<OrganizationUserResponseModel[]> {
+    return this._apiService.get(`${API_URL}/organizations/${id}/users`);
   }
 
   searchLocations(textQuery: string): Observable<LocationModel[]> {

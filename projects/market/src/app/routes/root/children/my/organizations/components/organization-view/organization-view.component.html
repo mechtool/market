@@ -1,0 +1,77 @@
+<div class="organization-view">
+  <div class="section_paragraph">
+    <h3>Организация</h3>
+    <div class="info_group__profile">
+        <div class="info_group info_group__supplier_group">
+            <span class="info_group__label">Наименование</span>
+            <span class="info_group__value">
+                <span class="supplier_title">
+                    <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(organizationData?.name)}"></span>
+                    <span class="supplier_name">
+                        {{organizationData?.name}}
+                    </span>
+                </span>
+            </span>
+        </div>
+        <div class="info_group">
+            <span class="info_group__label">ИНН</span>
+            <span class="info_group__value">{{organizationData?.legalRequisites?.inn}}</span>
+        </div>
+        <div class="info_group" *ngIf="organizationData?.legalRequisites?.kpp">
+            <span class="info_group__label">КПП</span>
+            <span class="info_group__value">{{organizationData?.legalRequisites?.kpp}}</span>
+        </div>
+    </div>
+    <h3 *ngIf="organizationData?.contacts?.website || organizationData?.contacts?.email || organizationData?.contacts?.phone || organizationData?.contacts?.address">Общие контакты</h3>
+    <div class="info_group__profile"
+      *ngIf="organizationData?.contacts?.website || organizationData?.contacts?.email || organizationData?.contacts?.phone || organizationData?.contacts?.address">
+        <div class="info_group" *ngIf="organizationData?.contacts?.website">
+            <span class="info_group__label">Сайт</span>
+            <span class="info_group__value"><a [attr.href]="organizationData?.contacts?.website" target="_blank">{{organizationData?.contacts?.website}}</a></span>
+        </div>
+        <div class="info_group" *ngIf="organizationData?.contacts?.email">
+            <span class="info_group__label">Электронная почта</span>
+            <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contacts?.email" target="_blank">{{organizationData?.contacts?.email}}</a></span>
+        </div>
+        <div class="info_group" *ngIf="organizationData?.contacts?.phone">
+            <span class="info_group__label">Телефон</span>
+            <span class="info_group__value">{{organizationData?.contacts?.phone}}</span>
+        </div>
+        <div class="info_group" *ngIf="organizationData?.contacts?.address">
+            <span class="info_group__label">Адрес</span>
+            <span class="info_group__value">{{organizationData?.contacts?.address}}</span>
+        </div>
+    </div>
+    <h3>Организация</h3>
+    <div class="info_group__profile">
+      <div class="info_group" *ngIf="organizationData?.contactPerson?.fullName">
+          <span class="info_group__label">Имя</span>
+          <span class="info_group__value">{{organizationData?.contactPerson?.fullName}}</span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.contactPerson?.position">
+          <span class="info_group__label">Должность</span>
+          <span class="info_group__value">{{organizationData?.contactPerson?.position}}</span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.contactPerson?.phone">
+          <span class="info_group__label">Телефон</span>
+          <span class="info_group__value">{{organizationData?.contactPerson?.phone}}</span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.contactPerson?.email">
+          <span class="info_group__label">Электронная почта</span>
+          <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contactPerson?.email" target="_blank">{{organizationData?.contactPerson?.email}}</a></span>
+      </div>
+    </div>
+  </div>
+  <div class="section_paragraph"  *ngIf="organizationData?.description">
+    <h3>Описание организации</h3>
+    <p>{{organizationData?.description}}</p>
+  </div>
+  <div class="section_paragraph section_paragraph_btns">
+    <div class="section_paragraph__btns">
+
+        <button nz-button nzType="primary" (click)="goToSupplierStore()">В магазин</button>
+        <button nz-button nzType="link" (click)="editProfile()" *ngIf="isAdmin">Редактировать профиль</button>
+
+    </div>
+  </div>
+</div>

@@ -216,6 +216,79 @@
           "href": "proxifier/shopping-carts/777888999/order/555555"
         }
       }
+    },
+    {
+      "supplier": {
+        "name": "ООО 'Свинтус'",
+        "inn": "033001220022",
+        "kpp": "921391431",
+        "phone": "+11299999999",
+        "email": "sales@svintus.ru"
+      },
+      "items": [
+        {
+          "productName": "Корица 2020",
+          "productDescription": "Корица",
+          "barCodes": [
+            "4413231211333"
+          ],
+          "partNumber": "002DX-442",
+          "packaging": "Коробка",
+          "imageUrls": [
+            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
+          ],
+          "unitOkei": {
+            "code": "796",
+            "nsymb": "шт",
+            "name": "Штука"
+          },
+          "quantity": 1,
+          "price": 1500000,
+          "priceIncludesVAT": "true",
+          "itemTotal": {
+            "total": 20000,
+            "totalVat": 22000,
+            "currencyCode": "643"
+          },
+          "vat": "VAT_20",
+          "maxDaysForShipment": 17,
+          "availabilityStatus": "TemporarilyOutOfSales",
+          "_links": {
+            "marketplace:trade-offer-view": {
+              "title": "Торговое предложение",
+              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
+            },
+            "marketplace:shopping-cart-remove-item": {
+              "title": "Удалить товар из корзины",
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
+            },
+            "marketplace:shopping-cart-update-item-quantity": {
+              "title": "Установить количество товара",
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
+            }
+          }
+        }
+      ],
+      "deliveryOptions": {
+        "pickupPoints": [
+          {
+            "fiasCode": "6fdecb78-893a-4e3f-a5ba-aa062459463b",
+            "title": "Севастополь",
+            "countryOksmCode": "643"
+          }
+        ]
+      },
+      "customersAudience": [],
+      "orderTotal": {
+        "total": 20000,
+        "totalVat": 22000,
+        "currencyCode": "643"
+      },
+      "orderConstraintViolations":[
+        {
+           "message": "Сумма заказа не может быть меньше 10000, сумма заказа - 367"
+        }
+      ]
     }
   ],
   "_links": {

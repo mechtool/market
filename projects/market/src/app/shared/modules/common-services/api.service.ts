@@ -46,6 +46,10 @@ export class ApiService {
     return this.request('PUT', url, body, init);
   }
 
+  patch<T>(url: string, body?: any, init?: any) {
+    return this.request('PATCH', url, body, init);
+  }
+
   delete<T>(url: string, _init?: any) {
     let init = null;
     if (!_init) {

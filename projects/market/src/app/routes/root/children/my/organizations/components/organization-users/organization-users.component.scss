@@ -1,0 +1,112 @@
+.btn-gray,
+a.btn-gray,
+button.btn-gray {
+  outline: none;
+  background-color: #F2F2F2;
+  border-color: #F2F2F2;
+
+  &:hover {
+    background: var(--color-accent);
+  }
+}
+
+.btn_long {
+  width: 200px;
+}
+
+.table_list {
+  display: table;
+  width: 100%;
+  border-bottom: 1px solid #ededed;
+}
+
+.table_row {
+  display: table-row;
+  position: relative;
+}
+
+.table_row:not(.table_header) {
+  cursor: pointer;
+  display: table-row;
+  position: relative;
+
+  &:hover {
+    .btn_get_access-key {
+      display: block;
+    }
+  }
+}
+
+.table_header {
+  opacity: .6;
+}
+
+.table_cell {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 6px 10px 6px 5px;
+  height: 55px;
+  font-size: var(--font-size-13);
+  line-height: 17px;
+  border-top: 1px solid #ededed;
+}
+
+.table_cell__inner {
+  display: flex;
+  align-items: center;
+}
+
+.table_header .table_cell {
+  vertical-align: top;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: 15px;
+  border-top: none;
+  height: 45px;
+}
+
+.cell_title {
+  flex-wrap: wrap;
+}
+
+.table_list__organizations .cell_title {
+  width: 340px;
+  min-width: 180px;
+  font-weight: var(--font-weight-medium);
+}
+
+.table_list__organizations .cell_status {
+  width: 290px;
+}
+
+.table_list__organizations .cell_action {
+  min-width: 250px;
+}
+
+.table_list__organizations .cell_action .btn {
+  white-space: nowrap;
+}
+
+.table_list__organizations .btn_get_access-key {
+  display: none;
+  color: var(--color-primary);
+  margin-right: 20px;
+}
+
+.supplier_title {
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.supplier_image {
+  display: flex;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 7px;
+}

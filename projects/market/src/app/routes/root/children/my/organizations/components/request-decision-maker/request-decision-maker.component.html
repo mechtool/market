@@ -1,0 +1,12 @@
+<div class="request-decision-maker">
+
+  <div class="title">Запрос на добавление в организацию</div>
+  <div class="description">{{request?.requesterNotes}}</div>
+
+  <div class="remove_user__btns">
+    <button nz-button nzType="primary" (click)="accept(request?.requestId)">Добавить</button>
+    <button nz-button nzType="link" (click)="reject(request?.requestId)">Отклонить</button>
+  </div>
+
+</div>
+

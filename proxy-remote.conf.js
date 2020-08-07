@@ -8,8 +8,11 @@ const locations = fs.readFileSync('./proxy-remote-assets/locations__search.json'
 const userOrganizations1 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-1.json').toString();
 const userOrganizations2 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-2.json').toString();
 const organizationsById = fs.readFileSync('./proxy-remote-assets/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
+const organizationsProfilesById = fs.readFileSync('./proxy-remote-assets/organizations-profiles__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
 const organizationAdmins = fs.readFileSync('./proxy-remote-assets/organizations__admins__12345.json').toString();
 const organizationByLegalId = fs.readFileSync('./proxy-remote-assets/organizations__by-legal-id__12345.json').toString();
+const organizationUsers = fs.readFileSync('./proxy-remote-assets/organizations__id__users.json').toString();
+const ownParticipationRequests = fs.readFileSync('./proxy-remote-assets/organizations__own-participation-requests.json').toString();
 const participationRequests = fs.readFileSync('./proxy-remote-assets/organizations__participation-requests.json').toString();
 const suggestions = fs.readFileSync('./proxy-remote-assets/suggestions.json').toString();
 const suppliers = fs.readFileSync('./proxy-remote-assets/suppliers.json').toString();
@@ -18,6 +21,7 @@ const tradeOffers = fs.readFileSync('./proxy-remote-assets/trade-offers__search.
 const accounts = fs.readFileSync('./proxy-remote-assets/accounts.json').toString();
 const orders = fs.readFileSync('./proxy-remote-assets/orders.json').toString();
 const accessKey = fs.readFileSync('./proxy-remote-assets/access-keys__obtain.json').toString();
+const accessKeys = fs.readFileSync('./proxy-remote-assets/organizations__access-keys.json').toString();
 
 
 const PROXY_CONFIG = [
@@ -38,11 +42,20 @@ const PROXY_CONFIG = [
         '/proxifier/locations/search': /^\/proxifier\/locations\/search\/?$/i,
         '/proxifier/organizations': /^\/proxifier\/organizations\/?$/i,
         '/proxifier/organizations/:id': /^\/proxifier\/organizations\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/organizations/:id/contact': /^\/proxifier\/organizations\/(?:([^\/]+?))\/contact\/?$/i,
+        '/proxifier/organizations/:id/users': /^\/proxifier\/organizations\/(?:([^\/]+?))\/users\/?$/i,
+        '/proxifier/organizations/:id/users/:userId': /^\/proxifier\/organizations\/(?:([^\/]+?))\/users\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/organizations/profiles/:id': /^\/proxifier\/organizations\/profiles\/(?:([^\/]+?))\/?$/i,
         '/proxifier/organizations/admins/:id': /^\/proxifier\/organizations\/admins\/(?:([^\/]+?))\/?$/i,
         '/proxifier/organizations/user-organizations': /^\/proxifier\/organizations\/user-organizations\/?$/i,
         '/proxifier/organizations/by-legal-id/:id': /^\/proxifier\/organizations\/by-legal-id\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/organizations/own-participation-requests': /^\/proxifier\/organizations\/own-participation-requests\/?$/i,
         '/proxifier/organizations/participation-requests': /^\/proxifier\/organizations\/participation-requests\/?$/i,
+        '/proxifier/organizations/participation-requests/:id/accept': /^\/proxifier\/organizations\/participation-requests\/(?:([^\/]+?))\/accept\/?$/i,
+        '/proxifier/organizations/participation-requests/:id/reject': /^\/proxifier\/organizations\/participation-requests\/(?:([^\/]+?))\/reject\/?$/i,
+        '/proxifier/organizations/access-keys/:id': /^\/proxifier\/organizations\/access-keys\/(?:([^\/]+?))\/?$/i,
         '/proxifier/organizations/access-keys/obtain': /^\/proxifier\/organizations\/access-keys\/obtain\/?$/i,
+        '/proxifier/organizations/access-keys': /^\/proxifier\/organizations\/access-keys\/?$/i,
         '/proxifier/suggestions': /^\/proxifier\/suggestions\/?$/i,
         '/proxifier/suppliers': /^\/proxifier\/suppliers\/?$/i,
         '/proxifier/trade-offers/:id': /^\/proxifier\/trade-offers\/(?:([^\/]+?))\/?$/i,
@@ -100,9 +113,39 @@ const PROXY_CONFIG = [
         return true;
       }
 
-      if (req.method === 'GET' && pathsObject['/proxifier/organizations/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('user-organizations') && !req.originalUrl.split('?')[0].includes('admins') && !req.originalUrl.split('?')[0].includes('by-legal-id') && !req.originalUrl.split('?')[0].includes('participation-requests') && !req.originalUrl.split('?')[0].includes('access-keys')) {
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('user-organizations') && !req.originalUrl.split('?')[0].includes('admins') && !req.originalUrl.split('?')[0].includes('by-legal-id') && !req.originalUrl.split('?')[0].includes('participation-requests') && !req.originalUrl.split('?')[0].includes('own-participation-requests') && !req.originalUrl.split('?')[0].includes('access-keys') && !req.originalUrl.split('?')[0].includes('profiles') && !req.originalUrl.split('?')[0].includes('contact') && !req.originalUrl.split('?')[0].includes('users')) {
         res.status(200);
         res.end(organizationsById);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/:id/users'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end(organizationUsers);
+        return true;
+      }
+
+      if (req.method === 'DELETE' && pathsObject['/proxifier/organizations/:id/users/:userId'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end('');
+        return true;
+      }
+
+      if (req.method === 'PATCH' && pathsObject['/proxifier/organizations/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end('');
+        return true;
+      }
+
+      if (req.method === 'PUT' && pathsObject['/proxifier/organizations/:id/contact'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end('');
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/profiles/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(organizationsProfilesById);
         return true;
       }
 
@@ -124,9 +167,27 @@ const PROXY_CONFIG = [
         return true;
       }
 
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/own-participation-requests'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(ownParticipationRequests);
+        return true;
+      }
+
       if (req.method === 'GET' && pathsObject['/proxifier/organizations/participation-requests'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
         res.end(participationRequests);
+        return true;
+      }
+
+      if (req.method === 'PUT' && pathsObject['/proxifier/organizations/participation-requests/:id/accept'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end('');
+        return true;
+      }
+
+      if (req.method === 'PUT' && pathsObject['/proxifier/organizations/participation-requests/:id/reject'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end('');
         return true;
       }
 
@@ -140,6 +201,18 @@ const PROXY_CONFIG = [
       if (req.method === 'POST' && pathsObject['/proxifier/organizations/access-keys/obtain'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
         res.end(accessKey);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/organizations/access-keys'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(accessKeys);
+        return true;
+      }
+
+      if (req.method === 'DELETE' && pathsObject['/proxifier/organizations/access-keys/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end('');
         return true;
       }
 
