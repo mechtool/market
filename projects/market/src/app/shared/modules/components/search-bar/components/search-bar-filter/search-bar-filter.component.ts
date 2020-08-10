@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
@@ -40,7 +40,7 @@ const PAGE_SIZE = 20;
     './search-bar-filter.component-360.scss',
   ],
 })
-export class SearchBarFilterComponent {
+export class SearchBarFilterComponent implements OnInit {
   MIN_PRICE = 0;
   MAX_PRICE = 1000000;
   availableFiltersForm: FormGroup;
@@ -78,20 +78,6 @@ export class SearchBarFilterComponent {
     }, 1);
   }
 
-  constructor(
-    private _locationService: LocationService,
-    private _localStorageService: LocalStorageService,
-    private _categoryService: CategoryService,
-    private _activatedRoute: ActivatedRoute,
-    private _supplierService: SupplierService,
-    private _organizationsService: OrganizationsService,
-    private _fb: FormBuilder,
-    private changeDetector: ChangeDetectorRef,
-    private _notificationsService: NotificationsService,
-  ) {
-    this._init();
-  }
-
   get isNotValidForm(): boolean {
     return this.availableFiltersForm.invalid;
   }
@@ -111,6 +97,23 @@ export class SearchBarFilterComponent {
 
   get withImages() {
     return this.availableFiltersForm.controls.withImages.value;
+  }
+
+  constructor(
+    private _locationService: LocationService,
+    private _localStorageService: LocalStorageService,
+    private _categoryService: CategoryService,
+    private _activatedRoute: ActivatedRoute,
+    private _supplierService: SupplierService,
+    private _organizationsService: OrganizationsService,
+    private _fb: FormBuilder,
+    private changeDetector: ChangeDetectorRef,
+    private _notificationsService: NotificationsService,
+  ) {
+  }
+
+  ngOnInit(): void {
+    this._init();
   }
 
   save() {
@@ -194,20 +197,16 @@ export class SearchBarFilterComponent {
       .pipe(
         switchMap(([params, queryParams]) => {
           this.categoryId = params.categoryId || queryParams.categoryId;
-          if (queryParams.supplierId) {
-            this._organizationsService.getOrganization(queryParams.supplierId)
-              .subscribe(
-                (organization) => {
-                  this.supplier = {
-                    id: organization.id,
-                    name: resizeBusinessStructure(organization.name),
-                    isSelected: true,
-                  };
-                },
-                (err) => {
-                  this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-                }
-              );
+          const supplierId = params.supplierId || queryParams.supplierId;
+          return combineLatest([of(params), supplierId ? this._organizationsService.getOrganization(supplierId) : of(null)]);
+        }),
+        switchMap(([params, organization]) => {
+          if (organization) {
+            this.supplier = {
+              id: organization.id,
+              name: resizeBusinessStructure(organization.name),
+              isSelected: true,
+            };
           }
           if (params.supplierId) {
             this.searchByInn = false;

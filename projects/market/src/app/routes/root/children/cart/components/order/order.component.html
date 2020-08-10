@@ -149,7 +149,11 @@
           <ng-container [formGroupName]="i">
             <div class="cell_left">
               <div class="cell_image">
-                <img src="{{form.get('items')['controls'][i].controls.imageUrl.value}}" alt="{{form.get('items')['controls'][i].controls.productName.value}}" title="{{form.get('items')['controls'][i].controls.productName.value}}">
+                <span *ngIf="!form.get('items')['controls'][i].controls.imageUrl.value" class="empty__img"></span>
+                <img *ngIf="form.get('items')['controls'][i].controls.imageUrl.value"
+                     src="{{form.get('items')['controls'][i].controls.imageUrl.value}}"
+                     alt="{{form.get('items')['controls'][i].controls.productName.value}}"
+                     title="{{form.get('items')['controls'][i].controls.productName.value}}">
               </div>
             </div>
             <div class="cell_right">

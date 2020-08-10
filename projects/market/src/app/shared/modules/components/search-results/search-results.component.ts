@@ -25,6 +25,10 @@ export class SearchResultComponent {
 
   isRequestFulfilled: boolean;
 
+  get found() {
+    return this.productsTotal < 5000 ? 'найдено' : 'найдено более';
+  }
+
   constructor(private _activatedRoute: ActivatedRoute) {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
       this.isRequestFulfilled = containParameters(queryParams);

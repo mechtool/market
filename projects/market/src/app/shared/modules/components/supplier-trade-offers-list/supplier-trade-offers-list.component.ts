@@ -10,8 +10,8 @@ import {
   TradeOfferSummaryPriceModel,
   TradeOfferVatEnumModel,
 } from '#shared/modules';
-import { ActivatedRoute, Router } from '@angular/router';
-import { absoluteImagePath, containParametersForRequest, mapStock, queryParamsFrom } from '#shared/utils';
+import { Router } from '@angular/router';
+import { absoluteImagePath, mapStock, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
 
 @Component({
   selector: 'market-supplier-trade-offers-list',
@@ -37,33 +37,32 @@ export class SupplierTradeOffersListComponent {
   @Input() isLoading: boolean;
   @Input() page: number;
   @Input() query: string;
+  @Input() availableFilters: DefaultSearchAvailableModel;
   @Input() sort: SortModel;
   @Output() loadTradeOffers: EventEmitter<number> = new EventEmitter();
 
-  availableFilters: DefaultSearchAvailableModel;
-  visibleSort: boolean;
+  get found() {
+    return this.tradeOffersTotal < 10000 ? 'найдено' : 'найдено более';
+  }
 
   constructor(
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private _localStorageService: LocalStorageService,
   ) {
-    this._activatedRoute.queryParams.subscribe((queryParams) => {
-      this.visibleSort = containParametersForRequest(queryParams);
-    });
   }
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     this.availableFilters = filters.availableFilters;
     this.sort = filters.sort;
+    const params = queryParamsWithoutSupplierIdFrom(filters);
     this._router.navigate([`/supplier/${this.supplier.id}`], {
-      queryParams: queryParamsFrom(filters),
+      queryParams: params,
     });
   }
 
   imageUrl(images: string[]) {
-    return images ? absoluteImagePath(images[0]) : absoluteImagePath(null);
+    return images?.length ? absoluteImagePath(images[0]) : null;
   }
 
   price(price: number) {

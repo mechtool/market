@@ -2,8 +2,7 @@
 
   <div class="title" *ngIf="productOffers.length">
     <strong>Результаты поиска</strong>
-    <span>найдено <b>{{productsTotal}}</b> {{productsTotal | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
-
+    <span>{{found}} <b>{{productsTotal}}</b> {{productsTotal | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
   </div>
 
   <div class="title info_not_found" *ngIf="!productOffers?.length && isRequestFulfilled">

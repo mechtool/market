@@ -479,7 +479,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _setImageUrl(images: string[]): string {
-    return images ? absoluteImagePath(images[0]) : absoluteImagePath(null);
+    return images?.length ? absoluteImagePath(images[0]) : null;
   }
 
   private _setAvailableOrganizationdAndInitConsumer() {

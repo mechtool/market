@@ -7,7 +7,7 @@
     (submitClick)="queryParametersChange($event)"
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
-    [visibleSort]="productsTotal > 0"
+    [visibleSort]="productOffers?.length > 1"
   ></market-search-bar>
 
   <ng-template #indicatorTemplate>

@@ -33,7 +33,11 @@
 
   <div class="carousel">
 
-    <div class="pic" *ngIf="!product.images || product.images?.length === 1">
+    <div *ngIf="!product.images">
+      <span class="empty__img"></span>
+    </div>
+
+    <div class="pic" *ngIf="product.images?.length === 1">
       <img src="{{firstImageUrl(product.images)}}" alt="">
     </div>
 

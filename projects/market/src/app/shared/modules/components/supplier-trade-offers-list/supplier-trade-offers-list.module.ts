@@ -6,7 +6,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { SearchBarModule } from '#shared/modules/components/search-bar';
 import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { ProductSideModule } from '#shared/modules';
+import { PipesModule, ProductSideModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -18,6 +18,7 @@ import { ProductSideModule } from '#shared/modules';
     NzSpinModule,
     InfiniteScrollModule,
     ProductSideModule,
+    PipesModule,
   ],
   exports: [SupplierTradeOffersListComponent],
   declarations: [SupplierTradeOffersListComponent],

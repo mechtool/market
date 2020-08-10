@@ -4,10 +4,10 @@ import {
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
 } from '#shared/modules/common-services/models';
-import { LocalStorageService, NotificationsService, SuggestionService } from '#shared/modules/common-services';
 import { Router } from '@angular/router';
 import { queryParamsFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { LocalStorageService, NotificationsService, SuggestionService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

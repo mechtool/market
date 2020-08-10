@@ -40,7 +40,7 @@ export class ProductGalleryComponent {
   }
 
   firstImageUrl(imgs: ImagesLinkModel[]) {
-    return imgs ? this.imageUrl(imgs[0].href) : this.imageUrl(null);
+    return imgs?.length ? this.imageUrl(imgs[0].href) : null;
   }
 
   imageUrl(img: string): string {

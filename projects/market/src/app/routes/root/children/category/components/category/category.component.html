@@ -10,7 +10,7 @@
     [sort]="sort"
     (submitClick)="queryParametersChange($event)"
     [suggestionsOff]="true"
-    [visibleSort]="true"
+    [visibleSort]="productOffers?.length > 1"
   ></market-search-bar>
 
   <market-search-results

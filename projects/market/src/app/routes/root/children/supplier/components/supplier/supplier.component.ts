@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
   CountryCode,
+  DefaultSearchAvailableModel,
   OrganizationResponseModel,
+  SortModel,
   SuppliersItemModel,
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
@@ -39,6 +41,8 @@ export class SupplierSingleComponent {
   tradeOffersTotal: number;
   page: number;
   query: string;
+  availableFilters: DefaultSearchAvailableModel;
+  sort: SortModel;
 
   get name() {
     return resizeBusinessStructure(this.supplier?.name);
@@ -84,6 +88,7 @@ export class SupplierSingleComponent {
     ])
       .pipe(
         switchMap(([params, queryParams]) => {
+          this._collectAvailableFilters(params, queryParams);
           this._collectRequest(queryParams);
           const supplierId = params.supplierId;
           this.supplierLogo = stringToRGB(supplierId);
@@ -105,8 +110,24 @@ export class SupplierSingleComponent {
       });
   }
 
-  private _collectRequest(queryParams: Params): void {
+  private _collectAvailableFilters(params: Params, queryParams: Params) {
     this.query = queryParams.q;
+    this.availableFilters = {
+      supplierId: params.supplierId,
+      trademark: queryParams.trademark,
+      delivery: queryParams.delivery,
+      pickup: queryParams.pickup,
+      inStock: queryParams.inStock,
+      withImages: queryParams.withImages,
+      priceFrom: queryParams.priceFrom,
+      priceTo: queryParams.priceTo,
+      categoryId: queryParams.categoryId,
+    };
+    this.sort = queryParams.sort;
+  }
+
+
+  private _collectRequest(queryParams: Params): void {
     const delivery = queryParams.delivery === CountryCode.RUSSIA ? undefined : queryParams.delivery;
     const pickup = queryParams.pickup === CountryCode.RUSSIA ? undefined : queryParams.pickup;
     this.request = {
@@ -121,7 +142,6 @@ export class SupplierSingleComponent {
       sort: queryParams.sort,
     };
   }
-
 
   private _init(tradeOffers: TradeOffersListResponseModel): void {
     this.tradeOffersList = tradeOffers;

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { TradeOfferResponseModel } from '#shared/modules';
+import { CountryCode, TradeOfferResponseModel } from '#shared/modules/common-services/models';
 import { mapStock } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
@@ -85,7 +85,7 @@ export class TermsOfSaleComponent {
         // todo пересмотреть, нужно ли в этом месте завязывать логику на коды всего мира
         this.tradeOffer.deliveryDescription.deliveryRegions
           .forEach((tradeOfferDelivery) => {
-            if (tradeOfferDelivery.countryOksmCode === '643') {
+            if (tradeOfferDelivery.countryOksmCode === CountryCode.RUSSIA) {
               deliveryRegions = 'Доставка осуществляется по всей России';
             }
           });

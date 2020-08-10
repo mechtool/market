@@ -16,7 +16,7 @@ import {
   ProductService,
 } from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
-import { queryParamsFrom } from '#shared/utils';
+import { queryParamsWithoutCategoryIdFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -36,7 +36,6 @@ export class CategoryComponent {
   isLoadingProducts = false;
   page: number;
 
-
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
@@ -51,12 +50,9 @@ export class CategoryComponent {
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
     const categoryId = filters.availableFilters?.categoryId || this.categoryId;
-    if (filters.availableFilters?.categoryId) {
-      // в данном компоненте категория часть пути, а не query string
-      filters.availableFilters.categoryId = undefined;
-    }
+    const params = queryParamsWithoutCategoryIdFrom(filters);
     this._router.navigate([`/category/${categoryId}`], {
-      queryParams: queryParamsFrom(filters),
+      queryParams: params,
     });
   }
 

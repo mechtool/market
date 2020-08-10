@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges
 } from '@angular/core';
@@ -13,8 +14,8 @@ import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
   LocationModel,
-  SortModel,
   Megacity,
+  SortModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel
 } from '../../common-services/models';
@@ -34,7 +35,7 @@ import { LocalStorageService, NotificationsService, ResponsiveService } from '#s
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarComponent implements OnChanges {
+export class SearchBarComponent implements OnInit, OnChanges {
   activeFilters = new Set<string>();
   form: FormGroup;
   isInputFocused = false;
@@ -87,6 +88,17 @@ export class SearchBarComponent implements OnChanges {
     private _activatedRoute: ActivatedRoute,
   ) {
     this._initForm();
+  }
+
+  ngOnInit(): void {
+    this._initUserLocation();
+    combineLatest([
+      this._activatedRoute.params,
+      this._activatedRoute.queryParams,
+    ]).subscribe(([params, queryParams]) => {
+      this._activeFiltersCount(params, queryParams);
+      this._addRegionToAvailableFilters(queryParams);
+    });
 
     if (!this.suggestionsOff) {
       this._subscribeOnQueryChanges();
@@ -174,14 +186,9 @@ export class SearchBarComponent implements OnChanges {
   }
 
   private _initForm(): void {
-    this._initUserLocation();
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]]
     });
-    combineLatest([
-      this._activatedRoute.params,
-      this._activatedRoute.queryParams,
-    ]).subscribe(([params, queryParams]) => this._activeFiltersCount(params, queryParams));
   }
 
   private _initUserLocation(): void {
@@ -243,5 +250,14 @@ export class SearchBarComponent implements OnChanges {
     if (queryParams.categoryId || params.categoryId) {
       this.activeFilters.add('categoryId');
     }
+  }
+
+  private _addRegionToAvailableFilters(queryParams: Params) {
+    if (!this.availableFilters) {
+      this.availableFilters = new DefaultSearchAvailableModel();
+    }
+    const fias = this._localStorageService.getUserLocation()?.fias;
+    this.availableFilters.delivery = queryParams.delivery ? queryParams.delivery : fias;
+    this.availableFilters.pickup = queryParams.pickup ? queryParams.pickup : fias;
   }
 }

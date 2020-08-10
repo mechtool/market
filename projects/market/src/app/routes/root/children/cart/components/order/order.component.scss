@@ -257,11 +257,22 @@ button.btn:hover {
   flex-shrink: 0;
 }
 
-.table_list__products .cell_image img {
-  max-width: 40px;
-  max-height: 40px;
-  width: auto;
-  height: auto;
+.table_list__products .cell_image {
+  img {
+    max-width: 40px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+  }
+
+  .empty__img {
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    display: flex;
+    background-color: #ffffff;
+    border: 0.8px solid #d7d7d7;
+  }
 }
 
 .table_list__products .cell_image {
@@ -299,7 +310,6 @@ button.btn:hover {
   opacity: 0.8;
   white-space: nowrap;
   color: #000000;
-  white-space: nowrap;
 }
 
 .cell_more {
@@ -1062,8 +1072,8 @@ textarea:focus {
 
 .tooltip .tooltip_inner:before {
   content: '';
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
   position: absolute;
   right: 50%;
   transform: translateX(50%);
@@ -1161,12 +1171,18 @@ textarea:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .table_list__products .cell_image img {
-    max-width: 56px;
-    max-height: 56px;
-    width: auto;
-    height: auto;
+
+    img {
+      max-width: 56px;
+      max-height: 56px;
+      width: auto;
+      height: auto;
+    }
+
+    .empty__img {
+      width: 56px;
+      height: 56px;
+    }
   }
   .table_list__products .cell_title {
     margin-top: 10px;

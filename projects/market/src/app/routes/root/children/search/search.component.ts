@@ -50,10 +50,9 @@ export class SearchComponent {
   }
 
   get requestParametersSelected(): boolean {
-    return !!this.query ||
-      !!(this.availableFilters?.supplierId || this.availableFilters?.trademark || this.availableFilters?.categoryId);
+    return this._hasRequestParameters(this.query, this.availableFilters?.supplierId,
+      this.availableFilters?.trademark, this.availableFilters?.categoryId);
   }
-
 
   searchSuggestions(query: string) {
     this._suggestionService.searchSuggestions(query)
@@ -67,9 +66,9 @@ export class SearchComponent {
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
-    this._cleanFilters(filters);
+    const params = queryParamsFrom(filters);
     this._router.navigate(['/search'], {
-      queryParams: queryParamsFrom(filters),
+      queryParams: params,
     });
   }
 
@@ -106,21 +105,19 @@ export class SearchComponent {
       .pipe(
         switchMap((queryParams) => {
           this.isSearching = true;
-          if (Object.keys(queryParams).length) {
-            this.query = queryParams.q;
-            this.availableFilters = {
-              supplierId: queryParams.supplierId,
-              trademark: queryParams.trademark,
-              delivery: queryParams.delivery,
-              pickup: queryParams.pickup,
-              inStock: queryParams.inStock,
-              withImages: queryParams.withImages,
-              priceFrom: queryParams.priceFrom,
-              priceTo: queryParams.priceTo,
-              categoryId: queryParams.categoryId,
-            };
-            this.sort = queryParams.sort;
-          }
+          this.query = queryParams.q;
+          this.availableFilters = {
+            supplierId: queryParams.supplierId,
+            trademark: queryParams.trademark,
+            delivery: queryParams.delivery,
+            pickup: queryParams.pickup,
+            inStock: queryParams.inStock,
+            withImages: queryParams.withImages,
+            priceFrom: queryParams.priceFrom,
+            priceTo: queryParams.priceTo,
+            categoryId: queryParams.categoryId,
+          };
+          this.sort = queryParams.sort;
           return of({
             query: this.query,
             availableFilters: this.availableFilters,
@@ -149,13 +146,7 @@ export class SearchComponent {
       });
   }
 
-
-  private _cleanFilters(filters: AllGroupQueryFiltersModel) {
-    if (!filters?.query) {
-      this.query = null;
-    }
-    if (!filters?.availableFilters) {
-      this.availableFilters = null;
-    }
+  private _hasRequestParameters(query: string, supplierId: string, trademark: string, categoryId: string): boolean {
+    return !!query || !!supplierId || !!trademark || !!categoryId;
   }
 }

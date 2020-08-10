@@ -5,13 +5,14 @@
     (submitClick)="queryParametersChange($event)"
     [availableFilters]="availableFilters"
     [suggestionsOff]="true"
-    [visibleSort]="visibleSort"
+    [visibleSort]="tradeOffers?.length > 1"
   ></market-search-bar>
 </div>
 
 <div class="catalog_header">
   <div class="catalog_header__count">
-    <span class="catalog_header__title">Торговые предложения</span> <strong>{{tradeOffersTotal}}</strong>
+    <span class="catalog_header__title">Результаты поиска</span>
+    <strong>{{found}} <b>{{tradeOffersTotal}}</b> {{tradeOffersTotal | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}</strong>
   </div>
 </div>
 
@@ -73,7 +74,8 @@
           </div>
           <div class="cell_right">
             <div class="cell_image">
-              <img src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
+              <span *ngIf="!tradeOffer.imageUrls" class="empty__img"></span>
+              <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
             </div>
             <div class="table_cell cell_price">
               <span class="price">{{price(tradeOffer.priceProjection.price)}} ₽</span>
