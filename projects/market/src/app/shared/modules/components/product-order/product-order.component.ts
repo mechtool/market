@@ -39,14 +39,16 @@ export class ProductOrderComponent implements OnInit {
   }
 
   get vatInfo() {
-    const includesVAT = this.tradeOffer?.termsOfSale.price.includesVAT;
-    switch (this.tradeOffer?.termsOfSale.price.vat) {
+    const includesVAT = this.tradeOffer?.termsOfSale.price?.includesVAT;
+    switch (this.tradeOffer?.termsOfSale.price?.vat) {
       case TradeOfferVatEnumModel.VAT_10:
         return includesVAT ? 'Цена включает НДС 10%' : 'Цена не включает НДС 10%';
       case TradeOfferVatEnumModel.VAT_20:
         return includesVAT ? 'Цена включает НДС 20%' : 'Цена не включает НДС 20%';
-      default:
+      case TradeOfferVatEnumModel.VAT_WITHOUT:
         return 'Цена без НДС';
+      default:
+        return null;
     }
   }
 
@@ -123,14 +125,16 @@ export class ProductOrderComponent implements OnInit {
   }
 
   private _getVat() {
-    const includesVAT = this.tradeOffer?.termsOfSale.price.includesVAT;
-    switch (this.tradeOffer?.termsOfSale.price.vat) {
+    const includesVAT = this.tradeOffer?.termsOfSale.price?.includesVAT;
+    switch (this.tradeOffer?.termsOfSale.price?.vat) {
       case TradeOfferVatEnumModel.VAT_10:
         return includesVAT ? 'с НДС 10%' : 'без НДС 10%';
       case TradeOfferVatEnumModel.VAT_20:
         return includesVAT ? 'с НДС 20%' : 'без НДС 20%';
-      default:
+      case TradeOfferVatEnumModel.VAT_WITHOUT:
         return 'без НДС';
+      default:
+        return null;
     }
   }
 
@@ -138,17 +142,20 @@ export class ProductOrderComponent implements OnInit {
     let result;
     let difference = 0;
 
-    for (let i = 0; i < matrix.length; i++) {
-      if (matrix[i].fromPackages <= total && ((total - matrix[i].fromPackages <= difference) || difference === 0)) {
-        difference = total - matrix[i].fromPackages;
-        result = matrix[i].price;
-      }
-    }
-    if (!result) {
+    if (matrix) {
       for (let i = 0; i < matrix.length; i++) {
-        if (matrix[i].fromPackages > total && ((matrix[i].fromPackages - total <= difference) || difference === 0)) {
+        if (matrix[i].fromPackages <= total && ((total - matrix[i].fromPackages <= difference) || difference === 0)) {
           difference = total - matrix[i].fromPackages;
           result = matrix[i].price;
+        }
+      }
+
+      if (!result) {
+        for (let i = 0; i < matrix.length; i++) {
+          if (matrix[i].fromPackages > total && ((matrix[i].fromPackages - total <= difference) || difference === 0)) {
+            difference = total - matrix[i].fromPackages;
+            result = matrix[i].price;
+          }
         }
       }
     }

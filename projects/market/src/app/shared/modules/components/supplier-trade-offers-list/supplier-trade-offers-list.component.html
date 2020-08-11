@@ -78,8 +78,8 @@
               <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
             </div>
             <div class="table_cell cell_price">
-              <span class="price">{{price(tradeOffer.priceProjection.price)}} ₽</span>
-              <span class="cell_nds">{{vat(tradeOffer.price)}}</span>
+              <span *ngIf="tradeOffer.priceProjection" class="price">{{tradeOffer.priceProjection?.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+              <span *ngIf="tradeOffer.price" class="cell_nds">{{vat(tradeOffer.price)}}</span>
               <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
                 <span class="tooltip"
                       nz-tooltip

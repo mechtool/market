@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor';
+import { browser } from 'protractor';
 
 export async function logout() {
   await browser.get(`https://login-dev.1c.ru/logout?service=${browser.baseUrl}`);
@@ -9,7 +9,7 @@ export async function navigateTo(url: string = browser.baseUrl) {
   return browser.get(url) as Promise<any>;
 }
 
-export async function waitForUrlToChangeTo(urlToChange: any, includeTicketQueryParam = false): Promise<boolean>  {
+export async function waitForUrlToChangeTo(urlToChange: any, includeTicketQueryParam = false): Promise<boolean> {
   return browser.wait(() => {
     return browser.getCurrentUrl()
       .then((url: string) => {

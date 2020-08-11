@@ -74,7 +74,7 @@ export class TradeOfferComponent {
       name: supplier.name,
       inn: supplier.inn,
       kpp: supplier.kpp,
-      description: `Описание организации ${supplier.name} являющейся поставщиком в сервисе 1С:Бизнес-Сеть`, // todo пока не приходит, не забыть убрать
+      description: supplier.description, // todo пока не приходит
       email: supplier.contactPerson?.email,
       phone: supplier.contactPerson?.phone,
       personName: supplier.contactPerson?.name,

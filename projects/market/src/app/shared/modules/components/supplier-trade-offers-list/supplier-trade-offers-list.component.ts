@@ -65,19 +65,17 @@ export class SupplierTradeOffersListComponent {
     return images?.length ? absoluteImagePath(images[0]) : null;
   }
 
-  price(price: number) {
-    return Number.isInteger(price) ? price / 100 : '';
-  }
-
   vat(price: TradeOfferSummaryPriceModel) {
-    const includesVAT = price.includesVAT;
+    const includesVAT = price?.includesVAT;
     switch (price?.vat) {
       case TradeOfferVatEnumModel.VAT_10:
         return includesVAT ? 'с НДС 10%' : 'без НДС 10%';
       case TradeOfferVatEnumModel.VAT_20:
         return includesVAT ? 'с НДС 20%' : 'без НДС 20%';
-      default:
+      case TradeOfferVatEnumModel.VAT_WITHOUT:
         return 'без НДС';
+      default:
+        return null;
     }
   }
 

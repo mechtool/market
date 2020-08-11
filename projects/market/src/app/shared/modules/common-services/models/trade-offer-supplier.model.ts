@@ -3,6 +3,7 @@ export class TradeOfferSupplierModel {
   inn: string;
   kpp: string;
   name: string;
+  description: string;
   contactPerson: {
     name: string;
     phone: string;
