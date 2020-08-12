@@ -10,7 +10,7 @@ import { switchMap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { NotificationsService, SupplierService } from '#shared/modules/common-services';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 40;
 
 @UntilDestroy({ checkProperties: true })
 @Component({
