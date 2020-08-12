@@ -19,6 +19,9 @@ export class TermsOfSaleComponent {
   @Input() tradeOffer: TradeOfferResponseModel;
 
   get stockLevel(): string {
+    if (this.tradeOffer.termsOfSale.temporarilyOutOfSales) {
+      return 'снят с продажи';
+    }
     return mapStock(this.tradeOffer.stock?.stockBalanceSummary?.level);
   }
 

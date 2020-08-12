@@ -1,7 +1,7 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { OrderStatusModal, RelationEnumModel, TradeOfferStockEnumModel } from '#shared/modules/common-services/models';
+import { OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
 import { CartService, NotificationsService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
@@ -15,7 +15,6 @@ import { CartService, NotificationsService } from '#shared/modules/common-servic
 export class ProductSideComponent implements OnInit {
 
   @Input() tradeOfferId: string;
-  @Input() level: TradeOfferStockEnumModel;
   orderStatus: OrderStatusModal;
   form: FormGroup;
 
@@ -49,9 +48,6 @@ export class ProductSideComponent implements OnInit {
           } else {
             this.orderStatus = OrderStatusModal.TO_CART;
             this.form.controls.totalPositions.setValue(null, { onlySelf: true, emitEvent: false });
-          }
-          if (this.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
-            this.orderStatus = OrderStatusModal.NOT_AVAILABLE;
           }
         },
         (err) => {

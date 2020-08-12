@@ -19,6 +19,7 @@ export class TradeOfferSummaryModel {
   packaging: TradeOfferPackagingModel;
   price: TradeOfferSummaryPriceModel;
   stock: TradeOfferSockModel;
+  temporarilyOutOfSales: boolean;
   priceProjection: TradeOfferSummaryPriceProjectionModel;
   ref1cNomenclatureSpecificationId: string;
   ref1cNomenclatureCharacteristicId: string;

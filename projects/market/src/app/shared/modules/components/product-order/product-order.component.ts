@@ -9,7 +9,6 @@ import {
   RelationEnumModel,
   TradeOfferPriceMatrixModel,
   TradeOfferResponseModel,
-  TradeOfferStockEnumModel,
   TradeOfferVatEnumModel
 } from '#shared/modules/common-services/models';
 import { CartService, NotificationsService } from '#shared/modules/common-services';
@@ -68,7 +67,6 @@ export class ProductOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._initOrderStatus();
     this.vat = this._getVat();
     this._closeModalOnResolutionChanges();
     this._cartService.getCartData$()
@@ -89,22 +87,10 @@ export class ProductOrderComponent implements OnInit {
             this._price = null;
             this.orderStatus = OrderStatusModal.TO_CART;
           }
-          if (this.tradeOffer.stock?.stockBalanceSummary?.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
-            this.orderStatus = OrderStatusModal.NOT_AVAILABLE;
-          }
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         });
-  }
-
-  private _initOrderStatus() {
-    if (this.tradeOffer?.termsOfSale.temporarilyOutOfSales ||
-      this.tradeOffer?.stock?.stockBalanceSummary?.level === TradeOfferStockEnumModel.OUT_OF_STOCK) {
-      this.orderStatus = OrderStatusModal.NOT_AVAILABLE;
-    } else {
-      this.orderStatus = OrderStatusModal.TO_CART;
-    }
   }
 
   private _closeModalOnResolutionChanges(): void {

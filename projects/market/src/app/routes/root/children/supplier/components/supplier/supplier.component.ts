@@ -135,6 +135,7 @@ export class SupplierSingleComponent {
       priceFrom: queryParams.priceFrom,
       priceTo: queryParams.priceTo,
       inStock: queryParams.inStock,
+      inSales: queryParams.inStock ? queryParams.inStock : false,
       withImages: queryParams.withImages,
       deliveryArea: delivery,
       pickupArea: pickup,

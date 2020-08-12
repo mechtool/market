@@ -69,7 +69,7 @@
               {{tradeOffer.packaging.description}}
             </div>
             <div class="table_cell cell_available" data-title="Доступность:">
-              {{stock(tradeOffer.stock?.stockBalanceSummary.level)}}
+              {{stock(tradeOffer.stock?.stockBalanceSummary.level, tradeOffer.temporarilyOutOfSales)}}
             </div>
           </div>
           <div class="cell_right">
@@ -91,7 +91,6 @@
         <div class="table_cell cell_buy">
           <market-product-side
             [tradeOfferId]="tradeOffer.id"
-            [level]="tradeOffer.stock?.stockBalanceSummary?.level"
           ></market-product-side>
           <a (click)="route(tradeOffer.id)" class="btn btn-gray btn__product_link">О товаре</a>
         </div>

@@ -79,7 +79,10 @@ export class SupplierTradeOffersListComponent {
     }
   }
 
-  stock(level: TradeOfferStockEnumModel) {
+  stock(level: TradeOfferStockEnumModel, temporarilyOutOfSales: boolean) {
+    if (temporarilyOutOfSales) {
+      return 'снят с продажи';
+    }
     return mapStock(level);
   }
 
