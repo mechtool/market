@@ -39,8 +39,7 @@ export class ProductSideComponent implements OnInit {
             return [...curr.items, ...accum];
           }, []);
           const foundTradeOffer = cartTradeOffers.find((x) => {
-            const hrefSplitted = x._links[RelationEnumModel.TRADE_OFFER_VIEW].href.split('/');
-            return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
+            return x.tradeOfferId === tradeOfferId;
           });
           if (foundTradeOffer) {
             this.orderStatus = OrderStatusModal.IN_CART;

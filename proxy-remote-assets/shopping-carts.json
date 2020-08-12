@@ -10,6 +10,7 @@
       },
       "items": [
         {
+          "tradeOfferId": "19f1aa3e-4bf1-4f94-ba4e-69196d22049e",
           "productName": "ADIDAS SuperStar 2020",
           "productDescription": "Кроссовки",
           "barCodes": [
@@ -53,6 +54,7 @@
           }
         },
         {
+          "tradeOfferId": "37f1aa3e-4bf1-4f94-ba4e-69196d22045d",
           "productName": "Reebok Pro1",
           "productDescription": "Кроссовки",
           "barCodes": [
@@ -148,6 +150,7 @@
       },
       "items": [
         {
+          "tradeOfferId": "29f1aa3e-4bf1-4f94-ba4e-69196d22049f",
           "productName": "ADIDAS SuperStar 2020",
           "productDescription": "Кроссовки",
           "barCodes": [
@@ -227,6 +230,7 @@
       },
       "items": [
         {
+          "tradeOfferId": "31f1aa3e-4bf1-4f94-ba4e-69196d22049d",
           "productName": "Корица 2020",
           "productDescription": "Корица",
           "barCodes": [

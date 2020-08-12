@@ -77,8 +77,7 @@ export class ProductOrderComponent implements OnInit {
             return [...curr.items, ...accum];
           }, []);
           const foundTradeOffer = cartTradeOffers.find((x) => {
-            const hrefSplitted = x._links[RelationEnumModel.TRADE_OFFER_VIEW].href.split('/');
-            return hrefSplitted[hrefSplitted.length - 1] === tradeOfferId;
+            return x.tradeOfferId === tradeOfferId;
           });
           if (foundTradeOffer) {
             this._price = foundTradeOffer.itemTotal?.total;
