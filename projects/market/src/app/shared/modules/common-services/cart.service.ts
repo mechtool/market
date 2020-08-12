@@ -180,9 +180,9 @@ export class CartService {
     if (currentData) {
       const currentDataContent = currentData?.content;
       content = data.content.reduce((accum, curr) => {
-        const orderRelationRef = curr._links[RelationEnumModel.ORDER_CREATE].href;
+        const orderRelationRef = curr._links?.[RelationEnumModel.ORDER_CREATE]?.href;
         const orderFoundInCurrentDataContent = currentDataContent?.find((item) => {
-          return item._links[RelationEnumModel.ORDER_CREATE].href === orderRelationRef;
+          return item._links?.[RelationEnumModel.ORDER_CREATE]?.href === orderRelationRef;
         });
         const newOrder = JSON.parse(JSON.stringify(curr));
         newOrder.consumer = orderFoundInCurrentDataContent?.consumer || null;

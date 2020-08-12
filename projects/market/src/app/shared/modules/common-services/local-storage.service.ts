@@ -151,9 +151,9 @@ export class LocalStorageService {
 
     if (currentCartData && orderData) {
       const currentDataContent = currentCartData?.content;
-      const orderRelationRef = orderData._links[RelationEnumModel.ORDER_CREATE].href;
+      const orderRelationRef = orderData._links?.[RelationEnumModel.ORDER_CREATE]?.href;
       const orderFoundInCurrentDataContent = currentDataContent?.find((item, ind) => {
-        if (item._links[RelationEnumModel.ORDER_CREATE].href === orderRelationRef) {
+        if (item._links?.[RelationEnumModel.ORDER_CREATE]?.href === orderRelationRef) {
           foundInd = ind;
           return true;
         }

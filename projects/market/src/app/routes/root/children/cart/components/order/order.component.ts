@@ -40,7 +40,6 @@ import {
 })
 export class CartOrderComponent implements OnInit, OnDestroy {
   @Input() order: CartDataOrderModel;
-  @Input() orderNum = Math.random().toString(36).slice(-6);
   @Input() userData: boolean;
   @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
   form: FormGroup;
@@ -106,7 +105,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get orderRelationHref(): string {
-    return this.order._links[RelationEnumModel.ORDER_CREATE].href;
+    return this.order._links?.[RelationEnumModel.ORDER_CREATE]?.href;
   }
 
   constructor(
@@ -193,9 +192,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
               tap((res) => {
                 this.cartDataChange.emit(res);
                 const foundOrder = res.content.find((x) => {
-                  return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
+                  return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
                 });
-                this._resetOrder(foundOrder);
+                if (foundOrder) {
+                  this._resetOrder(foundOrder);
+                }
               })
             );
           }),
@@ -208,7 +209,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             if (res) {
               this.cartDataChange.emit(res);
               const foundOrder = res.content.find((x) => {
-                return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
+                return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
               });
               if (!foundOrder) {
                 this.items.clear();
@@ -243,9 +244,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             tap((res) => {
               this.cartDataChange.emit(res);
               const foundOrder = res.content.find((x) => {
-                return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
+                return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
               });
-              this._resetOrder(foundOrder);
+              if (foundOrder) {
+                this._resetOrder(foundOrder);
+              }
             })
           );
         }),
@@ -258,9 +261,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.cartDataChange.emit(res);
           if (res) {
             const foundOrder = res.content.find((x) => {
-              return x._links[RelationEnumModel.ORDER_CREATE].href === this.orderRelationHref;
+              return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
             });
-            this._resetOrder(foundOrder);
+            if (foundOrder) {
+              this._resetOrder(foundOrder);
+            }
           }
           if (!this.items?.length) {
             this._cartService.setActualCartData().subscribe();
@@ -296,10 +301,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   createOrder() {
+    if (!this.orderRelationHref) {
+      return;
+    }
     if (!!this.userData) {
       if (this.availableUserOrganizations?.length) {
         const data = {
-          documentNumber: this.orderNum,
           customerOrganizationId: this.form.get('consumerId').value,
           contacts: {
             name: this.form.get('contactName').value,
@@ -471,7 +478,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       quantity: product.quantity,
       price: product.price,
       maxDaysForShipment: product.maxDaysForShipment,
-      availabilityStatus: product.availabilityStatus,
+      availabilityStatus: new FormControl(product.availabilityStatus, [Validators.pattern(/^(AvailableForOrder)$/)]),
       vat: vatConverter[product.vat] || 0,
       totalCost: product.itemTotal?.total,
       _links: product._links,

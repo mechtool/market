@@ -9,6 +9,7 @@ import { switchMap } from 'rxjs/operators';
 import { UserRemovalVerifierComponent } from '../user-removal-verifier/user-removal-verifier.component';
 import { RequestDecisionMakerComponent } from '../request-decision-maker/request-decision-maker.component';
 import { AccessKeyRemovalVerifierComponent } from '../access-key-removal-verifier/access-key-removal-verifier.component';
+import { iif } from 'rxjs';
 
 type TabType = 'a'|'b'|'c'|'d';
 type UpdateOrganizationType = {
@@ -80,16 +81,20 @@ export class SingleOrganizationComponent implements OnInit {
 
   init(orgId: string) {
     this._resetActiveTab();
+    this._resetIsAdmin(orgId);
     this._resetOrganizationData(orgId);
-    this._resetUsers(orgId);
-    this._resetParticipationRequests(orgId);
-    this._resetAccessKeys(orgId);
-    this._resetIsEditable();
+    if (this.isAdmin) {
+      this._resetUsers(orgId);
+      this._resetParticipationRequests(orgId);
+      this._resetAccessKeys(orgId);
+      this._resetIsEditable();
+    }
   }
 
   createAccessKeyComponentModal(): void {
     this._organizationsService.obtainAccessKey(this.orgId)
       .subscribe((res) => {
+        this._resetAccessKeys(this.orgId);
         this._modal = this._modalService.create({
           nzContent: AccessKeyComponent,
           nzViewContainerRef: this._viewContainerRef,
@@ -182,23 +187,23 @@ export class SingleOrganizationComponent implements OnInit {
   updateOrganization(data: UpdateOrganizationType): void {
 
     const contactPerson = {
-      ...(data.contactFio && { fullName: data.contactFio }),
-      ...(data.contactRole && { position: data.contactRole }),
-      ...(data.contactEmail && { email: data.contactEmail }),
-      ...(data.contactPhone && { phone: data.contactPhone }),
-    }
+      fullName: data.contactFio,
+      position: data.contactRole,
+      email: data.contactEmail,
+      phone: data.contactPhone,
+    };
 
     const contacts = {
-      ...(data.organizationEmail && { email: data.organizationEmail }),
-      ...(data.organizationPhone && { phone: data.organizationPhone }),
-      ...(data.organizationWebsite && { website: data.organizationWebsite }),
-      ...(data.organizationAddress && { address: data.organizationAddress }),
-    }
+      email: data.organizationEmail,
+      phone: data.organizationPhone,
+      website: data.organizationWebsite,
+      address: data.organizationAddress,
+    };
 
     this._organizationsService.updateOrganization(this.orgId, {
-      ...(data.organizationName && { name: data.organizationName }),
-      ...(data.organizationDescription && { description: data.organizationDescription }),
-      ...(Object.keys(contacts).length && { contacts })
+      contacts,
+      name: data.organizationName,
+      description: data.organizationDescription,
     }).pipe(
       switchMap((res) => {
         return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson)
@@ -263,8 +268,18 @@ export class SingleOrganizationComponent implements OnInit {
     this.activeTabType = tabType;
   }
 
+  private _resetIsAdmin(orgId: string): void {
+    const orgIndex = this._userService.userOrganizations$.value.findIndex((org) => {
+      return org.organizationId == orgId && org.userGrants?.isAdmin;
+    });
+    this.isAdmin = (orgIndex !== -1);
+  }
+
   private _resetOrganizationData(orgId: string): void {
-    this._organizationsService.getOrganizationProfile(orgId).subscribe((res) => {
+    iif(() => {
+      return this.isAdmin;
+    }, this._organizationsService.getOrganizationProfile(orgId), this._organizationsService.getOrganization(orgId))
+    .subscribe((res) => {
       this.organizationData = res;
       this.legalRequisites = {
         inn: res.legalRequisites?.inn,
@@ -275,14 +290,10 @@ export class SingleOrganizationComponent implements OnInit {
     })
   }
 
+  //
   private _resetUsers(orgId: string): void {
     this._organizationsService.getOrganizationUsers(orgId).subscribe((res) => {
-      this.currentUserId = this._userService.userData$.value.userInfo.userId;
       this.users = res;
-      const isCurrentUserAdminIndex = res.findIndex((user) => {
-        return this.currentUserId === user.uin && user.userGrants.isAdmin;
-      });
-      this.isAdmin = (isCurrentUserAdminIndex != -1);
     }, (err) => {
       this._notificationsService.error(ERROR_GET_ORG_USERS);
     })

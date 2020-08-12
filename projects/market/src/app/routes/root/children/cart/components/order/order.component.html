@@ -37,7 +37,7 @@
 
 <ng-template #orderSentModal>
   <div class="modal_content order_modal">
-    <div class="modal_title">Заказ №{{orderNum}} отправлен поставщику</div>
+    <div class="modal_title">Заказ отправлен поставщику</div>
     <p class="order_modal__text">Отслеживать статус заказов<br> вы можете в разделе Мои заказы.</p>
     <div class="order_modal__btns">
       <a class="btn btn_std btn-yellow" [routerLink]="['/my/orders']">Мои заказы</a>
@@ -51,10 +51,6 @@
   <form class="form__order" action="" [formGroup]="form" (submit)="createOrder()">
 
     <div class="order_info">
-      <div class="order_spec">
-        <div class="order_label">Заказ:</div>
-        <div class="order_value">№{{orderNum}}</div>
-      </div>
       <div class="order_spec" *ngIf="userData && availableUserOrganizations?.length">
         <div class="order_label">Доступный заказчик:</div>
         <div class="order__customer dropdown dropdown_selectable">
@@ -139,8 +135,8 @@
             <div class="table_cell cell_price_one">
               Цена
             </div>
-            <div class="table_cell cell_sum" data-title="Сумма с НДС:">
-              Сумма с НДС
+            <div class="table_cell cell_sum" data-title="Сумма:">
+              Сумма
             </div>
           </div>
         </div>

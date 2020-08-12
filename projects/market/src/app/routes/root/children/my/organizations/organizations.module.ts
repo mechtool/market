@@ -12,15 +12,15 @@ import { RequisitesCheckerComponent } from './components/requisites-checker/requ
 import { OrganizationOperateComponent } from './components/organization-operate/organization-operate.component';
 import { OrganizationExistsComponent } from './components/organization-exists/organization-exists.component';
 import { AccessKeyComponent } from './components/access-key/access-key.component';
-import { OrganizationRequestStatusPipe } from './pipes';
+import { OrganizationRequestStatusPipe, AccessKeyStatusPipe } from './pipes';
 import { SingleOrganizationGuard } from './guards';
 import { OrganizationViewComponent } from './components/organization-view/organization-view.component';
 import { OrganizationUsersComponent } from './components/organization-users/organization-users.component';
 import { UserRemovalVerifierComponent } from './components/user-removal-verifier/user-removal-verifier.component';
-import { OrganizationRequestsComponent } from './components/organization-requests/organization-requests.component';
 import { RequestDecisionMakerComponent } from './components/request-decision-maker/request-decision-maker.component';
 import { OrganizationAccessKeysComponent } from './components/organization-access-keys/organization-access-keys.component';
 import { AccessKeyRemovalVerifierComponent } from './components/access-key-removal-verifier/access-key-removal-verifier.component';
+import { OrganizationRequestsComponent } from './components/organization-requests/organization-requests.component';
 
 @NgModule({
   imports: [
@@ -50,6 +50,7 @@ import { AccessKeyRemovalVerifierComponent } from './components/access-key-remov
     OrganizationAccessKeysComponent,
     AccessKeyRemovalVerifierComponent,
     OrganizationRequestStatusPipe,
+    AccessKeyStatusPipe,
   ],
   providers: [SingleOrganizationGuard]
 })

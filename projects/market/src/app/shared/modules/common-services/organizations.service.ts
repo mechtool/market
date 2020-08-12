@@ -68,7 +68,7 @@ export class OrganizationsService {
   getAccessKeysByOrganizationId(orgId: string): Observable<AccessKeyResponseModel[]> {
     return this._bnetService.getAccessKeys().pipe(
       map((res) => {
-        return res.filter(key => key.organization?.id === orgId);
+        return res.filter(key => key.organization?.id === orgId).sort((a, b) => a.creationDate > b.creationDate ? -1 : 1)
       })
     )
   }

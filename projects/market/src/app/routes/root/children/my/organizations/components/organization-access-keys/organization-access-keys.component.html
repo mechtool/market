@@ -33,7 +33,7 @@
         {{accessKey?.accessCodeExpirationDate | date:'dd MMMM yyyy г.'}}
       </div>
       <div class="table_cell cell_status" data-title="Статус:">
-        {{accessKey?.status}}
+        {{accessKey?.status | marketAccessKeyStatus}}
       </div>
       <div class="table_cell cell_action">
         <div class="table_cell__inner">
