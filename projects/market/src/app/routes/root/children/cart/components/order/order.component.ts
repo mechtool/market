@@ -53,8 +53,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     { label: '15-18', value: '15-18' },
   ];
   isOrderLoading = false;
-
   deliveryOptions = [];
+  selectedTabIndex = 0;
 
   get consumerName(): string {
     return this.form.get('consumerName').value?.trim();
@@ -300,7 +300,23 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  createOrder() {
+  checkAndCreateOrder() {
+    if (this.form.valid) {
+      this._createOrder();
+    }
+    if (!this.form.valid) {
+      this.selectedTabIndex = 1;
+      Object.keys(this.form.controls).forEach(key => {
+        this.form.controls[key].markAsDirty();
+       });
+    }
+  }
+
+  changeSelectedTabIndex(tabIndex: number) {
+    this.selectedTabIndex = tabIndex;
+  }
+
+  private _createOrder() {
     if (!this.orderRelationHref) {
       return;
     }

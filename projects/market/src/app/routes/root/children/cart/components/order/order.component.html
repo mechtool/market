@@ -48,7 +48,7 @@
 
 <div class="order" *ngIf="form.get('items')['controls'].length">
 
-  <form class="form__order" action="" [formGroup]="form" (submit)="createOrder()">
+  <form class="form__order" action="" [formGroup]="form" (submit)="checkAndCreateOrder()">
 
     <div class="order_info">
       <div class="order_spec" *ngIf="userData && availableUserOrganizations?.length">
@@ -93,7 +93,7 @@
       </div>
     </div>
 
-    <nz-tabset class="" nzTabPosition="top" nzType="card">
+    <nz-tabset class="" nzTabPosition="top" nzType="card" [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="changeSelectedTabIndex($event)">
 
       <nz-tab nzTitle="Товары">
         <div class="tab-content">
@@ -313,7 +313,7 @@
     </div>
     <div class="order__total_nds">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
     <div class="order__total_btn">
-      <button nz-button type="submit" nzType="primary" [disabled]="!form.valid">Оформить заказ</button>
+      <button nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">Оформить заказ</button>
     </div>
   </div>
 
