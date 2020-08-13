@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, of, zip } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError, zip } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
@@ -49,7 +49,7 @@ export class CartService {
   }
 
   // Мердж текущего содержимого корзины с содержимым от сервера TODO
-  setActualCartData(): Observable<CartDataModel> {
+  setActualCartData(secondTime?: boolean): Observable<CartDataModel> {
     let currentCartData = null;
     return zip(
       this.getCart$(),
@@ -63,8 +63,11 @@ export class CartService {
         return this._bnetService.getCartDataByCartLocation(href);
       }),
       catchError((error) => {
-        // todo Нужно докрутить логики на различные типы ошибок (404, 500 и т.д) Возможно должно быть разное поведение
-        return this.createCart();
+        if (error.status === 404 || secondTime) {
+          return this.createCart();
+        }
+        // todo Нужно докрутить логики на различные типы ошибок (500 и т.д) Что делать когда 500 и др. ошибки?
+        return throwError(error);
       }),
       switchMap((res: any) => {
         if (typeof res === 'string') {

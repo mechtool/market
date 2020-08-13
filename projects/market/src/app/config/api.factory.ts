@@ -1,6 +1,6 @@
-import { switchMap, map, tap } from 'rxjs/operators';
-import { UserService, CartService, AuthService, CookieService } from '#shared/modules/common-services';
-import { zip, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { AuthService, CartService, CookieService, UserService } from '#shared/modules/common-services';
+import { of, zip } from 'rxjs';
 
 export function ApiFactory(
   userService: UserService,
@@ -44,10 +44,15 @@ function setCart(cartService: CartService) {
   if (!cartService.hasCart()) {
     return cartService.createCart().pipe(
       switchMap(_ => cartService.setActualCartData()),
-      map(_ => of(true))
-    );
+      // todo Сделал временное решение, чтобы создавалась новая корзина если 500 ошибка при получении созданной
+      catchError(_ => cartService.setActualCartData(true)),
+      map(_ => of(true)));
   }
   if (cartService.hasCart()) {
-    return cartService.setActualCartData().pipe(map(_ => of(true)));
+    return cartService.setActualCartData().pipe(
+      // todo Сделал временное решение, чтобы создавалась новая корзина если 500 ошибка при получении созданной
+      catchError(_ => cartService.setActualCartData(true)),
+      map(_ => of(true))
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
 import { CartService, NotificationsService } from '#shared/modules/common-services';
@@ -19,11 +19,13 @@ export class ProductSideComponent implements OnInit {
   @Input() tradeOfferId: string;
   orderStatus: OrderStatusModal;
   form: FormGroup;
+  isAdded: boolean;
 
   constructor(
     private _fb: FormBuilder,
     private _cartService: CartService,
     private _notificationsService: NotificationsService,
+    private changeDetector: ChangeDetectorRef,
   ) {
     this.form = this._fb.group({
       totalPositions: 0,
@@ -56,14 +58,17 @@ export class ProductSideComponent implements OnInit {
   }
 
   decrease() {
+    this.isAdded = true;
     this.form.patchValue({ totalPositions: this.form.get('totalPositions').value - 1 });
   }
 
   increase() {
+    this.isAdded = true;
     this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + 1 });
   }
 
   addToCart() {
+    this.isAdded = true;
     this.form.controls.totalPositions.setValue(1, { onlySelf: true, emitEvent: false });
     this.orderStatus = OrderStatusModal.IN_CART;
     const cartLocation = this._cartService.getCart$().value;
@@ -75,6 +80,7 @@ export class ProductSideComponent implements OnInit {
         quantity: 1,
       },
     ).subscribe(() => {
+      this.isAdded = false;
     }, (err) => {
       this._notificationsService.error('Невозможно добавить товар в корзину. Внутренняя ошибка сервера.');
       this.rollBackTotalPositions(Operation.ADD);
@@ -95,6 +101,7 @@ export class ProductSideComponent implements OnInit {
               },
             )
               .subscribe(() => {
+                this.isAdded = false;
               }, (err) => {
                 this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
                 this.rollBackTotalPositions();
@@ -106,6 +113,7 @@ export class ProductSideComponent implements OnInit {
               `${cartLocation}/items/${this.tradeOfferId}`,
             )
               .subscribe(() => {
+                this.isAdded = false;
               }, (err) => {
                 this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
                 this.rollBackTotalPositions(Operation.REMOVE);
@@ -115,17 +123,21 @@ export class ProductSideComponent implements OnInit {
   }
 
   private rollBackTotalPositions(operation?: Operation) {
+    this.isAdded = false;
     if (operation === Operation.REMOVE) {
       this.orderStatus = OrderStatusModal.IN_CART;
+      this.changeDetector.detectChanges();
       this.form.controls.totalPositions.setValue(1, { onlySelf: true, emitEvent: false });
     } else if (operation === Operation.ADD) {
       this.orderStatus = OrderStatusModal.TO_CART;
       this.form.controls.totalPositions.setValue(0, { onlySelf: true, emitEvent: false });
+      this.changeDetector.detectChanges();
     } else {
       const order = this.orderedProduct();
       if (order) {
         this.orderStatus = OrderStatusModal.IN_CART;
         this.form.controls.totalPositions.setValue(order.quantity, { onlySelf: true, emitEvent: false });
+        this.changeDetector.detectChanges();
       }
     }
   }
