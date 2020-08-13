@@ -350,10 +350,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           comments += `Желаемая дата доставки: ${this.form.get('deliveryDesirableDate').value}
           `;
         }
-        if (this.form.get('deliveryDesirableTimeInterval').value) {
-          comments += `Желаемый временной интервал: ${this.form.get('deliveryDesirableTimeInterval').value}
-          `;
-        }
         if (this.form.get('commentForSupplier').value) {
           comments += `Комментарий: ${this.form.get('commentForSupplier').value}
           `;
@@ -474,7 +470,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       contactEmail: new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required]),
       commentForSupplier: new FormControl(''),
       deliveryDesirableDate: new FormControl(''),
-      deliveryDesirableTimeInterval: new FormControl(''),
       items: this._fb.array(this.order.items.map(res => this._createItem(res))),
     }, { validator: deliveryAreaConditionValidator });
   }

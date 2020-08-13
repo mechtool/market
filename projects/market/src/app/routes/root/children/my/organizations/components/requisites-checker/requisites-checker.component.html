@@ -6,11 +6,11 @@
   <form [formGroup]="form" (submit)="send()">
     <div class="form-group form-group-std">
       <label for="formINN">ИНН *</label>
-      <input type="text" id="formINN" autocomplete="off" formControlName="inn">
+      <input type="number" id="formINN" autocomplete="off" formControlName="inn">
     </div>
     <div class="form-group form-group-std">
       <label for="formKPP">КПП</label>
-      <input type="text" id="formKPP" autocomplete="off" formControlName="kpp">
+      <input type="number" id="formKPP" autocomplete="off" formControlName="kpp">
     </div>
     <div class="form-group form-group-btn">
       <button nz-button [nzType]="'primary'" [disabled]="!form.valid">Продолжить</button>
