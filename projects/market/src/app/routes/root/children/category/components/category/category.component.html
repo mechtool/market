@@ -6,11 +6,12 @@
 
   <market-search-bar
     [query]="query"
-    [availableFilters]="availableFilters"
+    [filters]="filters"
     [sort]="sort"
-    (submitClick)="queryParametersChange($event)"
     [suggestionsOff]="true"
     [visibleSort]="productOffers?.length > 1"
+    (submitClick)="queryParametersChange($event)"
+    (cityChange)="cityChange($event)"
   ></market-search-bar>
 
   <market-search-results

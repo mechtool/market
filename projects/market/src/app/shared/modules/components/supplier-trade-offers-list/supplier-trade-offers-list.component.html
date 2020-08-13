@@ -2,10 +2,11 @@
   <market-search-bar
     [sort]="sort"
     [query]="query"
-    (submitClick)="queryParametersChange($event)"
-    [availableFilters]="availableFilters"
+    [filters]="filters"
     [suggestionsOff]="true"
     [visibleSort]="tradeOffers?.length > 1"
+    (submitClick)="queryParametersChange($event)"
+    (cityChange)="cityChange($event)"
   ></market-search-bar>
 </div>
 
@@ -77,7 +78,7 @@
               <span *ngIf="!tradeOffer.imageUrls" class="empty__img"></span>
               <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
             </div>
-            <div class="table_cell cell_price">
+            <div class="table_cell cell_price" *ngIf="tradeOffer.priceProjection?.price">
               <span *ngIf="tradeOffer.priceProjection" class="price">{{tradeOffer.priceProjection?.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
               <span *ngIf="tradeOffer.price" class="cell_nds">{{vat(tradeOffer.price)}}</span>
               <div class="tooltip_wrap" *ngIf="tradeOffer.audience">

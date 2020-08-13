@@ -19,9 +19,7 @@ import {
   SuggestionCategoryItemModel,
   SuggestionProductItemModel
 } from '../../common-services/models';
-import { ActivatedRoute, Params } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { combineLatest } from 'rxjs';
 import { LocalStorageService, NotificationsService, ResponsiveService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
@@ -47,7 +45,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   @Input() minQueryLength = 3;
   @Input() maxQueryLength = 20;
   @Input() placeholder = 'Поиск товаров';
-  @Input() availableFilters: DefaultSearchAvailableModel;
+  @Input() filters: DefaultSearchAvailableModel;
   @Input() sort = SortModel.ASC;
   @Input() visibleSort = false;
   @Input() productsSuggestions: SuggestionProductItemModel[];
@@ -57,6 +55,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   @Input() filterVisible = true;
   @Output() queryChange: EventEmitter<string> = new EventEmitter();
   @Output() submitClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
+  @Output() cityChange: EventEmitter<boolean> = new EventEmitter();
 
   get searchQuery() {
     return this.form.get('query').value.trim();
@@ -73,7 +72,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   get filterIsEmpty(): boolean {
-    return !this.availableFilters?.categoryId && !this.availableFilters?.trademark && !this.availableFilters?.supplierId;
+    return !this.filters?.categoryId && !this.filters?.trademark && !this.filters?.supplierId;
   }
 
   get filterCount(): number {
@@ -85,21 +84,12 @@ export class SearchBarComponent implements OnInit, OnChanges {
     private _responsiveService: ResponsiveService,
     private _notificationsService: NotificationsService,
     private _fb: FormBuilder,
-    private _activatedRoute: ActivatedRoute,
   ) {
     this._initForm();
   }
 
   ngOnInit(): void {
     this._initUserLocation();
-    combineLatest([
-      this._activatedRoute.params,
-      this._activatedRoute.queryParams,
-    ]).subscribe(([params, queryParams]) => {
-      this._activeFiltersCount(params, queryParams);
-      this._addRegionToAvailableFilters(queryParams);
-    });
-
     if (!this.suggestionsOff) {
       this._subscribeOnQueryChanges();
     }
@@ -116,7 +106,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
     if (this.queryOrNull || !this.filterIsEmpty) {
       this.submitClick.emit({
         query: this.queryOrNull,
-        availableFilters: this.availableFilters,
+        filters: this.filters,
         sort: this.sort,
       });
       this.visibleSuggestions = false;
@@ -127,19 +117,19 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.form.patchValue({ query: '' });
     this.submitClick.emit({
       query: null,
-      availableFilters: this.availableFilters,
-      sort: this.availableFilters ? this.sort : null,
+      filters: this.filters,
+      sort: this.filters ? this.sort : null,
     });
   }
 
   recFilter(filters: DefaultSearchAvailableModel) {
-    this.availableFilters = filters;
+    this.filters = filters;
     if (filters) {
       this.changeFilterFormVisibility(!this.isFilterFormVisible);
     }
     this.submitClick.emit({
       query: this.queryOrNull,
-      availableFilters: this.availableFilters,
+      filters: this.filters,
       sort: this.queryOrNull || !this.filterIsEmpty ? this.sort : null,
     });
   }
@@ -155,14 +145,8 @@ export class SearchBarComponent implements OnInit, OnChanges {
 
   changeLocation(location: LocationModel) {
     this.userLocation = location;
-    if (this.availableFilters?.delivery) {
-      this.availableFilters.delivery = location.fias;
-    }
-    if (this.availableFilters?.pickup) {
-      this.availableFilters.pickup = location.fias;
-    }
-    if (this.availableFilters?.delivery || this.availableFilters?.pickup) {
-      this.submit();
+    if (this.filters?.isDelivery || this.filters?.isPickup) {
+      this.cityChange.emit(true);
     }
   }
 
@@ -175,7 +159,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
     if (this.queryOrNull || !this.filterIsEmpty) {
       this.submitClick.emit({
         query: this.queryOrNull,
-        availableFilters: this.availableFilters,
+        filters: this.filters,
         sort: this.sort,
       });
     }
@@ -222,42 +206,5 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.visibleSuggestions = false;
     this.productsSuggestions = null;
     this.categoriesSuggestions = null;
-  }
-
-  private _activeFiltersCount(params: Params, queryParams: Params) {
-    this.activeFilters.clear();
-    if (queryParams.supplierId) {
-      this.activeFilters.add('supplierId');
-    }
-    if (queryParams.trademark) {
-      this.activeFilters.add('trademark');
-    }
-    if (queryParams.delivery) {
-      this.activeFilters.add('isDelivery');
-    }
-    if (queryParams.pickup) {
-      this.activeFilters.add('isPickup');
-    }
-    if (queryParams.inStock) {
-      this.activeFilters.add('inStock');
-    }
-    if (queryParams.withImages) {
-      this.activeFilters.add('withImages');
-    }
-    if (queryParams.priceFrom || queryParams.priceTo) {
-      this.activeFilters.add('price');
-    }
-    if (queryParams.categoryId || params.categoryId) {
-      this.activeFilters.add('categoryId');
-    }
-  }
-
-  private _addRegionToAvailableFilters(queryParams: Params) {
-    if (!this.availableFilters) {
-      this.availableFilters = new DefaultSearchAvailableModel();
-    }
-    const fias = this._localStorageService.getUserLocation()?.fias;
-    this.availableFilters.delivery = queryParams.delivery ? queryParams.delivery : fias;
-    this.availableFilters.pickup = queryParams.pickup ? queryParams.pickup : fias;
   }
 }

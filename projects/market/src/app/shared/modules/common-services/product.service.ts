@@ -8,39 +8,47 @@ import {
   ProductOffersListResponseModel
 } from './models';
 import { BNetService } from './bnet.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class ProductService {
 
-  constructor(private _bnetService: BNetService) {
+  constructor(
+    private _bnetService: BNetService,
+    private _localStorageService: LocalStorageService,
+  ) {
   }
 
-  getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
-    return this._bnetService.getProductOffer(id, filterQuery);
+  getProductOffer(id: string, query?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
+    return this._bnetService.getProductOffer(id, query);
   }
 
   getPopularProductOffers(): Observable<ProductOffersListResponseModel> {
     return this._bnetService.getPopularProducts();
   }
 
-  searchProductOffers(filters: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {
-    const delivery = filters.availableFilters?.delivery === CountryCode.RUSSIA ? undefined : filters.availableFilters?.delivery;
-    const pickup = filters.availableFilters?.pickup === CountryCode.RUSSIA ? undefined : filters.availableFilters?.pickup;
+  searchProductOffers(groupQuery: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {
+    const fias = this._fias();
     const searchQuery = {
-      q: filters.query,
-      categoryId: filters.availableFilters?.categoryId,
-      priceFrom: filters.availableFilters?.priceFrom,
-      priceTo: filters.availableFilters?.priceTo,
-      suppliers: [filters.availableFilters?.supplierId],
-      tradeMarks: [filters.availableFilters?.trademark],
-      inStock: filters.availableFilters?.inStock,
-      withImages: filters.availableFilters?.withImages,
-      deliveryArea: delivery,
-      pickupArea: pickup,
-      page: filters.page,
-      sort: filters.sort,
+      q: groupQuery.query,
+      categoryId: groupQuery.filters?.categoryId,
+      priceFrom: groupQuery.filters?.priceFrom,
+      priceTo: groupQuery.filters?.priceTo,
+      suppliers: [groupQuery.filters?.supplierId],
+      tradeMarks: [groupQuery.filters?.trademark],
+      inStock: groupQuery.filters?.inStock,
+      withImages: groupQuery.filters?.withImages,
+      deliveryArea: groupQuery.filters?.isDelivery ? fias : undefined,
+      pickupArea: groupQuery.filters?.isPickup ? fias : undefined,
+      page: groupQuery.page,
+      sort: groupQuery.sort,
     };
 
     return this._bnetService.searchProductOffers(searchQuery);
+  }
+
+  private _fias() {
+    return this._localStorageService.getUserLocation()?.fias === CountryCode.RUSSIA ?
+      undefined : this._localStorageService.getUserLocation()?.fias;
   }
 }

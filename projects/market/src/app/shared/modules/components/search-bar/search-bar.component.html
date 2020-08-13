@@ -61,12 +61,12 @@
 
         <nz-dropdown-menu #filterMenu="nzDropdownMenu">
           <market-search-bar-filter
-            [availableFilters]="availableFilters"
+            [filters]="filters"
             [city]="userLocation.name"
             [scroll] = "isFilterFormVisible"
             [activeFilters]="activeFilters"
             (stateLocationForm)="changeLocation($event)"
-            (stateAvailableFilters)="recFilter($event)"
+            (stateFilters)="recFilter($event)"
             (closeFilter)="changeFilterFormVisibility($event)"
             (filtersCount)="recFiltersCount($event)"
           ></market-search-bar-filter>

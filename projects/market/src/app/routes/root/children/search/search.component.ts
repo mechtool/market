@@ -31,7 +31,7 @@ export class SearchComponent {
   productsTotal: number;
   productsSuggestions: SuggestionProductItemModel[];
   categoriesSuggestions: SuggestionCategoryItemModel[];
-  availableFilters: DefaultSearchAvailableModel;
+  filters: DefaultSearchAvailableModel;
   query: string;
   sort: SortModel;
   page: number;
@@ -50,8 +50,7 @@ export class SearchComponent {
   }
 
   get requestParametersSelected(): boolean {
-    return this._hasRequestParameters(this.query, this.availableFilters?.supplierId,
-      this.availableFilters?.trademark, this.availableFilters?.categoryId);
+    return this._hasRequestParameters(this.query, this.filters?.supplierId, this.filters?.trademark, this.filters?.categoryId);
   }
 
   searchSuggestions(query: string) {
@@ -81,7 +80,7 @@ export class SearchComponent {
 
         this._productService.searchProductOffers({
           query: this.query,
-          availableFilters: this.availableFilters,
+          filters: this.filters,
           page: nextPage,
           sort: this.sort,
         })
@@ -100,17 +99,23 @@ export class SearchComponent {
     }
   }
 
+  cityChange(isChanged: boolean) {
+    if (isChanged) {
+      this._init();
+    }
+  }
+
   private _init() {
     this._activatedRoute.queryParams
       .pipe(
         switchMap((queryParams) => {
           this.isSearching = true;
           this.query = queryParams.q;
-          this.availableFilters = {
+          this.filters = {
             supplierId: queryParams.supplierId,
             trademark: queryParams.trademark,
-            delivery: queryParams.delivery,
-            pickup: queryParams.pickup,
+            isDelivery: queryParams.isDelivery !== 'false',
+            isPickup: queryParams.isPickup !== 'false',
             inStock: queryParams.inStock,
             withImages: queryParams.withImages,
             priceFrom: queryParams.priceFrom,
@@ -120,7 +125,7 @@ export class SearchComponent {
           this.sort = queryParams.sort;
           return of({
             query: this.query,
-            availableFilters: this.availableFilters,
+            filters: this.filters,
             sort: this.sort,
           });
         }),

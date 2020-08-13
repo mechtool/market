@@ -21,6 +21,10 @@ export class ProductSideComponent implements OnInit {
   form: FormGroup;
   isAdded: boolean;
 
+  get focusIsNotFormTotalPositions() {
+    return document.activeElement.attributes['formcontrolname']?.value !== 'totalPositions';
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _cartService: CartService,
@@ -41,8 +45,8 @@ export class ProductSideComponent implements OnInit {
           const cartTradeOffers = cartData.content?.reduce((accum, curr) => {
             return [...curr.items, ...accum];
           }, []);
-          const foundTradeOffer = cartTradeOffers.find((x) => {
-            return x.tradeOfferId === this.tradeOfferId;
+          const foundTradeOffer = cartTradeOffers.find((order) => {
+            return order.tradeOfferId === this.tradeOfferId;
           });
           if (foundTradeOffer) {
             this.orderStatus = OrderStatusModal.IN_CART;
@@ -58,12 +62,10 @@ export class ProductSideComponent implements OnInit {
   }
 
   decrease() {
-    this.isAdded = true;
     this.form.patchValue({ totalPositions: this.form.get('totalPositions').value - 1 });
   }
 
   increase() {
-    this.isAdded = true;
     this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + 1 });
   }
 
@@ -80,7 +82,8 @@ export class ProductSideComponent implements OnInit {
         quantity: 1,
       },
     ).subscribe(() => {
-      this.isAdded = false;
+      this.spinnerOf();
+      this.changeDetector.detectChanges();
     }, (err) => {
       this._notificationsService.error('Невозможно добавить товар в корзину. Внутренняя ошибка сервера.');
       this.rollBackTotalPositions(Operation.ADD);
@@ -92,7 +95,8 @@ export class ProductSideComponent implements OnInit {
       .subscribe(
         (value) => {
           const cartLocation = this._cartService.getCart$().value;
-          if (value > 0) {
+          if (this.focusIsNotFormTotalPositions && value > 0) {
+            this.isAdded = true;
             this._cartService.handleRelationAndUpdateData(
               RelationEnumModel.ITEM_UPDATE_QUANTITY,
               `${cartLocation}/items/${this.tradeOfferId}/quantity`,
@@ -101,19 +105,18 @@ export class ProductSideComponent implements OnInit {
               },
             )
               .subscribe(() => {
-                this.isAdded = false;
+                this.spinnerOf();
               }, (err) => {
                 this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
                 this.rollBackTotalPositions();
               });
-          } else {
+          } else if (this.focusIsNotFormTotalPositions && !value) {
             this.orderStatus = OrderStatusModal.TO_CART;
             this._cartService.handleRelationAndUpdateData(
               RelationEnumModel.ITEM_REMOVE,
               `${cartLocation}/items/${this.tradeOfferId}`,
             )
               .subscribe(() => {
-                this.isAdded = false;
               }, (err) => {
                 this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
                 this.rollBackTotalPositions(Operation.REMOVE);
@@ -123,7 +126,7 @@ export class ProductSideComponent implements OnInit {
   }
 
   private rollBackTotalPositions(operation?: Operation) {
-    this.isAdded = false;
+    this.spinnerOf();
     if (operation === Operation.REMOVE) {
       this.orderStatus = OrderStatusModal.IN_CART;
       this.changeDetector.detectChanges();
@@ -146,8 +149,13 @@ export class ProductSideComponent implements OnInit {
     const cartTradeOffers = this._cartService.getCartData$().getValue().content?.reduce((accum, curr) => {
       return [...curr.items, ...accum];
     }, []);
-    return cartTradeOffers.find((x) => {
-      return x.tradeOfferId === this.tradeOfferId;
+    return cartTradeOffers.find((order) => {
+      return order.tradeOfferId === this.tradeOfferId;
     });
+  }
+
+  private spinnerOf() {
+    this.isAdded = false;
+    this.changeDetector.detectChanges();
   }
 }

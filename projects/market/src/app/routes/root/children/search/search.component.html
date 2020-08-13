@@ -1,13 +1,14 @@
 <div class="search">
   <market-search-bar
     [query]="query"
-    [availableFilters]="availableFilters"
+    [filters]="filters"
     [sort]="sort"
-    (queryChange)="searchSuggestions($event)"
-    (submitClick)="queryParametersChange($event)"
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
     [visibleSort]="productOffers?.length > 1"
+    (queryChange)="searchSuggestions($event)"
+    (submitClick)="queryParametersChange($event)"
+    (cityChange)="cityChange($event)"
   ></market-search-bar>
 
   <ng-template #indicatorTemplate>

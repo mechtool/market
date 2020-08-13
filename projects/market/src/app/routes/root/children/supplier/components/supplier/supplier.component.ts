@@ -15,6 +15,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import {
+  LocalStorageService,
   NotificationsService,
   OrganizationsService,
   ProductService,
@@ -41,7 +42,7 @@ export class SupplierSingleComponent {
   tradeOffersTotal: number;
   page: number;
   query: string;
-  availableFilters: DefaultSearchAvailableModel;
+  filters: DefaultSearchAvailableModel;
   sort: SortModel;
 
   get name() {
@@ -55,6 +56,7 @@ export class SupplierSingleComponent {
     private _organizationsService: OrganizationsService,
     private _activatedRoute: ActivatedRoute,
     private _notificationsService: NotificationsService,
+    private _localStorageService: LocalStorageService,
   ) {
     this._initData();
   }
@@ -81,6 +83,12 @@ export class SupplierSingleComponent {
     }
   }
 
+  refreshPage(isRefresh: boolean) {
+    if (isRefresh) {
+      this._initData();
+    }
+  }
+
   private _initData() {
     combineLatest([
       this._activatedRoute.params,
@@ -88,8 +96,8 @@ export class SupplierSingleComponent {
     ])
       .pipe(
         switchMap(([params, queryParams]) => {
-          this._collectAvailableFilters(params, queryParams);
-          this._collectRequest(queryParams);
+          this._collectFilters(params, queryParams);
+          this._collectRequest();
           const supplierId = params.supplierId;
           this.supplierLogo = stringToRGB(supplierId);
           return this._organizationsService.getOrganization(supplierId);
@@ -110,13 +118,13 @@ export class SupplierSingleComponent {
       });
   }
 
-  private _collectAvailableFilters(params: Params, queryParams: Params) {
+  private _collectFilters(params: Params, queryParams: Params) {
     this.query = queryParams.q;
-    this.availableFilters = {
+    this.filters = {
       supplierId: params.supplierId,
       trademark: queryParams.trademark,
-      delivery: queryParams.delivery,
-      pickup: queryParams.pickup,
+      isDelivery: queryParams.isDelivery !== 'false',
+      isPickup: queryParams.isPickup !== 'false',
       inStock: queryParams.inStock,
       withImages: queryParams.withImages,
       priceFrom: queryParams.priceFrom,
@@ -126,21 +134,19 @@ export class SupplierSingleComponent {
     this.sort = queryParams.sort;
   }
 
-
-  private _collectRequest(queryParams: Params): void {
-    const delivery = queryParams.delivery === CountryCode.RUSSIA ? undefined : queryParams.delivery;
-    const pickup = queryParams.pickup === CountryCode.RUSSIA ? undefined : queryParams.pickup;
+  private _collectRequest(): void {
+    const fias = this._fias();
     this.request = {
-      q: queryParams.q,
-      priceFrom: queryParams.priceFrom,
-      priceTo: queryParams.priceTo,
-      inStock: queryParams.inStock,
-      inSales: queryParams.inStock ? queryParams.inStock : false,
-      withImages: queryParams.withImages,
-      deliveryArea: delivery,
-      pickupArea: pickup,
-      categoryId: queryParams.categoryId,
-      sort: queryParams.sort,
+      q: this.query,
+      priceFrom: this.filters.priceFrom,
+      priceTo: this.filters.priceTo,
+      inStock: this.filters.inStock,
+      inSales: this.filters.inStock ? this.filters.inStock : false,
+      withImages: this.filters.withImages,
+      deliveryArea: this.filters.isDelivery ? fias : undefined,
+      pickupArea: this.filters.isPickup ? fias : undefined,
+      categoryId: this.filters.categoryId,
+      sort: this.sort,
     };
   }
 
@@ -163,5 +169,10 @@ export class SupplierSingleComponent {
       website: organization.contacts?.website,
       address: organization.contacts?.address,
     };
+  }
+
+  private _fias() {
+    return this._localStorageService.getUserLocation()?.fias === CountryCode.RUSSIA ?
+      undefined : this._localStorageService.getUserLocation()?.fias;
   }
 }

@@ -28,7 +28,7 @@ export class CategoryComponent {
   categoryModel: CategoryModel;
   query = '';
   categoryId: string;
-  availableFilters: DefaultSearchAvailableModel;
+  filters: DefaultSearchAvailableModel;
   productOffersList: ProductOffersListResponseModel;
   productOffers: ProductOffersModel[];
   productsTotal: number;
@@ -49,7 +49,7 @@ export class CategoryComponent {
 
   queryParametersChange(filters: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(filters.query);
-    const categoryId = filters.availableFilters?.categoryId || this.categoryId;
+    const categoryId = filters.filters?.categoryId || this.categoryId;
     const params = queryParamsWithoutCategoryIdFrom(filters);
     this._router.navigate([`/category/${categoryId}`], {
       queryParams: params,
@@ -63,7 +63,7 @@ export class CategoryComponent {
 
       this._productService.searchProductOffers({
         query: this.query,
-        availableFilters: this.availableFilters,
+        filters: this.filters,
         page: nextPage,
         sort: this.sort,
       })
@@ -81,6 +81,12 @@ export class CategoryComponent {
     }
   }
 
+  cityChange(isChanged: boolean) {
+    if (isChanged) {
+      this._init();
+    }
+  }
+
   private _init(): void {
     combineLatest([
       this._activatedRoute.params,
@@ -91,11 +97,11 @@ export class CategoryComponent {
           this.categoryId = params.categoryId;
           this.query = queryParams.q;
           this.sort = queryParams.sort;
-          this.availableFilters = {
+          this.filters = {
             supplierId: queryParams.supplierId,
             trademark: queryParams.trademark,
-            delivery: queryParams.delivery,
-            pickup: queryParams.pickup,
+            isDelivery: queryParams.isDelivery !== 'false',
+            isPickup: queryParams.isPickup !== 'false',
             inStock: queryParams.inStock,
             withImages: queryParams.withImages,
             priceFrom: queryParams.priceFrom,
@@ -109,7 +115,7 @@ export class CategoryComponent {
           this.categoryModel = categoryModel.find(category => category.id === this.categoryId);
           return this._productService.searchProductOffers({
             query: this.query,
-            availableFilters: this.availableFilters,
+            filters: this.filters,
             sort: this.sort,
           });
         }),

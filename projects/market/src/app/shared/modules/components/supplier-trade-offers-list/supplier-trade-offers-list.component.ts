@@ -30,16 +30,16 @@ import { absoluteImagePath, mapStock, queryParamsWithoutSupplierIdFrom } from '#
 })
 
 export class SupplierTradeOffersListComponent {
-
   @Input() supplier: SuppliersItemModel;
   @Input() tradeOffers: TradeOfferSummaryModel[];
   @Input() tradeOffersTotal: number;
   @Input() isLoading: boolean;
   @Input() page: number;
   @Input() query: string;
-  @Input() availableFilters: DefaultSearchAvailableModel;
+  @Input() filters: DefaultSearchAvailableModel;
   @Input() sort: SortModel;
   @Output() loadTradeOffers: EventEmitter<number> = new EventEmitter();
+  @Output() refreshPage: EventEmitter<boolean> = new EventEmitter();
 
   get found() {
     return this.tradeOffersTotal < 10000 ? 'найдено' : 'найдено более';
@@ -51,11 +51,11 @@ export class SupplierTradeOffersListComponent {
   ) {
   }
 
-  queryParametersChange(filters: AllGroupQueryFiltersModel) {
-    this._localStorageService.putSearchText(filters.query);
-    this.availableFilters = filters.availableFilters;
-    this.sort = filters.sort;
-    const params = queryParamsWithoutSupplierIdFrom(filters);
+  queryParametersChange(groupQuery: AllGroupQueryFiltersModel) {
+    this._localStorageService.putSearchText(groupQuery.query);
+    this.filters = groupQuery.filters;
+    this.sort = groupQuery.sort;
+    const params = queryParamsWithoutSupplierIdFrom(groupQuery);
     this._router.navigate([`/supplier/${this.supplier.id}`], {
       queryParams: params,
     });
@@ -63,6 +63,12 @@ export class SupplierTradeOffersListComponent {
 
   imageUrl(images: string[]) {
     return images?.length ? absoluteImagePath(images[0]) : null;
+  }
+
+  cityChange(isChanged: boolean) {
+    if (isChanged) {
+      this.refreshPage.emit(true);
+    }
   }
 
   vat(price: TradeOfferSummaryPriceModel) {

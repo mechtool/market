@@ -43,25 +43,25 @@ const PAGE_SIZE = 20;
 export class SearchBarFilterComponent implements OnInit {
   MIN_PRICE = 0;
   MAX_PRICE = 1000000;
-  availableFiltersForm: FormGroup;
-  categoryFiltersForm: FormGroup;
+  filtersForm: FormGroup;
+  categoryForm: FormGroup;
   locationForm: FormGroup;
   categoryId: string;
   categoryIndex: number;
   categories: CategoryModel[];
-  searchByInn = true;
   showFilterWithCities = false;
   showFilterWithCategories = false;
   notShowFilter = false;
   foundCities: LocationModel[] = [];
   suppliers: SuppliersItemModel[];
+  showSupplierMarker = true;
+  showCategoryMarker = true;
   private supplier: any;
   private megacities = Megacity.ALL;
-
-  @Input() availableFilters: DefaultSearchAvailableModel;
+  @Input() filters: DefaultSearchAvailableModel;
   @Input() city: string;
   @Input() activeFilters = new Set<string>();
-  @Output() stateAvailableFilters: EventEmitter<DefaultSearchAvailableModel> = new EventEmitter();
+  @Output() stateFilters: EventEmitter<DefaultSearchAvailableModel> = new EventEmitter();
   @Output() stateLocation: EventEmitter<LocationModel> = new EventEmitter();
   @Output() closeFilter: EventEmitter<boolean> = new EventEmitter();
   @Output() stateLocationForm: EventEmitter<LocationModel> = new EventEmitter();
@@ -79,7 +79,7 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   get isNotValidForm(): boolean {
-    return this.availableFiltersForm.invalid;
+    return this.filtersForm.invalid;
   }
 
   get focusIsNotFormFilterInn(): boolean {
@@ -92,11 +92,11 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   get inStock() {
-    return this.availableFiltersForm.controls.inStock.value;
+    return this.filtersForm.controls.inStock.value;
   }
 
   get withImages() {
-    return this.availableFiltersForm.controls.withImages.value;
+    return this.filtersForm.controls.withImages.value;
   }
 
   constructor(
@@ -118,14 +118,14 @@ export class SearchBarFilterComponent implements OnInit {
 
   save() {
     this._saveFilters();
-    this.stateAvailableFilters.emit(this.availableFilters);
+    this.stateFilters.emit(this.filters);
   }
 
   reset() {
-    this.availableFilters = undefined;
+    this.filters = undefined;
     this.categoryId = undefined;
     this.supplier = undefined;
-    this.stateAvailableFilters.emit(this.availableFilters);
+    this.stateFilters.emit(this.filters);
     this.activeFilters.clear();
     this.filtersCount.emit(this.activeFilters);
     this._initForms();
@@ -183,8 +183,8 @@ export class SearchBarFilterComponent implements OnInit {
       name: supplier.name,
       isSelected: true,
     };
-    this.availableFiltersForm.controls.supplier.setValue(this.supplier, { onlySelf: true, emitEvent: false });
-    this.availableFiltersForm.controls.supplier.setErrors(null, { emitEvent: false });
+    this.filtersForm.controls.supplier.setValue(this.supplier, { onlySelf: true, emitEvent: false });
+    this.filtersForm.controls.supplier.setErrors(null, { emitEvent: false });
     this.suppliers = null;
     this._addActiveFilter('supplierId');
   }
@@ -209,8 +209,11 @@ export class SearchBarFilterComponent implements OnInit {
             };
           }
           if (params.supplierId) {
-            this.searchByInn = false;
+            this.showSupplierMarker = false;
             return this._categoryService.getAllSupplierCategories({ suppliers: [params.supplierId] });
+          }
+          if (params.categoryId) {
+            this.showCategoryMarker = false;
           }
           return this._categoryService.getAllSupplierCategories();
         }),
@@ -238,6 +241,8 @@ export class SearchBarFilterComponent implements OnInit {
 
           this._initForms();
           this._categoryChangesControl();
+
+          this._activeFiltersCount(this.showSupplierMarker, this.showCategoryMarker);
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
@@ -246,55 +251,50 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   private _saveFilters() {
-    this.availableFilters = new DefaultSearchAvailableModel();
+    this.filters = new DefaultSearchAvailableModel();
 
     if (this.supplier) {
-      this.availableFilters.supplierId = this.supplier.id;
+      this.filters.supplierId = this.supplier.id;
     }
-    const trademark = this.availableFiltersForm.controls.trademark.value;
+    const trademark = this.filtersForm.controls.trademark.value;
     if (trademark) {
-      this.availableFilters.trademark = trademark;
+      this.filters.trademark = trademark;
     }
 
-    if (this.availableFiltersForm.controls.isDelivery.value) {
-      this.availableFilters.delivery = this._localStorageService.getUserLocation().fias;
+    this.filters.isDelivery = this.filtersForm.controls.isDelivery.value;
+
+    this.filters.isPickup = this.filtersForm.controls.isPickup.value;
+
+    if (this.filtersForm.controls.inStock.value) {
+      this.filters.inStock = this.filtersForm.controls.inStock.value;
     }
 
-    if (this.availableFiltersForm.controls.isPickup.value) {
-      this.availableFilters.pickup = this._localStorageService.getUserLocation().fias;
+    if (this.filtersForm.controls.withImages.value) {
+      this.filters.withImages = this.filtersForm.controls.withImages.value;
     }
 
-    if (this.availableFiltersForm.controls.inStock.value) {
-      this.availableFilters.inStock = this.availableFiltersForm.controls.inStock.value;
-    }
-
-    if (this.availableFiltersForm.controls.withImages.value) {
-      this.availableFilters.withImages = this.availableFiltersForm.controls.withImages.value;
-    }
-
-    const priceFrom = this.availableFiltersForm.controls.priceFrom.value;
+    const priceFrom = this.filtersForm.controls.priceFrom.value;
     if (priceFrom) {
-      this.availableFilters.priceFrom = priceFrom;
+      this.filters.priceFrom = priceFrom;
     }
 
-    const priceTo = this.availableFiltersForm.controls.priceTo.value;
+    const priceTo = this.filtersForm.controls.priceTo.value;
     if (priceTo) {
-      this.availableFilters.priceTo = priceTo;
+      this.filters.priceTo = priceTo;
     }
 
     if (this.categoryId) {
-      this.availableFilters.categoryId = this.categoryId;
+      this.filters.categoryId = this.categoryId;
     }
   }
 
   private _initForms() {
-    this._initFormAvailableFilter();
-    this._initFormCategoryFilter();
-    this._initFormLocationFilter();
+    this._initFilterForm();
+    this._initCategoryForm();
+    this._initLocationForm();
   }
 
-
-  private _initFormLocationFilter() {
+  private _initLocationForm() {
     this.foundCities = this.megacities;
 
     if (this._localStorageService.hasUserLocation()) {
@@ -311,31 +311,31 @@ export class SearchBarFilterComponent implements OnInit {
     this._cityChangesControl();
   }
 
-  private _initFormCategoryFilter() {
-    this.categoryFiltersForm = this._fb.group({
+  private _initCategoryForm() {
+    this.categoryForm = this._fb.group({
       categoryName: undefined,
       selectedCategories: new FormArray([]),
     });
     this._addCheckboxes();
   }
 
-  private _initFormAvailableFilter() {
-    this.availableFiltersForm = this._fb.group({
+  private _initFilterForm() {
+    this.filtersForm = this._fb.group({
       supplier: this.supplierForm(),
-      trademark: this.availableFilters?.trademark,
-      isDelivery: !!this.availableFilters?.delivery,
-      isPickup: !!this.availableFilters?.pickup,
-      inStock: this.availableFilters?.inStock,
-      withImages: this.availableFilters?.withImages,
-      priceFrom: new FormControl(this.availableFilters?.priceFrom, [priceConditionValidator]),
-      priceTo: new FormControl(this.availableFilters?.priceTo, [priceConditionValidator]),
-      priceBetween: new FormControl([this.availableFilters?.priceFrom || this.MIN_PRICE, this.availableFilters?.priceTo || this.MAX_PRICE]),
+      trademark: this.filters?.trademark,
+      isDelivery: this.isNotFalse(this.filters?.isDelivery),
+      isPickup: this.isNotFalse(this.filters?.isPickup),
+      inStock: this.filters?.inStock,
+      withImages: this.filters?.withImages,
+      priceFrom: new FormControl(this.filters?.priceFrom, [priceConditionValidator]),
+      priceTo: new FormControl(this.filters?.priceTo, [priceConditionValidator]),
+      priceBetween: new FormControl([this.filters?.priceFrom || this.MIN_PRICE, this.filters?.priceTo || this.MAX_PRICE]),
     }, {
       validator: [priceRangeConditionValidator]
     });
 
-    if (this.availableFilters?.categoryId) {
-      this.categoryId = this.availableFilters.categoryId;
+    if (this.filters?.categoryId) {
+      this.categoryId = this.filters.categoryId;
     }
     this._controlsPrices();
     this._filtersChangesControl();
@@ -355,23 +355,23 @@ export class SearchBarFilterComponent implements OnInit {
   private _addCheckboxes() {
     if (this.categoryId) {
       this.categories.forEach((category, i) => {
-        (this.categoryFiltersForm.controls.selectedCategories as FormArray)
+        (this.categoryForm.controls.selectedCategories as FormArray)
           .push(new FormControl(this.categoryId === category.id));
       });
     } else {
       this.categories.forEach((category, i) => {
-        (this.categoryFiltersForm.controls.selectedCategories as FormArray).push(new FormControl(false));
+        (this.categoryForm.controls.selectedCategories as FormArray).push(new FormControl(false));
       });
     }
   }
 
   private _controlsPrices() {
-    this.availableFiltersForm.controls.priceFrom.valueChanges
+    this.filtersForm.controls.priceFrom.valueChanges
       .subscribe(
         (price) => {
-          this.availableFiltersForm.controls.priceFrom.setValue(+price, { onlySelf: true, emitEvent: false });
-          this.availableFiltersForm.controls.priceBetween.setValue(
-            [+price, this.availableFiltersForm.get('priceBetween').value[1]], { onlySelf: true, emitEvent: false }
+          this.filtersForm.controls.priceFrom.setValue(+price, { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.priceBetween.setValue(
+            [+price, this.filtersForm.get('priceBetween').value[1]], { onlySelf: true, emitEvent: false }
           );
           if (price) {
             this._addActiveFilter('price');
@@ -380,12 +380,12 @@ export class SearchBarFilterComponent implements OnInit {
           }
         });
 
-    this.availableFiltersForm.controls.priceTo.valueChanges
+    this.filtersForm.controls.priceTo.valueChanges
       .subscribe(
         (price) => {
-          this.availableFiltersForm.controls.priceTo.setValue(+price, { onlySelf: true, emitEvent: false });
-          this.availableFiltersForm.controls.priceBetween.setValue(
-            [this.availableFiltersForm.get('priceBetween').value[0], +price], { onlySelf: true, emitEvent: false }
+          this.filtersForm.controls.priceTo.setValue(+price, { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.priceBetween.setValue(
+            [this.filtersForm.get('priceBetween').value[0], +price], { onlySelf: true, emitEvent: false }
           );
           if (price) {
             this._addActiveFilter('price');
@@ -394,12 +394,12 @@ export class SearchBarFilterComponent implements OnInit {
           }
         });
 
-    this.availableFiltersForm.controls.priceBetween.valueChanges
+    this.filtersForm.controls.priceBetween.valueChanges
       .subscribe(
         (prices) => {
-          this.availableFiltersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
-          this.availableFiltersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
-          this.availableFiltersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
+          this.filtersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
             onlySelf: true,
             emitEvent: false
           });
@@ -412,7 +412,7 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   private _categoryChangesControl() {
-    this.categoryFiltersForm.controls.categoryName.valueChanges
+    this.categoryForm.controls.categoryName.valueChanges
       .subscribe(
         (query) => {
           this.categories.forEach((res) => {
@@ -420,10 +420,10 @@ export class SearchBarFilterComponent implements OnInit {
           });
         });
 
-    this.categoryFiltersForm.controls.selectedCategories.valueChanges
+    this.categoryForm.controls.selectedCategories.valueChanges
       .subscribe(
         (indexCategories) => {
-          this.categoryFiltersForm.controls.selectedCategories.setValue(indexCategories, {
+          this.categoryForm.controls.selectedCategories.setValue(indexCategories, {
             onlySelf: true,
             emitEvent: false
           });
@@ -482,7 +482,7 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   private _filtersChangesControl(): void {
-    this.availableFiltersForm.controls.supplier.valueChanges
+    this.filtersForm.controls.supplier.valueChanges
       .subscribe(
         (supplier) => {
           supplier.isSelected = false;
@@ -498,17 +498,17 @@ export class SearchBarFilterComponent implements OnInit {
             this.suppliers = null;
           }
 
-          this.availableFiltersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         }
       );
 
-    this.availableFiltersForm.controls.trademark.valueChanges
+    this.filtersForm.controls.trademark.valueChanges
       .subscribe(
         (trademark) => {
-          this.availableFiltersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
           if (trademark.length) {
             this._addActiveFilter('trademark');
           } else {
@@ -516,40 +516,40 @@ export class SearchBarFilterComponent implements OnInit {
           }
         });
 
-    this.availableFiltersForm.controls.isDelivery.valueChanges
+    this.filtersForm.controls.isDelivery.valueChanges
       .subscribe(
         (isDelivery) => {
-          this.availableFiltersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
           if (isDelivery) {
-            this._addActiveFilter('isDelivery');
-          } else {
             this._removeActiveFilter('isDelivery');
+          } else {
+            this._addActiveFilter('isDelivery');
           }
         });
 
-    this.availableFiltersForm.controls.isPickup.valueChanges
+    this.filtersForm.controls.isPickup.valueChanges
       .subscribe(
         (isPickup) => {
-          this.availableFiltersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
+          this.filtersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
           if (isPickup) {
-            this._addActiveFilter('isPickup');
-          } else {
             this._removeActiveFilter('isPickup');
+          } else {
+            this._addActiveFilter('isPickup');
           }
         });
 
-    this.availableFiltersForm.controls.inStock.valueChanges
+    this.filtersForm.controls.inStock.valueChanges
       .subscribe((inStock) => {
-        this.availableFiltersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
+        this.filtersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
         if (inStock) {
           this._addActiveFilter('inStock');
         } else {
           this._removeActiveFilter('inStock');
         }
       });
-    this.availableFiltersForm.controls.withImages.valueChanges
+    this.filtersForm.controls.withImages.valueChanges
       .subscribe((withImages) => {
-        this.availableFiltersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
+        this.filtersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
         if (withImages) {
           this._addActiveFilter('withImages');
         } else {
@@ -570,5 +570,38 @@ export class SearchBarFilterComponent implements OnInit {
       supplier.name = resizeBusinessStructure(supplier.name);
     });
     return suppliers;
+  }
+
+  private _activeFiltersCount(showSupplierMarker: boolean, showCategoryMarker: boolean) {
+    this.activeFilters.clear();
+    if (this.filters?.supplierId && showSupplierMarker) {
+      this.activeFilters.add('supplierId');
+    }
+    if (this.filters?.trademark) {
+      this.activeFilters.add('trademark');
+    }
+    if (this.filters?.isDelivery === false) {
+      this.activeFilters.add('isDelivery');
+    }
+    if (this.filters?.isPickup === false) {
+      this.activeFilters.add('isPickup');
+    }
+    if (this.filters?.inStock) {
+      this.activeFilters.add('inStock');
+    }
+    if (this.filters?.withImages) {
+      this.activeFilters.add('withImages');
+    }
+    if (this.filters?.priceFrom || this.filters?.priceTo) {
+      this.activeFilters.add('price');
+    }
+    if (this.filters?.categoryId && showCategoryMarker) {
+      this.activeFilters.add('categoryId');
+    }
+    this.filtersCount.emit(this.activeFilters);
+  }
+
+  private isNotFalse(flag: boolean) {
+    return flag !== false;
   }
 }

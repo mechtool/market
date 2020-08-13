@@ -1,8 +1,8 @@
 export class DefaultSearchAvailableModel {
   supplierId?: string;
   trademark?: string; // name brand or company
-  delivery?: string;
-  pickup?: string;
+  isDelivery?: boolean;
+  isPickup?: boolean;
   inStock?: boolean;
   withImages?: boolean;
   priceFrom?: number;

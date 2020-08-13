@@ -15,9 +15,10 @@
         [isLoading]="isLoadingTradeOffers"
         [page]="page"
         [query]="query"
-        [availableFilters]="availableFilters"
+        [filters]="filters"
         [sort]="sort"
         (loadTradeOffers)="loadTradeOffers($event)"
+        (refreshPage)="refreshPage($event)"
       ></market-supplier-trade-offers-list>
     </nz-tab>
 
