@@ -104,7 +104,7 @@
           },
           {
             "fiasCode": "2763c110-cb8b-416a-9dac-ad28a55b4402",
-            "name": "Екатеринбург, Свердловская обл",
+            "title": "Екатеринбург, Свердловская обл",
             "countryOksmCode": "643"
           }
         ],
@@ -112,6 +112,11 @@
           {
             "fiasCode": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
             "title": "Москва",
+            "countryOksmCode": "643"
+          },
+          {
+            "fiasCode": "1d5b2444-70a0-4932-980c-b4dc0d3f02c3",
+            "title": "Люберцы",
             "countryOksmCode": "643"
           }
         ]
@@ -274,13 +279,7 @@
         }
       ],
       "deliveryOptions": {
-        "pickupPoints": [
-          {
-            "fiasCode": "6fdecb78-893a-4e3f-a5ba-aa062459463b",
-            "title": "Севастополь",
-            "countryOksmCode": "643"
-          }
-        ]
+        "pickupPoints": null
       },
       "customersAudience": [],
       "orderTotal": {

@@ -15,4 +15,11 @@ export class LocationService {
     return null;
   }
 
+  searchAddresses(textQuery: string, fiasIds: string[]): Observable<LocationModel[]> {
+    if (textQuery.length) {
+      return this._bnetService.searchAddresses(textQuery, fiasIds);
+    }
+    return null;
+  }
+
 }

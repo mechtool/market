@@ -159,6 +159,11 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
+  searchAddresses(textQuery: string, fiasIds: string[]): Observable<LocationModel[]> {
+    const params = this._params({ textQuery, fiasIds });
+    return this._apiService.get(`${API_URL}/locations/search-address`, { params });
+  }
+
   searchSuppliers(query: SuppliersRequestModel): Observable<SuppliersResponseModel> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/suppliers`, { params });

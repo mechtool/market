@@ -55,6 +55,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   isOrderLoading = false;
   deliveryOptions = [];
   selectedTabIndex = 0;
+  // selectedPickupPoint = null;
 
   get consumerName(): string {
     return this.form.get('consumerName').value?.trim();
@@ -92,8 +93,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.form.get('deliveryMethod').value?.trim();
   }
 
+  get pickupArea(): any {
+    return this.form.get('pickupArea').value;
+  }
+
   get pickupPoints(): any[] {
     return this.order.deliveryOptions?.pickupPoints;
+  }
+
+  get deliveryZones(): any[] {
+    return this.order.deliveryOptions?.deliveryZones;
   }
 
   get deliveryAvailable(): boolean {
@@ -134,6 +143,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this._cartService.pullStorageCartData();
   }
 
+  setPickupArea(pickupPoint) {
+    this.form.patchValue({
+      pickupArea: pickupPoint,
+    });
+  }
+
   private _watchDeliveryAreaUserChanges() {
     this.form.get('deliveryArea').valueChanges
       .pipe(
@@ -141,7 +156,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         mergeMap((v) => {
           return iif(() => {
             return !this.order.deliveryOptions.deliveryZones;
-          }, this._locationService.searchLocations(v), this._searchInDeliveryZones(v));
+          },
+          this._locationService.searchLocations(v),
+          this._locationService.searchAddresses(v, this.order.deliveryOptions.deliveryZones.map(zone => zone.fiasCode)));
         }),
       )
       .subscribe(
@@ -152,19 +169,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         });
-  }
-
-  private _searchInDeliveryZones(val: string) {
-    const mapped = this.order.deliveryOptions.deliveryZones?.map((zone) => {
-      return {
-        fias: zone.fiasCode,
-        name: zone.title,
-        fullName: zone.title,
-      };
-    });
-    return of(mapped?.filter((zone) => {
-      return zone.fullName.toLowerCase().includes(val.toLowerCase());
-    }));
   }
 
   private _watchItemQuantityChanges() {
@@ -337,11 +341,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
                 countryOksmCode: '643',
               }
             } : {
-              pickupFrom: {
-                fiasCode: this.pickupPoints[0].fiasCode,
-                title: this.pickupPoints[0].name,
-                countryOksmCode: '643',
-              }
+              pickupFrom: this.pickupArea,
             })
           }
         };
@@ -468,6 +468,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       totalVat: new FormControl(this.order.orderTotal.totalVat),
       deliveryMethod: new FormControl(this.deliveryOptions?.[0]?.value, [Validators.required]),
       deliveryArea: new FormControl(''),
+      pickupArea: new FormControl(this.order.deliveryOptions?.pickupPoints?.[0]),
       contactName: new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
       contactPhone: new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
       contactEmail: new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required]),
@@ -530,7 +531,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   private _initConsumer() {
     if (this.availableUserOrganizations?.length) {
 
-      if (!this.order.consumer) {
+      if (!this.order.consumer || (this.order.consumer && !this.availableUserOrganizations.map(o => o.organizationId).includes(this.order.consumer.id))) {
         if (!this.order.customersAudience?.length) {
           this.setConsumer(this.availableUserOrganizations[0]);
         }
@@ -544,7 +545,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.order.consumer) {
+      else {
         this._setConsumerFromOrder();
       }
     }

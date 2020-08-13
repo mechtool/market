@@ -91,6 +91,30 @@
           </span>
         </div>
       </div>
+      <div class="order_spec">
+        <div class="order_label">Доступные способы поставки:</div>
+        <div class="order_value supplier_title">
+          <span class="supplier_name">
+            {{deliveryOptions | marketArrayJoiner: 'label':'; '}}
+          </span>
+        </div>
+      </div>
+      <div class="order_spec" *ngIf="pickupPoints?.length">
+        <div class="order_label">Адреса самовывоза:</div>
+        <div class="order_value supplier_title">
+          <span class="supplier_name">
+            {{pickupPoints | marketArrayJoiner: 'title':'; '}}
+          </span>
+        </div>
+      </div>
+      <div class="order_spec" *ngIf="deliveryZones?.length">
+        <div class="order_label">Зоны доставки:</div>
+        <div class="order_value supplier_title">
+          <span class="supplier_name">
+            {{deliveryZones | marketArrayJoiner: 'title':'; '}}
+          </span>
+        </div>
+      </div>
     </div>
 
     <nz-tabset class="" nzTabPosition="top" nzType="card" [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="changeSelectedTabIndex($event)">
@@ -198,14 +222,6 @@
   <ng-template #orderDetails>
     <section id="section_tab__information" class="section_tab section_tab__limited">
       <div class="section_paragraph">
-        <div class="info_group__small">
-          <div class="info_group">
-            <span class="info_group__label">Доступные способы доставки</span>
-            <span class="info_group__value">{{deliveryOptions | marketArrayJoiner: 'label'}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="section_paragraph">
         <div class="order__shipping">
           <div class="form-group_title">Укажите cпособ доставки</div>
           <div class="form-group_radio order__shipping_type">
@@ -213,8 +229,31 @@
               <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
             </nz-radio-group>
           </div>
-          <div class="order__shipping_type order__shipping_pickup showed">
-            <p><strong>Адреса самовывоза:</strong> {{pickupPoints | marketArrayJoiner: 'title':'; '}}</p>
+          <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">
+
+            <div class="order_spec" *ngIf="pickupPoints?.length">
+              <div class="order__customer dropdown dropdown_selectable">
+                <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click" [nzDropdownMenu]="pickupPointsList" [nzOverlayClassName]="'upclose'" [nzDisabled]="pickupPoints?.length === 1">
+                  <div class="supplier_title">
+                    <div class="supplier_name">
+                      {{pickupArea?.title}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <nz-dropdown-menu #pickupPointsList="nzDropdownMenu">
+                <ul nz-menu style="width: 290px">
+                  <li nz-menu-item *ngFor="let pickupPoint of pickupPoints" (click)="setPickupArea(pickupPoint)">
+                    <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="pickupPointsList">
+                      <div class="supplier_name">
+                        {{pickupPoint.title}}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </div>
+
           </div>
           <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
             <div class="form-group form-group-long">

@@ -5,6 +5,7 @@ const categoriesData = fs.readFileSync('./proxy-remote-assets/product-offers-cat
 const productOffersData = fs.readFileSync('./proxy-remote-assets/product-offers.json').toString();
 const productOffersById = fs.readFileSync('./proxy-remote-assets/product-offers__92320f4c-0fb7-4d45-a449-f167bc1305b4.json').toString();
 const locations = fs.readFileSync('./proxy-remote-assets/locations__search.json').toString();
+const addresses = fs.readFileSync('./proxy-remote-assets/locations__search-address.json').toString();
 const userOrganizations1 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-1.json').toString();
 const userOrganizations2 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-2.json').toString();
 const organizationsById = fs.readFileSync('./proxy-remote-assets/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
@@ -40,6 +41,7 @@ const PROXY_CONFIG = [
         '/proxifier/product-offers': /^\/proxifier\/product-offers\/?$/i,
         '/proxifier/product-offers/:id': /^\/proxifier\/product-offers\/(?:([^\/]+?))\/?$/i,
         '/proxifier/locations/search': /^\/proxifier\/locations\/search\/?$/i,
+        '/proxifier/locations/search-address': /^\/proxifier\/locations\/search-address\/?$/i,
         '/proxifier/organizations': /^\/proxifier\/organizations\/?$/i,
         '/proxifier/organizations/:id': /^\/proxifier\/organizations\/(?:([^\/]+?))\/?$/i,
         '/proxifier/organizations/:id/contact': /^\/proxifier\/organizations\/(?:([^\/]+?))\/contact\/?$/i,
@@ -104,6 +106,12 @@ const PROXY_CONFIG = [
       if (req.method === 'GET' && pathsObject['/proxifier/locations/search'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
         res.end(locations);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/locations/search-address'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(addresses);
         return true;
       }
 

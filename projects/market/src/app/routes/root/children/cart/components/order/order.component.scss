@@ -669,6 +669,7 @@ input[type="number"].switch_count__value {
   font-weight: var(--font-weight-medium);
   opacity: 0.6;
   width: 190px;
+  min-width: 190px;
 }
 
 .order_value {
