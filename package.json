@@ -46,6 +46,7 @@
     "ng-zorro-antd": "^9.2.2",
     "ngx-cookie-service": "^10.0.0",
     "ngx-infinite-scroll": "^9.0.0",
+    "ngx-mask": "^10.0.1",
     "ngx-webstorage-service": "^4.1.0",
     "normalize.css": "^8.0.1",
     "puppeteer": "^2.1.1",

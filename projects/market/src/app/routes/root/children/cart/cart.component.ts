@@ -46,7 +46,7 @@ export class CartComponent implements OnInit {
     this.cartData = cartData;
     this.supplierCount = cartData?.content?.length;
     this.totalCost = cartData?.content?.reduce((accum, curr, item) => {
-      accum += curr.orderTotal.total;
+      accum += curr.orderTotal?.total || 0;
       return accum;
     }, 0);
     this.totalItems = cartData?.content?.reduce((accum, curr, item) => {

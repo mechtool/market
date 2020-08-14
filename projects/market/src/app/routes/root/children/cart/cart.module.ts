@@ -11,11 +11,13 @@ import {
   NzButtonModule,
   NzAutocompleteModule,
   NzEmptyModule,
+  NzDatePickerModule,
 } from 'ng-zorro-antd';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
 import { CartComponent } from './cart.component';
 import { CartOrderComponent, CartOrderQtyCounterComponent } from './components';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   imports: [
@@ -31,6 +33,8 @@ import { CartOrderComponent, CartOrderQtyCounterComponent } from './components';
     NzAutocompleteModule,
     NzModalModule,
     NzEmptyModule,
+    NzDatePickerModule,
+    NgxMaskModule,
     CartRoutingModule,
     PipesModule,
   ],

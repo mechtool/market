@@ -292,6 +292,66 @@
            "message": "Сумма заказа не может быть меньше 10000, сумма заказа - 367"
         }
       ]
+    },
+    {
+      "supplier": {
+        "name": "ООО «Пневмопроект»",
+        "inn": "6685026960",
+        "kpp": "668501001",
+        "phone": null,
+        "email": null
+      },
+      "items":[
+        {
+          "tradeOfferId": "3fc2103c-425e-43ff-8add-297b07d5868c",
+          "productName": "101-1/8-1/4 Резьбовой соединитель НР G1/8\" - НР G1/4\", никелир. латунь",
+          "productDescription": null,
+          "barCodes": null,
+          "partNumber": "101-1/8-1/4",
+          "unitOkei": {
+            "code": "796",
+            "nsymb": "шт",
+            "name": "Штука"
+          },
+          "packaging": "шт",
+          "imageUrls": null,
+          "quantity": 1,
+          "priceIncludesVAT": false,
+          "maxDaysForShipment": null,
+          "availabilityStatus": "AvailableForOrder",
+          "orderConstraintViolations": [],
+          "_links": {
+            "marketplace:shopping-cart-update-item-quantity": {
+              "href": "https://api.1cbn.ru/market/shopping-carts/df39870b-7ea1-4762-936f-0e3feeb0ada2/items/3fc2103c-425e-43ff-8add-297b07d5868c/quantity"
+            },
+            "marketplace:shopping-cart-remove-item": {
+              "href": "https://api.1cbn.ru/market/shopping-carts/df39870b-7ea1-4762-936f-0e3feeb0ada2/items/3fc2103c-425e-43ff-8add-297b07d5868c"
+            },
+            "marketplace:trade-offer-view": {
+              "href": "https://api.1cbn.ru/market/trade-offers/storefront/3fc2103c-425e-43ff-8add-297b07d5868c"
+            }
+          }
+        }
+      ],
+      "deliveryOptions": {
+         "pickupPoints":[
+          {
+            "fiasCode": "92b30014-4d52-4e2e-892d-928142b924bf",
+            "title": "Свердловская обл, Екатеринбург г",
+            "countryOksmCode": "643"
+          },
+          {
+            "fiasCode": "2763c110-cb8b-416a-9dac-ad28a55b4402",
+            "title": "Свердловская обл, Екатеринбург г",
+            "countryOksmCode": "643"
+          }
+         ]
+      },
+      "_links": {
+         "marketplace:make-order": {
+            "href": "https://api.1cbn.ru/market/shopping-carts/df39870b-7ea1-4762-936f-0e3feeb0ada2/order/ae211508-1c2e-4115-8904-03e078ff021e-price-request"
+         }
+      }
     }
   ],
   "_links": {

@@ -168,24 +168,36 @@
         <div class="table_row" *ngFor="let item of form.get('items')['controls']; let i = index">
           <ng-container [formGroupName]="i">
             <div class="cell_left">
-              <div class="cell_image">
-                <span *ngIf="!form.get('items')['controls'][i].controls.imageUrl.value" class="empty__img"></span>
-                <img *ngIf="form.get('items')['controls'][i].controls.imageUrl.value"
-                     src="{{form.get('items')['controls'][i].controls.imageUrl.value}}"
-                     alt="{{form.get('items')['controls'][i].controls.productName.value}}"
-                     title="{{form.get('items')['controls'][i].controls.productName.value}}">
+              <div
+                class="cell_image"
+                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
+                  <span *ngIf="!form.get('items')['controls'][i].controls.imageUrl.value" class="empty__img"></span>
+                  <img *ngIf="form.get('items')['controls'][i].controls.imageUrl.value"
+                      src="{{form.get('items')['controls'][i].controls.imageUrl.value}}"
+                      alt="{{form.get('items')['controls'][i].controls.productName.value}}"
+                      title="{{form.get('items')['controls'][i].controls.productName.value}}">
               </div>
             </div>
             <div class="cell_right">
-              <div class="table_cell cell_title" (click)="goToTradeOffer(form.get('items')['controls'][i].controls._links.value['marketplace:trade-offer-view'].href)">
-                <span title="{{form.get('items')['controls'][i].controls.productName.value}}">{{form.get('items')['controls'][i].controls.productName.value}}
-                </span>
+              <div
+                class="table_cell cell_title"
+                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
+                  <span title="{{form.get('items')['controls'][i].controls.productName.value}}">
+                    {{form.get('items')['controls'][i].controls.productName.value}}
+                  </span>
               </div>
-              <div class="table_cell cell_article" data-title="Артикул:">
-                {{form.get('items')['controls'][i].controls.partNumber.value}}
+              <div
+                class="table_cell cell_article"
+                data-title="Артикул:"
+                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
+                  {{form.get('items')['controls'][i].controls.partNumber.value}}
               </div>
-              <div class="table_cell cell_available" [ngClass]="{'not-available': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}" data-title="Доступность:">
-                {{form.get('items')['controls'][i].controls.availabilityStatus.value | marketAvailability}}
+              <div
+                class="table_cell cell_available"
+                data-title="Доступность:"
+                [ngClass]="{'not-available': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}"
+                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
+                  {{form.get('items')['controls'][i].controls.availabilityStatus.value | marketAvailability}}
               </div>
               <div class="table_cell cell_count" data-title="Количество:" [ngClass]="{'not_clickable': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}">
                 <market-cart-order-qty-counter
@@ -265,34 +277,72 @@
               <div class="input_error" *ngIf="form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)">Заполните это поле</div>
             </div>
 
-            <div class="order__shipping_time">
-              <div class="form-group form-group-std order__shipping_date">
-                <label for="formDate">Желаемая дата и время доставки</label>
-                <input type="text" name="address" id="formDate" formControlName="deliveryDesirableDate">
-              </div>
+            <div class="form-group form-group-long">
+              <nz-date-picker
+                [nzShowTime]="{
+                  nzFormat: 'HH:mm',
+                  nzHourStep: '4',
+                  nzMinuteStep: '30'
+                }"
+                nzFormat="yyyy-MM-dd HH:mm"
+                nzPlaceHolder="Желаемая дата и время доставки"
+                [nzDisabledDate]="disabledDate"
+                formControlName="deliveryDesirableDate"
+              ></nz-date-picker>
             </div>
 
           </div>
           <div class="order__shipping_form__title">Контактное лицо с вашей стороны</div>
+
           <div class="form-group form-group-long">
-            <label for="formFIO">ФИО *</label>
-            <input type="text" name="fio" id="formFIO" [ngClass]="{'error': form.controls.contactName.errors?.required && (form.controls.contactName.touched || form.controls.contactName.dirty)}" formControlName="contactName">
-            <div class="input_error" *ngIf="form.controls.contactName.errors?.required && (form.controls.contactName.touched || form.controls.contactName.dirty)">Заполните это поле</div>
+            <label for="contactName">ФИО *</label>
+            <input
+              type="text"
+              id="contactName"
+              autocomplete="off"
+              [ngClass]="{'error': form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
+              formControlName="contactName">
+            <ng-container *ngIf="form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)">
+              <div class="input_error" *ngIf="form.controls.contactName.errors.required">Заполните это поле</div>
+            </ng-container>
           </div>
+
           <div class="form-group form-group-long">
-            <label for="formPhone">Телефон *</label>
-            <input type="text" name="phone" id="formPhone" [ngClass]="{'error': form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}" class="phone_mask" formControlName="contactPhone">
-            <div class="input_error" *ngIf="form.controls.contactPhone.errors?.required && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">Заполните это поле</div>
+            <label for="contactPhone">Телефон *</label>
+            <input
+              type="text"
+              id="contactPhone"
+              autocomplete="off"
+              [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
+              prefix="+7"
+              mask="(000) 000 00 00"
+              [showMaskTyped]="true"
+              formControlName="contactPhone">
+            <ng-container *ngIf="form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
+              <div class="input_error" *ngIf="form.controls.contactPhone.errors.required">Заполните это поле</div>
+              <div class="input_error" *ngIf="!form.controls.contactPhone.errors.required && form.controls.contactPhone.errors.mask">Некорректно заполнено поле</div>
+            </ng-container>
           </div>
+
           <div class="form-group form-group-long">
-            <label for="formEmail">Электронная почта *</label>
-            <input type="email" name="email" id="formEmail" [ngClass]="{'error': form.controls.contactEmail.errors?.required && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}" formControlName="contactEmail">
-            <div class="input_error" *ngIf="form.controls.contactEmail.errors?.required && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">Заполните это поле</div>
+            <label for="contactEmail">E-mail *</label>
+            <input
+              type="email"
+              id="contactEmail"
+              autocomplete="off"
+              [ngClass]="{'error': form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
+              formControlName="contactEmail">
+            <ng-container *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
+              <div class="input_error" *ngIf="form.controls.contactEmail.errors.required">Заполните это поле</div>
+              <div class="input_error" *ngIf="!form.controls.contactEmail.errors.required && form.controls.contactEmail.errors.email">Некорректно заполнено поле</div>
+            </ng-container>
           </div>
+
+
           <div class="form-group">
-            <label for="formComment">Комментарий для поставщика</label>
+            <label for="commentForSupplier">Комментарий для поставщика</label>
             <div class="textarea-wrap">
-              <textarea name="about" id="formComment" rows="6" formControlName="commentForSupplier"></textarea>
+              <textarea id="commentForSupplier" rows="6" formControlName="commentForSupplier"></textarea>
             </div>
           </div>
         </div>

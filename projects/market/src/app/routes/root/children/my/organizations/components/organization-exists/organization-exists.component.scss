@@ -65,3 +65,21 @@ textarea {
   line-height: 19px;
   width: 100%;
 }
+
+
+
+input[type="text"].error, textarea.error {
+  border-color: #f6837b;
+  outline-color: #f6837b;
+  color: #6a6a6a;
+}
+
+.input_error {
+  display: block;
+  position: absolute;
+  padding-left: 25px;
+  bottom: 12px;
+  left: 230px;
+  width: 100%;
+  opacity: 0.8;
+}

@@ -30,7 +30,7 @@
             <span class="info_group__value"><a [attr.href]="organizationData?.contacts?.website" target="_blank">{{organizationData?.contacts?.website}}</a></span>
         </div>
         <div class="info_group" *ngIf="organizationData?.contacts?.email">
-            <span class="info_group__label">Электронная почта</span>
+            <span class="info_group__label">E-mail</span>
             <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contacts?.email" target="_blank">{{organizationData?.contacts?.email}}</a></span>
         </div>
         <div class="info_group" *ngIf="organizationData?.contacts?.phone">
@@ -57,7 +57,7 @@
           <span class="info_group__value">{{organizationData?.contactPerson?.phone}}</span>
       </div>
       <div class="info_group" *ngIf="organizationData?.contactPerson?.email">
-          <span class="info_group__label">Электронная почта</span>
+          <span class="info_group__label">E-mail</span>
           <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contactPerson?.email" target="_blank">{{organizationData?.contactPerson?.email}}</a></span>
       </div>
     </div>

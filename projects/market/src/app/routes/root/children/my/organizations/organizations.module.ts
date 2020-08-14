@@ -21,6 +21,7 @@ import { RequestDecisionMakerComponent } from './components/request-decision-mak
 import { OrganizationAccessKeysComponent } from './components/organization-access-keys/organization-access-keys.component';
 import { AccessKeyRemovalVerifierComponent } from './components/access-key-removal-verifier/access-key-removal-verifier.component';
 import { OrganizationRequestsComponent } from './components/organization-requests/organization-requests.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { OrganizationRequestsComponent } from './components/organization-request
     NzButtonModule,
     NzEmptyModule,
     NzCheckboxModule,
+    NgxMaskModule,
     ReactiveFormsModule,
     OrganizationsRoutingModule,
   ],

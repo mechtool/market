@@ -17,6 +17,8 @@ import {
   RelationEnumModel
 } from '#shared/modules/common-services/models';
 import { catchError, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import format from "date-fns/format";
 import { absoluteImagePath, stringToHex, innKppToLegalId } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 import { iif, of } from 'rxjs';
@@ -55,7 +57,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   isOrderLoading = false;
   deliveryOptions = [];
   selectedTabIndex = 0;
-  // selectedPickupPoint = null;
 
   get consumerName(): string {
     return this.form.get('consumerName').value?.trim();
@@ -347,7 +348,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         };
         let comments = '';
         if (this.form.get('deliveryDesirableDate').value) {
-          comments += `Желаемая дата доставки: ${this.form.get('deliveryDesirableDate').value}
+          const dateFormatted = format(
+            new Date(this.form.get('deliveryDesirableDate').value),
+            'dd-MM-yyyy HH:mm'
+          );
+          comments += `Желаемая дата доставки: ${dateFormatted}
           `;
         }
         if (this.form.get('commentForSupplier').value) {
@@ -391,7 +396,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   register(): void {
-    this._authService.register();
+    this._authService.register('/my/organizations?tab=c');
   }
 
   setHexColor(str: string): string {
@@ -418,10 +423,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  goToTradeOffer(tradeOfferRelationHref: string) {
-    if (tradeOfferRelationHref) {
-      const splittedTradeOfferRelationHref = tradeOfferRelationHref.split('/');
-      const tradeOfferId = splittedTradeOfferRelationHref[splittedTradeOfferRelationHref.length - 1];
+  goToTradeOffer(tradeOfferId: string) {
+    if (tradeOfferId) {
       this._tradeOffersService.get(tradeOfferId)
         .subscribe(
           (res) => {
@@ -437,10 +440,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
           });
     }
-    if (!tradeOfferRelationHref) {
+    if (!tradeOfferId) {
       console.log('Отсутствует идентификатор ТП');
     }
   }
+
+  disabledDate (current: Date): boolean {
+    return differenceInCalendarDays(current, new Date()) < 1;
+  };
 
   private _setDeliveryOptions() {
     if (this.order.deliveryOptions?.pickupPoints?.length) {
@@ -460,14 +467,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       consumerINN: new FormControl(''),
       consumerKPP: new FormControl(''),
       consumerId: new FormControl(''),
-      totalCost: new FormControl(this.order.orderTotal.total),
-      totalVat: new FormControl(this.order.orderTotal.totalVat),
+      totalCost: new FormControl(this.order.orderTotal?.total),
+      totalVat: new FormControl(this.order.orderTotal?.totalVat),
       deliveryMethod: new FormControl(this.deliveryOptions?.[0]?.value, [Validators.required]),
       deliveryArea: new FormControl(''),
       pickupArea: new FormControl(this.order.deliveryOptions?.pickupPoints?.[0]),
       contactName: new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
       contactPhone: new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
-      contactEmail: new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required]),
+      contactEmail: new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required, Validators.email]),
       commentForSupplier: new FormControl(''),
       deliveryDesirableDate: new FormControl(''),
       items: this._fb.array(this.order.items.map(res => this._createItem(res))),
@@ -481,6 +488,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       VAT_WITHOUT: 0,
     };
     return this._fb.group({
+      tradeOfferId: product.tradeOfferId,
       productName: product.productName,
       productDescription: product.productDescription,
       barCodes: this._fb.array(product?.barCodes || []),

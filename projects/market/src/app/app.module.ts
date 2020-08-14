@@ -21,6 +21,7 @@ import {
 } from '#shared/modules';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { NgxMaskModule } from 'ngx-mask'
 
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
@@ -69,6 +70,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     PipesModule,
     CardModule,
     NomenclatureCardModule,
+    NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
     BreadcrumbsModule,

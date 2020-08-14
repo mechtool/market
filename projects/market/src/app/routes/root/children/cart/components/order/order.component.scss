@@ -203,10 +203,6 @@ button.btn:hover {
   height: 45px;
 }
 
-
-// .more_actions__dropdown.showed .btn_more{background-color:#F9F9F9;border-color:#F9F9F9;}
-// .more_actions__dropdown.showed .btn_more span,.more_actions__dropdown.showed .btn_more span::after,.more_actions__dropdown.showed .btn_more span::before{background-color:var(--color-accent);}
-
 .cell_title {
   flex-wrap: wrap;
 }
@@ -253,6 +249,7 @@ button.btn:hover {
 }
 
 .table_list__products .cell_image {
+  cursor: pointer;
   width: 55px;
   flex-shrink: 0;
 }
@@ -285,10 +282,12 @@ button.btn:hover {
 }
 
 .table_list__products .cell_article {
+  cursor: pointer;
   width: 100px;
 }
 
 .table_list__products .cell_available {
+  cursor: pointer;
   width: 145px;
 }
 
@@ -1090,6 +1089,11 @@ textarea:focus {
 .tooltip.hovered .tooltip_inner {
   opacity: 1;
   visibility: visible;
+}
+
+nz-date-picker {
+  width: 75%;
+  height: 40px;
 }
 
 @media all and (max-width: 1380px) {

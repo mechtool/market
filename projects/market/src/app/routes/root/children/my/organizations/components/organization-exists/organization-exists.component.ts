@@ -28,7 +28,7 @@ export class OrganizationExistsComponent implements OnInit {
   private _initForm(): void {
     this.form = this._fb.group({
       fio: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       message: new FormControl('', [Validators.required]),
     });
   }

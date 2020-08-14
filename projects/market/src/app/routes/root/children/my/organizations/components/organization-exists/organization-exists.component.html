@@ -11,23 +11,52 @@
   </p>
 
   <form [formGroup]="form" (submit)="send()">
+
     <div class="form-group form-group-std">
-      <label for="formFio">Имя и фамилия *</label>
-      <input type="text" id="formFio" autocomplete="off" formControlName="fio">
+      <label for="fio">Имя и фамилия *</label>
+      <input
+        type="text"
+        id="fio"
+        autocomplete="off"
+        [ngClass]="{'error': form.controls.fio.errors && (form.controls.fio.touched || form.controls.fio.dirty)}"
+        formControlName="fio">
+      <ng-container *ngIf="form.controls.fio.errors && (form.controls.fio.touched || form.controls.fio.dirty)">
+        <div class="input_error" *ngIf="form.controls.fio.errors.required">Заполните это поле</div>
+      </ng-container>
     </div>
+
     <div class="form-group form-group-std">
-      <label for="formEmail">Электронная почта *</label>
-      <input type="text" id="formEmail" autocomplete="off" formControlName="email">
+      <label for="email">E-mail *</label>
+      <input
+        type="text"
+        id="email"
+        autocomplete="off"
+        [ngClass]="{'error': form.controls.email.errors && (form.controls.email.touched || form.controls.email.dirty)}"
+        formControlName="email">
+      <ng-container *ngIf="form.controls.email.errors && (form.controls.email.touched || form.controls.email.dirty)">
+        <div class="input_error" *ngIf="form.controls.email.errors.required">Заполните это поле</div>
+        <div class="input_error" *ngIf="!form.controls.email.errors.required && form.controls.email.errors.email">Некорректно заполнено поле</div>
+      </ng-container>
     </div>
+
     <div class="form-group">
-      <label for="formMessage">Сообщение администратору *</label>
+      <label for="message">Сообщение администратору *</label>
       <div class="textarea-wrap">
-        <textarea id="formMessage" rows="6" formControlName="message"></textarea>
+        <textarea
+          id="message"
+          rows="6"
+          [ngClass]="{'error': form.controls.message.errors && (form.controls.message.touched || form.controls.message.dirty)}"
+          formControlName="message"></textarea>
       </div>
+      <ng-container *ngIf="form.controls.message.errors && (form.controls.message.touched || form.controls.message.dirty)">
+        <div class="input_error" *ngIf="form.controls.message.errors.required">Заполните это поле</div>
+      </ng-container>
     </div>
+
     <div class="form-group form-group-btn">
       <button nz-button [nzType]="'primary'" [disabled]="!form.valid">Отправить</button>
     </div>
   </form>
 
 </div>
+
