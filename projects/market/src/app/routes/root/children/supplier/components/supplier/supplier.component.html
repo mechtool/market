@@ -18,7 +18,7 @@
         [filters]="filters"
         [sort]="sort"
         (loadTradeOffers)="loadTradeOffers($event)"
-        (refreshPage)="refreshPage($event)"
+        (cityChange)="changeCityAndRefresh($event)"
       ></market-supplier-trade-offers-list>
     </nz-tab>
 

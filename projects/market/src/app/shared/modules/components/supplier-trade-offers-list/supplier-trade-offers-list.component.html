@@ -1,24 +1,29 @@
 <div class="search_bar">
   <market-search-bar
-    [sort]="sort"
     [query]="query"
     [filters]="filters"
     [suggestionsOff]="true"
-    [visibleSort]="tradeOffers?.length > 1"
-    (submitClick)="queryParametersChange($event)"
-    (cityChange)="cityChange($event)"
+    (submitClick)="changeQueryParamsAndRefresh($event)"
+    (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 </div>
 
 <div class="catalog_header">
+
   <div class="catalog_header__count">
     <span class="catalog_header__title">Результаты поиска</span>
     <strong>{{found}} <b>{{tradeOffersTotal}}</b> {{tradeOffersTotal | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}</strong>
   </div>
+
+  <market-results-sorter
+    *ngIf="tradeOffers?.length > 1"
+    [sort]="sort"
+    (sortChange)="sortChange($event)"
+  ></market-results-sorter>
 </div>
 
 
-<div class="table_list table_list__products" *ngIf="tradeOffers">
+<div class="table_list table_list__products" *ngIf="tradeOffers?.length">
 
   <div class="table_row table_header">
 
@@ -60,7 +65,7 @@
         <div class="cell_pre">
           <div class="cell_left">
             <div class="table_cell cell_title">
-              <a (click)="route(tradeOffer.id)"
+              <a (click)="routeToTradeOffer(tradeOffer.id)"
                  title="Браслет Honor Band 5 четвертая версия">{{tradeOffer.productName}}</a>
             </div>
             <div class="table_cell cell_article" data-title="Артикул:">
@@ -93,7 +98,7 @@
           <market-product-side
             [tradeOfferId]="tradeOffer.id"
           ></market-product-side>
-          <a (click)="route(tradeOffer.id)" class="btn btn-gray btn__product_link">О товаре</a>
+          <a (click)="routeToTradeOffer(tradeOffer.id)" class="btn btn-gray btn__product_link">О товаре</a>
         </div>
       </div>
 

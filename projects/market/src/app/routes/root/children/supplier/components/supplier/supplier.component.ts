@@ -58,7 +58,7 @@ export class SupplierSingleComponent {
     private _notificationsService: NotificationsService,
     private _localStorageService: LocalStorageService,
   ) {
-    this._initData();
+    this._init();
   }
 
   loadTradeOffers(nextPage: number) {
@@ -83,13 +83,13 @@ export class SupplierSingleComponent {
     }
   }
 
-  refreshPage(isRefresh: boolean) {
+  changeCityAndRefresh(isRefresh: boolean) {
     if (isRefresh) {
-      this._initData();
+      this._init();
     }
   }
 
-  private _initData() {
+  private _init() {
     combineLatest([
       this._activatedRoute.params,
       this._activatedRoute.queryParams,
@@ -112,7 +112,7 @@ export class SupplierSingleComponent {
         }),
       )
       .subscribe((tradeOffers) => {
-        this._init(tradeOffers);
+        this._initData(tradeOffers);
       }, (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
@@ -150,7 +150,7 @@ export class SupplierSingleComponent {
     };
   }
 
-  private _init(tradeOffers: TradeOffersListResponseModel): void {
+  private _initData(tradeOffers: TradeOffersListResponseModel): void {
     this.tradeOffersList = tradeOffers;
     this.tradeOffers = this.tradeOffersList._embedded.items;
     this.tradeOffersTotal = this.tradeOffersList.page.totalElements;

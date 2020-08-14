@@ -8,6 +8,7 @@ import { CardModule } from '../card/card.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
 import { PipesModule } from '#shared/modules/pipes';
+import { SorterModule } from '../sorter';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { PipesModule } from '#shared/modules/pipes';
     NzSpinModule,
     NzIconModule,
     PipesModule,
+    SorterModule,
   ],
   declarations: [
     SearchResultComponent,

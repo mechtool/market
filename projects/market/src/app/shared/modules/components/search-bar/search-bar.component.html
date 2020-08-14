@@ -89,12 +89,3 @@
   </div>
 
 </div>
-
-<div class="sort">
-  <!--todo Вынести в market-search-results!!!-->
-  <market-results-sorter
-    *ngIf="visibleSort"
-    [sort]="sort"
-    (sortChange)="sortChange($event)"
-  ></market-results-sorter>
-</div>

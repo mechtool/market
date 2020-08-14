@@ -7,19 +7,20 @@
   <market-search-bar
     [query]="query"
     [filters]="filters"
-    [sort]="sort"
     [suggestionsOff]="true"
-    [visibleSort]="productOffers?.length > 1"
-    (submitClick)="queryParametersChange($event)"
-    (cityChange)="cityChange($event)"
+    (submitClick)="changeQueryParamsAndRefresh($event)"
+    (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 
   <market-search-results
     [productOffers]="productOffers"
     [productsTotal]="productsTotal"
     [page]="page"
+    [sort]="sort"
+    [visibleSort]="productOffers?.length > 1"
     [isLoading]="isLoadingProducts"
     (loadProducts)="loadProducts($event)"
+    (sortingChanged)="changeSortingAndRefresh($event)"
   ></market-search-results>
 
 </div>

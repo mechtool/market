@@ -32,7 +32,7 @@ export class PaymentDocumentComponent implements OnInit {
           this.document = document;
         }, (err) => {
           this.isError = true;
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error('Невозможно отобразить заказ. Внутренняя ошибка сервера.');
         });
     } else if (this.documentType === DocumentType.ACCOUNT) {
       this._ediService.getAccountDocument(this.documentId)
@@ -40,7 +40,7 @@ export class PaymentDocumentComponent implements OnInit {
           this.document = document;
         }, (err) => {
           this.isError = true;
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error('Невозможно отобразить счет. Внутренняя ошибка сервера.');
         });
     }
   }

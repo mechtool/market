@@ -9,7 +9,6 @@ import {
   SearchBarItemComponent,
   SearchBarLocationComponent,
   SearchBarProductsComponent,
-  SorterComponent
 } from './components';
 import {
   NzAutocompleteModule,
@@ -42,7 +41,6 @@ import {
     SearchBarProductsComponent,
     SearchBarFilterComponent,
     SearchBarLocationComponent,
-    SorterComponent,
   ],
   exports: [SearchBarComponent],
 })

@@ -4,6 +4,14 @@
   border-bottom: 1px solid #ededed;
   margin-top: 15px;
 
+  .table_row.table_data {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-accent-lighter);
+    }
+  }
+
   &__orders {
     .cell_title {
       width: 250px;

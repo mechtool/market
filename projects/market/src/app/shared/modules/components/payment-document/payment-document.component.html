@@ -30,6 +30,8 @@
   </table>
 
   <p class="right">Итого:  {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p><br>
+  <p class="right">В том числе НДС:  {{3 | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p><br>
+  <p class="right">Всего к оплате:  {{300000 | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p><br>
 
   <p class="info">Всего наименований {{document.products?.length}}, на сумму
     {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p>

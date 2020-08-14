@@ -174,8 +174,7 @@ button.btn:hover {
 
 .catalog_header {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+  justify-content: space-between;
 
   &__count {
     font-size: var(--font-size-18);

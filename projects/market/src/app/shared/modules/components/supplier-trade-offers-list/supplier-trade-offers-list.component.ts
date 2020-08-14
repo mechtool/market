@@ -11,7 +11,7 @@ import {
   TradeOfferVatEnumModel,
 } from '#shared/modules';
 import { Router } from '@angular/router';
-import { absoluteImagePath, mapStock, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
+import { absoluteImagePath, hasRequiredParameters, mapStock, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
 
 @Component({
   selector: 'market-supplier-trade-offers-list',
@@ -28,7 +28,6 @@ import { absoluteImagePath, mapStock, queryParamsWithoutSupplierIdFrom } from '#
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class SupplierTradeOffersListComponent {
   @Input() supplier: SuppliersItemModel;
   @Input() tradeOffers: TradeOfferSummaryModel[];
@@ -39,7 +38,7 @@ export class SupplierTradeOffersListComponent {
   @Input() filters: DefaultSearchAvailableModel;
   @Input() sort: SortModel;
   @Output() loadTradeOffers: EventEmitter<number> = new EventEmitter();
-  @Output() refreshPage: EventEmitter<boolean> = new EventEmitter();
+  @Output() cityChange: EventEmitter<boolean> = new EventEmitter();
 
   get found() {
     return this.tradeOffersTotal < 10000 ? 'найдено' : 'найдено более';
@@ -51,24 +50,32 @@ export class SupplierTradeOffersListComponent {
   ) {
   }
 
-  queryParametersChange(groupQuery: AllGroupQueryFiltersModel) {
+  changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(groupQuery.query);
-    this.filters = groupQuery.filters;
-    this.sort = groupQuery.sort;
+    this.addOrRemoveSorting(groupQuery);
     const params = queryParamsWithoutSupplierIdFrom(groupQuery);
     this._router.navigate([`/supplier/${this.supplier.id}`], {
       queryParams: params,
     });
   }
 
-  imageUrl(images: string[]) {
-    return images?.length ? absoluteImagePath(images[0]) : null;
+  changeCityAndRefresh(isChanged: boolean) {
+    if (isChanged) {
+      this.cityChange.emit(true);
+    }
   }
 
-  cityChange(isChanged: boolean) {
-    if (isChanged) {
-      this.refreshPage.emit(true);
-    }
+  sortChange(sort: SortModel) {
+    this.sort = sort;
+    this.changeQueryParamsAndRefresh({
+      query: this.query,
+      filters: this.filters,
+      sort: this.sort,
+    });
+  }
+
+  imageUrl(images: string[]) {
+    return images?.length ? absoluteImagePath(images[0]) : null;
   }
 
   vat(price: TradeOfferSummaryPriceModel) {
@@ -92,11 +99,17 @@ export class SupplierTradeOffersListComponent {
     return mapStock(level);
   }
 
-  route(tradeOfferId: string) {
+  routeToTradeOffer(tradeOfferId: string) {
     this._router.navigate([`./supplier/${this.supplier.id}/offer/${tradeOfferId}`]);
   }
 
   tradeOffersLoading(nextPage: number) {
     this.loadTradeOffers.emit(nextPage);
+  }
+
+  private addOrRemoveSorting(groupQuery: AllGroupQueryFiltersModel) {
+    if (hasRequiredParameters(groupQuery)) {
+      groupQuery.sort = this.sort;
+    }
   }
 }

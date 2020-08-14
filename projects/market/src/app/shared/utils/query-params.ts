@@ -5,6 +5,10 @@ export function containParameters(queryParams: Params): boolean {
   return !!Object.keys(queryParams).length;
 }
 
+export function hasRequiredParameters(groupQuery: AllGroupQueryFiltersModel): boolean {
+  return !!groupQuery.query || !!groupQuery.filters?.supplierId || !!groupQuery.filters?.categoryId || !!groupQuery.filters?.trademark;
+}
+
 export function queryParamsFrom(groupQuery: AllGroupQueryFiltersModel): Params {
   const hasRequiredParams = hasRequiredRequestParams(groupQuery);
   return {

@@ -17,7 +17,7 @@ import {
   SuggestionService
 } from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
-import { queryParamsFrom } from '#shared/utils';
+import { hasRequiredParameters, queryParamsFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -50,7 +50,7 @@ export class SearchComponent {
   }
 
   get requestParametersSelected(): boolean {
-    return this._hasRequestParameters(this.query, this.filters?.supplierId, this.filters?.trademark, this.filters?.categoryId);
+    return hasRequiredParameters({ query: this.query, filters: this.filters });
   }
 
   searchSuggestions(query: string) {
@@ -61,14 +61,6 @@ export class SearchComponent {
       }, (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
-  }
-
-  queryParametersChange(filters: AllGroupQueryFiltersModel) {
-    this._localStorageService.putSearchText(filters.query);
-    const params = queryParamsFrom(filters);
-    this._router.navigate(['/search'], {
-      queryParams: params,
-    });
   }
 
   loadProducts(nextPage: number) {
@@ -99,10 +91,28 @@ export class SearchComponent {
     }
   }
 
-  cityChange(isChanged: boolean) {
+  changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
+    this._localStorageService.putSearchText(groupQuery.query);
+    this.addOrRemoveSorting(groupQuery);
+    const params = queryParamsFrom(groupQuery);
+    this._router.navigate(['/search'], {
+      queryParams: params,
+    });
+  }
+
+  changeCityAndRefresh(isChanged: boolean) {
     if (isChanged) {
       this._init();
     }
+  }
+
+  changeSortingAndRefresh(sort: SortModel) {
+    this.sort = sort;
+    this.changeQueryParamsAndRefresh({
+      query: this.query,
+      filters: this.filters,
+      sort: this.sort,
+    });
   }
 
   private _init() {
@@ -151,7 +161,9 @@ export class SearchComponent {
       });
   }
 
-  private _hasRequestParameters(query: string, supplierId: string, trademark: string, categoryId: string): boolean {
-    return !!query || !!supplierId || !!trademark || !!categoryId;
+  private addOrRemoveSorting(groupQuery: AllGroupQueryFiltersModel) {
+    if (hasRequiredParameters(groupQuery)) {
+      groupQuery.sort = this.sort;
+    }
   }
 }

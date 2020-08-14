@@ -1,16 +1,10 @@
 .title {
   font-size: var(--font-size-18);
   line-height: 23px;
-  margin: 0 20px 10px 0;
+  margin-bottom: 10px;
 
   span::before {
     content: " – ";
-  }
-
-  &.info_not_found {
-    margin-bottom: 45px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #918C8C;
   }
 }
 
@@ -29,4 +23,15 @@
   position: fixed;
   font-size: 50px;
   color: var(--color-accent-light);
+}
+
+.result_info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.line {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #918C8C;
 }

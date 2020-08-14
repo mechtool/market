@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductOffersModel } from '#shared/modules/common-services/models';
+import { ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -21,7 +21,10 @@ export class SearchResultComponent {
   @Input() productsTotal: number;
   @Input() page: number;
   @Input() isLoading: boolean;
+  @Input() visibleSort = false;
+  @Input() sort;
   @Output() loadProducts: EventEmitter<number> = new EventEmitter();
+  @Output() sortingChanged: EventEmitter<SortModel> = new EventEmitter();
 
   isRequestFulfilled: boolean;
 
@@ -38,5 +41,9 @@ export class SearchResultComponent {
 
   productOffersLoading(nextPage: number) {
     this.loadProducts.emit(nextPage);
+  }
+
+  sortChange(sort: SortModel) {
+    this.sortingChanged.emit(sort);
   }
 }

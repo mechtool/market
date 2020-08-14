@@ -2,13 +2,11 @@
   <market-search-bar
     [query]="query"
     [filters]="filters"
-    [sort]="sort"
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
-    [visibleSort]="productOffers?.length > 1"
     (queryChange)="searchSuggestions($event)"
-    (submitClick)="queryParametersChange($event)"
-    (cityChange)="cityChange($event)"
+    (submitClick)="changeQueryParamsAndRefresh($event)"
+    (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 
   <ng-template #indicatorTemplate>
@@ -21,8 +19,11 @@
       [productOffers]="productOffers"
       [productsTotal]="productsTotal"
       [page]="page"
+      [visibleSort]="productOffers?.length > 1"
+      [sort]="sort"
       [isLoading]="isLoadingProducts"
       (loadProducts)="loadProducts($event)"
+      (sortingChanged)="changeSortingAndRefresh($event)"
     ></market-search-results>
 
     <market-main-banners

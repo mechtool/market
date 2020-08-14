@@ -16,7 +16,7 @@ import {
   ProductService,
 } from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
-import { queryParamsWithoutCategoryIdFrom } from '#shared/utils';
+import { hasRequiredParameters, queryParamsWithoutCategoryIdFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -47,15 +47,6 @@ export class CategoryComponent {
     this._init();
   }
 
-  queryParametersChange(filters: AllGroupQueryFiltersModel) {
-    this._localStorageService.putSearchText(filters.query);
-    const categoryId = filters.filters?.categoryId || this.categoryId;
-    const params = queryParamsWithoutCategoryIdFrom(filters);
-    this._router.navigate([`/category/${categoryId}`], {
-      queryParams: params,
-    });
-  }
-
   loadProducts(nextPage: number) {
     if (nextPage === (this.productOffersList.page.number + 1) && nextPage < this.productOffersList.page.totalPages) {
       this.page = nextPage;
@@ -81,10 +72,29 @@ export class CategoryComponent {
     }
   }
 
-  cityChange(isChanged: boolean) {
+  changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
+    this._localStorageService.putSearchText(groupQuery.query);
+    const categoryId = groupQuery.filters?.categoryId || this.categoryId;
+    this.addOrRemoveSorting(groupQuery);
+    const params = queryParamsWithoutCategoryIdFrom(groupQuery);
+    this._router.navigate([`/category/${categoryId}`], {
+      queryParams: params,
+    });
+  }
+
+  changeCityAndRefresh(isChanged: boolean) {
     if (isChanged) {
       this._init();
     }
+  }
+
+  changeSortingAndRefresh(sort: SortModel) {
+    this.sort = sort;
+    this.changeQueryParamsAndRefresh({
+      query: this.query,
+      filters: this.filters,
+      sort: this.sort,
+    });
   }
 
   private _init(): void {
@@ -134,5 +144,11 @@ export class CategoryComponent {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         }
       );
+  }
+
+  private addOrRemoveSorting(groupQuery: AllGroupQueryFiltersModel) {
+    if (hasRequiredParameters(groupQuery)) {
+      groupQuery.sort = this.sort;
+    }
   }
 }

@@ -17,6 +17,7 @@ const ITS_URL = environment.itsUrl;
 const pathsWithAuth = [
   /^\/supplier$/i,
   /^\/my\/organizations$/i,
+  /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
   /^\/my\/orders$/i,
 ];
 

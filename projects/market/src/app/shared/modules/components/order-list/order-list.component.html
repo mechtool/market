@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="table_row" *ngFor="let document of documents">
+      <div class="table_row table_data" *ngFor="let document of documents" (click)="openDocument(payment_document)">
         <div class="table_cell cell_title" data-title="Поставщик:">
           <div class="supplier_title">
             <span class="supplier_image" [style]="{'background-color': orgLogo(document.party)}"></span>
@@ -29,9 +29,7 @@
           </div>
         </div>
         <div class="table_cell cell_number" data-title="Заказ:">
-          <a (click)="openDocument(payment_document)">
-            {{document.orderNumber}}
-          </a>
+          {{document.orderNumber}}
         </div>
         <div class="table_cell cell_date" data-title="Дата:">
           {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
@@ -40,7 +38,7 @@
           <span class="price">{{document.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
         </div>
         <div class="table_cell cell_action">
-          <button type="button" class="btn btn-gray btn_long" (click)="openDocument(payment_document)">Посмотреть заказ</button>
+          <button type="button" class="btn btn-gray btn_long">Посмотреть заказ</button>
         </div>
         <ng-template #payment_document>
           <market-payment-document

@@ -1,15 +1,22 @@
 <div class="result" *ngIf="productOffers">
 
-  <div class="title" *ngIf="productOffers.length">
-    <strong>Результаты поиска</strong>
-    <span>{{found}} <b>{{productsTotal}}</b> {{productsTotal | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
+  <div class="result_info">
+    <div class="title">
+      <strong>Результаты поиска</strong>
+      <span *ngIf="productOffers.length">{{found}}
+        <b>{{productsTotal}}</b> {{productsTotal | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
+      <span *ngIf="!productOffers?.length && isRequestFulfilled">По вашему запросу ничего не найдено.
+        <br/>Попробуйте изменить параметры поиска и поискать заново.</span>
+    </div>
+
+    <market-results-sorter
+      *ngIf="visibleSort"
+      [sort]="sort"
+      (sortChange)="sortChange($event)"
+    ></market-results-sorter>
   </div>
 
-  <div class="title info_not_found" *ngIf="!productOffers?.length && isRequestFulfilled">
-    <strong>Результаты поиска</strong>
-    <span>По вашему запросу ничего не найдено.<br/>Попробуйте изменить параметры поиска и поискать заново.</span>
-  </div>
-
+  <div class="line" *ngIf="!productOffers?.length && isRequestFulfilled"></div>
 
   <div class="content" itemscope="itemscope" *ngIf="productOffers.length">
 

@@ -15,7 +15,6 @@ import {
   DefaultSearchAvailableModel,
   LocationModel,
   Megacity,
-  SortModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel
 } from '../../common-services/models';
@@ -46,8 +45,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
   @Input() maxQueryLength = 20;
   @Input() placeholder = 'Поиск товаров';
   @Input() filters: DefaultSearchAvailableModel;
-  @Input() sort = SortModel.ASC;
-  @Input() visibleSort = false;
   @Input() productsSuggestions: SuggestionProductItemModel[];
   @Input() categoriesSuggestions: SuggestionCategoryItemModel[];
   @Input() suggestionsOff = false;
@@ -107,7 +104,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
       this.submitClick.emit({
         query: this.queryOrNull,
         filters: this.filters,
-        sort: this.sort,
       });
       this.visibleSuggestions = false;
     }
@@ -118,7 +114,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.submitClick.emit({
       query: null,
       filters: this.filters,
-      sort: this.filters ? this.sort : null,
     });
   }
 
@@ -130,7 +125,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.submitClick.emit({
       query: this.queryOrNull,
       filters: this.filters,
-      sort: this.queryOrNull || !this.filterIsEmpty ? this.sort : null,
     });
   }
 
@@ -152,17 +146,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
 
   changeLocationButton(isVisible: boolean) {
     this.visibleLocationForm = isVisible;
-  }
-
-  sortChange(sort: SortModel) {
-    this.sort = sort;
-    if (this.queryOrNull || !this.filterIsEmpty) {
-      this.submitClick.emit({
-        query: this.queryOrNull,
-        filters: this.filters,
-        sort: this.sort,
-      });
-    }
   }
 
   recFiltersCount(filterCount: Set<string>) {
