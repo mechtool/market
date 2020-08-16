@@ -10,7 +10,7 @@ enum DocumentType { ORDER = 'ORDER', ACCOUNT = 'ACCOUNT'}
   selector: 'market-payment-document',
   templateUrl: './payment-document.component.html',
   styleUrls: [
-    './payment-document.component.css'
+    './payment-document.component.scss',
   ]
 })
 export class PaymentDocumentComponent implements OnInit {
@@ -23,6 +23,24 @@ export class PaymentDocumentComponent implements OnInit {
     private _ediService: EdiService,
     private _notificationsService: NotificationsService,
   ) {
+  }
+
+  get outcomeVat(): number {
+    /*
+    const outcome = this.document?.outcome.find(res => res.key === 'СуммаНалогаИтог');
+    return outcome && isNumeric(outcome.value) ? +outcome.value : null;
+    Пока небезопасно использовать данные из commerceml так как не всегда приходят эти данные,
+    похоже что коробка и сервис корзины по-разннному формируют эти данные
+    В докумете типа v8.СчетНаОплату вообще отсутствует информация по итоговому НДС.
+    Поэтому пока делаем расчет тут.
+    */
+
+    let totalVat = 0;
+    this.document.products.forEach((doc) => {
+      totalVat += doc.tax?.vatSum;
+    });
+
+    return totalVat;
   }
 
   ngOnInit(): void {

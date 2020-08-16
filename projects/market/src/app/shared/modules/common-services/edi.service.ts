@@ -50,8 +50,7 @@ export class EdiService {
     const userOrganizations = this._userService.userOrganizations$.getValue();
     if (userOrganizations) {
       return userOrganizations.map((org) => {
-        const legalId = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
-        return legalId;
+        return innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
       });
     }
     return null;

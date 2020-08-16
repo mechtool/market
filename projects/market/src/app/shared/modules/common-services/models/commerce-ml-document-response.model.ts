@@ -11,6 +11,7 @@ export class CommerceMlDocumentResponseModel {
   recipient: Organization;
   products: Product[];
   signatory: string;
+  outcome: Outcome[];
 }
 
 class Organization {
@@ -22,8 +23,8 @@ class Organization {
   role: string;
 }
 
-class Contact {
-  type: string;
+class Outcome {
+  key: string;
   value: string;
 }
 
@@ -36,6 +37,11 @@ class Product {
   totalPrice: number;
   coefficient: number;
   tax: Tax;
+}
+
+class Contact {
+  type: string;
+  value: string;
 }
 
 class BaseUnit {

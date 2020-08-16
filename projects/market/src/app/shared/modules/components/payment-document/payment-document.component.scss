@@ -9,7 +9,7 @@ hr {
 table {
   border: 2px solid var(--color-black);
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 th, td {
@@ -32,6 +32,7 @@ p {
   color: var(--color-black);
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-medium);
+  margin-bottom: 0.8em;
 }
 
 .title {
@@ -40,17 +41,33 @@ p {
 }
 
 .info {
-  margin-top: 10px;
+  margin-top: 55px;
 }
 
 .sum_letters {
   margin-top: -10px;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-demi);
 }
 
 .right {
   position: absolute;
   right: 30px;
+  width: auto;
+
+  table, th, td {
+    border: none;
+  }
+
+  th, td {
+    text-align: right;
+    padding: 0;
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-medium);
+  }
+
+  th {
+    padding-right: 10px;
+  }
 }
 
 .error {

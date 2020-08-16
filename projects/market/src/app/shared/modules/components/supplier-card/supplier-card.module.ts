@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SupplierCardComponent } from './supplier-card.component';
-import { NzButtonModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzToolTipModule } from 'ng-zorro-antd';
 
 
 @NgModule({
@@ -10,6 +10,7 @@ import { NzButtonModule } from 'ng-zorro-antd';
     CommonModule,
     RouterModule,
     NzButtonModule,
+    NzToolTipModule,
   ],
   exports: [SupplierCardComponent],
   declarations: [SupplierCardComponent],

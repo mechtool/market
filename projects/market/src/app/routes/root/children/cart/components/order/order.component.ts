@@ -17,8 +17,8 @@ import {
   RelationEnumModel
 } from '#shared/modules/common-services/models';
 import { catchError, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
-import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
-import format from "date-fns/format";
+import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
+import format from 'date-fns/format';
 import { absoluteImagePath, stringToHex, innKppToLegalId } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 import { iif, of } from 'rxjs';

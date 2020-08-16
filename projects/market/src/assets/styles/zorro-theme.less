@@ -287,6 +287,7 @@ nz-spin {
 
 @media all and (max-width: 576px) {
   .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    min-width: 150px;
     font-size: var(--font-size-12);
     letter-spacing: 0.05em;
     width: auto;
@@ -304,6 +305,12 @@ nz-spin {
 
   .ant-modal-wrap {
     top: 100px;
+  }
+}
+
+@media all and (max-width: 400px) {
+  .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+    min-width: 120px;
   }
 }
 
