@@ -28,9 +28,7 @@ export class CartDataOrderResponseModel {
         currencyCode: string;
       };
       vat: 'VAT_10' | 'VAT_20' | 'VAT_WITHOUT';
-      orderConstraintViolations: { message: string; }[];
       maxDaysForShipment: number;
-      availabilityStatus: string;
       _links: CartDataOrderRelationResponseModel;
     }
   ];
@@ -46,7 +44,7 @@ export class CartDataOrderResponseModel {
       countryOksmCode: string;
     }[];
   };
-  customersAudience: {
+  customersAudience?: {
     id: string;
     name: string;
     legalId: string;
@@ -56,7 +54,11 @@ export class CartDataOrderResponseModel {
     totalVat: number;
     currencyCode: string;
   };
-  orderConstraintViolations: { message: string; }[];
+  makeOrderViolations?: {
+    code: string;
+    message: string;
+    tradeOfferId?: string;
+  }[];
   _links?: CartDataOrderRelationResponseModel;
 }
 

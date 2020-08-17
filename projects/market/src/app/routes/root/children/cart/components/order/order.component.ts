@@ -9,12 +9,13 @@ import {
   Output
 } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import {
   CartDataOrderModel,
   DeliveryMethod,
   LocationModel,
-  RelationEnumModel
+  RelationEnumModel,
+  UserOrganizationModel
 } from '#shared/modules/common-services/models';
 import { catchError, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
@@ -32,6 +33,8 @@ import {
   TradeOffersService,
   UserService,
 } from '#shared/modules/common-services';
+import { DeliveryMethodModel } from './models/delivery-method.model';
+import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -42,21 +45,21 @@ import {
 })
 export class CartOrderComponent implements OnInit, OnDestroy {
   @Input() order: CartDataOrderModel;
-  @Input() userData: boolean;
+  @Input() userInfo: UserInfoModel;
   @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
   form: FormGroup;
-  availableUserOrganizations: any[];
+  availableUserOrganizations: UserOrganizationModel[];
   foundLocations: LocationModel[] = [];
   isModalVisible = false;
   modalType: string = null;
-  deliveryTimeIntervals = [
-    { label: '9-12', value: '9-12' },
-    { label: '12-15', value: '12-15' },
-    { label: '15-18', value: '15-18' },
-  ];
   isOrderLoading = false;
-  deliveryOptions = [];
+  deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
+
+  get unavailableToOrderTradeOfferIds(): string[] {
+    const unavailableToOrderStatuses = ['TemporarilyOutOfSales'];
+    return this.order.makeOrderViolations?.filter(x => unavailableToOrderStatuses.includes(x.code)).map(x => x.tradeOfferId) || [];
+  }
 
   get consumerName(): string {
     return this.form.get('consumerName').value?.trim();
@@ -82,8 +85,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.order.supplier?.email?.trim();
   }
 
-  get totalCost(): number {
-    return +this.form.get('totalCost').value;
+  get total(): number {
+    return +this.form.get('total').value;
   }
 
   get totalVat(): number {
@@ -114,6 +117,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.form.get('items') as FormArray;
   }
 
+  get itemsControls(): FormGroup[] {
+    return this.items.controls as FormGroup[];
+  }
+
   get orderRelationHref(): string {
     return this.order._links?.[RelationEnumModel.ORDER_CREATE]?.href;
   }
@@ -133,9 +140,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._setDeliveryOptions();
-    this._initForm();
-    this._setAvailableOrganizationdAndInitConsumer();
+    this.deliveryMethods = this._getDeliveryMethods(this.order.deliveryOptions);
+    this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
+    this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.userOrganizations$.value, this.order);
+    this._initConsumer(this.availableUserOrganizations, this.order);
+    this._cdr.detectChanges();
     this._watchDeliveryAreaUserChanges();
     this._watchItemQuantityChanges();
   }
@@ -176,7 +185,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _watchItemQuantityChanges() {
-    this.form.get('items')['controls'].forEach((ctrl, ind) => {
+    this.itemsControls.forEach((ctrl, ind) => {
 
       const quantityControl = ctrl.controls.quantity;
       quantityControl.valueChanges
@@ -275,9 +284,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
               this._resetOrder(foundOrder);
             }
           }
-          if (!this.items?.length) {
-            this._cartService.setActualCartData().subscribe();
-          }
+          this._cartService.setActualCartData().subscribe();
         },
         (err) => {
           this.isOrderLoading = false;
@@ -290,14 +297,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (order) {
       this.items.clear();
       order.items.forEach((product) => {
-        this.items.push(this._createItem(product));
+        this.items.push(this._createItem(product, this.unavailableToOrderTradeOfferIds));
       });
       this.order.items = order.items;
       this._cartService.partiallyUpdateStorageByOrder(this.order);
       this.isOrderLoading = false;
       this._watchItemQuantityChanges();
       this.form.patchValue({
-        totalCost: order.orderTotal.total,
+        total: order.orderTotal.total,
         totalVat: order.orderTotal.totalVat,
       });
       this._cdr.detectChanges();
@@ -328,7 +335,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (!this.orderRelationHref) {
       return;
     }
-    if (!!this.userData) {
+    if (!!this.userInfo) {
       if (this.availableUserOrganizations?.length) {
         const data = {
           customerOrganizationId: this.form.get('consumerId').value,
@@ -387,7 +394,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    if (!this.userData) {
+    if (!this.userInfo) {
       this.isModalVisible = true;
       this.modalType = 'registerOrAuth';
       return;
@@ -452,44 +459,58 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return differenceInCalendarDays(current, new Date()) < 1;
   };
 
-  private _setDeliveryOptions() {
-    if (this.order.deliveryOptions?.pickupPoints?.length) {
-      this.deliveryOptions.push({ label: 'Самовывоз', value: DeliveryMethod.PICKUP });
+  private _getDeliveryMethods(opts: {
+    pickupPoints?: {
+      fiasCode: string;
+      title: string;
+      countryOksmCode: string;
+    }[];
+    deliveryZones?: {
+      fiasCode: string;
+      title: string;
+      countryOksmCode: string;
+    }[];
+  }): DeliveryMethodModel[] {
+    const deliveryMethods: DeliveryMethodModel[] = [];
+    if (opts?.pickupPoints?.length) {
+      deliveryMethods.push({ label: 'Самовывоз', value: DeliveryMethod.PICKUP });
     }
-    if (this.order.deliveryOptions?.deliveryZones?.length) {
-      this.deliveryOptions.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
+    if (opts?.deliveryZones?.length) {
+      deliveryMethods.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
     }
-    if (!this.deliveryOptions?.length) {
-      this.deliveryOptions.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
+    if (!deliveryMethods?.length) {
+      deliveryMethods.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
     }
+    return deliveryMethods;
   }
 
-  private _initForm(): void {
-    this.form = this._fb.group({
+  private _initForm(order: CartDataOrderModel, deliveryMethods: DeliveryMethodModel[], userInfo: UserInfoModel): FormGroup {
+    return this._fb.group({
       consumerName: new FormControl(''),
       consumerINN: new FormControl(''),
       consumerKPP: new FormControl(''),
       consumerId: new FormControl(''),
-      totalCost: new FormControl(this.order.orderTotal?.total),
-      totalVat: new FormControl(this.order.orderTotal?.totalVat),
-      deliveryMethod: new FormControl(this.deliveryOptions?.[0]?.value, [Validators.required]),
+      total: new FormControl(order.orderTotal?.total),
+      totalVat: new FormControl(order.orderTotal?.totalVat),
+      deliveryMethod: new FormControl(deliveryMethods[0]?.value, [Validators.required]),
       deliveryArea: new FormControl(''),
-      pickupArea: new FormControl(this.order.deliveryOptions?.pickupPoints?.[0]),
-      contactName: new FormControl(this.userData?.['userInfo']?.fullName || '', [Validators.required]),
-      contactPhone: new FormControl(this.userData?.['userInfo']?.phone || '', [Validators.required]),
-      contactEmail: new FormControl(this.userData?.['userInfo']?.email || '', [Validators.required, Validators.email]),
+      pickupArea: new FormControl(order.deliveryOptions?.pickupPoints?.[0]),
+      contactName: new FormControl(userInfo?.fullName || '', [Validators.required]),
+      contactPhone: new FormControl(userInfo?.phone || '', [Validators.required]),
+      contactEmail: new FormControl(userInfo?.email || '', [Validators.required, Validators.email]),
       commentForSupplier: new FormControl(''),
       deliveryDesirableDate: new FormControl(''),
-      items: this._fb.array(this.order.items.map(res => this._createItem(res))),
+      items: this._fb.array(order.items.map(res => this._createItem(res, this.unavailableToOrderTradeOfferIds))),
     }, { validator: deliveryAreaConditionValidator });
   }
 
-  private _createItem(product: any): FormGroup {
+  private _createItem(product: any, unavailableToOrderTradeOfferIds: string[]): FormGroup {
     const vatConverter = {
       VAT_10: 10,
       VAT_20: 20,
       VAT_WITHOUT: 0,
     };
+    const availableToOrder = !unavailableToOrderTradeOfferIds.includes(product.tradeOfferId);
     return this._fb.group({
       tradeOfferId: product.tradeOfferId,
       productName: product.productName,
@@ -500,10 +521,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       imageUrl: this._setImageUrl(product.imageUrls),
       quantity: product.quantity,
       price: product.price,
+      priceIncludesVAT: product.priceIncludesVAT || false,
       maxDaysForShipment: product.maxDaysForShipment,
-      availabilityStatus: new FormControl(product.availabilityStatus, [Validators.pattern(/^(AvailableForOrder)$/)]),
+      availableToOrder: new FormControl(availableToOrder, [Validators.requiredTrue]),
       vat: vatConverter[product.vat] || 0,
-      totalCost: product.itemTotal?.total,
+      total: product.itemTotal?.total,
       _links: product._links,
     });
   }
@@ -512,38 +534,23 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return images?.length ? absoluteImagePath(images[0]) : null;
   }
 
-  private _setAvailableOrganizationdAndInitConsumer() {
-    this._userService.userOrganizations$.pipe(
-      filter(res => !!res),
-      map((res) => {
-        this._setAvailableOrganizations(res);
-        this._initConsumer();
-        this._cdr.detectChanges();
-      })
-    ).subscribe();
-  }
-
-  private _setAvailableOrganizations(userOrganizations: any[]) {
-    if (!this.order.customersAudience?.length) {
-      this.availableUserOrganizations = userOrganizations;
-    }
-    if (this.order.customersAudience?.length) {
-      this.availableUserOrganizations = userOrganizations.filter((org) => {
-        return this._checkAudienceForAvailability(this.order.customersAudience, org);
+  private _getAvailableOrganizations(userOrganizations: UserOrganizationModel[], order: CartDataOrderModel): UserOrganizationModel[] {
+    return !order.customersAudience?.length ?
+      userOrganizations : userOrganizations?.filter((org) => {
+        return this._checkAudienceForAvailability(order.customersAudience, org);
       });
-    }
   }
 
-  private _initConsumer() {
-    if (this.availableUserOrganizations?.length) {
+  private _initConsumer(availableOrganizations: UserOrganizationModel[], order: CartDataOrderModel) {
+    if (availableOrganizations?.length) {
 
-      if (!this.order.consumer || (this.order.consumer && !this.availableUserOrganizations.map(o => o.organizationId).includes(this.order.consumer.id))) {
-        if (!this.order.customersAudience?.length) {
-          this.setConsumer(this.availableUserOrganizations[0]);
+      if (!order.consumer || (order.consumer && !availableOrganizations.map(o => o.organizationId).includes(order.consumer.id))) {
+        if (!order.customersAudience?.length) {
+          this.setConsumer(availableOrganizations[0]);
         }
-        if (this.order.customersAudience?.length) {
-          const foundUserOrganization = this.availableUserOrganizations.find((org) => {
-            return this._checkAudienceForAvailability(this.order.customersAudience, org);
+        if (order.customersAudience?.length) {
+          const foundUserOrganization = availableOrganizations.find((org) => {
+            return this._checkAudienceForAvailability(order.customersAudience, org);
           });
           if (foundUserOrganization) {
             this.setConsumer(foundUserOrganization);

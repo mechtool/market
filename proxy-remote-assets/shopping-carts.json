@@ -27,29 +27,25 @@
             "nsymb": "шт",
             "name": "Штука"
           },
-          "quantity": 10,
-          "price": 1500000,
-          "priceIncludesVAT": "true",
+          "quantity": 2,
+          "price": 222,
+          "priceIncludesVAT": true,
           "itemTotal": {
-            "total": 7000,
-            "totalVat": 8400,
+            "total": 444,
+            "totalVat": 74,
             "currencyCode": "643"
           },
-          "vat": "VAT_WITHOUT",
+          "vat": "VAT_20",
           "maxDaysForShipment": 30,
-          "availabilityStatus": "AvailableForOrder",
           "_links": {
             "marketplace:trade-offer-view": {
-              "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
             },
             "marketplace:shopping-cart-remove-item": {
-              "title": "Удалить товар из корзины",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "title": "Установить количество товара",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/63f05d5e-2ba3-48d5-aacc-b57a78a71a77/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e/quantity"
             }
           }
         },
@@ -69,28 +65,24 @@
             "name": "Штука"
           },
           "quantity": 7,
-          "price": 81000,
-          "priceIncludesVAT": "true",
+          "price": 317,
+          "priceIncludesVAT": true,
           "itemTotal": {
-            "total": 3000,
-            "totalVat": 3600,
+            "total": 951,
+            "totalVat": 96,
             "currencyCode": "643"
           },
           "vat": "VAT_10",
           "maxDaysForShipment": 20,
-          "availabilityStatus": "TemporarilyOutOfSales",
           "_links": {
             "marketplace:trade-offer-view": {
-              "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
             },
             "marketplace:shopping-cart-remove-item": {
-              "title": "Удалить товар из корзины",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "title": "Установить количество товара",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/75f05d5e-2ba3-48d5-aacc-b57a78a71a85/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d/quantity"
             }
           }
         }
@@ -129,19 +121,19 @@
         }
       ],
       "orderTotal": {
-        "total": 10000,
-        "totalVat": 12000,
+        "total": 1395,
+        "totalVat": 170,
         "currencyCode": "643"
       },
-      "orderConstraintViolations":[
+      "makeOrderViolations":[
         {
-           "message": "Сумма заказа не может быть меньше 800000, сумма заказа - 10497"
+          "code": "SupplierPolicyViolated",
+          "message": "Минимальная сумма заказа (включая НДС) должна быть не менее 8000.00 RUB. Добавьте товары, чтобы сумма заказа превысила минимальную"
         }
       ],
       "_links": {
         "marketplace:make-order": {
-          "title": "Создание заказа",
-          "href": "proxifier/shopping-carts/777888999/order/44444"
+          "href": "proxifier/shopping-carts/777888999/order/1111111"
         }
       }
     },
@@ -171,29 +163,25 @@
             "nsymb": "шт",
             "name": "Штука"
           },
-          "quantity": 1,
-          "price": 1500000,
-          "priceIncludesVAT": "true",
+          "quantity": 8,
+          "price": 20000,
+          "priceIncludesVAT": false,
           "itemTotal": {
-            "total": 20000,
-            "totalVat": 22000,
+            "total": 160000,
+            "totalVat": 0,
             "currencyCode": "643"
           },
-          "vat": "VAT_20",
+          "vat": "VAT_WITHOUT",
           "maxDaysForShipment": 17,
-          "availabilityStatus": "AvailableForOrder",
           "_links": {
             "marketplace:trade-offer-view": {
-              "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
             },
             "marketplace:shopping-cart-remove-item": {
-              "title": "Удалить товар из корзины",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "title": "Установить количество товара",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f/quantity"
             }
           }
         }
@@ -207,23 +195,18 @@
           }
         ]
       },
-      "customersAudience": [],
       "orderTotal": {
-        "total": 20000,
-        "totalVat": 22000,
+        "total": 160000,
+        "totalVat": 0,
         "currencyCode": "643"
       },
-      "orderConstraintViolations":[
+      "makeOrderViolations":[
         {
-           "message": "Сумма заказа не может быть меньше 10000, сумма заказа - 367"
+          "code": "TemporarilyOutOfSales",
+          "message": "Товар временно снят с продажи поставщиком. Удалите товар из корзины, или дождитесь возобновления поставки.",
+          "tradeOfferId": "29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
         }
-      ],
-      "_links": {
-        "marketplace:make-order": {
-          "title": "Создание заказа",
-          "href": "proxifier/shopping-carts/777888999/order/555555"
-        }
-      }
+      ]
     },
     {
       "supplier": {
@@ -253,7 +236,7 @@
           },
           "quantity": 1,
           "price": 1500000,
-          "priceIncludesVAT": "true",
+          "priceIncludesVAT": true,
           "itemTotal": {
             "total": 20000,
             "totalVat": 22000,
@@ -261,19 +244,15 @@
           },
           "vat": "VAT_20",
           "maxDaysForShipment": 17,
-          "availabilityStatus": "TemporarilyOutOfSales",
           "_links": {
             "marketplace:trade-offer-view": {
-              "title": "Торговое предложение",
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
             },
             "marketplace:shopping-cart-remove-item": {
-              "title": "Удалить товар из корзины",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "title": "Установить количество товара",
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/15f05d5e-2ba3-48d5-aacc-b57a78a73e74/quantity"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d/quantity"
             }
           }
         }
@@ -281,17 +260,16 @@
       "deliveryOptions": {
         "pickupPoints": null
       },
-      "customersAudience": [],
       "orderTotal": {
         "total": 20000,
         "totalVat": 22000,
         "currencyCode": "643"
       },
-      "orderConstraintViolations":[
-        {
-           "message": "Сумма заказа не может быть меньше 10000, сумма заказа - 367"
+      "_links": {
+        "marketplace:make-order": {
+          "href": "proxifier/shopping-carts/777888999/order/555555"
         }
-      ]
+      }
     },
     {
       "supplier": {
@@ -318,17 +296,15 @@
           "quantity": 1,
           "priceIncludesVAT": false,
           "maxDaysForShipment": null,
-          "availabilityStatus": "AvailableForOrder",
-          "orderConstraintViolations": [],
           "_links": {
-            "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://api.1cbn.ru/market/shopping-carts/df39870b-7ea1-4762-936f-0e3feeb0ada2/items/3fc2103c-425e-43ff-8add-297b07d5868c/quantity"
+            "marketplace:trade-offer-view": {
+              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/3fc2103c-425e-43ff-8add-297b07d5868c"
             },
             "marketplace:shopping-cart-remove-item": {
-              "href": "https://api.1cbn.ru/market/shopping-carts/df39870b-7ea1-4762-936f-0e3feeb0ada2/items/3fc2103c-425e-43ff-8add-297b07d5868c"
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c"
             },
-            "marketplace:trade-offer-view": {
-              "href": "https://api.1cbn.ru/market/trade-offers/storefront/3fc2103c-425e-43ff-8add-297b07d5868c"
+            "marketplace:shopping-cart-update-item-quantity": {
+              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c/quantity"
             }
           }
         }
@@ -349,7 +325,93 @@
       },
       "_links": {
          "marketplace:make-order": {
-            "href": "https://api.1cbn.ru/market/shopping-carts/df39870b-7ea1-4762-936f-0e3feeb0ada2/order/ae211508-1c2e-4115-8904-03e078ff021e-price-request"
+            "href": "proxifier/shopping-carts/777888999/order/6666666"
+         }
+      }
+    },
+    {
+      "supplier":{
+         "name":"Общество с ограниченной ответственностью \"МАКСРОН\"",
+         "inn":"7734567890",
+         "kpp":"173456789",
+         "phone":"+7(800)01-01-03",
+         "email":"ruslan.1c.company@gmail.com"
+      },
+      "items":[
+         {
+            "tradeOfferId":"8e61bed4-582b-4bca-82a4-2e8b19ae808a",
+            "productName":"Infineon IPB144N12N3GATMA1 N-channel MOSFET, 56 A, 120 V OptiMOS 3, 3-Pin D2PAK",
+            "productDescription":"Высота: 4.572мм\nШирина: 9.45мм\nТипичный заряд затвора при Vgs: 37 нКл\nМаксимальный непрерывный ток стока: 56 А\nРазмеры: 10.312 x 9.45 x 4.572мм\nПрямая активная межэлектродная проводимость: 62s\nТип корпуса: D2PAK (TO-263)\nТипичное время задержки выключения: 24 нс\nКатегория: Мощный МОП-транзистор\nТипичное время задержки включения: 16 нс\nСерия: OptiMOS 3\nДлина: 10.31мм\nМаксимальное сопротивление сток-исток: 14,7 мΩ\nТипичная входная емкость при Vds: 2420 пФ при 60 В",
+            "barCodes":[
+
+            ],
+            "partNumber":null,
+            "unitOkei":{
+               "code":"796",
+               "nsymb":"шт",
+               "name":"Штука"
+            },
+            "packaging":"Штука",
+            "imageUrls":[
+               "https://catalog-pic.1c.ru/api/v1/0/4/3/7/04378cd3efb7235d08ce208b66670b8c4.jpg",
+               "https://catalog-pic.1c.ru/api/v1/0/d/3/3/0d339e1e08da03b2bb1476a795d5d4e6e.jpg"
+            ],
+            "quantity":2,
+            "price":100000,
+            "priceIncludesVAT": true,
+            "itemTotal":{
+               "total":200000,
+               "totalVat":18182,
+               "currencyCode":"643"
+            },
+            "maxDaysForShipment":1,
+            "_links": {
+              "marketplace:trade-offer-view": {
+                "href": "https://todo-api.1cbn.ru/trade-offers/storefront/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
+              },
+              "marketplace:shopping-cart-remove-item": {
+                "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
+              },
+              "marketplace:shopping-cart-update-item-quantity": {
+                "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a/quantity"
+              }
+            }
+         }
+      ],
+      "deliveryOptions":{
+         "pickupPoints":[
+            {
+               "fiasCode":"0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+               "title":"Москва г, Пресненская наб, дом 12",
+               "countryOksmCode":"643"
+            },
+            {
+               "fiasCode":"8181e3aa-137c-4187-9fd6-fceb252142d1",
+               "title":"Москва г, Пресненская наб, дом 12",
+               "countryOksmCode":"643"
+            },
+            {
+               "fiasCode":"745e543b-8690-4dca-9d78-858876340cdd",
+               "title":"Москва г, Пресненская наб, дом 12",
+               "countryOksmCode":"643"
+            }
+         ],
+         "deliveryZones":[
+            {
+               "fiasCode":"0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+               "title":"Москва г",
+               "countryOksmCode":"643"
+            }
+         ]
+      },
+      "orderTotal":{
+         "total":200000,
+         "totalVat":18182,
+         "currencyCode":"643"
+      },
+      "_links":{
+         "marketplace:make-order":{
+            "href":"proxifier/shopping-carts/777888999/order/4444444"
          }
       }
     }

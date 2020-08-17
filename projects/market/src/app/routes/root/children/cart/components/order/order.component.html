@@ -45,13 +45,12 @@
   </div>
 </ng-template>
 
-
-<div class="order" *ngIf="form.get('items')['controls'].length">
+<div class="order" *ngIf="itemsControls.length">
 
   <form class="form__order" action="" [formGroup]="form" (submit)="checkAndCreateOrder()">
 
     <div class="order_info">
-      <div class="order_spec" *ngIf="userData && availableUserOrganizations?.length">
+      <div class="order_spec" *ngIf="userInfo && availableUserOrganizations?.length">
         <div class="order_label">Доступный заказчик:</div>
         <div class="order__customer dropdown dropdown_selectable">
           <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'" [nzDisabled]="availableUserOrganizations?.length === 1">
@@ -95,7 +94,7 @@
         <div class="order_label">Доступные способы поставки:</div>
         <div class="order_value supplier_title">
           <span class="supplier_name">
-            {{deliveryOptions | marketArrayJoiner: 'label':'; '}}
+            {{deliveryMethods | marketArrayJoiner: 'label':'; '}}
           </span>
         </div>
       </div>
@@ -165,53 +164,63 @@
           </div>
         </div>
 
-        <div class="table_row" *ngFor="let item of form.get('items')['controls']; let i = index">
+        <div class="table_row" *ngFor="let item of itemsControls; let i = index">
           <ng-container [formGroupName]="i">
             <div class="cell_left">
               <div
                 class="cell_image"
-                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
-                  <span *ngIf="!form.get('items')['controls'][i].controls.imageUrl.value" class="empty__img"></span>
-                  <img *ngIf="form.get('items')['controls'][i].controls.imageUrl.value"
-                      src="{{form.get('items')['controls'][i].controls.imageUrl.value}}"
-                      alt="{{form.get('items')['controls'][i].controls.productName.value}}"
-                      title="{{form.get('items')['controls'][i].controls.productName.value}}">
+                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                  <span *ngIf="!item.controls.imageUrl.value" class="empty__img"></span>
+                  <img *ngIf="item.controls.imageUrl.value"
+                      src="{{item.controls.imageUrl.value}}"
+                      alt="{{item.controls.productName.value}}"
+                      title="{{item.controls.productName.value}}">
               </div>
             </div>
             <div class="cell_right">
               <div
                 class="table_cell cell_title"
-                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
-                  <span title="{{form.get('items')['controls'][i].controls.productName.value}}">
-                    {{form.get('items')['controls'][i].controls.productName.value}}
+                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                  <span title="{{item.controls.productName.value}}">
+                    {{item.controls.productName.value}}
                   </span>
               </div>
               <div
                 class="table_cell cell_article"
                 data-title="Артикул:"
-                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
-                  {{form.get('items')['controls'][i].controls.partNumber.value}}
+                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                  {{item.controls.partNumber.value}}
               </div>
               <div
                 class="table_cell cell_available"
                 data-title="Доступность:"
-                [ngClass]="{'not-available': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}"
-                (click)="goToTradeOffer(form.get('items')['controls'][i].controls.tradeOfferId)">
-                  {{form.get('items')['controls'][i].controls.availabilityStatus.value | marketAvailability}}
+                [ngClass]="{'not-available': item.controls.availableToOrder.errors}"
+                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                  {{item.controls.availableToOrder.errors ? 'Недоступно' : ''}}
               </div>
-              <div class="table_cell cell_count" data-title="Количество:" [ngClass]="{'not_clickable': form.get('items')['controls'][i].controls.availabilityStatus.value !== 'AvailableForOrder'}">
+              <div class="table_cell cell_count" data-title="Количество:" [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
                 <market-cart-order-qty-counter
                   formControlName="quantity"
                   [isDisabled]="isOrderLoading"
                 ></market-cart-order-qty-counter>
               </div>
               <div class="table_cell cell_price_one">
-                <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
+                <span class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
               </div>
               <div class="table_cell cell_sum" data-title="Стоимость:">
-                <span class="price">{{form.get('items')['controls'][i].controls.totalCost.value | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
-                <span class="cell_nds" *ngIf="form.get('items')['controls'][i].controls.vat.value !== 0">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
-                <span class="cell_nds" *ngIf="form.get('items')['controls'][i].controls.vat.value === 0">без НДС</span>
+                <span class="price">{{item.controls.total.value | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
+
+                <span
+                  class="cell_nds"
+                  *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">
+                    НДС {{item.controls.vat.value / 100 | percent}}
+                </span>
+                <span
+                  class="cell_nds"
+                  *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">
+                    без НДС
+                </span>
+
               </div>
               <div class="table_cell cell_more">
                 <div class="table_cell__inner more_actions__dropdown dropdown">
@@ -219,7 +228,7 @@
                   <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
                   <nz-dropdown-menu #itemModal="nzDropdownMenu">
                     <div class="dropdown_block">
-                      <div class="dropdown_item dropdown_item__hover" (click)="removeItem(form.get('items')['controls'][i].controls, i)">Удалить из заказа</div>
+                      <div class="dropdown_item dropdown_item__hover" (click)="removeItem(item.controls, i)">Удалить из заказа</div>
                     </div>
                   </nz-dropdown-menu>
                 </div>
@@ -238,7 +247,7 @@
           <div class="form-group_title">Укажите cпособ доставки</div>
           <div class="form-group_radio order__shipping_type">
             <nz-radio-group formControlName="deliveryMethod">
-              <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryOptions">{{ opt.label }}</label>
+              <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
             </nz-radio-group>
           </div>
           <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">
@@ -390,11 +399,12 @@
   <div class="order__total">
     <div class="order__total_price">
       <div class="order__total_label">Итого:</div>
-      <div class="order__total_value">{{totalCost | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</div>
+      <div class="order__total_value">{{total | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</div>
     </div>
     <div class="order__total_nds">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</div>
     <div class="order__total_btn">
       <button nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">Оформить заказ</button>
+      <div class="form_error" *ngIf="!form.valid && selectedTabIndex == 1 && unavailableToOrderTradeOfferIds.length">Удалите недоступные позиции из заказа</div>
     </div>
   </div>
 
