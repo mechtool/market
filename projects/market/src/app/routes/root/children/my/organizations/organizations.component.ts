@@ -113,6 +113,11 @@ export class OrganizationsComponent implements OnInit {
       tap(res => this._userService.setUserOrganizations(res)),
     )
       .subscribe(() => {
+        const tabSplitted = this._activatedRoute.snapshot.queryParams?.tab?.split(';');
+        if (tabSplitted.length > 1) {
+          this._router.navigateByUrl('/cart');
+          return;
+        }
         this.checkedLegalRequisites = null;
         this.goToTab('a');
       }, (err) => {
@@ -121,7 +126,6 @@ export class OrganizationsComponent implements OnInit {
   }
 
   goToTab(tabType: TabType) {
-
     this._router.navigateByUrl(
       this._router.url.split('?')[0],
       { skipLocationChange: true }
@@ -161,7 +165,8 @@ export class OrganizationsComponent implements OnInit {
     )
       .subscribe(
         (res) => {
-          switch(res.tab) {
+          const tabValue = res.tab.split(';')[0];
+          switch(tabValue) {
             case 'a':
               this._setActiveTabType('a')
               break;

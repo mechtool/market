@@ -21,7 +21,7 @@ import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, stringToHex, innKppToLegalId } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
-import { iif, of } from 'rxjs';
+import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   AuthService,
@@ -399,7 +399,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   register(): void {
-    this._authService.register('/my/organizations?tab=c');
+    this._authService.register('/my/organizations?tab=c;/cart');
   }
 
   setHexColor(str: string): string {

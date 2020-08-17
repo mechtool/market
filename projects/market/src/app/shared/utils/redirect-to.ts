@@ -1,3 +1,3 @@
 export function redirectTo(url: any) {
-  window.location = url;
+  window.location.href = encodeURI(url);
 }
