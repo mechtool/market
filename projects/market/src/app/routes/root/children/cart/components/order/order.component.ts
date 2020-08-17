@@ -154,13 +154,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.get('deliveryArea').valueChanges
       .pipe(
         filter(res => typeof res === 'string'),
-        mergeMap((v) => {
-          return iif(() => {
-            return !this.order.deliveryOptions.deliveryZones;
-          },
-          this._locationService.searchLocations(v),
-          this._locationService.searchAddresses(v, this.order.deliveryOptions.deliveryZones.map(zone => zone.fiasCode)));
-        }),
+        switchMap((res) => {
+          let fiasCodes = null;
+          if (this.order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode)) {
+            fiasCodes = this.order.deliveryOptions.deliveryZones.map(zone => zone.fiasCode);
+          }
+          if (fiasCodes) {
+            return this._locationService.searchAddresses(res, fiasCodes);
+          }
+          return this._locationService.searchAddresses(res);
+        })
       )
       .subscribe(
         (res) => {
