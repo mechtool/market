@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
@@ -18,6 +18,7 @@ import {
 import { catchError, switchMap } from 'rxjs/operators';
 import { hasRequiredParameters, queryParamsWithoutCategoryIdFrom } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { categoryPromotion } from '#environments/promotions';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -35,6 +36,10 @@ export class CategoryComponent {
   sort: SortModel;
   isLoadingProducts = false;
   page: number;
+
+  get showBanners(): boolean {
+    return categoryPromotion.includes(this.categoryId);
+  }
 
   constructor(
     private _activatedRoute: ActivatedRoute,

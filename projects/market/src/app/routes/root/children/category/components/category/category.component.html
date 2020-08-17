@@ -13,6 +13,7 @@
   ></market-search-bar>
 
   <market-search-results
+    [templateBanners]="banners"
     [productOffers]="productOffers"
     [productsTotal]="productsTotal"
     [page]="page"
@@ -22,5 +23,11 @@
     (loadProducts)="loadProducts($event)"
     (sortingChanged)="changeSortingAndRefresh($event)"
   ></market-search-results>
+
+  <ng-template #banners>
+    <market-main-banners
+      *ngIf="showBanners"
+    ></market-main-banners>
+  </ng-template>
 
 </div>

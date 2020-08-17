@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CategoryRoutingModule } from './category-routing.module';
 import { CategoriesComponent, CategoryComponent } from './components';
 import { CategoryListModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
+import { ProductModule } from '../product';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { CategoryListModule, SearchBarModule, SearchResultsModule } from '#share
     CategoryListModule,
     SearchBarModule,
     SearchResultsModule,
+    ProductModule,
   ],
   declarations: [
     CategoryComponent,

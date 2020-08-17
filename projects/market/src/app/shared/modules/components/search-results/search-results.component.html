@@ -18,6 +18,8 @@
 
   <div class="line" *ngIf="!productOffers?.length && isRequestFulfilled"></div>
 
+  <ng-container *ngTemplateOutlet="templateBanners"></ng-container>
+
   <div class="content" itemscope="itemscope" *ngIf="productOffers.length">
 
     <ng-template #indicatorTemplate>
