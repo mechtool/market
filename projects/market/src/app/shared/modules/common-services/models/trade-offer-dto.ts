@@ -14,7 +14,7 @@ export class TradeOfferDto {
   static fromTradeOffer(offer: TradeOffersModel): TradeOfferDto {
     return {
       id: offer.id,
-      description: offer.offerDescription?.title,
+      description: offer.offerDescription?.title || offer.offerDescription?.description,
       price: offer.price,
       stock: mapStock(offer.stock),
       supplierId: offer.supplier.id,
