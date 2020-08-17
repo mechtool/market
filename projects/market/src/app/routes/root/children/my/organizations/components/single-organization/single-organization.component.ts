@@ -1,9 +1,14 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ActivatedRoute } from '@angular/router';
-import { NzModalService, NzModalRef } from 'ng-zorro-antd/modal';
-import { OrganizationsService, NotificationsService, UserService } from '#shared/modules/common-services';
-import { OrganizationUserResponseModel, ParticipationRequestResponseModel, UserOrganizationModel, OrganizationResponseModel, AccessKeyResponseModel } from '#shared/modules/common-services/models';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NotificationsService, OrganizationsService, UserService } from '#shared/modules/common-services';
+import {
+  AccessKeyResponseModel,
+  OrganizationResponseModel,
+  OrganizationUserResponseModel,
+  ParticipationRequestResponseModel
+} from '#shared/modules/common-services/models';
 import { AccessKeyComponent } from '../access-key/access-key.component';
 import { switchMap } from 'rxjs/operators';
 import { UserRemovalVerifierComponent } from '../user-removal-verifier/user-removal-verifier.component';
@@ -11,7 +16,7 @@ import { RequestDecisionMakerComponent } from '../request-decision-maker/request
 import { AccessKeyRemovalVerifierComponent } from '../access-key-removal-verifier/access-key-removal-verifier.component';
 import { iif } from 'rxjs';
 
-type TabType = 'a'|'b'|'c'|'d';
+type TabType = 'a' | 'b' | 'c' | 'd';
 type UpdateOrganizationType = {
   inn: string;
   kpp: string;
@@ -73,7 +78,8 @@ export class SingleOrganizationComponent implements OnInit {
     private _notificationsService: NotificationsService,
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._watchParamsChanges();
@@ -161,7 +167,7 @@ export class SingleOrganizationComponent implements OnInit {
   }
 
   createMakeRequestDecisionModal(requestId: string): void {
-    const request = this.participationRequests.find(req => req.requestId === requestId )
+    const request = this.participationRequests.find(req => req.requestId === requestId);
     this._modal = this._modalService.create({
       nzContent: RequestDecisionMakerComponent,
       nzViewContainerRef: this._viewContainerRef,
@@ -188,7 +194,6 @@ export class SingleOrganizationComponent implements OnInit {
 
     const contactPerson = {
       fullName: data.contactFio,
-      position: data.contactRole,
       email: data.contactEmail,
       phone: data.contactPhone,
     };
@@ -206,15 +211,15 @@ export class SingleOrganizationComponent implements OnInit {
       description: data.organizationDescription,
     }).pipe(
       switchMap((res) => {
-        return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson)
+        return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson);
       })
     )
-    .subscribe((_) => {
-      this.isEditable = false;
-      this._resetOrganizationData(this.orgId);
-    }, (err) => {
-      this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
-    })
+      .subscribe((_) => {
+        this.isEditable = false;
+        this._resetOrganizationData(this.orgId);
+      }, (err) => {
+        this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
+      });
   }
 
   private _acceptParticipationRequest(requestId: string): void {
@@ -223,7 +228,7 @@ export class SingleOrganizationComponent implements OnInit {
       this._resetParticipationRequests(this.orgId);
     }, (err) => {
       this._notificationsService.error(ERROR_ACCEPT_USER_TO_ORG);
-    })
+    });
   }
 
   private _rejectParticipationRequest(requestId: string): void {
@@ -232,7 +237,7 @@ export class SingleOrganizationComponent implements OnInit {
       this._resetParticipationRequests(this.orgId);
     }, (err) => {
       this._notificationsService.error(ERROR_REJECT_USER_TO_ORG);
-    })
+    });
   }
 
   private _deleteUserFromOrganization(userId: string): void {
@@ -241,7 +246,7 @@ export class SingleOrganizationComponent implements OnInit {
       this._resetUsers(this.orgId);
     }, (err) => {
       this._notificationsService.error(ERROR_REMOVE_USER_FROM_ORG);
-    })
+    });
   }
 
   private _deleteAccessKey(accessKeyId: string): void {
@@ -250,7 +255,7 @@ export class SingleOrganizationComponent implements OnInit {
       this._resetAccessKeys(this.orgId);
     }, (err) => {
       this._notificationsService.error(ERROR_DELETE_ACCESS_KEY);
-    })
+    });
   }
 
   private _watchParamsChanges(): void {
@@ -279,15 +284,15 @@ export class SingleOrganizationComponent implements OnInit {
     iif(() => {
       return this.isAdmin;
     }, this._organizationsService.getOrganizationProfile(orgId), this._organizationsService.getOrganization(orgId))
-    .subscribe((res) => {
-      this.organizationData = res;
-      this.legalRequisites = {
-        inn: res.legalRequisites?.inn,
-        kpp: res.legalRequisites?.kpp || null
-      };
-    }, (err) => {
-      this._notificationsService.error(ERROR_GET_ORG_INFO);
-    })
+      .subscribe((res) => {
+        this.organizationData = res;
+        this.legalRequisites = {
+          inn: res.legalRequisites?.inn,
+          kpp: res.legalRequisites?.kpp || null
+        };
+      }, (err) => {
+        this._notificationsService.error(ERROR_GET_ORG_INFO);
+      });
   }
 
   //
@@ -296,15 +301,15 @@ export class SingleOrganizationComponent implements OnInit {
       this.users = res;
     }, (err) => {
       this._notificationsService.error(ERROR_GET_ORG_USERS);
-    })
+    });
   }
 
   private _resetParticipationRequests(orgId: string): void {
     this._organizationsService.getParticipationRequests(orgId).subscribe((res) => {
-      this.participationRequests = res.filter(req => !req.requestStatus?.resolutionDate)
+      this.participationRequests = res.filter(req => !req.requestStatus?.resolutionDate);
     }, (err) => {
       this._notificationsService.error(ERROR_GET_ORG_REQUESTS);
-    })
+    });
   }
 
   private _resetAccessKeys(orgId: string): void {
@@ -312,7 +317,7 @@ export class SingleOrganizationComponent implements OnInit {
       this.accessKeys = res;
     }, (err) => {
       this._notificationsService.error(ERROR_GET_ORG_ACCESS_KEYS);
-    })
+    });
   }
 
   private _resetIsEditable(): void {

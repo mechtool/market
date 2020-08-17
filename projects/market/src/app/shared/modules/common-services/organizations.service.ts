@@ -1,16 +1,16 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
-  OrganizationResponseModel,
-  UserOrganizationModel,
-  OrganizationAdminResponseModel,
+  AccessKeyModel,
   AccessKeyResponseModel,
+  OrganizationAdminResponseModel,
+  OrganizationResponseModel,
+  OrganizationUserResponseModel,
   ParticipationRequestResponseModel,
   RegisterOrganizationRequestModel,
-  AccessKeyModel,
-  UpdateOrganizationRequestModel,
   UpdateOrganizationContactPersonRequestModel,
-  OrganizationUserResponseModel
+  UpdateOrganizationRequestModel,
+  UserOrganizationModel
 } from './models';
 import { BNetService } from './bnet.service';
 import { map } from 'rxjs/operators';
@@ -45,11 +45,11 @@ export class OrganizationsService {
     return this._bnetService.sendParticipationRequest(data);
   }
 
-  getOwnParticipationRequests(): Observable<ParticipationRequestResponseModel[]>  {
+  getOwnParticipationRequests(): Observable<ParticipationRequestResponseModel[]> {
     return this._bnetService.getOwnParticipationRequests();
   }
 
-  getParticipationRequests(orgId: string): Observable<ParticipationRequestResponseModel[]>  {
+  getParticipationRequests(orgId: string): Observable<ParticipationRequestResponseModel[]> {
     return this._bnetService.getParticipationRequests(orgId);
   }
 
@@ -68,9 +68,9 @@ export class OrganizationsService {
   getAccessKeysByOrganizationId(orgId: string): Observable<AccessKeyResponseModel[]> {
     return this._bnetService.getAccessKeys().pipe(
       map((res) => {
-        return res.filter(key => key.organization?.id === orgId).sort((a, b) => a.creationDate > b.creationDate ? -1 : 1)
+        return res.filter(key => key.organization?.id === orgId).sort((a, b) => a.creationDate > b.creationDate ? -1 : 1);
       })
-    )
+    );
   }
 
   registerOrganization(data: RegisterOrganizationRequestModel): Observable<any> {

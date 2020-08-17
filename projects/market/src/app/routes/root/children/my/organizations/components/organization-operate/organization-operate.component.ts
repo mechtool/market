@@ -42,7 +42,6 @@ export class OrganizationOperateComponent implements OnChanges {
       organizationWebsite: new FormControl(this.organizationData?.contacts?.website || ''),
       organizationAddress: new FormControl(this.organizationData?.contacts?.address || ''),
       contactFio: new FormControl(this.organizationData?.contactPerson?.fullName || '', [Validators.required]),
-      contactRole: new FormControl(this.organizationData?.contactPerson?.position || ''),
       contactEmail: new FormControl(this.organizationData?.contactPerson?.email || '', [Validators.required, Validators.email]),
       contactPhone: new FormControl(this.organizationData?.contactPerson?.phone || '', [Validators.required]),
       ...(this.operationType === 'register' && { agree: new FormControl(false, [Validators.requiredTrue]) }),

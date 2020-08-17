@@ -83,7 +83,7 @@
     <div
       class="form-group form-group-std"
       [ngClass]="{'error': form.controls.contactFio.errors && (form.controls.contactFio.touched || form.controls.contactFio.dirty)}">
-        <label for="contactFio">Имя и фамилия *</label>
+        <label for="contactFio">Как к Вам обращаться? *</label>
         <input
           type="text"
           id="contactFio"
@@ -92,11 +92,6 @@
         <ng-container *ngIf="form.controls.contactFio.errors && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">
           <div class="input_attention" *ngIf="form.controls.contactFio.errors.required">Заполните это поле</div>
         </ng-container>
-    </div>
-
-    <div class="form-group form-group-std">
-      <label for="contactRole">Должность</label>
-      <input type="text" id="contactRole" autocomplete="off" formControlName="contactRole">
     </div>
 
     <div

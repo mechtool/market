@@ -97,7 +97,6 @@ export class OrganizationsComponent implements OnInit {
       email: data.contactEmail,
       fullName: data.contactFio,
       phone: data.contactPhone,
-      ...(data.contactRole && { position: data.contactRole }),
     };
 
     const regOrgData = {
