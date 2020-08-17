@@ -45,6 +45,10 @@ export class NavbarNavComponent implements OnInit {
     return this._cartService.getCartData$().pipe(map(res => res?.content?.length));
   }
 
+  get userLogin(): string {
+    return this._userService.userData$?.value?.userInfo?.login || null;
+  }
+
   @HostBinding('class.minified')
   get isNavBarMinified(): boolean {
     return this._navService.isNavBarMinified && !this._navService.isMenuOpened;

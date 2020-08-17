@@ -2,7 +2,10 @@
   <div class="opener" (click)="handleOpenerClick()">
     <img src="assets/img/svg/icon__site.svg" alt="1C:Бизнес-сеть" title="1C:Бизнес-сеть" >
   </div>
-  <h1 class="label" (click)="goToRoot()">1C:Бизнес-сеть</h1>
+  <div class="label" (click)="goToRoot()">
+    <h1>1C:Бизнес-сеть</h1>
+    <span *ngIf="userLogin">{{userLogin}}</span>
+  </div>
   <button type="button" class="btn btn_close btn_bordered nav__mobile__btn_close" (click)="closeMenu()"></button>
 </div>
 <div class="panel">
@@ -34,7 +37,10 @@
       <div class="opener">
         <img src="./assets/img/svg/icon__site.svg" alt="1C:Бизнес-сеть" title="1C:Бизнес-сеть" >
       </div>
-      <h1 class="label">1C:Бизнес-сеть</h1>
+      <div class="label">
+        <h1>1C:Бизнес-сеть</h1>
+        <span *ngIf="userLogin">{{userLogin}}</span>
+      </div>
     </div>
     <div class="nav-btns">
         <a class="btn btn_bordered">
