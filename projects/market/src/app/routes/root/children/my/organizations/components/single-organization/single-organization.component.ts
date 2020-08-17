@@ -10,7 +10,7 @@ import {
   ParticipationRequestResponseModel
 } from '#shared/modules/common-services/models';
 import { AccessKeyComponent } from '../access-key/access-key.component';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { UserRemovalVerifierComponent } from '../user-removal-verifier/user-removal-verifier.component';
 import { RequestDecisionMakerComponent } from '../request-decision-maker/request-decision-maker.component';
 import { AccessKeyRemovalVerifierComponent } from '../access-key-removal-verifier/access-key-removal-verifier.component';
@@ -212,7 +212,9 @@ export class SingleOrganizationComponent implements OnInit {
     }).pipe(
       switchMap((res) => {
         return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson);
-      })
+      }),
+      switchMap(_ => this._organizationsService.getUserOrganizations()),
+      tap(res => this._userService.setUserOrganizations(res)),
     )
       .subscribe((_) => {
         this.isEditable = false;
