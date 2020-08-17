@@ -2,7 +2,7 @@
   <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
 
   <span class="catalog_item__descr">
-    
+
     <span class="catalog_item__title"
           nz-tooltip
           nzTooltipTitle="{{tradeOffer.supplierName}}">
@@ -25,7 +25,7 @@
       <span class="catalog_item__price"
             nz-tooltip
             nzTooltipTitle="Цена"
-            *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+            *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
 
     </span>
   </span>

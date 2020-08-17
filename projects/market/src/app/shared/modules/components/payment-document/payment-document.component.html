@@ -23,9 +23,9 @@
       <td>{{i + 1}}</td>
       <td>{{product.productName}}</td>
       <td>{{product.amount}} {{product.baseUnit.shortName}}.</td>
-      <td>{{product.price | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
-      <td>{{product.tax?.vatSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
-      <td>{{product.totalPrice | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+      <td>{{product.price | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+      <td>{{product.tax?.vatSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+      <td>{{product.totalPrice | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
     </tr>
   </table>
 
@@ -33,21 +33,21 @@
     <table>
       <tr>
         <th>Итого:</th>
-        <td>{{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+        <td>{{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
       </tr>
       <tr>
         <th>В том числе НДС:</th>
-        <td>{{outcomeVat | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+        <td>{{outcomeVat | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
       </tr>
       <tr>
         <th>Всего к оплате:</th>
-        <td>{{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</td>
+        <td>{{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
       </tr>
     </table>
   </div>
 
   <p class="info">Всего наименований {{document.products?.length}}, на сумму
-    {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.'}}</p>
+    {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</p>
   <p class="sum_letters">{{document.totalSum | marketSumLetters}}</p>
 
   <hr>

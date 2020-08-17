@@ -8,7 +8,7 @@
     <p class="total" *ngIf="cartData?.content?.length">
       Всего {{totalItems}}{{totalItems | marketDeclension: ' товар': ' товара': ' товаров'}}
       от {{supplierCount}}{{supplierCount | marketDeclension: ' поставщика': ' поставщиков': ' поставщиков'}}
-      на сумму {{totalCost | marketMultiplier:'.01' | currency:'RUB':'symbol'}}
+      на сумму {{totalCost | marketMultiplier:'.01' | currency:'RUB':'symbol': '1.0'}}
     </p>
     <market-cart-order *ngFor="let order of cartData?.content; let i = index" [order]="order" [userData]="userData$ | async" (cartDataChange)="setProps($event)"></market-cart-order>
   </ng-container>

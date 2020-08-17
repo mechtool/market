@@ -11,7 +11,7 @@
     </div>
     <div class="info_group" *ngIf="orderRestrictions">
       <span class="info_group__label">Минимальная общая сумма заказа</span>
-      <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+      <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currency:'RUB':'symbol' : '1.0'}}</span>
     </div>
   </div>
 </div>

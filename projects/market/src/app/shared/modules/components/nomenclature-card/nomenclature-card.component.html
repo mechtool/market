@@ -18,11 +18,11 @@
     <span class="meta">
       <span class="count"
             nz-tooltip
-            nzTooltipTitle="Количество предложений от поставщиков">{{productOffer.offersTotal | number:'1.0-0'}}</span>
+            nzTooltipTitle="Количество предложений от поставщиков">{{productOffer.offersTotal | number:'1.0'}}</span>
       <span
         class="price"
         nz-tooltip
-        nzTooltipTitle="Минимальная цена"><span>{{productOffer.offersMinPrice | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span></span>
+        nzTooltipTitle="Минимальная цена"><span>{{productOffer.offersMinPrice | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span></span>
     </span>
   </span>
 </div>

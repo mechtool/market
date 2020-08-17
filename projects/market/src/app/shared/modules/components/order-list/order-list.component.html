@@ -35,7 +35,7 @@
           {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
         </div>
         <div class="table_cell cell_sum" data-title="Сумма:">
-          <span class="price">{{document.price | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+          <span class="price">{{document.price | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
         </div>
         <div class="table_cell cell_action">
           <button type="button" class="btn btn-gray btn_long">Посмотреть заказ</button>

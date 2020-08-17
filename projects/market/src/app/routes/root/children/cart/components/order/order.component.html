@@ -206,10 +206,10 @@
                 ></market-cart-order-qty-counter>
               </div>
               <div class="table_cell cell_price_one">
-                <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+                <span class="price_one">{{form.get('items')['controls'][i].controls.price.value | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
               </div>
               <div class="table_cell cell_sum" data-title="Стоимость:">
-                <span class="price">{{form.get('items')['controls'][i].controls.totalCost.value | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</span>
+                <span class="price">{{form.get('items')['controls'][i].controls.totalCost.value | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
                 <span class="cell_nds" *ngIf="form.get('items')['controls'][i].controls.vat.value !== 0">НДС {{form.get('items')['controls'][i].controls.vat.value / 100 | percent}}</span>
                 <span class="cell_nds" *ngIf="form.get('items')['controls'][i].controls.vat.value === 0">без НДС</span>
               </div>
@@ -390,9 +390,9 @@
   <div class="order__total">
     <div class="order__total_price">
       <div class="order__total_label">Итого:</div>
-      <div class="order__total_value">{{totalCost | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
+      <div class="order__total_value">{{totalCost | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</div>
     </div>
-    <div class="order__total_nds">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:'RUB':'symbol'}}</div>
+    <div class="order__total_nds">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</div>
     <div class="order__total_btn">
       <button nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">Оформить заказ</button>
     </div>
