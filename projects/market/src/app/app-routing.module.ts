@@ -36,10 +36,6 @@ const routes: Routes = [
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/category/category.module').then(m => m.CategoryModule),
       }, {
-        path: 'about',
-        data: { preload: false },
-        loadChildren: () => import('./routes/root/children/about/about.module').then(m => m.AboutModule),
-      }, {
         path: 'my',
         canActivate: [AuthGuard],
         children: [

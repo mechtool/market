@@ -34,7 +34,6 @@ const pathsObjectWithBreadcrumbs = {
   '/product/:id': /^\/product\/(?:([^\/]+?))$/i,
   '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
   '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
-  '/about': /^\/about$/i,
   '/cart': /^\/cart$/i,
   '/my/orders': /^\/my\/orders$/i,
   '/my/organizations': /^\/my\/organizations$/i,
@@ -159,18 +158,6 @@ export class BreadcrumbsGuard implements CanActivate {
             return of(true);
           })
         );
-      case '/about':
-        breadcrumbsItems = [
-          {
-            label: 'Личный кабинет',
-            routerLink: '/'
-          },
-          {
-            label: 'О проекте 1С:Бизнес-сеть',
-          }
-        ];
-        this._breadcrumbsService.setItems(breadcrumbsItems);
-        return true;
       case '/cart':
         breadcrumbsItems = [
           {

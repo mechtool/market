@@ -78,7 +78,7 @@ export class NavbarNavComponent implements OnInit {
         // TODO: оптимизировать проход по элементам меню
         this.navItems.forEach((el, i, arr) => {
           if (el.items?.length) {
-            const subItem = el.items.find(subItem => subItem.routerLink?.[0] === this._location.path()
+            const subItem = el.items.find(item => item.routerLink?.[0] === this._location.path()
             );
             if (subItem) {
               this.navItemActive = subItem;
@@ -111,7 +111,7 @@ export class NavbarNavComponent implements OnInit {
       this._router.navigate(navItem.routerLink, {});
     }
     if (navItem.url) {
-      location.assign(navItem.url);
+      window.open(navItem.url, '_blank');
     }
   }
 

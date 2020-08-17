@@ -92,7 +92,7 @@ export class NavigationService {
         label: 'О проекте',
         icon: 'info',
         styleClass: 'delimiter',
-        routerLink: ['/about'],
+        url: 'https://1cbn.ru/trading.html',
       },
     ];
     const authedNavItems: NavItemModel[] = [
@@ -146,7 +146,7 @@ export class NavigationService {
         label: 'О проекте',
         icon: 'info',
         styleClass: 'delimiter',
-        routerLink: ['/about'],
+        url: 'https://1cbn.ru/trading.html',
       },
     ];
     return this._userService.userData$.asObservable().pipe(
