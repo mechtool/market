@@ -9,24 +9,21 @@ import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
 import {
-  CardModule,
-  UserService,
-  CartService,
   AuthService,
-  CookieService,
+  CartService,
   CommonServicesModule,
-  NomenclatureCardModule,
-  PipesModule,
-  SetupServicesModule,
-} from '#shared/modules';
+  CookieService,
+  UserService,
+} from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { NgxMaskModule } from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask';
 
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
 import {
   BreadcrumbsModule,
+  CookieAgreementModule,
   NavbarComponent,
   NavbarMobileNavComponent,
   NavbarNavComponent,
@@ -36,6 +33,9 @@ import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
+import { PipesModule } from '#shared/modules/pipes';
+import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
+import { SetupServicesModule } from '#shared/modules/setup-services';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -74,6 +74,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
     BreadcrumbsModule,
+    CookieAgreementModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },

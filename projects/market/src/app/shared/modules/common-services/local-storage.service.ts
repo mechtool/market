@@ -1,16 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import {
+  CartDataModel,
+  CartDataOrderModel,
+  CartDataResponseModel,
   LocationModel,
+  RelationEnumModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
   SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
-  CartDataOrderModel,
-  CartDataModel,
-  CartDataResponseModel,
-  RelationEnumModel,
 } from '../common-services/models';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
@@ -18,6 +18,7 @@ const USER_LOCATION_STORAGE_KEY = 'user_location';
 const LAST_DATE_USER_ACCOUNT_STORAGE_KEY = 'last_date_user_account';
 const CART_LOCATION_STORAGE_KEY = 'cart_location';
 const CART_DATA_STORAGE_KEY = 'cart_data';
+const USER_AND_COOKIES_AGREEMENT_STORAGE_KEY = 'user_and_cookies_agreement';
 
 @Injectable()
 export class LocalStorageService {
@@ -176,6 +177,14 @@ export class LocalStorageService {
     const lastDates = this._storage.get(LAST_DATE_USER_ACCOUNT_STORAGE_KEY) || {};
     lastDates[uin] = newLastDate;
     this._storage.set(LAST_DATE_USER_ACCOUNT_STORAGE_KEY, lastDates);
+  }
+
+  getUserAndCookiesAgreement(): boolean {
+    return this._storage.get(USER_AND_COOKIES_AGREEMENT_STORAGE_KEY);
+  }
+
+  putUserAndCookiesAgreement() {
+    this._storage.set(USER_AND_COOKIES_AGREEMENT_STORAGE_KEY, true);
   }
 
   private toHexId(text: string): string {

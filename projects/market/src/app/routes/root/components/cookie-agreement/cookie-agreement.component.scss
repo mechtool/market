@@ -1,0 +1,26 @@
+.cookie-info-content {
+  display: block;
+  width: 80%;
+  position: fixed;
+  bottom: 10px;
+  margin-left: 10%;
+  z-index: 10;
+
+  nz-alert {
+    opacity: 0.7;
+
+    p {
+      font-size: var(--font-size-14);
+      color: var(--color-primary);
+      text-align: center;
+    }
+
+    a {
+      font-weight: var(--font-weight-demi);
+      &:hover {
+        color: inherit;
+        text-decoration: underline;
+      }
+    }
+  }
+}

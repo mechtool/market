@@ -129,7 +129,7 @@
     <div class="form-group form-group-agree" *ngIf="operationType === 'register'">
       <label nz-checkbox formControlName="agree" style="display: flex; align-items: flex-start;">
         <span class="checkbox-agree-text">Я являюсь уполномоченным представителем регистрируемой<br/>организации и принимаю условия
-          <a class="attention-link" href="https://1cbn.ru/agreement/" target="_blank" (click)="$event.stopPropagation()">пользовательского соглашения</a>
+          <a class="attention-link" href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer" (click)="$event.stopPropagation()">пользовательского соглашения</a>
         </span>
       </label>
     </div>

@@ -1,4 +1,5 @@
-export * from './navbar';
 export * from './breadcrumbs';
+export * from './cookie-agreement';
+export * from './navbar';
 
 
