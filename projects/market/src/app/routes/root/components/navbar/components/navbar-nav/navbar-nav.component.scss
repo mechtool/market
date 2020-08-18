@@ -10,6 +10,15 @@
     text-decoration: none;
   }
 
+  .user-login {
+    font-size: var(--font-size-13);
+    opacity: 0.5;
+
+    img {
+      height: var(--font-size-16);
+    }
+  }
+
   .logo {
     display: flex;
     align-items: center;
@@ -85,6 +94,7 @@
       &.delimiter {
         margin: 25px 0 0 0;
       }
+
       a {
         cursor: pointer;
         display: flex;
@@ -217,6 +227,7 @@
           justify-content: center;
           padding: 0;
         }
+
         .icon-point {
           display: block;
           width: 6px;
@@ -329,8 +340,7 @@
   content: "";
   width: 8px;
   height: 14px;
-  background: url(../../../../../../../assets/img/svg/icon__arrow_right.svg)
-    no-repeat;
+  background: url(../../../../../../../assets/img/svg/icon__arrow_right.svg) no-repeat;
 }
 
 .categories_panel {
@@ -370,8 +380,7 @@
   border: none;
   cursor: pointer;
   outline: none;
-  background: url(../../../../../../../assets/img/svg/icon__close.svg) no-repeat
-    center center;
+  background: url(../../../../../../../assets/img/svg/icon__close.svg) no-repeat center center;
   min-width: 40px;
 }
 
@@ -445,25 +454,31 @@
 .scrollbar::-webkit-scrollbar {
   width: 5px;
 }
+
 .scrollbar::-webkit-scrollbar-button {
   display: none;
 }
+
 .scrollbar::-webkit-scrollbar-track {
   width: 1px;
   background-color: #ebebeb;
 }
+
 .scrollbar::-webkit-scrollbar-track-piece {
   width: 1px;
   background-color: #ebebeb;
 }
+
 .scrollbar::-webkit-scrollbar-thumb {
   height: 50px;
   width: 5px;
   background-color: var(--color-accent-light);
 }
+
 .scrollbar::-webkit-scrollbar-corner {
   display: none;
 }
+
 .scrollbar::-webkit-resizer {
   display: none;
 }
