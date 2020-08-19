@@ -138,8 +138,8 @@ export class SupplierSingleComponent {
     const fias = this._fias();
     this.request = {
       q: this.query,
-      priceFrom: this.filters.priceFrom,
-      priceTo: this.filters.priceTo,
+      priceFrom: this.filters.priceFrom ? this.filters.priceFrom * 100 : undefined,
+      priceTo: this.filters.priceTo ? this.filters.priceTo * 100 : undefined,
       inStock: this.filters.inStock,
       inSales: this.filters.inStock ? this.filters.inStock : false,
       withImages: this.filters.withImages,

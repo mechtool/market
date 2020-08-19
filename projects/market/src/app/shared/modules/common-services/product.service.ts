@@ -32,8 +32,8 @@ export class ProductService {
     const searchQuery = {
       q: groupQuery.query,
       categoryId: groupQuery.filters?.categoryId,
-      priceFrom: groupQuery.filters?.priceFrom,
-      priceTo: groupQuery.filters?.priceTo,
+      priceFrom: groupQuery.filters?.priceFrom ? groupQuery.filters.priceFrom * 100 : undefined,
+      priceTo: groupQuery.filters?.priceTo ? groupQuery.filters.priceTo * 100 : undefined,
       suppliers: [groupQuery.filters?.supplierId],
       tradeMarks: [groupQuery.filters?.trademark],
       inStock: groupQuery.filters?.inStock,
