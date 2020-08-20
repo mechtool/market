@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
+import { Subject } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -10,16 +11,16 @@ import { ParticipationRequestResponseModel } from '#shared/modules/common-servic
 })
 export class RequestDecisionMakerComponent {
   @Input() request: ParticipationRequestResponseModel;
-  @Output() makeDecisionChange: EventEmitter<any> = new EventEmitter();
+  @Output() makeDecisionChange: Subject<any> = new Subject();
 
   constructor() {}
 
   accept(requestId: string) {
-    this.makeDecisionChange.emit([requestId, true]);
+    this.makeDecisionChange.next([requestId, true]);
   }
 
   reject(requestId: string) {
-    this.makeDecisionChange.emit([requestId, false]);
+    this.makeDecisionChange.next([requestId, false]);
   }
 
 }

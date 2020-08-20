@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { LocationModel } from './models';
 import { BNetService } from './bnet.service';
 
@@ -19,7 +19,7 @@ export class LocationService {
     if (textQuery.length) {
       return this._bnetService.searchAddresses(textQuery, fiasIds);
     }
-    return null;
+    return of([]);
   }
 
 }

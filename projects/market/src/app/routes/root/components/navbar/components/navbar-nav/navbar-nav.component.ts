@@ -9,7 +9,7 @@ import { NavItemModel } from '#shared/modules/common-services/models/nav-item.mo
 import { CategoryModel } from '#shared/modules/common-services/models/category.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
-import { map } from 'rxjs/operators';
+import { map, take, pluck } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -41,12 +41,12 @@ export class NavbarNavComponent implements OnInit {
     return this._userService.userCategories$.asObservable();
   }
 
-  get getCartCounter$(): any {
-    return this._cartService.getCartData$().pipe(map(res => res?.content?.length));
-  }
-
   get userLogin(): string {
     return this._userService.userData$?.value?.userInfo?.login || null;
+  }
+
+  get cartNavItem(): NavItemModel {
+    return this.navItems?.find(item => item.label === 'Корзина') || null;
   }
 
   @HostBinding('class.minified')
@@ -72,29 +72,8 @@ export class NavbarNavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._navService.navItems$.subscribe(
-      (res) => {
-        this.navItems = res;
-        // TODO: оптимизировать проход по элементам меню
-        this.navItems.forEach((el, i, arr) => {
-          if (el.items?.length) {
-            const subItem = el.items.find(item => item.routerLink?.[0] === this._location.path()
-            );
-            if (subItem) {
-              this.navItemActive = subItem;
-            }
-            if (!subItem) {
-              this.navItemActive = this.navItems.find((item) => {
-                return item.routerLink?.[0] === this._location.path();
-              });
-            }
-          }
-        });
-      },
-      (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      }
-    );
+    this._setNavigation();
+    this._watchSetCartDataCounter();
   }
 
   navigateNavItem(navItem: NavItemModel): void {
@@ -102,7 +81,7 @@ export class NavbarNavComponent implements OnInit {
       navItem.expanded = !navItem.expanded;
     }
     if (!navItem.items) {
-      this.navItemActive = navItem;
+      this._setNavItemActive(navItem);
     }
     if (navItem.command) {
       navItem.command();
@@ -165,5 +144,46 @@ export class NavbarNavComponent implements OnInit {
 
   goToRoot() {
     this._navService.goTo();
+  }
+
+  private _setNavigation() {
+    this._navService.navItems$
+      .pipe(take(1))
+      .subscribe((res) => {
+        this.navItems = res;
+        this._setNavItemActive(this._getActiveItem(this.navItems));
+      }, (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      })
+  }
+
+  private _getActiveItem(navItems: NavItemModel[]): NavItemModel {
+    let activeItem = this._getItemForPath(navItems, this._location.path());
+    navItems.forEach((el) => {
+      if (el.items?.length) {
+        const subItem = this._getItemForPath(el.items, this._location.path());
+        if (subItem) {
+          activeItem = subItem;
+        }
+      }
+    })
+    return activeItem;
+  }
+
+  private _getItemForPath(navItems: NavItemModel[], path: string): NavItemModel {
+    return navItems.find(item => item.routerLink?.[0] === path) || null;
+  }
+
+  private _setNavItemActive(navItem: NavItemModel): void {
+    this.navItemActive = navItem;
+  }
+
+  private _watchSetCartDataCounter(): void {
+    this._cartService.getCartData$()
+      .pipe(
+        pluck('content', 'length')
+      ).subscribe((cartDataLength) => {
+        this.cartNavItem.counter = cartDataLength;
+      })
   }
 }

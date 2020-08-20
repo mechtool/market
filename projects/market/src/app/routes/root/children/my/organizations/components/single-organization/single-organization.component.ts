@@ -10,11 +10,11 @@ import {
   ParticipationRequestResponseModel
 } from '#shared/modules/common-services/models';
 import { AccessKeyComponent } from '../access-key/access-key.component';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, map, filter } from 'rxjs/operators';
 import { UserRemovalVerifierComponent } from '../user-removal-verifier/user-removal-verifier.component';
 import { RequestDecisionMakerComponent } from '../request-decision-maker/request-decision-maker.component';
 import { AccessKeyRemovalVerifierComponent } from '../access-key-removal-verifier/access-key-removal-verifier.component';
-import { iif } from 'rxjs';
+import { iif, of, Observable } from 'rxjs';
 
 type TabType = 'a' | 'b' | 'c' | 'd';
 type UpdateOrganizationType = {
@@ -36,8 +36,7 @@ const ERROR_DEFAULT = 'Невозможно обработать запрос. �
 const ERROR_GET_ACCESS_KEY = 'Произошла ошибка при получении ключа доступа.';
 const ERROR_DELETE_LAST_ADMIN = 'Невозможно удалить последнего администратора организации.';
 const ERROR_SAVE_ORG_UPDATES = 'Произошла ошибка при сохранении изменений в организации.';
-const ERROR_ACCEPT_USER_TO_ORG = 'Произошла ошибка при добавлении пользователя в организацию.';
-const ERROR_REJECT_USER_TO_ORG = 'Произошла ошибка при отказе от добавления пользователя в организацию.';
+const ERROR_ACCEPT_REJECT_USER_TO_ORG = 'Произошла ошибка при добавлении/отказе пользователя в организацию.';
 const ERROR_REMOVE_USER_FROM_ORG = 'Произошла ошибка при удалении пользователя.';
 const ERROR_DELETE_ACCESS_KEY = 'Произошла ошибка при удалении одноразового пароля.';
 const ERROR_GET_ORG_INFO = 'Произошла ошибка при получении информации по организации.';
@@ -178,16 +177,23 @@ export class SingleOrganizationComponent implements OnInit {
       nzFooter: null,
       nzWidth: 480,
     });
-    this._modal.componentInstance.makeDecisionChange.subscribe(([requestId, type]) => {
-      if (type) {
-        this._acceptParticipationRequest(requestId);
-        this._resetUsers(this.orgId);
-        this._resetActiveTab('b');
-      }
-      if (!type) {
-        this._rejectParticipationRequest(requestId);
-      }
-    });
+
+    this._modal.componentInstance.makeDecisionChange
+      .pipe(
+        switchMap((res: [string, boolean]) => this._makeDecisionParticipationRequest(res)),
+        tap(() => {
+          this._resetParticipationRequests(this.orgId);
+        })
+      )
+      .subscribe((res: boolean) => {
+        this._modal.destroy();
+        if (res) {
+          this._resetUsers(this.orgId);
+          this._resetActiveTab('b');
+        }
+      }, (err) => {
+        this._notificationsService.error(ERROR_ACCEPT_REJECT_USER_TO_ORG);
+      });
   }
 
   updateOrganization(data: UpdateOrganizationType): void {
@@ -224,22 +230,16 @@ export class SingleOrganizationComponent implements OnInit {
       });
   }
 
-  private _acceptParticipationRequest(requestId: string): void {
-    this._organizationsService.acceptParticipationRequest(requestId).subscribe((res) => {
-      this._modal.destroy();
-      this._resetParticipationRequests(this.orgId);
-    }, (err) => {
-      this._notificationsService.error(ERROR_ACCEPT_USER_TO_ORG);
-    });
+  private _makeDecisionParticipationRequest([requestId, accept]: [string, boolean]): any {
+    return this[accept ? '_acceptParticipationRequest' : '_rejectParticipationRequest'](requestId);
   }
 
-  private _rejectParticipationRequest(requestId: string): void {
-    this._organizationsService.rejectParticipationRequest(requestId).subscribe((res) => {
-      this._modal.destroy();
-      this._resetParticipationRequests(this.orgId);
-    }, (err) => {
-      this._notificationsService.error(ERROR_REJECT_USER_TO_ORG);
-    });
+  private _acceptParticipationRequest(requestId: string): Observable<boolean> {
+    return this._organizationsService.acceptParticipationRequest(requestId).pipe(map(() => true));
+  }
+
+  private _rejectParticipationRequest(requestId: string): Observable<boolean> {
+    return this._organizationsService.rejectParticipationRequest(requestId).pipe(map(() => false));
   }
 
   private _deleteUserFromOrganization(userId: string): void {

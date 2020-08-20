@@ -263,7 +263,7 @@ const PROXY_CONFIG = [
 
       if (req.method === 'GET' && pathsObject['/proxifier/shopping-carts/:id'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
-        res.end(cartData);
+        res.end(Math.random() < .5 ? cartData : '{"content":[]}');
         return true;
       }
 

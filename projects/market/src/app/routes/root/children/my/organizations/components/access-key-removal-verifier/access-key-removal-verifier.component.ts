@@ -1,5 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { Subject } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -9,17 +10,17 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 })
 export class AccessKeyRemovalVerifierComponent {
   @Input() accessKeyId: string;
-  @Output() accessKeyRemovalChange: EventEmitter<any> = new EventEmitter();
-  @Output() destroyModalChange: EventEmitter<any> = new EventEmitter();
+  @Output() accessKeyRemovalChange: Subject<any> = new Subject();
+  @Output() destroyModalChange: Subject<any> = new Subject();
 
   constructor() {}
 
   remove() {
-    this.accessKeyRemovalChange.emit(this.accessKeyId);
+    this.accessKeyRemovalChange.next(this.accessKeyId);
   }
 
   destroy() {
-    this.destroyModalChange.emit(true);
+    this.destroyModalChange.next(true);
   }
 
 }

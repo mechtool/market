@@ -4,6 +4,7 @@ import { DeclensionPipe } from './declension.pipe';
 import { ArrayJoinerPipe } from './array-joiner.pipe';
 import { AvailabilityPipe } from './availability.pipe';
 import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
+import { NaviCartCounterPipe } from './navi-cart-counter.pipe';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
     ArrayJoinerPipe,
     AvailabilityPipe,
     SumLettersPipe,
+    NaviCartCounterPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -19,6 +21,7 @@ import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
     ArrayJoinerPipe,
     AvailabilityPipe,
     SumLettersPipe,
+    NaviCartCounterPipe,
   ],
 })
 export class PipesModule {

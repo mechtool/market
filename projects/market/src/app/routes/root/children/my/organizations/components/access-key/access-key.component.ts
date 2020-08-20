@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { UserOrganizationModel, AccessKeyModel } from '#shared/modules/common-services/models';
+import { AccessKeyModel } from '#shared/modules/common-services/models';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

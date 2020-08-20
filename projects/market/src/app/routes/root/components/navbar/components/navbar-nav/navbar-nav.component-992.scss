@@ -35,7 +35,7 @@
 
     .panel {
       .label {
-        display: block;
+        display: flex;
       }
 
       .item {
@@ -114,7 +114,8 @@
         margin: 0 0 0 10px;
       }
 
-      .counter {
+      .cart[data-counter]:after {
+        content: attr(data-counter);
         display: flex;
         align-items: center;
         justify-content: center;

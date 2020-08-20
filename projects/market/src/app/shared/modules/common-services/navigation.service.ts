@@ -68,7 +68,7 @@ export class NavigationService {
         styleClass: 'delimiter',
         routerLink: ['/cart'],
         icon: 'basket',
-        counter: 99,
+        counter: 0,
       },
       {
         label: 'Личный кабинет',
@@ -118,7 +118,7 @@ export class NavigationService {
         styleClass: 'delimiter',
         routerLink: ['/cart'],
         icon: 'basket',
-        counter: 99,
+        counter: 0,
       },
       {
         label: 'Личный кабинет',
