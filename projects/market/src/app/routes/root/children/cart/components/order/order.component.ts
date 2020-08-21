@@ -15,9 +15,10 @@ import {
   DeliveryMethod,
   LocationModel,
   RelationEnumModel,
-  UserOrganizationModel
+  UserOrganizationModel,
+  CountryCode
 } from '#shared/modules/common-services/models';
-import { catchError, filter, map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, filter, map, mergeMap, switchMap, take, tap, debounceTime } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, stringToHex, innKppToLegalId } from '#shared/utils';
@@ -49,7 +50,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
   form: FormGroup;
   availableUserOrganizations: UserOrganizationModel[];
-  foundLocations: LocationModel[] = [];
+  foundLocations: LocationModel[] = null;
   isModalVisible = false;
   modalType: string = null;
   isOrderLoading = false;
@@ -144,6 +145,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
     this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.userOrganizations$.value, this.order);
     this._initConsumer(this.availableUserOrganizations, this.order);
+    this.foundLocations = this._getFoundLocations(this.order);
     this._cdr.detectChanges();
     this._watchDeliveryAreaUserChanges();
     this._watchItemQuantityChanges();
@@ -159,17 +161,35 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _getFoundLocations(order: CartDataOrderModel): LocationModel[] {
+    if (order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode)) {
+      return order.deliveryOptions.deliveryZones.map((zone: any) => {
+        return {
+          fias: zone.fiasCode,
+          name: zone.title,
+          fullName: zone.title,
+        };
+      });
+    }
+    return [{
+      fias: CountryCode.RUSSIA,
+      name: 'Россия',
+      fullName: 'Российская Федерация',
+    }];
+  }
+
   private _watchDeliveryAreaUserChanges() {
     this.form.get('deliveryArea').valueChanges
       .pipe(
         filter(res => typeof res === 'string'),
+        debounceTime(300),
         switchMap((res) => {
-          let fiasCodes = null;
+          let deliveryZones = null;
           if (this.order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode)) {
-            fiasCodes = this.order.deliveryOptions.deliveryZones.map(zone => zone.fiasCode);
+            deliveryZones = this.order.deliveryOptions.deliveryZones;
           }
-          if (fiasCodes) {
-            return this._locationService.searchAddresses(res, fiasCodes);
+          if (deliveryZones?.length) {
+            return this._locationService.searchAddresses(res, deliveryZones);
           }
           return this._locationService.searchAddresses(res);
         })
