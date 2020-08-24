@@ -5,13 +5,20 @@ import {
   LocalStorageService,
   SortModel,
   SuppliersItemModel,
+  TradeOfferPriceMatrixModel,
   TradeOfferStockEnumModel,
   TradeOfferSummaryModel,
   TradeOfferSummaryPriceModel,
   TradeOfferVatEnumModel,
 } from '#shared/modules';
 import { Router } from '@angular/router';
-import { absoluteImagePath, hasRequiredParameters, mapStock, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
+import {
+  absoluteImagePath,
+  currencyCode,
+  hasRequiredParameters,
+  mapStock,
+  queryParamsWithoutSupplierIdFrom
+} from '#shared/utils';
 
 @Component({
   selector: 'market-supplier-trade-offers-list',
@@ -48,6 +55,17 @@ export class SupplierTradeOffersListComponent {
     private _router: Router,
     private _localStorageService: LocalStorageService,
   ) {
+  }
+
+  price(matrix: TradeOfferPriceMatrixModel[]): number {
+    if (matrix?.length) {
+      return matrix.sort((one, two) => one.price - two.price)[0].price;
+    }
+    return null;
+  }
+
+  currencyCode(currencyNum: string): string {
+    return currencyCode(currencyNum);
   }
 
   changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
@@ -90,6 +108,14 @@ export class SupplierTradeOffersListComponent {
       default:
         return null;
     }
+  }
+
+  fromPackages(matrix: TradeOfferPriceMatrixModel[]) {
+    if (matrix?.length) {
+      const fromPackages = matrix.sort((one, two) => one.price - two.price)[0].fromPackages;
+      return `от ${fromPackages} шт.`;
+    }
+    return null;
   }
 
   stock(level: TradeOfferStockEnumModel, temporarilyOutOfSales: boolean) {

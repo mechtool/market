@@ -390,20 +390,20 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         })
       }
     };
-    let comments = '';
+    let comment = '';
     if (this.form.get('deliveryDesirableDate').value) {
       const dateFormatted = format(
         new Date(this.form.get('deliveryDesirableDate').value),
         'dd-MM-yyyy HH:mm'
       );
-      comments += `Желаемая дата доставки: ${dateFormatted}
+      comment += `Желаемая дата доставки: ${dateFormatted}
       `;
     }
     if (this.form.get('commentForSupplier').value) {
-      comments += `Комментарий: ${this.form.get('commentForSupplier').value}`;
+      comment += `Комментарий: ${this.form.get('commentForSupplier').value}`;
     }
-    if (comments) {
-      data['comments'] = comments;
+    if (comment) {
+      data['comment'] = comment;
     }
     this._cartService.handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
       .pipe(

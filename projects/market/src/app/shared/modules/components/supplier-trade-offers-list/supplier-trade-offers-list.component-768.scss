@@ -123,8 +123,9 @@
       color: var(--color-primary);
     }
 
-    .cell_nds {
+    .cell_nds, .cell_from_packages {
       margin-top: 5px;
+      margin-right: 0;
       font-size: var(--font-size-10);
       color: var(--color-primary);
     }

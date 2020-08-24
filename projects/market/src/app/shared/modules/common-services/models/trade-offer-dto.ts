@@ -6,6 +6,7 @@ export class TradeOfferDto {
   id: string;
   description?: string;
   price?: number;
+  currencyCode?: string;
   stock?: string; // todo: Должно быть number, но пока в апи такого нет
   supplierId?: string;
   supplierName?: string;
@@ -16,9 +17,10 @@ export class TradeOfferDto {
       id: offer.id,
       description: offer.offerDescription?.title || offer.offerDescription?.description,
       price: offer.price,
+      currencyCode: offer.currency?.numericCode,
       stock: mapStock(offer.stock),
-      supplierId: offer.supplier.id,
-      supplierName: offer.supplier.name,
+      supplierId: offer.supplier?.id,
+      supplierName: offer.supplier?.name,
       audience: offer.audience,
     };
   }

@@ -6,12 +6,12 @@ import { debounceTime, filter } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import {
   OrderStatusModal,
-  RelationEnumModel,
   TradeOfferPriceMatrixModel,
   TradeOfferResponseModel,
   TradeOfferVatEnumModel
 } from '#shared/modules/common-services/models';
 import { CartService, NotificationsService } from '#shared/modules/common-services';
+import { currencyCode } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -34,7 +34,11 @@ export class ProductOrderComponent implements OnInit {
   private _price: number;
 
   get price(): number {
-    return this._price ? this._price : this._closest(this.matrix, 1);
+    return this._price ? this._price : this._closest(this.matrix);
+  }
+
+  get currencyCode(): string {
+    return currencyCode(this.tradeOffer.termsOfSale.price?.currencyCode);
   }
 
   get vatInfo() {
@@ -52,7 +56,7 @@ export class ProductOrderComponent implements OnInit {
   }
 
   get matrix(): TradeOfferPriceMatrixModel[] {
-    return this.tradeOffer.requestedPriceProjection?.matrix
+    return this.tradeOffer.termsOfSale?.price?.matrix
       .sort((one, two) => one.fromPackages - two.fromPackages);
   }
 
@@ -123,27 +127,10 @@ export class ProductOrderComponent implements OnInit {
     }
   }
 
-  private _closest(matrix: TradeOfferPriceMatrixModel[], total: number): number {
-    let result;
-    let difference = 0;
-
-    if (matrix) {
-      for (let i = 0; i < matrix.length; i++) {
-        if (matrix[i].fromPackages <= total && ((total - matrix[i].fromPackages <= difference) || difference === 0)) {
-          difference = total - matrix[i].fromPackages;
-          result = matrix[i].price;
-        }
-      }
-
-      if (!result) {
-        for (let i = 0; i < matrix.length; i++) {
-          if (matrix[i].fromPackages > total && ((matrix[i].fromPackages - total <= difference) || difference === 0)) {
-            difference = total - matrix[i].fromPackages;
-            result = matrix[i].price;
-          }
-        }
-      }
+  private _closest(matrix: TradeOfferPriceMatrixModel[]) {
+    if (matrix?.length) {
+      return matrix.sort((one, two) => one.price - two.price)[0].price;
     }
-    return result;
+    return null;
   }
 }

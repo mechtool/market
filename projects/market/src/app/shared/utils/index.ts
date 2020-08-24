@@ -1,6 +1,7 @@
 export * from './business-structure';
 export * from './convert-list-to-tree';
 export * from './convert-string-to-color';
+export * from './currency';
 export * from './deep-tree-search';
 export * from './deep-tree-parents-search';
 export * from './generate-query-string-from-object';
