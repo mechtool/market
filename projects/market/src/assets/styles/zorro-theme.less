@@ -263,6 +263,7 @@ nz-spin {
 }
 
 .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+  user-select: none;
   font-size: var(--font-size-15);
   font-weight: var(--font-weight-base);
   margin-right: 0;
@@ -270,7 +271,6 @@ nz-spin {
   min-width: 160px;
   align-items: center;
   text-align: center;
-  cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   border: 1px solid #f9f9f9;
 
@@ -280,9 +280,14 @@ nz-spin {
     border: 1px solid #f2f2f2;
   }
 
-  &:hover {
+  &:not(.ant-tabs-tab-disabled):hover {
     background-color: var(--color-accent-light);
   }
+
+}
+
+.ant-empty-image {
+  height: 60px;
 }
 
 @media all and (max-width: 576px) {

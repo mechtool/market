@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
 export class NavbarMobileNavComponent {
 
   get getCartCounter$(): any {
-    return this._cartService.getCartData$().pipe(map(res => res?.content?.length));
+    return this._cartService.cartCounter$;
   }
 
   constructor(

@@ -1,53 +1,6 @@
-<nz-modal #modal nzWrapClassName="my_modal" [(nzVisible)]="isModalVisible" [nzFooter]="null" (nzOnCancel)="isModalVisible = false" [nzCloseOnNavigation]="false">
-
-  <ng-container *ngIf="modalType === 'registerOrAuth'">
-    <ng-container *ngTemplateOutlet="registerOrAuthModal"></ng-container>
-  </ng-container>
-
-  <ng-container *ngIf="modalType === 'addOrganization'">
-    <ng-container *ngTemplateOutlet="addOrganizationModal"></ng-container>
-  </ng-container>
-
-  <ng-container *ngIf="modalType === 'orderSent'">
-    <ng-container *ngTemplateOutlet="orderSentModal"></ng-container>
-  </ng-container>
-
-</nz-modal>
-
-<ng-template #registerOrAuthModal>
-  <div class="modal_content order_modal">
-    <div class="modal_title">Необходимо пройти авторизацию</div>
-    <p class="order_modal__text">Чтобы оформить заказ необходимо<br> зарегистрироваться или войти в свой аккаунт в 1С.<br> Не переживайте: данные в корзине сохранятся.</p>
-    <div class="order_modal__btns">
-      <a class="btn btn_std btn-yellow" (click)="register()">Регистрация</a>
-      <a class="btn btn_std btn-gray" (click)="login()">Вход</a>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #addOrganizationModal>
-  <div class="modal_content order_modal">
-    <div class="modal_title">Необходимо зарегистрировать организацию</div>
-    <p class="order_modal__text">Чтобы оформить заказ необходимо<br> иметь хотя бы одну зарегистрированную организацию.</p>
-    <div class="order_modal__btns">
-      <a class="btn btn_std btn-yellow" [routerLink]="['/my/organizations?tab=c']">Мои организации</a>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #orderSentModal>
-  <div class="modal_content order_modal">
-    <div class="modal_title">Заказ отправлен поставщику</div>
-    <p class="order_modal__text">Отслеживать статус заказов<br> вы можете в разделе Мои заказы.</p>
-    <div class="order_modal__btns">
-      <a class="btn btn_std btn-yellow" [routerLink]="['/my/orders']">Мои заказы</a>
-    </div>
-  </div>
-</ng-template>
-
 <div class="order" *ngIf="itemsControls.length">
 
-  <form class="form__order" action="" [formGroup]="form" (submit)="checkAndCreateOrder()">
+  <form class="form__order" action="" [formGroup]="form" (submit)="checkForValidityAndCreateOrder()">
 
     <div class="order_info">
       <div class="order_spec" *ngIf="userInfo && availableUserOrganizations?.length">
@@ -124,7 +77,7 @@
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="Данные для заказа">
+      <nz-tab nzTitle="Данные для заказа" nzDisabled="{{!userInfo}}">
         <div class="tab-content">
           <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
         </div>
@@ -404,7 +357,7 @@
     <div class="order__total_nds">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</div>
     <div class="order__total_btn">
       <button nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">Оформить заказ</button>
-      <div class="form_error" *ngIf="!form.valid && selectedTabIndex == 1 && unavailableToOrderTradeOfferIds.length">Удалите недоступные позиции из заказа</div>
+      <div class="form_error" *ngIf="!form.valid && unavailableToOrderTradeOfferIds.length">Удалите недоступные позиции из заказа</div>
     </div>
   </div>
 

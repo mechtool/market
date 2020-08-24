@@ -6,7 +6,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
@@ -36,6 +36,8 @@ import {
 } from '#shared/modules/common-services';
 import { DeliveryMethodModel } from './models/delivery-method.model';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
+import { AuthModalService } from '#shared/modules/setup-services/auth-modal.service';
+import { CartModalService } from '../../cart-modal.service';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -51,8 +53,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   form: FormGroup;
   availableUserOrganizations: UserOrganizationModel[];
   foundLocations: LocationModel[] = null;
-  isModalVisible = false;
-  modalType: string = null;
   isOrderLoading = false;
   deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
@@ -132,11 +132,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _cartService: CartService,
     private _userService: UserService,
     private _locationService: LocationService,
-    private _authService: AuthService,
     private _bnetService: BNetService,
     private _router: Router,
     private _tradeOffersService: TradeOffersService,
     private _notificationsService: NotificationsService,
+    private _authModalService: AuthModalService,
+    private _cartModalService: CartModalService,
   ) {
   }
 
@@ -335,16 +336,34 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkAndCreateOrder() {
-    if (this.form.valid) {
-      this._createOrder();
+  checkForValidityAndCreateOrder() {
+
+    if (!this.userInfo) {
+      this._authModalService.openAuthDecisionMakerModal();
+      return;
     }
+
+    if (!this.availableUserOrganizations?.length) {
+      this._authModalService.openEmptyOrganizationsInfoModal();
+      return;
+    }
+
+    if (!this.orderRelationHref) {
+      this.changeSelectedTabIndex(0);
+      this._cartModalService.openOrderUnavailableModal();
+      return;
+    }
+
     if (!this.form.valid) {
-      this.selectedTabIndex = 1;
+      this.changeSelectedTabIndex(1);
       Object.keys(this.form.controls).forEach(key => {
         this.form.controls[key].markAsDirty();
-       });
+      });
+      return;
     }
+
+    this._createOrder();
+
   }
 
   changeSelectedTabIndex(tabIndex: number) {
@@ -352,81 +371,54 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _createOrder() {
-    if (!this.orderRelationHref) {
-      return;
-    }
-    if (!!this.userInfo) {
-      if (this.availableUserOrganizations?.length) {
-        const data = {
-          customerOrganizationId: this.form.get('consumerId').value,
-          contacts: {
-            name: this.form.get('contactName').value,
-            phone: this.form.get('contactPhone').value,
-            email: this.form.get('contactEmail').value,
-          },
-          deliveryOptions: {
-            ...(this.deliveryAvailable ? {
-              deliveryTo: {
-                fiasCode: this.form.get('deliveryArea').value.fias,
-                title: this.form.get('deliveryArea').value.fullName,
-                countryOksmCode: '643',
-              }
-            } : {
-              pickupFrom: this.pickupArea,
-            })
+    const data = {
+      customerOrganizationId: this.form.get('consumerId').value,
+      contacts: {
+        name: this.form.get('contactName').value,
+        phone: this.form.get('contactPhone').value,
+        email: this.form.get('contactEmail').value,
+      },
+      deliveryOptions: {
+        ...(this.deliveryAvailable ? {
+          deliveryTo: {
+            fiasCode: this.form.get('deliveryArea').value.fias,
+            title: this.form.get('deliveryArea').value.fullName,
+            countryOksmCode: '643',
           }
-        };
-        let comments = '';
-        if (this.form.get('deliveryDesirableDate').value) {
-          const dateFormatted = format(
-            new Date(this.form.get('deliveryDesirableDate').value),
-            'dd-MM-yyyy HH:mm'
-          );
-          comments += `Желаемая дата доставки: ${dateFormatted}
-          `;
-        }
-        if (this.form.get('commentForSupplier').value) {
-          comments += `Комментарий: ${this.form.get('commentForSupplier').value}
-          `;
-        }
-        if (comments) {
-          data['comments'] = comments;
-        }
-        this._cartService.handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
-          .pipe(
-            switchMap(_ => this._cartService.setActualCartData())
-          )
-          .subscribe(
-            (res) => {
-              this.isModalVisible = true;
-              this.modalType = 'orderSent';
-              this.cartDataChange.emit(res);
-              this.items.clear();
-              this._cdr.detectChanges();
-            },
-            (err) => {
-              this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-            });
+        } : {
+          pickupFrom: this.pickupArea,
+        })
       }
-      if (!this.availableUserOrganizations?.length) {
-        this.isModalVisible = true;
-        this.modalType = 'addOrganization';
-        return;
-      }
+    };
+    let comments = '';
+    if (this.form.get('deliveryDesirableDate').value) {
+      const dateFormatted = format(
+        new Date(this.form.get('deliveryDesirableDate').value),
+        'dd-MM-yyyy HH:mm'
+      );
+      comments += `Желаемая дата доставки: ${dateFormatted}
+      `;
     }
-    if (!this.userInfo) {
-      this.isModalVisible = true;
-      this.modalType = 'registerOrAuth';
-      return;
+    if (this.form.get('commentForSupplier').value) {
+      comments += `Комментарий: ${this.form.get('commentForSupplier').value}`;
     }
-  }
-
-  login(): void {
-    this._authService.login(`${location.pathname}${location.search}`);
-  }
-
-  register(): void {
-    this._authService.register('/my/organizations?tab=c;/cart');
+    if (comments) {
+      data['comments'] = comments;
+    }
+    this._cartService.handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
+      .pipe(
+        switchMap(_ => this._cartService.setActualCartData())
+      )
+      .subscribe(
+        (res) => {
+          this._cartModalService.openOrderSentModal();
+          this.cartDataChange.emit(res);
+          this.items.clear();
+          this._cdr.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        });
   }
 
   setHexColor(str: string): string {

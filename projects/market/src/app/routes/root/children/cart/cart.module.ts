@@ -16,8 +16,10 @@ import {
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
 import { CartComponent } from './cart.component';
-import { CartOrderComponent, CartOrderQtyCounterComponent } from './components';
+import { CartOrderComponent, CartOrderQtyCounterComponent, OrderSentComponent } from './components';
 import { NgxMaskModule } from 'ngx-mask';
+import { CartModalService } from './cart-modal.service';
+import { OrderUnavailableComponent } from './components/order/components/order-unavailable';
 
 @NgModule({
   imports: [
@@ -42,7 +44,10 @@ import { NgxMaskModule } from 'ngx-mask';
     CartComponent,
     CartOrderComponent,
     CartOrderQtyCounterComponent,
+    OrderUnavailableComponent,
+    OrderSentComponent,
   ],
+  providers: [CartModalService]
 })
 export class CartModule {
 }

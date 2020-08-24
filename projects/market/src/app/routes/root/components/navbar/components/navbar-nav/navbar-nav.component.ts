@@ -179,10 +179,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _watchSetCartDataCounter(): void {
-    this._cartService.getCartData$()
-      .pipe(
-        pluck('content', 'length')
-      ).subscribe((cartDataLength) => {
+    this._cartService.cartCounter$.subscribe((cartDataLength) => {
         this.cartNavItem.counter = cartDataLength;
       })
   }

@@ -28,6 +28,18 @@ export class CartService {
     this._localStorageService.putCartData(cartData);
   }
 
+  get cartCounter$(): Observable<number> {
+    return this.getCartData$()
+      .pipe(
+        map((res) => {
+          return res.content.reduce((accum, curr) => {
+            accum += curr.items.length;
+            return accum;
+          }, 0);
+        })
+      );
+  }
+
   constructor(
     private _bnetService: BNetService,
     private _localStorageService: LocalStorageService,

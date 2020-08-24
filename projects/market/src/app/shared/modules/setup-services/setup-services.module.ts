@@ -8,10 +8,14 @@ import { DelayedPreloadingStrategy } from './preloading-strategy';
 import { ApiInterceptor } from './api-interceptor';
 import { NzModalModule } from 'ng-zorro-antd';
 import { AuthOrganizationGuard } from './auth-organization.guard';
+import { AuthDecisionMakerModule } from '#shared/modules/components/auth-decision-maker/auth-decision-maker.module';
+import { EmptyOrganizationsInfoModule } from '#shared/modules/components/empty-organizations-info/empty-organizations-info.module';
 
 @NgModule({
   imports: [
-    NzModalModule
+    NzModalModule,
+    AuthDecisionMakerModule,
+    EmptyOrganizationsInfoModule,
   ]
 })
 export class SetupServicesModule {

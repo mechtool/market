@@ -45,30 +45,40 @@ export class LocationService {
 
     if (textQuery.length) {
 
-      if (deliveryZones?.length) {
-        const textQueryArraySplittedByComma = textQuery.split(',');
-        if (textQueryArraySplittedByComma.length === 1) {
-          const newTextQuery = textQuery.split(' ').join(',');
+      const textQueryArraySplittedByComma = textQuery.split(',');
+      if (textQueryArraySplittedByComma.length === 1) {
+        const newTextQuery = textQuery.split(' ').join(',');
+        if (deliveryZones?.length) {
           return this._bnetService.searchAddresses(newTextQuery, deliveryZones.map(zone => zone.fiasCode));
         }
-        if (textQueryArraySplittedByComma.length === 2 && !textQueryArraySplittedByComma[1].trim()) {
+        if (!deliveryZones?.length) {
+          return this._bnetService.searchAddresses(newTextQuery);
+        }
+      }
+      if (textQueryArraySplittedByComma.length === 2 && !textQueryArraySplittedByComma[1].trim()) {
+        if (deliveryZones?.length) {
           return this._bnetService.searchAddresses(textQuery, deliveryZones.map(zone => zone.fiasCode));
         }
-        if (textQueryArraySplittedByComma.length >= 2 && textQueryArraySplittedByComma[1].trim()) {
-          const firstPartArraySplittedByComma = textQueryArraySplittedByComma.slice(0, textQueryArraySplittedByComma.length - 1);
-          const lastElem = textQueryArraySplittedByComma[textQueryArraySplittedByComma.length - 1];
-          const textLastElem = lastElem.split(' ').join(',');
+        if (!deliveryZones?.length) {
+          return this._bnetService.searchAddresses(textQuery);
+        }
+      }
+      if (textQueryArraySplittedByComma.length >= 2 && textQueryArraySplittedByComma[1].trim()) {
+        const firstPartArraySplittedByComma = textQueryArraySplittedByComma.slice(0, textQueryArraySplittedByComma.length - 1);
+        const lastElem = textQueryArraySplittedByComma[textQueryArraySplittedByComma.length - 1];
+        const textLastElem = lastElem.split(' ').join(',');
+        if (deliveryZones?.length) {
           return this._bnetService.searchAddresses(
             firstPartArraySplittedByComma.join(',') + textLastElem,
             deliveryZones.map(zone => zone.fiasCode)
           );
         }
+        if (!deliveryZones?.length) {
+          return this._bnetService.searchAddresses(
+            firstPartArraySplittedByComma.join(',') + textLastElem
+          );
+        }
       }
-
-      if (!deliveryZones?.length) {
-        return this._bnetService.searchAddresses(textQuery);
-      }
-
 
     }
   }

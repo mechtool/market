@@ -379,27 +379,10 @@
          }
       ],
       "deliveryOptions":{
-         "pickupPoints":[
-            {
-               "fiasCode":"0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
-               "title":"Москва г, Пресненская наб, дом 12",
-               "countryOksmCode":"643"
-            },
-            {
-               "fiasCode":"8181e3aa-137c-4187-9fd6-fceb252142d1",
-               "title":"Москва г, Пресненская наб, дом 12",
-               "countryOksmCode":"643"
-            },
-            {
-               "fiasCode":"745e543b-8690-4dca-9d78-858876340cdd",
-               "title":"Москва г, Пресненская наб, дом 12",
-               "countryOksmCode":"643"
-            }
-         ],
          "deliveryZones":[
             {
-               "fiasCode":"0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
-               "title":"Москва г",
+               "fiasCode": null,
+               "title": "Россия",
                "countryOksmCode":"643"
             }
          ]
