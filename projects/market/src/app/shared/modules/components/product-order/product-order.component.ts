@@ -56,8 +56,7 @@ export class ProductOrderComponent implements OnInit {
   }
 
   get matrix(): TradeOfferPriceMatrixModel[] {
-    return this.tradeOffer.termsOfSale?.price?.matrix
-      .sort((one, two) => one.fromPackages - two.fromPackages);
+    return this.tradeOffer.termsOfSale?.price?.matrix?.sort((one, two) => one.fromPackages - two.fromPackages) || [];
   }
 
   constructor(

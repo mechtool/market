@@ -51,6 +51,8 @@ export class OrganizationOperateComponent implements OnChanges {
   send() {
     this.organizationDataChange.emit({
       ...this.form.value,
+      ...(this.form.value.organizationPhone && { organizationPhone: `+7${this.form.value.organizationPhone}` }),
+      ...{ contactPhone: `+7${this.form.value.contactPhone}` },
       ...{
         inn: this.form.get('inn').value,
         kpp: this.form.get('kpp').value

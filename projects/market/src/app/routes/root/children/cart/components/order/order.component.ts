@@ -57,6 +57,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
 
+  get orderType(): 'order' | 'priceRequest' {
+    return this.order?.items?.[0]?.price ? 'order' : 'priceRequest';
+  }
+
   get unavailableToOrderTradeOfferIds(): string[] {
     const unavailableToOrderStatuses = ['TemporarilyOutOfSales'];
     return this.order.makeOrderViolations?.filter(x => unavailableToOrderStatuses.includes(x.code)).map(x => x.tradeOfferId) || [];
@@ -325,8 +329,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this.isOrderLoading = false;
       this._watchItemQuantityChanges();
       this.form.patchValue({
-        total: order.orderTotal.total,
-        totalVat: order.orderTotal.totalVat,
+        total: order.orderTotal?.total,
+        totalVat: order.orderTotal?.totalVat,
       });
       this._cdr.detectChanges();
     }
@@ -375,7 +379,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       customerOrganizationId: this.form.get('consumerId').value,
       contacts: {
         name: this.form.get('contactName').value,
-        phone: this.form.get('contactPhone').value,
+        phone: `+7${this.form.get('contactPhone').value}`,
         email: this.form.get('contactEmail').value,
       },
       deliveryOptions: {

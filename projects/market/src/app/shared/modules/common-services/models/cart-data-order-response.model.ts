@@ -20,8 +20,8 @@ export class CartDataOrderResponseModel {
       imageUrls: string[];
       unitOkei: CartDataOrderOkeiResponseModel;
       quantity: number;
-      price: number;
-      priceIncludesVAT: boolean;
+      price?: number;
+      priceIncludesVAT?: boolean;
       itemTotal: {
         total: number;
         totalVat: number;
