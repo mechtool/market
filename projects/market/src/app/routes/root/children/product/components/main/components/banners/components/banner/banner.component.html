@@ -4,8 +4,8 @@
     <div class="banner__descr">
       <p><ng-content select=".description"></ng-content></p>
     </div>
-    <div class="banner__btn">
-      <a href="{{btnLink}}" target="_blank" rel="noopener noreferrer" class="btn btn_std btn_banner">{{btnText}}</a>
+    <div class="banner__btn" *ngIf="btnLink && btnText">
+      <a href="{{btnLink}}" target="{{isLinkExternal ? '_blank' : ''}}" rel="noopener noreferrer" class="btn btn_std btn_banner">{{btnText}}</a>
     </div>
   </div>
   <div class="banner__img">

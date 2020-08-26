@@ -23,10 +23,9 @@ import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, stringToHex, innKppToLegalId } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
-import { of } from 'rxjs';
+import {Observable, of, zip} from 'rxjs';
 import { Router } from '@angular/router';
 import {
-  AuthService,
   BNetService,
   CartService,
   LocationService,
@@ -38,6 +37,7 @@ import { DeliveryMethodModel } from './models/delivery-method.model';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
 import { AuthModalService } from '#shared/modules/setup-services/auth-modal.service';
 import { CartModalService } from '../../cart-modal.service';
+import { DeliveryOptionsModel } from "./models";
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -62,7 +62,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get unavailableToOrderTradeOfferIds(): string[] {
-    const unavailableToOrderStatuses = ['TemporarilyOutOfSales'];
+    const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable'];
     return this.order.makeOrderViolations?.filter(x => unavailableToOrderStatuses.includes(x.code)).map(x => x.tradeOfferId) || [];
   }
 
@@ -146,14 +146,25 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.deliveryMethods = this._getDeliveryMethods(this.order.deliveryOptions);
-    this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
-    this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.userOrganizations$.value, this.order);
-    this._initConsumer(this.availableUserOrganizations, this.order);
-    this.foundLocations = this._getFoundLocations(this.order);
-    this._cdr.detectChanges();
+    this._getDeliveryMethods(this.order.deliveryOptions)
+      .pipe(
+        tap((res) => {
+          this.deliveryMethods = res;
+          this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
+          this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.userOrganizations$.value, this.order);
+          this._initConsumer(this.availableUserOrganizations, this.order);
+        }),
+        switchMap((res) => {
+          return this._getFoundLocations(this.order);
+        })
+      ).subscribe((res) => {
+        this.foundLocations = res;
+        this._cdr.detectChanges();
+      })
+
     this._watchDeliveryAreaUserChanges();
     this._watchItemQuantityChanges();
+
   }
 
   ngOnDestroy() {
@@ -166,21 +177,18 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _getFoundLocations(order: CartDataOrderModel): LocationModel[] {
-    if (order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode)) {
-      return order.deliveryOptions.deliveryZones.map((zone: any) => {
+  private _getFoundLocations(order: CartDataOrderModel): Observable<any> {
+    const areAllDeliveryZonesValid = order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode);
+    if (areAllDeliveryZonesValid) {
+      return of(order.deliveryOptions.deliveryZones.map((zone: any) => {
         return {
           fias: zone.fiasCode,
           name: zone.title,
           fullName: zone.title,
         };
-      });
+      }));
     }
-    return [{
-      fias: CountryCode.RUSSIA,
-      name: 'Россия',
-      fullName: 'Российская Федерация',
-    }];
+    return this._locationService.getMainRegions();
   }
 
   private _watchDeliveryAreaUserChanges() {
@@ -190,7 +198,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         debounceTime(300),
         switchMap((res) => {
           let deliveryZones = null;
-          if (this.order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode)) {
+          const areAllDeliveryZonesValid = this.order.deliveryOptions?.deliveryZones?.every(zone => zone.fiasCode);
+          if (areAllDeliveryZonesValid) {
             deliveryZones = this.order.deliveryOptions.deliveryZones;
           }
           if (deliveryZones?.length) {
@@ -475,18 +484,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return differenceInCalendarDays(current, new Date()) < 1;
   };
 
-  private _getDeliveryMethods(opts: {
-    pickupPoints?: {
-      fiasCode: string;
-      title: string;
-      countryOksmCode: string;
-    }[];
-    deliveryZones?: {
-      fiasCode: string;
-      title: string;
-      countryOksmCode: string;
-    }[];
-  }): DeliveryMethodModel[] {
+  private _getDeliveryMethods(opts: DeliveryOptionsModel): Observable<DeliveryMethodModel[]> {
     const deliveryMethods: DeliveryMethodModel[] = [];
     if (opts?.pickupPoints?.length) {
       deliveryMethods.push({ label: 'Самовывоз', value: DeliveryMethod.PICKUP });
@@ -497,7 +495,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (!deliveryMethods?.length) {
       deliveryMethods.push({ label: 'Доставка', value: DeliveryMethod.DELIVERY });
     }
-    return deliveryMethods;
+    return of(deliveryMethods);
   }
 
   private _initForm(order: CartDataOrderModel, deliveryMethods: DeliveryMethodModel[], userInfo: UserInfoModel): FormGroup {
@@ -560,7 +558,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   private _initConsumer(availableOrganizations: UserOrganizationModel[], order: CartDataOrderModel) {
     if (availableOrganizations?.length) {
 
-      if (!order.consumer || (order.consumer && !availableOrganizations.map(o => o.organizationId).includes(order.consumer.id))) {
+      if (!order.consumer || !availableOrganizations.map(o => o.organizationId).includes(order.consumer.id)) {
         if (!order.customersAudience?.length) {
           this.setConsumer(availableOrganizations[0]);
         }

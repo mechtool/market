@@ -19,6 +19,9 @@ export class MainBannersBannerComponent {
   @Input() title: string;
   @Input() btnLink: string;
   @Input() btnText: string;
+  get isLinkExternal(): boolean {
+    return !this.btnLink.includes(location.hostname) && !(this.btnLink[0] === '/');
+  }
 
   constructor() {}
 

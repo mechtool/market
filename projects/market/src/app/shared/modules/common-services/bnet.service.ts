@@ -164,6 +164,10 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search-address`, { params });
   }
 
+  getMainRegions(): Observable<LocationModel[]> {
+    return this._apiService.get(`${API_URL}/locations/main-regions`);
+  }
+
   searchSuppliers(query: SuppliersRequestModel): Observable<SuppliersResponseModel> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/suppliers`, { params });

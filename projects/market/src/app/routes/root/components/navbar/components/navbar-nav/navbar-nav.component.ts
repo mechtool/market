@@ -9,7 +9,7 @@ import { NavItemModel } from '#shared/modules/common-services/models/nav-item.mo
 import { CategoryModel } from '#shared/modules/common-services/models/category.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
-import { map, take, pluck } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

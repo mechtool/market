@@ -65,9 +65,9 @@ export class NavigationService {
       },
       {
         label: 'Корзина',
+        icon: 'basket',
         styleClass: 'delimiter',
         routerLink: ['/cart'],
-        icon: 'basket',
         counter: 0,
       },
       {
@@ -92,7 +92,17 @@ export class NavigationService {
         label: 'О проекте',
         icon: 'info',
         styleClass: 'delimiter',
-        url: 'https://1cbn.ru/trading.html',
+        items: [
+          {
+            label: 'О сервисе',
+            url: 'https://1cbn.ru/trading.html',
+          },
+          {
+            label: 'Условия использования',
+            url: 'https://1cbn.ru/agreement',
+          },
+        ],
+        // url: 'https://1cbn.ru/trading.html',
       },
     ];
     const authedNavItems: NavItemModel[] = [
@@ -115,9 +125,9 @@ export class NavigationService {
       },
       {
         label: 'Корзина',
+        icon: 'basket',
         styleClass: 'delimiter',
         routerLink: ['/cart'],
-        icon: 'basket',
         counter: 0,
       },
       {
@@ -146,7 +156,17 @@ export class NavigationService {
         label: 'О проекте',
         icon: 'info',
         styleClass: 'delimiter',
-        url: 'https://1cbn.ru/trading.html',
+        items: [
+          {
+            label: 'О сервисе',
+            url: 'https://1cbn.ru/trading.html',
+          },
+          {
+            label: 'Условия использования',
+            url: 'https://1cbn.ru/agreement',
+          },
+        ],
+        // url: 'https://1cbn.ru/trading.html',
       },
     ];
     return this._userService.userData$.asObservable().pipe(

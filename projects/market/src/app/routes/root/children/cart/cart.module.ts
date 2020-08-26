@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from '#shared/modules/pipes/pipes.module';
 import {
-  NzFormModule,
+  NzAutocompleteModule,
+  NzButtonModule,
+  NzDatePickerModule,
   NzDropDownModule,
+  NzEmptyModule,
+  NzFormModule,
+  NzRadioModule,
   NzTabsModule,
   NzToolTipModule,
-  NzRadioModule,
-  NzButtonModule,
-  NzAutocompleteModule,
-  NzEmptyModule,
-  NzDatePickerModule,
 } from 'ng-zorro-antd';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';

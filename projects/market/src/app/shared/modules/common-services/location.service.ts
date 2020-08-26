@@ -12,7 +12,7 @@ export class LocationService {
     if (textQuery.length) {
       return this._bnetService.searchLocations(textQuery);
     }
-    return null;
+    return of(null);
   }
 
   searchAddresses(textQuery: string, deliveryZones?: {
@@ -35,11 +35,7 @@ export class LocationService {
       }
 
       if (!deliveryZones?.length) {
-        return of([{
-          fias: CountryCode.RUSSIA,
-          name: 'Россия',
-          fullName: 'Российская Федерация',
-        }]);
+        return this.getMainRegions();
       }
     }
 
@@ -81,6 +77,10 @@ export class LocationService {
       }
 
     }
+  }
+
+  getMainRegions(): Observable<LocationModel[]> {
+    return this._bnetService.getMainRegions();
   }
 
 }

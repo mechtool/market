@@ -54,6 +54,14 @@
       }
     }
 
+    .extra {
+      .list {
+        .item {
+          padding: 0;
+        }
+      }
+    }
+
     .categories {
       &.showed {
         left: 0;
