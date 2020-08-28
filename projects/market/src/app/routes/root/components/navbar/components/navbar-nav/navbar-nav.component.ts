@@ -38,7 +38,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   get categoryItems$(): Observable<CategoryModel[]> {
-    return this._userService.userCategories$.asObservable();
+    return this._userService.categories$.asObservable();
   }
 
   get userLogin(): string {
@@ -47,6 +47,20 @@ export class NavbarNavComponent implements OnInit {
 
   get cartNavItem(): NavItemModel {
     return this.navItems?.find(item => item.label === 'Корзина') || null;
+  }
+
+  get myOrganizationsItem(): NavItemModel {
+    return this.navItems.reduce((accum, curr)  => {
+      if (accum) {
+        return accum;
+      }
+      if (curr.items?.length) {
+        accum = curr.items.find((it) => {
+          return  it.label === 'Мои организации';
+        });
+      }
+      return accum;
+    }, null);
   }
 
   @HostBinding('class.minified')
@@ -74,6 +88,7 @@ export class NavbarNavComponent implements OnInit {
   ngOnInit() {
     this._setNavigation();
     this._watchSetCartDataCounter();
+    this._watchSetParticipationRequestsCounter();
   }
 
   navigateNavItem(navItem: NavItemModel): void {
@@ -154,7 +169,7 @@ export class NavbarNavComponent implements OnInit {
         this._setNavItemActive(this._getActiveItem(this.navItems));
       }, (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      })
+      });
   }
 
   private _getActiveItem(navItems: NavItemModel[]): NavItemModel {
@@ -166,7 +181,7 @@ export class NavbarNavComponent implements OnInit {
           activeItem = subItem;
         }
       }
-    })
+    });
     return activeItem;
   }
 
@@ -179,8 +194,18 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _watchSetCartDataCounter(): void {
-    this._cartService.cartCounter$.subscribe((cartDataLength) => {
+    this._cartService.cartCounter$
+      .subscribe((cartDataLength) => {
         this.cartNavItem.counter = cartDataLength;
-      })
+      });
+  }
+
+  private _watchSetParticipationRequestsCounter(): void {
+    this._userService.participationRequests$
+      .subscribe((participationRequests) => {
+        if (this.myOrganizationsItem) {
+          this.myOrganizationsItem.counter = participationRequests?.length || 0;
+        }
+      });
   }
 }

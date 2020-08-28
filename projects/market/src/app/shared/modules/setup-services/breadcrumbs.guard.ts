@@ -239,7 +239,7 @@ export class BreadcrumbsGuard implements CanActivate {
     const nextPageWithAuthentication = pathsWithAuthentication.some(regEx => regEx.test(urlWithoutQueryParams));
     const nextPageWithAuthorization = pathsWithAuthorization.some(regEx => regEx.test(urlWithoutQueryParams));
     return (nextPageWithAuthentication && !this._userService.userData$.getValue()) ||
-      (nextPageWithAuthorization && !this._userService.userOrganizations$.getValue()?.length);
+      (nextPageWithAuthorization && !this._userService.organizations$.getValue()?.length);
   }
 }
 

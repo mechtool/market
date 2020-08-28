@@ -18,14 +18,14 @@
         class="tab_item tab_long"
         [ngClass]="{'active': activeTabType == 'b'}"
         (click)="activeTabType = 'b'; isEditable = false">
-          <span class="data_counter data_counter__gray" [attr.data_counter]="users?.length || 0">Пользователи</span>
+          <span class="data_counter data_counter__gray" [attr.data_counter]="users?.length || null">Пользователи</span>
       </span>
 
       <span
         class="tab_item tab_long"
         [ngClass]="{'active': activeTabType == 'c'}"
         (click)="activeTabType = 'c'; isEditable = false">
-          <span class="data_counter data_counter__gray" [attr.data_counter]="participationRequests?.length || 0">Запросы</span>
+          <span class="data_counter data_counter__gray" [attr.data_counter]="participationRequests?.length || null">Запросы</span>
       </span>
 
       <span

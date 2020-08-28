@@ -7,10 +7,11 @@
 <div class="nav-btns">
     <a class="btn btn_bordered">
       <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
-      <span class="counter" *ngIf="getCartCounter$ | async as cartCounter">{{cartCounter}}</span>
+      <span class="counter" *ngIf="getCartCounter$ | async as cartCounter">{{cartCounter | marketNaviCounter}}</span>
     </a>
     <a class="btn btn_bordered btn_mobile-menu" (click)="openMenu()">
       <span></span>
     </a>
 </div>
+
 

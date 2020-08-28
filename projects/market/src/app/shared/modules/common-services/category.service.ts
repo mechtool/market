@@ -42,6 +42,6 @@ export class CategoryService {
   }
 
   getCategories(): Observable<CategoryModel[]> {
-    return this._userService.userCategories$.asObservable();
+    return this._userService.categories$.asObservable();
   }
 }

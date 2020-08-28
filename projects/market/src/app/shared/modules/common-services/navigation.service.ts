@@ -102,7 +102,6 @@ export class NavigationService {
             url: 'https://1cbn.ru/agreement',
           },
         ],
-        // url: 'https://1cbn.ru/trading.html',
       },
     ];
     const authedNavItems: NavItemModel[] = [
@@ -137,10 +136,12 @@ export class NavigationService {
           {
             label: 'Мои заказы',
             routerLink: ['/my/orders'],
+            counter: 0,
           },
           {
             label: 'Мои организации',
             routerLink: ['/my/organizations'],
+            counter: 0,
           },
           {
             label: 'Выход',
@@ -166,7 +167,6 @@ export class NavigationService {
             url: 'https://1cbn.ru/agreement',
           },
         ],
-        // url: 'https://1cbn.ru/trading.html',
       },
     ];
     return this._userService.userData$.asObservable().pipe(
@@ -293,7 +293,7 @@ export class NavigationService {
   }
 
   private _setUserCategories(): void {
-    this._userService.userCategories$.subscribe((res) => {
+    this._userService.categories$.subscribe((res) => {
       this._userCategories = res;
     });
   }

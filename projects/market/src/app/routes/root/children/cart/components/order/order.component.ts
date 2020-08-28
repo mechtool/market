@@ -151,7 +151,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         tap((res) => {
           this.deliveryMethods = res;
           this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
-          this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.userOrganizations$.value, this.order);
+          this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.organizations$.value, this.order);
           this._initConsumer(this.availableUserOrganizations, this.order);
         }),
         switchMap((res) => {

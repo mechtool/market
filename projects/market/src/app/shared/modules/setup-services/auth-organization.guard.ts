@@ -16,7 +16,7 @@ export class AuthOrganizationGuard implements CanActivate {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-    return this._userService.userOrganizations$
+    return this._userService.organizations$
       .pipe(
         switchMap((organizations) => {
           if (organizations?.length) {

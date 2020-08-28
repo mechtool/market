@@ -42,11 +42,11 @@ export class OrganizationsComponent implements OnInit {
   }
 
   get userOrganizations$(): Observable<UserOrganizationModel[]> {
-    return this._userService.userOrganizations$;
+    return this._userService.organizations$;
   }
 
-  get userParticipationRequests$(): Observable<ParticipationRequestResponseModel[]> {
-    return this._userService.userParticipationRequests$;
+  get userOwnParticipationRequests$(): Observable<ParticipationRequestResponseModel[]> {
+    return this._userService.ownParticipationRequests$;
   }
 
   constructor(
@@ -213,7 +213,7 @@ export class OrganizationsComponent implements OnInit {
       })
     ).subscribe((res) => {
       if (res) {
-        const userOrganizationsIds = this._userService.userOrganizations$.value.map(org => org.organizationId) || [];
+        const userOrganizationsIds = this._userService.organizations$.value.map(org => org.organizationId) || [];
         if (userOrganizationsIds.includes(res.id)) {
           this._notificationsService.info('Вы уже имеете доступ к данной организации');
         }
@@ -244,7 +244,7 @@ export class OrganizationsComponent implements OnInit {
   private _setUserParticipationRequests() {
     this._organizationsService.getOwnParticipationRequests()
       .subscribe((res) => {
-        this._userService.userParticipationRequests$.next(res);
+        this._userService.ownParticipationRequests$.next(res);
       }, (err) => {
         this._notificationsService.error('Произошла ошибка при получении запросов на присоединение');
       });

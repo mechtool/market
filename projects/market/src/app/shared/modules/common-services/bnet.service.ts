@@ -3,6 +3,8 @@ import { ApiService } from './api.service';
 import { environment } from '#environments/environment';
 import { Observable } from 'rxjs';
 import {
+  AccessKeyModel,
+  AccessKeyResponseModel,
   CartAddItemRequestModel,
   CartCreateOrderRequestModel,
   CartDataResponseModel,
@@ -13,26 +15,24 @@ import {
   DocumentResponseModel,
   EdiRequestModel,
   LocationModel,
+  OrganizationAdminResponseModel,
   OrganizationResponseModel,
+  OrganizationUserResponseModel, ParticipationRequestRequestModel,
+  ParticipationRequestResponseModel,
   ProductOfferRequestModel,
   ProductOfferResponseModel,
   ProductOffersListResponseModel,
   ProductOffersRequestModel,
+  RegisterOrganizationRequestModel,
   SuggestionResponseModel,
   SuppliersRequestModel,
   SuppliersResponseModel,
   TradeOfferResponseModel,
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
-  UserOrganizationModel,
-  OrganizationAdminResponseModel,
-  AccessKeyResponseModel,
-  ParticipationRequestResponseModel,
-  RegisterOrganizationRequestModel,
-  AccessKeyModel,
-  UpdateOrganizationRequestModel,
   UpdateOrganizationContactPersonRequestModel,
-  OrganizationUserResponseModel,
+  UpdateOrganizationRequestModel,
+  UserOrganizationModel,
 } from './models';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 
@@ -102,8 +102,9 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/organizations/own-participation-requests`);
   }
 
-  getParticipationRequests(orgId: string): Observable<ParticipationRequestResponseModel[]> {
-    return this._apiService.get(`${API_URL}/organizations/participation-requests?organizationId=${orgId}`);
+  getParticipationRequests(query: ParticipationRequestRequestModel): Observable<ParticipationRequestResponseModel[]> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/organizations/participation-requests`, { params });
   }
 
   acceptParticipationRequestById(id: string): Observable<any> {

@@ -11,7 +11,7 @@ export class SingleOrganizationGuard implements CanActivate {
   }
 
   canActivate(next: ActivatedRouteSnapshot): any {
-    const userOrganizationsIds = this._userService.userOrganizations$.value.map(org => org.organizationId) || [];
+    const userOrganizationsIds = this._userService.organizations$.value.map(org => org.organizationId) || [];
 
     if (userOrganizationsIds.includes(next.params.id)) {
       return true;

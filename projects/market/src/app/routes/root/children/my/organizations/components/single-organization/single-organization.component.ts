@@ -14,7 +14,7 @@ import { switchMap, tap, map, filter } from 'rxjs/operators';
 import { UserRemovalVerifierComponent } from '../user-removal-verifier/user-removal-verifier.component';
 import { RequestDecisionMakerComponent } from '../request-decision-maker/request-decision-maker.component';
 import { AccessKeyRemovalVerifierComponent } from '../access-key-removal-verifier/access-key-removal-verifier.component';
-import { iif, of, Observable } from 'rxjs';
+import { iif, of, Observable, zip } from 'rxjs';
 
 type TabType = 'a' | 'b' | 'c' | 'd';
 type UpdateOrganizationType = {
@@ -30,7 +30,8 @@ type UpdateOrganizationType = {
   contactRole: string;
   contactEmail: string;
   contactPhone: string;
-}
+};
+const PAGE_SIZE = 100;
 
 const ERROR_DEFAULT = 'Невозможно обработать запрос. Внутренняя ошибка сервера.';
 const ERROR_GET_ACCESS_KEY = 'Произошла ошибка при получении ключа доступа.';
@@ -84,14 +85,14 @@ export class SingleOrganizationComponent implements OnInit {
     this._watchParamsChanges();
   }
 
-  init(orgId: string) {
+  init(organizationId: string) {
     this._resetActiveTab();
-    this._resetIsAdmin(orgId);
-    this._resetOrganizationData(orgId);
+    this._resetIsAdmin(organizationId);
+    this._resetOrganizationData(organizationId);
     if (this.isAdmin) {
-      this._resetUsers(orgId);
-      this._resetParticipationRequests(orgId);
-      this._resetAccessKeys(orgId);
+      this._resetUsers(organizationId);
+      this._resetParticipationRequests(organizationId);
+      this._resetAccessKeys(organizationId);
       this._resetIsEditable();
     }
   }
@@ -181,13 +182,19 @@ export class SingleOrganizationComponent implements OnInit {
     this._modal.componentInstance.makeDecisionChange
       .pipe(
         switchMap((res: [string, boolean]) => this._makeDecisionParticipationRequest(res)),
+        switchMap((res: boolean) => {
+          return zip(
+            of(res),
+            this._userService.updateParticipationRequests(),
+          );
+        }),
         tap(() => {
           this._resetParticipationRequests(this.orgId);
         })
       )
-      .subscribe((res: boolean) => {
+      .subscribe((res: [boolean, any]) => {
         this._modal.destroy();
-        if (res) {
+        if (res[0]) {
           this._resetUsers(this.orgId);
           this._resetActiveTab('b');
         }
@@ -275,17 +282,17 @@ export class SingleOrganizationComponent implements OnInit {
     this.activeTabType = tabType;
   }
 
-  private _resetIsAdmin(orgId: string): void {
-    const orgIndex = this._userService.userOrganizations$.value.findIndex((org) => {
-      return org.organizationId == orgId && org.userGrants?.isAdmin;
+  private _resetIsAdmin(organizationId: string): void {
+    const orgIndex = this._userService.organizations$.value.findIndex((org) => {
+      return org.organizationId === organizationId && org.userGrants?.isAdmin;
     });
     this.isAdmin = (orgIndex !== -1);
   }
 
-  private _resetOrganizationData(orgId: string): void {
+  private _resetOrganizationData(organizationId: string): void {
     iif(() => {
       return this.isAdmin;
-    }, this._organizationsService.getOrganizationProfile(orgId), this._organizationsService.getOrganization(orgId))
+    }, this._organizationsService.getOrganizationProfile(organizationId), this._organizationsService.getOrganization(organizationId))
       .subscribe((res) => {
         this.organizationData = res;
         this.legalRequisites = {
@@ -297,25 +304,29 @@ export class SingleOrganizationComponent implements OnInit {
       });
   }
 
-  //
-  private _resetUsers(orgId: string): void {
-    this._organizationsService.getOrganizationUsers(orgId).subscribe((res) => {
+  private _resetUsers(organizationId: string): void {
+    this._organizationsService.getOrganizationUsers(organizationId).subscribe((res) => {
       this.users = res;
     }, (err) => {
       this._notificationsService.error(ERROR_GET_ORG_USERS);
     });
   }
 
-  private _resetParticipationRequests(orgId: string): void {
-    this._organizationsService.getParticipationRequests(orgId).subscribe((res) => {
-      this.participationRequests = res.filter(req => !req.requestStatus?.resolutionDate);
-    }, (err) => {
-      this._notificationsService.error(ERROR_GET_ORG_REQUESTS);
-    });
+  private _resetParticipationRequests(organizationId: string): void {
+    this._organizationsService.getParticipationRequests({
+      organizationIds: [organizationId],
+      page: 0,
+      size: PAGE_SIZE,
+    })
+      .subscribe((res) => {
+        this.participationRequests = res;
+      }, (err) => {
+        this._notificationsService.error(ERROR_GET_ORG_REQUESTS);
+      });
   }
 
-  private _resetAccessKeys(orgId: string): void {
-    this._organizationsService.getAccessKeysByOrganizationId(orgId).subscribe((res) => {
+  private _resetAccessKeys(organizationId: string): void {
+    this._organizationsService.getAccessKeysByOrganizationId(organizationId).subscribe((res) => {
       this.accessKeys = res;
     }, (err) => {
       this._notificationsService.error(ERROR_GET_ORG_ACCESS_KEYS);
