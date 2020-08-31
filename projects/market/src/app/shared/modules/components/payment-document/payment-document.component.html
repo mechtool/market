@@ -1,4 +1,53 @@
 <div class="payment-document" *ngIf="document">
+
+  <div class="payment_account" *ngIf="document.sender.paymentAccount">
+    <table>
+      <tr>
+        <td rowspan=2 colspan="2" class="name_bank">
+          <p>{{document.sender.paymentAccount.bankName}}</p>
+          <p class="down">Банк получателя</p>
+        </td>
+        <td>
+          БИК
+        </td>
+        <td class="bic_bank">
+          {{document.sender.paymentAccount.bic}}
+        </td>
+      </tr>
+      <tr>
+        <td class="account">
+          Сч. №
+        </td>
+        <td class="account_bank">
+          {{document.sender.paymentAccount.accountCorr}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          ИНН {{document.sender.inn}}
+        </td>
+        <td>
+          КПП {{document.sender.kpp}}
+        </td>
+        <td rowspan=2>
+          Сч. №
+        </td>
+        <td class="account_sender">
+          {{document.sender.paymentAccount.accountNum}}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="sender_name">
+          <p>{{document.sender.name}}</p>
+          <p class="down">Получатель</p>
+        </td>
+        <td class="empty">
+          &nbsp;
+        </td>
+      </tr>
+    </table>
+  </div>
+
   <p class="title">{{document.typeOperation}} №{{document.numberOperation}}
     от {{ document.dateOperation | date:'dd MMMM yyyy г.' }}</p>
 

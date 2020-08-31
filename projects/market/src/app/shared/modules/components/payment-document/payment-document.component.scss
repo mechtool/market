@@ -36,7 +36,9 @@ p {
 }
 
 .title {
-  font-size: var(--font-size-15);
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-demi);
+  margin-top: 15px;
   margin-right: 10px;
 }
 
@@ -67,6 +69,61 @@ p {
 
   th {
     padding-right: 10px;
+  }
+}
+
+.payment_account {
+
+  margin-top: 20px;
+
+  table {
+    border: 1.5px solid var(--color-black);
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  td {
+    text-align: left;
+    vertical-align: baseline;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-12);
+  }
+
+  .name_bank {
+    width: 50%;
+  }
+
+  .account_bank {
+    border-top: none;
+  }
+
+  .account_sender {
+    border-bottom: none;
+  }
+
+  .bic_bank {
+    border-bottom: none;
+  }
+
+  .account {
+    width: 7%;
+    height: 30px;
+  }
+
+  .empty {
+    border-top: none;
+  }
+
+  .sender_name {
+    height: 40px;
+  }
+
+  p {
+    font-size: var(--font-size-10);
+  }
+
+  .down {
+    margin-bottom: 0;
   }
 }
 

@@ -21,6 +21,7 @@ class Organization {
   address: string;
   contact: Contact;
   role: string;
+  paymentAccount: PaymentAccount;
 }
 
 class Outcome {
@@ -56,4 +57,11 @@ class Tax {
   vat: string;
   vatSum: number;
   includesVat: boolean;
+}
+
+class PaymentAccount {
+  accountNum: string;
+  accountCorr: string;
+  bankName: string;
+  bic: string;
 }
