@@ -19,7 +19,7 @@
     ],
     "curly": true,
     "array-type": false,
-    "arrow-parens": false,
+    "arrow-parens": true,
     "deprecation": {
       "severity": "warning"
     },
@@ -107,6 +107,7 @@
       true,
       "single"
     ],
+    "ter-arrow-parens": true,
     "trailing-comma": false,
     "no-conflicting-lifecycle": true,
     "no-host-metadata-property": true,

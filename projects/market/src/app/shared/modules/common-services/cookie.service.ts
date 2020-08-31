@@ -13,22 +13,23 @@ export class CookieService {
     return this._ngxCookieService.get(USER_STATUS) === UserStatusEnumModel.AUTHED;
   }
 
-  constructor(
-    private _location: PlatformLocation,
-    private _ngxCookieService: NgxCookieService,
-  ) {
+  constructor(private _location: PlatformLocation, private _ngxCookieService: NgxCookieService) {
     this._setRouteDomain();
   }
 
   setUserStatusCookie(statusName: string): void {
     if (this._routeDomain) {
-      this._ngxCookieService.set(
-        USER_STATUS,
-        statusName,
-        null,
-        '/',
-        this._routeDomain
-      );
+      this._ngxCookieService.set(USER_STATUS, statusName, null, '/', this._routeDomain);
+    }
+  }
+
+  getUserLastLoginTimestamp(uin: string): number {
+    return +this._ngxCookieService.get(`last_login_timestamp_${uin}`);
+  }
+
+  setUserLastLoginTimestamp(uin: string, timestamp: number): void {
+    if (this._routeDomain) {
+      this._ngxCookieService.set(`last_login_timestamp_${uin}`, timestamp.toString(), null, '/', this._routeDomain);
     }
   }
 
@@ -42,6 +43,4 @@ export class CookieService {
       this._routeDomain = `${hostNameSplitted[hostNameSplitted.length - 2]}.${hostNameSplitted[hostNameSplitted.length - 1]}`;
     }
   }
-
-
 }

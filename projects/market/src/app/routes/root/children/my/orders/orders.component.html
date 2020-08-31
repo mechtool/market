@@ -14,7 +14,7 @@
     </nz-tab>
 
     <ng-template #account>
-      <div class="account" [attr.new-accounts]="newAccounts">Счета</div>
+      <div class="account" [attr.new-accounts]="(newAccountDocumentsCounter$ | async) || null">Счета</div>
     </ng-template>
 
     <nz-tab [nzTitle]="account">

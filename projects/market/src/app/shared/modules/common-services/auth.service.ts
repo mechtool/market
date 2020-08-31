@@ -5,7 +5,7 @@ import { map, tap, switchMap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
-import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel, } from './models';
+import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel } from './models';
 import { UserService } from './user.service';
 import { OrganizationsService } from './organizations.service';
 
@@ -14,23 +14,16 @@ const ITS_URL = environment.itsUrl;
 /**
  * URL пути находящиеся под аутентификацией
  */
-const pathsWithAuth = [
-  /^\/supplier$/i,
-  /^\/my\/organizations$/i,
-  /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
-  /^\/my\/orders$/i,
-];
+const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organizations\/(?:([^\/]+?))\/?$/i, /^\/my\/orders$/i];
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private _apiService: ApiService,
     private _userService: UserService,
     private _organizationsService: OrganizationsService,
     private _router: Router,
-  ) {
-  }
+  ) {}
 
   logout(path: string = '/') {
     const routePath = this.isPathWithAuth(path) ? '/' : path;
@@ -42,22 +35,23 @@ export class AuthService {
     const pathName = path.split('?')[0];
     const ticket = getParamFromQueryString('ticket');
     const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
-    const url = pathName === location.pathname ?
-      `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}` :
-      `${location.origin}${pathName}`;
+    const url =
+      pathName === location.pathname
+        ? `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`
+        : `${location.origin}${pathName}`;
     if (ticket) {
       const serviceName = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
-      return this.auth({ ticket, serviceName })
-        .pipe(
-          tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
-          switchMap(_ => this._organizationsService.getUserOrganizations()),
-          tap(res => this._userService.setUserOrganizations(res)),
-          switchMap(res => this._userService.updateParticipationRequests()),
-          map(() => {
-            this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
-            return null;
-          }),
-        );
+      return this.auth({ ticket, serviceName }).pipe(
+        tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
+        switchMap((_) => this._organizationsService.getUserOrganizations()),
+        tap((res) => this._userService.setUserOrganizations(res)),
+        switchMap((res) => this._userService.updateParticipationRequests()),
+        switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
+        map(() => {
+          this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
+          return null;
+        }),
+      );
     }
     if (!ticket && redirectable) {
       this.redirectExternalSsoAuth(url);
@@ -83,10 +77,9 @@ export class AuthService {
   }
 
   goTo(url: string): void {
-    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true })
-      .then(() => {
-        this._router.navigateByUrl(url)
-      });
+    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true }).then(() => {
+      this._router.navigateByUrl(url);
+    });
   }
 
   redirectExternalSsoAuth(url: string): void {
@@ -95,7 +88,6 @@ export class AuthService {
 
   private isPathWithAuth(currentUrl: string): boolean {
     const urlWithoutQueryParams = currentUrl.split('?')[0];
-    return pathsWithAuth.some(regEx => regEx.test(urlWithoutQueryParams));
+    return pathsWithAuth.some((regEx) => regEx.test(urlWithoutQueryParams));
   }
-
 }

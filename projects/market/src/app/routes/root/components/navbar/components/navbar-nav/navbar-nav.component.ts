@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener, Injector, OnInit, } from '@angular/core';
+import { Component, HostBinding, HostListener, Injector, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -46,17 +46,31 @@ export class NavbarNavComponent implements OnInit {
   }
 
   get cartNavItem(): NavItemModel {
-    return this.navItems?.find(item => item.label === 'Корзина') || null;
+    return this.navItems?.find((item) => item.label === 'Корзина') || null;
   }
 
   get myOrganizationsItem(): NavItemModel {
-    return this.navItems.reduce((accum, curr)  => {
+    return this.navItems.reduce((accum, curr) => {
       if (accum) {
         return accum;
       }
       if (curr.items?.length) {
         accum = curr.items.find((it) => {
-          return  it.label === 'Мои организации';
+          return it.label === 'Мои организации';
+        });
+      }
+      return accum;
+    }, null);
+  }
+
+  get myOrdersItem(): NavItemModel {
+    return this.navItems.reduce((accum, curr) => {
+      if (accum) {
+        return accum;
+      }
+      if (curr.items?.length) {
+        accum = curr.items.find((it) => {
+          return it.label === 'Мои заказы';
         });
       }
       return accum;
@@ -89,6 +103,7 @@ export class NavbarNavComponent implements OnInit {
     this._setNavigation();
     this._watchSetCartDataCounter();
     this._watchSetParticipationRequestsCounter();
+    this._watchSetNewAccountDocumentsCounter();
   }
 
   navigateNavItem(navItem: NavItemModel): void {
@@ -110,10 +125,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   toggleMenu(): void {
-    if (
-      this._navService.screenWidthGreaterThan(992) &&
-      this._navService.screenWidthLessThan(1300)
-    ) {
+    if (this._navService.screenWidthGreaterThan(992) && this._navService.screenWidthLessThan(1300)) {
       if (!this._navService.isMenuOpened) {
         this._navService.openMenu();
       } else {
@@ -162,14 +174,15 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _setNavigation() {
-    this._navService.navItems$
-      .pipe(take(1))
-      .subscribe((res) => {
+    this._navService.navItems$.pipe(take(1)).subscribe(
+      (res) => {
         this.navItems = res;
         this._setNavItemActive(this._getActiveItem(this.navItems));
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      });
+      },
+    );
   }
 
   private _getActiveItem(navItems: NavItemModel[]): NavItemModel {
@@ -186,7 +199,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _getItemForPath(navItems: NavItemModel[], path: string): NavItemModel {
-    return navItems.find(item => item.routerLink?.[0] === path) || null;
+    return navItems.find((item) => item.routerLink?.[0] === path) || null;
   }
 
   private _setNavItemActive(navItem: NavItemModel): void {
@@ -194,18 +207,24 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _watchSetCartDataCounter(): void {
-    this._cartService.cartCounter$
-      .subscribe((cartDataLength) => {
-        this.cartNavItem.counter = cartDataLength;
-      });
+    this._cartService.cartCounter$.subscribe((cartDataLength) => {
+      this.cartNavItem.counter = cartDataLength;
+    });
   }
 
   private _watchSetParticipationRequestsCounter(): void {
-    this._userService.participationRequests$
-      .subscribe((participationRequests) => {
-        if (this.myOrganizationsItem) {
-          this.myOrganizationsItem.counter = participationRequests?.length || 0;
-        }
-      });
+    this._userService.participationRequests$.subscribe((participationRequests) => {
+      if (this.myOrganizationsItem) {
+        this.myOrganizationsItem.counter = participationRequests?.length || 0;
+      }
+    });
+  }
+
+  private _watchSetNewAccountDocumentsCounter(): void {
+    this._userService.newAccountDocumentsCounter$.subscribe((counter) => {
+      if (this.myOrdersItem) {
+        this.myOrdersItem.counter = counter || 0;
+      }
+    });
   }
 }

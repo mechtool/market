@@ -22,21 +22,19 @@ const USER_AND_COOKIES_AGREEMENT_STORAGE_KEY = 'user_and_cookies_agreement';
 
 @Injectable()
 export class LocalStorageService {
-
-  constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {
-  }
+  constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {}
 
   getSearchQueriesHistoryList(query?: string): SuggestionResponseModel {
     let searchQueries;
     if (query && query.trim().length) {
       const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
       const queryLowerCase = query.toLowerCase();
-      searchQueries = historyList.filter(res => res.searchText.toLowerCase().includes(queryLowerCase));
+      searchQueries = historyList.filter((res) => res.searchText.toLowerCase().includes(queryLowerCase));
     } else {
       searchQueries = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
     }
     return {
-      searchQueriesHistory: searchQueries.reverse()
+      searchQueriesHistory: searchQueries.reverse(),
     };
   }
 
@@ -47,13 +45,13 @@ export class LocalStorageService {
 
   removeSearchQuery(id: string): void {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
-    const filterHistoryList = historyList.filter(res => res.id !== id);
+    const filterHistoryList = historyList.filter((res) => res.id !== id);
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList.length ? filterHistoryList : undefined);
   }
 
   putSearchQuery(searchQuery: SuggestionSearchQueryHistoryModel): void {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.id !== searchQuery.id);
+    const filterHistoryList = historyList.filter((res) => res.id !== searchQuery.id);
     const query = {
       id: searchQuery.id,
       imageUrl: searchQuery.imageUrl,
@@ -68,7 +66,7 @@ export class LocalStorageService {
     if (_searchText) {
       const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
       const hexId = this.toHexId(_searchText);
-      const filterHistoryList = historyList.filter(res => res.id !== hexId);
+      const filterHistoryList = historyList.filter((res) => res.id !== hexId);
       const query = {
         id: hexId,
         imageUrl: 'assets/img/svg/quick_search_history.svg',
@@ -82,7 +80,7 @@ export class LocalStorageService {
 
   putSearchProduct(product: SuggestionProductItemModel) {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.searchText !== product.name);
+    const filterHistoryList = historyList.filter((res) => res.searchText !== product.name);
     const query = {
       id: product.id,
       imageUrl: product.images ? product.images[0].href : 'assets/img/tmp/no_photo.png',
@@ -95,7 +93,7 @@ export class LocalStorageService {
 
   putSearchCategory(category: SuggestionCategoryItemModel) {
     const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-    const filterHistoryList = historyList.filter(res => res.searchText !== category.name);
+    const filterHistoryList = historyList.filter((res) => res.searchText !== category.name);
     const query = {
       id: category.id,
       imageUrl: 'assets/img/tmp/lightning.png',
@@ -166,17 +164,6 @@ export class LocalStorageService {
       currentCartData?.content.splice(foundInd, 1, newOrder);
       this._storage.set(CART_DATA_STORAGE_KEY, currentCartData);
     }
-  }
-
-  getLastDateUserAccount(uin: string): number {
-    const lastDates = this._storage.get(LAST_DATE_USER_ACCOUNT_STORAGE_KEY) || {};
-    return lastDates[uin];
-  }
-
-  putLastDateUserAccount(uin: string, newLastDate: number) {
-    const lastDates = this._storage.get(LAST_DATE_USER_ACCOUNT_STORAGE_KEY) || {};
-    lastDates[uin] = newLastDate;
-    this._storage.set(LAST_DATE_USER_ACCOUNT_STORAGE_KEY, lastDates);
   }
 
   getUserAndCookiesAgreement(): boolean {
