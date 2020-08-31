@@ -86,8 +86,8 @@
               <span *ngIf="!tradeOffer.imageUrls" class="empty__img"></span>
               <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
             </div>
-            <div class="table_cell cell_price" *ngIf="tradeOffer.priceProjection?.price">
-              <span *ngIf="tradeOffer.priceProjection"
+            <div class="table_cell cell_price">
+              <span *ngIf="tradeOffer.price"
                     class="price">{{price(tradeOffer.price.matrix) | marketMultiplier:'.01' | currency:currencyCode(tradeOffer.price.currencyCode):'symbol':'1.0'}}</span>
               <span *ngIf="tradeOffer.price" class="cell_from_packages">{{fromPackages(tradeOffer.price.matrix)}}</span>
               <span *ngIf="tradeOffer.price" class="cell_nds">{{vat(tradeOffer.price)}}</span>
