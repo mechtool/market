@@ -129,7 +129,7 @@
                *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
             <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
               <span class="filter_category__name">{{category.name}}</span>
-              <span class="filter_category__count">({{category.offers}})</span>
+              <span class="filter_category__count">({{category.products}})</span>
             </label><br/>
           </div>
         </nz-checkbox-wrapper>
@@ -305,7 +305,7 @@
                  *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
               <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
                 <span class="filter_category__name">{{category.name}}</span>
-                <span class="filter_category__count">({{category.offers}})</span>
+                <span class="filter_category__count">({{category.products}})</span>
               </label><br/>
             </div>
           </nz-checkbox-wrapper>
