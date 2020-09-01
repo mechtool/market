@@ -11,12 +11,13 @@ import { AuthService } from '#shared/modules/common-services/auth.service';
 })
 export class AuthDecisionMakerComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
+  @Input() loginRedirectPath: string;
 
-  constructor(private _authService: AuthService,) {}
+  constructor(private _authService: AuthService) {}
 
   login(): void {
     this._destroy();
-    this._authService.login(`${location.pathname}${location.search}`);
+    this._authService.login(this.loginRedirectPath);
   }
 
   register(): void {
@@ -27,5 +28,4 @@ export class AuthDecisionMakerComponent {
   private _destroy() {
     this.destroyModalChange.next(true);
   }
-
 }

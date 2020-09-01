@@ -34,8 +34,9 @@ export class UserService {
     this.userData$.next(data);
   }
 
-  setUserOrganizations(data: any): void {
+  setUserOrganizations(data: any): Observable<any> {
     this.organizations$.next(data);
+    return of(data);
   }
 
   getUserLastLoginTimestamp(uin: string): number {
@@ -72,29 +73,33 @@ export class UserService {
   }
 
   updateNewAccountDocumentsCounter(): Observable<any> {
-    return this._bnetService
-      .getAccounts({
-        legalIds: this._legalIds(),
-        page: 1,
-        size: 100,
-      })
-      .pipe(
-        catchError((err) => {
-          this.newAccountDocumentsCounter$.next(0);
-          return of(null);
-        }),
-        tap((docs: DocumentResponseModel[]) => {
-          const uin = this.userData$.value?.userInfo.userId;
-          const lastLoginTimestamp = this.getUserLastLoginTimestamp(uin);
-          if (lastLoginTimestamp) {
-            const counter = docs.filter((doc) => doc.sentDate > lastLoginTimestamp).length;
-            this.newAccountDocumentsCounter$.next(counter);
-          }
-          if (!lastLoginTimestamp) {
-            this.newAccountDocumentsCounter$.next(docs?.length);
-          }
-        }),
-      );
+    const legalIds = this._legalIds();
+    if (legalIds?.length) {
+      return this._bnetService
+        .getAccounts({
+          legalIds: this._legalIds(),
+          page: 1,
+          size: 100,
+        })
+        .pipe(
+          catchError((err) => {
+            this.newAccountDocumentsCounter$.next(0);
+            return of(null);
+          }),
+          tap((docs: DocumentResponseModel[]) => {
+            const uin = this.userData$.value?.userInfo.userId;
+            const lastLoginTimestamp = this.getUserLastLoginTimestamp(uin);
+            if (lastLoginTimestamp) {
+              const counter = docs.filter((doc) => doc.sentDate > lastLoginTimestamp).length;
+              this.newAccountDocumentsCounter$.next(counter);
+            }
+            if (!lastLoginTimestamp) {
+              this.newAccountDocumentsCounter$.next(docs?.length);
+            }
+          }),
+        );
+    }
+    return of(null);
   }
 
   watchUserDataChangesForUserStatusCookie() {

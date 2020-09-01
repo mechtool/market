@@ -44,7 +44,7 @@ export class AuthService {
       return this.auth({ ticket, serviceName }).pipe(
         tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
         switchMap((_) => this._organizationsService.getUserOrganizations()),
-        tap((res) => this._userService.setUserOrganizations(res)),
+        switchMap((res) => this._userService.setUserOrganizations(res)),
         switchMap((res) => this._userService.updateParticipationRequests()),
         switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
         map(() => {

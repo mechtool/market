@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class EmptyOrganizationsInfoComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
+  @Input() description: string;
 
   constructor(private _router: Router) {}
 
@@ -23,6 +24,4 @@ export class EmptyOrganizationsInfoComponent {
   private _destroy() {
     this.destroyModalChange.next(true);
   }
-
 }
-

@@ -1,5 +1,5 @@
 {
-  "extends": "tslint-config-airbnb",
+  "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
   "rules": {
     "align": [
       true,
@@ -26,10 +26,7 @@
     "eofline": true,
     "forin": true,
     "import-spacing": true,
-    "indent": [
-      true,
-      "spaces"
-    ],
+    "ter-indent": false,
     "interface-over-type-literal": true,
     "no-arg": true,
     "no-bitwise": true,
