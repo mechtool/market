@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
@@ -127,7 +127,7 @@ export class CategoryComponent {
           return this._categoryService.getCategoryTree(this.categoryId);
         }),
         switchMap((categoryModel) => {
-          this.categoryModel = categoryModel.find(category => category.id === this.categoryId);
+          this.categoryModel = categoryModel.find((category) => category.id === this.categoryId);
           return this._productService.searchProductOffers({
             query: this.query,
             filters: this.filters,

@@ -24,7 +24,7 @@ export class CategoryListComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this._categoryService.getCategoriesChildren(this.category.id)
+    this._categoryService.getCategoriesChildren(this.category?.id)
       .subscribe(
         (categories) => {
           this.categories = categories;
