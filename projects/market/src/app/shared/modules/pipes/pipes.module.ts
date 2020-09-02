@@ -5,6 +5,7 @@ import { ArrayJoinerPipe } from './array-joiner.pipe';
 import { AvailabilityPipe } from './availability.pipe';
 import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
 import { NaviCounterPipe } from './navi-counter.pipe';
+import { FoundPipe } from './found.pipe';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { NaviCounterPipe } from './navi-counter.pipe';
     AvailabilityPipe,
     SumLettersPipe,
     NaviCounterPipe,
+    FoundPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -22,6 +24,7 @@ import { NaviCounterPipe } from './navi-counter.pipe';
     AvailabilityPipe,
     SumLettersPipe,
     NaviCounterPipe,
+    FoundPipe,
   ],
 })
 export class PipesModule {

@@ -3,6 +3,7 @@ import { ProductOffersModel, SortModel } from '#shared/modules/common-services/m
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -29,8 +30,8 @@ export class SearchResultComponent {
 
   isRequestFulfilled: boolean;
 
-  get found() {
-    return this.productsTotal < 5000 ? 'найдено' : 'найдено более';
+  get foundCount() {
+    return this.productsTotal < MAX_VALUE ? this.productsTotal : MAX_VALUE;
   }
 
   constructor(private _activatedRoute: ActivatedRoute) {

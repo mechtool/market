@@ -19,6 +19,7 @@ import {
   mapStock,
   queryParamsWithoutSupplierIdFrom
 } from '#shared/utils';
+import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 
 @Component({
   selector: 'market-supplier-trade-offers-list',
@@ -47,8 +48,8 @@ export class SupplierTradeOffersListComponent {
   @Output() loadTradeOffers: EventEmitter<number> = new EventEmitter();
   @Output() cityChange: EventEmitter<boolean> = new EventEmitter();
 
-  get found() {
-    return this.tradeOffersTotal < 10000 ? 'найдено' : 'найдено более';
+  get foundCount() {
+    return this.tradeOffersTotal < MAX_VALUE ? this.tradeOffersTotal : MAX_VALUE;
   }
 
   constructor(

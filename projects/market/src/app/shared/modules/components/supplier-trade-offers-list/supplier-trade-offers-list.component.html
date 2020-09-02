@@ -12,8 +12,8 @@
 
   <div class="catalog_header__count">
     <span class="catalog_header__title">Результаты поиска</span>
-    <strong *ngIf="tradeOffersTotal">{{found}}
-      <b>{{tradeOffersTotal}}</b> {{tradeOffersTotal | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}
+    <strong *ngIf="tradeOffersTotal">{{tradeOffersTotal | marketFound}}
+      <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}
     </strong>
     <strong *ngIf="!tradeOffersTotal">поставщик не опубликовал торговые предложения для вашей организации</strong>
   </div>

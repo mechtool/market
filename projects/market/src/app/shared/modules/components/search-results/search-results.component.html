@@ -3,8 +3,8 @@
   <div class="result_info">
     <div class="title">
       <strong>Результаты поиска</strong>
-      <span *ngIf="productOffers.length">{{found}}
-        <b>{{productsTotal}}</b> {{productsTotal | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
+      <span *ngIf="productOffers.length">{{productsTotal | marketFound}}
+        <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
       <span *ngIf="!productOffers?.length && isRequestFulfilled">По вашему запросу ничего не найдено.
         <br/>Попробуйте изменить параметры поиска и поискать заново.</span>
     </div>
