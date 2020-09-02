@@ -16,7 +16,14 @@ export class AuthGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     return this._userService.userData$.pipe(
       switchMap((auth) => {
-        return !!auth ? of(true) : of(this._authModalService.openAuthDecisionMakerModal(state.url));
+        return !!auth
+          ? of(true)
+          : of(
+              this._authModalService.openAuthDecisionMakerModal(
+                'Для продолжения работы необходимо зарегистрироваться или войти в свой аккаунт в 1С.',
+                state.url,
+              ),
+            );
       }),
       catchError((e) => {
         return of(false);

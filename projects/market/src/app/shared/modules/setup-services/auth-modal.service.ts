@@ -13,13 +13,13 @@ const PATHS_WITH_AUTHORIZATION: RegExp[] = [/^\/supplier$/i, /^\/my\/organizatio
 @Injectable()
 export class AuthModalService {
   constructor(private _modalService: NzModalService, private _authService: AuthService) {}
-
-  openAuthDecisionMakerModal(loginRedirectPath: string = `${location.pathname}${location.search}`) {
+  openAuthDecisionMakerModal(description: string, loginRedirectPath: string = `${location.pathname}${location.search}`) {
     const modal = this._modalService.create({
       nzContent: AuthDecisionMakerComponent,
       nzFooter: null,
       nzWidth: 480,
       nzComponentParams: {
+        description,
         loginRedirectPath,
       },
     });

@@ -11,6 +11,7 @@ import { AuthService } from '#shared/modules/common-services/auth.service';
 })
 export class AuthDecisionMakerComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
+  @Input() description: string;
   @Input() loginRedirectPath: string;
 
   constructor(private _authService: AuthService) {}
