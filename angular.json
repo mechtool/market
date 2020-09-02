@@ -17,7 +17,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/market",
+            "buildOptimizer": true,
+            "vendorChunk": true,
+            "extractLicenses": true,
+            "namedChunks": true,
+            "extractCss": true,
+            "sourceMap": true,
+            "optimization": true,
+            "outputHashing": "all",
+            "outputPath": "dist/market/dev",
             "index": "projects/market/src/index.html",
             "main": "projects/market/src/main.ts",
             "polyfills": "projects/market/src/polyfills.ts",
@@ -29,6 +37,18 @@
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
+              }
+            ],
+            "budgets": [
+              {
+                "type": "initial",
+                "maximumWarning": "4mb",
+                "maximumError": "10mb"
+              },
+              {
+                "type": "anyComponentStyle",
+                "maximumWarning": "50kb",
+                "maximumError": "100kb"
               }
             ],
             "styles": [
@@ -50,28 +70,7 @@
                   "with": "projects/market/src/environments/environment.dev.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "outputPath": "dist/market/dev",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": true,
-              "aot": true,
-              "extractLicenses": false,
-              "vendorChunk": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "100kb"
-                }
-              ]
+              "outputPath": "dist/market/dev"
             },
             "stage": {
               "fileReplacements": [
@@ -80,28 +79,7 @@
                   "with": "projects/market/src/environments/environment.stage.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "outputPath": "dist/market/stage",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": true,
-              "aot": true,
-              "extractLicenses": false,
-              "vendorChunk": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "100kb"
-                }
-              ]
+              "outputPath": "dist/market/stage"
             },
             "production": {
               "fileReplacements": [
@@ -110,28 +88,7 @@
                   "with": "projects/market/src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "outputPath": "dist/market/prod",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "100kb"
-                }
-              ]
+              "outputPath": "dist/market/prod"
             },
             "remote": {
               "fileReplacements": [
@@ -140,35 +97,16 @@
                   "with": "projects/market/src/environments/environment.remote.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "outputPath": "dist/market/remote",
-              "sourceMap": true,
-              "extractCss": true,
-              "namedChunks": true,
-              "aot": true,
-              "extractLicenses": false,
-              "vendorChunk": true,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "4mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "50kb",
-                  "maximumError": "100kb"
-                }
-              ]
+              "outputPath": "dist/market/remote"
+            },
+            "es5": {
+              "tsConfig": "projects/market/tsconfig.es5.app.json"
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "aot": true,
             "browserTarget": "market:build",
             "disableHostCheck": true,
             "host": "0.0.0.0",
@@ -179,10 +117,6 @@
             "sslCert": "ssl/server.crt"
           },
           "configurations": {
-            "remote": {
-              "browserTarget": "market:build:remote",
-              "proxyConfig": "./proxy-remote.conf.js"
-            },
             "dev": {
               "browserTarget": "market:build:dev"
             },
@@ -191,6 +125,13 @@
             },
             "production": {
               "browserTarget": "market:build:production"
+            },
+            "remote": {
+              "browserTarget": "market:build:remote",
+              "proxyConfig": "./proxy-remote.conf.js"
+            },
+            "es5": {
+              "browserTarget": "market:build:es5"
             }
           }
         },

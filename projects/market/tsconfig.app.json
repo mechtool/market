@@ -15,7 +15,7 @@
     "src/test.ts",
     "src/**/*.spec.ts",
     "src/environments/*.ts",
-    "src/**/index.ts",
+    "src/**/index.ts"
   ],
   "angularCompilerOptions": {
     "enableIvy": true
