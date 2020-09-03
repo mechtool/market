@@ -218,32 +218,29 @@
       },
       "items": [
         {
-          "tradeOfferId": "31f1aa3e-4bf1-4f94-ba4e-69196d22049d",
-          "productName": "Корица 2020",
-          "productDescription": "Корица",
-          "barCodes": [
-            "4413231211333"
-          ],
-          "partNumber": "002DX-442",
-          "packaging": "Коробка",
-          "imageUrls": [
-            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
-          ],
+          "tradeOfferId": "9b270d77-4570-4ede-8c16-d3ec4445f05f",
+          "productName": "Miele SGEA0 Cat&Dog",
+          "productDescription": null,
+          "barCodes": null,
+          "partNumber": "1.753-505",
           "unitOkei": {
             "code": "796",
             "nsymb": "шт",
             "name": "Штука"
           },
+          "packaging": "шт",
+          "imageUrls": [
+            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
+          ],
           "quantity": 1,
-          "price": 1500000,
+          "price": 10000,
           "priceIncludesVAT": true,
-          "itemTotal": {
-            "total": 20000,
-            "totalVat": 22000,
-            "currencyCode": "643"
-          },
           "vat": "VAT_20",
-          "maxDaysForShipment": 17,
+          "itemTotal": {
+            "total": 10000,
+            "totalVat": 1667,
+            "currencyCode": "978"
+          },
           "_links": {
             "marketplace:trade-offer-view": {
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
@@ -261,9 +258,9 @@
         "pickupPoints": null
       },
       "orderTotal": {
-        "total": 20000,
-        "totalVat": 22000,
-        "currencyCode": "643"
+        "total": 10000,
+        "totalVat": 1667,
+        "currencyCode": "978"
       },
       "_links": {
         "marketplace:make-order": {

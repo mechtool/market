@@ -11,7 +11,7 @@ import {
 import { catchError, debounceTime, filter, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
-import { absoluteImagePath, innKppToLegalId, stringToHex } from '#shared/utils';
+import { absoluteImagePath, innKppToLegalId, stringToHex, currencyCode } from '#shared/utils';
 import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -28,6 +28,7 @@ import { UserInfoModel } from '#shared/modules/common-services/models/user-info.
 import { AuthModalService } from '#shared/modules/setup-services/auth-modal.service';
 import { CartModalService } from '../../cart-modal.service';
 import { DeliveryOptionsModel } from './models';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -118,6 +119,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   get orderRelationHref(): string {
     return this.order._links?.[RelationEnumModel.ORDER_CREATE]?.href;
+  }
+
+  get currencyCode(): string {
+    return currencyCode(this.order.orderTotal?.currencyCode);
   }
 
   constructor(
@@ -461,13 +466,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             console.log('Не удалось получить поставщика по ТП');
           }
         },
-        (err) => {
+        (err: HttpErrorResponse) => {
+          if (err.status === 404) {
+            this._notificationsService.error('Данный товар недоступен к просмотру');
+            return;
+          }
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
     }
     if (!tradeOfferId) {
-      console.log('Отсутствует идентификатор ТП');
+      this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
     }
   }
 
@@ -539,7 +548,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _setImageUrl(images: string[]): string {
-    return images?.length ? absoluteImagePath(images[0]) : null;
+    return images?.length ? absoluteImagePath(images[0]) : './assets/img/svg/clean.svg';
   }
 
   private _getAvailableOrganizations(userOrganizations: UserOrganizationModel[], order: CartDataOrderModel): UserOrganizationModel[] {

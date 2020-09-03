@@ -7,13 +7,9 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 @Component({
   selector: 'market-product-gallery',
   templateUrl: './product-gallery.component.html',
-  styleUrls: [
-    './product-gallery.component.scss',
-    './product-gallery.component-768.scss'
-  ],
+  styleUrls: ['./product-gallery.component.scss', './product-gallery.component-768.scss'],
 })
 export class ProductGalleryComponent {
-
   @Input() product: ProductDto;
   @Input() supplierId: string;
   @Input() supplierName: string;
@@ -21,11 +17,11 @@ export class ProductGalleryComponent {
   @Input() supplierLogo: string;
 
   get images(): ImagesLinkModel[] {
-    if (this.product.images.length > 10) {
-      // todo Чтобы не переделывать компанент карусели, решили что будем ПОКА отображать максимум 10 изображений
+    if (this.product.images?.length > 10) {
+      // todo Чтобы не переделывать компонент карусели, решили что будем ПОКА отображать максимум 10 изображений
       return this.product.images.slice(0, 10);
     }
-    return this.product.images;
+    return this.product.images || null;
   }
 
   get stockLevel() {
@@ -36,8 +32,7 @@ export class ProductGalleryComponent {
     return resizeBusinessStructure(this.supplierName);
   }
 
-  constructor() {
-  }
+  constructor() {}
 
   firstImageUrl(imgs: ImagesLinkModel[]) {
     return imgs?.length ? this.imageUrl(imgs[0].href) : null;
@@ -46,5 +41,4 @@ export class ProductGalleryComponent {
   imageUrl(img: string): string {
     return absoluteImagePath(img);
   }
-
 }
