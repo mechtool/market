@@ -124,6 +124,7 @@
     }
 
     .icon {
+      position:relative;
       width: 40px;
       flex-shrink: 0;
       display: flex;
@@ -255,8 +256,8 @@
       color: var(--color-secondary);
       font-size: var(--font-size-10);
       font-weight: var(--font-weight-medium);
-      margin-left: 32px;
-      margin-top: -12px;
+      top: -8px;
+      right: 0;
       position: absolute;
     }
 

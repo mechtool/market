@@ -1,13 +1,10 @@
 :host {
-  display: flex;
-  justify-content: center;
+  display: block;
 }
 
 .access-key-removal-verifier {
   width: 230px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 0 auto;
 }
 
 .title {

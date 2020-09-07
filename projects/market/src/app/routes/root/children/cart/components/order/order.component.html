@@ -230,7 +230,7 @@
           </div>
           <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
             <div class="form-group form-group-long">
-              <label for="formAddress">Укажите адрес доставки *</label>
+              <label>Укажите адрес доставки *</label>
               <input type="text" placeholder="" [ngClass]="{'error': form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)}" nz-input [nzAutocomplete]="auto" formControlName="deliveryArea">
               <nz-autocomplete nzBackfill #auto>
                 <nz-auto-option *ngFor="let location of foundLocations" [nzValue]="location" [nzLabel]="location.fullName">{{ location.fullName }}</nz-auto-option>
