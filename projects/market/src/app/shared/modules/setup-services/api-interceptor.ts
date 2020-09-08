@@ -1,26 +1,11 @@
-import {
-  HttpEvent,
-  HttpHandler,
-  HttpHeaders,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { throwError, of } from 'rxjs';
-import {
-  catchError,
-  filter,
-  map,
-  switchMap,
-  tap,
-  take
-} from 'rxjs/operators';
-import { AuthService, UserService } from '#shared/modules/common-services';
+import { catchError, filter, map, switchMap, tap, take } from 'rxjs/operators';
+import { AuthResponseModel, AuthService, UserService } from '#shared/modules/common-services';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
-
   constructor(private _injector: Injector) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -28,19 +13,7 @@ export class ApiInterceptor implements HttpInterceptor {
     const userService = this._injector.get(UserService);
     const userData = userService.userData$.value;
 
-    const headerSettings = req.headers.keys().reduce((accumulator, key) => {
-      accumulator[key] = req.headers.getAll(key);
-      return accumulator;
-    }, {});
-
-    if (!headerSettings['Content-type']) {
-      headerSettings['Content-type'] =  ['application/json'];
-    }
-
-    if (userData) {
-      headerSettings['Authorization'] = `Bearer ${userData.accessToken}`;
-    }
-
+    const headerSettings = this._setHeaderSettings(req, userData);
     const headers = new HttpHeaders(headerSettings);
 
     return next.handle(req.clone({ headers })).pipe(
@@ -49,21 +22,20 @@ export class ApiInterceptor implements HttpInterceptor {
         if (err.status === 401) {
           const userData = userService.userData$.value;
           if (userData) {
-            return authService.refresh({ refreshToken: userData.refreshToken })
-              .pipe(
-                catchError(() => {
-                  authService.logout();
-                  return of(null);
-                }),
-                tap((res) => {
-                  userService.setUserData(res);
-                }),
-                switchMap((res) => {
-                  headerSettings['Authorization'] = `Bearer ${res.accessToken}`;
-                  const headers = new HttpHeaders(headerSettings);
-                  return next.handle(req.clone({ headers }));
-                }),
-              );
+            return authService.refresh({ refreshToken: userData.refreshToken }).pipe(
+              catchError(() => {
+                authService.logout();
+                return of(null);
+              }),
+              tap((res) => {
+                userService.setUserData(res);
+              }),
+              switchMap((res) => {
+                headerSettings['Authorization'] = `Bearer ${res.accessToken}`;
+                const headers = new HttpHeaders(headerSettings);
+                return next.handle(req.clone({ headers }));
+              }),
+            );
           }
           if (!userData) {
             return throwError(err);
@@ -85,11 +57,31 @@ export class ApiInterceptor implements HttpInterceptor {
           };
         }
         return throwError(err);
-      })
+      }),
     );
-
-
   }
 
-}
+  private _setHeaderSettings(req: HttpRequest<any>, userData: AuthResponseModel) {
+    const headerSettings = req.headers.keys().reduce(
+      (accumulator, key) => {
+        accumulator[key] = req.headers.getAll(key);
+        return accumulator;
+      },
+      {
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+        Expires: 'Sat, 01 Jan 2000 00:00:00 GMT',
+      },
+    );
 
+    if (!headerSettings['Content-type']) {
+      headerSettings['Content-type'] = ['application/json'];
+    }
+
+    if (userData) {
+      headerSettings['Authorization'] = `Bearer ${userData.accessToken}`;
+    }
+
+    return headerSettings;
+  }
+}
