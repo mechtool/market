@@ -1,19 +1,18 @@
 import { by, element, ElementFinder } from 'protractor';
 
 export class AppPage {
-
   getNavbarElement(): ElementFinder {
     const navbarElement = element(by.css('market-navbar'));
     return navbarElement;
   }
 
   getNavbarContainerElement(): ElementFinder {
-    const navbarContainerElement = element(by.css('market-navbar .navbar'));
+    const navbarContainerElement = element(by.css('market-navbar market-navbar-nav'));
     return navbarContainerElement;
   }
 
   getNavbarLogoElement(): ElementFinder {
-    const navbarLogoElement = element(by.css('market-navbar market-navbar-logo'));
+    const navbarLogoElement = element(by.css('market-navbar market-navbar-nav .logo .opener'));
     return navbarLogoElement;
   }
 
@@ -37,7 +36,6 @@ export class AppPage {
     return navBarMyOrdersElement;
   }
 
-
   // async getTitleText(): Promise<string> {
   //   const titleElement = element(by.css('market-app .content span'));
   //   return await titleElement.getText();
@@ -47,5 +45,4 @@ export class AppPage {
   //   const userMenuLink = element(by.css('.user-menu > a'));
   //   return userMenuLink;
   // }
-
 }

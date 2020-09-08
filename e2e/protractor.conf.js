@@ -10,16 +10,22 @@ const puppeteer = require('puppeteer');
  */
 exports.config = {
   allScriptsTimeout: 11000,
-  specs: [
-    './src/**/*.e2e-spec.ts'
-  ],
+  specs: ['./src/**/*.e2e-spec.ts'],
   SELENIUM_PROMISE_MANAGER: false,
   capabilities: {
     browserName: 'chrome',
-    acceptInsecureCerts : true,
+    acceptInsecureCerts: true,
     chromeOptions: {
-      // args: ['--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
-      args: ['--headless', '--disable-gpu', '--disable-dev-shm-usage', '--no-sandbox', '--log-level=2', '--ignore-certificate-errors', '--allow-insecure-localhost'],
+      args: [
+        //   '--headless',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--no-sandbox',
+        '--log-level=2',
+        '--ignore-certificate-errors',
+        '--allow-insecure-localhost',
+        '--start-maximized',
+      ],
       binary: puppeteer.executablePath(),
     },
   },
@@ -28,13 +34,13 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
-    print: function() {}
+    print: function () {},
   },
   restartBrowserBetweenTests: false,
   onPrepare() {
     require('ts-node').register({
-      project: require('path').join(__dirname, './tsconfig.json')
+      project: require('path').join(__dirname, './tsconfig.json'),
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-  }
+  },
 };

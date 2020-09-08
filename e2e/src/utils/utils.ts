@@ -11,20 +11,19 @@ export async function navigateTo(url: string = browser.baseUrl) {
 
 export async function waitForUrlToChangeTo(urlToChange: any, includeTicketQueryParam = false): Promise<boolean> {
   return browser.wait(() => {
-    return browser.getCurrentUrl()
-      .then((url: string) => {
-        if (!includeTicketQueryParam) {
-          return url.includes(urlToChange) && !url.includes('ticket=ST');
-        }
-        if (includeTicketQueryParam) {
-          return url.includes(urlToChange);
-        }
-      });
+    return browser.getCurrentUrl().then((url: string) => {
+      if (!includeTicketQueryParam) {
+        return url.includes(urlToChange) && !url.includes('ticket=ST');
+      }
+      if (includeTicketQueryParam) {
+        return url.includes(urlToChange);
+      }
+    });
   });
 }
 
 export function presenceOfAll(elementArrayFinder) {
   return function () {
-    return elementArrayFinder.count(count => count > 0);
+    return elementArrayFinder.count((count) => count > 0);
   };
 }

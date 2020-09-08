@@ -169,7 +169,7 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "",
-            "baseUrl": "https://10.70.2.97:4200"
+            "baseUrl": "https://10.70.7.10:4200"
           },
           "configurations": {
             "dev": {
@@ -183,6 +183,14 @@
             "production": {
               "devServerTarget": "",
               "baseUrl": "https://market.1cbn.ru"
+            },
+            "denis": {
+              "devServerTarget": "",
+              "baseUrl": "https://10.70.2.97:4200"
+            },
+            "remote": {
+              "devServerTarget": "",
+              "baseUrl": "https://market.1cbn.ru:4200"
             }
           }
         }
