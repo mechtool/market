@@ -133,7 +133,7 @@
               <div
                 class="table_cell cell_title"
                 (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
-                  <span title="{{item.controls.productName.value}}">
+                  <span title="{{item.controls.productName.value}}" marketLineClamp [rows]="2">
                     {{item.controls.productName.value}}
                   </span>
               </div>

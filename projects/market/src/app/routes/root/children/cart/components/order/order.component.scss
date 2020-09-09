@@ -241,13 +241,6 @@ button.btn:hover {
   padding-left: 0;
 }
 
-.table_list__products .cell_title span {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 .table_list__products .cell_image {
   cursor: pointer;
   width: 55px;
@@ -626,13 +619,6 @@ input[type='number'].switch_count__value {
   border: none;
 }
 
-.basket_total__preview {
-  color: #000000;
-  margin-top: -15px;
-  margin-bottom: 0;
-  padding-bottom: 14px;
-}
-
 .order .tabs_wrap {
   margin-bottom: 10px;
 }
@@ -668,28 +654,18 @@ input[type='number'].switch_count__value {
   padding-left: 9px;
 }
 
-.basket_order__expl {
-  font-size: var(--font-size-13);
-  font-weight: var(--font-weight-light);
-  opacity: 0.5;
-  margin-left: 5px;
-}
-
-.order__customer,
-.basket_order__conditions {
+.order__customer {
   width: 100%;
   max-width: 290px;
 }
 
 .order__customer_current .supplier_name {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.order__customer_current,
-.basket_order__conditions_current {
+.order__customer_current {
   width: 100%;
   height: 30px;
   border: 1px solid #c4c4c4;
@@ -703,8 +679,7 @@ input[type='number'].switch_count__value {
   cursor: pointer;
 }
 
-.order__customer_list,
-.basket_order__conditions_list {
+.order__customer_list {
   width: 100%;
 }
 
@@ -714,16 +689,6 @@ input[type='number'].switch_count__value {
   font-size: var(--font-size-12);
   font-weight: var(--font-weight-medium);
   min-height: 30px;
-}
-
-.basket_order__conditions_list .dropdown_item__hover {
-  padding: 5px 9px;
-  cursor: pointer;
-  font-size: var(--font-size-12);
-  font-weight: var(--font-weight-medium);
-  min-height: 30px;
-  display: flex;
-  align-items: center;
 }
 
 .order__total {
@@ -1279,14 +1244,6 @@ nz-date-picker {
     border: 1px solid #ececec;
     border-radius: 4px;
   }
-  .basket_order__expl {
-    display: none;
-  }
-  .basket_total__preview {
-    text-align: center;
-    margin-bottom: 25px;
-    padding-bottom: 20px;
-  }
   .section_tab__title {
     display: block;
   }
@@ -1345,24 +1302,8 @@ nz-date-picker {
   .order_spec_full {
     flex-wrap: wrap;
   }
-  .basket_order__conditions {
-    max-width: none;
-    margin-top: 5px;
-  }
-  .basket_order__conditions_current {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
   .order_info .supplier_name {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .order_info .dropdown_item .supplier_name {
-    -webkit-line-clamp: 100;
+    white-space: normal;
   }
   .order__customer {
     max-width: none;

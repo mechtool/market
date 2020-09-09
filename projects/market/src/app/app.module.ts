@@ -3,18 +3,12 @@ import { RouterModule } from '@angular/router';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { LocationStrategy, PathLocationStrategy, registerLocaleData, } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
-import {
-  AuthService,
-  CartService,
-  CommonServicesModule,
-  CookieService,
-  UserService,
-} from '#shared/modules/common-services';
+import { AuthService, CartService, CommonServicesModule, CookieService, UserService } from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgxMaskModule } from 'ngx-mask';
@@ -36,26 +30,17 @@ import * as AllIcons from '@ant-design/icons-angular/icons';
 import { PipesModule } from '#shared/modules/pipes';
 import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
+import { LineClampModule } from '#shared/modules';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
   [key: string]: IconDefinition;
 };
-const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key]);
+const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesignIcons[key]);
 
 @NgModule({
-  entryComponents: [
-    NavbarComponent,
-    NavbarMobileNavComponent,
-    NavbarNavComponent,
-  ],
-  declarations: [
-    AppComponent,
-    RootComponent,
-    NavbarComponent,
-    NavbarMobileNavComponent,
-    NavbarNavComponent,
-  ],
+  entryComponents: [NavbarComponent, NavbarMobileNavComponent, NavbarNavComponent],
+  declarations: [AppComponent, RootComponent, NavbarComponent, NavbarMobileNavComponent, NavbarNavComponent],
   imports: [
     BrowserModule,
     RouterModule,
@@ -63,12 +48,13 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
     PortalModule,
     OverlayModule,
     NzIconModule,
     PipesModule,
     CardModule,
+    LineClampModule,
     NomenclatureCardModule,
     NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
@@ -90,5 +76,4 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

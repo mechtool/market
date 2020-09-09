@@ -1,3 +1,4 @@
+import { LineClampModule } from './../../../../shared/modules/directives/line-clamp/line-clamp.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -39,6 +40,7 @@ import { OrderUnavailableComponent } from './components/order/components/order-u
     NgxMaskModule,
     CartRoutingModule,
     PipesModule,
+    LineClampModule,
   ],
   declarations: [
     CartComponent,
