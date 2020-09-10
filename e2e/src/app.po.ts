@@ -2,38 +2,31 @@ import { by, element, ElementFinder } from 'protractor';
 
 export class AppPage {
   getNavbarElement(): ElementFinder {
-    const navbarElement = element(by.css('market-navbar'));
-    return navbarElement;
+    return element(by.css('market-navbar'));
   }
 
   getNavbarContainerElement(): ElementFinder {
-    const navbarContainerElement = element(by.css('market-navbar market-navbar-nav'));
-    return navbarContainerElement;
+    return element(by.css('market-navbar market-navbar-nav'));
   }
 
   getNavbarLogoElement(): ElementFinder {
-    const navbarLogoElement = element(by.css('market-navbar market-navbar-nav .logo .opener'));
-    return navbarLogoElement;
+    return element(by.css('market-navbar market-navbar-nav .logo .opener'));
   }
 
   getMainElement(): ElementFinder {
-    const mainElement = element(by.css('main'));
-    return mainElement;
+    return element(by.css('main'));
   }
 
   getNavBarLKElement(): ElementFinder {
-    const navBarLKElement = element(by.cssContainingText('.nav-list_item', 'Личный кабинет'));
-    return navBarLKElement;
+    return element(by.cssContainingText('.nav-list_item', 'Личный кабинет'));
   }
 
   getNavBarLoginElement(): ElementFinder {
-    const navBarLoginElement = element(by.cssContainingText('.nav-list_item', 'Войти'));
-    return navBarLoginElement;
+    return element(by.cssContainingText('.nav-list_item', 'Войти'));
   }
 
   getNavBarMyOrdersElement(): ElementFinder {
-    const navBarMyOrdersElement = element(by.cssContainingText('.nav-list_item', 'Мои заказы'));
-    return navBarMyOrdersElement;
+    return element(by.cssContainingText('.nav-list_item', 'Мои заказы'));
   }
 
   // async getTitleText(): Promise<string> {
@@ -42,7 +35,6 @@ export class AppPage {
   // }
 
   // getUserMenuLink() {
-  //   const userMenuLink = element(by.css('.user-menu > a'));
-  //   return userMenuLink;
+  //   return element(by.css('.user-menu > a'));
   // }
 }

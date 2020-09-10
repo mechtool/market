@@ -6,18 +6,15 @@ export class LoginItsPage {
   userPassword = 'doNotChangePassword!';
 
   getLoginInput() {
-    const loginInputElement = element(by.css('.page .controls #username'));
-    return loginInputElement;
+    return element(by.css('.page .controls #username'));
   }
 
   getPasswordInput() {
-    const passwordInputElement = element(by.css('.page .controls #password'));
-    return passwordInputElement;
+    return element(by.css('.page .controls #password'));
   }
 
   getLoginButton() {
-    const loginBtnElement = element(by.css('.page #loginButton'));
-    return loginBtnElement;
+    return element(by.css('.page #loginButton'));
   }
 
   async authUser() {

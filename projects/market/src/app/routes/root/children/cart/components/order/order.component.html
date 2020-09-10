@@ -231,7 +231,7 @@
           <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
             <div class="form-group form-group-long">
               <label>Укажите адрес доставки *</label>
-              <input type="text" placeholder="" [ngClass]="{'error': form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)}" nz-input [nzAutocomplete]="auto" formControlName="deliveryArea">
+              <input id="delivery_address_input" type="text" placeholder="" [ngClass]="{'error': form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)}" nz-input [nzAutocomplete]="auto" formControlName="deliveryArea">
               <nz-autocomplete nzBackfill #auto>
                 <nz-auto-option *ngFor="let location of foundLocations" [nzValue]="location" [nzLabel]="location.fullName">{{ location.fullName }}</nz-auto-option>
               </nz-autocomplete>
@@ -355,7 +355,7 @@
     </div>
     <div class="order__total_nds" *ngIf="orderType === 'order'">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
     <div class="order__total_btn">
-      <button nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">{{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
+      <button id="checkoutButton" nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">{{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
       <div class="form_error" *ngIf="!form.valid && unavailableToOrderTradeOfferIds.length">Удалите недоступные позиции из заказа</div>
     </div>
   </div>

@@ -1,3 +1,4 @@
+/*
 import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
 import { LoginItsPage } from './login-its/login-its.po';
@@ -81,3 +82,4 @@ describe('При запуске приложения', async () => {
 //     await logout();
 //   });
 // });
+*/

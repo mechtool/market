@@ -4,6 +4,7 @@
     <nz-input-group [nzSuffix]="inputClearTpl">
       <input
         nz-input
+        id="search_bar_input"
         placeholder="{{placeholder}}"
         autocomplete="off"
         name="query"
@@ -45,12 +46,14 @@
     <div class="buttons">
       <div class="buttons__item">
         <button class="btn btn_square btn_search"
+                id="search_bar_button"
                 [ngClass]="{'disabled': form.invalid && filterIsEmpty}">
         </button>
       </div>
 
       <div class="buttons__item" *ngIf="filterVisible">
         <a class="btn btn_square btn_filter"
+           id="search_bar_filter"
            [attr.filter_count]="filterCount"
            nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
            [nzDropdownMenu]="filterMenu"

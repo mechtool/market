@@ -18,7 +18,7 @@
         <span class="product_specs__item__label">Поставщик:</span>
         <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
 
-        <span class="product_specs__item__value">
+        <span class="product_specs__item__value" id="supplierNameRouterLink">
             <a [routerLink]="['/supplier/' + supplierId]">
               <strong>&nbsp;&nbsp;{{name}}</strong>
             </a>

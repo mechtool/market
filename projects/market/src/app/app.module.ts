@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, PathLocationStrategy, registerLocaleData, } from '@angular/common';
 import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
@@ -63,7 +63,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
+    NoopAnimationsModule,
     PortalModule,
     OverlayModule,
     NzIconModule,

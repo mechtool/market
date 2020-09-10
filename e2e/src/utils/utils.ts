@@ -1,8 +1,12 @@
-import { browser } from 'protractor';
+import { browser, protractor, ProtractorExpectedConditions } from 'protractor';
 
 export async function logout() {
   await browser.get(`https://login-dev.1c.ru/logout?service=${browser.baseUrl}`);
   await browser.get(`https://login-dev.1c.ru/login?service=${browser.baseUrl}`);
+}
+
+export function expectedConditions(): ProtractorExpectedConditions {
+  return protractor.ExpectedConditions;
 }
 
 export async function navigateTo(url: string = browser.baseUrl) {

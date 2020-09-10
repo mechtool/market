@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserService } from './user.service';
 import { CategoryModel, CategoryRequestModel } from './models';
 import { map } from 'rxjs/operators';
@@ -16,6 +16,9 @@ export class CategoryService {
 
   getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
     // todo: Метод должен возвращать категории от root до categoryId
+    if (categoryId === '6341') {
+      return this.emptyCategory();
+    }
     return this.getCategories().pipe(
       map((res) => {
         return deepTreeParentsSearch(res, 'id', categoryId);
@@ -25,6 +28,9 @@ export class CategoryService {
 
   getCategoriesChildren(categoryId: string): Observable<CategoryModel[]> {
     // todo: Метод должен возвращать все следущие подкатегории для запрошенной categoryId
+    if (categoryId === '6341') {
+      return this.emptyCategory();
+    }
     return this.getCategories().pipe(
       map((res) => {
         const foundCategory = deepTreeSearch(res, 'id', (k, v) => v === categoryId);
@@ -43,5 +49,9 @@ export class CategoryService {
 
   getCategories(): Observable<CategoryModel[]> {
     return this._userService.categories$.asObservable();
+  }
+
+  private emptyCategory(): Observable<CategoryModel[]> {
+    return of([]);
   }
 }

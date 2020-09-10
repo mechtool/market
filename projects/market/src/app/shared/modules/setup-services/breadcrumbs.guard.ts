@@ -71,7 +71,7 @@ export class BreadcrumbsGuard implements CanActivate {
     const urlSplitted = urlWithoutQueryParams.split('/');
     let breadcrumbsItems = [];
 
-    const isRouteWithoutBreadcrumb = Object.values(pathsObjectWithoutBreadcrumbs).some(regEx => regEx.test(urlWithoutQueryParams));
+    const isRouteWithoutBreadcrumb = Object.values(pathsObjectWithoutBreadcrumbs).some((regEx) => regEx.test(urlWithoutQueryParams));
 
     if (this.nextPageWithAuth(urlWithoutQueryParams)) {
       return true;
@@ -84,7 +84,7 @@ export class BreadcrumbsGuard implements CanActivate {
     }
 
     this._breadcrumbsService.setVisible(true);
-    const foundEntry = Object.entries(pathsObjectWithBreadcrumbs).find(entry => entry[1].test(urlWithoutQueryParams));
+    const foundEntry = Object.entries(pathsObjectWithBreadcrumbs).find((entry) => entry[1].test(urlWithoutQueryParams));
     switch (foundEntry[0]) {
       case '/category/:categoryId':
         const categoryId = urlSplitted[2];
@@ -236,8 +236,8 @@ export class BreadcrumbsGuard implements CanActivate {
   }
 
   private nextPageWithAuth(urlWithoutQueryParams: string): boolean {
-    const nextPageWithAuthentication = pathsWithAuthentication.some(regEx => regEx.test(urlWithoutQueryParams));
-    const nextPageWithAuthorization = pathsWithAuthorization.some(regEx => regEx.test(urlWithoutQueryParams));
+    const nextPageWithAuthentication = pathsWithAuthentication.some((regEx) => regEx.test(urlWithoutQueryParams));
+    const nextPageWithAuthorization = pathsWithAuthorization.some((regEx) => regEx.test(urlWithoutQueryParams));
     return (nextPageWithAuthentication && !this._userService.userData$.getValue()) ||
       (nextPageWithAuthorization && !this._userService.organizations$.getValue()?.length);
   }

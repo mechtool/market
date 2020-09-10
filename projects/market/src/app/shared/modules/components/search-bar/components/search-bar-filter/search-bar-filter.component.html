@@ -46,9 +46,9 @@
 
     <div class="form-group_title">Параметры поиска</div>
     <div class="form-group_checkbox">
-      <label nz-checkbox formControlName="inStock">Только товары в наличии</label>
+      <label nz-checkbox id="inStock" formControlName="inStock">Только товары в наличии</label>
       <br/>
-      <label nz-checkbox formControlName="withImages">Только с картинками</label>
+      <label nz-checkbox id="withImages" formControlName="withImages">Только с картинками</label>
     </div>
 
     <div class="form-group_title">Цена</div>
@@ -92,10 +92,10 @@
     </div>
 
     <div class="filter_btns">
-      <button nz-button type="submit" nzType="primary" [disabled]="isNotValidForm"
+      <button nz-button id="saveFilters" type="submit" nzType="primary" [disabled]="isNotValidForm"
               (click)="save()">Сохранить
       </button>
-      <button nz-button type="button" nzType="link"
+      <button nz-button id="resetFilters" type="button" nzType="link"
               (click)="reset()">Сбросить
       </button>
     </div>
