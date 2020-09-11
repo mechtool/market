@@ -1,6 +1,7 @@
 export class NavItemModel {
   id?: number;
   label: string;
+  attributeId?: string;
   icon?: string;
   command?: () => any;
   url?: string;

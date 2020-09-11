@@ -82,24 +82,44 @@ export class AppLoadPage {
     return element.all(by.css('nz-breadcrumb-item'));
   }
 
-  getCartElement(): ElementFinder {
+  /*getCartElement(): ElementFinder {
     return element(by.cssContainingText('.item', 'Корзина'));
+  }*/
+
+  getCartElement(): ElementFinder {
+    return element(by.css('market-navbar-nav #basket_menu_id'));
   }
+
+  /*getMyOrdersElement(): ElementFinder {
+    return element(by.cssContainingText('.item', 'Мои заказы'));
+  }*/
 
   getMyOrdersElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Мои заказы'));
+    return element(by.css('market-navbar-nav #orders_menu_id'));
   }
+
+  /*getNavBarPersonalAccountElement(): ElementFinder {
+    return element(by.cssContainingText('.item', 'Личный кабинет'));
+  }*/
 
   getNavBarPersonalAccountElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Личный кабинет'));
+    return element(by.id('personal_menu_id'));
   }
+
+  /*getNavBarLoginElement(): ElementFinder {
+    return element(by.cssContainingText('.item', 'Войти'));
+  }*/
 
   getNavBarLoginElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Войти'));
+    return element(by.css('market-navbar-nav #login_menu_id'));
   }
 
-  getNavBarLogoutElement(): ElementFinder {
+  /*getNavBarLogoutElement(): ElementFinder {
     return element(by.cssContainingText('.item', 'Выход'));
+  }*/
+
+  getNavBarLogoutElement(): ElementFinder {
+    return element(by.css('market-navbar-nav #logout_menu_id'));
   }
 
   getLoginInput(): ElementFinder {

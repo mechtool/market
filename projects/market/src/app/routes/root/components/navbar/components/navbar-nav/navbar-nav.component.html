@@ -32,7 +32,7 @@
                 title="{{item.label}}">
           </span>
 
-          <span class="label" [attr.data-counter]="item.counter | marketNaviCounter">
+          <span id="{{item.attributeId}}" class="label" [attr.data-counter]="item.counter | marketNaviCounter">
             {{item.label}}
           </span>
 
@@ -42,7 +42,7 @@
           <li class="item" *ngFor="let subItem of item.items">
             <a [ngClass]="{'active': subItem.label === navItemActive?.label}" (click)="navigateNavItem(subItem)">
               <span class="icon icon-point"></span>
-              <span class="label" [attr.data-counter]="subItem.counter | marketNaviCounter">
+              <span id="{{subItem.attributeId}}" class="label" [attr.data-counter]="subItem.counter | marketNaviCounter">
                 {{subItem.label}}
               </span>
             </a>

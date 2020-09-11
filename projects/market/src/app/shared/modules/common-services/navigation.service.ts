@@ -2,12 +2,12 @@ import { ComponentRef, Injectable, ViewContainerRef, } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { fromEvent } from 'rxjs';
-import { map, debounceTime, filter, pairwise } from 'rxjs/operators';
-import { NavItemModel, CategoryModel } from './models';
+import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
+import { CategoryModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -48,11 +48,13 @@ export class NavigationService {
     const notAuthedNavItems: NavItemModel[] = [
       {
         label: 'Товары',
+        attributeId: 'product_menu_id',
         icon: 'search',
         routerLink: ['/search'],
       },
       {
         label: 'Каталог',
+        attributeId: 'catalog_menu_id',
         icon: 'category',
         command: () => {
           this.toggleCategoriesLayer();
@@ -60,11 +62,13 @@ export class NavigationService {
       },
       {
         label: 'Поставщики',
+        attributeId: 'supplier_menu_id',
         icon: 'supplier',
         routerLink: ['/supplier'],
       },
       {
         label: 'Корзина',
+        attributeId: 'basket_menu_id',
         icon: 'basket',
         styleClass: 'delimiter',
         routerLink: ['/cart'],
@@ -72,16 +76,19 @@ export class NavigationService {
       },
       {
         label: 'Личный кабинет',
+        attributeId: 'personal_menu_id',
         icon: 'personal',
         items: [
           {
             label: 'Войти',
+            attributeId: 'login_menu_id',
             command: () => {
               this._authService.login(`${location.pathname}${location.search}`);
             },
           },
           {
             label: 'Зарегистрироваться',
+            attributeId: 'register_menu_id',
             command: () => {
               this._authService.register();
             },
@@ -90,15 +97,18 @@ export class NavigationService {
       },
       {
         label: 'О проекте',
+        attributeId: 'info_menu_id',
         icon: 'info',
         styleClass: 'delimiter',
         items: [
           {
             label: 'О сервисе',
+            attributeId: 'about_service_menu_id',
             url: 'https://1cbn.ru/trading.html',
           },
           {
             label: 'Условия использования',
+            attributeId: 'terms_of_use_menu_id',
             url: 'https://1cbn.ru/agreement',
           },
         ],
@@ -107,11 +117,13 @@ export class NavigationService {
     const authedNavItems: NavItemModel[] = [
       {
         label: 'Товары',
+        attributeId: 'product_menu_id',
         icon: 'search',
         routerLink: ['/search'],
       },
       {
         label: 'Каталог',
+        attributeId: 'catalog_menu_id',
         icon: 'category',
         command: () => {
           this.toggleCategoriesLayer();
@@ -119,11 +131,13 @@ export class NavigationService {
       },
       {
         label: 'Поставщики',
+        attributeId: 'supplier_menu_id',
         icon: 'supplier',
         routerLink: ['/supplier'],
       },
       {
         label: 'Корзина',
+        attributeId: 'basket_menu_id',
         icon: 'basket',
         styleClass: 'delimiter',
         routerLink: ['/cart'],
@@ -131,20 +145,24 @@ export class NavigationService {
       },
       {
         label: 'Личный кабинет',
+        attributeId: 'personal_menu_id',
         icon: 'personal',
         items: [
           {
             label: 'Мои заказы',
+            attributeId: 'orders_menu_id',
             routerLink: ['/my/orders'],
             counter: 0,
           },
           {
             label: 'Мои организации',
+            attributeId: 'organization_menu_id',
             routerLink: ['/my/organizations'],
             counter: 0,
           },
           {
             label: 'Выход',
+            attributeId: 'logout_menu_id',
             command: () => {
               this._authService.logout(
                 `${location.pathname}${location.search}`
@@ -155,22 +173,25 @@ export class NavigationService {
       },
       {
         label: 'О проекте',
+        attributeId: 'info_menu_id',
         icon: 'info',
         styleClass: 'delimiter',
         items: [
           {
             label: 'О сервисе',
+            attributeId: 'about_service_menu_id',
             url: 'https://1cbn.ru/trading.html',
           },
           {
             label: 'Условия использования',
+            attributeId: 'terms_of_use_menu_id',
             url: 'https://1cbn.ru/agreement',
           },
         ],
       },
     ];
     return this._userService.userData$.asObservable().pipe(
-      map(auth => (auth ? authedNavItems : notAuthedNavItems))
+      map((auth) => (auth ? authedNavItems : notAuthedNavItems))
     );
   }
 
@@ -363,7 +384,7 @@ export class NavigationService {
   private _closeCategoriesLayerOnNavigation(): void {
     this._router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         pairwise()
       )
       .subscribe((event: any[]) => {

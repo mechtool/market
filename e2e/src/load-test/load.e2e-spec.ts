@@ -1,10 +1,7 @@
 import { authorizedUserAddsProductsToCartAndPacesOrder, unauthorizedUserSearches } from './load.tests';
-import { browser } from 'protractor';
-
-browser.driver.manage().window().maximize();
 
 describe('Сценарии: Нагрузочного тестирования', async() => {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 1e4; i++) {
     /**
      * Основной сценарий заказа
      */

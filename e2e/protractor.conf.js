@@ -9,13 +9,112 @@ const puppeteer = require('puppeteer');
  * @type { import("protractor").Config }
  */
 exports.config = {
-  // jasmineNodeOpts: {
-  //   defaultTimeoutInterval: 120000
-  // },
   allScriptsTimeout: 11000,
   specs: ['./src/**/*.e2e-spec.ts'],
   SELENIUM_PROMISE_MANAGER: false,
   multiCapabilities: [
+    {
+      browserName: 'chrome',
+      acceptInsecureCerts: true,
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--no-sandbox',
+          '--log-level=2',
+          '--ignore-certificate-errors',
+          '--allow-insecure-localhost',
+          '--start-maximized',
+        ],
+        binary: puppeteer.executablePath(),
+      },
+    },
+    {
+      browserName: 'chrome',
+      acceptInsecureCerts: true,
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--no-sandbox',
+          '--log-level=2',
+          '--ignore-certificate-errors',
+          '--allow-insecure-localhost',
+          '--start-maximized',
+        ],
+        binary: puppeteer.executablePath(),
+      },
+    },
+    {
+      browserName: 'chrome',
+      acceptInsecureCerts: true,
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--no-sandbox',
+          '--log-level=2',
+          '--ignore-certificate-errors',
+          '--allow-insecure-localhost',
+          '--start-maximized',
+        ],
+        binary: puppeteer.executablePath(),
+      },
+    },
+    {
+      browserName: 'chrome',
+      acceptInsecureCerts: true,
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--no-sandbox',
+          '--log-level=2',
+          '--ignore-certificate-errors',
+          '--allow-insecure-localhost',
+          '--start-maximized',
+        ],
+        binary: puppeteer.executablePath(),
+      },
+    },
+    {
+      browserName: 'chrome',
+      acceptInsecureCerts: true,
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--no-sandbox',
+          '--log-level=2',
+          '--ignore-certificate-errors',
+          '--allow-insecure-localhost',
+          '--start-maximized',
+        ],
+        binary: puppeteer.executablePath(),
+      },
+    },
+    {
+      browserName: 'chrome',
+      acceptInsecureCerts: true,
+      chromeOptions: {
+        args: [
+          '--headless',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--no-sandbox',
+          '--log-level=2',
+          '--ignore-certificate-errors',
+          '--allow-insecure-localhost',
+          '--start-maximized',
+        ],
+        binary: puppeteer.executablePath(),
+      },
+    },
     {
       browserName: 'chrome',
       acceptInsecureCerts: true,
@@ -89,7 +188,7 @@ exports.config = {
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 120000,
     print: function () {},
   },
   restartBrowserBetweenTests: false,
