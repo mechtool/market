@@ -2,7 +2,7 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
-const {SpecReporter} = require('jasmine-spec-reporter');
+const { SpecReporter } = require('jasmine-spec-reporter');
 const puppeteer = require('puppeteer');
 
 /**
@@ -21,7 +21,7 @@ exports.config = {
       acceptInsecureCerts: true,
       chromeOptions: {
         args: [
-          // '--headless',
+          '--headless',
           '--disable-gpu',
           '--disable-dev-shm-usage',
           '--no-sandbox',
@@ -30,7 +30,7 @@ exports.config = {
           '--allow-insecure-localhost',
           '--start-maximized',
         ],
-        // binary: puppeteer.executablePath(),
+        binary: puppeteer.executablePath(),
       },
     },
     {
@@ -38,7 +38,7 @@ exports.config = {
       acceptInsecureCerts: true,
       chromeOptions: {
         args: [
-          // '--headless',
+          '--headless',
           '--disable-gpu',
           '--disable-dev-shm-usage',
           '--no-sandbox',
@@ -47,7 +47,7 @@ exports.config = {
           '--allow-insecure-localhost',
           '--start-maximized',
         ],
-        // binary: puppeteer.executablePath(),
+        binary: puppeteer.executablePath(),
       },
     },
     {
@@ -55,7 +55,7 @@ exports.config = {
       acceptInsecureCerts: true,
       chromeOptions: {
         args: [
-          // '--headless',
+          '--headless',
           '--disable-gpu',
           '--disable-dev-shm-usage',
           '--no-sandbox',
@@ -64,7 +64,7 @@ exports.config = {
           '--allow-insecure-localhost',
           '--start-maximized',
         ],
-        // binary: puppeteer.executablePath(),
+        binary: puppeteer.executablePath(),
       },
     },
     {
@@ -72,7 +72,7 @@ exports.config = {
       acceptInsecureCerts: true,
       chromeOptions: {
         args: [
-          // '--headless',
+          '--headless',
           '--disable-gpu',
           '--disable-dev-shm-usage',
           '--no-sandbox',
@@ -81,7 +81,7 @@ exports.config = {
           '--allow-insecure-localhost',
           '--start-maximized',
         ],
-        // binary: puppeteer.executablePath(),
+        binary: puppeteer.executablePath(),
       },
     },
   ],
@@ -90,14 +90,13 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000,
-    print: function () {
-    },
+    print: function () {},
   },
   restartBrowserBetweenTests: false,
   onPrepare() {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.json'),
     });
-    jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}));
+    jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
   },
 };

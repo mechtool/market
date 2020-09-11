@@ -4,7 +4,7 @@ services:
     container_name: app
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
 
   # example_service_name:
   #   container_name: example_container_name
