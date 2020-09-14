@@ -5,7 +5,7 @@
   <h1 class="label" (click)="goToRoot()">1C:Торговая площадка</h1>
 </div>
 <div class="nav-btns">
-    <a class="btn btn_bordered">
+    <a class="btn btn_bordered" [routerLink]="['/cart']">
       <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
       <span class="counter" *ngIf="getCartCounter$ | async as cartCounter">{{cartCounter | marketNaviCounter}}</span>
     </a>

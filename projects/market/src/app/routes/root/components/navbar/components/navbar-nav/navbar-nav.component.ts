@@ -117,6 +117,9 @@ export class NavbarNavComponent implements OnInit {
       navItem.command();
     }
     if (navItem.routerLink) {
+      if (window.innerWidth <= 992) {
+        this._navService.closeMenu();
+      }
       this._router.navigate(navItem.routerLink, {});
     }
     if (navItem.url) {
