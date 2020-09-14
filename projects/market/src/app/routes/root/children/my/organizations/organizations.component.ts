@@ -13,17 +13,14 @@ import { UserOrganizationModel } from '#shared/modules/common-services/models/us
 import { AccessKeyComponent } from './components/access-key/access-key.component';
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
+import { Metrika } from 'ng-yandex-metrika';
 
-type TabType = 'a'|'b'|'c';
+type TabType = 'a' | 'b' | 'c';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './organizations.component.html',
-  styleUrls: [
-    './organizations.component.scss',
-    './organizations.component-768.scss',
-    './organizations.component-576.scss',
-  ],
+  styleUrls: ['./organizations.component.scss', './organizations.component-768.scss', './organizations.component-576.scss'],
 })
 export class OrganizationsComponent implements OnInit {
   existingOrganization: OrganizationResponseModel = null;
@@ -57,6 +54,7 @@ export class OrganizationsComponent implements OnInit {
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
+    private _metrika: Metrika,
   ) {}
 
   ngOnInit() {
@@ -68,19 +66,20 @@ export class OrganizationsComponent implements OnInit {
   sendParticipationRequest(data: any) {
     const bodyData = {
       organizationId: this.existingOrganization.id,
-      notes: `${data.fio} (${data.email}) создал заявку на присоединение к организации ${this.existingOrganization.name}. ${data.message}`
-    }
-    this._organizationsService.sendParticipationRequest(bodyData)
-      .subscribe((_) => {
+      notes: `${data.fio} (${data.email}) создал заявку на присоединение к организации ${this.existingOrganization.name}. ${data.message}`,
+    };
+    this._organizationsService.sendParticipationRequest(bodyData).subscribe(
+      (_) => {
         this.existingOrganization = null;
         this.goToTab('b');
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error('Произошла ошибка при подаче заявки на добавление в организацию');
-      });
+      },
+    );
   }
 
   registerOrganization(data: any) {
-
     const legalRequisites = {
       inn: data.inn,
       ...(data.kpp && { kpp: data.kpp }),
@@ -107,38 +106,40 @@ export class OrganizationsComponent implements OnInit {
       ...(data.organizationDescription && { description: data.organizationDescription }),
     };
 
-    this._organizationsService.registerOrganization(regOrgData).pipe(
-      switchMap(_ => this._organizationsService.getUserOrganizations()),
-      tap(res => this._userService.setUserOrganizations(res)),
-    )
-      .subscribe(() => {
-        const tabSplitted = this._activatedRoute.snapshot.queryParams?.tab?.split(';');
-        if (tabSplitted.length > 1) {
-          this._router.navigateByUrl('/cart');
-          return;
-        }
-        this.checkedLegalRequisites = null;
-        this.goToTab('a');
-      }, (err) => {
-        this._notificationsService.error('Произошла ошибка при регистрации организации');
-      })
+    this._organizationsService
+      .registerOrganization(regOrgData)
+      .pipe(
+        switchMap((_) => this._organizationsService.getUserOrganizations()),
+        tap((res) => this._userService.setUserOrganizations(res)),
+      )
+      .subscribe(
+        () => {
+          const tabSplitted = this._activatedRoute.snapshot.queryParams?.tab?.split(';');
+          if (tabSplitted.length > 1) {
+            this._router.navigateByUrl('/cart');
+            return;
+          }
+          this.checkedLegalRequisites = null;
+          this.goToTab('a');
+          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
+            this._metrika.fireEvent('ORG_REGISTER');
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Произошла ошибка при регистрации организации');
+        },
+      );
   }
 
   goToTab(tabType: TabType) {
-    this._router.navigateByUrl(
-      this._router.url.split('?')[0],
-      { skipLocationChange: true }
-    )
-    .then(() => {
+    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true }).then(() => {
       this._router.navigateByUrl(`my/organizations?tab=${tabType}`);
     });
-
   }
 
   createAccessKeyModal(org: UserOrganizationModel) {
-
-    this._organizationsService.obtainAccessKey(org.organizationId)
-      .subscribe((res) => {
+    this._organizationsService.obtainAccessKey(org.organizationId).subscribe(
+      (res) => {
         const modal = this._modalService.create({
           nzContent: AccessKeyComponent,
           nzViewContainerRef: this._viewContainerRef,
@@ -152,37 +153,36 @@ export class OrganizationsComponent implements OnInit {
           nzFooter: null,
           nzWidth: 480,
         });
-
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error('Произошла ошибка при получении ключа доступа');
-      });
+      },
+    );
   }
 
   private _watchQueryParamsChanges() {
-    this._activatedRoute.queryParams.pipe(
-      filter(res => res.tab)
-    )
-      .subscribe(
-        (res) => {
-          const tabValue = res.tab.split(';')[0];
-          switch(tabValue) {
-            case 'a':
-              this._setActiveTabType('a')
-              break;
-            case 'b':
-              this._setActiveTabType('b');
-              break;
-            case 'c':
-              this._createRequisitesCheckerModal();
-              break;
-            default:
-              this._setActiveTabType('a')
-              break;
-          }
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        });
+    this._activatedRoute.queryParams.pipe(filter((res) => res.tab)).subscribe(
+      (res) => {
+        const tabValue = res.tab.split(';')[0];
+        switch (tabValue) {
+          case 'a':
+            this._setActiveTabType('a');
+            break;
+          case 'b':
+            this._setActiveTabType('b');
+            break;
+          case 'c':
+            this._createRequisitesCheckerModal();
+            break;
+          default:
+            this._setActiveTabType('a');
+            break;
+        }
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
   }
 
   private _createRequisitesCheckerModal() {
@@ -195,46 +195,47 @@ export class OrganizationsComponent implements OnInit {
       nzWidth: 480,
     });
 
-    modal.afterClose.pipe(
-      filter(res => !res && this.activeTabType !== 'c')
-    )
-    .subscribe(() => {
+    modal.afterClose.pipe(filter((res) => !res && this.activeTabType !== 'c')).subscribe(() => {
       this.goToTab(this.activeTabType);
-    })
-
-    const subscription = modal.componentInstance.legalRequisitesChange.pipe(
-      switchMap((res) => {
-        localCheckedLegalRequisites = {
-          inn: res?.inn,
-          kpp: res?.kpp,
-        };
-        const legalId = innKppToLegalId(res?.inn, res?.kpp);
-        return this._organizationsService.getOrganizationByLegalId(legalId);
-      })
-    ).subscribe((res) => {
-      if (res) {
-        const userOrganizationsIds = this._userService.organizations$.value.map(org => org.organizationId) || [];
-        if (userOrganizationsIds.includes(res.id)) {
-          this._notificationsService.info('Вы уже имеете доступ к данной организации');
-        }
-        if (!userOrganizationsIds.includes(res.id)) {
-          modal.destroy(true);
-          subscription.unsubscribe();
-          this._setActiveTabType('c');
-          this.existingOrganization = res;
-        }
-      }
-      if (!res) {
-        modal.destroy(true);
-        subscription.unsubscribe();
-        this.existingOrganization = null;
-        this._setActiveTabType('c');
-        this.checkedLegalRequisites = localCheckedLegalRequisites;
-      }
-
-    }, (err) => {
-      this._notificationsService.error('Произошла ошибка при получении информации об организации');
     });
+
+    const subscription = modal.componentInstance.legalRequisitesChange
+      .pipe(
+        switchMap((res) => {
+          localCheckedLegalRequisites = {
+            inn: res?.inn,
+            kpp: res?.kpp,
+          };
+          const legalId = innKppToLegalId(res?.inn, res?.kpp);
+          return this._organizationsService.getOrganizationByLegalId(legalId);
+        }),
+      )
+      .subscribe(
+        (res) => {
+          if (res) {
+            const userOrganizationsIds = this._userService.organizations$.value.map((org) => org.organizationId) || [];
+            if (userOrganizationsIds.includes(res.id)) {
+              this._notificationsService.info('Вы уже имеете доступ к данной организации');
+            }
+            if (!userOrganizationsIds.includes(res.id)) {
+              modal.destroy(true);
+              subscription.unsubscribe();
+              this._setActiveTabType('c');
+              this.existingOrganization = res;
+            }
+          }
+          if (!res) {
+            modal.destroy(true);
+            subscription.unsubscribe();
+            this.existingOrganization = null;
+            this._setActiveTabType('c');
+            this.checkedLegalRequisites = localCheckedLegalRequisites;
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Произошла ошибка при получении информации об организации');
+        },
+      );
   }
 
   private _setActiveTabType(tabType: TabType) {
@@ -242,13 +243,13 @@ export class OrganizationsComponent implements OnInit {
   }
 
   private _setUserParticipationRequests() {
-    this._organizationsService.getOwnParticipationRequests()
-      .subscribe((res) => {
+    this._organizationsService.getOwnParticipationRequests().subscribe(
+      (res) => {
         this._userService.ownParticipationRequests$.next(res);
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error('Произошла ошибка при получении запросов на присоединение');
-      });
+      },
+    );
   }
-
 }
-

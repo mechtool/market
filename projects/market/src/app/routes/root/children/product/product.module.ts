@@ -25,7 +25,7 @@ import {
   SearchResultsModule,
   TradeOfferCardModule,
 } from '#shared/modules';
-import { NzAlertModule, NzCarouselModule, NzDropDownModule, NzTabsModule, } from 'ng-zorro-antd';
+import { NzAlertModule, NzCarouselModule, NzDropDownModule, NzTabsModule } from 'ng-zorro-antd';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 
 @NgModule({
@@ -62,10 +62,6 @@ import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
     TradeOfferCardsListComponent,
   ],
   providers: [DeclensionPipe],
-  exports: [
-    MainPopularComponent,
-    MainBannersComponent
-  ]
+  exports: [MainPopularComponent, MainBannersComponent, MainBannersBannerComponent],
 })
-export class ProductModule {
-}
+export class ProductModule {}

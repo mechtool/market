@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import {
   BreadcrumbsService,
@@ -8,7 +8,7 @@ import {
   OrganizationsService,
   ProductService,
   TradeOffersService,
-  UserService
+  UserService,
 } from '#shared/modules/common-services';
 import { BreadcrumbItemModel } from '#shared/modules/common-services/models';
 import { of } from 'rxjs';
@@ -35,6 +35,8 @@ const pathsObjectWithBreadcrumbs = {
   '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
   '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
   '/cart': /^\/cart$/i,
+  '/promo': /^\/promo$/i,
+  '/promo/:id': /^\/promo\/(?:([^\/]+?))$/i,
   '/my/orders': /^\/my\/orders$/i,
   '/my/organizations': /^\/my\/organizations$/i,
   '/my/organizations/:id': /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
@@ -43,16 +45,12 @@ const pathsObjectWithBreadcrumbs = {
 /**
  * URL пути находящиеся под аутентификацией
  */
-const pathsWithAuthentication = [
-  /^\/supplier$/i,
-];
+const pathsWithAuthentication = [/^\/supplier$/i];
 
 /**
  * URL пути находящиеся под авторизацией
  */
-const pathsWithAuthorization = [
-  /^\/my\/orders$/i,
-];
+const pathsWithAuthorization = [/^\/my\/orders$/i];
 
 @Injectable()
 export class BreadcrumbsGuard implements CanActivate {
@@ -63,8 +61,7 @@ export class BreadcrumbsGuard implements CanActivate {
     private _organizationsService: OrganizationsService,
     private _tradeOffersService: TradeOffersService,
     private _userService: UserService,
-  ) {
-  }
+  ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     const urlWithoutQueryParams = state.url.split('?')[0];
@@ -98,7 +95,7 @@ export class BreadcrumbsGuard implements CanActivate {
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
-          })
+          }),
         );
       case '/product/:id':
         const productId = urlSplitted[2];
@@ -115,7 +112,7 @@ export class BreadcrumbsGuard implements CanActivate {
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
-          })
+          }),
         );
       case '/supplier/:supplierId':
         const supplierId = urlSplitted[2];
@@ -124,11 +121,11 @@ export class BreadcrumbsGuard implements CanActivate {
             this._breadcrumbsService.setItems([
               {
                 label: 'Поставщики',
-                routerLink: '/supplier'
+                routerLink: '/supplier',
               },
               {
                 label: `${res.name}`,
-                routerLink: `/supplier/${res.id}`
+                routerLink: `/supplier/${res.id}`,
               },
             ]);
             return true;
@@ -137,14 +134,14 @@ export class BreadcrumbsGuard implements CanActivate {
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
-          })
+          }),
         );
       case '/supplier/:supplierId/offer/:tradeOfferId':
         const tradeOfferId = urlSplitted[4];
         return this._tradeOffersService.get(tradeOfferId).pipe(
           switchMap((tradeOffer) => {
-            const categoryId = tradeOffer.product.ref1cNomenclature?.categoryId ||
-              tradeOffer.product.supplierNomenclature?.ref1Cn.categoryId;
+            const categoryId =
+              tradeOffer.product.ref1cNomenclature?.categoryId || tradeOffer.product.supplierNomenclature?.ref1Cn.categoryId;
             return this._categoryService.getCategoryTree(categoryId);
           }),
           map((categories) => {
@@ -156,17 +153,42 @@ export class BreadcrumbsGuard implements CanActivate {
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
-          })
+          }),
         );
       case '/cart':
         breadcrumbsItems = [
           {
             label: 'Личный кабинет',
-            routerLink: '/'
+            routerLink: '/',
           },
           {
             label: 'Корзина',
-          }
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/promo':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Акции',
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/promo/:id':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Акции',
+            routerLink: '/promo',
+          },
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
@@ -174,11 +196,11 @@ export class BreadcrumbsGuard implements CanActivate {
         breadcrumbsItems = [
           {
             label: 'Личный кабинет',
-            routerLink: '/'
+            routerLink: '/',
           },
           {
             label: 'Мои заказы',
-          }
+          },
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
@@ -188,7 +210,7 @@ export class BreadcrumbsGuard implements CanActivate {
             label: 'Мои организации',
             routerLink: '/my/organizations',
             queryParams: { tab: 'a' },
-          }
+          },
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
@@ -204,7 +226,7 @@ export class BreadcrumbsGuard implements CanActivate {
               },
               {
                 label: `${res.name}`,
-                routerLink: `/my/organizations/${res.id}`
+                routerLink: `/my/organizations/${res.id}`,
               },
             ]);
             return true;
@@ -213,7 +235,7 @@ export class BreadcrumbsGuard implements CanActivate {
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
-          })
+          }),
         );
       default:
         this._breadcrumbsService.setVisible(false);
@@ -223,23 +245,21 @@ export class BreadcrumbsGuard implements CanActivate {
   }
 
   private breadcrumbsCategoryAncestors(categories: CategoryModel[]): BreadcrumbItemModel[] {
-    return categories.reduce(
-      (accum, curr) => {
-        accum.push({
-          label: curr.name,
-          routerLink: `/category/${curr.id}`,
-        });
-        return accum;
-      },
-      <BreadcrumbItemModel[]>[]
-    );
+    return categories.reduce((accum, curr) => {
+      accum.push({
+        label: curr.name,
+        routerLink: `/category/${curr.id}`,
+      });
+      return accum;
+    }, <BreadcrumbItemModel[]>[]);
   }
 
   private nextPageWithAuth(urlWithoutQueryParams: string): boolean {
     const nextPageWithAuthentication = pathsWithAuthentication.some((regEx) => regEx.test(urlWithoutQueryParams));
     const nextPageWithAuthorization = pathsWithAuthorization.some((regEx) => regEx.test(urlWithoutQueryParams));
-    return (nextPageWithAuthentication && !this._userService.userData$.getValue()) ||
-      (nextPageWithAuthorization && !this._userService.organizations$.getValue()?.length);
+    return (
+      (nextPageWithAuthentication && !this._userService.userData$.getValue()) ||
+      (nextPageWithAuthorization && !this._userService.organizations$.getValue()?.length)
+    );
   }
 }
-

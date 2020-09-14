@@ -29,6 +29,7 @@ import { AuthModalService } from '#shared/modules/setup-services/auth-modal.serv
 import { CartModalService } from '../../cart-modal.service';
 import { DeliveryOptionsModel } from './models';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Metrika } from 'ng-yandex-metrika';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -137,6 +138,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _notificationsService: NotificationsService,
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
+    private _metrika: Metrika,
   ) {}
 
   ngOnInit() {
@@ -423,6 +425,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.cartDataChange.emit(res);
           this.items.clear();
           this._cdr.detectChanges();
+          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
+            this._metrika.fireEvent('ORDER_CREATE');
+          }
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

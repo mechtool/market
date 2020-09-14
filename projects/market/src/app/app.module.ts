@@ -12,6 +12,7 @@ import { AuthService, CartService, CommonServicesModule, CookieService, UserServ
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgxMaskModule } from 'ngx-mask';
+import { MetrikaModule } from 'ng-yandex-metrika';
 
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
@@ -59,6 +60,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
+    MetrikaModule.forRoot({ id: 67089850, webvisor: true, clickmap: true, trackLinks: true, accurateTrackBounce: true }),
     BreadcrumbsModule,
     CookieAgreementModule,
   ],

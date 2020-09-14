@@ -8,8 +8,9 @@ const routes: Routes = [
   {
     path: 'login',
     data: { preload: false },
-    loadChildren: () => import('./routes/login/login.module').then(m => m.LoginModule),
-  }, {
+    loadChildren: () => import('./routes/login/login.module').then((m) => m.LoginModule),
+  },
+  {
     path: '',
     canActivate: [BreadcrumbsGuard, SsoTicketGuard],
     runGuardsAndResolvers: 'always',
@@ -18,48 +19,61 @@ const routes: Routes = [
       {
         path: '',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/product/product.module').then(m => m.ProductModule),
-      }, {
+        loadChildren: () => import('./routes/root/children/product/product.module').then((m) => m.ProductModule),
+      },
+      {
+        path: 'promo',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/promo/promo.module').then((m) => m.PromoModule),
+      },
+      {
         path: 'search',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/search/search.module').then(m => m.SearchModule),
-      }, {
+        loadChildren: () => import('./routes/root/children/search/search.module').then((m) => m.SearchModule),
+      },
+      {
         path: 'supplier',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/supplier/supplier.module').then(m => m.SupplierModule),
-      }, {
+        loadChildren: () => import('./routes/root/children/supplier/supplier.module').then((m) => m.SupplierModule),
+      },
+      {
         path: 'cart',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/cart/cart.module').then(m => m.CartModule),
-      }, {
+        loadChildren: () => import('./routes/root/children/cart/cart.module').then((m) => m.CartModule),
+      },
+      {
         path: 'category',
         data: { preload: false },
-        loadChildren: () => import('./routes/root/children/category/category.module').then(m => m.CategoryModule),
-      }, {
+        loadChildren: () => import('./routes/root/children/category/category.module').then((m) => m.CategoryModule),
+      },
+      {
         path: 'my',
         canActivate: [AuthGuard],
         children: [
           {
             path: 'orders',
             data: { preload: false },
-            loadChildren: () => import('./routes/root/children/my/orders/orders.module').then(m => m.OrdersModule),
-          }, {
+            loadChildren: () => import('./routes/root/children/my/orders/orders.module').then((m) => m.OrdersModule),
+          },
+          {
             path: 'organizations',
             data: { preload: false },
-            loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then(m => m.OrganizationsModule),
-          }, {
+            loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then((m) => m.OrganizationsModule),
+          },
+          {
             path: '**',
             redirectTo: 'orders',
             pathMatch: 'full',
-          }
+          },
         ],
-      }, {
+      },
+      {
         path: '**',
         redirectTo: '',
         pathMatch: 'full',
-      }
+      },
     ],
-  }
+  },
 ];
 
 @NgModule({
@@ -69,8 +83,6 @@ const routes: Routes = [
       preloadingStrategy: DelayedPreloadingStrategy,
     }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
-
+export class AppRoutingModule {}
