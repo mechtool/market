@@ -1,7 +1,10 @@
 import { authorizedUserAddsProductsToCartAndPacesOrder, unauthorizedUserSearches } from './load.tests';
 
 describe('Сценарии: Нагрузочного тестирования', async() => {
-  for (let i = 0; i < 1e4; i++) {
+
+  const iterations = process.env.npm_config_ITERATIONS ? +process.env.npm_config_ITERATIONS : 20;
+
+  for (let i = 0; i < iterations; i++) {
     /**
      * Основной сценарий заказа
      */
