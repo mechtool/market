@@ -586,7 +586,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   private _checkAudienceForAvailability(audienceArray: any[], org: any) {
     const innKpp = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
-    return audienceArray.map((aud) => aud.id).includes(innKpp);
+    return audienceArray.map((aud) => aud.legalId).includes(innKpp);
   }
 
   private _setConsumerFromOrder() {
