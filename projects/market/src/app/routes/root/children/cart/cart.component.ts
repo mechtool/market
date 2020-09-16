@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CartService, NotificationsService, UserService } from '#shared/modules/common-services';
 import { CartDataModel, CartDataResponseModel } from '#shared/modules/common-services/models';
-import { take } from 'rxjs/operators';
+import { take, switchMap } from 'rxjs/operators';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
 
 type CartDataCommonModel = CartDataResponseModel | CartDataModel;
@@ -20,9 +20,12 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.userInfo = this._getUserInfo();
-    this._cartService
-      .getCartData$()
-      .pipe(take(1))
+    this._cartService.setActualCartData().pipe(
+      switchMap((res) => {
+        return this._cartService.getCartData$()
+      }),
+      take(1)
+    )
       .subscribe(
         (res) => {
           this.setProps(res);
