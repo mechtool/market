@@ -1302,11 +1302,8 @@ nz-date-picker {
   .order_spec_full {
     flex-wrap: wrap;
   }
-  .order_info .supplier_name {
-    white-space: normal;
-  }
   .order__customer {
-    max-width: none;
+    max-width: calc(100% - 65px);
   }
   .order__total_price {
     justify-content: center;
@@ -1336,6 +1333,9 @@ nz-date-picker {
   .tabs_wrap .tab_item {
     font-size: var(--font-size-13);
   }
+  .table_list__basket .cell_left {
+    width: 80px;
+  }
 }
 
 @media all and (max-width: 360px) {
@@ -1348,15 +1348,11 @@ nz-date-picker {
   .table_list__products .cell_right {
     margin-right: 10px;
   }
-  .table_list__basket .cell_left {
-    width: 110px;
-  }
   .table_list__basket .tooltip_wrap {
     bottom: 23px;
   }
 }
 
-//
 .tab-content {
   margin: 10px 0 0 0;
   color: var(--color-primary);

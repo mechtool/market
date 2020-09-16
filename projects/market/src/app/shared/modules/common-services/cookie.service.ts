@@ -19,7 +19,7 @@ export class CookieService {
 
   setUserStatusCookie(statusName: string): void {
     if (this._routeDomain) {
-      this._ngxCookieService.set(USER_STATUS, statusName, null, '/', this._routeDomain);
+      this._ngxCookieService.set(USER_STATUS, statusName, null, '/', this._routeDomain, true);
     }
   }
 
@@ -29,7 +29,7 @@ export class CookieService {
 
   setUserLastLoginTimestamp(uin: string, timestamp: number): void {
     if (this._routeDomain) {
-      this._ngxCookieService.set(`last_login_timestamp_${uin}`, timestamp.toString(), null, '/', this._routeDomain);
+      this._ngxCookieService.set(`last_login_timestamp_${uin}`, timestamp.toString(), null, '/', this._routeDomain, true);
     }
   }
 
