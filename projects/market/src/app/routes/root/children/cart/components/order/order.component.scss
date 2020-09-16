@@ -51,9 +51,8 @@ a.btn,
 button.btn {
   color: var(--color-primary);
   font-size: var(--font-size-base);
-  font-family: 'Futura';
+  font-family: 'Futura', serif;
   font-weight: var(--font-weight-medium);
-  border: none;
   border-radius: 2px;
   background-color: #ffffff;
   min-height: 38px;
@@ -591,7 +590,7 @@ input[type='number'].switch_count__value {
   text-align: center;
   font-size: var(--font-size-13);
   line-height: 17px;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 input[type='number'] {
@@ -621,6 +620,10 @@ input[type='number'].switch_count__value {
 
 .order .tabs_wrap {
   margin-bottom: 10px;
+}
+
+.wrapper_delivery_input {
+  display: inline-flex;
 }
 
 .order {
@@ -733,10 +736,6 @@ input[type='number'].switch_count__value {
   margin-bottom: 18px;
 }
 
-.order__shipping .textarea-wrap {
-  max-width: 390px;
-}
-
 .order__shipping .radio-wrap {
   margin-left: 25px;
   font-size: var(--font-size-13);
@@ -844,7 +843,7 @@ input[type='number'].switch_count__value {
 
 .form-group-long {
   width: 100%;
-  max-width: 390px;
+  max-width: 500px;
 }
 
 .form-group-std input,
@@ -865,7 +864,6 @@ input[type='number'],
 textarea {
   font-size: var(--font-size-base);
   padding: 10px 15px;
-  background-color: #ffffff;
   border: 1px solid #d6d6d6;
   outline: var(--color-accent);
   resize: none;
@@ -890,6 +888,7 @@ input[type='number']::-ms-clear {
 
 textarea {
   line-height: 19px;
+  max-width: 500px;
   width: 100%;
 }
 
@@ -903,7 +902,7 @@ textarea:focus {
 .textarea-wrap {
   position: relative;
   width: 100%;
-  max-width: 410px;
+  max-width: 500px;
 }
 
 .textarea__symbols {
@@ -1057,7 +1056,7 @@ textarea:focus {
 }
 
 nz-date-picker {
-  width: 75%;
+  width: 100%;
   height: 40px;
 }
 
@@ -1288,6 +1287,10 @@ nz-date-picker {
     font-size: var(--font-size-13);
     font-weight: var(--font-weight-medium);
   }
+  .wrapper_delivery_input {
+    display: block;
+    width: 100%;
+  }
   .section_tab__supplier .supplier_title .tooltip_wrap {
     display: block;
     margin-left: auto;
@@ -1370,8 +1373,7 @@ nz-date-picker {
   padding-left: 25px;
   bottom: 12px;
   width: 100%;
-  max-width: 320px;
-  left: 390px;
+  left: 500px;
 }
 
 @media (max-width: 768px) {

@@ -17,7 +17,8 @@ import {
   LocationModel,
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
-  OrganizationUserResponseModel, ParticipationRequestRequestModel,
+  OrganizationUserResponseModel,
+  ParticipationRequestRequestModel,
   ParticipationRequestResponseModel,
   ProductOfferRequestModel,
   ProductOfferResponseModel,
@@ -155,18 +156,14 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/organizations/${id}/users`);
   }
 
-  searchLocations(textQuery: string): Observable<LocationModel[]> {
-    const params = new HttpParams().set('textQuery', textQuery);
+  searchLocations(textQuery: string, level: string): Observable<LocationModel[]> {
+    const params = new HttpParams().set('textQuery', textQuery).set('level', level);
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  searchAddresses(textQuery: string, fiasIds?: string[]): Observable<LocationModel[]> {
-    const params = this._params({ textQuery, fiasIds });
-    return this._apiService.get(`${API_URL}/locations/search-address`, { params });
-  }
-
-  getMainRegions(): Observable<LocationModel[]> {
-    return this._apiService.get(`${API_URL}/locations/main-regions`);
+  containsFiasAddress(query: { fiasId: string, fiasIds: string[]}): Observable<boolean> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/locations/contains`, { params });
   }
 
   searchSuppliers(query: SuppliersRequestModel): Observable<SuppliersResponseModel> {

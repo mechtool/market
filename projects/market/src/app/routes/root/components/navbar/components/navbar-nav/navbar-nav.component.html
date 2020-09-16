@@ -21,7 +21,7 @@
       class="item"
       ngClass="{{item.styleClass}}"
       *ngFor="let item of navItems">
-        <a [ngClass]="{'active': item.label === navItemActive?.label}" (click)="navigateNavItem(item)">
+      <a [ngClass]="{'active': item.label === navItemActive?.label}" (click)="navigateNavItem(item)">
           <span
             class="icon"
             [attr.title]="item.counter || null"
@@ -32,22 +32,23 @@
                 title="{{item.label}}">
           </span>
 
-          <span id="{{item.attributeId}}" class="label" [attr.data-counter]="item.counter | marketNaviCounter">
+        <span id="{{item.attributeId}}" class="label" [attr.data-counter]="item.counter | marketNaviCounter">
             {{item.label}}
           </span>
 
-          <span [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
-        </a>
-        <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
-          <li class="item" *ngFor="let subItem of item.items">
-            <a [ngClass]="{'active': subItem.label === navItemActive?.label}" (click)="navigateNavItem(subItem)">
-              <span class="icon icon-point"></span>
-              <span id="{{subItem.attributeId}}" class="label" [attr.data-counter]="subItem.counter | marketNaviCounter">
+        <span
+          [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
+      </a>
+      <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
+        <li class="item" *ngFor="let subItem of item.items">
+          <a [ngClass]="{'active': subItem.label === navItemActive?.label}" (click)="navigateNavItem(subItem)">
+            <span class="icon icon-point"></span>
+            <span id="{{subItem.attributeId}}" class="label" [attr.data-counter]="subItem.counter | marketNaviCounter">
                 {{subItem.label}}
               </span>
-            </a>
-          </li>
-        </ul>
+          </a>
+        </li>
+      </ul>
     </li>
   </ul>
 </div>
@@ -67,7 +68,7 @@
   <div class="categories-mobive-nav">
     <div class="logo">
       <div class="opener">
-        <img src="./assets/img/svg/icon__site.svg" alt="1C:Торговая площадка" title="1C:Торговая площадка" >
+        <img src="./assets/img/svg/icon__site.svg" alt="1C:Торговая площадка" title="1C:Торговая площадка">
       </div>
       <div class="label">
         <h1>1C:Торговая площадка</h1>
@@ -77,17 +78,17 @@
       </div>
     </div>
     <div class="nav-btns">
-        <a class="btn btn_bordered">
-          <img
-            class="cart"
-            src="./assets/img/svg/icon__basket.svg"
-            alt="Корзина"
-            title="Корзина"
-            [attr.data-counter]="cartNavItem.counter || null">
-        </a>
-        <a class="btn btn_bordered btn_mobile-menu" (click)="closeMenuWithCategories()">
-          <span></span>
-        </a>
+      <a class="btn btn_bordered">
+        <img
+          class="cart"
+          src="./assets/img/svg/icon__basket.svg"
+          alt="Корзина"
+          title="Корзина"
+          [attr.data-counter]="cartNavItem.counter || null">
+      </a>
+      <a class="btn btn_bordered btn_mobile-menu" (click)="closeMenuWithCategories()">
+        <span></span>
+      </a>
     </div>
   </div>
 
@@ -98,13 +99,14 @@
     <div class="categories_list">
       <div class="categories_header">Каталог</div>
       <nav>
-          <ul class="nav_list">
-              <li *ngFor="let categoryItem of categoryItems$ | async">
-                  <a class="nav_item category_control" [ngClass]="{'active': categoryItem.id  == mainCategorySelectedId}" (click)="setMainCategorySelectedId(categoryItem.id)">
-                      <span>{{categoryItem.name}}</span>
-                  </a>
-              </li>
-          </ul>
+        <ul class="nav_list">
+          <li *ngFor="let categoryItem of categoryItems$ | async">
+            <a class="nav_item category_control" [ngClass]="{'active': categoryItem.id  == mainCategorySelectedId}"
+               (click)="setMainCategorySelectedId(categoryItem.id)">
+              <span>{{categoryItem.name}}</span>
+            </a>
+          </li>
+        </ul>
       </nav>
     </div>
     <div class="categories_panel" [ngClass]="{'main-category-selected': mainCategorySelectedId}">
@@ -114,14 +116,18 @@
           <div class="categories_header">{{categoryItem.name}}</div>
           <div class="sub_categories scrollbar">
             <div class="sub_category" *ngFor="let subCategoryItem of categoryItem.children">
-                <div class="sub_category__name">
-                    <a [routerLink]="['/category/' + subCategoryItem.id]" [queryParams]="{}">{{subCategoryItem.name}}</a>
-                </div>
-                <ul class="sub_category__list">
-                    <li class="sub_category__item" *ngFor="let subSubCategoryItem of subCategoryItem.children">
-                        <a [routerLink]="['/category/' + subSubCategoryItem.id]"  [queryParams]="{}" class="sub_category__link">{{subSubCategoryItem.name}}</a>
-                    </li>
-                </ul>
+              <div class="sub_category__name">
+                <!--todo Объеденить потом routerLink и click в один метод-->
+                <a [routerLink]="['/category/' + subCategoryItem.id]" [queryParams]="{}"
+                   (click)="closeMenu()">{{subCategoryItem.name}}</a>
+              </div>
+              <ul class="sub_category__list">
+                <li class="sub_category__item" *ngFor="let subSubCategoryItem of subCategoryItem.children">
+                  <!--todo Объеденить потом routerLink и click в один метод-->
+                  <a [routerLink]="['/category/' + subSubCategoryItem.id]" [queryParams]="{}" class="sub_category__link"
+                     (click)="closeMenu()">{{subSubCategoryItem.name}}</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

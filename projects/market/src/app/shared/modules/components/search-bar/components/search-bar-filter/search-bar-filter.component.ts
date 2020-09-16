@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
   DefaultSearchAvailableModel,
+  Level,
   LocationModel,
   Megacity,
   SuppliersItemModel
@@ -299,7 +300,7 @@ export class SearchBarFilterComponent implements OnInit {
 
     if (this._localStorageService.hasUserLocation()) {
       const userLocation = this._localStorageService.getUserLocation();
-      if (!this.foundCities.find(res => res.fias === userLocation.fias)) {
+      if (!this.foundCities.find((location) => location.fias === userLocation.fias)) {
         this.foundCities.unshift(userLocation);
       }
     }
@@ -455,14 +456,14 @@ export class SearchBarFilterComponent implements OnInit {
   private _cityChangesControl(): void {
     this.locationForm.controls.city.valueChanges
       .pipe(
-        filter(cityName => cityName.length > 1),
+        filter((cityName) => cityName.length > 1),
         switchMap((cityName) => {
-          return combineLatest([of(cityName), this._locationService.searchLocations(cityName)]);
+          return combineLatest([of(cityName), this._locationService.searchLocations(cityName, Level.CITY)]);
         })
       )
       .subscribe(
         ([city, cities]) => {
-          this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
+          this.foundCities = cities.filter((location) => location.name.toLowerCase().includes(city.toLowerCase()));
           this.changeDetector.detectChanges();
         },
         (err) => {

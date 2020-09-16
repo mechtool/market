@@ -1,18 +1,28 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   CartDataOrderModel,
+  CountryCode,
   DeliveryMethod,
+  Level,
   LocationModel,
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
-import { catchError, debounceTime, filter, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
-import { absoluteImagePath, innKppToLegalId, stringToHex, currencyCode } from '#shared/utils';
-import { deliveryAreaConditionValidator } from '../../validators/delivery-area-condition.validator';
+import { absoluteImagePath, currencyCode, innKppToLegalId, stringToHex } from '#shared/utils';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import {
@@ -44,10 +54,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
   form: FormGroup;
   availableUserOrganizations: UserOrganizationModel[];
-  foundLocations: LocationModel[] = null;
   isOrderLoading = false;
   deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
+  selectedAddress: LocationModel;
+
+  foundCities: string[];
+  foundStreets: string[];
+  foundHouses: string[];
+  private foundLocations: LocationModel[];
+  private validDeliveryFiasCode: string[];
 
   get orderType(): 'order' | 'priceRequest' {
     return this.order?.items?.[0]?.price ? 'order' : 'priceRequest';
@@ -139,7 +155,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
     private _metrika: Metrika,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._getDeliveryMethods(this.order.deliveryOptions)
@@ -154,127 +171,63 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           return this._getFoundLocations(this.order);
         }),
       )
-      .subscribe((res) => {
-        this.foundLocations = res;
-        this._cdr.detectChanges();
+      .subscribe((validDeliveryArea) => {
+        this.validDeliveryFiasCode = validDeliveryArea;
+        this._watchDeliveryAreaUserChanges();
+        this._watchItemQuantityChanges();
       });
-
-    this._watchDeliveryAreaUserChanges();
-    this._watchItemQuantityChanges();
   }
 
   ngOnDestroy() {
     this._cartService.pullStorageCartData();
   }
 
+  citySelected() {
+    if (this.form.get('deliveryArea').get('deliveryCity').value?.length) {
+      this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
+      document.getElementById('street_delivery_address_input').focus();
+    }
+  }
+
+  streetSelected() {
+    if (this.form.get('deliveryArea').get('deliveryStreet').value?.length) {
+      this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
+      document.getElementById('house_delivery_address_input').focus();
+    }
+  }
+
+  houseSelected() {
+    const house = this.form.controls.deliveryArea.value.deliveryHouse;
+    const location = this.foundLocations.find((loc) => loc.house === house);
+
+    if (!location) {
+      this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
+    } else {
+
+      const hasRussianCode = this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
+
+      if (hasRussianCode) {
+        this.selectedAddress = location;
+      } else if (this.validDeliveryFiasCode?.length) {
+        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode)
+          .subscribe((isAvailable) => {
+            if (isAvailable) {
+              this.selectedAddress = location;
+            } else {
+              this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
+            }
+          });
+      } else {
+        // todo Пока считаем, что если поставщик не указал ни самовывоз, ни доставку, то он доставляет по все России
+        this.selectedAddress = location;
+      }
+    }
+    document.getElementById('house_delivery_address_input').blur();
+  }
+
   setPickupArea(pickupPoint) {
     this.form.patchValue({
       pickupArea: pickupPoint,
-    });
-  }
-
-  private _getFoundLocations(order: CartDataOrderModel): Observable<any> {
-    const areAllDeliveryZonesValid = order.deliveryOptions?.deliveryZones?.every((zone) => zone.fiasCode);
-    if (areAllDeliveryZonesValid) {
-      return of(
-        order.deliveryOptions.deliveryZones.map((zone: any) => {
-          return {
-            fias: zone.fiasCode,
-            name: zone.title,
-            fullName: zone.title,
-          };
-        }),
-      );
-    }
-    return this._locationService.getMainRegions();
-  }
-
-  private _watchDeliveryAreaUserChanges() {
-    this.form
-      .get('deliveryArea')
-      .valueChanges.pipe(
-        filter((res) => typeof res === 'string'),
-        debounceTime(300),
-        switchMap((res) => {
-          let deliveryZones = null;
-          const areAllDeliveryZonesValid = this.order.deliveryOptions?.deliveryZones?.every((zone) => zone.fiasCode);
-          if (areAllDeliveryZonesValid) {
-            deliveryZones = this.order.deliveryOptions.deliveryZones;
-          }
-          if (deliveryZones?.length) {
-            return this._locationService.searchAddresses(res, deliveryZones);
-          }
-          return this._locationService.searchAddresses(res);
-        }),
-      )
-      .subscribe(
-        (res) => {
-          this.foundLocations = res;
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
-  }
-
-  private _watchItemQuantityChanges() {
-    this.itemsControls.forEach((ctrl, ind) => {
-      const quantityControl = ctrl.controls.quantity;
-      quantityControl.valueChanges
-        .pipe(
-          tap((_) => (this.isOrderLoading = true)),
-          switchMap((res) => {
-            return res === 0
-              ? this._cartService.handleRelation(RelationEnumModel.ITEM_REMOVE, ctrl.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
-              : this._cartService.handleRelation(
-                  RelationEnumModel.ITEM_UPDATE_QUANTITY,
-                  ctrl.value['_links'][RelationEnumModel.ITEM_UPDATE_QUANTITY].href,
-                  {
-                    quantity: res,
-                  },
-                );
-          }),
-          catchError((_) => {
-            return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
-              tap((res) => {
-                this.cartDataChange.emit(res);
-                const foundOrder = res.content.find((x) => {
-                  return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
-                });
-                if (foundOrder) {
-                  this._resetOrder(foundOrder);
-                }
-              }),
-            );
-          }),
-          switchMap((res) => {
-            return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
-          }),
-        )
-        .subscribe(
-          (res) => {
-            if (res) {
-              this.cartDataChange.emit(res);
-              const foundOrder = res.content.find((x) => {
-                return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
-              });
-              if (!foundOrder) {
-                this.items.clear();
-                this._cartService.setActualCartData().pipe(take(1)).subscribe();
-                this._cdr.detectChanges();
-              }
-              if (foundOrder) {
-                this._resetOrder(foundOrder);
-              }
-            }
-          },
-          (err) => {
-            this.isOrderLoading = false;
-            this._cdr.detectChanges();
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-          },
-        );
     });
   }
 
@@ -324,28 +277,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       );
   }
 
-  private _resetOrder(order) {
-    if (order) {
-      this.items.clear();
-      order.items.forEach((product) => {
-        this.items.push(this._createItem(product, this.unavailableToOrderTradeOfferIds));
-      });
-      this.order.items = order.items;
-      this._cartService.partiallyUpdateStorageByOrder(this.order);
-      this.isOrderLoading = false;
-      this._watchItemQuantityChanges();
-      this.form.patchValue({
-        total: order.orderTotal?.total,
-        totalVat: order.orderTotal?.totalVat,
-      });
-      this._cdr.detectChanges();
-    }
-    if (!order) {
-      this.items.clear();
-      this._cdr.detectChanges();
-    }
-  }
-
   checkForValidityAndCreateOrder() {
     if (!this.userInfo) {
       this._authModalService.openAuthDecisionMakerModal(
@@ -368,11 +299,20 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.form.valid) {
+    if (!this.form.valid || (!this.selectedAddress && this.deliveryAvailable)) {
       this.changeSelectedTabIndex(1);
-      Object.keys(this.form.controls).forEach((key) => {
-        this.form.controls[key].markAsDirty();
-      });
+
+      if (!this.form.valid) {
+        Object.keys(this.form.controls).forEach((key) => {
+          this.form.controls[key].markAsDirty();
+        });
+      }
+
+      if (!this.selectedAddress && this.deliveryAvailable) {
+        this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
+        document.getElementById('city_delivery_address_input').focus();
+      }
+
       return;
     }
 
@@ -381,58 +321,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   changeSelectedTabIndex(tabIndex: number) {
     this.selectedTabIndex = tabIndex;
-  }
-
-  private _createOrder() {
-    const data = {
-      customerOrganizationId: this.form.get('consumerId').value,
-      contacts: {
-        name: this.form.get('contactName').value,
-        phone: `+7${this.form.get('contactPhone').value}`,
-        email: this.form.get('contactEmail').value,
-      },
-      deliveryOptions: {
-        ...(this.deliveryAvailable
-          ? {
-              deliveryTo: {
-                fiasCode: this.form.get('deliveryArea').value.fias,
-                title: this.form.get('deliveryArea').value.fullName,
-                countryOksmCode: '643',
-              },
-            }
-          : {
-              pickupFrom: this.pickupArea,
-            }),
-      },
-    };
-    let comment = '';
-    if (this.form.get('deliveryDesirableDate').value) {
-      const dateFormatted = format(new Date(this.form.get('deliveryDesirableDate').value), 'dd-MM-yyyy HH:mm');
-      comment += `Желаемая дата доставки: ${dateFormatted}. `;
-    }
-    if (this.form.get('commentForSupplier').value) {
-      comment += `${this.form.get('commentForSupplier').value}`;
-    }
-    if (comment) {
-      data['comment'] = comment;
-    }
-    this._cartService
-      .handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
-      .pipe(switchMap((_) => this._cartService.setActualCartData()))
-      .subscribe(
-        (res) => {
-          this._cartModalService.openOrderSentModal();
-          this.cartDataChange.emit(res);
-          this.items.clear();
-          this._cdr.detectChanges();
-          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-            this._metrika.fireEvent('ORDER_CREATE');
-          }
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
   }
 
   setHexColor(str: string): string {
@@ -489,6 +377,230 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return differenceInCalendarDays(current, new Date()) < 1;
   }
 
+  private _getFoundLocations(order: CartDataOrderModel): Observable<string[]> {
+    if (order.deliveryOptions?.deliveryZones?.length) {
+      return of(
+        order.deliveryOptions.deliveryZones
+          .filter((zone) => zone.fiasCode || zone.countryOksmCode === CountryCode.RUSSIA)
+          .map((zone) => {
+            if (!zone.fiasCode) {
+              return zone.countryOksmCode;
+            }
+            return zone.fiasCode;
+          }),
+      );
+    }
+    return of([]);
+  }
+
+  private _watchDeliveryAreaUserChanges() {
+    this.form.controls.deliveryArea.get('deliveryCity').valueChanges
+      .pipe(
+        switchMap((city) => {
+          if (city?.length > 1) {
+            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
+            return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
+          }
+          return of([]);
+        })
+      ).subscribe((cities) => {
+        this.selectedAddress = null;
+        this.foundStreets = [];
+        this.foundHouses = [];
+        this.foundLocations = [];
+        this.foundCities = cities.map((city) => city.name).filter((value, index, self) => self.indexOf(value) === index);
+        this._cdr.detectChanges();
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      });
+
+    this.form.controls.deliveryArea.get('deliveryStreet').valueChanges
+      .pipe(
+        switchMap((street) => {
+          if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
+            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+            const query = {
+              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+              deliveryStreet: street
+            };
+            return this._locationService.searchAddresses(query, Level.STREET);
+          }
+          return of([]);
+        })
+      ).subscribe((cities) => {
+        this.selectedAddress = null;
+        this.foundHouses = [];
+        this.foundLocations = [];
+        this.foundStreets = cities.map((city) => city.street);
+        this._cdr.detectChanges();
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      });
+
+    this.form.controls.deliveryArea.get('deliveryHouse').valueChanges
+      .pipe(
+        switchMap((house) => {
+          if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
+            const query = {
+              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+              deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
+              deliveryHouse: house
+            };
+            return this._locationService.searchAddresses(query, Level.HOUSE);
+          }
+          return of([]);
+        })
+      ).subscribe((cities) => {
+        this.selectedAddress = null;
+        this.foundHouses = cities.map((city) => city.house);
+        this._cdr.detectChanges();
+        this.foundLocations = cities;
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      });
+  }
+
+  private _watchItemQuantityChanges() {
+    this.itemsControls?.forEach((ctrl, ind) => {
+      const quantityControl = ctrl.controls.quantity;
+      quantityControl.valueChanges
+        .pipe(
+          tap((_) => (this.isOrderLoading = true)),
+          switchMap((res) => {
+            return res === 0
+              ? this._cartService.handleRelation(RelationEnumModel.ITEM_REMOVE, ctrl.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
+              : this._cartService.handleRelation(
+                RelationEnumModel.ITEM_UPDATE_QUANTITY,
+                ctrl.value['_links'][RelationEnumModel.ITEM_UPDATE_QUANTITY].href,
+                {
+                  quantity: res,
+                },
+              );
+          }),
+          catchError((_) => {
+            return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
+              tap((res) => {
+                this.cartDataChange.emit(res);
+                const foundOrder = res.content.find((x) => {
+                  return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
+                });
+                if (foundOrder) {
+                  this._resetOrder(foundOrder);
+                }
+              }),
+            );
+          }),
+          switchMap((res) => {
+            return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
+          }),
+        )
+        .subscribe(
+          (res) => {
+            if (res) {
+              this.cartDataChange.emit(res);
+              const foundOrder = res.content.find((x) => {
+                return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
+              });
+              if (!foundOrder) {
+                this.items.clear();
+                this._cartService.setActualCartData().pipe(take(1)).subscribe();
+                this._cdr.detectChanges();
+              }
+              if (foundOrder) {
+                this._resetOrder(foundOrder);
+              }
+            }
+          },
+          (err) => {
+            this.isOrderLoading = false;
+            this._cdr.detectChanges();
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          },
+        );
+    });
+  }
+
+  private _resetOrder(order) {
+    if (order) {
+      this.items.clear();
+      order.items.forEach((product) => {
+        this.items.push(this._createItem(product, this.unavailableToOrderTradeOfferIds));
+      });
+      this.order.items = order.items;
+      this._cartService.partiallyUpdateStorageByOrder(this.order);
+      this.isOrderLoading = false;
+      this._watchItemQuantityChanges();
+      this.form.patchValue({
+        total: order.orderTotal?.total,
+        totalVat: order.orderTotal?.totalVat,
+      });
+      this._cdr.detectChanges();
+    }
+    if (!order) {
+      this.items.clear();
+      this._cdr.detectChanges();
+    }
+  }
+
+  private _createOrder() {
+    const data = {
+      customerOrganizationId: this.form.get('consumerId').value,
+      contacts: {
+        name: this.form.get('contactName').value,
+        phone: `+7${this.form.get('contactPhone').value}`,
+        email: this.form.get('contactEmail').value,
+      },
+      deliveryOptions: {
+        ...(this.deliveryAvailable
+          ? {
+            deliveryTo: {
+              fiasCode: this.selectedAddress.fias,
+              title: this.selectedAddress.fullName,
+              countryOksmCode: '643',
+            },
+          }
+          : {
+            pickupFrom: this.pickupArea,
+          }),
+      },
+    };
+    let comment = '';
+    if (this.form.get('deliveryDesirableDate').value) {
+      const dateFormatted = format(new Date(this.form.get('deliveryDesirableDate').value), 'dd-MM-yyyy HH:mm');
+      comment += `Желаемая дата доставки: ${dateFormatted}. `;
+    }
+    if (this.form.get('commentForSupplier').value) {
+      comment += `${this.form.get('commentForSupplier').value}`;
+    }
+    if (comment) {
+      data['comment'] = comment;
+    }
+    this._cartService
+      .handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
+      .pipe(switchMap((_) => this._cartService.setActualCartData()))
+      .subscribe(
+        (res) => {
+          this._cartModalService.openOrderSentModal();
+          this.cartDataChange.emit(res);
+          this.items.clear();
+          this._cdr.detectChanges();
+          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
+            this._metrika.fireEvent('ORDER_CREATE');
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
+  }
+
   private _getDeliveryMethods(opts: DeliveryOptionsModel): Observable<DeliveryMethodModel[]> {
     const deliveryMethods: DeliveryMethodModel[] = [];
     if (opts?.pickupPoints?.length) {
@@ -513,7 +625,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         total: new FormControl(order.orderTotal?.total),
         totalVat: new FormControl(order.orderTotal?.totalVat),
         deliveryMethod: new FormControl(deliveryMethods[0]?.value, [Validators.required]),
-        deliveryArea: new FormControl(''),
+        deliveryArea: this._createDeliveryAreaForm(),
         pickupArea: new FormControl(order.deliveryOptions?.pickupPoints?.[0]),
         contactName: new FormControl(userInfo?.fullName || '', [Validators.required]),
         contactPhone: new FormControl(userInfo?.phone || '', [Validators.required]),
@@ -522,7 +634,19 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         deliveryDesirableDate: new FormControl(''),
         items: this._fb.array(order.items.map((res) => this._createItem(res, this.unavailableToOrderTradeOfferIds))),
       },
-      { validator: deliveryAreaConditionValidator },
+    );
+  }
+
+  private _createDeliveryAreaForm(): FormGroup {
+    return this._fb.group({
+        deliveryCity: new FormControl(''),
+        deliveryStreet: new FormControl({ value: '', disabled: true }),
+        deliveryHouse: new FormControl({ value: '', disabled: true }),
+      },
+      {
+        // todo Пока создаем и проверяем данные прямо тут в коде, постараться переделать
+        // validator: deliveryAreaConditionValidator
+      }
     );
   }
 
@@ -560,8 +684,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return !order.customersAudience?.length
       ? userOrganizations
       : userOrganizations?.filter((org) => {
-          return this._checkAudienceForAvailability(order.customersAudience, org);
-        });
+        return this._checkAudienceForAvailability(order.customersAudience, org);
+      });
   }
 
   private _initConsumer(availableOrganizations: UserOrganizationModel[], order: CartDataOrderModel) {

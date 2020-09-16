@@ -10,6 +10,7 @@ import {
   NzDropDownModule,
   NzEmptyModule,
   NzFormModule,
+  NzInputModule,
   NzRadioModule,
   NzTabsModule,
   NzToolTipModule,
@@ -41,6 +42,7 @@ import { OrderUnavailableComponent } from './components/order/components/order-u
     CartRoutingModule,
     PipesModule,
     LineClampModule,
+    NzInputModule,
   ],
   declarations: [
     CartComponent,

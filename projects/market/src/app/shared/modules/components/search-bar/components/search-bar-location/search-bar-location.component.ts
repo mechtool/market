@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angu
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { filter, switchMap } from 'rxjs/operators';
 import { combineLatest, of } from 'rxjs';
-import { LocationModel, Megacity } from '#shared/modules/common-services/models';
+import { Level, LocationModel, Megacity } from '#shared/modules/common-services/models';
 import { LocalStorageService, LocationService, NotificationsService } from '#shared/modules/common-services';
 
 @Component({
@@ -45,7 +45,7 @@ export class SearchBarLocationComponent {
 
     if (this._localStorageService.hasUserLocation()) {
       const userLocation = this._localStorageService.getUserLocation();
-      if (!this.foundCities.find(res => res.fias === userLocation.fias)) {
+      if (!this.foundCities.find((res) => res.fias === userLocation.fias)) {
         this.foundCities.unshift(userLocation);
       }
     }
@@ -58,14 +58,14 @@ export class SearchBarLocationComponent {
   private _subscribeOnCityRequest(): void {
     this.locationForm.controls.city.valueChanges
       .pipe(
-        filter(cityName => cityName.length > 1),
+        filter((cityName) => cityName.length > 1),
         switchMap((cityName) => {
-          return combineLatest([of(cityName), this._locationService.searchLocations(cityName)]);
+          return combineLatest([of(cityName), this._locationService.searchLocations(cityName, Level.CITY)]);
         })
       )
       .subscribe(
         ([city, cities]) => {
-          this.foundCities = cities.filter(r => r.name.toLowerCase().includes(city.toLowerCase()));
+          this.foundCities = cities.filter((location) => location.name.toLowerCase().includes(city.toLowerCase()));
           this.changeDetector.detectChanges();
         },
         (err) => {

@@ -1,4 +1,4 @@
-<div class="order" *ngIf="itemsControls.length">
+<div class="order" *ngIf="itemsControls?.length">
 
   <form class="form__order" action="" [formGroup]="form" (submit)="checkForValidityAndCreateOrder()">
 
@@ -6,7 +6,9 @@
       <div class="order_spec" *ngIf="userInfo && availableUserOrganizations?.length">
         <div class="order_label">Доступный заказчик:</div>
         <div class="order__customer dropdown dropdown_selectable">
-          <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'" [nzDisabled]="availableUserOrganizations?.length === 1">
+          <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click"
+               [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'"
+               [nzDisabled]="availableUserOrganizations?.length === 1">
             <div class="supplier_title">
               <div class="supplier_image">
                 <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(consumerName)}"></div>
@@ -19,10 +21,12 @@
         </div>
         <nz-dropdown-menu #organizationsList="nzDropdownMenu">
           <ul nz-menu style="width: 290px">
-            <li nz-menu-item *ngFor="let organization of availableUserOrganizations" (click)="setConsumer(organization)">
+            <li nz-menu-item *ngFor="let organization of availableUserOrganizations"
+                (click)="setConsumer(organization)">
               <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
                 <div class="supplier_image">
-                  <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(organization?.organizationName)}"></div>
+                  <div class="supplier_image-color"
+                       [ngStyle]="{'background-color': setHexColor(organization?.organizationName)}"></div>
                 </div>
                 <div class="supplier_name">
                   {{organization?.organizationName}}
@@ -69,7 +73,8 @@
       </div>
     </div>
 
-    <nz-tabset class="" nzTabPosition="top" nzType="card" [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="changeSelectedTabIndex($event)">
+    <nz-tabset class="" nzTabPosition="top" nzType="card" [nzSelectedIndex]="selectedTabIndex"
+               (nzSelectedIndexChange)="changeSelectedTabIndex($event)">
 
       <nz-tab nzTitle="Товары">
         <div class="tab-content">
@@ -77,7 +82,8 @@
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="{{orderType === 'order' ? 'Данные для заказа' : 'Данные для запроса цен'}}" nzDisabled="{{!userInfo}}">
+      <nz-tab nzTitle="{{orderType === 'order' ? 'Данные для заказа' : 'Данные для запроса цен'}}"
+              nzDisabled="{{!userInfo}}">
         <div class="tab-content">
           <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
         </div>
@@ -91,274 +97,358 @@
 
     </nz-tabset>
 
-  <ng-template #tableProducts>
-    <section id="section_tab__products" class="section_tab section_tab__moving" formArrayName="items">
-      <div class="table_list table_list__products table_list__basket">
-        <div class="table_row table_header">
-          <div class="cell_right">
-            <div class="table_cell cell_title">
-              Наименование товара
-            </div>
-            <div class="table_cell cell_article">
-              Артикул
-            </div>
-            <div class="table_cell cell_available">
-              Доступность
-            </div>
-            <div class="table_cell cell_count" data-title="Количество:">
-              Количество
-            </div>
-            <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
-              Цена
-            </div>
-            <div class="table_cell cell_sum" data-title="Сумма:" *ngIf="orderType === 'order'">
-              Сумма
+    <ng-template #tableProducts>
+      <section id="section_tab__products" class="section_tab section_tab__moving" formArrayName="items">
+        <div class="table_list table_list__products table_list__basket">
+          <div class="table_row table_header">
+            <div class="cell_right">
+              <div class="table_cell cell_title">
+                Наименование товара
+              </div>
+              <div class="table_cell cell_article">
+                Артикул
+              </div>
+              <div class="table_cell cell_available">
+                Доступность
+              </div>
+              <div class="table_cell cell_count" data-title="Количество:">
+                Количество
+              </div>
+              <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
+                Цена
+              </div>
+              <div class="table_cell cell_sum" data-title="Сумма:" *ngIf="orderType === 'order'">
+                Сумма
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="table_row" *ngFor="let item of itemsControls; let i = index">
-          <ng-container [formGroupName]="i">
-            <div class="cell_left">
-              <div
-                class="cell_image"
-                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+          <div class="table_row" *ngFor="let item of itemsControls; let i = index">
+            <ng-container [formGroupName]="i">
+              <div class="cell_left">
+                <div
+                  class="cell_image"
+                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   <img src="{{item.controls.imageUrl.value}}"
                        alt="{{item.controls.productName.value}}"
                        title="{{item.controls.productName.value}}"
                        onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
+                </div>
               </div>
-            </div>
-            <div class="cell_right">
-              <div
-                class="table_cell cell_title"
-                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+              <div class="cell_right">
+                <div
+                  class="table_cell cell_title"
+                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   <span title="{{item.controls.productName.value}}" marketLineClamp [rows]="2">
                     {{item.controls.productName.value}}
                   </span>
-              </div>
-              <div
-                class="table_cell cell_article"
-                data-title="Артикул:"
-                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                </div>
+                <div
+                  class="table_cell cell_article"
+                  data-title="Артикул:"
+                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   {{item.controls.partNumber.value}}
-              </div>
-              <div
-                class="table_cell cell_available"
-                data-title="Доступность:"
-                [ngClass]="{'not-available': item.controls.availableToOrder.errors}"
-                (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                </div>
+                <div
+                  class="table_cell cell_available"
+                  data-title="Доступность:"
+                  [ngClass]="{'not-available': item.controls.availableToOrder.errors}"
+                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   {{item.controls.availableToOrder.errors ? 'Недоступно' : ''}}
-              </div>
-              <div class="table_cell cell_count" data-title="Количество:" [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
-                <market-cart-order-qty-counter
-                  formControlName="quantity"
-                  [isDisabled]="isOrderLoading"
-                ></market-cart-order-qty-counter>
-              </div>
-              <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
-                <span class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
-              </div>
-              <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="orderType === 'order'">
-                <span class="price">{{item.controls.total.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+                </div>
+                <div class="table_cell cell_count" data-title="Количество:"
+                     [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
+                  <market-cart-order-qty-counter
+                    formControlName="quantity"
+                    [isDisabled]="isOrderLoading"
+                  ></market-cart-order-qty-counter>
+                </div>
+                <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
+                  <span
+                    class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+                </div>
+                <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="orderType === 'order'">
+                  <span
+                    class="price">{{item.controls.total.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
 
-                <span
-                  class="cell_nds"
-                  *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">
+                  <span
+                    class="cell_nds"
+                    *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">
                     НДС {{item.controls.vat.value / 100 | percent}}
                 </span>
-                <span
-                  class="cell_nds"
-                  *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">
+                  <span
+                    class="cell_nds"
+                    *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">
                     без НДС
                 </span>
 
-              </div>
-              <div class="table_cell cell_more">
-                <div class="table_cell__inner more_actions__dropdown dropdown">
-                  <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span></button>
-                  <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
-                  <nz-dropdown-menu #itemModal="nzDropdownMenu">
-                    <div class="dropdown_block">
-                      <div class="dropdown_item dropdown_item__hover" (click)="removeItem(item.controls, i)">Удалить из заказа</div>
-                    </div>
-                  </nz-dropdown-menu>
                 </div>
-              </div>
-            </div>
-          </ng-container>
-        </div>
-      </div>
-    </section>
-  </ng-template>
-
-  <ng-template #orderDetails>
-    <section id="section_tab__information" class="section_tab section_tab__limited">
-      <div class="section_paragraph">
-        <div class="order__shipping">
-          <div class="form-group_title">Укажите cпособ доставки</div>
-          <div class="form-group_radio order__shipping_type">
-            <nz-radio-group formControlName="deliveryMethod">
-              <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
-            </nz-radio-group>
-          </div>
-          <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">
-
-            <div class="order_spec" *ngIf="pickupPoints?.length">
-              <div class="order__customer dropdown dropdown_selectable">
-                <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click" [nzDropdownMenu]="pickupPointsList" [nzOverlayClassName]="'upclose'" [nzDisabled]="pickupPoints?.length === 1">
-                  <div class="supplier_title">
-                    <div class="supplier_name">
-                      {{pickupArea?.title}}
-                    </div>
+                <div class="table_cell cell_more">
+                  <div class="table_cell__inner more_actions__dropdown dropdown">
+                    <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span></button>
+                    <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown
+                            [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
+                    <nz-dropdown-menu #itemModal="nzDropdownMenu">
+                      <div class="dropdown_block">
+                        <div class="dropdown_item dropdown_item__hover" (click)="removeItem(item.controls, i)">Удалить
+                          из заказа
+                        </div>
+                      </div>
+                    </nz-dropdown-menu>
                   </div>
                 </div>
               </div>
-              <nz-dropdown-menu #pickupPointsList="nzDropdownMenu">
-                <ul nz-menu style="width: 290px">
-                  <li nz-menu-item *ngFor="let pickupPoint of pickupPoints" (click)="setPickupArea(pickupPoint)">
-                    <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="pickupPointsList">
+            </ng-container>
+          </div>
+        </div>
+      </section>
+    </ng-template>
+
+    <ng-template #orderDetails>
+      <section id="section_tab__information" class="section_tab section_tab__limited">
+        <div class="section_paragraph">
+          <div class="order__shipping">
+            <div class="form-group_title">Укажите способ доставки</div>
+            <div class="form-group_radio order__shipping_type">
+              <nz-radio-group formControlName="deliveryMethod">
+                <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
+              </nz-radio-group>
+            </div>
+            <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">
+
+              <div class="order_spec" *ngIf="pickupPoints?.length">
+                <div class="order__customer dropdown dropdown_selectable">
+                  <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown
+                       nzTrigger="click" [nzDropdownMenu]="pickupPointsList" [nzOverlayClassName]="'upclose'"
+                       [nzDisabled]="pickupPoints?.length === 1">
+                    <div class="supplier_title">
                       <div class="supplier_name">
-                        {{pickupPoint.title}}
+                        {{pickupArea?.title}}
                       </div>
                     </div>
-                  </li>
-                </ul>
-              </nz-dropdown-menu>
+                  </div>
+                </div>
+                <nz-dropdown-menu #pickupPointsList="nzDropdownMenu">
+                  <ul nz-menu style="width: 290px">
+                    <li nz-menu-item *ngFor="let pickupPoint of pickupPoints" (click)="setPickupArea(pickupPoint)">
+                      <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="pickupPointsList">
+                        <div class="supplier_name">
+                          {{pickupPoint.title}}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </nz-dropdown-menu>
+              </div>
+
             </div>
 
-          </div>
-          <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
-            <div class="form-group form-group-long">
-              <label>Укажите адрес доставки *</label>
-              <input id="delivery_address_input" type="text" placeholder="" [ngClass]="{'error': form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)}" nz-input [nzAutocomplete]="auto" formControlName="deliveryArea">
-              <nz-autocomplete nzBackfill #auto>
-                <nz-auto-option *ngFor="let location of foundLocations" [nzValue]="location" [nzLabel]="location.fullName">{{ location.fullName }}</nz-auto-option>
-              </nz-autocomplete>
-              <div class="input_error" *ngIf="form.errors?.deliveryAreaCondition && (form.controls.deliveryArea.touched || form.controls.deliveryArea.dirty)">Заполните это поле</div>
-            </div>
+            <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
+              <div class="form-group form-group-long">
 
-            <div class="form-group form-group-long">
-              <nz-date-picker
-                [nzShowTime]="{
+                <label>Укажите адрес доставки *</label>
+
+                <div class="wrapper_delivery_input" formGroupName="deliveryArea">
+
+                  <input nz-input
+                         id="city_delivery_address_input"
+                         formControlName="deliveryCity"
+                         autocomplete="off"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         type="text"
+                         placeholder="Город"
+                         (keyup.enter)="citySelected()"
+                         [nzAutocomplete]="auto_city">
+
+                  <nz-autocomplete nzBackfill #auto_city>
+                    <nz-auto-option *ngFor="let city of foundCities"
+                                    (click)="citySelected()"
+                                    [nzValue]="city">{{ city }}</nz-auto-option>
+                  </nz-autocomplete>
+
+                  <input nz-input
+                         id="street_delivery_address_input"
+                         formControlName="deliveryStreet"
+                         autocomplete="off"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         type="text"
+                         placeholder="Улица"
+                         (keyup.enter)="streetSelected()"
+                         [nzAutocomplete]="auto_street">
+
+                  <nz-autocomplete nzBackfill #auto_street>
+                    <nz-auto-option *ngFor="let street of foundStreets"
+                                    (click)="streetSelected()"
+                                    [nzValue]="street">{{ street }}</nz-auto-option>
+                  </nz-autocomplete>
+
+                  <input nz-input
+                         id="house_delivery_address_input"
+                         formControlName="deliveryHouse"
+                         autocomplete="off"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         type="text"
+                         placeholder="Дом"
+                         (keyup.enter)="houseSelected()"
+                         [nzAutocomplete]="auto_house">
+
+                  <nz-autocomplete nzBackfill #auto_house>
+                    <nz-auto-option *ngFor="let house of foundHouses"
+                                    (click)="houseSelected()"
+                                    [nzValue]="house">{{ house }}</nz-auto-option>
+                  </nz-autocomplete>
+
+                </div>
+
+                <div class="input_error"
+                     *ngIf="form.controls.deliveryArea.errors?.deliveryNotAvailable">
+                  Нет доставки по указанному адресу
+                </div>
+
+                <div class="input_error"
+                     *ngIf="form.controls.deliveryArea.errors?.deliveryAreaCondition">
+                  Заполните это поле
+                </div>
+
+              </div>
+
+
+              <div class="form-group form-group-long">
+                <label>Желаемая дата и время доставки</label>
+
+                <nz-date-picker
+                  [nzShowTime]="{
                   nzFormat: 'HH:mm',
-                  nzHourStep: '4',
-                  nzMinuteStep: '30'
+                  nzHourStep: 4,
+                  nzMinuteStep: 30
                 }"
-                nzFormat="yyyy-MM-dd HH:mm"
-                nzPlaceHolder="Желаемая дата и время доставки"
-                [nzDisabledDate]="disabledDate"
-                formControlName="deliveryDesirableDate"
-              ></nz-date-picker>
+                  nzFormat="yyyy-MM-dd HH:mm"
+                  nzPlaceHolder="Нажмите для ввода даты и времени"
+                  [nzDisabledDate]="disabledDate"
+                  formControlName="deliveryDesirableDate"
+                ></nz-date-picker>
+              </div>
             </div>
 
-          </div>
-          <div class="order__shipping_form__title">Контактное лицо с вашей стороны</div>
+            <div class="order__shipping_form__title">Контактное лицо с вашей стороны</div>
 
-          <div class="form-group form-group-long">
-            <label for="contactName">ФИО *</label>
-            <input
-              type="text"
-              id="contactName"
-              autocomplete="off"
-              [ngClass]="{'error': form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
-              formControlName="contactName">
-            <ng-container *ngIf="form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)">
-              <div class="input_error" *ngIf="form.controls.contactName.errors.required">Заполните это поле</div>
-            </ng-container>
-          </div>
+            <div class="form-group form-group-long">
+              <label for="contactName">ФИО *</label>
+              <input
+                type="text"
+                id="contactName"
+                autocomplete="off"
+                [ngClass]="{'error': form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
+                formControlName="contactName">
+              <ng-container
+                *ngIf="form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)">
+                <div class="input_error" *ngIf="form.controls.contactName.errors.required">Заполните это поле</div>
+              </ng-container>
+            </div>
 
-          <div class="form-group form-group-long">
-            <label for="contactPhone">Телефон *</label>
-            <input
-              type="text"
-              id="contactPhone"
-              autocomplete="off"
-              [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
-              prefix="+7"
-              mask="(000) 000 00 00"
-              [showMaskTyped]="true"
-              formControlName="contactPhone">
-            <ng-container *ngIf="form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
-              <div class="input_error" *ngIf="form.controls.contactPhone.errors.required">Заполните это поле</div>
-              <div class="input_error" *ngIf="!form.controls.contactPhone.errors.required && form.controls.contactPhone.errors.mask">Некорректно заполнено поле</div>
-            </ng-container>
-          </div>
+            <div class="form-group form-group-long">
+              <label for="contactPhone">Телефон *</label>
+              <input
+                type="text"
+                id="contactPhone"
+                autocomplete="off"
+                [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
+                prefix="+7"
+                mask="(000) 000 00 00"
+                [showMaskTyped]="true"
+                formControlName="contactPhone">
+              <ng-container
+                *ngIf="form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
+                <div class="input_error" *ngIf="form.controls.contactPhone.errors.required">Заполните это поле</div>
+                <div class="input_error"
+                     *ngIf="!form.controls.contactPhone.errors.required && form.controls.contactPhone.errors.mask">
+                  Некорректно заполнено поле
+                </div>
+              </ng-container>
+            </div>
 
-          <div class="form-group form-group-long">
-            <label for="contactEmail">E-mail *</label>
-            <input
-              type="email"
-              id="contactEmail"
-              autocomplete="off"
-              [ngClass]="{'error': form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
-              formControlName="contactEmail">
-            <ng-container *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
-              <div class="input_error" *ngIf="form.controls.contactEmail.errors.required">Заполните это поле</div>
-              <div class="input_error" *ngIf="!form.controls.contactEmail.errors.required && form.controls.contactEmail.errors.email">Некорректно заполнено поле</div>
-            </ng-container>
-          </div>
+            <div class="form-group form-group-long">
+              <label for="contactEmail">E-mail *</label>
+              <input
+                type="email"
+                id="contactEmail"
+                autocomplete="off"
+                [ngClass]="{'error': form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
+                formControlName="contactEmail">
+              <ng-container
+                *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
+                <div class="input_error" *ngIf="form.controls.contactEmail.errors.required">Заполните это поле</div>
+                <div class="input_error"
+                     *ngIf="!form.controls.contactEmail.errors.required && form.controls.contactEmail.errors.email">
+                  Некорректно заполнено поле
+                </div>
+              </ng-container>
+            </div>
 
 
-          <div class="form-group">
-            <label for="commentForSupplier">Комментарий для поставщика</label>
-            <div class="textarea-wrap">
-              <textarea id="commentForSupplier" rows="6" formControlName="commentForSupplier"></textarea>
+            <div class="form-group">
+              <label for="commentForSupplier">Комментарий для поставщика</label>
+              <div class="textarea-wrap">
+                <textarea id="commentForSupplier" rows="6" formControlName="commentForSupplier"></textarea>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </ng-template>
+      </section>
+    </ng-template>
 
-  <ng-template #supplierData>
-    <section id="section_tab__supplier" class="section_tab section_tab__supplier section_tab__limited">
-      <div class="section_paragraph">
-        <h3>Поставщик</h3>
-        <p class="supplier_title">
+    <ng-template #supplierData>
+      <section id="section_tab__supplier" class="section_tab section_tab__supplier section_tab__limited">
+        <div class="section_paragraph">
+          <h3>Поставщик</h3>
+          <p class="supplier_title">
           <span class="supplier_image">
             <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(supplierName)}"></div>
           </span>
-          <span class="supplier_name">
+            <span class="supplier_name">
             {{supplierName}}
           </span>
-        </p>
-        <div class="info_group__supplier">
-          <div class="info_group">
-            <span class="info_group__label">ИНН</span>
-            <span class="info_group__value">{{supplierINN}}</span>
+          </p>
+          <div class="info_group__supplier">
+            <div class="info_group">
+              <span class="info_group__label">ИНН</span>
+              <span class="info_group__value">{{supplierINN}}</span>
+            </div>
+            <div class="info_group">
+              <span class="info_group__label">КПП</span>
+              <span class="info_group__value">{{supplierKPP}}</span>
+            </div>
           </div>
-          <div class="info_group">
-            <span class="info_group__label">КПП</span>
-            <span class="info_group__value">{{supplierKPP}}</span>
+          <h3>Контакная информация</h3>
+          <div class="info_group__supplier">
+            <div class="info_group">
+              <span class="info_group__label">Телефон</span>
+              <span class="info_group__value">{{supplierPhone}}</span>
+            </div>
+            <div class="info_group">
+              <span class="info_group__label">E-mail</span>
+              <span class="info_group__value">{{supplierEmail}}</span>
+            </div>
           </div>
         </div>
-        <h3>Контакная информация</h3>
-        <div class="info_group__supplier">
-          <div class="info_group">
-            <span class="info_group__label">Телефон</span>
-            <span class="info_group__value">{{supplierPhone}}</span>
-          </div>
-          <div class="info_group">
-            <span class="info_group__label">E-mail</span>
-            <span class="info_group__value">{{supplierEmail}}</span>
-          </div>
+      </section>
+    </ng-template>
+
+    <div class="order__total">
+      <div class="order__total_price" *ngIf="orderType === 'order'">
+        <div class="order__total_label">Итого:</div>
+        <div class="order__total_value">{{total | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
+      </div>
+      <div class="order__total_nds" *ngIf="orderType === 'order'">Включая
+        НДС {{totalVat | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
+      <div class="order__total_btn">
+        <button id="checkoutButton" nz-button type="submit" nzType="primary"
+                [disabled]="!form.valid && selectedTabIndex == 1">{{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
+        <div class="form_error" *ngIf="!form.valid && unavailableToOrderTradeOfferIds.length">Удалите недоступные
+          позиции из заказа
         </div>
       </div>
-    </section>
-  </ng-template>
-
-  <div class="order__total">
-    <div class="order__total_price" *ngIf="orderType === 'order'">
-      <div class="order__total_label">Итого:</div>
-      <div class="order__total_value">{{total | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
     </div>
-    <div class="order__total_nds" *ngIf="orderType === 'order'">Включая НДС {{totalVat | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
-    <div class="order__total_btn">
-      <button id="checkoutButton" nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">{{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
-      <div class="form_error" *ngIf="!form.valid && unavailableToOrderTradeOfferIds.length">Удалите недоступные позиции из заказа</div>
-    </div>
-  </div>
 
   </form>
 
