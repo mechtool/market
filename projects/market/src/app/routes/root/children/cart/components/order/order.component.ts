@@ -203,12 +203,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (!location) {
       this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
     } else {
-
       const hasRussianCode = this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
 
       if (hasRussianCode) {
         this.selectedAddress = location;
-      } else if (this.validDeliveryFiasCode?.length) {
+        document.getElementById('house_delivery_address_input').blur();
+      }
+
+      if (this.validDeliveryFiasCode?.length) {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode)
           .subscribe((isAvailable) => {
             if (isAvailable) {
@@ -216,13 +218,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             } else {
               this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
             }
+            document.getElementById('house_delivery_address_input').blur();
           });
       } else {
         // todo Пока считаем, что если поставщик не указал ни самовывоз, ни доставку, то он доставляет по все России
         this.selectedAddress = location;
+        document.getElementById('house_delivery_address_input').blur();
       }
     }
-    document.getElementById('house_delivery_address_input').blur();
   }
 
   setPickupArea(pickupPoint) {
@@ -310,7 +313,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
       if (!this.selectedAddress && this.deliveryAvailable) {
         this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
-        document.getElementById('city_delivery_address_input').focus();
+        document.getElementById('city_delivery_address_input')?.focus();
       }
 
       return;
@@ -457,7 +460,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           return of([]);
         })
       ).subscribe((cities) => {
-        this.selectedAddress = null;
         this.foundHouses = cities.map((city) => city.house);
         this._cdr.detectChanges();
         this.foundLocations = cities;
