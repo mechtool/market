@@ -2,6 +2,7 @@ export class LocationModel {
   public fias?: string;
   public name?: string;
   public fullName?: string;
+  public city?: string;
   public street?: string;
   public house?: string;
 

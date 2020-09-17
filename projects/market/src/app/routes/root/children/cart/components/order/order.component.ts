@@ -196,33 +196,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  houseSelected() {
-    const house = this.form.controls.deliveryArea.value.deliveryHouse;
-    const location = this.foundLocations.find((loc) => loc.house === house);
-
-    if (!location) {
-      this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
-    } else {
-      const hasRussianCode = this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
-
-      if (hasRussianCode) {
-        this.selectedAddress = location;
-      } else if (this.validDeliveryFiasCode?.length) {
-        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode)
-          .subscribe((isAvailable) => {
-            if (isAvailable) {
-              this.selectedAddress = location;
-            } else {
-              this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
-            }
-          });
-      } else {
-        // todo Пока считаем, что если поставщик не указал ни самовывоз, ни доставку, то он доставляет по все России
-        this.selectedAddress = location;
-      }
-    }
-  }
-
   setPickupArea(pickupPoint) {
     this.form.patchValue({
       pickupArea: pickupPoint,
@@ -409,7 +382,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         this.foundStreets = [];
         this.foundHouses = [];
         this.foundLocations = [];
-        this.foundCities = cities.map((city) => city.name).filter((value, index, self) => self.indexOf(value) === index);
+        this.foundCities = cities.map((city) => city.city).filter((value, index, self) => self.indexOf(value) === index);
         this._cdr.detectChanges();
       },
       (err) => {
@@ -463,6 +436,33 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
+  }
+
+  private houseSelected() {
+    const house = this.form.controls.deliveryArea.value.deliveryHouse;
+    const location = this.foundLocations.find((loc) => loc.house === house);
+
+    if (!location) {
+      this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
+    } else {
+      const hasRussianCode = this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
+
+      if (hasRussianCode) {
+        this.selectedAddress = location;
+      } else if (this.validDeliveryFiasCode?.length) {
+        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode)
+          .subscribe((isAvailable) => {
+            if (isAvailable) {
+              this.selectedAddress = location;
+            } else {
+              this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
+            }
+          });
+      } else {
+        // todo Пока считаем, что если поставщик не указал ни самовывоз, ни доставку, то он доставляет по все России
+        this.selectedAddress = location;
+      }
+    }
   }
 
   private _watchItemQuantityChanges() {
