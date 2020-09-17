@@ -25,9 +25,16 @@
   ></market-search-results>
 
   <ng-template #banners>
-    <market-main-banners
-      *ngIf="showBanners"
-    ></market-main-banners>
+    <div class="banners_suppliers" *ngIf="supplierBannerItems?.length">
+      <market-main-banners-banner
+        *ngFor="let item of supplierBannerItems"
+        title="{{item.title}}"
+        btnLink="{{item.btnLink}}"
+        btnText="Подобрать товары">
+          <span class="description">{{item.description}}</span>
+          <img class="cover" src="{{item.imgUrl}}" alt="{{item.title}}" title="{{item.title}}">
+      </market-main-banners-banner>
+    </div>
   </ng-template>
 
 </div>

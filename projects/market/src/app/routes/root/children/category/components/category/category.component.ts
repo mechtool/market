@@ -37,8 +37,8 @@ export class CategoryComponent {
   isLoadingProducts = false;
   page: number;
 
-  get showBanners(): boolean {
-    return categoryPromotion.includes(this.categoryId);
+  get supplierBannerItems(): any[] {
+    return categoryPromotion[this.categoryId] || null;
   }
 
   constructor(

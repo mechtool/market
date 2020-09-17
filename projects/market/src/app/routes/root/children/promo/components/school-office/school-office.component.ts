@@ -19,7 +19,7 @@ export class PromoSchoolOfficeComponent {
       imgUrl: 'assets/img/promo/school-office/kit-hobby.png',
     },
     {
-      title: 'А ЦИФРА',
+      title: 'А-ЦИФРА',
       btnLink: '/supplier/e945ff97-41e5-4b41-9936-17810d1141de',
       description: '- 5% в категории «Полиграфические услуги», доставка РФ от 300 р.',
       imgUrl: 'assets/img/promo/school-office/a-cifra.png',
