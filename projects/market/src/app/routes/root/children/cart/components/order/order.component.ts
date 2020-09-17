@@ -207,10 +207,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
       if (hasRussianCode) {
         this.selectedAddress = location;
-        document.getElementById('house_delivery_address_input').blur();
-      }
-
-      if (this.validDeliveryFiasCode?.length) {
+      } else if (this.validDeliveryFiasCode?.length) {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode)
           .subscribe((isAvailable) => {
             if (isAvailable) {
@@ -218,12 +215,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             } else {
               this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
             }
-            document.getElementById('house_delivery_address_input').blur();
           });
       } else {
         // todo Пока считаем, что если поставщик не указал ни самовывоз, ни доставку, то он доставляет по все России
         this.selectedAddress = location;
-        document.getElementById('house_delivery_address_input').blur();
       }
     }
   }
@@ -461,8 +456,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         })
       ).subscribe((cities) => {
         this.foundHouses = cities.map((city) => city.house);
-        this._cdr.detectChanges();
         this.foundLocations = cities;
+        this.houseSelected();
+        this._cdr.detectChanges();
       },
       (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

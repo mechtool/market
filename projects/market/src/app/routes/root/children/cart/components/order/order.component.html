@@ -289,12 +289,10 @@
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Дом"
-                         (keyup.enter)="houseSelected()"
                          [nzAutocomplete]="auto_house">
 
                   <nz-autocomplete nzBackfill #auto_house>
                     <nz-auto-option *ngFor="let house of foundHouses"
-                                    (click)="houseSelected()"
                                     [nzValue]="house">{{ house }}</nz-auto-option>
                   </nz-autocomplete>
 
@@ -307,7 +305,7 @@
 
                 <div class="input_error"
                      *ngIf="form.controls.deliveryArea.errors?.deliveryAreaCondition">
-                  Заполните это поле
+                  Заполните это поля
                 </div>
 
               </div>
