@@ -87,11 +87,12 @@
               <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
             </div>
             <div class="table_cell cell_price">
-              <span *ngIf="tradeOffer.price"
+              <span *ngIf="tradeOffer.price.matrix?.length"
                     class="price">{{price(tradeOffer.price.matrix) | marketMultiplier:'.01' | currency:currencyCode(tradeOffer.price.currencyCode):'symbol':'1.0'}}</span>
-              <span *ngIf="tradeOffer.price" class="cell_from_packages">{{fromPackages(tradeOffer.price.matrix)}}</span>
-              <span *ngIf="tradeOffer.price" class="cell_nds">{{vat(tradeOffer.price)}}</span>
-              <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
+              <span *ngIf="tradeOffer.price.matrix?.length" class="cell_nds">{{vat(tradeOffer.price)}}</span>
+              <span *ngIf="tradeOffer.price.matrix?.length"
+                    class="cell_from_packages">{{fromPackages(tradeOffer.price.matrix)}}</span>
+              <div class="tooltip_wrap" *ngIf="tradeOffer.audience && tradeOffer.price.matrix?.length">
                 <span class="tooltip"
                       nz-tooltip
                       nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>

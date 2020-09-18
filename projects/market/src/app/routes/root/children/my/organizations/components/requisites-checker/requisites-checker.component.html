@@ -1,19 +1,21 @@
 <div class="requisites-checker">
 
   <div class="title">Добавить организацию</div>
-  <div class="description">Чтобы продолжить работу, <br>укажите данные организации:</div>
+  <div class="description">Чтобы продолжить, <br>укажите {{requisiteType}} организации:</div>
 
   <form [formGroup]="form" (submit)="send()">
-    <div class="form-group form-group-std">
-      <label for="formINN">ИНН *</label>
+
+    <div class="form-group form-group-std" *ngIf="!enterKpp">
       <input type="number" id="formINN" autocomplete="off" formControlName="inn">
     </div>
-    <div class="form-group form-group-std">
-      <label for="formKPP">КПП</label>
-      <input type="number" id="formKPP" autocomplete="off" formControlName="kpp">
+
+    <div class="form-group form-group-std" *ngIf="enterKpp">
+      <input #elementKpp type="number" id="formKPP" autocomplete="off" formControlName="kpp">
     </div>
+
     <div class="form-group form-group-btn">
-      <button nz-button [nzType]="'primary'" [disabled]="!form.valid">Продолжить</button>
+      <button *ngIf="!enterKpp" nz-button [nzType]="'primary'" (click)="nexStep()" [disabled]="form.controls.inn.invalid">Продолжить</button>
+      <button *ngIf="enterKpp" nz-button [nzType]="'primary'" [disabled]="form.invalid">Продолжить</button>
     </div>
   </form>
 

@@ -27,7 +27,6 @@ import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
   styleUrls: [
     './supplier-trade-offers-list.component.scss',
     './supplier-trade-offers-list.component-1380.scss',
-    './supplier-trade-offers-list.component-1300.scss',
     './supplier-trade-offers-list.component-1100.scss',
     './supplier-trade-offers-list.component-992.scss',
     './supplier-trade-offers-list.component-768.scss',

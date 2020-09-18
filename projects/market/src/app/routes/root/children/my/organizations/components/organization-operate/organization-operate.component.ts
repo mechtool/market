@@ -23,6 +23,14 @@ export class OrganizationOperateComponent implements OnChanges {
   @Input() legalRequisites: { inn: string; kpp?: string; };
   @Output() organizationDataChange: EventEmitter<any> = new EventEmitter();
 
+  get subject() {
+    return this.form.controls.inn.value.toString().length === 10 ? 'юридического лица' : 'индивидуального предпринимателя';
+  }
+
+  get shortSubject() {
+    return this.form.controls.inn.value.toString().length === 10 ? 'юр. лица' : 'ИП';
+  }
+
   constructor(
     private _fb: FormBuilder) {
   }
