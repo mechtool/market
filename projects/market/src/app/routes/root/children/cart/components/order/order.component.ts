@@ -382,7 +382,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         this.foundStreets = [];
         this.foundHouses = [];
         this.foundLocations = [];
-        this.foundCities = cities.map((city) => city.city).filter((value, index, self) => self.indexOf(value) === index);
+        this.foundCities = cities.map((city) => city.locality).filter((value, index, self) => self.indexOf(value) === index);
         this._cdr.detectChanges();
       },
       (err) => {
