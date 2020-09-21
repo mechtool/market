@@ -4,4 +4,5 @@ export enum RelationEnumModel {
   ITEM_UPDATE_QUANTITY = 'marketplace:shopping-cart-update-item-quantity',
   ITEM_ADD = 'marketplace:shopping-cart-add-item',
   ORDER_CREATE = 'marketplace:make-order',
+  PRICEREQUEST_CREATE = 'marketplace:request-for-price',
 }

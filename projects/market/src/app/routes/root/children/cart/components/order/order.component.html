@@ -190,7 +190,7 @@
                             [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
                     <nz-dropdown-menu #itemModal="nzDropdownMenu">
                       <div class="dropdown_block">
-                        <div class="dropdown_item dropdown_item__hover" (click)="removeItem(item.controls, i)">Удалить
+                        <div class="dropdown_item dropdown_item__hover" (click)="removeItem(item.controls)">Удалить
                           из заказа
                         </div>
                       </div>

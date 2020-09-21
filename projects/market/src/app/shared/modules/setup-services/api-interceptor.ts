@@ -24,7 +24,7 @@ export class ApiInterceptor implements HttpInterceptor {
           if (userData) {
             return authService.refresh({ refreshToken: userData.refreshToken }).pipe(
               catchError(() => {
-                authService.logout();
+                authService.login(location.pathname);
                 return of(null);
               }),
               tap((res) => {

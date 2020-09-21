@@ -12,6 +12,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   CartDataOrderModel,
+  CartDataResponseModel,
   CountryCode,
   DeliveryMethod,
   Level,
@@ -69,7 +70,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   private validDeliveryFiasCode: string[];
 
   get orderType(): 'order' | 'priceRequest' {
-    return this.order?.items?.[0]?.price ? 'order' : 'priceRequest';
+    return this.order.tags?.includes('Order') ? 'order' : 'priceRequest' || 'order';
   }
 
   get unavailableToOrderTradeOfferIds(): string[] {
@@ -138,7 +139,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get orderRelationHref(): string {
-    return this.order._links?.[RelationEnumModel.ORDER_CREATE]?.href;
+    if (this.orderType === 'order') {
+      return this.order._links?.[RelationEnumModel.ORDER_CREATE]?.href;
+    }
+    return this.order._links?.[RelationEnumModel.PRICEREQUEST_CREATE]?.href;
   }
 
   get currencyCode(): string {
@@ -205,7 +209,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  removeItem(orderItem: any, i: any) {
+  private _findOrderInCart(cartData: CartDataResponseModel): any {
+    const relationObject = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
+    return cartData.content.find((orderItem) => {
+      return this.orderRelationHref && this.orderRelationHref === orderItem._links?.[relationObject]?.href;
+    });
+  }
+
+  removeItem(orderItem: any) {
     if (this.isOrderLoading) {
       return;
     }
@@ -217,9 +228,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
             tap((res) => {
               this.cartDataChange.emit(res);
-              const foundOrder = res.content.find((x) => {
-                return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
-              });
+              const foundOrder = this._findOrderInCart(res);
               if (foundOrder) {
                 this._resetOrder(foundOrder);
               }
@@ -234,9 +243,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         (res) => {
           this.cartDataChange.emit(res);
           if (res) {
-            const foundOrder = res.content.find((x) => {
-              return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
-            });
+            const foundOrder = this._findOrderInCart(res);
             if (foundOrder) {
               this._resetOrder(foundOrder);
             }
@@ -489,9 +496,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
               tap((res) => {
                 this.cartDataChange.emit(res);
-                const foundOrder = res.content.find((x) => {
-                  return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
-                });
+                const foundOrder = this._findOrderInCart(res);
                 if (foundOrder) {
                   this._resetOrder(foundOrder);
                 }
@@ -506,9 +511,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           (res) => {
             if (res) {
               this.cartDataChange.emit(res);
-              const foundOrder = res.content.find((x) => {
-                return this.orderRelationHref && x._links?.[RelationEnumModel.ORDER_CREATE]?.href === this.orderRelationHref;
-              });
+              const foundOrder = this._findOrderInCart(res);
               if (!foundOrder) {
                 this.items.clear();
                 this._cartService.setActualCartData().pipe(take(1)).subscribe();
@@ -583,8 +586,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (comment) {
       data['comment'] = comment;
     }
+    const relationHref = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
     this._cartService
-      .handleRelation(RelationEnumModel.ORDER_CREATE, this.orderRelationHref, data)
+      .handleRelation(relationHref, this.orderRelationHref, data)
       .pipe(switchMap((_) => this._cartService.setActualCartData()))
       .subscribe(
         (res) => {

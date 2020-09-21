@@ -147,6 +147,8 @@ export class CartService {
         return this._bnetService.addItemToCart(relationHref, data);
       case RelationEnumModel.ORDER_CREATE:
         return this._bnetService.createOrder(relationHref, data);
+      case RelationEnumModel.PRICEREQUEST_CREATE:
+        return this._bnetService.createPriceRequest(relationHref, data);
       case RelationEnumModel.ITEM_UPDATE_QUANTITY:
         return this._bnetService.updateItemQuantityInCart(relationHref, data);
       case RelationEnumModel.ITEM_REMOVE:

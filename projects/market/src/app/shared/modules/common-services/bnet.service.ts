@@ -200,6 +200,10 @@ export class BNetService {
     return this._apiService.post(relationHref, data);
   }
 
+  createPriceRequest(relationHref: string, data: CartCreateOrderRequestModel): Observable<any> {
+    return this._apiService.post(relationHref, data);
+  }
+
   getTradeOfferFromCart(relationHref: string): Observable<any> {
     return this._apiService.get(relationHref);
   }

@@ -54,6 +54,7 @@ export class CartDataOrderResponseModel {
     totalVat: number;
     currencyCode: string;
   };
+  tags: string[];
   makeOrderViolations?: {
     code: string;
     message: string;
