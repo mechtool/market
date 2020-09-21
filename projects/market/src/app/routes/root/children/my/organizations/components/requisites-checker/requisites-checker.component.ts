@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { innConditionValidator, innKppConditionValidator } from './requisites-condition.validator';
@@ -14,7 +14,6 @@ export class RequisitesCheckerComponent implements OnInit {
   enterKpp = false;
   form: FormGroup;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
-  @ViewChild('elementKpp') elementKpp: ElementRef;
 
   get requisiteType() {
     return this.enterKpp ? 'КПП' : 'ИНН';

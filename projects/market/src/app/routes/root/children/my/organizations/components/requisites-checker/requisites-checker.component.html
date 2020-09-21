@@ -10,11 +10,13 @@
     </div>
 
     <div class="form-group form-group-std" *ngIf="enterKpp">
-      <input #elementKpp type="number" id="formKPP" autocomplete="off" formControlName="kpp">
+      <input type="number" id="formKPP" autocomplete="off" formControlName="kpp">
     </div>
 
     <div class="form-group form-group-btn">
-      <button *ngIf="!enterKpp" nz-button [nzType]="'primary'" (click)="nexStep()" [disabled]="form.controls.inn.invalid">Продолжить</button>
+      <button *ngIf="!enterKpp" nz-button [nzType]="'primary'" (click)="nexStep()"
+              [disabled]="form.controls.inn.invalid">Продолжить
+      </button>
       <button *ngIf="enterKpp" nz-button [nzType]="'primary'" [disabled]="form.invalid">Продолжить</button>
     </div>
   </form>

@@ -1,12 +1,12 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output, ViewChild
 } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -49,6 +49,9 @@ import { Metrika } from 'ng-yandex-metrika';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartOrderComponent implements OnInit, OnDestroy {
+  @ViewChild('elementInputCity') elementInputCity: ElementRef;
+  @ViewChild('elementInputStreet') elementInputStreet: ElementRef;
+  @ViewChild('elementInputHouse') elementInputHouse: ElementRef;
   @Input() order: CartDataOrderModel;
   @Input() userInfo: UserInfoModel;
   @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
@@ -185,14 +188,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   citySelected() {
     if (this.form.get('deliveryArea').get('deliveryCity').value?.length) {
       this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
-      document.getElementById('street_delivery_address_input').focus();
+      this.elementInputStreet?.nativeElement.focus()
     }
   }
 
   streetSelected() {
     if (this.form.get('deliveryArea').get('deliveryStreet').value?.length) {
       this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
-      document.getElementById('house_delivery_address_input').focus();
+      this.elementInputHouse?.nativeElement.focus()
     }
   }
 
@@ -281,7 +284,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
       if (!this.selectedAddress && this.deliveryAvailable) {
         this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
-        document.getElementById('city_delivery_address_input')?.focus();
+        this.elementInputCity?.nativeElement.focus();
       }
 
       return;
