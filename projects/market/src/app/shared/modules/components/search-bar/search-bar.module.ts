@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchBarComponent } from './search-bar.component';
 import {
+  SearchBarCategoryDesktopElementDirective,
+  SearchBarCategoryMobileElementDirective,
   SearchBarFilterComponent,
   SearchBarHistoryComponent,
   SearchBarItemComponent,
@@ -41,6 +43,8 @@ import {
     SearchBarProductsComponent,
     SearchBarFilterComponent,
     SearchBarLocationComponent,
+    SearchBarCategoryDesktopElementDirective,
+    SearchBarCategoryMobileElementDirective,
   ],
   exports: [SearchBarComponent],
 })

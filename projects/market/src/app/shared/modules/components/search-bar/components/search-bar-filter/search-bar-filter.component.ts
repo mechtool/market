@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, Directive, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
@@ -29,6 +29,19 @@ import {
 
 const PAGE_SIZE = 20;
 
+
+@Directive({
+  // tslint:disable-next-line: directive-selector
+  selector: '.category_desktop',
+})
+export class SearchBarCategoryDesktopElementDirective {}
+
+@Directive({
+  // tslint:disable-next-line: directive-selector
+  selector: '.category_mobile',
+})
+export class SearchBarCategoryMobileElementDirective {}
+
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-search-bar-filter',
@@ -42,6 +55,8 @@ const PAGE_SIZE = 20;
   ],
 })
 export class SearchBarFilterComponent implements OnInit {
+  @ViewChildren(SearchBarCategoryDesktopElementDirective, { read: ElementRef }) private _categoryDesktopElements: QueryList<ElementRef>
+  @ViewChildren(SearchBarCategoryMobileElementDirective, { read: ElementRef }) private _categoryMobileElements: QueryList<ElementRef>
   MIN_PRICE = 0;
   MAX_PRICE = 1000000;
   filtersForm: FormGroup;
@@ -72,11 +87,10 @@ export class SearchBarFilterComponent implements OnInit {
   set scroll($event) {
     setTimeout(() => {
       if ($event && this.categoryIndex) {
-        document.getElementById(`category-index-${this.categoryIndex}`).scrollIntoView({
-          block: 'center'
-        });
+        const categoryElementToScroll = this._categoryDesktopElements.find((_, i) => i === this.categoryIndex);
+        categoryElementToScroll.nativeElement.scrollIntoView({ block: 'center' });
       }
-    }, 1);
+    }, 0);
   }
 
   get isNotValidForm(): boolean {
@@ -144,11 +158,10 @@ export class SearchBarFilterComponent implements OnInit {
     this.notShowFilter = true;
     setTimeout(() => {
       if (this.categoryIndex) {
-        document.getElementById(`category-mobile-index-${this.categoryIndex}`).scrollIntoView({
-          block: 'center'
-        });
+        const categoryElementToScroll = this._categoryMobileElements.find((_, i) => i === this.categoryIndex);
+        categoryElementToScroll.nativeElement.scrollIntoView({ block: 'center' });
       }
-    }, 1);
+    }, 0);
   }
 
   backToFilter() {
@@ -606,3 +619,5 @@ export class SearchBarFilterComponent implements OnInit {
     return flag !== false;
   }
 }
+
+

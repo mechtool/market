@@ -597,7 +597,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.items.clear();
           this._cdr.detectChanges();
           if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-            this._metrika.fireEvent('ORDER_CREATE');
+            this._metrika.fireEvent(this.orderType === 'order' ? 'ORDER_CREATE' : 'PRICEREQUEST_CREATE');
           }
         },
         (err) => {
