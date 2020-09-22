@@ -650,7 +650,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       },
       {
         // todo Пока создаем и проверяем данные прямо тут в коде, постараться переделать
-        // validator: deliveryAreaConditionValidator
+        // validator:
       }
     );
   }

@@ -15,7 +15,7 @@
     <strong *ngIf="tradeOffersTotal">{{tradeOffersTotal | marketFound}}
       <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}
     </strong>
-    <strong *ngIf="!tradeOffersTotal">поставщик не опубликовал торговые предложения для вашей организации</strong>
+    <strong *ngIf="!tradeOffersTotal">поставщик не опубликовал торговые предложения для ваших организаций</strong>
   </div>
 
   <market-results-sorter

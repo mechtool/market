@@ -13,10 +13,11 @@
   <form [formGroup]="form" (submit)="send()">
 
     <div class="form-group form-group-std">
-      <label for="fio">Имя и фамилия *</label>
+      <label for="fio">Как к Вам обращаться? *</label>
       <input
         type="text"
         id="fio"
+        maxlength="35"
         autocomplete="off"
         [ngClass]="{'error': form.controls.fio.errors && (form.controls.fio.touched || form.controls.fio.dirty)}"
         formControlName="fio">
@@ -30,6 +31,7 @@
       <input
         type="text"
         id="email"
+        maxlength="35"
         autocomplete="off"
         [ngClass]="{'error': form.controls.email.errors && (form.controls.email.touched || form.controls.email.dirty)}"
         formControlName="email">
@@ -44,7 +46,8 @@
       <div class="textarea-wrap">
         <textarea
           id="message"
-          rows="6"
+          maxlength="110"
+          rows="3"
           [ngClass]="{'error': form.controls.message.errors && (form.controls.message.touched || form.controls.message.dirty)}"
           formControlName="message"></textarea>
       </div>

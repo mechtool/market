@@ -43,7 +43,7 @@ export class OrganizationOperateComponent implements OnChanges {
     this.form = this._fb.group({
       inn: new FormControl({ value: this.legalRequisites?.inn || '', disabled: true }, [Validators.required]),
       kpp: new FormControl({ value: this.legalRequisites?.kpp || '', disabled: true }),
-      organizationName: new FormControl(this.organizationData?.name || '', [Validators.required]),
+      organizationName: new FormControl(this.organizationData?.name || '', [Validators.required, Validators.minLength(3)]),
       organizationDescription: new FormControl(this.organizationData?.description || ''),
       organizationEmail: new FormControl(this.organizationData?.contacts?.email || '', [Validators.email]),
       organizationPhone: new FormControl(this.organizationData?.contacts?.phone || ''),

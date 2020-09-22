@@ -25,16 +25,21 @@
           type="text"
           id="organizationName"
           autocomplete="off"
+          maxlength="300"
           formControlName="organizationName">
         <ng-container *ngIf="form.controls.organizationName.errors && (form.controls.organizationName.touched || form.controls.organizationName.dirty)">
           <div class="input_attention" *ngIf="form.controls.organizationName.errors.required">Заполните это поле</div>
+          <div class="input_attention" *ngIf="form.controls.organizationName.errors.minlength">Минимальная длина 3 символа</div>
         </ng-container>
     </div>
 
     <div class="form-group">
       <label for="organizationDescription">Описание деятельности {{shortSubject}}</label>
       <div class="textarea-wrap">
-        <textarea id="organizationDescription" rows="6" formControlName="organizationDescription"></textarea>
+        <textarea id="organizationDescription"
+                  rows="6"
+                  maxlength="1000"
+                  formControlName="organizationDescription"></textarea>
       </div>
     </div>
 
@@ -46,6 +51,7 @@
           type="text"
           id="organizationEmail"
           autocomplete="off"
+          maxlength="100"
           formControlName="organizationEmail">
         <ng-container *ngIf="form.controls.organizationEmail.errors && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)">
           <div class="input_attention" *ngIf="form.controls.organizationEmail.errors.email">Некорректно заполнено поле</div>
@@ -70,12 +76,19 @@
 
     <div class="form-group form-group-std">
       <label for="organizationWebsite">Сайт компании</label>
-      <input type="text" id="organizationWebsite" autocomplete="off" formControlName="organizationWebsite">
+      <input type="text"
+             id="organizationWebsite"
+             autocomplete="off"
+             maxlength="100"
+             formControlName="organizationWebsite">
     </div>
 
     <div class="form-group form-group-std">
       <label for="organizationAddress">Адрес компании</label>
-      <input type="text" id="organizationAddress" autocomplete="off" formControlName="organizationAddress">
+      <input type="text" id="organizationAddress"
+             autocomplete="off"
+             maxlength="500"
+             formControlName="organizationAddress">
     </div>
 
     <p class="form_title form_title__inner">Укажите контакты менеджера,<br> для связи поддержкой 1С:Бизнес-сеть:</p>
@@ -88,6 +101,7 @@
           type="text"
           id="contactFio"
           autocomplete="off"
+          maxlength="100"
           formControlName="contactFio">
         <ng-container *ngIf="form.controls.contactFio.errors && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">
           <div class="input_attention" *ngIf="form.controls.contactFio.errors.required">Заполните это поле</div>
@@ -102,6 +116,7 @@
           type="text"
           id="contactEmail"
           autocomplete="off"
+          maxlength="100"
           formControlName="contactEmail">
         <ng-container *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
           <div class="input_attention" *ngIf="form.controls.contactEmail.errors.required">Заполните это поле</div>
