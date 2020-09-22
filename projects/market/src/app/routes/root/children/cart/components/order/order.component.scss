@@ -1144,8 +1144,6 @@ nz-date-picker {
     img {
       max-width: 56px;
       max-height: 56px;
-      width: 100%;
-      height: 100%;
     }
   }
   .table_list__products .cell_title {
@@ -1158,12 +1156,14 @@ nz-date-picker {
     margin-bottom: 10px;
   }
   .table_list__products .cell_article {
+    flex-wrap: wrap;
     height: auto;
     margin-bottom: 6px;
     margin-top: 5px;
     align-items: flex-start;
   }
   .table_list__products .cell_available {
+    flex-wrap: wrap;
     margin-bottom: 10px;
     align-items: flex-start;
   }
@@ -1194,7 +1194,9 @@ nz-date-picker {
     display: block;
   }
   .table_list__products.table_list__basket .cell_right {
-    width: auto;
+    width: calc(100% - 80px);
+    display: flex;
+    flex-direction: column;
     margin-right: 0;
     flex-shrink: 1;
   }
