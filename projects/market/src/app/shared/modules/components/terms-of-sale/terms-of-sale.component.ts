@@ -30,7 +30,30 @@ export class TermsOfSaleComponent {
     if (this.tradeOffer.termsOfSale.packaging.description) {
       return `${units} ${this.tradeOffer.termsOfSale.packaging.description.toLowerCase()}`;
     }
-    return units;
+    return `${units} шт.`;
+  }
+
+  get packageMultiplicity(): string | number {
+    const packageMultiplicity = this.tradeOffer.termsOfSale.packageMultiplicity;
+    if (this.tradeOffer.termsOfSale.packaging.description) {
+      return `${packageMultiplicity} ${this.tradeOffer.termsOfSale.packaging.description.toLowerCase()}`;
+    }
+    return `${packageMultiplicity} шт.`;
+  }
+
+  get minQuantity(): string {
+    if (this.tradeOffer.termsOfSale.price?.matrix) {
+      const fromPackages = [...this.tradeOffer.termsOfSale.price.matrix]
+        .sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
+
+      if (fromPackages > 1) {
+        if (this.tradeOffer.termsOfSale.packaging.description) {
+          return `от ${fromPackages} ${this.tradeOffer.termsOfSale.packaging.description.toLowerCase()}`;
+        }
+        return `от ${fromPackages} шт.`;
+      }
+    }
+    return null;
   }
 
   get offerDescription() {

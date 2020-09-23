@@ -94,7 +94,7 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   get isNotValidForm(): boolean {
-    return this.filtersForm.invalid;
+    return this.filtersForm?.invalid;
   }
 
   get focusIsNotFormFilterInn(): boolean {
@@ -107,11 +107,11 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   get inStock() {
-    return this.filtersForm.controls.inStock.value;
+    return this.filtersForm?.controls.inStock.value;
   }
 
   get withImages() {
-    return this.filtersForm.controls.withImages.value;
+    return this.filtersForm?.controls.withImages.value;
   }
 
   constructor(

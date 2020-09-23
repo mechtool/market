@@ -68,6 +68,13 @@ export class SupplierTradeOffersListComponent {
     return currencyCode(currencyNum);
   }
 
+  minQuantity(matrix: TradeOfferPriceMatrixModel[]): number {
+    if (matrix?.length) {
+      return matrix.sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
+    }
+    return 1;
+  }
+
   changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(groupQuery.query);
     this.addOrRemoveSorting(groupQuery);

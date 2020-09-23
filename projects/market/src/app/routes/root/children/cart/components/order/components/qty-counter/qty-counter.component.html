@@ -1,6 +1,23 @@
 <div class="switch_count color_scheme_grey" [formGroup]="form">
-  <button type="button" class="switch_count__decrease" (click)="decrement()" [disabled]="value <= min || isDisabled"></button>
-  <input type="number" class="switch_count__value" (keypress)="onlyNumberKey($event)" (blur)="resetToZeroIfNull()" formControlName="val" *ngIf="!isDisabled">
-  <div style="width: 80px; background: #f2f2f2; box-shadow: 0 1px 2px rgba(0,0,0,.08); display: flex; align-items: center; justify-content: center;" *ngIf="isDisabled">{{value}}</div>
-  <button type="button" class="switch_count__increase" (click)="increment()" [disabled]="value >= max || isDisabled"></button>
+
+  <button type="button"
+          class="switch_count__decrease"
+          (click)="decrement()"
+          [disabled]="value <= min || isDisabled"></button>
+
+  <input *ngIf="!isDisabled"
+         type="number"
+         class="switch_count__value"
+         (keypress)="onlyNumberKey($event)"
+         (blur)="resetToZeroIfNull()"
+         formControlName="val">
+
+  <div *ngIf="isDisabled"
+       class="disabled_value">{{value}}</div>
+
+  <button type="button"
+          class="switch_count__increase"
+          (click)="increment()"
+          [disabled]="isDisabled"></button>
+
 </div>

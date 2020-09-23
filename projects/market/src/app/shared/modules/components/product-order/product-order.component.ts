@@ -33,6 +33,11 @@ export class ProductOrderComponent implements OnInit {
   isVisible = false;
   private _price: number;
 
+
+  get minQuantity(): number {
+    return this.matrix ? this.matrix[0].fromPackages : 1;
+  }
+
   get price(): number {
     return this._price ? this._price : this._closest(this.matrix);
   }

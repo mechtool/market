@@ -9,6 +9,14 @@
       <span class="info_group__label">В упаковке</span>
       <span class="info_group__value">{{packaging}}</span>
     </div>
+    <div class="info_group" *ngIf="this.tradeOffer.termsOfSale.price?.matrix">
+      <span class="info_group__label">Заказ возможен</span>
+      <span class="info_group__value">{{minQuantity}}</span>
+    </div>
+    <div class="info_group">
+      <span class="info_group__label">Шаг заказа</span>
+      <span class="info_group__value">{{packageMultiplicity}}</span>
+    </div>
     <div class="info_group" *ngIf="orderRestrictions">
       <span class="info_group__label">Минимальная общая сумма заказа</span>
       <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currency:'RUB':'symbol' : '1.0'}}</span>

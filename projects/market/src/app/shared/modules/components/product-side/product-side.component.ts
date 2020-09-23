@@ -17,6 +17,8 @@ enum Operation { REMOVE, ADD }
 export class ProductSideComponent implements OnInit {
 
   @Input() tradeOfferId: string;
+  @Input() minQuantity: number;
+  @Input() orderStep: number;
   orderStatus: OrderStatusModal;
   form: FormGroup;
   isAdded: boolean;
@@ -62,16 +64,16 @@ export class ProductSideComponent implements OnInit {
   }
 
   decrease() {
-    this.form.patchValue({ totalPositions: this.form.get('totalPositions').value - 1 });
+    this.form.patchValue({ totalPositions: this.form.get('totalPositions').value - this.orderStep });
   }
 
   increase() {
-    this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + 1 });
+    this.form.patchValue({ totalPositions: this.form.get('totalPositions').value + this.orderStep });
   }
 
   addToCart() {
     this.isAdded = true;
-    this.form.controls.totalPositions.setValue(1, { onlySelf: true, emitEvent: false });
+    this.form.controls.totalPositions.setValue(this.minQuantity, { onlySelf: true, emitEvent: false });
     this.orderStatus = OrderStatusModal.IN_CART;
     const cartLocation = this._cartService.getCart$().value;
     this._cartService.handleRelationAndUpdateData(
@@ -79,7 +81,7 @@ export class ProductSideComponent implements OnInit {
       `${cartLocation}/items`,
       {
         tradeOfferId: this.tradeOfferId,
-        quantity: 1,
+        quantity: this.minQuantity,
       },
     ).subscribe(() => {
       this.spinnerOf();
@@ -95,7 +97,12 @@ export class ProductSideComponent implements OnInit {
       .subscribe(
         (value) => {
           const cartLocation = this._cartService.getCart$().value;
-          if (this.focusIsNotFormTotalPositions && value > 0) {
+          if (this.focusIsNotFormTotalPositions && value >= this.minQuantity) {
+            if (value % this.orderStep !== 0) {
+              /* todo Возможно данный блок нужно будет переделать, решить после закрытия задачи BNET-3597 */
+              value = value - (value % this.orderStep);
+              this.form.controls.totalPositions.setValue(value, { onlySelf: true, emitEvent: false });
+            }
             this.isAdded = true;
             this._cartService.handleRelationAndUpdateData(
               RelationEnumModel.ITEM_UPDATE_QUANTITY,
@@ -110,7 +117,7 @@ export class ProductSideComponent implements OnInit {
                 this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
                 this.rollBackTotalPositions();
               });
-          } else if (this.focusIsNotFormTotalPositions && !value) {
+          } else if (this.focusIsNotFormTotalPositions && (!value || value < this.minQuantity)) {
             this.orderStatus = OrderStatusModal.TO_CART;
             this._cartService.handleRelationAndUpdateData(
               RelationEnumModel.ITEM_REMOVE,
@@ -130,7 +137,7 @@ export class ProductSideComponent implements OnInit {
     if (operation === Operation.REMOVE) {
       this.orderStatus = OrderStatusModal.IN_CART;
       this.changeDetector.detectChanges();
-      this.form.controls.totalPositions.setValue(1, { onlySelf: true, emitEvent: false });
+      this.form.controls.totalPositions.setValue(this.minQuantity, { onlySelf: true, emitEvent: false });
     } else if (operation === Operation.ADD) {
       this.orderStatus = OrderStatusModal.TO_CART;
       this.form.controls.totalPositions.setValue(0, { onlySelf: true, emitEvent: false });

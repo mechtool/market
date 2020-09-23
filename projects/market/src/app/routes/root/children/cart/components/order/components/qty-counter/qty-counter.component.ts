@@ -1,6 +1,13 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  NG_VALUE_ACCESSOR,
+  Validators
+} from '@angular/forms';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -18,12 +25,11 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
   form: FormGroup;
 
   @Input() min = 0;
-  @Input() max = 10000;
   @Input() isDisabled = false;
 
   @Input()
   set value(val) {
-   this.form.patchValue({ val });
+    this.form.patchValue({ val });
   }
 
   get value(): number {
@@ -43,7 +49,7 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
   ngOnInit() {
     this._initForm();
     this.value = this.value || this.min;
-    this.form.get('val').valueChanges.subscribe(_ => this.onChange(this.value));
+    this.form.get('val').valueChanges.subscribe((_) => this.onChange(this.value));
   }
 
   private _initForm(): void {
@@ -58,12 +64,11 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
     }
   }
 
-  onChange(_: any) {}
+  onChange(_: any) {
+  }
 
   increment() {
-    if (this.value < this.max) {
-      this.value++;
-    }
+    this.value++;
   }
 
   decrement() {
@@ -80,7 +85,8 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
     this.onChange = fn;
   }
 
-  registerOnTouched() {}
+  registerOnTouched() {
+  }
 
 }
 
