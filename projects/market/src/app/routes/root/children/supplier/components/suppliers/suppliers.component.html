@@ -21,17 +21,11 @@
 
   <div class="catalog catalog_suppliers">
 
-    <ng-template #indicatorTemplate>
-      <em class="icon_scroll" nz-icon nzType="loading"></em>
-    </ng-template>
-
-    <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
-      <div class="suppliers_infinite_scroll" infiniteScroll (scrolled)="supplierLoading()">
-        <market-card *ngFor="let item of suppliers">
-          <market-supplier-card [supplier]="item"></market-supplier-card>
-        </market-card>
-      </div>
-    </nz-spin>
+    <div class="suppliers_infinite_scroll" infiniteScroll (scrolled)="supplierLoading()">
+      <market-card *ngFor="let item of suppliers">
+        <market-supplier-card [supplier]="item"></market-supplier-card>
+      </market-card>
+    </div>
 
   </div>
 

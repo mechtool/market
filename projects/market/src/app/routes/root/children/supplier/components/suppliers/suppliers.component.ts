@@ -1,18 +1,12 @@
 import { Component } from '@angular/core';
 import { combineLatest } from 'rxjs';
-import {
-  AllGroupQueryFiltersModel,
-  SuppliersItemModel,
-  SuppliersResponseModel,
-} from '#shared/modules/common-services/models';
+import { AllGroupQueryFiltersModel, SuppliersItemModel, SuppliersResponseModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { NotificationsService, SupplierService } from '#shared/modules/common-services';
+import { NotificationsService, SpinnerService, SupplierService } from '#shared/modules/common-services';
 
 const PAGE_SIZE = 40;
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './suppliers.component.html',
   styleUrls: [
@@ -26,13 +20,13 @@ export class SupplierListComponent {
   query: string;
   supplierData: SuppliersResponseModel;
   suppliers: SuppliersItemModel[];
-  isLoading = false;
 
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _supplierService: SupplierService,
     private _notificationsService: NotificationsService,
+    private _spinnerService: SpinnerService,
   ) {
     this._initForm();
   }
@@ -42,7 +36,7 @@ export class SupplierListComponent {
     this._router.navigate(['/supplier'], {
       queryParams: {
         q: $event.query,
-      }
+      },
     });
   }
 
@@ -54,39 +48,43 @@ export class SupplierListComponent {
     const nextPage = this.supplierData.page.number + 1;
 
     if (nextPage < this.supplierData.page.totalPages) {
-      this.isLoading = true;
+      this._spinnerService.show();
 
       this._getSuppliers(nextPage).subscribe(
         (suppliers) => {
           this.supplierData = suppliers;
           // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
           this.suppliers.push(...this.supplierData._embedded.suppliers);
-          this.isLoading = false;
+          this._spinnerService.hide();
         },
         (err) => {
-          this.isLoading = false;
+          this._spinnerService.hide();
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        }
+        },
       );
     }
   }
 
   private _initForm() {
+    this._spinnerService.show();
     combineLatest([this._activatedRoute.queryParams])
       .pipe(
         switchMap(([queryParams]) => {
           this.query = queryParams.q;
           return this._getSuppliers(0);
-        })
+        }),
       )
       .subscribe(
         (suppliers) => {
+          this._spinnerService.hide();
           this.supplierData = suppliers;
           this.suppliers = this.supplierData._embedded.suppliers;
         },
         (err) => {
+          this._spinnerService.hide();
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        });
+        },
+      );
   }
 
   private _getSuppliers(page: number) {

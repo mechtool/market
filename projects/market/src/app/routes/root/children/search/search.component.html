@@ -9,32 +9,25 @@
     (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 
-  <ng-template #indicatorTemplate>
-    <em class="icon_scroll" nz-icon nzType="loading"></em>
-  </ng-template>
+  <market-search-results
+    [productOffers]="productOffers"
+    [productsTotal]="productsTotal"
+    [page]="page"
+    [visibleSort]="productOffers?.length > 1"
+    [sort]="sort"
+    (loadProducts)="loadProducts($event)"
+    (sortingChanged)="changeSortingAndRefresh($event)"
+  ></market-search-results>
 
-  <nz-spin [nzSpinning]="isSearching" [nzIndicator]="indicatorTemplate">
+  <market-main-banners
+    *ngIf="productsTotal === 0"
+  ></market-main-banners>
 
-    <market-search-results
-      [productOffers]="productOffers"
-      [productsTotal]="productsTotal"
-      [page]="page"
-      [visibleSort]="productOffers?.length > 1"
-      [sort]="sort"
-      [isLoading]="isLoadingProducts"
-      (loadProducts)="loadProducts($event)"
-      (sortingChanged)="changeSortingAndRefresh($event)"
-    ></market-search-results>
+  <market-main-popular
+    *ngIf="productsTotal === 0"
+  ></market-main-popular>
 
-    <market-main-banners
-      *ngIf="productsTotal === 0"
-    ></market-main-banners>
 
-    <market-main-popular
-      *ngIf="productsTotal === 0"
-    ></market-main-popular>
-
-  </nz-spin>
 
 </div>
 

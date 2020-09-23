@@ -7,7 +7,6 @@
     <nz-tab nzTitle="Заказы">
       <market-order-list
         [documents]="orderDocuments"
-        [isLoading]="isLoadingOrderDocuments"
         [page]="pageOrderDocuments"
         (loadDocuments)="loadOrderDocuments($event)"
       ></market-order-list>
@@ -20,7 +19,6 @@
     <nz-tab [nzTitle]="account">
       <market-account-list
         [documents]="accountDocuments"
-        [isLoading]="isLoadingAccountDocuments"
         [page]="pageAccountDocuments"
         (loadDocuments)="loadAccountDocuments($event)"
       ></market-account-list>

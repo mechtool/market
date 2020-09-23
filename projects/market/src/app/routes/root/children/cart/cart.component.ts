@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CartService, NotificationsService, UserService } from '#shared/modules/common-services';
+import { CartService, NotificationsService, SpinnerService, UserService } from '#shared/modules/common-services';
 import { CartDataModel, CartDataResponseModel } from '#shared/modules/common-services/models';
 import { take, switchMap } from 'rxjs/operators';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
@@ -15,22 +15,35 @@ type CartDataCommonModel = CartDataResponseModel | CartDataModel;
 export class CartComponent implements OnInit {
   cartData: CartDataCommonModel;
   userInfo: UserInfoModel;
+  isCartDataLoaded = false;
 
-  constructor(private _cartService: CartService, private _userService: UserService, private _notificationsService: NotificationsService) {}
+  constructor(
+    private _cartService: CartService,
+    private _userService: UserService,
+    private _notificationsService: NotificationsService,
+    private _spinnerService: SpinnerService,
+  ) {}
 
   ngOnInit() {
+    this._spinnerService.show();
     this.userInfo = this._getUserInfo();
-    this._cartService.setActualCartData().pipe(
-      switchMap((res) => {
-        return this._cartService.getCartData$()
-      }),
-      take(1)
-    )
+    this._cartService
+      .setActualCartData()
+      .pipe(
+        switchMap((res) => {
+          return this._cartService.getCartData$();
+        }),
+        take(1),
+      )
       .subscribe(
         (res) => {
+          this._spinnerService.hide();
+          this.isCartDataLoaded = true;
           this.setProps(res);
         },
         (err) => {
+          this._spinnerService.hide();
+          this.isCartDataLoaded = true;
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );

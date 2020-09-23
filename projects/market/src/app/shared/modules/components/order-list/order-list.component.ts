@@ -1,5 +1,5 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { DocumentDto } from '#shared/modules/common-services/models';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 import { PaymentDocumentModalService } from '#shared/modules/common-services';
@@ -8,23 +8,14 @@ import { PaymentDocumentModalService } from '#shared/modules/common-services';
 @Component({
   selector: 'market-order-list',
   templateUrl: './order-list.component.html',
-  styleUrls: [
-    './order-list.component.scss',
-    './order-list.component-768.scss',
-    './order-list.component-340.scss',
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./order-list.component.scss', './order-list.component-768.scss', './order-list.component-340.scss'],
 })
 export class OrderListComponent {
   @Input() documents: DocumentDto[];
-  @Input() isLoading: boolean;
   @Input() page: number;
   @Output() loadDocuments: EventEmitter<number> = new EventEmitter();
 
-  constructor(
-    private _paymentDocumentService: PaymentDocumentModalService,
-  ) {
-  }
+  constructor(private _paymentDocumentService: PaymentDocumentModalService) {}
 
   name(name: string) {
     return resizeBusinessStructure(name);

@@ -172,7 +172,6 @@ button.btn:hover {
   border-color: var(--color-accent);
 }
 
-
 .catalog_header {
   display: flex;
   justify-content: space-between;
@@ -191,7 +190,7 @@ button.btn:hover {
     font-weight: var(--font-weight-bold);
 
     &:after {
-      content: " – ";
+      content: ' – ';
       font-weight: var(--font-weight-light);
     }
   }
@@ -258,10 +257,4 @@ a {
   &:hover {
     color: var(--color-black);
   }
-}
-
-.icon_scroll {
-  position: fixed;
-  font-size: 50px;
-  color: var(--color-accent-light);
 }

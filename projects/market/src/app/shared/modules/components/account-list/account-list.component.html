@@ -1,53 +1,47 @@
-<ng-template #indicatorTemplate>
-  <em class="icon_scroll" nz-icon nzType="loading"></em>
-</ng-template>
+<div class="documents_infinite_scroll" infiniteScroll (scrolled)="documentsLoading(page + 1)">
+  <div class="table_list table_list__orders">
 
-<nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
-  <div class="documents_infinite_scroll" infiniteScroll (scrolled)="documentsLoading(page + 1)">
-    <div class="table_list table_list__orders">
-
-      <div class="table_row table_header">
-        <div class="table_cell cell_title">
-          <span>Отправитель</span>
-        </div>
-        <div class="table_cell cell_number">
-          <span>Номер счета</span>
-        </div>
-        <div class="table_cell cell_date">
-          <span>Дата</span>
-        </div>
-        <div class="table_cell cell_sum">
-          <span>Сумма</span>
-        </div>
+    <div class="table_row table_header">
+      <div class="table_cell cell_title">
+        <span>Отправитель</span>
       </div>
-
-      <div class="table_row table_data" *ngFor="let document of documents" (click)="openDocument(payment_document)">
-        <div class="table_cell cell_title" data-title="Отправитель:">
-          <div class="supplier_title">
-            <span class="supplier_image" [style]="{'background-color': orgLogo(document.party)}"></span>
-            <span class="supplier_name">{{name(document.party)}}</span>
-          </div>
-        </div>
-        <div class="table_cell cell_number" data-title="Счет:">
-          {{document.orderNumber}}
-        </div>
-        <div class="table_cell cell_date" data-title="Дата:">
-          {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
-        </div>
-        <div class="table_cell cell_sum" data-title="Сумма:">
-          <span class="price">{{document.price | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
-        </div>
-        <div class="table_cell cell_action">
-          <button type="button" class="btn btn-gray btn_long">Посмотреть счет</button>
-        </div>
-        <ng-template #payment_document>
-          <market-payment-document
-            [documentId]="document.id"
-            [documentType]="'ACCOUNT'"
-          ></market-payment-document>
-        </ng-template>
+      <div class="table_cell cell_number">
+        <span>Номер счета</span>
+      </div>
+      <div class="table_cell cell_date">
+        <span>Дата</span>
+      </div>
+      <div class="table_cell cell_sum">
+        <span>Сумма</span>
       </div>
     </div>
+
+    <div class="table_row table_data" *ngFor="let document of documents" (click)="openDocument(payment_document)">
+      <div class="table_cell cell_title" data-title="Отправитель:">
+        <div class="supplier_title">
+          <span class="supplier_image" [style]="{'background-color': orgLogo(document.party)}"></span>
+          <span class="supplier_name">{{name(document.party)}}</span>
+        </div>
+      </div>
+      <div class="table_cell cell_number" data-title="Счет:">
+        {{document.orderNumber}}
+      </div>
+      <div class="table_cell cell_date" data-title="Дата:">
+        {{ document.orderDate | date:'dd MMMM yyyy г. HH:mm' }}
+      </div>
+      <div class="table_cell cell_sum" data-title="Сумма:">
+        <span class="price">{{document.price | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span>
+      </div>
+      <div class="table_cell cell_action">
+        <button type="button" class="btn btn-gray btn_long">Посмотреть счет</button>
+      </div>
+      <ng-template #payment_document>
+        <market-payment-document
+          [documentId]="document.id"
+          [documentType]="'ACCOUNT'"
+        ></market-payment-document>
+      </ng-template>
+    </div>
   </div>
-</nz-spin>
+</div>
 

@@ -22,21 +22,14 @@
 
   <div class="content" itemscope="itemscope" *ngIf="productOffers.length">
 
-    <ng-template #indicatorTemplate>
-      <em class="icon_scroll" nz-icon nzType="loading"></em>
-    </ng-template>
+    <div class="product_infinite_scroll" infiniteScroll (scrolled)="productOffersLoading(page + 1)">
+      <market-card *ngFor="let productOffer of productOffers">
+        <market-nomenclature-card
+          [productOffer]="productOffer"
+        ></market-nomenclature-card>
+      </market-card>
+    </div>
 
-    <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
-
-      <div class="product_infinite_scroll" infiniteScroll (scrolled)="productOffersLoading(page + 1)">
-        <market-card *ngFor="let productOffer of productOffers">
-          <market-nomenclature-card
-            [productOffer]="productOffer"
-          ></market-nomenclature-card>
-        </market-card>
-      </div>
-
-    </nz-spin>
 
   </div>
 </div>

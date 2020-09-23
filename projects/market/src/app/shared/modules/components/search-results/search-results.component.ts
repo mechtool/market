@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-search-results',
   templateUrl: './search-results.component.html',
@@ -15,13 +13,11 @@ import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
     './search-results.component-768.scss',
     './search-results.component-576.scss',
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchResultComponent {
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
   @Input() page: number;
-  @Input() isLoading: boolean;
   @Input() visibleSort = false;
   @Input() sort;
   @Input() templateBanners: TemplateRef<any>;
@@ -38,7 +34,6 @@ export class SearchResultComponent {
     this._activatedRoute.queryParams.subscribe((queryParams) => {
       this.isRequestFulfilled = containParameters(queryParams);
     });
-
   }
 
   productOffersLoading(nextPage: number) {

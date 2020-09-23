@@ -64,7 +64,7 @@ button.btn:hover {
   &__decrease::before,
   &__increase::before,
   &__increase::after {
-    content: "";
+    content: '';
     display: block;
     background-color: var(--color-black);
     position: absolute;
@@ -87,7 +87,6 @@ button.btn:hover {
   }
 }
 
-
 .color_scheme_yellow .switch_count__increase,
 .color_scheme_yellow .switch_count__decrease {
   background-color: var(--color-accent-light);
@@ -103,7 +102,7 @@ button.btn:hover {
 }
 
 .switch_count__value,
-input[type="number"].switch_count__value {
+input[type='number'].switch_count__value {
   width: 80px;
   display: flex;
   align-items: center;
@@ -114,25 +113,25 @@ input[type="number"].switch_count__value {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
-input[type="number"].switch_count__value {
+input[type='number'].switch_count__value {
   -moz-appearance: textfield;
   border: none;
   outline: none;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type="number"] {
+input[type='number'] {
   font-size: var(--font-size-10);
-  font-family: "Futura", Arial, Helvetica, sans-serif;
+  font-family: 'Futura', Arial, Helvetica, sans-serif;
   padding: 10px 15px;
   background-color: #ffffff;
   border: 1px solid #d6d6d6;
@@ -141,17 +140,10 @@ input[type="number"] {
   border-radius: 2px;
 }
 
-input[type="number"]::-ms-clear {
+input[type='number']::-ms-clear {
   display: none;
 }
 
-input[type="number"]:focus {
+input[type='number']:focus {
   border-color: var(--color-accent);
 }
-
-.icon_scroll {
-  margin-top: 10px;
-  font-size: 20px;
-  color: var(--color-accent-light);
-}
-

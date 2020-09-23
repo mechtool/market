@@ -8,29 +8,25 @@ import {
   SuppliersItemModel,
   TradeOffersListResponseModel,
   TradeOffersRequestModel,
-  TradeOfferSummaryModel
+  TradeOfferSummaryModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
-import { UntilDestroy } from '@ngneat/until-destroy';
+
 import {
   LocalStorageService,
   NotificationsService,
   OrganizationsService,
   ProductService,
+  SpinnerService,
   SupplierService,
-  TradeOffersService
+  TradeOffersService,
 } from '#shared/modules/common-services';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './supplier.component.html',
-  styleUrls: [
-    './supplier.component.scss',
-    './supplier.component-992.scss',
-    './supplier.component-768.scss',
-  ],
+  styleUrls: ['./supplier.component.scss', './supplier.component-992.scss', './supplier.component-768.scss'],
 })
 export class SupplierSingleComponent {
   supplier: SuppliersItemModel;
@@ -38,7 +34,6 @@ export class SupplierSingleComponent {
   tradeOffersList: TradeOffersListResponseModel;
   tradeOffers: TradeOfferSummaryModel[];
   supplierLogo: string;
-  isLoadingTradeOffers = false;
   tradeOffersTotal: number;
   page: number;
   query: string;
@@ -57,6 +52,7 @@ export class SupplierSingleComponent {
     private _activatedRoute: ActivatedRoute,
     private _notificationsService: NotificationsService,
     private _localStorageService: LocalStorageService,
+    private _spinnerService: SpinnerService,
   ) {
     this._init();
   }
@@ -64,22 +60,22 @@ export class SupplierSingleComponent {
   loadTradeOffers(nextPage: number) {
     if (nextPage === this.tradeOffersList.page.number + 1 && nextPage < this.tradeOffersList.page.totalPages) {
       this.page = nextPage;
-      this.isLoadingTradeOffers = true;
+      this._spinnerService.show();
       this.request.page = nextPage;
 
-      this._tradeOffersService.search(this.request)
-        .subscribe(
-          (tradeOffers) => {
-            this.tradeOffersList = tradeOffers;
-            // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
-            this.tradeOffers.push(...this.tradeOffersList._embedded.items);
-            this.tradeOffersTotal = this.tradeOffersList.page.totalElements;
-            this.isLoadingTradeOffers = false;
-          },
-          (err) => {
-            this.isLoadingTradeOffers = false;
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-          });
+      this._tradeOffersService.search(this.request).subscribe(
+        (tradeOffers) => {
+          this.tradeOffersList = tradeOffers;
+          // todo: оптимизировать работу с памятью, возможно следует использовать scrolledUp, чтобы освобождать место
+          this.tradeOffers.push(...this.tradeOffersList._embedded.items);
+          this.tradeOffersTotal = this.tradeOffersList.page.totalElements;
+          this._spinnerService.hide();
+        },
+        (err) => {
+          this._spinnerService.hide();
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
     }
   }
 
@@ -90,10 +86,8 @@ export class SupplierSingleComponent {
   }
 
   private _init() {
-    combineLatest([
-      this._activatedRoute.params,
-      this._activatedRoute.queryParams,
-    ])
+    this._spinnerService.show();
+    combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(
         switchMap(([params, queryParams]) => {
           this._collectFilters(params, queryParams);
@@ -111,11 +105,16 @@ export class SupplierSingleComponent {
           return throwError(err);
         }),
       )
-      .subscribe((tradeOffers) => {
-        this._initData(tradeOffers);
-      }, (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      });
+      .subscribe(
+        (tradeOffers) => {
+          this._spinnerService.hide();
+          this._initData(tradeOffers);
+        },
+        (err) => {
+          this._spinnerService.hide();
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
   }
 
   private _collectFilters(params: Params, queryParams: Params) {
@@ -172,7 +171,8 @@ export class SupplierSingleComponent {
   }
 
   private _fias() {
-    return this._localStorageService.getUserLocation()?.fias === CountryCode.RUSSIA ?
-      undefined : this._localStorageService.getUserLocation()?.fias;
+    return this._localStorageService.getUserLocation()?.fias === CountryCode.RUSSIA
+      ? undefined
+      : this._localStorageService.getUserLocation()?.fias;
   }
 }

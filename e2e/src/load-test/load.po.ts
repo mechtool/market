@@ -1,7 +1,6 @@
 import { by, element, ElementArrayFinder, ElementFinder } from 'protractor';
 
 export class AppLoadPage {
-
   getSearchBar(): ElementFinder {
     return element(by.css('market-search-bar'));
   }
@@ -163,7 +162,6 @@ export class AppLoadPage {
   }
 
   getSpinnerSpinning(): ElementFinder {
-    return element(by.css('nz-spin .ant-spin-spinning'));
+    return element(by.css('.spinner'));
   }
-
 }

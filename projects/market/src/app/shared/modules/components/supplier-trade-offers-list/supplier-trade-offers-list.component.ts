@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -12,13 +12,7 @@ import {
   TradeOfferVatEnumModel,
 } from '#shared/modules';
 import { Router } from '@angular/router';
-import {
-  absoluteImagePath,
-  currencyCode,
-  hasRequiredParameters,
-  mapStock,
-  queryParamsWithoutSupplierIdFrom
-} from '#shared/utils';
+import { absoluteImagePath, currencyCode, hasRequiredParameters, mapStock, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 
 @Component({
@@ -33,13 +27,11 @@ import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
     './supplier-trade-offers-list.component-576.scss',
     './supplier-trade-offers-list.component-360.scss',
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SupplierTradeOffersListComponent {
   @Input() supplier: SuppliersItemModel;
   @Input() tradeOffers: TradeOfferSummaryModel[];
   @Input() tradeOffersTotal: number;
-  @Input() isLoading: boolean;
   @Input() page: number;
   @Input() query: string;
   @Input() filters: DefaultSearchAvailableModel;
@@ -51,11 +43,7 @@ export class SupplierTradeOffersListComponent {
     return this.tradeOffersTotal < MAX_VALUE ? this.tradeOffersTotal : MAX_VALUE;
   }
 
-  constructor(
-    private _router: Router,
-    private _localStorageService: LocalStorageService,
-  ) {
-  }
+  constructor(private _router: Router, private _localStorageService: LocalStorageService) {}
 
   price(matrix: TradeOfferPriceMatrixModel[]): number {
     if (matrix?.length) {

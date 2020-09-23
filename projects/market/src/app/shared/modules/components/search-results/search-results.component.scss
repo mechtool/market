@@ -4,7 +4,7 @@
   margin-bottom: 10px;
 
   span::before {
-    content: " – ";
+    content: ' – ';
   }
 }
 
@@ -19,12 +19,6 @@
   flex-wrap: wrap;
 }
 
-.icon_scroll {
-  position: fixed;
-  font-size: 50px;
-  color: var(--color-accent-light);
-}
-
 .result_info {
   display: flex;
   justify-content: space-between;
@@ -33,5 +27,5 @@
 .line {
   margin-bottom: 15px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #918C8C;
+  border-bottom: 1px solid #918c8c;
 }

@@ -14,13 +14,12 @@ import {
   LocalStorageService,
   NotificationsService,
   ProductService,
+  SpinnerService,
 } from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
 import { hasRequiredParameters, queryParamsWithoutCategoryIdFrom } from '#shared/utils';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { categoryPromotion } from '#environments/promotions';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
@@ -34,7 +33,6 @@ export class CategoryComponent {
   productOffers: ProductOffersModel[];
   productsTotal: number;
   sort: SortModel;
-  isLoadingProducts = false;
   page: number;
 
   get supplierBannerItems(): any[] {
@@ -48,32 +46,35 @@ export class CategoryComponent {
     private _categoryService: CategoryService,
     private _localStorageService: LocalStorageService,
     private _notificationsService: NotificationsService,
+    private _spinnerService: SpinnerService,
   ) {
     this._init();
   }
 
   loadProducts(nextPage: number) {
-    if (nextPage === (this.productOffersList.page.number + 1) && nextPage < this.productOffersList.page.totalPages) {
+    if (nextPage === this.productOffersList.page.number + 1 && nextPage < this.productOffersList.page.totalPages) {
       this.page = nextPage;
-      this.isLoadingProducts = true;
+      this._spinnerService.show();
 
-      this._productService.searchProductOffers({
-        query: this.query,
-        filters: this.filters,
-        page: nextPage,
-        sort: this.sort,
-      })
+      this._productService
+        .searchProductOffers({
+          query: this.query,
+          filters: this.filters,
+          page: nextPage,
+          sort: this.sort,
+        })
         .subscribe(
           (productOffers) => {
             this.productOffersList = productOffers;
             this.productOffers.push(...this.productOffersList._embedded.productOffers);
             this.productsTotal = this.productOffersList.page.totalElements;
-            this.isLoadingProducts = false;
+            this._spinnerService.hide();
           },
           (err) => {
-            this.isLoadingProducts = false;
+            this._spinnerService.hide();
             this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-          });
+          },
+        );
     }
   }
 
@@ -103,10 +104,7 @@ export class CategoryComponent {
   }
 
   private _init(): void {
-    combineLatest([
-      this._activatedRoute.params,
-      this._activatedRoute.queryParams,
-    ])
+    combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(
         switchMap(([params, queryParams]) => {
           this.categoryId = params.categoryId;
@@ -136,7 +134,7 @@ export class CategoryComponent {
         }),
         catchError((err) => {
           return throwError(err);
-        })
+        }),
       )
       .subscribe(
         (productOffers) => {
@@ -147,7 +145,7 @@ export class CategoryComponent {
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        }
+        },
       );
   }
 

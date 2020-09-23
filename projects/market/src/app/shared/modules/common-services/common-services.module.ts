@@ -22,13 +22,10 @@ import { EdiService } from './edi.service';
 import { NotificationsService } from './notifications.service';
 import { NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { PaymentDocumentModalService } from './payment-document-modal.service';
+import { SpinnerService } from './spinner.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    NzMessageModule,
-    NzModalModule,
-  ],
+  imports: [CommonModule, NzMessageModule, NzModalModule],
 })
 export class CommonServicesModule {
   static forRoot(): ModuleWithProviders {
@@ -56,6 +53,7 @@ export class CommonServicesModule {
         EdiService,
         NotificationsService,
         PaymentDocumentModalService,
+        SpinnerService,
       ],
     };
   }

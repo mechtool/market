@@ -8,14 +8,18 @@
   ></market-search-bar>
 </div>
 
-<div class="catalog_header">
+<div class="catalog_header" *ngIf="tradeOffersTotal >= 0">
 
   <div class="catalog_header__count">
     <span class="catalog_header__title">Результаты поиска</span>
-    <strong *ngIf="tradeOffersTotal">{{tradeOffersTotal | marketFound}}
-      <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}
-    </strong>
-    <strong *ngIf="!tradeOffersTotal">поставщик не опубликовал торговые предложения для ваших организаций</strong>
+    <ng-container *ngIf="tradeOffersTotal > 0; else emptyTradeOffers">
+      <strong *ngIf="tradeOffersTotal > 0">{{tradeOffersTotal | marketFound}}
+        <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'торговое предложение': 'торговых предложения': 'торговых предложений'}}
+      </strong>
+    </ng-container>
+    <ng-template #emptyTradeOffers>
+      <strong *ngIf="tradeOffersTotal === 0">поставщик не опубликовал торговые предложения для ваших организаций</strong>
+    </ng-template>
   </div>
 
   <market-results-sorter
@@ -56,13 +60,8 @@
     </div>
   </div>
 
-  <ng-template #indicatorTemplate>
-    <em class="icon_scroll" nz-icon nzType="loading"></em>
-  </ng-template>
 
-  <nz-spin [nzSpinning]="isLoading" [nzIndicator]="indicatorTemplate">
-
-    <div class="trade_offers_infinite_scroll" infiniteScroll (scrolled)="tradeOffersLoading(page + 1)">
+  <div class="trade_offers_infinite_scroll" infiniteScroll (scrolled)="tradeOffersLoading(page + 1)">
 
       <div class="table_row" *ngFor="let tradeOffer of tradeOffers">
         <div class="cell_pre">
@@ -114,7 +113,6 @@
 
     </div>
 
-  </nz-spin>
 
 </div>
 

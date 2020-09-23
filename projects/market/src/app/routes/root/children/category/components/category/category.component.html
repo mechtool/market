@@ -19,7 +19,6 @@
     [page]="page"
     [sort]="sort"
     [visibleSort]="productOffers?.length > 1"
-    [isLoading]="isLoadingProducts"
     (loadProducts)="loadProducts($event)"
     (sortingChanged)="changeSortingAndRefresh($event)"
   ></market-search-results>

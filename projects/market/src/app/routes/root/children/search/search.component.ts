@@ -14,13 +14,12 @@ import {
   LocalStorageService,
   NotificationsService,
   ProductService,
-  SuggestionService
+  SpinnerService,
+  SuggestionService,
 } from '#shared/modules/common-services';
 import { catchError, switchMap } from 'rxjs/operators';
 import { hasRequiredParameters, queryParamsFrom } from '#shared/utils';
-import { UntilDestroy } from '@ngneat/until-destroy';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
@@ -35,8 +34,6 @@ export class SearchComponent {
   query: string;
   sort: SortModel;
   page: number;
-  isLoadingProducts = false;
-  isSearching: boolean;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -45,6 +42,7 @@ export class SearchComponent {
     private _router: Router,
     private _localStorageService: LocalStorageService,
     private _notificationsService: NotificationsService,
+    private _spinnerService: SpinnerService,
   ) {
     this._init();
   }
@@ -54,39 +52,42 @@ export class SearchComponent {
   }
 
   searchSuggestions(query: string) {
-    this._suggestionService.searchSuggestions(query)
-      .subscribe((res) => {
+    this._suggestionService.searchSuggestions(query).subscribe(
+      (res) => {
         this.productsSuggestions = res.products;
         this.categoriesSuggestions = res.categories;
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      });
+      },
+    );
   }
 
   loadProducts(nextPage: number) {
     if (this.requestParametersSelected) {
-
-      if (nextPage === (this.productOffersList.page.number + 1) && nextPage < this.productOffersList.page.totalPages) {
+      if (nextPage === this.productOffersList.page.number + 1 && nextPage < this.productOffersList.page.totalPages) {
         this.page = nextPage;
-        this.isLoadingProducts = true;
+        this._spinnerService.show();
 
-        this._productService.searchProductOffers({
-          query: this.query,
-          filters: this.filters,
-          page: nextPage,
-          sort: this.sort,
-        })
+        this._productService
+          .searchProductOffers({
+            query: this.query,
+            filters: this.filters,
+            page: nextPage,
+            sort: this.sort,
+          })
           .subscribe(
             (productOffers) => {
               this.productOffersList = productOffers;
               this.productOffers.push(...this.productOffersList._embedded.productOffers);
               this.productsTotal = this.productOffersList.page.totalElements;
-              this.isLoadingProducts = false;
+              this._spinnerService.hide();
             },
             (err) => {
-              this.isLoadingProducts = false;
+              this._spinnerService.hide();
               this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-            });
+            },
+          );
       }
     }
   }
@@ -119,7 +120,7 @@ export class SearchComponent {
     this._activatedRoute.queryParams
       .pipe(
         switchMap((queryParams) => {
-          this.isSearching = true;
+          this._spinnerService.show();
           this.query = queryParams.q;
           this.filters = {
             supplierId: queryParams.supplierId,
@@ -147,18 +148,21 @@ export class SearchComponent {
         }),
         catchError((err) => {
           return throwError(err);
-        })
+        }),
       )
-      .subscribe((productOffers) => {
-        this.productOffersList = productOffers;
-        this.productOffers = this.productOffersList._embedded?.productOffers || [];
-        this.productsTotal = this.productOffersList.page?.totalElements || 0;
-        this.page = this.productOffersList.page?.number || 0;
-        this.isSearching = false;
-      }, (err) => {
-        this.isSearching = false;
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      });
+      .subscribe(
+        (productOffers) => {
+          this.productOffersList = productOffers;
+          this.productOffers = this.productOffersList._embedded?.productOffers || [];
+          this.productsTotal = this.productOffersList.page?.totalElements || 0;
+          this.page = this.productOffersList.page?.number || 0;
+          this._spinnerService.hide();
+        },
+        (err) => {
+          this._spinnerService.hide();
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
   }
 
   private addOrRemoveSorting(groupQuery: AllGroupQueryFiltersModel) {

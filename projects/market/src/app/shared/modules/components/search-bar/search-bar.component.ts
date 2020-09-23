@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import {
@@ -16,20 +7,16 @@ import {
   LocationModel,
   Megacity,
   SuggestionCategoryItemModel,
-  SuggestionProductItemModel
+  SuggestionProductItemModel,
 } from '../../common-services/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { LocalStorageService, NotificationsService, ResponsiveService } from '#shared/modules/common-services';
+import { LocalStorageService, NotificationsService, ResponsiveService, SpinnerService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: [
-    './search-bar.component.scss',
-    './search-bar.component-768.scss',
-    './search-bar.component-576.scss',
-  ],
+  styleUrls: ['./search-bar.component.scss', './search-bar.component-768.scss', './search-bar.component-576.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBarComponent implements OnInit, OnChanges {
@@ -40,6 +27,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   visibleLocationForm = false;
   visibleSuggestions: boolean;
   userLocation: LocationModel;
+
   @Input() query: string;
   @Input() minQueryLength = 3;
   @Input() maxQueryLength = 20;
@@ -63,9 +51,11 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   get isShowSuggestions(): boolean {
-    return !this.suggestionsOff &&
+    return (
+      !this.suggestionsOff &&
       ((this.searchQuery.length >= this.minQueryLength && (!!this.productsSuggestions || !!this.categoriesSuggestions)) ||
-        this._localStorageService.hasSearchQueriesHistory());
+        this._localStorageService.hasSearchQueriesHistory())
+    );
   }
 
   get filterIsEmpty(): boolean {
@@ -80,6 +70,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
     private _localStorageService: LocalStorageService,
     private _responsiveService: ResponsiveService,
     private _notificationsService: NotificationsService,
+    private _spinnerService: SpinnerService,
     private _fb: FormBuilder,
   ) {
     this._initForm();
@@ -129,6 +120,17 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   changeFilterFormVisibility(isVisible: boolean) {
+    if (isVisible) {
+      this._spinnerService.show();
+      const intervalId = setInterval(() => {
+        // TODO: как поправим быстродействие фильтра - убрать
+        const searchBarFilterEl = document.querySelector('market-search-bar-filter');
+        if (searchBarFilterEl) {
+          this._spinnerService.hide();
+          clearInterval(intervalId);
+        }
+      }, 3e2);
+    }
     this.isFilterFormVisible = isVisible;
   }
 
@@ -154,7 +156,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
 
   private _initForm(): void {
     this.form = this._fb.group({
-      query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]]
+      query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]],
     });
   }
 
@@ -168,17 +170,17 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   private _subscribeOnQueryChanges(): void {
-    this.form.get('query').valueChanges
-      .pipe(
-        filter(res => res.trim().length >= this.minQueryLength && res.trim().length <= this.maxQueryLength),
-      )
+    this.form
+      .get('query')
+      .valueChanges.pipe(filter((res) => res.trim().length >= this.minQueryLength && res.trim().length <= this.maxQueryLength))
       .subscribe(
         (query) => {
           this.queryChange.emit(query.trim());
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        });
+        },
+      );
   }
 
   private _updateForm() {

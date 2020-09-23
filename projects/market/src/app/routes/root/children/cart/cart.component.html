@@ -4,7 +4,7 @@
     <h2>Корзина</h2>
   </div>
 
-  <ng-container *ngIf="cartData?.content?.length; else emptyCart">
+  <ng-container *ngIf="isCartDataLoaded && cartData?.content?.length;">
     <market-cart-order
       *ngFor="let order of cartData.content"
       [order]="order"
@@ -13,18 +13,17 @@
     ></market-cart-order>
   </ng-container>
 
-</div>
-
-
-<ng-template #emptyCart>
-  <div class="empty">
-    <nz-empty
-      nzNotFoundImage="./assets/img/svg/empty.svg"
-      [nzNotFoundContent]="contentTpl"
+  <ng-container *ngIf="isCartDataLoaded && !cartData?.content?.length">
+    <div class="empty">
+      <nz-empty
+        nzNotFoundImage="./assets/img/svg/empty.svg"
+        [nzNotFoundContent]="contentTpl"
       >
-      <ng-template #contentTpl>
-        <span>Корзина пуста</span>
-      </ng-template>
-    </nz-empty>
-  </div>
-</ng-template>
+        <ng-template #contentTpl>
+          <span>Корзина пуста</span>
+        </ng-template>
+      </nz-empty>
+    </div>
+  </ng-container>
+
+</div>

@@ -1,7 +1,7 @@
 <div [ngSwitch]="orderStatus">
 
   <ng-template #indicatorTemplate>
-    <em class="icon_scroll" nz-icon nzType="loading"></em>
+    <market-spinner></market-spinner>
   </ng-template>
 
   <nz-spin [nzSpinning]="isAdded" [nzIndicator]="indicatorTemplate">
