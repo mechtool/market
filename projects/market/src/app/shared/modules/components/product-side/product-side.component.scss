@@ -1,7 +1,3 @@
-.to_cart__btn_wrap {
-  margin-bottom: 10px;
-}
-
 .btn-yellow,
 button.btn-yellow {
   background-color: var(--color-accent-light);
@@ -35,7 +31,6 @@ button.btn:hover {
   height: 40px;
   display: flex;
   align-items: stretch;
-  margin-bottom: 8px;
 
   &__increase,
   &__decrease {
