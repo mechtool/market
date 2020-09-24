@@ -1,11 +1,9 @@
 import { Input, Output, Component, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 
 type OperationType = 'register'|'edit';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-organization-operate',
   templateUrl: './organization-operate.component.html',
@@ -59,8 +57,8 @@ export class OrganizationOperateComponent implements OnChanges {
   send() {
     this.organizationDataChange.emit({
       ...this.form.value,
-      ...(this.form.value.organizationPhone && { organizationPhone: `+7${this.form.value.organizationPhone}` }),
-      ...{ contactPhone: `+7${this.form.value.contactPhone}` },
+      ...(this.form.value.organizationPhone && { organizationPhone: `${this.form.value.organizationPhone}` }),
+      ...{ contactPhone: `${this.form.value.contactPhone}` },
       ...{
         inn: this.form.get('inn').value,
         kpp: this.form.get('kpp').value

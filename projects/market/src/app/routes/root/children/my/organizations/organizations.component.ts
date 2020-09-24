@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
@@ -17,7 +16,6 @@ import { Metrika } from 'ng-yandex-metrika';
 
 type TabType = 'a' | 'b' | 'c';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './organizations.component.html',
   styleUrls: ['./organizations.component.scss', './organizations.component-768.scss', './organizations.component-576.scss'],

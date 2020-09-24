@@ -120,17 +120,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   changeFilterFormVisibility(isVisible: boolean) {
-    if (isVisible) {
-      this._spinnerService.show();
-      const intervalId = setInterval(() => {
-        // TODO: как поправим быстродействие фильтра - убрать
-        const searchBarFilterEl = document.querySelector('market-search-bar-filter');
-        if (searchBarFilterEl) {
-          this._spinnerService.hide();
-          clearInterval(intervalId);
-        }
-      }, 3e2);
-    }
     this.isFilterFormVisible = isVisible;
   }
 

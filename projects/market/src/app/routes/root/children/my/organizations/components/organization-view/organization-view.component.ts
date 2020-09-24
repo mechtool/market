@@ -1,10 +1,8 @@
 import { Input, Output, Component, EventEmitter, OnInit } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { Router } from '@angular/router';
 import { stringToHex } from '#shared/utils';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-organization-view',
   templateUrl: './organization-view.component.html',
