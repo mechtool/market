@@ -35,7 +35,7 @@ export class ProductOrderComponent implements OnInit {
 
 
   get minQuantity(): number {
-    return this.matrix ? this.matrix[0].fromPackages : 1;
+    return this.matrix?.length ? this.matrix[0].fromPackages : 1;
   }
 
   get price(): number {
