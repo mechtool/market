@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
@@ -20,7 +20,6 @@ export class SearchResultComponent {
   @Input() page: number;
   @Input() visibleSort = false;
   @Input() sort;
-  @Input() templateBanners: TemplateRef<any>;
   @Output() loadProducts: EventEmitter<number> = new EventEmitter();
   @Output() sortingChanged: EventEmitter<SortModel> = new EventEmitter();
 

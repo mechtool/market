@@ -12,8 +12,11 @@
     (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 
+  <ng-container *ngTemplateOutlet="banners"></ng-container>
+
+  <market-main-popular *ngIf="!usedSearch && supplierBannerItems?.length"></market-main-popular>
+
   <market-search-results
-    [templateBanners]="banners"
     [productOffers]="productOffers"
     [productsTotal]="productsTotal"
     [page]="page"
@@ -21,6 +24,7 @@
     [visibleSort]="productOffers?.length > 1"
     (loadProducts)="loadProducts($event)"
     (sortingChanged)="changeSortingAndRefresh($event)"
+    *ngIf="!supplierBannerItems?.length || (usedSearch && supplierBannerItems?.length)"
   ></market-search-results>
 
   <ng-template #banners>

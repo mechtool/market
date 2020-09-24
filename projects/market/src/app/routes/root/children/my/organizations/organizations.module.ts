@@ -12,7 +12,7 @@ import { RequisitesCheckerComponent } from './components/requisites-checker/requ
 import { OrganizationOperateComponent } from './components/organization-operate/organization-operate.component';
 import { OrganizationExistsComponent } from './components/organization-exists/organization-exists.component';
 import { AccessKeyComponent } from './components/access-key/access-key.component';
-import { OrganizationRequestStatusPipe, AccessKeyStatusPipe } from './pipes';
+import { OrganizationRequestStatusPipe, AccessKeyStatusPipe, PhoneFormattersPipe } from './pipes';
 import { SingleOrganizationGuard } from './guards';
 import { OrganizationViewComponent } from './components/organization-view/organization-view.component';
 import { OrganizationUsersComponent } from './components/organization-users/organization-users.component';
@@ -53,6 +53,7 @@ import { NgxMaskModule } from 'ngx-mask';
     AccessKeyRemovalVerifierComponent,
     OrganizationRequestStatusPipe,
     AccessKeyStatusPipe,
+    PhoneFormattersPipe,
   ],
   providers: [SingleOrganizationGuard]
 })

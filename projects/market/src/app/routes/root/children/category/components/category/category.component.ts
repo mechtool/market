@@ -34,9 +34,14 @@ export class CategoryComponent {
   productsTotal: number;
   sort: SortModel;
   page: number;
+  private _usedSearch = false;
 
   get supplierBannerItems(): any[] {
     return categoryPromotion[this.categoryId] || null;
+  }
+
+  get usedSearch(): boolean {
+    return this._usedSearch || !!Object.keys(this._activatedRoute.snapshot.queryParams).length;
   }
 
   constructor(
@@ -79,6 +84,7 @@ export class CategoryComponent {
   }
 
   changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
+    this._usedSearch = true;
     this._localStorageService.putSearchText(groupQuery.query);
     const categoryId = groupQuery.filters?.categoryId || this.categoryId;
     this.addOrRemoveSorting(groupQuery);

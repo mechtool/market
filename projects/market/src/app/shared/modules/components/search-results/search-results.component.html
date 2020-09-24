@@ -18,8 +18,6 @@
 
   <div class="line" *ngIf="!productOffers?.length && isRequestFulfilled"></div>
 
-  <ng-container *ngTemplateOutlet="templateBanners"></ng-container>
-
   <div class="content" itemscope="itemscope" *ngIf="productOffers.length">
 
     <div class="product_infinite_scroll" infiniteScroll (scrolled)="productOffersLoading(page + 1)">
@@ -30,7 +28,7 @@
       </market-card>
     </div>
 
-
   </div>
+
 </div>
 

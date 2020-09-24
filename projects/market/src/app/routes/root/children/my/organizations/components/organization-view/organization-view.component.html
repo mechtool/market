@@ -35,7 +35,7 @@
         </div>
         <div class="info_group" *ngIf="organizationData?.contacts?.phone">
             <span class="info_group__label">Телефон</span>
-            <span class="info_group__value">+7{{organizationData?.contacts?.phone}}</span>
+            <span class="info_group__value">{{organizationData?.contacts?.phone | marketPhoneFormatter}}</span>
         </div>
         <div class="info_group" *ngIf="organizationData?.contacts?.address">
             <span class="info_group__label">Адрес</span>
@@ -50,7 +50,7 @@
       </div>
       <div class="info_group" *ngIf="organizationData?.contactPerson?.phone">
           <span class="info_group__label">Телефон</span>
-          <span class="info_group__value">+7{{organizationData?.contactPerson?.phone}}</span>
+          <span class="info_group__value">{{organizationData?.contactPerson?.phone | marketPhoneFormatter}}</span>
       </div>
       <div class="info_group" *ngIf="organizationData?.contactPerson?.email">
           <span class="info_group__label">E-mail</span>
