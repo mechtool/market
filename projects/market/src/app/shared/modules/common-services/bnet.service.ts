@@ -14,6 +14,7 @@ import {
   CommerceMlDocumentResponseModel,
   DocumentResponseModel,
   EdiRequestModel,
+  FeedbackRequestModel,
   LocationModel,
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
@@ -161,7 +162,7 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  containsFiasAddress(query: { fiasId: string, fiasIds: string[]}): Observable<boolean> {
+  containsFiasAddress(query: { fiasId: string, fiasIds: string[] }): Observable<boolean> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/locations/contains`, { params });
   }
@@ -174,6 +175,10 @@ export class BNetService {
   getCategories(query?: CategoryRequestModel): Observable<CategoryResponseModel> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/categories`, { params });
+  }
+
+  sendFeedback(feedback: FeedbackRequestModel): Observable<any> {
+    return this._apiService.post(`${API_URL}/feedback`, feedback);
   }
 
   createCart(): Observable<HttpResponse<any>> {

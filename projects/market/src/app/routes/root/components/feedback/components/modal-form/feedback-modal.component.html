@@ -1,0 +1,45 @@
+<div class="requisites-checker">
+
+  <div class="title">Обратная связь</div>
+  <div class="description">Для решения Вашего вопроса, пожалуйста, введите свою контактную информацию и суть
+    обращения.
+  </div>
+
+  <form [formGroup]="form" (submit)="send()">
+
+    <div class="form-group form-group-std">
+      <label for="userName">Как к Вам обращаться?</label>
+      <input type="text"
+             id="userName"
+             autocomplete="off"
+             maxlength="100"
+             formControlName="userName">
+    </div>
+
+    <div class="form-group form-group-std">
+      <label for="emailOrPhone">Ваш email или телефон *</label>
+      <input type="text"
+             id="emailOrPhone"
+             autocomplete="off"
+             maxlength="100"
+             [ngClass]="{'error': form.controls.emailOrPhone.errors && (form.controls.emailOrPhone.touched || form.controls.emailOrPhone.dirty)}"
+             formControlName="emailOrPhone">
+    </div>
+
+
+    <div class="form-group form-group-std">
+      <label for="message">Суть Вашего обращения? *</label>
+      <textarea rows="4"
+                id="message"
+                maxlength="2000"
+                [ngClass]="{'error': form.controls.message.errors && (form.controls.message.touched || form.controls.message.dirty)}"
+                formControlName="message"></textarea>
+    </div>
+
+    <div class="form-group form-group-btn">
+      <button nz-button [nzType]="'primary'" [disabled]="form.invalid">Отправить</button>
+    </div>
+  </form>
+
+</div>
+

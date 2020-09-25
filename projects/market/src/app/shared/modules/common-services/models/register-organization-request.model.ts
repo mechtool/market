@@ -1,4 +1,4 @@
-import { OrganizationLegalRequisitesModel } from "./organization-legal-requisites.model";
+import { OrganizationLegalRequisitesModel } from './organization-legal-requisites.model';
 
 export class RegisterOrganizationRequestModel {
   legalRequisites: OrganizationLegalRequisitesModel;

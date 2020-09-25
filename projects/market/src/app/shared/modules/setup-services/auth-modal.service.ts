@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd';
 import { AuthService } from '#shared/modules/common-services';
-import { RouterStateSnapshot } from '@angular/router';
 import { EmptyOrganizationsInfoComponent } from '../components/empty-organizations-info/empty-organizations-info.component';
 import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
 
@@ -12,7 +11,9 @@ const PATHS_WITH_AUTHORIZATION: RegExp[] = [/^\/supplier$/i, /^\/my\/organizatio
 
 @Injectable()
 export class AuthModalService {
-  constructor(private _modalService: NzModalService, private _authService: AuthService) {}
+  constructor(private _modalService: NzModalService, private _authService: AuthService) {
+  }
+
   openAuthDecisionMakerModal(description: string, loginRedirectPath: string = `${location.pathname}${location.search}`) {
     const modal = this._modalService.create({
       nzContent: AuthDecisionMakerComponent,

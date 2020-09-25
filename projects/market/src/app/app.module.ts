@@ -8,7 +8,13 @@ import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@ang
 import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
-import { AuthService, CartService, CommonServicesModule, CookieService, UserService } from '#shared/modules/common-services';
+import {
+  AuthService,
+  CartService,
+  CommonServicesModule,
+  CookieService,
+  UserService
+} from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgxMaskModule } from 'ngx-mask';
@@ -19,6 +25,7 @@ import { RootComponent } from './routes/root/root.component';
 import {
   BreadcrumbsModule,
   CookieAgreementModule,
+  FeedbackModule,
   NavbarComponent,
   NavbarMobileNavComponent,
   NavbarNavComponent,
@@ -60,9 +67,16 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
-    MetrikaModule.forRoot({ id: 67089850, webvisor: true, clickmap: true, trackLinks: true, accurateTrackBounce: true }),
+    MetrikaModule.forRoot({
+      id: 67089850,
+      webvisor: true,
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true
+    }),
     BreadcrumbsModule,
     CookieAgreementModule,
+    FeedbackModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -78,4 +92,5 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

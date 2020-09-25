@@ -23,6 +23,7 @@ import { NotificationsService } from './notifications.service';
 import { NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { PaymentDocumentModalService } from './payment-document-modal.service';
 import { SpinnerService } from './spinner.service';
+import { FeedbackService } from './feedback.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -51,6 +52,7 @@ export class CommonServicesModule {
         TradeOffersService,
         CartService,
         EdiService,
+        FeedbackService,
         NotificationsService,
         PaymentDocumentModalService,
         SpinnerService,
