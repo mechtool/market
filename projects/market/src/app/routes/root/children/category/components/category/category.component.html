@@ -14,7 +14,7 @@
 
   <ng-container *ngTemplateOutlet="banners"></ng-container>
 
-  <market-main-popular *ngIf="!usedSearch && supplierBannerItems?.length"></market-main-popular>
+  <market-main-popular *ngIf="!isSeachUsed && supplierBannerItems?.length"></market-main-popular>
 
   <market-search-results
     [productOffers]="productOffers"
