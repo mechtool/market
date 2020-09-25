@@ -24,7 +24,6 @@
     [visibleSort]="productOffers?.length > 1"
     (loadProducts)="loadProducts($event)"
     (sortingChanged)="changeSortingAndRefresh($event)"
-    *ngIf="!supplierBannerItems?.length || (usedSearch && supplierBannerItems?.length)"
   ></market-search-results>
 
   <ng-template #banners>
