@@ -1,0 +1,26 @@
+<div class="filter_category__list scrollbar" [formGroup]="categoryForm">
+  <div class="form-group_checkbox">
+
+    <nz-checkbox-wrapper>
+      <ng-container #container></ng-container>
+    </nz-checkbox-wrapper>
+    <ng-template #template let-item="item" let-i="index">
+      <div
+        class="category"
+        formArrayName="selectedCategories"
+        [ngClass]="{
+          'visible': item.visible,
+          'category_mobile': type === 'mobile',
+          'category_desktop': type === 'desktop'
+         }">
+        <label nz-checkbox formControlName="{{i}}" [nzDisabled]="item.disabled">
+          <span class="filter_category__name">{{item.name}}</span>
+          <span class="filter_category__count">({{item.products}})</span>
+        </label>
+      </div>
+    </ng-template>
+
+
+  </div>
+</div>
+

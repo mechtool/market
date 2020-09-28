@@ -43,8 +43,8 @@
   }
 }
 
-input[type="text"],
-input[type="number"],
+input[type='text'],
+input[type='number'],
 textarea {
   font-size: var(--font-size-base);
   letter-spacing: 0.05em;
@@ -61,13 +61,13 @@ textarea {
   }
 }
 
-input[type="text"] {
+input[type='text'] {
   height: 40px;
   line-height: 40px;
 }
 
 .radio-wrap::before {
-  content: "";
+  content: '';
   display: block;
   width: 16px;
   height: 16px;
@@ -91,7 +91,7 @@ input[type="text"] {
   }
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 10px;
     height: 10px;
@@ -122,20 +122,12 @@ input[type="text"] {
   border-left: 1px solid #e0e0e0;
 }
 
-.filter_category__list {
-  height: 400px;
-  overflow-y: auto;
-  padding-right: 13px;
-  margin-top: 15px;
-}
-
 .filter_city__list {
   height: 432px;
   overflow-y: auto;
   padding-right: 13px;
   margin-top: 15px;
 }
-
 
 .filter_title {
   margin: 0 0 20px 0;
@@ -164,7 +156,7 @@ input[type="text"] {
     font-weight: var(--font-weight-medium);
   }
 
-  input[type="text"] {
+  input[type='text'] {
     width: 100%;
   }
 
@@ -220,7 +212,7 @@ input[type="text"] {
   text-align: center;
   width: 100%;
   max-width: 120px;
-  content: "₽";
+  content: '₽';
 }
 
 .range_inputs {
@@ -249,45 +241,8 @@ input[type="text"] {
   margin-left: 10px;
 }
 
-.filter_category__count {
-  color: #d6d6d6;
-  margin-left: 3px;
-}
-
 .margin-cleared {
   margin: 0;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 5px;
-}
-
-.scrollbar::-webkit-scrollbar-button {
-  display: none;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  width: 1px;
-  background-color: #ebebeb;
-}
-
-.scrollbar::-webkit-scrollbar-track-piece {
-  width: 1px;
-  background-color: #ebebeb;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  height: 50px;
-  width: 5px;
-  background-color: #fedc7b;
-}
-
-.scrollbar::-webkit-scrollbar-corner {
-  display: none;
-}
-
-.scrollbar::-webkit-resizer {
-  display: none;
 }
 
 .form-group_checkbox {
@@ -296,14 +251,6 @@ input[type="text"] {
 
 .ant-checkbox-wrapper + .ant-checkbox-wrapper {
   margin-left: 0;
-}
-
-.category {
-  display: none;
-
-  &.visible {
-    display: block;
-  }
 }
 
 .form_filter_mobile {

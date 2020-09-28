@@ -1,4 +1,19 @@
-import { ChangeDetectorRef, Component, Directive, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren,
+  ViewContainerRef,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   CategoryModel,
@@ -6,7 +21,7 @@ import {
   Level,
   LocationModel,
   Megacity,
-  SuppliersItemModel
+  SuppliersItemModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, filter, switchMap } from 'rxjs/operators';
@@ -15,20 +30,20 @@ import { resizeBusinessStructure } from '#shared/utils';
 import {
   priceConditionValidator,
   priceRangeConditionValidator,
-  supplierNameConditionValidator
+  supplierNameConditionValidator,
 } from './search-bar-filter-conditions.validator';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import {
   CategoryService,
   LocalStorageService,
   LocationService,
+  NavigationService,
   NotificationsService,
   OrganizationsService,
-  SupplierService
+  SpinnerService,
+  SupplierService,
 } from '#shared/modules/common-services';
 
 const PAGE_SIZE = 20;
-
 
 @Directive({
   // tslint:disable-next-line: directive-selector
@@ -42,7 +57,6 @@ export class SearchBarCategoryDesktopElementDirective {}
 })
 export class SearchBarCategoryMobileElementDirective {}
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-search-bar-filter',
   templateUrl: './search-bar-filter.component.html',
@@ -53,10 +67,15 @@ export class SearchBarCategoryMobileElementDirective {}
     './search-bar-filter.component-400.scss',
     './search-bar-filter.component-360.scss',
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBarFilterComponent implements OnInit {
-  @ViewChildren(SearchBarCategoryDesktopElementDirective, { read: ElementRef }) private _categoryDesktopElements: QueryList<ElementRef>
-  @ViewChildren(SearchBarCategoryMobileElementDirective, { read: ElementRef }) private _categoryMobileElements: QueryList<ElementRef>
+  @ViewChildren(SearchBarCategoryDesktopElementDirective, { read: ElementRef }) private _categoryDesktopElements: QueryList<ElementRef>;
+  @ViewChildren(SearchBarCategoryMobileElementDirective, { read: ElementRef }) private _categoryMobileElements: QueryList<ElementRef>;
+  @ViewChild('categoriesDesktopContainer', { read: ViewContainerRef }) private _desktopContainer: ViewContainerRef;
+  @ViewChild('categoryDesktopItem', { read: TemplateRef }) private _categoryDesktopItemTemplate: TemplateRef<any>;
+  @ViewChild('categoriesMobileContainer', { read: ViewContainerRef }) private _mobileContainer: ViewContainerRef;
+  @ViewChild('categoryMobileItem', { read: TemplateRef }) private _categoryMobileItemTemplate: TemplateRef<any>;
   MIN_PRICE = 0;
   MAX_PRICE = 1000000;
   filtersForm: FormGroup;
@@ -102,8 +121,10 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   get focusIsNotFormFilterPrice(): boolean {
-    return document.activeElement.attributes['formcontrolname']?.value !== 'priceFrom' &&
-      document.activeElement.attributes['formcontrolname']?.value !== 'priceTo';
+    return (
+      document.activeElement.attributes['formcontrolname']?.value !== 'priceFrom' &&
+      document.activeElement.attributes['formcontrolname']?.value !== 'priceTo'
+    );
   }
 
   get inStock() {
@@ -122,10 +143,10 @@ export class SearchBarFilterComponent implements OnInit {
     private _supplierService: SupplierService,
     private _organizationsService: OrganizationsService,
     private _fb: FormBuilder,
-    private changeDetector: ChangeDetectorRef,
+    private _cdr: ChangeDetectorRef,
     private _notificationsService: NotificationsService,
-  ) {
-  }
+    private _spinnerService: SpinnerService,
+  ) {}
 
   ngOnInit(): void {
     this._init();
@@ -204,10 +225,7 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   private _init() {
-    combineLatest([
-      this._activatedRoute.params,
-      this._activatedRoute.queryParams,
-    ])
+    combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(
         switchMap(([params, queryParams]) => {
           this.categoryId = params.categoryId || queryParams.categoryId;
@@ -233,7 +251,7 @@ export class SearchBarFilterComponent implements OnInit {
         }),
         catchError((err) => {
           return throwError(err);
-        })
+        }),
       )
       .subscribe(
         (categories) => {
@@ -260,7 +278,7 @@ export class SearchBarFilterComponent implements OnInit {
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        }
+        },
       );
   }
 
@@ -319,7 +337,7 @@ export class SearchBarFilterComponent implements OnInit {
     }
 
     this.locationForm = this._fb.group({
-      city: ''
+      city: '',
     });
 
     this._cityChangesControl();
@@ -328,25 +346,28 @@ export class SearchBarFilterComponent implements OnInit {
   private _initCategoryForm() {
     this.categoryForm = this._fb.group({
       categoryName: undefined,
-      selectedCategories: new FormArray([]),
+      selectedCategories: this._fb.array([]),
     });
     this._addCheckboxes();
   }
 
   private _initFilterForm() {
-    this.filtersForm = this._fb.group({
-      supplier: this.supplierForm(),
-      trademark: this.filters?.trademark,
-      isDelivery: this.isNotFalse(this.filters?.isDelivery),
-      isPickup: this.isNotFalse(this.filters?.isPickup),
-      inStock: this.filters?.inStock,
-      withImages: this.filters?.withImages,
-      priceFrom: new FormControl(this.filters?.priceFrom, [priceConditionValidator]),
-      priceTo: new FormControl(this.filters?.priceTo, [priceConditionValidator]),
-      priceBetween: new FormControl([this.filters?.priceFrom || this.MIN_PRICE, this.filters?.priceTo || this.MAX_PRICE]),
-    }, {
-      validator: [priceRangeConditionValidator]
-    });
+    this.filtersForm = this._fb.group(
+      {
+        supplier: this.supplierForm(),
+        trademark: this.filters?.trademark,
+        isDelivery: this.isNotFalse(this.filters?.isDelivery),
+        isPickup: this.isNotFalse(this.filters?.isPickup),
+        inStock: this.filters?.inStock,
+        withImages: this.filters?.withImages,
+        priceFrom: new FormControl(this.filters?.priceFrom, [priceConditionValidator]),
+        priceTo: new FormControl(this.filters?.priceTo, [priceConditionValidator]),
+        priceBetween: new FormControl([this.filters?.priceFrom || this.MIN_PRICE, this.filters?.priceTo || this.MAX_PRICE]),
+      },
+      {
+        validator: [priceRangeConditionValidator],
+      },
+    );
 
     if (this.filters?.categoryId) {
       this.categoryId = this.filters.categoryId;
@@ -361,16 +382,17 @@ export class SearchBarFilterComponent implements OnInit {
         id: this.supplier?.id,
         name: this.supplier?.name,
         isSelected: this.supplier?.isSelected,
-      }, {
-        validator: [supplierNameConditionValidator]
-      });
+      },
+      {
+        validator: [supplierNameConditionValidator],
+      },
+    );
   }
 
   private _addCheckboxes() {
     if (this.categoryId) {
       this.categories.forEach((category, i) => {
-        (this.categoryForm.controls.selectedCategories as FormArray)
-          .push(new FormControl(this.categoryId === category.id));
+        (this.categoryForm.controls.selectedCategories as FormArray).push(new FormControl(this.categoryId === category.id));
       });
     } else {
       this.categories.forEach((category, i) => {
@@ -380,90 +402,74 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   private _controlsPrices() {
-    this.filtersForm.controls.priceFrom.valueChanges
-      .subscribe(
-        (price) => {
-          this.filtersForm.controls.priceFrom.setValue(+price, { onlySelf: true, emitEvent: false });
-          this.filtersForm.controls.priceBetween.setValue(
-            [+price, this.filtersForm.get('priceBetween').value[1]], { onlySelf: true, emitEvent: false }
-          );
-          if (price) {
-            this._addActiveFilter('price');
-          } else {
-            this._removeActiveFilter('price');
-          }
-        });
+    this.filtersForm.controls.priceFrom.valueChanges.subscribe((price) => {
+      this.filtersForm.controls.priceFrom.setValue(+price, { onlySelf: true, emitEvent: false });
+      this.filtersForm.controls.priceBetween.setValue([+price, this.filtersForm.get('priceBetween').value[1]], {
+        onlySelf: true,
+        emitEvent: false,
+      });
+      if (price) {
+        this._addActiveFilter('price');
+      } else {
+        this._removeActiveFilter('price');
+      }
+    });
 
-    this.filtersForm.controls.priceTo.valueChanges
-      .subscribe(
-        (price) => {
-          this.filtersForm.controls.priceTo.setValue(+price, { onlySelf: true, emitEvent: false });
-          this.filtersForm.controls.priceBetween.setValue(
-            [this.filtersForm.get('priceBetween').value[0], +price], { onlySelf: true, emitEvent: false }
-          );
-          if (price) {
-            this._addActiveFilter('price');
-          } else {
-            this._removeActiveFilter('price');
-          }
-        });
+    this.filtersForm.controls.priceTo.valueChanges.subscribe((price) => {
+      this.filtersForm.controls.priceTo.setValue(+price, { onlySelf: true, emitEvent: false });
+      this.filtersForm.controls.priceBetween.setValue([this.filtersForm.get('priceBetween').value[0], +price], {
+        onlySelf: true,
+        emitEvent: false,
+      });
+      if (price) {
+        this._addActiveFilter('price');
+      } else {
+        this._removeActiveFilter('price');
+      }
+    });
 
-    this.filtersForm.controls.priceBetween.valueChanges
-      .subscribe(
-        (prices) => {
-          this.filtersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
-          this.filtersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
-          this.filtersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
-            onlySelf: true,
-            emitEvent: false
-          });
-          if (prices) {
-            this._addActiveFilter('price');
-          } else {
-            this._removeActiveFilter('price');
-          }
-        });
+    this.filtersForm.controls.priceBetween.valueChanges.subscribe((prices) => {
+      this.filtersForm.controls.priceFrom.setValue(+prices[0], { onlySelf: true, emitEvent: false });
+      this.filtersForm.controls.priceTo.setValue(+prices[1], { onlySelf: true, emitEvent: false });
+      this.filtersForm.controls.priceBetween.setValue([+prices[0], +prices[1]], {
+        onlySelf: true,
+        emitEvent: false,
+      });
+      if (prices) {
+        this._addActiveFilter('price');
+      } else {
+        this._removeActiveFilter('price');
+      }
+    });
   }
 
   private _categoryChangesControl() {
-    this.categoryForm.controls.categoryName.valueChanges
-      .subscribe(
-        (query) => {
-          this.categories.forEach((res) => {
-            res.visible = res.name.toLowerCase().includes(query);
-          });
+    this.categoryForm.controls.selectedCategories.valueChanges.subscribe((indexCategories) => {
+      this.categoryForm.controls.selectedCategories.setValue(indexCategories, {
+        onlySelf: true,
+        emitEvent: false,
+      });
+      if (this.categoryId) {
+        indexCategories.forEach((value, i) => {
+          if (this.categoryId === this.categories[i].id) {
+            this.categoryId = undefined;
+            this.categoryIndex = undefined;
+            this._removeActiveFilter('categoryId');
+          }
+          this.categories[i].disabled = false;
         });
-
-    this.categoryForm.controls.selectedCategories.valueChanges
-      .subscribe(
-        (indexCategories) => {
-          this.categoryForm.controls.selectedCategories.setValue(indexCategories, {
-            onlySelf: true,
-            emitEvent: false
-          });
-          if (this.categoryId) {
-            indexCategories
-              .forEach((value, i) => {
-                if (this.categoryId === this.categories[i].id) {
-                  this.categoryId = undefined;
-                  this.categoryIndex = undefined;
-                  this._removeActiveFilter('categoryId');
-                }
-                this.categories[i].disabled = false;
-              });
+      } else {
+        indexCategories.forEach((value, i) => {
+          if (value) {
+            this.categoryId = this.categories[i].id;
+            this.categoryIndex = i;
+            this._addActiveFilter('categoryId');
           } else {
-            indexCategories
-              .forEach((value, i) => {
-                if (value) {
-                  this.categoryId = this.categories[i].id;
-                  this.categoryIndex = i;
-                  this._addActiveFilter('categoryId');
-                } else {
-                  this.categories[i].disabled = true;
-                }
-              });
+            this.categories[i].disabled = true;
           }
         });
+      }
+    });
   }
 
   private _cityChangesControl(): void {
@@ -472,16 +478,16 @@ export class SearchBarFilterComponent implements OnInit {
         filter((cityName) => cityName.length > 1),
         switchMap((cityName) => {
           return combineLatest([of(cityName), this._locationService.searchLocations(cityName, Level.CITY)]);
-        })
+        }),
       )
       .subscribe(
         ([city, cities]) => {
           this.foundCities = cities.filter((location) => location.name.toLowerCase().includes(city.toLowerCase()));
-          this.changeDetector.detectChanges();
+          this._cdr.detectChanges();
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        }
+        },
       );
   }
 
@@ -496,80 +502,70 @@ export class SearchBarFilterComponent implements OnInit {
   }
 
   private _filtersChangesControl(): void {
-    this.filtersForm.controls.supplier.valueChanges
-      .subscribe(
-        (supplier) => {
-          supplier.isSelected = false;
+    this.filtersForm.controls.supplier.valueChanges.subscribe(
+      (supplier) => {
+        supplier.isSelected = false;
 
-          this._removeActiveFilter('supplierId');
-          if (supplier.name.trim().length > 3) {
-            this._supplierService.findSuppliersBy(supplier.name, 0, PAGE_SIZE)
-              .subscribe((data) => {
-                this.suppliers = this._map(data._embedded.suppliers);
-                this.changeDetector.detectChanges();
-              });
-          } else {
-            this.suppliers = null;
-          }
-
-          this.filtersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        }
-      );
-
-    this.filtersForm.controls.trademark.valueChanges
-      .subscribe(
-        (trademark) => {
-          this.filtersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
-          if (trademark.length) {
-            this._addActiveFilter('trademark');
-          } else {
-            this._removeActiveFilter('trademark');
-          }
-        });
-
-    this.filtersForm.controls.isDelivery.valueChanges
-      .subscribe(
-        (isDelivery) => {
-          this.filtersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
-          if (isDelivery) {
-            this._removeActiveFilter('isDelivery');
-          } else {
-            this._addActiveFilter('isDelivery');
-          }
-        });
-
-    this.filtersForm.controls.isPickup.valueChanges
-      .subscribe(
-        (isPickup) => {
-          this.filtersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
-          if (isPickup) {
-            this._removeActiveFilter('isPickup');
-          } else {
-            this._addActiveFilter('isPickup');
-          }
-        });
-
-    this.filtersForm.controls.inStock.valueChanges
-      .subscribe((inStock) => {
-        this.filtersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
-        if (inStock) {
-          this._addActiveFilter('inStock');
+        this._removeActiveFilter('supplierId');
+        if (supplier.name.trim().length > 3) {
+          this._supplierService.findSuppliersBy(supplier.name, 0, PAGE_SIZE).subscribe((data) => {
+            this.suppliers = this._map(data._embedded.suppliers);
+            this._cdr.detectChanges();
+          });
         } else {
-          this._removeActiveFilter('inStock');
+          this.suppliers = null;
         }
-      });
-    this.filtersForm.controls.withImages.valueChanges
-      .subscribe((withImages) => {
-        this.filtersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
-        if (withImages) {
-          this._addActiveFilter('withImages');
-        } else {
-          this._removeActiveFilter('withImages');
-        }
-      });
+
+        this.filtersForm.controls.supplier.setValue(supplier, { onlySelf: true, emitEvent: false });
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
+
+    this.filtersForm.controls.trademark.valueChanges.subscribe((trademark) => {
+      this.filtersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
+      if (trademark.length) {
+        this._addActiveFilter('trademark');
+      } else {
+        this._removeActiveFilter('trademark');
+      }
+    });
+
+    this.filtersForm.controls.isDelivery.valueChanges.subscribe((isDelivery) => {
+      this.filtersForm.controls.isDelivery.setValue(isDelivery, { onlySelf: true, emitEvent: false });
+      if (isDelivery) {
+        this._removeActiveFilter('isDelivery');
+      } else {
+        this._addActiveFilter('isDelivery');
+      }
+    });
+
+    this.filtersForm.controls.isPickup.valueChanges.subscribe((isPickup) => {
+      this.filtersForm.controls.isPickup.setValue(isPickup, { onlySelf: true, emitEvent: false });
+      if (isPickup) {
+        this._removeActiveFilter('isPickup');
+      } else {
+        this._addActiveFilter('isPickup');
+      }
+    });
+
+    this.filtersForm.controls.inStock.valueChanges.subscribe((inStock) => {
+      this.filtersForm.controls.inStock.setValue(inStock, { onlySelf: true, emitEvent: false });
+      if (inStock) {
+        this._addActiveFilter('inStock');
+      } else {
+        this._removeActiveFilter('inStock');
+      }
+    });
+    this.filtersForm.controls.withImages.valueChanges.subscribe((withImages) => {
+      this.filtersForm.controls.withImages.setValue(withImages, { onlySelf: true, emitEvent: false });
+      if (withImages) {
+        this._addActiveFilter('withImages');
+      } else {
+        this._removeActiveFilter('withImages');
+      }
+    });
   }
 
   private _resetCategories(): void {
@@ -619,5 +615,3 @@ export class SearchBarFilterComponent implements OnInit {
     return flag !== false;
   }
 }
-
-

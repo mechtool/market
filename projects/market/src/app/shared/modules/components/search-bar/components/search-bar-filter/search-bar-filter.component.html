@@ -1,6 +1,6 @@
-<div class="dropdown_block filter_wrap" *ngIf="categories">
+<div class="dropdown_block filter_wrap" *ngIf="categories" [formGroup]="filtersForm">
 
-  <form nz-form id="formFilter" class="form_filter" [formGroup]="filtersForm">
+  <div nz-form id="formFilter" class="form_filter">
 
     <p class="filter_title">Фильтр для поиска</p>
 
@@ -99,9 +99,8 @@
               (click)="reset()">Сбросить
       </button>
     </div>
-  </form>
-
-  <form nz-form id="formCategory" class="form_category" [formGroup]="categoryForm">
+  </div>
+  <div nz-form id="formCategory" class="form_category" [formGroup]="categoryForm">
 
     <p class="filter_title">
       <span>Фильтр категорий</span>
@@ -122,206 +121,192 @@
       </nz-form-item>
     </div>
 
-    <div class="filter_category__list scrollbar" id="filter_category_list_id">
-      <div class="form-group_checkbox">
-        <nz-checkbox-wrapper>
-          <div class="category category_desktop" [ngClass]="{'visible': category.visible}"
-               *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
-            <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
-              <span class="filter_category__name">{{category.name}}</span>
-              <span class="filter_category__count">({{category.products}})</span>
-            </label><br/>
-          </div>
-        </nz-checkbox-wrapper>
-      </div>
-    </div>
+    <market-search-bar-filter-category
+      [formGroup]="categoryForm"
+      [categories]="categories"
+      type="'desktop'"
+    ></market-search-bar-filter-category>
 
-  </form>
+  </div>
+  <div nz-form id="formFilterMobile" class="form_filter_mobile">
 
-  <form nz-form id="formFilterMobile" class="form_filter_mobile" [formGroup]="filtersForm">
+      <div class="available__filter" [ngClass]="{'not_visible': notShowFilter}">
 
-    <div class="available__filter" [ngClass]="{'not_visible': notShowFilter}">
+        <p class="filter_title">
+          <span>Фильтр для поиска</span>
+          <button type="button" class="dropdown_close" (click)="close()"></button>
+        </p>
 
-      <p class="filter_title">
-        <span>Фильтр для поиска</span>
-        <button type="button" class="dropdown_close" (click)="close()"></button>
-      </p>
-
-      <div class="filter__choose_city" (click)="clickFilterChooseCity()">
-        Регион: <span class="user_location">{{city}}</span>
-      </div>
-
-      <div class="filter__choose_category" (click)="clickFilterChooseCategory()">
-        Категории товаров
-      </div>
-
-      <div class="form-group" *ngIf="showSupplierMarker" formGroupName="supplier">
-        <nz-form-control>
-          <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
-          <input nz-input type="text"
-                 [ngClass]="{'error': filtersForm.controls.supplier.errors && focusIsNotFormFilterInn}"
-                 autocomplete="off"
-                 name="formFilterInnMobile"
-                 id="formFilterInnMobile"
-                 placeholder="Начните вводить"
-                 formControlName="name"
-                 [nzAutocomplete]="supplier_autocomplete">
-
-          <nz-autocomplete nzBackfill #supplier_autocomplete>
-            <nz-auto-option *ngFor="let supplier of suppliers"
-                            (click)="supplierSelect(supplier)"
-                            [nzValue]="supplier"
-                            [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </div>
-
-      <div class="form-group">
-        <nz-form-control>
-          <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
-          <input nz-input type="text"
-                 name="formFilterBrandMobile"
-                 id="formFilterBrandMobile"
-                 placeholder="Укажите бренд"
-                 formControlName="trademark">
-        </nz-form-control>
-      </div>
-
-      <div class="form-group_title">Способ доставки</div>
-      <div class="form-group_checkbox">
-        <label nz-checkbox formControlName="isPickup">Самовывоз</label>
-        <br/>
-        <label nz-checkbox formControlName="isDelivery">Доставка</label>
-      </div>
-
-      <div class="form-group_title">Параметры поиска</div>
-      <div class="form-group_checkbox">
-        <label nz-checkbox formControlName="inStock">Только товары в наличии</label>
-        <br/>
-        <label nz-checkbox formControlName="withImages">Только с картинками</label>
-      </div>
-
-      <div class="form-group_title">Цена</div>
-
-      <div class="range_wrap range_price">
-        <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween"
-                   nzTooltipVisible="{{false}}"></nz-slider>
-
-        <div class="range_inputs">
-          <nz-form-item>
-            <div class="range_inputs-text">От</div>
-
-            <nz-form-control>
-              <input nz-input type="number" name="price_from"
-                     [ngClass]="{'error': focusIsNotFormFilterPrice && (filtersForm.controls.priceFrom.errors || filtersForm.errors)}"
-                     id="formPriceFromMobile"
-                     class="range_input range_from price_from"
-                     placeholder="{{MIN_PRICE}} ₽"
-                     autocomplete="off"
-                     formControlName="priceFrom"/>
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item>
-            <div class="range_inputs-text range_inputs-delimiter">До</div>
-
-            <nz-form-control>
-              <input nz-input type="number" name="price_to"
-                     [ngClass]="{'error': focusIsNotFormFilterPrice && (filtersForm.controls.priceTo.errors || filtersForm.errors)}"
-                     id="formPriceToMobile"
-                     class="range_input range_to price_to"
-                     placeholder="{{MAX_PRICE}} ₽"
-                     autocomplete="off"
-                     formControlName="priceTo"/>
-            </nz-form-control>
-          </nz-form-item>
+        <div class="filter__choose_city" (click)="clickFilterChooseCity()">
+          Регион: <span class="user_location">{{city}}</span>
         </div>
-      </div>
 
-      <div class="filter_btns">
-        <button nz-button type="submit" nzType="primary" [disabled]="isNotValidForm"
-                (click)="save()">Сохранить
-        </button>
-        <button nz-button type="button" nzType="link"
-                (click)="reset()">Сбросить
-        </button>
-      </div>
-    </div>
+        <div class="filter__choose_category" (click)="clickFilterChooseCategory()">
+          Категории товаров
+        </div>
 
-    <div class="city__filter" [ngClass]="{'visible': showFilterWithCities}" [formGroup]="locationForm">
+        <div class="form-group" *ngIf="showSupplierMarker" formGroupName="supplier">
+          <nz-form-control>
+            <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
+            <input nz-input type="text"
+                   [ngClass]="{'error': filtersForm.controls.supplier.errors && focusIsNotFormFilterInn}"
+                   autocomplete="off"
+                   name="formFilterInnMobile"
+                   id="formFilterInnMobile"
+                   placeholder="Начните вводить"
+                   formControlName="name"
+                   [nzAutocomplete]="supplier_autocomplete">
 
-      <div class="choose__return_wrap">
-        <span>Назад к фильтрам для поиска</span>
-        <button type="button" class="dropdown_close" (click)="backToFilter()"></button>
-      </div>
+            <nz-autocomplete nzBackfill #supplier_autocomplete>
+              <nz-auto-option *ngFor="let supplier of suppliers"
+                              (click)="supplierSelect(supplier)"
+                              [nzValue]="supplier"
+                              [nzLabel]="supplier.name">{{ supplier.name }}</nz-auto-option>
+            </nz-autocomplete>
+          </nz-form-control>
+        </div>
 
-      <p class="filter_title">
-        <span>Выбор региона</span>
-      </p>
+        <div class="form-group">
+          <nz-form-control>
+            <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
+            <input nz-input type="text"
+                   name="formFilterBrandMobile"
+                   id="formFilterBrandMobile"
+                   placeholder="Укажите бренд"
+                   formControlName="trademark">
+          </nz-form-control>
+        </div>
 
-      <input nz-input type="text"
-             autocomplete="off"
-             id="formUserRegionLocationMobile"
-             name="formUserRegionLocationMobile"
-             placeholder="Введите город"
-             formControlName="city"/>
-
-      <div class="filter_city__list scrollbar">
-        <ul class="choose-city_list">
-          <li class="choose-city_item" *ngFor="let item of foundCities"
-              (mousedown)="chooseCity(item)">{{item.fullName}}</li>
-        </ul>
-      </div>
-
-      <div class="filter_btns">
-        <button nz-button type="submit" nzType="primary"
-                (click)="saveLocation()">Сохранить
-        </button>
-      </div>
-    </div>
-
-    <div class="category__filter" [ngClass]="{'visible': showFilterWithCategories}" [formGroup]="categoryForm">
-
-      <div class="choose__return_wrap">
-        <span>Назад к фильтрам для поиска</span>
-        <button type="button" class="dropdown_close" (click)="backToFilter()"></button>
-      </div>
-
-      <p class="filter_title">
-        <span>Фильтр категорий</span>
-      </p>
-
-      <input nz-input type="text"
-             name="formFilterCategoryMobile"
-             id="formFilterCategoryMobile"
-             placeholder="Укажите название категории"
-             autocomplete="off"
-             formControlName="categoryName">
-
-      <div class="filter_category__list scrollbar" id="filter_category_list_mobile_id">
+        <div class="form-group_title">Способ доставки</div>
         <div class="form-group_checkbox">
-          <nz-checkbox-wrapper>
-            <div class="category category_mobile" [ngClass]="{'visible': category.visible}"
-                 *ngFor="let category of categories; let i = index" formArrayName="selectedCategories">
-              <label nz-checkbox [formControlName]="i" [nzDisabled]="category.disabled">
-                <span class="filter_category__name">{{category.name}}</span>
-                <span class="filter_category__count">({{category.products}})</span>
-              </label><br/>
-            </div>
-          </nz-checkbox-wrapper>
+          <label nz-checkbox formControlName="isPickup">Самовывоз</label>
+          <br/>
+          <label nz-checkbox formControlName="isDelivery">Доставка</label>
+        </div>
+
+        <div class="form-group_title">Параметры поиска</div>
+        <div class="form-group_checkbox">
+          <label nz-checkbox formControlName="inStock">Только товары в наличии</label>
+          <br/>
+          <label nz-checkbox formControlName="withImages">Только с картинками</label>
+        </div>
+
+        <div class="form-group_title">Цена</div>
+
+        <div class="range_wrap range_price">
+          <nz-slider nzRange nzMin="{{MIN_PRICE}}" nzMax="{{MAX_PRICE}}" formControlName="priceBetween"
+                     nzTooltipVisible="{{false}}"></nz-slider>
+
+          <div class="range_inputs">
+            <nz-form-item>
+              <div class="range_inputs-text">От</div>
+
+              <nz-form-control>
+                <input nz-input type="number" name="price_from"
+                       [ngClass]="{'error': focusIsNotFormFilterPrice && (filtersForm.controls.priceFrom.errors || filtersForm.errors)}"
+                       id="formPriceFromMobile"
+                       class="range_input range_from price_from"
+                       placeholder="{{MIN_PRICE}} ₽"
+                       autocomplete="off"
+                       formControlName="priceFrom"/>
+              </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+              <div class="range_inputs-text range_inputs-delimiter">До</div>
+
+              <nz-form-control>
+                <input nz-input type="number" name="price_to"
+                       [ngClass]="{'error': focusIsNotFormFilterPrice && (filtersForm.controls.priceTo.errors || filtersForm.errors)}"
+                       id="formPriceToMobile"
+                       class="range_input range_to price_to"
+                       placeholder="{{MAX_PRICE}} ₽"
+                       autocomplete="off"
+                       formControlName="priceTo"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div class="filter_btns">
+          <button nz-button type="submit" nzType="primary" [disabled]="isNotValidForm"
+                  (click)="save()">Сохранить
+          </button>
+          <button nz-button type="button" nzType="link"
+                  (click)="reset()">Сбросить
+          </button>
         </div>
       </div>
 
-      <div class="filter_btns">
-        <button nz-button type="submit" nzType="primary"
-                (click)="saveCategory()">Сохранить
-        </button>
-        <button nz-button type="button" nzType="link"
-                (click)="reset()">Сбросить
-        </button>
+      <div class="city__filter" [ngClass]="{'visible': showFilterWithCities}" [formGroup]="locationForm">
+
+        <div class="choose__return_wrap">
+          <span>Назад к фильтрам для поиска</span>
+          <button type="button" class="dropdown_close" (click)="backToFilter()"></button>
+        </div>
+
+        <p class="filter_title">
+          <span>Выбор региона</span>
+        </p>
+
+        <input nz-input type="text"
+               autocomplete="off"
+               id="formUserRegionLocationMobile"
+               name="formUserRegionLocationMobile"
+               placeholder="Введите город"
+               formControlName="city"/>
+
+        <div class="filter_city__list scrollbar">
+          <ul class="choose-city_list">
+            <li class="choose-city_item" *ngFor="let item of foundCities"
+                (mousedown)="chooseCity(item)">{{item.fullName}}</li>
+          </ul>
+        </div>
+
+        <div class="filter_btns">
+          <button nz-button type="submit" nzType="primary"
+                  (click)="saveLocation()">Сохранить
+          </button>
+        </div>
       </div>
+
+      <div class="category__filter" [ngClass]="{'visible': showFilterWithCategories}" [formGroup]="categoryForm">
+
+        <div class="choose__return_wrap">
+          <span>Назад к фильтрам для поиска</span>
+          <button type="button" class="dropdown_close" (click)="backToFilter()"></button>
+        </div>
+
+        <p class="filter_title">
+          <span>Фильтр категорий</span>
+        </p>
+
+        <input nz-input type="text"
+               name="formFilterCategoryMobile"
+               id="formFilterCategoryMobile"
+               placeholder="Укажите название категории"
+               autocomplete="off"
+               formControlName="categoryName">
+
+        <market-search-bar-filter-category
+          [formGroup]="categoryForm"
+          [categories]="categories"
+          type="'mobile'"
+        ></market-search-bar-filter-category>
+
+        <div class="filter_btns">
+          <button nz-button type="submit" nzType="primary"
+                  (click)="saveCategory()">Сохранить
+          </button>
+          <button nz-button type="button" nzType="link"
+                  (click)="reset()">Сбросить
+          </button>
+        </div>
+      </div>
+
     </div>
 
-  </form>
+
 
 </div>
+

@@ -10,6 +10,7 @@ import {
   SearchBarHistoryComponent,
   SearchBarItemComponent,
   SearchBarLocationComponent,
+  SearchBarFilterCategoryComponent,
   SearchBarProductsComponent,
 } from './components';
 import {
@@ -43,11 +44,10 @@ import {
     SearchBarProductsComponent,
     SearchBarFilterComponent,
     SearchBarLocationComponent,
+    SearchBarFilterCategoryComponent,
     SearchBarCategoryDesktopElementDirective,
     SearchBarCategoryMobileElementDirective,
   ],
   exports: [SearchBarComponent],
 })
-export class SearchBarModule {
-}
-
+export class SearchBarModule {}
