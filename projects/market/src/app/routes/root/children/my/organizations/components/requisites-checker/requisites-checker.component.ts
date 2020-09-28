@@ -15,10 +15,6 @@ export class RequisitesCheckerComponent implements OnInit {
   form: FormGroup;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
-  get requisiteType() {
-    return this.enterKpp ? 'КПП' : 'ИНН';
-  }
-
   constructor(private _fb: FormBuilder) {
   }
 
@@ -40,6 +36,7 @@ export class RequisitesCheckerComponent implements OnInit {
     }
 
     if (inn.length === 10 && !this.enterKpp) {
+      this.form.controls.inn.disable();
       this.enterKpp = true;
     }
   }
