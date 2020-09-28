@@ -45,18 +45,6 @@ import {
 
 const PAGE_SIZE = 20;
 
-@Directive({
-  // tslint:disable-next-line: directive-selector
-  selector: '.category_desktop',
-})
-export class SearchBarCategoryDesktopElementDirective {}
-
-@Directive({
-  // tslint:disable-next-line: directive-selector
-  selector: '.category_mobile',
-})
-export class SearchBarCategoryMobileElementDirective {}
-
 @Component({
   selector: 'market-search-bar-filter',
   templateUrl: './search-bar-filter.component.html',
@@ -70,8 +58,6 @@ export class SearchBarCategoryMobileElementDirective {}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBarFilterComponent implements OnInit {
-  @ViewChildren(SearchBarCategoryDesktopElementDirective, { read: ElementRef }) private _categoryDesktopElements: QueryList<ElementRef>;
-  @ViewChildren(SearchBarCategoryMobileElementDirective, { read: ElementRef }) private _categoryMobileElements: QueryList<ElementRef>;
   @ViewChild('categoriesDesktopContainer', { read: ViewContainerRef }) private _desktopContainer: ViewContainerRef;
   @ViewChild('categoryDesktopItem', { read: TemplateRef }) private _categoryDesktopItemTemplate: TemplateRef<any>;
   @ViewChild('categoriesMobileContainer', { read: ViewContainerRef }) private _mobileContainer: ViewContainerRef;
@@ -101,16 +87,6 @@ export class SearchBarFilterComponent implements OnInit {
   @Output() closeFilter: EventEmitter<boolean> = new EventEmitter();
   @Output() stateLocationForm: EventEmitter<LocationModel> = new EventEmitter();
   @Output() filtersCount: EventEmitter<Set<string>> = new EventEmitter();
-
-  @Input()
-  set scroll($event) {
-    setTimeout(() => {
-      if ($event && this.categoryIndex) {
-        const categoryElementToScroll = this._categoryDesktopElements.find((_, i) => i === this.categoryIndex);
-        categoryElementToScroll.nativeElement.scrollIntoView({ block: 'center' });
-      }
-    }, 0);
-  }
 
   get isNotValidForm(): boolean {
     return this.filtersForm?.invalid;
@@ -177,12 +153,6 @@ export class SearchBarFilterComponent implements OnInit {
   clickFilterChooseCategory() {
     this.showFilterWithCategories = true;
     this.notShowFilter = true;
-    setTimeout(() => {
-      if (this.categoryIndex) {
-        const categoryElementToScroll = this._categoryMobileElements.find((_, i) => i === this.categoryIndex);
-        categoryElementToScroll.nativeElement.scrollIntoView({ block: 'center' });
-      }
-    }, 0);
   }
 
   backToFilter() {

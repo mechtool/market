@@ -120,10 +120,10 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-
     <market-search-bar-filter-category
       [formGroup]="categoryForm"
       [categories]="categories"
+      [selectedCategoryIndex]="categoryIndex"
       type="'desktop'"
     ></market-search-bar-filter-category>
 
@@ -291,6 +291,7 @@
         <market-search-bar-filter-category
           [formGroup]="categoryForm"
           [categories]="categories"
+          [selectedCategoryIndex]="categoryIndex"
           type="'mobile'"
         ></market-search-bar-filter-category>
 

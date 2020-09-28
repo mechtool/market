@@ -4,14 +4,14 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SearchBarComponent } from './search-bar.component';
 import {
-  SearchBarCategoryDesktopElementDirective,
-  SearchBarCategoryMobileElementDirective,
   SearchBarFilterComponent,
   SearchBarHistoryComponent,
   SearchBarItemComponent,
   SearchBarLocationComponent,
   SearchBarFilterCategoryComponent,
   SearchBarProductsComponent,
+  SearchBarCategoryDesktopElementDirective,
+  SearchBarCategoryMobileElementDirective,
 } from './components';
 import {
   NzAutocompleteModule,

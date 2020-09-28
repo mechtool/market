@@ -66,12 +66,12 @@
           <market-search-bar-filter
             [filters]="filters"
             [city]="userLocation.name"
-            [scroll] = "isFilterFormVisible"
             [activeFilters]="activeFilters"
             (stateLocationForm)="changeLocation($event)"
             (stateFilters)="recFilter($event)"
             (closeFilter)="changeFilterFormVisibility($event)"
             (filtersCount)="recFiltersCount($event)"
+            *ngIf="isFilterFormVisible"
           ></market-search-bar-filter>
         </nz-dropdown-menu>
       </div>
