@@ -4,13 +4,15 @@
 
   <form [formGroup]="form" (submit)="send()">
 
-    <div class="description" *ngIf="!enterKpp">Укажите ИНН организации:</div>
+    <div class="description" *ngIf="!enterKpp">Укажите ИНН организации</div>
+
+    <div class="description" *ngIf="enterKpp">ИНН</div>
 
     <div class="form-group form-group-std">
       <input type="number" id="formINN" autocomplete="off" formControlName="inn">
     </div>
 
-    <div class="description" *ngIf="enterKpp">Укажите КПП организации:</div>
+    <div class="description" *ngIf="enterKpp">Укажите КПП организации</div>
 
     <div class="form-group form-group-std" *ngIf="enterKpp">
       <input type="number" id="formKPP" autocomplete="off" formControlName="kpp">
