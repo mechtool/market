@@ -6,11 +6,13 @@ import { AvailabilityPipe } from './availability.pipe';
 import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
 import { NaviCounterPipe } from './navi-counter.pipe';
 import { FoundPipe } from './found.pipe';
+import { PlaceJoinerPipe } from './place-joiner.pipe';
 
 @NgModule({
   declarations: [
     MultiplierPipe,
     DeclensionPipe,
+    PlaceJoinerPipe,
     ArrayJoinerPipe,
     AvailabilityPipe,
     SumLettersPipe,
@@ -20,6 +22,7 @@ import { FoundPipe } from './found.pipe';
   exports: [
     MultiplierPipe,
     DeclensionPipe,
+    PlaceJoinerPipe,
     ArrayJoinerPipe,
     AvailabilityPipe,
     SumLettersPipe,

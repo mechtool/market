@@ -59,7 +59,7 @@
         <div class="order_label">Адреса самовывоза:</div>
         <div class="order_value supplier_title">
           <span class="supplier_name">
-            {{pickupPoints | marketArrayJoiner: 'title':'; '}}
+            {{pickupPoints | marketPlaceJoiner: '; '}}
           </span>
         </div>
       </div>
@@ -67,7 +67,7 @@
         <div class="order_label">Зоны доставки:</div>
         <div class="order_value supplier_title">
           <span class="supplier_name">
-            {{deliveryZones | marketArrayJoiner: 'title':'; '}}
+            {{deliveryZones | marketPlaceJoiner: '; '}}
           </span>
         </div>
       </div>
