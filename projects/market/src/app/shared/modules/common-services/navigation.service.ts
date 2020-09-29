@@ -257,7 +257,7 @@ export class NavigationService {
 
   closeMenu() {
     this._isMenuOpened = false;
-    this.overlayRef.dispose();
+    this.overlayRef?.dispose();
     if (window.innerWidth > 992) {
       this.selectedPortal = this._componentPortal;
     }

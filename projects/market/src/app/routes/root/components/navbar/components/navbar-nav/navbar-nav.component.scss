@@ -101,7 +101,7 @@
         display: flex;
         color: var(--color-secondary);
         align-items: center;
-        height: 50px;
+        height: 47px;
         padding-left: 20px;
         background-color: transparent;
         transition: background-color 0.2s, padding-left 0.1s;
@@ -183,6 +183,7 @@
     justify-content: flex-end;
     flex: 1;
     padding: 0 0 25px 0;
+    font-size: var(--font-size-13);
 
     .list {
       .item {
