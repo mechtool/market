@@ -39,22 +39,18 @@ export class CategoryComponent {
     return categoryPromotion[this.categoryId] || null;
   }
 
-  get isSeachUsed(): boolean {
+  get isNotSearchUsed(): boolean {
     const queryParamsInFilter = [
       'q',
-      'sort',
       'supplierId',
       'trademark',
-      'isDelivery',
-      'isPickup',
       'inStock',
       'withImages',
       'priceFrom',
       'priceTo',
-      'categoryId',
     ];
     const queryParamsList = Object.keys(this._activatedRoute.snapshot.queryParams);
-    return queryParamsList.some((queryParam) => queryParamsInFilter.includes(queryParam));
+    return !queryParamsList.some((queryParam) => queryParamsInFilter.includes(queryParam));
   }
 
   constructor(

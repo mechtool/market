@@ -96,9 +96,7 @@
     </table>
   </div>
 
-  <p class="info">Всего наименований {{document.products?.length}}, на сумму
-    {{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</p>
-  <p class="sum_letters">{{document.totalSum | marketSumLetters}}</p>
+  <p class="info">{{sumLetters}}</p>
 
   <hr>
 

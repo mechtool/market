@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { ProductOffersModel } from '#shared/modules/common-services/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -18,6 +18,7 @@ import { NotificationsService } from '#shared/modules';
 })
 export class MainPopularComponent implements OnInit {
   productOffers: ProductOffersModel[];
+  @Input() categoryId: string;
 
   constructor(
     private _productService: ProductService,
@@ -29,9 +30,8 @@ export class MainPopularComponent implements OnInit {
     this._getPopularNomenclatures();
   }
 
-
   private _getPopularNomenclatures(): void {
-    this._productService.getPopularProductOffers()
+    this._productService.getPopularProductOffers(this.categoryId)
       .subscribe((products) => {
         this.productOffers = products._embedded.productOffers;
       }, (err) => {

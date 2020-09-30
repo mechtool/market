@@ -23,8 +23,8 @@ export class ProductService {
     return this._bnetService.getProductOffer(id, query);
   }
 
-  getPopularProductOffers(): Observable<ProductOffersListResponseModel> {
-    return this._bnetService.getPopularProducts();
+    getPopularProductOffers(categoryId?: string): Observable<ProductOffersListResponseModel> {
+    return this._bnetService.getPopularProducts(categoryId);
   }
 
   searchProductOffers(groupQuery: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {

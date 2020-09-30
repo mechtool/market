@@ -24,12 +24,12 @@ class Organization {
   paymentAccount: PaymentAccount;
 }
 
-class Outcome {
+export class Outcome {
   key: string;
   value: string;
 }
 
-class Product {
+export class Product {
   partNumber: string;
   productName: string;
   baseUnit: BaseUnit;

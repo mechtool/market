@@ -23,5 +23,6 @@ export const categoryPromotion = {
       description: '- 5% в категории «Полиграфические услуги», доставка РФ от 300 р.',
       imgUrl: 'assets/img/promo/school-office/a-cifra.png',
     },
-  ]
-}
+  ],
+  3321: []
+};
