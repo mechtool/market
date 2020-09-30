@@ -12,7 +12,8 @@ import { UserOrganizationModel } from '#shared/modules/common-services/models/us
 import { AccessKeyComponent } from './components/access-key/access-key.component';
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
-import { Metrika } from 'ng-yandex-metrika';
+import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
+import { MetrikaEventModel } from '#shared/modules/common-services/models';
 
 type TabType = 'a' | 'b' | 'c';
 
@@ -52,7 +53,7 @@ export class OrganizationsComponent implements OnInit {
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _metrika: Metrika,
+    private _externalProvidersService: ExternalProvidersService,
   ) {}
 
   ngOnInit() {
@@ -119,9 +120,7 @@ export class OrganizationsComponent implements OnInit {
           }
           this.checkedLegalRequisites = null;
           this.goToTab('a');
-          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-            this._metrika.fireEvent('ORG_REGISTER');
-          }
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORG_REGISTER);
         },
         (err) => {
           this._notificationsService.error('Произошла ошибка при регистрации организации');

@@ -24,3 +24,4 @@ export * from './cart.service';
 export * from './notifications.service';
 export * from './payment-document-modal.service';
 export * from './spinner.service';
+export * from './external-providers.service';

@@ -1,9 +1,8 @@
-import { Component, HostListener } from '@angular/core';
-import { Location } from '@angular/common';
-import { UserService } from '#shared/modules';
-import { Metrika } from 'ng-yandex-metrika';
+import { Component } from '@angular/core';
+import { ExternalProvidersService, UserService } from '#shared/modules';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
+import { fromEvent, Observable } from 'rxjs';
 
 @Component({
   selector: 'market-app',
@@ -11,31 +10,28 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private _userService: UserService, private _metrika: Metrika, private _router: Router, private _location: Location) {
-    let prevPath = this._location.path();
-    this._router.events
-      .pipe(
-        filter((event) => {
-          return window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200';
-        }),
-        filter((event) => {
-          return event instanceof NavigationEnd;
-        }),
-      )
-      .subscribe(() => {
-        const newPath = this._location.path();
-        this._metrika.hit(newPath, {
-          referer: prevPath,
-        });
-        prevPath = newPath;
-      });
+  constructor(private _userService: UserService, private _router: Router, private _externalProvidersService: ExternalProvidersService) {
+    this._routeChanges$().subscribe((res) => {
+      this._externalProvidersService.resetYandexTranslatePopupPosition();
+      this._externalProvidersService.hitYandexMetrika();
+    });
+
+    this._authedUserWindowCloseChanges$().subscribe((uin) => {
+      this._userService.setUserLastLoginTimestamp(uin, Date.now());
+    });
   }
 
-  @HostListener('window:beforeunload', ['$event']) onCloseApp(event: Event) {
-    const uin = this._userService.userData$.value?.userInfo.userId || null;
-    if (uin) {
-      event.preventDefault();
-      this._userService.setUserLastLoginTimestamp(uin, Date.now());
-    }
+  private _routeChanges$(): Observable<NavigationEnd> {
+    return this._router.events.pipe(filter((event) => event instanceof NavigationEnd)) as Observable<NavigationEnd>;
+  }
+
+  private _authedUserWindowCloseChanges$(): Observable<string> {
+    return fromEvent(window, 'beforeunload').pipe(
+      filter((ev) => {
+        return !!this._userService.userData$.value?.userInfo.userId;
+      }),
+      tap((ev) => ev.preventDefault()),
+      map((res) => this._userService.userData$.value.userInfo.userId),
+    );
   }
 }

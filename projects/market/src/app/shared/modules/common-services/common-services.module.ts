@@ -24,6 +24,7 @@ import { NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { PaymentDocumentModalService } from './payment-document-modal.service';
 import { SpinnerService } from './spinner.service';
 import { FeedbackService } from './feedback.service';
+import { ExternalProvidersService } from './external-providers.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -56,6 +57,7 @@ export class CommonServicesModule {
         NotificationsService,
         PaymentDocumentModalService,
         SpinnerService,
+        ExternalProvidersService,
       ],
     };
   }

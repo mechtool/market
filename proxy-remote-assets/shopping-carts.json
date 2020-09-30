@@ -42,10 +42,10 @@
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
             },
             "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e/quantity"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e/quantity"
             }
           }
         },
@@ -79,10 +79,10 @@
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
             },
             "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d/quantity"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d/quantity"
             }
           }
         }
@@ -178,10 +178,10 @@
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
             },
             "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f/quantity"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f/quantity"
             }
           }
         }
@@ -246,10 +246,10 @@
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
             },
             "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d/quantity"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d/quantity"
             }
           }
         }
@@ -298,10 +298,10 @@
               "href": "https://todo-api.1cbn.ru/trade-offers/storefront/3fc2103c-425e-43ff-8add-297b07d5868c"
             },
             "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c"
             },
             "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c/quantity"
+              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c/quantity"
             }
           }
         }
@@ -367,10 +367,10 @@
                 "href": "https://todo-api.1cbn.ru/trade-offers/storefront/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
               },
               "marketplace:shopping-cart-remove-item": {
-                "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
+                "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
               },
               "marketplace:shopping-cart-update-item-quantity": {
-                "href": "https://market.1cbn.ru:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a/quantity"
+                "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a/quantity"
               }
             }
          }

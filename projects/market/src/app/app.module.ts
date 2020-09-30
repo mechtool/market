@@ -8,17 +8,10 @@ import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@ang
 import ru from '@angular/common/locales/ru';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
-import {
-  AuthService,
-  CartService,
-  CommonServicesModule,
-  CookieService,
-  UserService
-} from '#shared/modules/common-services';
+import { AuthService, CartService, CommonServicesModule, CookieService, UserService } from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgxMaskModule } from 'ngx-mask';
-import { MetrikaModule } from 'ng-yandex-metrika';
 
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
@@ -39,6 +32,7 @@ import { PipesModule } from '#shared/modules/pipes';
 import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
 import { LineClampModule } from '#shared/modules';
+import { MetrikaModule } from 'ng-yandex-metrika';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -67,16 +61,16 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
+    BreadcrumbsModule,
+    CookieAgreementModule,
+    FeedbackModule,
     MetrikaModule.forRoot({
       id: 67089850,
       webvisor: true,
       clickmap: true,
       trackLinks: true,
-      accurateTrackBounce: true
+      accurateTrackBounce: true,
     }),
-    BreadcrumbsModule,
-    CookieAgreementModule,
-    FeedbackModule,
   ],
   providers: [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
@@ -92,5 +86,4 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

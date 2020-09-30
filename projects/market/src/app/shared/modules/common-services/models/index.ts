@@ -67,3 +67,4 @@ export * from './participation-request-response.model';
 export * from './register-organization-request.model';
 export * from './access-key.model';
 export * from './access-key-response.model';
+export * from './metrika-event.model';

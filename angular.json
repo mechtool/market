@@ -182,7 +182,7 @@
             },
             "production": {
               "devServerTarget": "",
-              "baseUrl": "https://market.1cbn.ru"
+              "baseUrl": "https://1c.market"
             },
             "denis": {
               "devServerTarget": "",
@@ -190,7 +190,7 @@
             },
             "remote": {
               "devServerTarget": "",
-              "baseUrl": "https://market.1cbn.ru:4200"
+              "baseUrl": "https://market.1cbn.rus:4200"
             }
           }
         }

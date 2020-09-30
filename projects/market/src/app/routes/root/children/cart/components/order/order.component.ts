@@ -19,6 +19,7 @@ import {
   DeliveryMethod,
   Level,
   LocationModel,
+  MetrikaEventModel,
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
@@ -31,6 +32,7 @@ import { Router } from '@angular/router';
 import {
   BNetService,
   CartService,
+  ExternalProvidersService,
   LocationService,
   NotificationsService,
   TradeOffersService,
@@ -42,7 +44,6 @@ import { AuthModalService } from '#shared/modules/setup-services/auth-modal.serv
 import { CartModalService } from '../../cart-modal.service';
 import { DeliveryOptionsModel } from './models';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Metrika } from 'ng-yandex-metrika';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -163,7 +164,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _notificationsService: NotificationsService,
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
-    private _metrika: Metrika,
+    private _externalProvidersService: ExternalProvidersService,
   ) {}
 
   ngOnInit() {
@@ -237,9 +238,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           );
         }),
         switchMap((res) => {
-          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-            this._metrika.fireEvent('ORDER_PUT');
-          }
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
           return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
         }),
       )
@@ -497,9 +496,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         .pipe(
           tap((_) => (this.isOrderLoading = true)),
           switchMap((res) => {
-            if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-              this._metrika.fireEvent('ORDER_PUT');
-            }
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
             return res === 0
               ? this._cartService.handleRelation(RelationEnumModel.ITEM_REMOVE, ctrl.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
               : this._cartService.handleRelation(
@@ -614,9 +611,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.cartDataChange.emit(res);
           this.items.clear();
           this._cdr.detectChanges();
-          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-            this._metrika.fireEvent(this.orderType === 'order' ? 'ORDER_CREATE' : 'PRICEREQUEST_CREATE');
-          }
+          this._externalProvidersService.fireYandexMetrikaEvent(
+            this.orderType === 'order' ? MetrikaEventModel.ORDER_CREATE : MetrikaEventModel.PRICEREQUEST_CREATE,
+          );
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

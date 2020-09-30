@@ -1,9 +1,8 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
-import { CartService, NotificationsService } from '#shared/modules/common-services';
-import { Metrika } from 'ng-yandex-metrika';
+import { MetrikaEventModel, OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
+import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
 
 enum Operation {
   REMOVE,
@@ -33,7 +32,7 @@ export class ProductSideComponent implements OnInit {
     private _cartService: CartService,
     private _notificationsService: NotificationsService,
     private _cdr: ChangeDetectorRef,
-    private _metrika: Metrika,
+    private _externalProvidersService: ExternalProvidersService,
   ) {
     this.form = this._fb.group({
       totalPositions: 0,
@@ -85,9 +84,7 @@ export class ProductSideComponent implements OnInit {
       })
       .subscribe(
         () => {
-          if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-            this._metrika.fireEvent('ORDER_PUT');
-          }
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
           this.spinnerOf();
           this._cdr.detectChanges();
         },
@@ -114,9 +111,7 @@ export class ProductSideComponent implements OnInit {
           })
           .subscribe(
             () => {
-              if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-                this._metrika.fireEvent('ORDER_PUT');
-              }
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
               this.spinnerOf();
             },
             (err) => {
@@ -130,9 +125,7 @@ export class ProductSideComponent implements OnInit {
           .handleRelationAndUpdateData(RelationEnumModel.ITEM_REMOVE, `${cartLocation}/items/${this.tradeOfferId}`)
           .subscribe(
             () => {
-              if (window.location.hostname === 'market.1cbn.ru' && window.location.port !== '4200') {
-                this._metrika.fireEvent('ORDER_PUT');
-              }
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
             },
             (err) => {
               this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
