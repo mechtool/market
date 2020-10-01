@@ -6,7 +6,7 @@ import { MetrikaEventModel } from '#shared/modules/common-services/models';
 @Injectable()
 export class ExternalProvidersService {
   private _renderer: Renderer2;
-  private _yandexTranslatePopupEl: HTMLElement = document.getElementById('tr-popup');
+  private _yandexTranslatePopupEl: HTMLElement = null;
   private _yandexMetrikaPrevPath = this._location.path();
 
   constructor(private _rendererFactory: RendererFactory2, private _location: Location, private _metrika: Metrika) {
@@ -14,6 +14,7 @@ export class ExternalProvidersService {
   }
 
   resetYandexTranslatePopupPosition(): void {
+    this._yandexTranslatePopupEl = document.getElementById('tr-popup');
     if (this._yandexTranslatePopupEl) {
       this._renderer.setStyle(this._yandexTranslatePopupEl, 'top', 'auto');
       this._renderer.setStyle(this._yandexTranslatePopupEl, 'right', 'auto');
