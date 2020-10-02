@@ -36,7 +36,7 @@
           </ul>
         </nz-dropdown-menu>
       </div>
-      <div class="order_spec">
+      <div class="order_spec" *ngIf="order?.supplier">
         <div class="order_label">Поставщик:</div>
         <div class="order_value supplier_title">
           <span class="supplier_image">
@@ -89,7 +89,8 @@
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="Поставщик">
+      <nz-tab nzTitle="Поставщик"
+              nzDisabled="{{!order?.supplier}}">
         <div class="tab-content">
           <ng-container *ngTemplateOutlet="supplierData"></ng-container>
         </div>
@@ -415,7 +416,7 @@
               <span class="info_group__label">ИНН</span>
               <span class="info_group__value">{{supplierINN}}</span>
             </div>
-            <div class="info_group">
+            <div class="info_group" *ngIf="supplierKPP">
               <span class="info_group__label">КПП</span>
               <span class="info_group__value">{{supplierKPP}}</span>
             </div>
