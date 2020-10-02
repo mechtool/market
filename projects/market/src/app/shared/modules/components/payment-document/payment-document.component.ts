@@ -1,23 +1,18 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  CommerceMlDocumentResponseModel,
-  EdiService,
-  NotificationsService,
-  Outcome,
-  Product
-} from '#shared/modules/common-services';
-import { resizeBusinessStructure } from '#shared/utils';
+import { CommerceMlDocumentResponseModel, EdiService, NotificationsService, Outcome, Product } from '#shared/modules/common-services';
+import { defer, Observable } from 'rxjs';
 
-enum DocumentType { ORDER = 'ORDER', ACCOUNT = 'ACCOUNT'}
+enum DocumentType {
+  ORDER = 'ORDER',
+  ACCOUNT = 'ACCOUNT',
+}
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-payment-document',
   templateUrl: './payment-document.component.html',
-  styleUrls: [
-    './payment-document.component.scss',
-  ]
+  styleUrls: ['./payment-document.component.scss'],
 })
 export class PaymentDocumentComponent implements OnInit {
   @Input() documentId: number;
@@ -27,47 +22,35 @@ export class PaymentDocumentComponent implements OnInit {
   sumLetters: string;
   isError: boolean;
 
-  constructor(
-    private _ediService: EdiService,
-    private _notificationsService: NotificationsService,
-  ) {
-  }
+  constructor(private _ediService: EdiService, private _notificationsService: NotificationsService) {}
 
   ngOnInit(): void {
-    if (this.documentType === DocumentType.ORDER) {
-      this._ediService.getOrderDocument(this.documentId)
-        .subscribe((document) => {
-          this.fillDate(document);
-        }, (err) => {
-          this.isError = true;
-          this._notificationsService.error('Невозможно отобразить заказ. Внутренняя ошибка сервера.');
-        });
-    } else if (this.documentType === DocumentType.ACCOUNT) {
-      this._ediService.getAccountDocument(this.documentId)
-        .subscribe((document) => {
-          this.fillDate(document);
-        }, (err) => {
-          this.isError = true;
-          this._notificationsService.error('Невозможно отобразить счет. Внутренняя ошибка сервера.');
-        });
-    }
+    this._getDocumentConditionally$().subscribe(
+      (document) => {
+        this._fillData(document);
+      },
+      (err) => {
+        this.isError = true;
+        this._notificationsService.error('Невозможно отобразить счет. Внутренняя ошибка сервера.');
+      },
+    );
   }
 
-  name(name: string): string {
-    return resizeBusinessStructure(name);
+  private _getDocumentConditionally$(): Observable<CommerceMlDocumentResponseModel> {
+    return defer(() => {
+      return this.documentType === DocumentType.ORDER
+        ? this._ediService.getOrderDocument(this.documentId)
+        : this._ediService.getAccountDocument(this.documentId);
+    });
   }
 
-  kpp(kpp: string): string {
-    return kpp ? `, КПП ${kpp}` : '';
-  }
-
-  private fillDate(document: CommerceMlDocumentResponseModel) {
+  private _fillData(document: CommerceMlDocumentResponseModel) {
     this.document = document;
-    this.sumLetters = this.mapSumLetters(document.outcome);
-    this.outcomeVat = this.mapOutcomeVat(document.products);
+    this.sumLetters = this._mapSumLetters(document.outcome);
+    this.outcomeVat = this._mapOutcomeVat(document.products);
   }
 
-  private mapOutcomeVat(products: Product[]): number {
+  private _mapOutcomeVat(products: Product[]): number {
     /*
     const outcome = this.document?.outcome.find(res => res.key === 'СуммаНалогаИтог');
     return outcome && isNumeric(outcome.value) ? +outcome.value : null;
@@ -77,15 +60,13 @@ export class PaymentDocumentComponent implements OnInit {
     Поэтому пока делаем расчет тут.
     */
 
-    let totalVat = 0;
-    products.forEach((doc) => {
-      totalVat += doc.tax?.vatSum;
-    });
-
-    return totalVat;
+    return products.reduce((accum, curr) => {
+      accum += curr.tax?.vatSum || 0;
+      return accum;
+    }, 0);
   }
 
-  private mapSumLetters(outcome: Outcome[]) {
+  private _mapSumLetters(outcome: Outcome[]) {
     return outcome.find((res) => res.key === 'ИтогиПрописью')?.value;
   }
 }

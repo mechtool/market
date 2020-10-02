@@ -1,405 +1,672 @@
 {
-  "content": [
+  "content":[
     {
-      "supplier": {
-        "name": "ИП Иванов Георгий Александрович",
-        "inn": "345001228795",
-        "kpp": "978654911",
-        "phone": "+23999999997",
-        "email": "ivanov@ivanov.ru"
+      "supplier":{
+        "name":"ООО \"МЕТРО Кэш энд Керри Россия\"",
+        "inn":"7704218694",
+        "kpp":"774301001",
+        "phone":"8-800-700-10-77",
+        "email":""
       },
-      "items": [
-        {
-          "tradeOfferId": "19f1aa3e-4bf1-4f94-ba4e-69196d22049e",
-          "productName": "ADIDAS SuperStar 2020",
-          "productDescription": "Кроссовки",
-          "barCodes": [
-            "8123231211333"
-          ],
-          "partNumber": "002DX-442",
-          "packaging": "Коробка",
-          "imageUrls": [
-            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg",
-            ""
-          ],
-          "unitOkei": {
-            "code": "796",
-            "nsymb": "шт",
-            "name": "Штука"
-          },
-          "quantity": 2,
-          "price": 222,
-          "priceIncludesVAT": true,
-          "itemTotal": {
-            "total": 444,
-            "totalVat": 74,
-            "currencyCode": "643"
-          },
-          "vat": "VAT_20",
-          "maxDaysForShipment": 30,
-          "_links": {
-            "marketplace:trade-offer-view": {
-              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
-            },
-            "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e"
-            },
-            "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/19f1aa3e-4bf1-4f94-ba4e-69196d22049e/quantity"
-            }
-          }
-        },
-        {
-          "tradeOfferId": "37f1aa3e-4bf1-4f94-ba4e-69196d22045d",
-          "productName": "Reebok Pro1",
-          "productDescription": "Кроссовки",
-          "barCodes": [
-            "97232312113467"
-          ],
-          "partNumber": "002DX-442",
-          "packaging": "Коробка",
-          "imageUrls": [],
-          "unitOkei": {
-            "code": "796",
-            "nsymb": "шт",
-            "name": "Штука"
-          },
-          "quantity": 7,
-          "price": 317,
-          "priceIncludesVAT": true,
-          "itemTotal": {
-            "total": 951,
-            "totalVat": 96,
-            "currencyCode": "643"
-          },
-          "vat": "VAT_10",
-          "maxDaysForShipment": 20,
-          "_links": {
-            "marketplace:trade-offer-view": {
-              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
-            },
-            "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d"
-            },
-            "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/37f1aa3e-4bf1-4f94-ba4e-69196d22045d/quantity"
-            }
-          }
-        }
+      "tags":[
+        "Order"
       ],
-      "deliveryOptions": {
-        "pickupPoints": [
-          {
-            "fiasCode": "5ee84ac0-eb9a-4b42-b814-2f5f7c27c255",
-            "title": "г Москва, ул Сухонская, д 11",
-            "countryOksmCode": "643"
-          },
-          {
-            "fiasCode": "2763c110-cb8b-416a-9dac-ad28a55b4402",
-            "title": "Екатеринбург, Свердловская обл",
-            "countryOksmCode": "643"
-          }
-        ],
-        "deliveryZones": [
-          {
-            "fiasCode": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
-            "title": "Москва",
-            "countryOksmCode": "643"
-          },
-          {
-            "fiasCode": "1d5b2444-70a0-4932-980c-b4dc0d3f02c3",
-            "title": "Люберцы",
-            "countryOksmCode": "643"
-          }
-        ]
-      },
-      "customersAudience": [
-        {
-          "id": "180414879123",
-          "name": "ООО Брюква",
-          "legalId": "3672873648:774301001"
-        }
-      ],
-      "orderTotal": {
-        "total": 1395,
-        "totalVat": 170,
-        "currencyCode": "643"
-      },
-      "makeOrderViolations":[
-        {
-          "code": "SupplierPolicyViolated",
-          "message": "Минимальная сумма заказа (включая НДС) должна быть не менее 8000.00 RUB. Добавьте товары, чтобы сумма заказа превысила минимальную"
-        }
-      ],
-      "_links": {
-        "marketplace:make-order": {
-          "href": "proxifier/shopping-carts/777888999/order/1111111"
-        }
-      }
-    },
-    {
-      "supplier": {
-        "name": "ООО 'Ромашка'",
-        "inn": "011001220011",
-        "kpp": "921391111",
-        "phone": "+99999999999",
-        "email": "sales@romashka.ru"
-      },
-      "items": [
-        {
-          "tradeOfferId": "29f1aa3e-4bf1-4f94-ba4e-69196d22049f",
-          "productName": "ADIDAS SuperStar 2020",
-          "productDescription": "Кроссовки",
-          "barCodes": [
-            "8123231211333"
-          ],
-          "partNumber": "002DX-442",
-          "packaging": "Коробка",
-          "imageUrls": [
-            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
-          ],
-          "unitOkei": {
-            "code": "796",
-            "nsymb": "шт",
-            "name": "Штука"
-          },
-          "quantity": 8,
-          "price": 20000,
-          "priceIncludesVAT": false,
-          "itemTotal": {
-            "total": 160000,
-            "totalVat": 0,
-            "currencyCode": "643"
-          },
-          "vat": "VAT_WITHOUT",
-          "maxDaysForShipment": 17,
-          "_links": {
-            "marketplace:trade-offer-view": {
-              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
-            },
-            "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
-            },
-            "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/f840e6b9-9631-483a-9bef-47d0a8d1c4fe/items/29f1aa3e-4bf1-4f94-ba4e-69196d22049f/quantity"
-            }
-          }
-        }
-      ],
-      "deliveryOptions": {
-        "pickupPoints": [
-          {
-            "fiasCode": "6fdecb78-893a-4e3f-a5ba-aa062459463b",
-            "title": "Севастополь",
-            "countryOksmCode": "643"
-          }
-        ]
-      },
-      "orderTotal": {
-        "total": 160000,
-        "totalVat": 0,
-        "currencyCode": "643"
-      },
-      "makeOrderViolations":[
-        {
-          "code": "TemporarilyOutOfSales",
-          "message": "Товар временно снят с продажи поставщиком. Удалите товар из корзины, или дождитесь возобновления поставки.",
-          "tradeOfferId": "29f1aa3e-4bf1-4f94-ba4e-69196d22049f"
-        }
-      ]
-    },
-    {
-      "supplier": {
-        "name": "ООО 'Свинтус'",
-        "inn": "033001220022",
-        "kpp": "921391431",
-        "phone": "+11299999999",
-        "email": "sales@svintus.ru"
-      },
-      "items": [
-        {
-          "tradeOfferId": "9b270d77-4570-4ede-8c16-d3ec4445f05f",
-          "productName": "Miele SGEA0 Cat&Dog",
-          "productDescription": null,
-          "barCodes": null,
-          "partNumber": "1.753-505",
-          "unitOkei": {
-            "code": "796",
-            "nsymb": "шт",
-            "name": "Штука"
-          },
-          "packaging": "шт",
-          "imageUrls": [
-            "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
-          ],
-          "quantity": 1,
-          "price": 10000,
-          "priceIncludesVAT": true,
-          "vat": "VAT_20",
-          "itemTotal": {
-            "total": 10000,
-            "totalVat": 1667,
-            "currencyCode": "978"
-          },
-          "_links": {
-            "marketplace:trade-offer-view": {
-              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
-            },
-            "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d"
-            },
-            "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/31f1aa3e-4bf1-4f94-ba4e-69196d22049d/quantity"
-            }
-          }
-        }
-      ],
-      "deliveryOptions": {
-        "pickupPoints": null
-      },
-      "orderTotal": {
-        "total": 10000,
-        "totalVat": 1667,
-        "currencyCode": "978"
-      },
-      "_links": {
-        "marketplace:make-order": {
-          "href": "proxifier/shopping-carts/777888999/order/555555"
-        }
-      }
-    },
-    {
-      "supplier": {
-        "name": "ООО «Пневмопроект»",
-        "inn": "6685026960",
-        "kpp": "668501001",
-        "phone": null,
-        "email": null
-      },
       "items":[
         {
-          "tradeOfferId": "3fc2103c-425e-43ff-8add-297b07d5868c",
-          "productName": "101-1/8-1/4 Резьбовой соединитель НР G1/8\" - НР G1/4\", никелир. латунь",
-          "productDescription": null,
-          "barCodes": null,
-          "partNumber": "101-1/8-1/4",
-          "unitOkei": {
-            "code": "796",
-            "nsymb": "шт",
-            "name": "Штука"
+          "tradeOfferId":"1566cf51-01c5-47b2-bf68-e68a5cfe297f",
+          "productName":"Fine Life Пакет-майка полиэтиленовый 38х62см",
+          "productDescription":"Срок годности не ограничен",
+          "barCodes":[
+            
+          ],
+          "partNumber":"641228",
+          "unitOkei":{
+            "code":"796",
+            "nsymb":"шт",
+            "name":"Штука"
           },
-          "packaging": "шт",
-          "imageUrls": null,
-          "quantity": 1,
-          "priceIncludesVAT": false,
-          "maxDaysForShipment": null,
-          "_links": {
-            "marketplace:trade-offer-view": {
-              "href": "https://todo-api.1cbn.ru/trade-offers/storefront/3fc2103c-425e-43ff-8add-297b07d5868c"
+          "packaging":"Штука",
+          "imageUrls":null,
+          "quantity":1,
+          "price":222,
+          "priceIncludesVAT":true,
+          "vat":"VAT_20",
+          "itemTotal":{
+            "total":222,
+            "totalVat":37,
+            "currencyCode":"643"
+          },
+          "maxDaysForShipment":null,
+          "_links":{
+            "marketplace:shopping-cart-update-item-quantity":{
+              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/1566cf51-01c5-47b2-bf68-e68a5cfe297f/quantity"
             },
-            "marketplace:shopping-cart-remove-item": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c"
+            "marketplace:shopping-cart-remove-item":{
+              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/1566cf51-01c5-47b2-bf68-e68a5cfe297f"
             },
-            "marketplace:shopping-cart-update-item-quantity": {
-              "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/3fc2103c-425e-43ff-8add-297b07d5868c/quantity"
+            "marketplace:trade-offer-view":{
+              "href":"https://bnet-api-stage.1c.ru/market/trade-offers/storefront/1566cf51-01c5-47b2-bf68-e68a5cfe297f"
             }
           }
         }
       ],
-      "deliveryOptions": {
-         "pickupPoints":[
+      "deliveryOptions":{
+        "deliveryZones":[
           {
-            "fiasCode": "92b30014-4d52-4e2e-892d-928142b924bf",
-            "title": "Свердловская обл, Екатеринбург г",
-            "countryOksmCode": "643"
+            "fiasCode":"0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+            "title":"Москва г",
+            "countryOksmCode":"643"
           },
           {
-            "fiasCode": "2763c110-cb8b-416a-9dac-ad28a55b4402",
-            "title": "Свердловская обл, Екатеринбург г",
-            "countryOksmCode": "643"
+            "fiasCode":"29251dcf-00a1-4e34-98d4-5c47484a36d4",
+            "title":"Московская обл",
+            "countryOksmCode":"643"
           }
-         ]
+        ]
       },
-      "_links": {
-         "marketplace:make-order": {
-            "href": "proxifier/shopping-carts/777888999/order/6666666"
-         }
+      "orderTotal":{
+        "total":222,
+        "totalVat":37,
+        "currencyCode":"643"
+      },
+      "makeOrderViolations":[
+        {
+          "message":"Минимальная сумма заказа (включая НДС) должна быть не менее 8000.00 RUB Добавьте товары, чтобы сумма заказа превысила минимальную.",
+          "code":"SupplierPolicyViolated"
+        }
+      ],
+      "_links":{
+        "self":{
+          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-9e9703ce-7b9d-49a9-b5b8-8a9798dc5345"
+        },
+        "marketplace:make-order":{
+          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/9e9703ce-7b9d-49a9-b5b8-8a9798dc5345"
+        }
       }
     },
     {
       "supplier":{
-         "name":"Общество с ограниченной ответственностью \"МАКСРОН\"",
-         "inn":"7734567890",
-         "kpp":"173456789",
-         "phone":"+7(800)01-01-03",
-         "email":"ruslan.1c.company@gmail.com"
+        "name":"ОАО \"ВОТКИНСКАЯ ПРОМЫШЛЕННАЯ КОМПАНИЯ\"",
+        "inn":"1828011980",
+        "kpp":"182801001",
+        "phone":null,
+        "email":"sede@1c.ru"
       },
+      "tags":[
+        "Order"
+      ],
       "items":[
-         {
-            "tradeOfferId":"8e61bed4-582b-4bca-82a4-2e8b19ae808a",
-            "productName":"Infineon IPB144N12N3GATMA1 N-channel MOSFET, 56 A, 120 V OptiMOS 3, 3-Pin D2PAK",
-            "productDescription":"Высота: 4.572мм\nШирина: 9.45мм\nТипичный заряд затвора при Vgs: 37 нКл\nМаксимальный непрерывный ток стока: 56 А\nРазмеры: 10.312 x 9.45 x 4.572мм\nПрямая активная межэлектродная проводимость: 62s\nТип корпуса: D2PAK (TO-263)\nТипичное время задержки выключения: 24 нс\nКатегория: Мощный МОП-транзистор\nТипичное время задержки включения: 16 нс\nСерия: OptiMOS 3\nДлина: 10.31мм\nМаксимальное сопротивление сток-исток: 14,7 мΩ\nТипичная входная емкость при Vds: 2420 пФ при 60 В",
-            "barCodes":[
-
-            ],
-            "partNumber":null,
-            "unitOkei":{
-               "code":"796",
-               "nsymb":"шт",
-               "name":"Штука"
+        {
+          "tradeOfferId":"54607354-65bf-40a4-938f-f9a39e0a63fc",
+          "productName":"Ледянка 2 \"Ветерок\"",
+          "productDescription":"Детская ледянка выполнена из высокопрочного пластика, устойчивого к перепадам температуры.Размеры ледянки (ДхШхВ): 44,0 х 34,5 х 8,5 см.",
+          "barCodes":[
+            ""
+          ],
+          "partNumber":"826228",
+          "unitOkei":{
+            "code":"796",
+            "nsymb":"шт",
+            "name":"Штука"
+          },
+          "packaging":"Штука",
+          "imageUrls":[
+            "/supplier-nomenclatures/images/sn-images/ba03944b-5d65-48f7-baea-2fceae6a0930/30771702-e791-4b7b-80a3-e535bed6cf0f"
+          ],
+          "quantity":1,
+          "price":5998,
+          "priceIncludesVAT":true,
+          "vat":"VAT_20",
+          "itemTotal":{
+            "total":5998,
+            "totalVat":1000,
+            "currencyCode":"643"
+          },
+          "maxDaysForShipment":null,
+          "_links":{
+            "marketplace:shopping-cart-update-item-quantity":{
+              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/54607354-65bf-40a4-938f-f9a39e0a63fc/quantity"
             },
-            "packaging":"Штука",
-            "imageUrls":[
-               "https://catalog-pic.1c.ru/api/v1/0/4/3/7/04378cd3efb7235d08ce208b66670b8c4.jpg",
-               "https://catalog-pic.1c.ru/api/v1/0/d/3/3/0d339e1e08da03b2bb1476a795d5d4e6e.jpg"
-            ],
-            "quantity":2,
-            "price":100000,
-            "priceIncludesVAT": true,
-            "itemTotal":{
-               "total":200000,
-               "totalVat":18182,
-               "currencyCode":"643"
+            "marketplace:shopping-cart-remove-item":{
+              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/54607354-65bf-40a4-938f-f9a39e0a63fc"
             },
-            "maxDaysForShipment":1,
-            "_links": {
-              "marketplace:trade-offer-view": {
-                "href": "https://todo-api.1cbn.ru/trade-offers/storefront/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
-              },
-              "marketplace:shopping-cart-remove-item": {
-                "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a"
-              },
-              "marketplace:shopping-cart-update-item-quantity": {
-                "href": "https://market.1cbn.rus:4200/proxifier/shopping-carts/d940e6b9-9631-483a-9bef-47d0a8d1c4da/items/8e61bed4-582b-4bca-82a4-2e8b19ae808a/quantity"
-              }
+            "marketplace:trade-offer-view":{
+              "href":"https://bnet-api-stage.1c.ru/market/trade-offers/storefront/54607354-65bf-40a4-938f-f9a39e0a63fc"
             }
-         }
+          }
+        }
       ],
       "deliveryOptions":{
-         "deliveryZones":[
-            {
-               "fiasCode": null,
-               "title": "Россия",
-               "countryOksmCode":"643"
-            }
-         ]
+        "pickupPoints":[
+          {
+            "fiasCode":"cf77eabf-d067-4729-b5a5-3912055191e7",
+            "title":"Московская обл, Электрогорск г, Советская ул, дом 3",
+            "countryOksmCode":"643"
+          }
+        ],
+        "deliveryZones":[
+          {
+            "fiasCode":"639efe9d-3fc8-4438-8e70-ec4f2321f2a7",
+            "title":"Белгородская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"f5807226-8be0-4ea8-91fc-39d053aec1e2",
+            "title":"Брянская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"b8837188-39ee-4ff9-bc91-fcc9ed451bb3",
+            "title":"Владимирская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"b756fe6b-bbd3-44d5-9302-5bfcc740f46e",
+            "title":"Воронежская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"0824434f-4098-4467-af72-d4f702fed335",
+            "title":"Ивановская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"18133adf-90c2-438e-88c4-62c41656de70",
+            "title":"Калужская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"15784a67-8cea-425b-834a-6afe0e3ed61c",
+            "title":"Костромская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"ee594d5e-30a9-40dc-b9f2-0add1be44ba1",
+            "title":"Курская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"1490490e-49c5-421c-9572-5673ba5d80c8",
+            "title":"Липецкая обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"29251dcf-00a1-4e34-98d4-5c47484a36d4",
+            "title":"Московская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"5e465691-de23-4c4e-9f46-f35a125b5970",
+            "title":"Орловская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"963073ee-4dfc-48bd-9a70-d2dfc6bd1f31",
+            "title":"Рязанская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"e8502180-6d08-431b-83ea-c7038f0df905",
+            "title":"Смоленская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"a9a71961-9363-44ba-91b5-ddf0463aebc2",
+            "title":"Тамбовская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"61723327-1c20-42fe-8dfa-402638d9b396",
+            "title":"Тверская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"d028ec4f-f6da-4843-ada6-b68b3e0efa3d",
+            "title":"Тульская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"a84b2ef4-db03-474b-b552-6229e801ae9b",
+            "title":"Ярославская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+            "title":"Москва г",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"d8327a56-80de-4df2-815c-4f6ab1224c50",
+            "title":"Адыгея респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"491cde9d-9d76-4591-ab46-ea93c079e686",
+            "title":"Калмыкия респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"bd8e6511-e4b9-4841-90de-6bbc231a789e",
+            "title":"Крым респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"d00e1013-16bd-4c09-b3d5-3cb09fc54bd8",
+            "title":"Краснодарский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"83009239-25cb-4561-af8e-7ee111b1cb73",
+            "title":"Астраханская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"da051ec8-da2e-4a66-b542-473b8d221ab4",
+            "title":"Волгоградская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"f10763dc-63e3-48db-83e1-9c566fe3092b",
+            "title":"Ростовская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"6fdecb78-893a-4e3f-a5ba-aa062459463b",
+            "title":"Севастополь г",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"0bb7fa19-736d-49cf-ad0e-9774c4dae09b",
+            "title":"Дагестан респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"b2d8cd20-cabc-4deb-afad-f3c4b4d55821",
+            "title":"Ингушетия респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"1781f74e-be4a-4697-9c6b-493057c94818",
+            "title":"Кабардино-Балкарская респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"61b95807-388a-4cb1-9bee-889f7cf811c8",
+            "title":"Карачаево-Черкесская респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"de459e9c-2933-4923-83d1-9c64cfd7a817",
+            "title":"Северная Осетия - Алания респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"de67dc49-b9ba-48a3-a4cc-c2ebfeca6c5e",
+            "title":"Чеченская респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"327a060b-878c-4fb4-8dc4-d5595871a3d8",
+            "title":"Ставропольский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"6f2cbfd8-692a-4ee4-9b16-067210bde3fc",
+            "title":"Башкортостан респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"de2cbfdf-9662-44a4-a4a4-8ad237ae4a3e",
+            "title":"Марий Эл респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"37a0c60a-9240-48b5-a87f-0d8c86cdb6e1",
+            "title":"Мордовия респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"0c089b04-099e-4e0e-955a-6bf1ce525f1a",
+            "title":"Татарстан респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"52618b9c-bcbb-47e7-8957-95c63f0b17cc",
+            "title":"Удмуртская респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"878fc621-3708-46c7-a97f-5a13a4176b3e",
+            "title":"Чувашская Республика - Чувашия",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"4f8b1a21-e4bb-422f-9087-d3cbf4bebc14",
+            "title":"Пермский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"0b940b96-103f-4248-850c-26b6c7296728",
+            "title":"Кировская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"88cd27e2-6a8a-4421-9718-719a28a0a088",
+            "title":"Нижегородская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"8bcec9d6-05bc-4e53-b45c-ba0c6f3a5c44",
+            "title":"Оренбургская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"c99e7924-0428-4107-a302-4fd7c0cca3ff",
+            "title":"Пензенская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"df3d7359-afa9-4aaa-8ff9-197e73906b1c",
+            "title":"Самарская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"df594e0e-a935-4664-9d26-0bae13f904fe",
+            "title":"Саратовская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"fee76045-fe22-43a4-ad58-ad99e903bd58",
+            "title":"Ульяновская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"4a3d970f-520e-46b9-b16c-50d4ca7535a8",
+            "title":"Курганская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"92b30014-4d52-4e2e-892d-928142b924bf",
+            "title":"Свердловская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"54049357-326d-4b8f-b224-3c6dc25d6dd3",
+            "title":"Тюменская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"27eb7c10-a234-44da-a59c-8b1f864966de",
+            "title":"Челябинская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"d66e5325-3a25-4d29-ba86-4ca351d9704b",
+            "title":"Ханты-Мансийский Автономный округ - Югра ао",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"826fa834-3ee8-404f-bdbc-13a5221cfb6e",
+            "title":"Ямало-Ненецкий ао",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"5c48611f-5de6-4771-9695-7e36a4e7529d",
+            "title":"Алтай респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"026bc56f-3731-48e9-8245-655331f596c0",
+            "title":"Тыва респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"8d3f1d35-f0f4-41b5-b5b7-e7cadf3e7bd7",
+            "title":"Хакасия респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"8276c6a1-1a86-4f0d-8920-aba34d4cc34a",
+            "title":"Алтайский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"db9c4f8b-b706-40e2-b2b4-d31b98dcd3d1",
+            "title":"Красноярский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"6466c988-7ce3-45e5-8b97-90ae16cb1249",
+            "title":"Иркутская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"393aeccb-89ef-4a7e-ae42-08d5cebc2e30",
+            "title":"Кемеровская область - Кузбасс",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"1ac46b49-3209-4814-b7bf-a509ea1aecd9",
+            "title":"Новосибирская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"05426864-466d-41a3-82c4-11e61cdc98ce",
+            "title":"Омская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"889b1f3a-98aa-40fc-9d3d-0f41192758ab",
+            "title":"Томская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"a84ebed3-153d-4ba9-8532-8bdf879e1f5a",
+            "title":"Бурятия респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"c225d3db-1db6-4063-ace0-b3fe9ea3805f",
+            "title":"Саха /Якутия/ респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"b6ba5716-eb48-401b-8443-b197c9578734",
+            "title":"Забайкальский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"d02f30fc-83bf-4c0f-ac2b-5729a866a207",
+            "title":"Камчатский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"43909681-d6e1-432d-b61f-ddac393cb5da",
+            "title":"Приморский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"7d468b39-1afa-41ec-8c4f-97a8603cb3d4",
+            "title":"Хабаровский край",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"844a80d6-5e31-4017-b422-4d9c01e9942c",
+            "title":"Амурская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"9c05e812-8679-4710-b8cb-5e8bd43cdf48",
+            "title":"Магаданская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"aea6280f-4648-460f-b8be-c2bc18923191",
+            "title":"Сахалинская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"1b507b09-48c9-434f-bf6f-65066211c73e",
+            "title":"Еврейская аобл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"f136159b-404a-4f1f-8d8d-d169e1374d5c",
+            "title":"Чукотский ао",
+            "countryOksmCode":"643"
+          }
+        ]
       },
       "orderTotal":{
-         "total":200000,
-         "totalVat":18182,
-         "currencyCode":"643"
+        "total":5998,
+        "totalVat":1000,
+        "currencyCode":"643"
       },
       "_links":{
-         "marketplace:make-order":{
-            "href":"proxifier/shopping-carts/777888999/order/4444444"
-         }
+        "self":{
+          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-10f042fa-6b77-47bf-9208-b6a02f4c06eb"
+        },
+        "marketplace:make-order":{
+          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/10f042fa-6b77-47bf-9208-b6a02f4c06eb"
+        }
+      }
+    },
+    {
+      "supplier":{
+        "name":"ОАО \"ВОТКИНСКАЯ ПРОМЫШЛЕННАЯ КОМПАНИЯ\"",
+        "inn":"1828011980",
+        "kpp":"182801001",
+        "phone":null,
+        "email":"sede@1c.ru"
+      },
+      "tags":[
+        "Order"
+      ],
+      "items":[
+        {
+          "tradeOfferId":"55cff843-f545-4e71-b9d2-0a1de46d713d",
+          "productName":"Ледянка 2 \"Ветерок\"",
+          "productDescription":"Размеры ледянки (ДхШхВ): 44,0 х 34,5 х 8,5 см\nДетская ледянка выполнена из высокопрочного пластика, устойчивого к перепадам температуры.",
+          "barCodes":[
+            ""
+          ],
+          "partNumber":"826228",
+          "unitOkei":{
+            "code":"796",
+            "nsymb":"шт",
+            "name":"Штука"
+          },
+          "packaging":"Штука",
+          "imageUrls":[
+            "/supplier-nomenclatures/images/sn-images/ba03944b-5d65-48f7-baea-2fceae6a0930/30771702-e791-4b7b-80a3-e535bed6cf0f"
+          ],
+          "quantity":1,
+          "price":5383,
+          "priceIncludesVAT":true,
+          "vat":"VAT_20",
+          "itemTotal":{
+            "total":5383,
+            "totalVat":897,
+            "currencyCode":"643"
+          },
+          "maxDaysForShipment":null,
+          "_links":{
+            "marketplace:shopping-cart-update-item-quantity":{
+              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/55cff843-f545-4e71-b9d2-0a1de46d713d/quantity"
+            },
+            "marketplace:shopping-cart-remove-item":{
+              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/55cff843-f545-4e71-b9d2-0a1de46d713d"
+            },
+            "marketplace:trade-offer-view":{
+              "href":"https://bnet-api-stage.1c.ru/market/trade-offers/storefront/55cff843-f545-4e71-b9d2-0a1de46d713d"
+            }
+          }
+        }
+      ],
+      "deliveryOptions":{
+        "pickupPoints":[
+          {
+            "fiasCode":"cf77eabf-d067-4729-b5a5-3912055191e7",
+            "title":"Московская обл, Электрогорск г, Советская ул, дом 3",
+            "countryOksmCode":"643"
+          }
+        ],
+        "deliveryZones":[
+          {
+            "fiasCode":"c2deb16a-0330-4f05-821f-1d09c93331e6",
+            "title":"Санкт-Петербург г",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"248d8071-06e1-425e-a1cf-d1ff4c4a14a8",
+            "title":"Карелия респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"c20180d9-ad9c-46d1-9eff-d60bc424592a",
+            "title":"Коми респ",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"294277aa-e25d-428c-95ad-46719c4ddb44",
+            "title":"Архангельская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"ed36085a-b2f5-454f-b9a9-1c9a678ee618",
+            "title":"Вологодская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"90c7181e-724f-41b3-b6c6-bd3ec7ae3f30",
+            "title":"Калининградская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"6d1ebb35-70c6-4129-bd55-da3969658f5d",
+            "title":"Ленинградская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"1c727518-c96a-4f34-9ae6-fd510da3be03",
+            "title":"Мурманская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"e5a84b81-8ea1-49e3-b3c4-0528651be129",
+            "title":"Новгородская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"f6e148a1-c9d0-4141-a608-93e3bd95e6c4",
+            "title":"Псковская обл",
+            "countryOksmCode":"643"
+          },
+          {
+            "fiasCode":"826fa834-3ee8-404f-bdbc-13a5221cfb6e",
+            "title":"Ямало-Ненецкий ао",
+            "countryOksmCode":"643"
+          }
+        ]
+      },
+      "orderTotal":{
+        "total":5383,
+        "totalVat":897,
+        "currencyCode":"643"
+      },
+      "_links":{
+        "self":{
+          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-03ba77c8-c01f-454e-a712-179cfcf2ea67"
+        },
+        "marketplace:make-order":{
+          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/03ba77c8-c01f-454e-a712-179cfcf2ea67"
+        }
       }
     }
   ],
-  "_links": {
-    "marketplace:shopping-cart-add-item": {
-      "title": "Добавить товар в корзину",
-      "href": "proxifier/shopping-carts/777888999/items"
+  "_links":{
+    "marketplace:shopping-cart-add-item":{
+      "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items"
     }
   }
 }

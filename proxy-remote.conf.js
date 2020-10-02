@@ -10,7 +10,9 @@ const mainRegions = fs.readFileSync('./proxy-remote-assets/locations__main-regio
 const userOrganizations1 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-1.json').toString();
 const userOrganizations2 = fs.readFileSync('./proxy-remote-assets/organizations__user-organizations-2.json').toString();
 const organizationsById = fs.readFileSync('./proxy-remote-assets/organizations__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
-const organizationsProfilesById = fs.readFileSync('./proxy-remote-assets/organizations-profiles__01f85410-45dc-4f20-902b-f6aba5be3497.json').toString();
+const organizationsProfilesById = fs
+  .readFileSync('./proxy-remote-assets/organizations-profiles__01f85410-45dc-4f20-902b-f6aba5be3497.json')
+  .toString();
 const organizationAdmins = fs.readFileSync('./proxy-remote-assets/organizations__admins__12345.json').toString();
 const organizationByLegalId = fs.readFileSync('./proxy-remote-assets/organizations__by-legal-id__12345.json').toString();
 const organizationUsers = fs.readFileSync('./proxy-remote-assets/organizations__id__users.json').toString();
@@ -22,19 +24,19 @@ const tradeOffersById = fs.readFileSync('./proxy-remote-assets/trade-offers__f52
 const tradeOffers = fs.readFileSync('./proxy-remote-assets/trade-offers__search.json').toString();
 const accounts = fs.readFileSync('./proxy-remote-assets/accounts.json').toString();
 const orders = fs.readFileSync('./proxy-remote-assets/orders.json').toString();
+const accountsId = fs.readFileSync('./proxy-remote-assets/accounts__ID.json').toString();
+const ordersId = fs.readFileSync('./proxy-remote-assets/orders__ID.json').toString();
 const accessKey = fs.readFileSync('./proxy-remote-assets/access-keys__obtain.json').toString();
 const accessKeys = fs.readFileSync('./proxy-remote-assets/organizations__access-keys.json').toString();
-
 
 const PROXY_CONFIG = [
   {
     context: '/proxifier',
     secure: false,
     changeOrigin: true,
-    logLevel: "debug",
+    logLevel: 'debug',
     methods: ['POST', 'GET', 'DELETE', 'PUT'],
     bypass: (req, res, proxyOptions) => {
-
       const pathsObject = {
         '/proxifier/auth': /^\/proxifier\/auth\/?$/i,
         '/proxifier/categories': /^\/proxifier\/categories\/?$/i,
@@ -73,6 +75,8 @@ const PROXY_CONFIG = [
         '/proxifier/shopping-carts/:id/order/:orderId': /^\/proxifier\/shopping-carts\/(?:([^\/]+?))\/order\/(?:([^\/]+?))\/?$/i,
         '/proxifier/edi/orders': /^\/proxifier\/edi\/orders\/?$/i,
         '/proxifier/edi/accounts': /^\/proxifier\/edi\/accounts\/?$/i,
+        '/proxifier/edi/orders/:id': /^\/proxifier\/edi\/orders\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/edi/accounts/:id': /^\/proxifier\/edi\/accounts\/(?:([^\/]+?))\/?$/i,
       };
 
       if (req.method === 'POST' && pathsObject['/proxifier/auth'].test(req.originalUrl.split('?')[0])) {
@@ -129,7 +133,19 @@ const PROXY_CONFIG = [
         return true;
       }
 
-      if (req.method === 'GET' && pathsObject['/proxifier/organizations/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('user-organizations') && !req.originalUrl.split('?')[0].includes('admins') && !req.originalUrl.split('?')[0].includes('by-legal-id') && !req.originalUrl.split('?')[0].includes('participation-requests') && !req.originalUrl.split('?')[0].includes('own-participation-requests') && !req.originalUrl.split('?')[0].includes('access-keys') && !req.originalUrl.split('?')[0].includes('profiles') && !req.originalUrl.split('?')[0].includes('contact') && !req.originalUrl.split('?')[0].includes('users')) {
+      if (
+        req.method === 'GET' &&
+        pathsObject['/proxifier/organizations/:id'].test(req.originalUrl.split('?')[0]) &&
+        !req.originalUrl.split('?')[0].includes('user-organizations') &&
+        !req.originalUrl.split('?')[0].includes('admins') &&
+        !req.originalUrl.split('?')[0].includes('by-legal-id') &&
+        !req.originalUrl.split('?')[0].includes('participation-requests') &&
+        !req.originalUrl.split('?')[0].includes('own-participation-requests') &&
+        !req.originalUrl.split('?')[0].includes('access-keys') &&
+        !req.originalUrl.split('?')[0].includes('profiles') &&
+        !req.originalUrl.split('?')[0].includes('contact') &&
+        !req.originalUrl.split('?')[0].includes('users')
+      ) {
         res.status(200);
         res.end(organizationsById);
         return true;
@@ -167,13 +183,13 @@ const PROXY_CONFIG = [
 
       if (req.method === 'GET' && pathsObject['/proxifier/organizations/admins/:id'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
-        res.end(Math.random() < .5 ? organizationAdmins : '[]');
+        res.end(Math.random() < 0.5 ? organizationAdmins : '[]');
         return true;
       }
 
       if (req.method === 'GET' && pathsObject['/proxifier/organizations/by-legal-id/:id'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
-        res.end(Math.random() < .5 ? organizationByLegalId : '');
+        res.end(Math.random() < 0.5 ? organizationByLegalId : '');
         return true;
       }
 
@@ -195,13 +211,19 @@ const PROXY_CONFIG = [
         return true;
       }
 
-      if (req.method === 'PUT' && pathsObject['/proxifier/organizations/participation-requests/:id/accept'].test(req.originalUrl.split('?')[0])) {
+      if (
+        req.method === 'PUT' &&
+        pathsObject['/proxifier/organizations/participation-requests/:id/accept'].test(req.originalUrl.split('?')[0])
+      ) {
         res.status(200);
         res.end('');
         return true;
       }
 
-      if (req.method === 'PUT' && pathsObject['/proxifier/organizations/participation-requests/:id/reject'].test(req.originalUrl.split('?')[0])) {
+      if (
+        req.method === 'PUT' &&
+        pathsObject['/proxifier/organizations/participation-requests/:id/reject'].test(req.originalUrl.split('?')[0])
+      ) {
         res.status(200);
         res.end('');
         return true;
@@ -244,13 +266,21 @@ const PROXY_CONFIG = [
         return true;
       }
 
-      if (req.method === 'GET' && pathsObject['/proxifier/trade-offers/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('search')) {
+      if (
+        req.method === 'GET' &&
+        pathsObject['/proxifier/trade-offers/:id'].test(req.originalUrl.split('?')[0]) &&
+        !req.originalUrl.split('?')[0].includes('search')
+      ) {
         res.status(200);
         res.end(tradeOffersById);
         return true;
       }
 
-      if (req.method === 'GET' && pathsObject['/proxifier/trade-offers/find/:id'].test(req.originalUrl.split('?')[0]) && !req.originalUrl.split('?')[0].includes('search')) {
+      if (
+        req.method === 'GET' &&
+        pathsObject['/proxifier/trade-offers/find/:id'].test(req.originalUrl.split('?')[0]) &&
+        !req.originalUrl.split('?')[0].includes('search')
+      ) {
         res.status(200);
         res.end(tradeOffersById);
         return true;
@@ -271,7 +301,7 @@ const PROXY_CONFIG = [
 
       if (req.method === 'GET' && pathsObject['/proxifier/shopping-carts/:id'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
-        res.end(Math.random() < .5 ? cartData : '{"content":[]}');
+        res.end(Math.random() < 0.5 ? cartData : '{"content":[]}');
         return true;
       }
 
@@ -319,9 +349,19 @@ const PROXY_CONFIG = [
         return true;
       }
 
+      if (req.method === 'GET' && pathsObject['/proxifier/edi/orders/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(ordersId);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/edi/accounts/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(accountsId);
+        return true;
+      }
     },
   },
-
 ];
 
 module.exports = PROXY_CONFIG;

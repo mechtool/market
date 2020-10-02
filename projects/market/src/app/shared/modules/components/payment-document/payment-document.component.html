@@ -53,11 +53,8 @@
 
   <hr>
 
-  <p>{{document.sender.role}}: {{name(document.sender.name)}},
-    ИНН {{document.sender.inn}}{{kpp(document.sender.kpp)}}</p>
-
-  <p>{{document.recipient.role}}: {{name(document.recipient.name)}},
-    ИНН {{document.recipient.inn}}{{kpp(document.recipient.kpp)}}</p>
+  <p>{{document | marketCounterPartLine:'sender'}}</p>
+  <p>{{document | marketCounterPartLine:'recipient'}}</p>
 
   <table>
     <tr>
@@ -101,6 +98,7 @@
   <hr>
 
   <p>Исполнитель: {{document.signatory}}</p>
+  <p *ngIf="document.comment">Комментарий: {{document.comment}}</p>
 </div>
 
 <div class="error" *ngIf="isError">

@@ -7,6 +7,7 @@ export class CommerceMlDocumentResponseModel {
   currency: string;
   course: number;
   totalSum: number;
+  comment: string;
   sender: Organization;
   recipient: Organization;
   products: Product[];

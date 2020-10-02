@@ -1,0 +1,79 @@
+{
+  "id":"ab6646f0-b6e8-4083-b1b7-a62fde09215a",
+  "numberOperation":"Заказ ООО Весна от 02-10-2020 01-46",
+  "dateOperation":1601596800000,
+  "typeOperation":"Заказ товара",
+  "role":"Покупатель",
+  "currency":"643",
+  "course":null,
+  "totalSum":209,
+  "comment":"Желаемая дата доставки: 17-10-2020 04:46. КОММЕНТ тестовый",
+  "sender":{
+    "name":"ООО Весна",
+    "inn":"7175295816",
+    "kpp":"452244434",
+    "contact":null,
+    "role":"Покупатель",
+    "paymentAccount":null
+  },
+  "recipient":{
+    "name":"ООО \"МЕТРО Кэш энд Керри Россия\"",
+    "inn":"7704218694",
+    "kpp":"774301001",
+    "contact":null,
+    "role":"Продавец",
+    "paymentAccount":null
+  },
+  "products":[
+    {
+      "partNumber":"8994",
+      "productName":"Вино Vicente GANDIA El Pescaito розовое сухое, 0,75",
+      "baseUnit":{
+        "code":"796",
+        "shortName":"шт",
+        "fullName":"Штука"
+      },
+      "price":209,
+      "amount":1,
+      "totalPrice":209,
+      "coefficient":1,
+      "tax":{
+        "name":"НДС",
+        "vat":"20",
+        "vatSum":34.83,
+        "includesVat":true
+      }
+    }
+  ],
+  "signatory":"Бенедикт Иоганович Тестеров",
+  "outcome":[
+    {
+      "key":"ИтогиПрописью",
+      "value":"Всего наименований 1 на сумму двести девять рублей 00 копеек"
+    },
+    {
+      "key":"Список",
+      "value":"ДокументыСделки"
+    },
+    {
+      "key":"Нпп",
+      "value":"0"
+    },
+    {
+      "key":"СуммаИтог",
+      "value":"209.00"
+    },
+    {
+      "key":"СуммаНалогаИтог",
+      "value":"34.83"
+    },
+    {
+      "key":"ЦенаВключаетНДС",
+      "value":"Да"
+    },
+    {
+      "key":"СуммаБезСкидкиИтог",
+      "value":"209.00"
+    }
+  ]
+}

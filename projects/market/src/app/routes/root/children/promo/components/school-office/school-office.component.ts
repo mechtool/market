@@ -16,7 +16,7 @@ export class PromoSchoolOfficeComponent {
       title: 'КИТ ХОББИ',
       btnLink: '/supplier/e911cf76-6ed8-4c03-b6be-4e8aee3465fe',
       description: '- 5% в категории «Товары для офиса», доставка по РФ от 1900 р.',
-      imgUrl: 'assets/img/promo/school-office/kit-hobby.png',
+      imgUrl: 'assets/img/promo/school-office/kit-hobby.jpg',
     },
     {
       title: 'А-ЦИФРА',
