@@ -3,7 +3,6 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { innConditionValidator, innKppConditionValidator } from './requisites-condition.validator';
 
-
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-requisites-checker',
@@ -15,18 +14,25 @@ export class RequisitesCheckerComponent implements OnInit {
   form: FormGroup;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _fb: FormBuilder) {
-  }
+  constructor(private _fb: FormBuilder) {}
 
   ngOnInit() {
     this._initForm();
   }
 
   private _initForm(): void {
-    this.form = this._fb.group({
-      inn: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), innConditionValidator]),
-      kpp: new FormControl('', [Validators.pattern('^[0-9]*$'), Validators.min(100000000), Validators.max(999999999)]),
-    }, { validator: innKppConditionValidator });
+    this.form = this._fb.group(
+      {
+        inn: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), innConditionValidator]),
+        kpp: new FormControl('', [Validators.pattern('^[0-9]*$'), Validators.min(100000000), Validators.max(999999999)]),
+      },
+      { validator: innKppConditionValidator },
+    );
+  }
+
+  onlyNumberKey(event) {
+    const charCode = event.query ? event.query : event.keyCode;
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
   }
 
   nexStep() {
@@ -44,10 +50,8 @@ export class RequisitesCheckerComponent implements OnInit {
   send() {
     const data = {
       inn: this.form.get('inn').value,
-      ...(this.form.get('kpp').value) && { kpp: this.form.get('kpp').value },
+      ...(this.form.get('kpp').value && { kpp: this.form.get('kpp').value }),
     };
     this.legalRequisitesChange.emit(data);
   }
 }
-
-
