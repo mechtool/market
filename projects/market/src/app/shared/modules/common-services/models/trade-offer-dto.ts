@@ -1,13 +1,14 @@
 import { AudienceModel } from './audience-model';
 import { TradeOffersModel } from './trade-offers.model';
-import { mapStock } from '#shared/utils';
+import { TradeOfferStockEnumModel } from '#shared/modules';
 
 export class TradeOfferDto {
   id: string;
   description?: string;
   price?: number;
   currencyCode?: string;
-  stock?: string; // todo: Должно быть number, но пока в апи такого нет
+  stock?: TradeOfferStockEnumModel;
+  amount?: number;
   supplierId?: string;
   supplierName?: string;
   audience?: AudienceModel[];
@@ -18,7 +19,8 @@ export class TradeOfferDto {
       description: offer.offerDescription?.title || offer.offerDescription?.description,
       price: offer.price,
       currencyCode: offer.currency?.numericCode,
-      stock: mapStock(offer.stock),
+      stock: offer.stockBalanceSummary?.level,
+      amount: offer.stockBalanceSummary?.amount,
       supplierId: offer.supplier?.id,
       supplierName: offer.supplier?.name,
       audience: offer.audience,

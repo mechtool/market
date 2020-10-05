@@ -24,9 +24,9 @@
             </a>
         </span>
       </div>
-      <div class="product_specs__item" *ngIf="stock">
+      <div class="product_specs__item" *ngIf="stockAmount || stockLevel || temporarilyOutOfSales">
         <span class="product_specs__item__label">Наличие:</span>
-        <span class="product_specs__item__value"><strong>{{stockLevel}}</strong></span>
+        <span class="product_specs__item__value"><strong>{{stockAmount | marketStock : stockLevel : temporarilyOutOfSales}}</strong></span>
       </div>
     </div>
   </div>
@@ -67,9 +67,9 @@
       <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
       <span class="product_specs__item__value"><strong>&nbsp;&nbsp;{{name}}</strong></span>
     </div>
-    <div class="product_specs__item" *ngIf="stock">
+    <div class="product_specs__item" *ngIf="stockAmount || stockLevel || temporarilyOutOfSales">
       <span class="product_specs__item__label">Наличие:</span>
-      <span class="product_specs__item__value"><strong>{{stock}}</strong></span>
+      <span class="product_specs__item__value"><strong>{{stockAmount | marketStock : stockLevel : temporarilyOutOfSales}}</strong></span>
     </div>
   </div>
 </div>

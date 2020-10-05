@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ImagesLinkModel, ProductDto } from '#shared/modules/common-services/models';
-import { absoluteImagePath, mapStock, resizeBusinessStructure } from '#shared/utils';
+import { ImagesLinkModel, ProductDto, TradeOfferStockEnumModel } from '#shared/modules/common-services/models';
+import { absoluteImagePath, resizeBusinessStructure } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -13,7 +13,9 @@ export class ProductGalleryComponent {
   @Input() product: ProductDto;
   @Input() supplierId: string;
   @Input() supplierName: string;
-  @Input() stock: string;
+  @Input() stockLevel: TradeOfferStockEnumModel;
+  @Input() stockAmount: number;
+  @Input() temporarilyOutOfSales: boolean;
   @Input() supplierLogo: string;
 
   get images(): ImagesLinkModel[] {
@@ -24,15 +26,12 @@ export class ProductGalleryComponent {
     return this.product.images || null;
   }
 
-  get stockLevel() {
-    return mapStock(this.stock);
-  }
-
   get name() {
     return resizeBusinessStructure(this.supplierName);
   }
 
-  constructor() {}
+  constructor() {
+  }
 
   firstImageUrl(imgs: ImagesLinkModel[]) {
     return imgs?.length ? this.imageUrl(imgs[0].href) : null;

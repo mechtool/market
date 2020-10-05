@@ -20,7 +20,8 @@
       <span class="catalog_item__count tooltip"
             nz-tooltip
             nzTooltipTitle="Наличие товара"
-            *ngIf="tradeOffer.stock">{{tradeOffer.stock}}</span>
+            *ngIf="tradeOffer.stock || tradeOffer.amount">
+        {{tradeOffer.amount | marketStock : tradeOffer.stock : false}}</span>
 
       <span class="catalog_item__price"
             nz-tooltip

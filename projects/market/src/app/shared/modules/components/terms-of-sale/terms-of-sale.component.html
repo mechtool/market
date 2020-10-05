@@ -1,9 +1,9 @@
 <div class="section_paragraph">
   <h3>Особенности предложения</h3>
   <div class="info_group__small">
-    <div class="info_group" *ngIf="tradeOffer.stock?.stockBalanceSummary?.level">
+    <div class="info_group" *ngIf="tradeOffer.stock?.stockBalanceSummary || tradeOffer.termsOfSale?.temporarilyOutOfSales">
       <span class="info_group__label">В наличие</span>
-      <span class="info_group__value">{{stockLevel}}</span>
+      <span class="info_group__value">{{tradeOffer.stock?.stockBalanceSummary?.amount | marketStock : tradeOffer.stock?.stockBalanceSummary?.level : tradeOffer.termsOfSale?.temporarilyOutOfSales}}</span>
     </div>
     <div class="info_group">
       <span class="info_group__label">В упаковке</span>

@@ -22,7 +22,9 @@
     [product]="product"
     [supplierName]="supplier.name"
     [supplierId]="supplier.id"
-    [stock]="tradeOffer.stock?.stockBalanceSummary?.level"
+    [stockLevel]="tradeOffer.stock?.stockBalanceSummary?.level"
+    [stockAmount]="tradeOffer.stock?.stockBalanceSummary?.amount"
+    [temporarilyOutOfSales]="tradeOffer.termsOfSale.temporarilyOutOfSales"
     [supplierLogo]="supplierLogo"
   ></market-product-gallery>
 </ng-template>

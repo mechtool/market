@@ -7,6 +7,7 @@ import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
 import { NaviCounterPipe } from './navi-counter.pipe';
 import { FoundPipe } from './found.pipe';
 import { PlaceJoinerPipe } from './place-joiner.pipe';
+import { StockPipe } from '#shared/modules/pipes/stock.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PlaceJoinerPipe } from './place-joiner.pipe';
     SumLettersPipe,
     NaviCounterPipe,
     FoundPipe,
+    StockPipe
   ],
   exports: [
     MultiplierPipe,
@@ -28,6 +30,7 @@ import { PlaceJoinerPipe } from './place-joiner.pipe';
     SumLettersPipe,
     NaviCounterPipe,
     FoundPipe,
+    StockPipe
   ],
 })
 export class PipesModule {

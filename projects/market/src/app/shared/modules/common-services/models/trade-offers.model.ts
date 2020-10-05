@@ -14,6 +14,10 @@ export class TradeOffersModel {
   vat: TradeOfferVatEnumModel;
   includesVAT: boolean;
   priceMatrix: TradeOfferPriceMatrixModel[];
+  stockBalanceSummary: {
+    level: TradeOfferStockEnumModel;
+    amount: number;
+  };
   stock: TradeOfferStockEnumModel;
   supplier: TradeOffersSupplierModel;
   orderPlacingReference: string;

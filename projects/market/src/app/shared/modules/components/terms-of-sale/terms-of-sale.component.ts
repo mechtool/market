@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CountryCode, TradeOfferResponseModel } from '#shared/modules/common-services/models';
-import { mapStock } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -17,13 +16,6 @@ import { mapStock } from '#shared/utils';
 export class TermsOfSaleComponent {
 
   @Input() tradeOffer: TradeOfferResponseModel;
-
-  get stockLevel(): string {
-    if (this.tradeOffer.termsOfSale.temporarilyOutOfSales) {
-      return 'снят с продажи';
-    }
-    return mapStock(this.tradeOffer.stock?.stockBalanceSummary?.level);
-  }
 
   get packaging(): string | number {
     const units = this.tradeOffer.termsOfSale.packaging.unitsNumerator / this.tradeOffer.termsOfSale.packaging.unitsDenominator;

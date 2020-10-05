@@ -6,13 +6,17 @@ import {
   SortModel,
   SuppliersItemModel,
   TradeOfferPriceMatrixModel,
-  TradeOfferStockEnumModel,
   TradeOfferSummaryModel,
   TradeOfferSummaryPriceModel,
   TradeOfferVatEnumModel,
 } from '#shared/modules';
 import { Router } from '@angular/router';
-import { absoluteImagePath, currencyCode, hasRequiredParameters, mapStock, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
+import {
+  absoluteImagePath,
+  currencyCode,
+  hasRequiredParameters,
+  queryParamsWithoutSupplierIdFrom
+} from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 
 @Component({
@@ -43,7 +47,8 @@ export class SupplierTradeOffersListComponent {
     return this.tradeOffersTotal < MAX_VALUE ? this.tradeOffersTotal : MAX_VALUE;
   }
 
-  constructor(private _router: Router, private _localStorageService: LocalStorageService) {}
+  constructor(private _router: Router, private _localStorageService: LocalStorageService) {
+  }
 
   price(matrix: TradeOfferPriceMatrixModel[]): number {
     if (matrix?.length) {
@@ -111,13 +116,6 @@ export class SupplierTradeOffersListComponent {
       return `от ${fromPackages} шт.`;
     }
     return null;
-  }
-
-  stock(level: TradeOfferStockEnumModel, temporarilyOutOfSales: boolean) {
-    if (temporarilyOutOfSales) {
-      return 'снят с продажи';
-    }
-    return mapStock(level);
   }
 
   routeToTradeOffer(tradeOfferId: string) {
