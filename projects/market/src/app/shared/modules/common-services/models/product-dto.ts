@@ -13,6 +13,7 @@ export class ProductDto {
   features?: ProductFeatureDto[];
   manufacturer?: ProductManufacturerDto;
   images?: ImagesLinkDto[];
+  publicationDate?: string;
 
   static fromProductOffer(product: ProductModel): ProductDto {
     return {
@@ -45,6 +46,7 @@ export class ProductDto {
       features: _mapRequisites(tradeOffer.product),
       manufacturer: _mapManufacture(tradeOffer.product),
       images: _mapImages(tradeOffer.product),
+      publicationDate: tradeOffer.publicationDate,
     };
   }
 }

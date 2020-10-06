@@ -28,7 +28,12 @@
         <span class="product_specs__item__label">Наличие:</span>
         <span class="product_specs__item__value"><strong>{{stockAmount | marketStock : stockLevel : temporarilyOutOfSales}}</strong></span>
       </div>
+      <div class="product_specs__item" *ngIf="product.publicationDate">
+        <span class="product_specs__item__label">Опубликовано:</span>
+        <span class="product_specs__item__value">{{product.publicationDate | date:'dd MMMM yyyy г.'}}</span>
+      </div>
     </div>
+
   </div>
 
   <div class="carousel">
