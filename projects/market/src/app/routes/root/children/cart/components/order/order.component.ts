@@ -165,7 +165,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
     private _externalProvidersService: ExternalProvidersService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._getDeliveryMethods(this.order.deliveryOptions)
@@ -381,17 +382,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryCity')
       .valueChanges.pipe(
-        switchMap((city) => {
-          if (city?.length > 1) {
-            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
-            return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
-          }
-          return of([]);
-        }),
-      )
+      switchMap((city) => {
+        if (city?.length > 1) {
+          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
+          return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
+        }
+        return of([]);
+      }),
+    )
       .subscribe(
         (cities) => {
           this.selectedAddress = null;
@@ -409,19 +410,19 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryStreet')
       .valueChanges.pipe(
-        switchMap((street) => {
-          if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
-            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-            const query = {
-              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-              deliveryStreet: street,
-            };
-            return this._locationService.searchAddresses(query, Level.STREET);
-          }
-          return of([]);
-        }),
-      )
+      switchMap((street) => {
+        if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
+          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+          const query = {
+            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+            deliveryStreet: street,
+          };
+          return this._locationService.searchAddresses(query, Level.STREET);
+        }
+        return of([]);
+      }),
+    )
       .subscribe(
         (cities) => {
           this.selectedAddress = null;
@@ -438,18 +439,18 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryHouse')
       .valueChanges.pipe(
-        switchMap((house) => {
-          if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
-            const query = {
-              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-              deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
-              deliveryHouse: house,
-            };
-            return this._locationService.searchAddresses(query, Level.HOUSE);
-          }
-          return of([]);
-        }),
-      )
+      switchMap((house) => {
+        if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
+          const query = {
+            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+            deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
+            deliveryHouse: house,
+          };
+          return this._locationService.searchAddresses(query, Level.HOUSE);
+        }
+        return of([]);
+      }),
+    )
       .subscribe(
         (cities) => {
           this.foundHouses = cities.map((city) => city.house);
@@ -490,22 +491,29 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _watchItemQuantityChanges() {
-    this.itemsControls?.forEach((ctrl, ind) => {
-      const quantityControl = ctrl.controls.quantity;
+    this.itemsControls?.forEach((item, ind) => {
+      const quantityControl = item.controls.quantity;
       quantityControl.valueChanges
         .pipe(
           tap((_) => (this.isOrderLoading = true)),
-          switchMap((res) => {
+          switchMap((orderQuantity) => {
             this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
-            return res === 0
-              ? this._cartService.handleRelation(RelationEnumModel.ITEM_REMOVE, ctrl.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
-              : this._cartService.handleRelation(
-                  RelationEnumModel.ITEM_UPDATE_QUANTITY,
-                  ctrl.value['_links'][RelationEnumModel.ITEM_UPDATE_QUANTITY].href,
-                  {
-                    quantity: res,
-                  },
-                );
+            if (orderQuantity < item.controls.orderQtyMin.value) {
+              return this._cartService
+                .handleRelation(RelationEnumModel.ITEM_REMOVE, item.value['_links'][RelationEnumModel.ITEM_REMOVE].href);
+            }
+
+            if (orderQuantity % item.controls.orderQtyStep.value !== 0) {
+              orderQuantity = orderQuantity - (orderQuantity % item.controls.orderQtyStep.value);
+            }
+
+            return this._cartService
+              .handleRelation(RelationEnumModel.ITEM_UPDATE_QUANTITY,
+                item.value['_links'][RelationEnumModel.ITEM_UPDATE_QUANTITY].href,
+                {
+                  quantity: orderQuantity,
+                },
+              );
           }),
           catchError((_) => {
             return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
@@ -579,15 +587,15 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       deliveryOptions: {
         ...(this.deliveryAvailable
           ? {
-              deliveryTo: {
-                fiasCode: this.selectedAddress.fias,
-                title: this.selectedAddress.fullName,
-                countryOksmCode: '643',
-              },
-            }
+            deliveryTo: {
+              fiasCode: this.selectedAddress.fias,
+              title: this.selectedAddress.fullName,
+              countryOksmCode: '643',
+            },
+          }
           : {
-              pickupFrom: this.pickupArea,
-            }),
+            pickupFrom: this.pickupArea,
+          }),
       },
     };
     let comment = '';
@@ -688,6 +696,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       price: product.price,
       priceIncludesVAT: product.priceIncludesVAT || false,
       maxDaysForShipment: product.maxDaysForShipment,
+      orderQtyMin: product.orderQtyMin,
+      orderQtyStep: product.orderQtyStep,
       availableToOrder: new FormControl(availableToOrder, [Validators.requiredTrue]),
       vat: vatConverter[product.vat] || 0,
       total: product.itemTotal?.total,
@@ -703,8 +713,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return !order.customersAudience?.length
       ? userOrganizations
       : userOrganizations?.filter((org) => {
-          return this._checkAudienceForAvailability(order.customersAudience, org);
-        });
+        return this._checkAudienceForAvailability(order.customersAudience, org);
+      });
   }
 
   private _initConsumer(availableOrganizations: UserOrganizationModel[], order: CartDataOrderModel) {

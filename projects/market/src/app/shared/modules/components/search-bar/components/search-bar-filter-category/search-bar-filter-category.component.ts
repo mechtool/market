@@ -3,16 +3,13 @@ import {
   ChangeDetectorRef,
   Component,
   Directive,
-  ElementRef,
   Input,
   OnInit,
-  QueryList,
   TemplateRef,
   ViewChild,
-  ViewChildren,
   ViewContainerRef,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { CategoryModel } from '#shared/modules/common-services/models';
 import { NotificationsService } from '#shared/modules/common-services';
 import { debounceTime, tap } from 'rxjs/operators';
@@ -22,13 +19,15 @@ import { Observable } from 'rxjs';
   // tslint:disable-next-line: directive-selector
   selector: '.category_desktop',
 })
-export class SearchBarCategoryDesktopElementDirective {}
+export class SearchBarCategoryDesktopElementDirective {
+}
 
 @Directive({
   // tslint:disable-next-line: directive-selector
   selector: '.category_mobile',
 })
-export class SearchBarCategoryMobileElementDirective {}
+export class SearchBarCategoryMobileElementDirective {
+}
 
 @Component({
   selector: 'market-search-bar-filter-category',
@@ -45,6 +44,7 @@ export class SearchBarFilterCategoryComponent implements OnInit {
   @Input() selectedCategoryIndex: number;
   // tslint:disable-next-line:no-input-rename
   @Input('formGroup') categoryForm: FormGroup;
+
   @Input() set categories(value: CategoryModel[]) {
     this._categories = value;
 
@@ -55,8 +55,10 @@ export class SearchBarFilterCategoryComponent implements OnInit {
         }),
       )
       .subscribe(
-        (res) => {},
-        (err) => {},
+        (res) => {
+        },
+        (err) => {
+        },
         () => {
           this._scrollToCategory();
           this._cdr.detectChanges();
@@ -64,7 +66,8 @@ export class SearchBarFilterCategoryComponent implements OnInit {
       );
   }
 
-  constructor(private _notificationsService: NotificationsService, private _fb: FormBuilder, private _cdr: ChangeDetectorRef) {}
+  constructor(private _notificationsService: NotificationsService, private _fb: FormBuilder, private _cdr: ChangeDetectorRef) {
+  }
 
   ngOnInit() {
     this.categoryForm.controls.categoryName.valueChanges.pipe(debounceTime(3e2)).subscribe((query: string) => {

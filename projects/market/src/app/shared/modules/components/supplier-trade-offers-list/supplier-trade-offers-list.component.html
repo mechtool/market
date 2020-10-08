@@ -105,7 +105,7 @@
       <div class="table_cell cell_buy">
         <market-product-side
           [tradeOfferId]="tradeOffer.id"
-          [minQuantity]="minQuantity(tradeOffer.price?.matrix)"
+          [minQuantity]="minQuantity(tradeOffer.price?.matrix, tradeOffer.packageMultiplicity)"
           [orderStep]="tradeOffer.packageMultiplicity"
         ></market-product-side>
         <a (click)="routeToTradeOffer(tradeOffer.id)" class="btn btn-gray btn__product_link">О товаре</a>

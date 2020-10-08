@@ -3,7 +3,7 @@
   <button type="button"
           class="switch_count__decrease"
           (click)="decrement()"
-          [disabled]="value <= min || isDisabled"></button>
+          [disabled]="value <= minQuantity || isDisabled"></button>
 
   <input *ngIf="!isDisabled"
          type="number"

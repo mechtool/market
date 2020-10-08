@@ -51,7 +51,7 @@ export class CartService {
   createCart(): Observable<string> {
     return this._bnetService.createCart()
       .pipe(
-        map(res => res.headers.get('Location')),
+        map((res) => res.headers.get('Location')),
         map(
           (res) => {
             this.setCart(res);
@@ -90,7 +90,7 @@ export class CartService {
       map((res) => {
         return this._mergeCardDataCurrentWithResponse(res, currentCartData);
       }),
-      tap((res => this.setCartData(res)))
+      tap((res) => this.setCartData(res))
     );
   }
 

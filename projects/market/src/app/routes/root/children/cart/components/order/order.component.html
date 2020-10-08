@@ -162,6 +162,8 @@
                   <market-cart-order-qty-counter
                     formControlName="quantity"
                     [isDisabled]="isOrderLoading"
+                    [minQuantity]="item.controls.orderQtyMin.value"
+                    [orderStep]="item.controls.orderQtyStep.value"
                   ></market-cart-order-qty-counter>
                 </div>
                 <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">

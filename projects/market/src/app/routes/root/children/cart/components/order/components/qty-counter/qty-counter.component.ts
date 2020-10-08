@@ -23,9 +23,9 @@ import {
 })
 export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccessor {
   form: FormGroup;
-
-  @Input() min = 0;
   @Input() isDisabled = false;
+  @Input() minQuantity: number;
+  @Input() orderStep: number;
 
   @Input()
   set value(val) {
@@ -48,7 +48,7 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
 
   ngOnInit() {
     this._initForm();
-    this.value = this.value || this.min;
+    this.value = this.value || this.minQuantity;
     this.form.get('val').valueChanges.subscribe((_) => this.onChange(this.value));
   }
 
@@ -68,12 +68,12 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
   }
 
   increment() {
-    this.value++;
+    this.value += this.orderStep;
   }
 
   decrement() {
-    if (this.value > this.min) {
-      this.value--;
+    if (this.value > this.minQuantity) {
+      this.value -= this.orderStep;
     }
   }
 

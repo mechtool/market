@@ -61,11 +61,11 @@ export class SupplierTradeOffersListComponent {
     return currencyCode(currencyNum);
   }
 
-  minQuantity(matrix: TradeOfferPriceMatrixModel[]): number {
+  minQuantity(matrix: TradeOfferPriceMatrixModel[], packageMultiplicity: number): number {
     if (matrix?.length) {
       return matrix.sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
     }
-    return 1;
+    return packageMultiplicity;
   }
 
   changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
