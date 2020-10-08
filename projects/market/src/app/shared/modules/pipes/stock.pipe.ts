@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TradeOfferStockEnumModel } from '#shared/modules';
+import { TradeOfferStockEnumModel } from '#shared/modules/common-services/models';
 
 @Pipe({
   name: 'marketStock',

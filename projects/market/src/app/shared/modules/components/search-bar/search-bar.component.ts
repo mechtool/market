@@ -91,7 +91,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   submit() {
-    if (this.queryOrNull || !this.filterIsEmpty) {
+    if (this.searchQuery.length === 0 || this.queryOrNull || !this.filterIsEmpty) {
       this.submitClick.emit({
         query: this.queryOrNull,
         filters: this.filters,

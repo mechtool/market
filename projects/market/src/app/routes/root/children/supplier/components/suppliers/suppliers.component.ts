@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { combineLatest } from 'rxjs';
-import { AllGroupQueryFiltersModel, SuppliersItemModel, SuppliersResponseModel } from '#shared/modules/common-services/models';
+import {
+  AllGroupQueryFiltersModel,
+  SuppliersItemModel,
+  SuppliersResponseModel
+} from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { NotificationsService, SpinnerService, SupplierService } from '#shared/modules/common-services';
@@ -38,10 +42,6 @@ export class SupplierListComponent {
         q: $event.query,
       },
     });
-  }
-
-  queryChange($event: string) {
-    this.query = $event;
   }
 
   supplierLoading() {
