@@ -42,11 +42,7 @@ const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(
-    private _apiService: ApiService,
-    private _http: HttpClient,
-  ) {
-  }
+  constructor(private _apiService: ApiService, private _http: HttpClient) {}
 
   getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
@@ -163,7 +159,7 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
-  containsFiasAddress(query: { fiasId: string, fiasIds: string[] }): Observable<boolean> {
+  containsFiasAddress(query: { fiasId: string; fiasIds: string[] }): Observable<boolean> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/locations/contains`, { params });
   }
@@ -178,8 +174,8 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/categories`, { params });
   }
 
-  sendFeedback(feedback: FeedbackRequestModel): Observable<any> {
-    return this._apiService.post(`${API_URL}/feedback`, feedback);
+  sendFeedback(feedback: FeedbackRequestModel, token: string): Observable<any> {
+    return this._apiService.post(`${API_URL}/email/feedback?token=${token}`, feedback);
   }
 
   createCart(): Observable<HttpResponse<any>> {
@@ -250,5 +246,3 @@ export class BNetService {
     }
   }
 }
-
-

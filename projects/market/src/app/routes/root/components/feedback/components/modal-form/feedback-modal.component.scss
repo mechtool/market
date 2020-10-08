@@ -60,3 +60,14 @@ input[type="text"].error, textarea.error {
   margin-top: 22px;
   text-align: center;
 }
+
+.recaptcha {
+  font-size: 10px;
+  color: #efefef;
+
+  a:hover {
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
+  }
+}

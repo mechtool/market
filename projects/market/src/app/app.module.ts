@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import ru from '@angular/common/locales/ru';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
 import { AuthService, CartService, CommonServicesModule, CookieService, UserService } from '#shared/modules/common-services';
@@ -53,6 +54,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     BrowserAnimationsModule,
     PortalModule,
     OverlayModule,
+    RecaptchaV3Module,
     NzIconModule,
     PipesModule,
     CardModule,
@@ -73,6 +75,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     }),
   ],
   providers: [
+    { provide: RECAPTCHA_V3_SITE_KEY, useValue: '6Ld7utQZAAAAAFFHDpsosgD-fw3jA0xwD_f25wZ1' },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: LOCALE_ID, useValue: 'ru' },
     { provide: NZ_I18N, useValue: ru_RU },
