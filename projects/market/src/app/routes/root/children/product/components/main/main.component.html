@@ -1,8 +1,15 @@
-<market-search-bar
-  (queryChange)="searchSuggestions($event)"
-  (submitClick)="navigateToSearchRoute($event)"
-  [productsSuggestions]="productsSuggestions"
-  [categoriesSuggestions]="categoriesSuggestions"
-></market-search-bar>
-<market-main-banners></market-main-banners>
-<market-main-popular></market-main-popular>
+<market-search-area
+  [areAdditionalFiltersEnabled]="false"
+  [filterCollapsed]="true"
+  [enableSuggestions]="true"
+  (submitClick)="navigateToCategoryRoute($event)"
+>
+  <ng-container ngProjectAs="upper-slot">
+    <market-main-banners></market-main-banners>
+  </ng-container>
+
+  <ng-container ngProjectAs="main-slot">
+    <market-main-popular></market-main-popular>
+  </ng-container>
+
+</market-search-area>

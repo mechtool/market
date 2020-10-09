@@ -3,15 +3,16 @@ import { Location } from '@angular/common';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
-import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 import { CategoryModel, MetrikaEventTypeModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { ExternalProvidersService } from './external-providers.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationExtras, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { UserStateService } from './user-state.service';
+import { CustomBlockScrollStrategy } from '../../../config/custom-block-scroll-strategy';
 
 @UntilDestroy({ checkProperties: true })
 @Injectable()
@@ -19,7 +20,6 @@ export class NavigationService implements OnDestroy {
   private _isNavBarMinified = false;
   isNavBarMinified$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _isMenuOpened = false;
-  private _mainCategorySelectedId: string = null;
   private _userCategories: CategoryModel[];
   private readonly _componentPortal: ComponentPortal<NavbarNavComponent>;
   selectedPortal: Portal<any> | null;
@@ -42,28 +42,14 @@ export class NavigationService implements OnDestroy {
     return this._isMenuOpened;
   }
 
-  get areCategoriesShowed(): boolean {
-    return !!this._activatedRoute.snapshot.queryParamMap.get('showCategories');
-  }
-
-  get mainCategorySelectedId(): string {
-    return this._mainCategorySelectedId;
-  }
-
   get navItems$() {
     const notAuthedNavItems: NavItemModel[] = [
       {
         label: 'Товары',
         attributeId: 'product_menu_id',
         icon: 'search',
-        routerLink: ['/search'],
-      },
-      {
-        label: 'Каталог',
-        attributeId: 'catalog_menu_id',
-        icon: 'category',
         command: () => {
-          this.toggleCategoriesLayer();
+          this.navigateReloadable(['/category']);
         },
       },
       {
@@ -130,14 +116,8 @@ export class NavigationService implements OnDestroy {
         label: 'Товары',
         attributeId: 'product_menu_id',
         icon: 'search',
-        routerLink: ['/search'],
-      },
-      {
-        label: 'Каталог',
-        attributeId: 'catalog_menu_id',
-        icon: 'category',
         command: () => {
-          this.toggleCategoriesLayer();
+          this.navigateReloadable(['/category']);
         },
       },
       {
@@ -219,11 +199,9 @@ export class NavigationService implements OnDestroy {
     this.setHistory();
     this._componentPortal = new ComponentPortal(NavbarNavComponent);
     this._setUserCategories();
-    this.setInitialMainCategorySelectedId();
     this._updateLayoutOnResolutionChanges();
     this._renderInitialNavBar();
     this._setInitialNavBarType();
-    this._closeCategoriesLayerOnNavigation();
   }
 
   ngOnDestroy() {
@@ -264,7 +242,7 @@ export class NavigationService implements OnDestroy {
       hasBackdrop: true,
       backdropClass: 'overlay-backdrop-dark',
       panelClass: 'nav-menu',
-      scrollStrategy: this._overlay.scrollStrategies.block(),
+      scrollStrategy: new CustomBlockScrollStrategy(),
     });
 
     this.overlayRef = this._overlay.create(config);
@@ -290,39 +268,12 @@ export class NavigationService implements OnDestroy {
     }
   }
 
-  openCategoriesLayer(route: string[] = []): void {
-    this._router.navigate(route, {
-      relativeTo: !route.length ? this._activatedRoute : null,
-      queryParams: { showCategories: 'true' },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  closeCategoriesLayer(route: string[] = []): void {
-    this._router.navigate(route, {
-      relativeTo: !route.length ? this._activatedRoute : null,
-      queryParams: { showCategories: null },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  toggleCategoriesLayer(): void {
-    setTimeout(() => {
-      if (!this.areCategoriesShowed) {
-        this.openCategoriesLayer();
-      }
-      if (this.areCategoriesShowed) {
-        this.closeCategoriesLayer();
-      }
-    }, 0);
-  }
-
-  setMainCategorySelectedId(id: string) {
-    this._mainCategorySelectedId = id;
-  }
-
   goTo(route: string[] = ['/']) {
     this._router.navigate(route);
+  }
+
+  navigateReloadable(commands: any[], extras?: NavigationExtras) {
+    this._router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => this._router.navigate(commands, extras));
   }
 
   private _setUserCategories(): void {
@@ -331,16 +282,11 @@ export class NavigationService implements OnDestroy {
     });
   }
 
-  setInitialMainCategorySelectedId(): void {
-    this.setMainCategorySelectedId(this.screenWidthLessThan(768) ? null : this._userCategories[0].id);
-  }
-
   private _updateLayoutOnResolutionChanges(): void {
     fromEvent(window, 'resize')
       .pipe(debounceTime(10))
       .subscribe(
         (evt: any) => {
-          this.setMainCategorySelectedId(this._userCategories[0].id);
           if (evt.target.innerWidth > 1300) {
             this._isNavBarMinified = false;
             this.isNavBarMinified$.next(this._isNavBarMinified);
@@ -371,7 +317,6 @@ export class NavigationService implements OnDestroy {
             }
           }
           if (evt.target.innerWidth <= 768) {
-            this.setMainCategorySelectedId(null);
           }
         },
         (err) => {
@@ -391,18 +336,5 @@ export class NavigationService implements OnDestroy {
   private _setInitialNavBarType(): void {
     this._isNavBarMinified = !!(this.screenWidthGreaterThan(992) && this.screenWidthLessThan(1300));
     this.isNavBarMinified$.next(this._isNavBarMinified);
-  }
-
-  private _closeCategoriesLayerOnNavigation(): void {
-    this._router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        pairwise(),
-      )
-      .subscribe((event: any[]) => {
-        if (event[0].url.includes('showCategories')) {
-          this.closeCategoriesLayer();
-        }
-      });
   }
 }

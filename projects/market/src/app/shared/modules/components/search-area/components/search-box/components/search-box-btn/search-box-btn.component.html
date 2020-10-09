@@ -1,0 +1,13 @@
+<div class="sbb">
+
+  <button
+    type="button"
+    class="btn btn_square"
+    [ngClass]="{'pressed': isPressed}"
+    [disabled]="isDisabled"
+    [attr.data_counter]="dataCounter || null"
+    [ngStyle]="{'background-image': iconUrlString}"
+    (click)="click()"
+  ></button>
+
+</div>

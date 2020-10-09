@@ -1,5 +1,5 @@
 :host {
-  width: 12.5%;
+  width: 16.66666%;
   flex-basis: auto;
   padding: 10px;
 }
@@ -11,11 +11,23 @@
   :host-context(main.content.wide) {
     width: 14.285%;
   }
+  :host-context(.area:not(.collapsed)) {
+    width: 20%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 20%;
+  }
 }
 
 @media (max-width: 1880px) {
   :host {
     width: 16.66666%;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 20%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 20%;
   }
 }
 
@@ -24,7 +36,13 @@
     width: 20%;
   }
   :host-context(main.content.wide) {
-    width: 16.66666%;
+    width: 20%;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 25%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 25%;
   }
 }
 
@@ -35,6 +53,27 @@
   :host-context(main.content.wide) {
     width: 20%;
   }
+  :host-context(.area:not(.collapsed)) {
+    width: 33.33333%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 25%;
+  }
+}
+
+@media (max-width: 1430px) {
+  :host {
+    width: 25%;
+  }
+  :host-context(main.content.wide) {
+    width: 20%;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 33.33333%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 33.33333%;
+  }
 }
 
 @media (max-width: 1300px) {
@@ -42,7 +81,13 @@
     width: 20%;
   }
   :host-context(main.content.wide) {
-    width: 16.66666%;
+    width: 20%;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 25%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 25%;
   }
 }
 
@@ -51,14 +96,28 @@
     width: 25%;
   }
   :host-context(main.content.wide) {
-    width: 20%;
+    width: 25%;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 33.33333%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 33.33333%;
   }
 }
 
-@media (max-width: 880px) {
+@media (max-width: 992px) {
   :host {
     width: 33.33333%;
-    flex-basis: 33.33333%;
+  }
+  :host-context(main.content.wide) {
+    width: 33.33333%;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 33.33333%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 33.33333%;
   }
 }
 
@@ -66,27 +125,38 @@
   :host {
     width: 50%;
   }
+  :host-context(.area:not(.collapsed)) {
+    width: 50%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 50%;
+  }
 }
 
 @media (max-width: 576px) {
   :host {
     width: 100%;
-    flex-basis: 100%;
     margin: 7px 0;
     padding: 0;
+  }
+  :host-context(.area:not(.collapsed)) {
+    width: 100%;
+  }
+  :host-context(main.content.wide .area:not(.collapsed)) {
+    width: 100%;
   }
 }
 
 .card {
   cursor: pointer;
   display: flex;
-	flex-direction: column;
-	width: 100%;
+  flex-direction: column;
+  width: 100%;
   flex-basis: 100%;
   height: 100%;
-	position: relative;
-	padding: 30px;
-	background: #ffffff;
+  position: relative;
+  padding: 30px;
+  background: #ffffff;
   border: 1px solid #d7d7d7;
   border-radius: 4px;
   transition: border-color 0.3s;

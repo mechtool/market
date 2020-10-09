@@ -1,34 +1,48 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { Component, Input } from '@angular/core';
 import { CategoryModel } from '#shared/modules/common-services/models';
-import { CategoryService, NotificationsService } from '#shared/modules/common-services';
+import { CategoryService, NavigationService, NotificationsService, UserService } from '#shared/modules/common-services';
+import { take } from 'rxjs/operators';
+import { defer } from 'rxjs';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-category-list',
   templateUrl: './category-list.component.html',
-  styleUrls: [
-    './category-list.component.scss'
-  ]
+  styleUrls: ['./category-list.component.scss', './category-list.component-768.scss'],
 })
-export class CategoryListComponent implements OnChanges {
+export class CategoryListComponent {
   categories: CategoryModel[];
-  @Input() category: CategoryModel;
+  private _category: CategoryModel;
 
-  constructor(
-    private _categoryService: CategoryService,
-    private _notificationsService: NotificationsService,
-  ) {
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this._categoryService.getCategoriesChildren(this.category?.id)
+  @Input() set category(val: CategoryModel) {
+    this._category = val;
+    defer(() => {
+      return this._category?.id ? this._categoryService.getCategoriesChildren(this._category.id) : this._userService.categories$;
+    })
+      .pipe(take(1))
       .subscribe(
         (categories) => {
           this.categories = categories;
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        });
+        },
+      );
+  }
+
+  get category() {
+    return this._category;
+  }
+
+  constructor(
+    private _categoryService: CategoryService,
+    private _notificationsService: NotificationsService,
+    private _navigationService: NavigationService,
+    private _userService: UserService,
+  ) {}
+
+  goToCategory(id: string, event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this._navigationService.navigateReloadable(['./category', id]);
   }
 }

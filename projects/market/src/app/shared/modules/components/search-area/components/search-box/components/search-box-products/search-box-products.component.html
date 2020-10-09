@@ -1,0 +1,18 @@
+<div class="products" *ngIf="productQueries?.length || categoryQueries?.length;">
+
+  <market-search-box-item
+    *ngFor="let searchQuery of productQueries"
+    [item]="searchQuery"
+    type="productOffer"
+    (mousedown)="chooseProduct(searchQuery)"
+  ></market-search-box-item>
+
+  <market-search-box-item
+    *ngFor="let searchQuery of categoryQueries"
+    [item]="searchQuery"
+    type="category"
+    (mousedown)="chooseCategory(searchQuery)"
+  ></market-search-box-item>
+
+
+</div>

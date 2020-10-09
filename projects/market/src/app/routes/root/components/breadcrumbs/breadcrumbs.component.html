@@ -3,10 +3,10 @@
     <nz-breadcrumb-item *ngFor="let item of items">
       <ng-container *ngIf="item.routerLink">
         <ng-container *ngIf="item.queryParams">
-          <a [routerLink]="[item.routerLink]" [queryParams]="item.queryParams">{{item.label}}</a>
+          <a [routerLink]="[item.routerLink]" [queryParams]="item.queryParams" (click)="goTo(item, $event)">{{item.label}}</a>
         </ng-container>
         <ng-container *ngIf="!item.queryParams">
-          <a [routerLink]="[item.routerLink]">{{item.label}}</a>
+          <a [routerLink]="[item.routerLink]" (click)="goTo(item, $event)">{{item.label}}</a>
         </ng-container>
       </ng-container>
       <ng-container *ngIf="!item.routerLink">

@@ -17,14 +17,14 @@ const routes: Routes = [
         loadChildren: () => import('./routes/root/children/product/product.module').then((m) => m.ProductModule),
       },
       {
+        path: 'category',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/category/category.module').then((m) => m.CategoryModule),
+      },
+      {
         path: 'promo',
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/promo/promo.module').then((m) => m.PromoModule),
-      },
-      {
-        path: 'search',
-        data: { preload: false },
-        loadChildren: () => import('./routes/root/children/search/search.module').then((m) => m.SearchModule),
       },
       {
         path: 'supplier',
@@ -40,11 +40,6 @@ const routes: Routes = [
         path: 'blank',
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/blank/blank.module').then((m) => m.BlankModule),
-      },
-      {
-        path: 'category',
-        data: { preload: false },
-        loadChildren: () => import('./routes/root/children/category/category.module').then((m) => m.CategoryModule),
       },
       {
         path: 'my',

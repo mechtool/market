@@ -2,11 +2,11 @@ export class SuggestionSearchQueryHistoryModel {
   id: string;
   searchText: string;
   imageUrl: string;
-  typeOfSearch: TypeOfSearch;
+  typeOfSearch?: TypeOfSearch;
 }
 
 export enum TypeOfSearch {
   PRODUCT = 'Продукт',
   CATEGORY = 'Категория',
-  SEARCH = 'Запрос'
+  SEARCH = 'Запрос',
 }

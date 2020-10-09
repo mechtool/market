@@ -1,6 +1,6 @@
 export class DefaultSearchAvailableModel {
   supplierId?: string;
-  trademark?: string; // name brand or company
+  trademark?: string;
   isDelivery?: boolean;
   isPickup?: boolean;
   inStock?: boolean;
@@ -8,4 +8,7 @@ export class DefaultSearchAvailableModel {
   priceFrom?: number;
   priceTo?: number;
   categoryId?: string;
+  deliveryArea?: string;
+  pickupArea?: string;
+  subCategoryId?: string;
 }

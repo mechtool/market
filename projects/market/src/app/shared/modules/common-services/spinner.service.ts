@@ -2,12 +2,13 @@ import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { SpinnerOverlayComponent } from '#shared/modules/components/spinner';
+import { CustomBlockScrollStrategy } from '../../../config/custom-block-scroll-strategy';
 
 @Injectable()
 export class SpinnerService {
   private _overlayRef: OverlayRef = null;
   private _overlayConfig: OverlayConfig = new OverlayConfig({
-    scrollStrategy: this._overlay.scrollStrategies.block(),
+    scrollStrategy: new CustomBlockScrollStrategy(),
   });
 
   constructor(private _overlay: Overlay) {}

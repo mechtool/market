@@ -33,6 +33,8 @@ const pathsObjectWithoutBreadcrumbs = {
  * Регекспы по роутингу {@link http://forbeslindesay.github.io/express-route-tester/}
  */
 const pathsObjectWithBreadcrumbs = {
+  '/category': /^\/category$/i,
+  '/category/:id': /^\/category\/(?:([^\/]+?))\/?$/i,
   '/category/:categoryId': /^\/category\/(?:([^\/]+?))$/i,
   '/product/:id': /^\/product\/(?:([^\/]+?))$/i,
   '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
@@ -87,11 +89,25 @@ export class BreadcrumbsGuard implements CanActivate {
     this._breadcrumbsService.setVisible(true);
     const foundEntry = Object.entries(pathsObjectWithBreadcrumbs).find((entry) => entry[1].test(urlWithoutQueryParams));
     switch (foundEntry[0]) {
-      case '/category/:categoryId':
+      case '/category':
+        breadcrumbsItems = [
+          {
+            label: 'Товары',
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/category/:id':
         const categoryId = urlSplitted[2];
         return this._categoryService.getCategoryTree(categoryId).pipe(
           map((categories) => {
-            breadcrumbsItems = this.breadcrumbsCategoryAncestors(categories);
+            breadcrumbsItems = [
+              {
+                label: 'Товары',
+                routerLink: '/category',
+              },
+            ];
+            breadcrumbsItems.push(...this.breadcrumbsCategoryAncestors(categories));
             this._breadcrumbsService.setItems(breadcrumbsItems);
             return true;
           }),
@@ -241,7 +257,7 @@ export class BreadcrumbsGuard implements CanActivate {
   }
 
   private breadcrumbsCategoryAncestors(categories: CategoryModel[]): BreadcrumbItemModel[] {
-    return categories.reduce((accum, curr) => {
+    return categories.reduce((accum, curr, ind) => {
       accum.push({
         label: curr.name,
         routerLink: `/category/${curr.id}`,

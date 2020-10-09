@@ -5,36 +5,22 @@ import { NavigationService, ResponsiveService, BreadcrumbsService } from '#share
 @UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './root.component.html',
-  styleUrls: [
-    './root.component.scss',
-    './root.component-1300.scss',
-    './root.component-992.scss',
-  ],
+  styleUrls: ['./root.component.scss', './root.component-1300.scss', './root.component-992.scss', './root.component-576.scss'],
 })
 export class RootComponent {
-
   get isNavBarMinified(): boolean {
     return this._navService.isNavBarMinified;
-  }
-
-  get areCategoriesShowed(): boolean {
-    return this._navService.areCategoriesShowed;
   }
 
   get breadcrumbsItems$() {
     return this._breadcrumbsService.getItems();
   }
 
-  get isMenuOpened() {
-    return this._navService.isMenuOpened;
-  }
-
   constructor(
     private _navService: NavigationService,
     private _breadcrumbsService: BreadcrumbsService,
-    private _responsiveService: ResponsiveService
+    private _responsiveService: ResponsiveService,
   ) {
     this._responsiveService.init();
   }
-
 }

@@ -1,0 +1,23 @@
+<div class="sbcf">
+
+  <ul class="base">
+    <li class="item">
+      <span class="hoverable" (click)="setSelectedCategoryItem(null)">Везде</span>
+    </li>
+  </ul>
+
+  <ul class="list">
+    <li class="item" *ngFor="let category of categories">
+      <span class="hoverable" (click)="setSelectedCategoryItem(category)">{{category.name}}</span>
+    </li>
+  </ul>
+
+  <div class="meta">
+    <span class="hoverable" (click)="showAllCategories()">Показать больше категорий</span>
+  </div>
+
+  <div class="closer">
+    <button (click)="close()"></button>
+  </div>
+
+</div>

@@ -1,19 +1,20 @@
-.cookie-info-content ::ng-deep {
-  .ant-alert-close-icon .anticon-close {
-    color: #000;
-  }
-  .ant-alert.ant-alert-no-icon .ant-alert-close-icon {
-    top: 12px;
-  }
-}
-
-.cookie-info-content {
+.cookie-agreement {
   display: block;
   width: 80%;
   position: fixed;
   bottom: 10px;
   margin-left: 10%;
-  z-index: 10;
+  z-index: 1001;
+
+  ::ng-deep {
+    .ant-alert.ant-alert-no-icon .ant-alert-close-icon {
+      top: 12px;
+    }
+
+    .ant-alert-close-icon .anticon-close {
+      color: #000000;
+    }
+  }
 
   nz-alert {
     p {

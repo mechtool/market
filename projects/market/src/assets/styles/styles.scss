@@ -119,6 +119,10 @@ button.btn {
   text-decoration: none;
   transition: background-color 0.2s, border 0.2s;
 
+  &:focus {
+    outline: none;
+  }
+
   &:hover {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
@@ -142,6 +146,10 @@ button.btn_bordered {
   &.cdk-overlay-backdrop-showing {
     opacity: 1;
   }
+}
+
+.ant-tabs-nav {
+  box-shadow: none;
 }
 
 .ant-dropdown.upclose {
@@ -175,5 +183,54 @@ input[type='number'] {
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+}
+
+.scrollbar {
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    width: 1px;
+    background-color: #ebebeb;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    width: 1px;
+    background-color: #ebebeb;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 50px;
+    width: 5px;
+    background-color: var(--color-accent-light);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 50px;
+    width: 5px;
+    background-color: var(--color-accent-light);
+  }
+
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+
+  &::-webkit-resizer {
+    display: none;
+  }
+}
+
+.panel_search-filter {
+  display: none;
+}
+@media all and (max-width: 992px) {
+  .panel_search-filter {
+    display: block;
   }
 }

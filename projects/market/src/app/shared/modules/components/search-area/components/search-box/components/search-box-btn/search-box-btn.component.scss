@@ -1,0 +1,30 @@
+button {
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  &:after {
+    content: attr(data_counter);
+    display: inline-block;
+    line-height: 20px;
+    padding: 0 6px;
+    background-color: var(--color-accent-secondary);
+    border-radius: 2px;
+    color: #ffffff;
+    font-size: var(--font-size-10);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &.pressed {
+    background-color: #fdc82f;
+    border-color: #fdc82f;
+  }
+}
+
+:host-context(.focused) button {
+  border: 1px solid var(--color-accent-light);
+}
+
+button {
+  border-radius: 6px;
+}

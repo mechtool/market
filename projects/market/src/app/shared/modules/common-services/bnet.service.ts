@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
+import { CacheService } from './cache.service';
 import { environment } from '#environments/environment';
 import { Observable } from 'rxjs';
 import {
@@ -43,7 +44,12 @@ const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(private _apiService: ApiService, private _apiWorkerService: ApiWorkerService, private _http: HttpClient) {}
+  constructor(
+    private _apiService: ApiService,
+    private _cacheService: CacheService,
+    private _apiWorkerService: ApiWorkerService,
+    private _http: HttpClient,
+  ) {}
 
   getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
@@ -55,9 +61,11 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/product-offers/popular`, { params });
   }
 
-  searchProductOffers(searchQuery: ProductOffersRequestModel): Observable<ProductOffersListResponseModel> {
+  searchProductOffers(searchQuery: ProductOffersRequestModel, cacheable = true): Observable<ProductOffersListResponseModel> {
     const params = this._params(searchQuery);
-    return this._apiService.get(`${API_URL}/product-offers`, { params });
+    return cacheable
+      ? this._cacheService.get(`${API_URL}/product-offers`, params)
+      : this._apiService.get(`${API_URL}/product-offers`, { params });
   }
 
   getTradeOffer(id: string): Observable<TradeOfferResponseModel> {

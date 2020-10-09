@@ -1,0 +1,28 @@
+<span class="item" [ngClass]="{'active': isActive}">
+
+  <div class="cover">
+    <img
+      src="{{imageUrl(item.imageUrl)}}"
+      alt="{{item.searchText}}"
+      title="{{item.searchText}}"
+      onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
+  </div>
+
+  <div class="title">
+    <div [innerHTML]="(item.searchText || item.highlight) | marketSafeHtml"></div>
+  </div>
+
+  <div class="meta">
+    <ng-container *ngIf="type === 'searchQueryHistory'">
+      <span (mousedown)="removeHistoricalSuggestion(); $event.stopPropagation(); $event.preventDefault()">Удалить</span>
+    </ng-container>
+    <ng-container *ngIf="type === 'productOffer'">
+      {{item.offers}} {{item.offers | marketDeclension: 'предложение': 'предложения': 'предложений'}}
+    </ng-container>
+    <ng-container *ngIf="type === 'category'">
+      {{item.offers}} {{item.offers | marketDeclension: 'предложение': 'предложения': 'предложений'}}
+    </ng-container>
+  </div>
+
+</span>
+

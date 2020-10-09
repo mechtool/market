@@ -78,12 +78,14 @@ export class CategoryService {
   private _setPromo() {
     Object.keys(categoryPromotion).forEach((categoryId) => {
       this.categoryPromos[categoryId] = categoryPromotion[categoryId];
-      this.getCategoriesChildren(categoryId).subscribe((cat) => {
-        const childCategoriesIds = getFlatPropertyArray(cat);
-        childCategoriesIds.forEach((childCategoryId) => {
-          this.categoryPromos[childCategoryId] = categoryPromotion[categoryId];
+      if (categoryId) {
+        this.getCategoriesChildren(categoryId).subscribe((cat) => {
+          const childCategoriesIds = getFlatPropertyArray(cat);
+          childCategoriesIds.forEach((childCategoryId) => {
+            this.categoryPromos[childCategoryId] = categoryPromotion[categoryId];
+          });
         });
-      });
+      }
     });
   }
 

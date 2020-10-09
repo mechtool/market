@@ -1,0 +1,31 @@
+@media all and (max-width: 576px) {
+  .sbcfa {
+    .primary_block {
+      .root_categories {
+        .list {
+          .item {
+            padding: 0 15px 0 20px;
+          }
+        }
+      }
+
+      .title {
+        padding: 0 20px;
+      }
+    }
+
+    .secondary_block {
+      .children_categories {
+        padding: 0 20px;
+
+        .list {
+          overflow-x: hidden;
+        }
+      }
+    }
+
+    .closer {
+      right: 10px;
+    }
+  }
+}

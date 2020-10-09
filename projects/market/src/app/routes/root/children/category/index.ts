@@ -1,2 +1,2 @@
 export * from './category.module';
-export * from './components';
+export * from './category.component';

@@ -1,13 +1,11 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { BannerItemModel } from '../../models';
+import { NavigationService } from '#shared/modules/common-services/navigation.service';
 
 @Component({
   selector: 'market-banner',
   templateUrl: './banner.component.html',
-  styleUrls: [
-    './banner.component.scss',
-    './banner.component-400.scss'
-  ],
+  styleUrls: ['./banner.component.scss', './banner.component-400.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BannerComponent {
@@ -25,5 +23,11 @@ export class BannerComponent {
     return !this.item?.btnLink.includes(location.hostname) && !(this.item?.btnLink[0] === '/');
   }
 
-  constructor() {}
+  constructor(private _navigationService: NavigationService) {}
+
+  goTo(item: BannerItemModel, event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this._navigationService.navigateReloadable([item.btnLink], { ...(item.btnQueryParams && { queryParams: item.btnQueryParams }) });
+  }
 }

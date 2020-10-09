@@ -2,7 +2,8 @@
   <a class="banner_item banner_item__big"
      rel="noopener noreferrer"
      [routerLink]="item.btnLink"
-     [queryParams]="item.btnQueryParams">
+     [queryParams]="item.btnQueryParams"
+     (click)="goTo(item, $event)">
     <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
   </a>
 </ng-container>

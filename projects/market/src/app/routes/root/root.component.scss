@@ -10,14 +10,9 @@
 .content {
   width: 100%;
   flex: 1;
-  padding: 15px 100px 70px 370px;
+  padding: 15px 60px 70px 370px;
 
   &.wide {
     padding-left: 110px;
-  }
-
-  &.scrollblock {
-    overflow: hidden;
-    height: calc(100vh - 20px);
   }
 }

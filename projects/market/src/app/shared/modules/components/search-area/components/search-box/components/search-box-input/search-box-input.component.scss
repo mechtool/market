@@ -1,0 +1,37 @@
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.sbi {
+  display: flex;
+  flex: 1;
+}
+
+:host-context(.focused) nz-input-group {
+  border: 1px solid var(--color-accent-light);
+}
+
+nz-input-group {
+  border: 1px solid #e0e0e0;
+
+  &:hover {
+    border: 1px solid #e0e0e0;
+  }
+}
+
+.input_clear {
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  img {
+    cursor: pointer;
+    opacity: 0.44;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  position: relative;
+
+  &.collapsed {
+    .filter {
+      width: auto;
+      padding: 0;
+    }
+  }
+
+  .content {
+    flex: 1;
+    width: 100px;
+  }
+
+  .filter {
+    width: 280px;
+    padding: 0 0 20px 20px;
+    background: #fdfdfd;
+    z-index: 0;
+  }
+}
+
+.area {
+  padding: 20px 0 0 0;
+}

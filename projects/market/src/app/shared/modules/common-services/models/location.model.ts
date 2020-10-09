@@ -12,11 +12,13 @@ export class LocationModel {
 }
 
 export enum Level {
-  CITY = 'city', STREET = 'street', HOUSE = 'house'
+  CITY = 'city',
+  STREET = 'street',
+  HOUSE = 'house',
 }
 
 export enum CountryCode {
-  RUSSIA = '643'
+  RUSSIA = '643',
 }
 
 export class Megacity {
@@ -24,7 +26,7 @@ export class Megacity {
     {
       fias: CountryCode.RUSSIA,
       name: 'Россия',
-      fullName: 'Российская Федерация',
+      fullName: 'Россия',
     },
     {
       fias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
@@ -78,4 +80,3 @@ export class Megacity {
     },
   ];
 }
-

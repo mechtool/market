@@ -1,0 +1,12 @@
+<div class="history">
+
+  <market-search-box-item
+    *ngFor="let searchQuery of historicalQueries$ | async"
+    [item]="searchQuery"
+    type="searchQueryHistory"
+    (mousedown)="clickSearchQuery(searchQuery)"
+    (removeHistoricalSuggestionChanges)="removeHistoricalSuggestionById($event)"
+  >
+  </market-search-box-item>
+
+</div>

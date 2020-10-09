@@ -1,0 +1,207 @@
+<div class="sf scrollbar" [ngClass]="{'sf_collapsed': filterCollapsed}" [formGroup]="form">
+
+  <div class="header">
+    <div class="title">Фильтр для поиска</div>
+    <div class="collapser" (click)="toggleCollapse()">
+      <i nz-icon nzType="double-right" nzTheme="outline"></i>
+    </div>
+    <div class="closer" (click)="close()">
+      <i nz-icon nzType="close" nzTheme="outline"></i>
+    </div>
+  </div>
+  <div class="content">
+    <div
+      class="form-group"
+      [ngClass]="{'error': form.get('location').errors && (form.get('location').touched || form.get('location').dirty) && !locationEl.dataset.focused}"
+      formGroupName="location">
+      <nz-form-control>
+        <nz-form-label nzFor="{{componentId}}_location">Регион поставки</nz-form-label>
+        <nz-input-group [nzSuffix]="regionClearTpl">
+          <input nz-input type="text"
+                 [ngClass]="{'error': false}"
+                 autocomplete="off"
+                 id="{{componentId}}_location"
+                 placeholder="Россия"
+                 formControlName="name"
+                 (keyup.enter)="selectLocationOnEnter()"
+                 (focus)="locationEl.dataset.focused = 'focused'"
+                 (blur)="locationEl.removeAttribute('data-focused')"
+                 [nzAutocomplete]="locationAutocompleteTpl"
+                 #locationEl>
+        </nz-input-group>
+
+        <nz-autocomplete nzBackfill #locationAutocompleteTpl>
+          <nz-auto-option *ngFor="let location of locationsToChoose"
+                          (click)="selectLocation(location); $event.stopPropagation()"
+                          [nzValue]="location.name"
+                          [nzLabel]="location.name">{{location.fullName}}</nz-auto-option>
+        </nz-autocomplete>
+
+        <ng-template #regionClearTpl>
+          <div class="input_clear">
+            <img src="assets/img/svg/icon__close.svg"
+                 alt=""
+                 (click)="resetControl('location')"
+                 *ngIf="form.get('location.name').value.length">
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </div>
+
+
+    <div class="form-group"
+         [ngClass]="{'error': form.get('supplier').errors && (form.get('supplier').touched || form.get('supplier').dirty) && !supplierEl.dataset.focused}"
+         formGroupName="supplier"
+         *ngIf="markerIsSupplierControlVisible">
+
+      <nz-form-control>
+        <nz-form-label nzFor="{{componentId}}_inn">ИНН или наименование поставщика</nz-form-label>
+        <nz-input-group [nzSuffix]="supplierNameClearTpl">
+          <input nz-input type="text"
+                 autocomplete="off"
+                 id="{{componentId}}_inn"
+                 placeholder="Искать поставщика"
+                 formControlName="name"
+                 (keyup.enter)="selectSupplierOnEnter()"
+                 (focus)="supplierEl.dataset.focused = 'focused'"
+                 (blur)="supplierEl.removeAttribute('data-focused')"
+                 [nzAutocomplete]="supplierAutocompleteTpl"
+                 #supplierEl>
+        </nz-input-group>
+
+        <nz-autocomplete nzBackfill #supplierAutocompleteTpl>
+          <nz-auto-option [nzDisabled]="true" *ngIf="form.get('supplier.name').value.length <= 2">Введите более 2 символов</nz-auto-option>
+          <nz-auto-option *ngFor="let supplier of suppliersToChoose"
+                          (click)="selectSupplier(supplier); $event.stopPropagation()"
+                          [nzValue]="supplier.name | abbreviatedBusinessName"
+                          [nzLabel]="supplier.name | abbreviatedBusinessName">{{ supplier.name | abbreviatedBusinessName }}</nz-auto-option>
+        </nz-autocomplete>
+
+        <ng-template #supplierNameClearTpl>
+          <div class="input_clear">
+            <img src="assets/img/svg/icon__close.svg"
+                 alt=""
+                 (click)="resetControl('supplier')"
+                 *ngIf="form.get('supplier.name').value.length">
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </div>
+
+    <div class="form-group">
+      <nz-form-control>
+        <nz-form-label nzFor="{{componentId}}_brand">Наименование бренда производителя</nz-form-label>
+        <nz-input-group [nzSuffix]="trademarkClearTpl">
+          <input nz-input type="text"
+                 autocomplete="off"
+                 id="{{componentId}}_brand"
+                 placeholder="Искать бренд"
+                 formControlName="trademark">
+        </nz-input-group>
+
+        <ng-template #trademarkClearTpl>
+          <div class="input_clear">
+            <img src="assets/img/svg/icon__close.svg"
+                 alt=""
+                 (click)="resetControl('trademark')"
+                 *ngIf="form.get('trademark').value.length">
+          </div>
+        </ng-template>
+      </nz-form-control>
+    </div>
+
+    <ng-container *ngIf="areAdditionalFiltersEnabled">
+      <div class="form-group_title">Способ доставки</div>
+      <div class="form-group_checkbox">
+        <label nz-checkbox formControlName="isPickup">Самовывоз</label>
+        <label nz-checkbox formControlName="isDelivery">Доставка</label>
+      </div>
+
+      <div class="form-group_title">Параметры поиска</div>
+      <div class="form-group_checkbox">
+        <label nz-checkbox formControlName="inStock">Только товары в наличии</label>
+        <label nz-checkbox formControlName="withImages">Только с картинками</label>
+      </div>
+
+      <div class="form-group_title">Цена</div>
+      <div class="range_wrap range_price">
+        <nz-slider nzRange nzMin="{{minPrice}}" nzMax="{{maxPrice}}" formControlName="priceRange"
+                   [nzTooltipVisible]="'never'"></nz-slider>
+
+        <div class="range_inputs">
+
+          <nz-form-item>
+            <div class="range_inputs-text">От</div>
+            <nz-form-control>
+              <input nz-input type="number"
+                     [ngClass]="{'error': false}"
+                     name="price_from"
+                     class="range_input range_from price_from"
+                     placeholder="{{minPrice}} ₽"
+                     autocomplete="off"
+                     formControlName="priceFrom"/>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <nz-form-item>
+            <div class="range_inputs-text range_inputs-delimiter">До</div>
+            <nz-form-control>
+              <input nz-input type="number"
+                     [ngClass]="{'error': false}"
+                     name="price_to"
+                     class="range_input range_to price_to"
+                     placeholder="{{maxPrice}} ₽"
+                     autocomplete="off"
+                     formControlName="priceTo"/>
+            </nz-form-control>
+          </nz-form-item>
+
+        </div>
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngIf="(availableCategories$ | async)?.length">
+      <div class="form-group_title">Фильтр подкатегорий</div>
+      <div class="form-group">
+
+        <div class="categories_header">
+          <nz-form-control>
+            <nz-form-label nzFor="{{componentId}}_category">Поиск подкатегории</nz-form-label>
+            <input nz-input type="text"
+                   autocomplete="off"
+                   id="{{componentId}}_category"
+                   placeholder="Искать подкатегорию"
+                   formControlName="categorySearchQuery">
+          </nz-form-control>
+        </div>
+
+        <div class="categories_content">
+          <cdk-virtual-scroll-viewport itemSize="20" minBufferPx="300" maxBufferPx="600"
+                                       class="viewport scrollbar" (click)="setCategoryId($event.target)">
+            <div class="category_item"
+                 attr.data-id="{{category.id}}"
+                 *cdkVirtualFor="let category of filteredCategories"
+                 [ngClass]="form.get('subCategoryId').value ? form.get('subCategoryId').value === category.id ? 'active' : 'disabled' : null">
+              <div class="category_item_box"></div>
+              <div class="category_item_name">{{category.name}}</div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+        </div>
+
+      </div>
+    </ng-container>
+
+    <div class="filter_btns">
+      <button nz-button type="submit" nzType="primary" [disabled]="!form.valid"
+              (click)="save()">Найти
+      </button>
+      <button nz-button type="button" nzType="link"
+              (click)="reset()">Сбросить
+      </button>
+    </div>
+
+  </div>
+
+</div>

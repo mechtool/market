@@ -1,0 +1,12 @@
+.tag {
+  display: inline-flex;
+}
+
+nz-tag {
+  cursor: pointer;
+
+  i {
+    font-size: 12px;
+    margin: 0 0 0 5px;
+  }
+}

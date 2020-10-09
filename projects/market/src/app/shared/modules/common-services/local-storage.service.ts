@@ -17,7 +17,7 @@ const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
 const CART_LOCATION_STORAGE_KEY = 'cart_location';
 const CART_DATA_STORAGE_KEY = 'cart_data';
-const USER_AND_COOKIES_AGREEMENT_STORAGE_KEY = 'user_and_cookies_agreement';
+const COOKIES_AGREEMENT_STORAGE_KEY = 'cookies_agreement';
 const LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY = 'later_visit_my_organizations';
 
 @Injectable()
@@ -39,15 +39,20 @@ export class LocalStorageService {
     };
   }
 
+  getSearchQueriesHistoryListNEW(): SuggestionSearchQueryHistoryModel[] {
+    return (this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || []).reverse();
+  }
+
   hasSearchQueriesHistory(): boolean {
     const history = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
     return !!history;
   }
 
   removeSearchQuery(id: string): void {
-    const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
-    const filterHistoryList = historyList.filter((res) => res.id !== id);
-    this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList.length ? filterHistoryList : undefined);
+    const currentHistoryList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
+    const updateHistoryList = currentHistoryList.filter((res) => res.id !== id);
+    this._storage.remove(SEARCH_QUERIES_HISTORY_STORAGE_KEY);
+    this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, updateHistoryList);
   }
 
   putSearchQuery(searchQuery: SuggestionSearchQueryHistoryModel): void {
@@ -168,11 +173,11 @@ export class LocalStorageService {
   }
 
   getUserAndCookiesAgreement(): boolean {
-    return this._storage.get(USER_AND_COOKIES_AGREEMENT_STORAGE_KEY);
+    return this._storage.get(COOKIES_AGREEMENT_STORAGE_KEY);
   }
 
   putUserAndCookiesAgreement() {
-    this._storage.set(USER_AND_COOKIES_AGREEMENT_STORAGE_KEY, true);
+    this._storage.set(COOKIES_AGREEMENT_STORAGE_KEY, true);
   }
 
   putDateOfLaterVisitMyOrganizations(date: number): void {

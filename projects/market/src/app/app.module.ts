@@ -1,14 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { RouteReuseStrategy, RouterModule } from '@angular/router';
 import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, Injector, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import ru from '@angular/common/locales/ru';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiFactory } from './config/api.factory';
+import { ApiFactory, AppRouteReuseStrategy, APP_CONFIG } from './config';
 import { CommonServicesModule } from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -33,7 +33,6 @@ import { PipesModule } from '#shared/modules/pipes';
 import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
 import { LineClampModule } from '#shared/modules';
-import { APP_CONFIG } from './config/app.config.token';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
 import { environment } from '#environments/environment';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
@@ -54,7 +53,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
+    NoopAnimationsModule,
     PortalModule,
     OverlayModule,
     RecaptchaV3Module,
@@ -80,7 +79,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     { provide: NZ_I18N, useValue: ru_RU },
     { provide: NZ_ICONS, useValue: icons },
     { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
-    { provide: APP_CONFIG, useValue: { retryNum: 3, retryDelay: 300 } },
+    { provide: APP_CONFIG, useValue: { retryNum: 3, retryDelay: 300, debounceTime: 300 } },
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
@@ -88,6 +87,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
       multi: true,
     },
     { provide: DEFAULT_CURRENCY_CODE, useValue: '' },
+    { provide: RouteReuseStrategy, useClass: AppRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })

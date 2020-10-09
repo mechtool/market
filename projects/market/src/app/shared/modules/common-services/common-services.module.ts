@@ -26,6 +26,7 @@ import { PaymentDocumentModalService } from './payment-document-modal.service';
 import { SpinnerService } from './spinner.service';
 import { FeedbackService } from './feedback.service';
 import { ExternalProvidersService } from './external-providers.service';
+import { OverlayService } from './overlay.service';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartPromoterService } from './cart-promoter.service';
@@ -65,6 +66,7 @@ export class CommonServicesModule {
         PaymentDocumentModalService,
         SpinnerService,
         ExternalProvidersService,
+        OverlayService,
       ],
     };
   }

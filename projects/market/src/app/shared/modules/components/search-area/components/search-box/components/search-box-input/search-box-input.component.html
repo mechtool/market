@@ -1,0 +1,22 @@
+<div class="sbi">
+
+  <nz-input-group [nzSuffix]="queryClearTpl">
+    <input
+      placeholder="{{placeholder}}"
+      autocomplete="off"
+      nz-input
+      [(ngModel)]="queryText"
+      #queryInputEl
+    >
+  </nz-input-group>
+
+  <ng-template #queryClearTpl>
+    <div class="input_clear">
+      <img src="assets/img/svg/icon__close.svg"
+           alt=""
+           (click)="cleanQueryText()"
+           *ngIf="queryText.length">
+    </div>
+  </ng-template>
+
+</div>

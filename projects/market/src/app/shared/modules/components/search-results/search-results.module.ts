@@ -10,6 +10,7 @@ import { PipesModule } from '#shared/modules/pipes';
 import { SorterModule } from '../sorter';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzIconModule,
     PipesModule,
     SorterModule,
+    VirtualScrollerModule,
   ],
   declarations: [SearchResultComponent],
   exports: [SearchResultComponent],

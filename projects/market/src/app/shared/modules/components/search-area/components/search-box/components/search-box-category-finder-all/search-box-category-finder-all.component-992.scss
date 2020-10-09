@@ -1,0 +1,28 @@
+@media all and (max-width: 992px) {
+  .sbcfa {
+    top: 0;
+
+    &.wide,
+    &.narrow {
+      width: 100vw;
+      height: 100vh;
+      left: 0;
+    }
+
+    .primary_block {
+      .root_categories {
+        .list {
+          height: calc(100vh - 150px);
+        }
+      }
+    }
+
+    .secondary_block {
+      .children_categories {
+        .list {
+          height: calc(100vh - 150px);
+        }
+      }
+    }
+  }
+}

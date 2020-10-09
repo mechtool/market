@@ -1,23 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryRoutingModule } from './category-routing.module';
-import { CategoriesComponent, CategoryComponent } from './components';
-import { CategoryListModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
-import { ProductModule } from '../product';
+import { CategoryComponent } from './category.component';
+import { SearchAreaModule } from '#shared/modules/components/search-area/search-area.module';
+import { CategoryListModule } from '#shared/modules/components/category-list/category-list.module';
 import { BannersModule } from '#shared/modules/components/banners/banner.module';
+import { ProductModule } from '../product';
+import { SearchResultsModule } from '#shared/modules/components/search-results/search-results.module';
+import { TagModule } from '#shared/modules/components/tag';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     CategoryRoutingModule,
+    SearchAreaModule,
     CategoryListModule,
-    SearchBarModule,
-    SearchResultsModule,
-    ProductModule,
     BannersModule,
+    ProductModule,
+    SearchResultsModule,
+    TagModule,
   ],
-  declarations: [CategoryComponent, CategoriesComponent],
+  declarations: [CategoryComponent],
 })
 export class CategoryModule {}

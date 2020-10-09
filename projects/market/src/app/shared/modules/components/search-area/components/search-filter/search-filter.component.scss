@@ -1,0 +1,173 @@
+.sf {
+  .header {
+    display: flex;
+
+    .title {
+      flex: 1;
+      margin: 0 0 20px;
+      font-size: calc(15rem / 15);
+      font-weight: 600;
+      color: #454545;
+      letter-spacing: 0.05px;
+    }
+
+    .collapser {
+      cursor: pointer;
+    }
+
+    .closer {
+      cursor: pointer;
+      display: none;
+    }
+  }
+
+  &_collapsed {
+    display: none;
+  }
+}
+
+nz-input-group {
+  padding: 10px 15px;
+}
+
+.input_clear {
+  cursor: pointer;
+  opacity: 0.44;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// TODO - разобраться с ng-deep
+::ng-deep {
+  .ant-checkbox-wrapper + .ant-checkbox-wrapper {
+    margin-left: 0;
+  }
+}
+
+.form-group {
+  &.error {
+    nz-form-label ::ng-deep > label {
+      color: #f6837b;
+    }
+    nz-input-group {
+      border-color: #f6837b;
+      outline-color: #f6837b;
+    }
+  }
+}
+
+.form-group_title {
+  margin: 14px 0 10px;
+  font-weight: 600;
+  font-size: calc(15rem / 15);
+  color: #454545;
+  letter-spacing: 0.05px;
+}
+
+.form-group_checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  label {
+    margin: 5px 0 0 0;
+  }
+}
+
+.range_inputs {
+  display: flex;
+  margin-top: 15px;
+
+  nz-form-item {
+    flex: 1;
+    align-items: center;
+    margin: 0;
+
+    .range_inputs-text {
+      margin: 0 5px 0 0;
+    }
+
+    + nz-form-item {
+      margin: 0 0 0 10px;
+    }
+  }
+}
+
+.filter_btns {
+  margin: 14px 0 0;
+}
+
+.categories_header {
+  margin: 0 0 10px 0;
+}
+
+.categories_content {
+  .viewport {
+    height: 300px;
+    overflow-x: hidden;
+
+    .category_item {
+      display: flex;
+      margin: 4px 0;
+      height: 20px;
+
+      &.active,
+      &:hover {
+        .category_item_box {
+          border: 2px solid #fdc82f;
+        }
+      }
+
+      &.active {
+        .category_item_box {
+          &:after {
+            position: absolute;
+            display: table;
+            border: 2px solid #454545;
+            border-top: 0;
+            border-left: 0;
+            transform: rotate(45deg) scale(1) translate(-50%, -50%);
+            opacity: 1;
+            transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+            content: ' ';
+            top: 50%;
+            left: 22%;
+            width: 7.14285714px;
+            height: 11.42857143px;
+          }
+        }
+      }
+
+      &.disabled {
+        opacity: 0.25;
+        pointer-events: none;
+      }
+
+      &_box {
+        cursor: pointer;
+        display: block;
+        width: 20px;
+        height: 20px;
+        background-color: #fff;
+        border: 2px solid #ddd;
+        border-radius: 2px;
+        transition: all 0.3s;
+        position: relative;
+      }
+
+      &_name {
+        cursor: pointer;
+        flex: 1;
+        padding: 0 8px 0 16px;
+        font-size: calc(13rem / 15);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 200px;
+      }
+    }
+  }
+}

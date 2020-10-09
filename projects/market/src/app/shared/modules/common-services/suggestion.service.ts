@@ -6,10 +6,7 @@ import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class SuggestionService {
-
-  constructor(private _bnetService: BNetService,
-              private localStorageService: LocalStorageService) {
-  }
+  constructor(private _bnetService: BNetService, private localStorageService: LocalStorageService) {}
 
   searchSuggestions(query: string): Observable<SuggestionResponseModel> {
     return this._bnetService.searchSuggestions(query);
@@ -18,5 +15,4 @@ export class SuggestionService {
   getHistoricalSuggestions(query?: string): Observable<SuggestionResponseModel> {
     return of(this.localStorageService.getSearchQueriesHistoryList(query));
   }
-
 }

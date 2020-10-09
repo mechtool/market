@@ -1,0 +1,26 @@
+:host-context(.focused) button {
+  border: 1px solid var(--color-accent-light);
+}
+
+button {
+  span {
+    color: #454545;
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
+    max-width: 170px;
+  }
+
+  &.not-clickable:hover {
+    cursor: text;
+  }
+
+  i {
+    cursor: pointer;
+  }
+}

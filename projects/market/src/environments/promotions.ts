@@ -4,6 +4,29 @@
  */
 
 export const categoryPromotion = {
+  '': [
+    {
+      title: 'Скидка 10% на первый заказ!',
+      btnLink: '/promo/first-order',
+      btnText: 'Подробнее',
+      description: 'до 31 декабря скидки от Поставщиков',
+      imgUrl: 'assets/img/tmp/banner_1.png',
+    },
+    {
+      title: 'Все для офиса!',
+      btnLink: '/category/616',
+      btnText: 'Подробнее',
+      description: 'до 10% на заказы в категории «Товары для школы и офиса»',
+      imgUrl: 'assets/img/tmp/banner_2.png',
+    },
+    {
+      title: 'Все для магазина и ресторана!',
+      btnLink: '/category/3321',
+      btnText: 'Подробнее',
+      description: '> 7000 товаров в категории «Продукты, напитки, табак»',
+      imgUrl: 'assets/img/tmp/banner_3.png',
+    },
+  ],
   616: [
     {
       title: 'КОМУС',
@@ -35,7 +58,7 @@ export const categoryPromotion = {
         categoryId: '3321',
         isDelivery: true,
         isPickup: true,
-        sort: 'minPriceAsc'
+        sort: 'minPriceAsc',
       },
       btnText: 'Подобрать товары',
       description: '>7000 товаров в категории "Продукты, напитки, табак", заказ от 10000 р.',
@@ -59,6 +82,6 @@ export const categoryPromotion = {
       btnText: 'Подобрать товары',
       description: '- 10% первый заказ на "Чай, Кофе, Какао", доставка по РФ.',
       imgUrl: 'assets/img/promo/kofruss.png',
-    }
-  ]
+    },
+  ],
 };

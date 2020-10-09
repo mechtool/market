@@ -1,17 +1,17 @@
-<div class="cookie-info-content" *ngIf="isAgreementNotAccepted">
+<div class="cookie-agreement" *ngIf="isAgreementNotAccepted">
   <nz-alert
     nzType="warning"
     nzCloseable
-    [nzMessage]=cookie_agreement
-    (nzOnClose)="afterClose()"
-  ></nz-alert>
-
-
-  <ng-template #cookie_agreement>
-    <p>Сайт использует наши собственные и сторонние файлы cookie.
-      Если вы продолжите использовать сайт, вы принимаете
-      <a href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer">пользовательское соглашение</a>
-      и не возражаете против использования сайтом файлов cookie.
-    </p>
-  </ng-template>
+    [nzMessage]="agreementTpl"
+    (nzOnClose)="afterClose()">
+  </nz-alert>
 </div>
+
+<ng-template #agreementTpl>
+  <p>Сайт использует наши собственные и сторонние файлы cookie.
+    Если вы продолжите использовать сайт, вы принимаете
+    <a href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer">пользовательское соглашение</a>
+    и не возражаете против использования сайтом файлов cookie.
+  </p>
+</ng-template>
+

@@ -1,0 +1,39 @@
+<div class="search" [ngClass]="{'focused': focusChange$ | async}">
+
+  <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+
+    <market-search-box-btn-categories
+      *ngIf="areCategoriesShown"
+      formControlName="categoryId">
+    </market-search-box-btn-categories>
+
+    <market-search-box-input
+      [placeholder]="placeholder"
+      formControlName="query"
+    ></market-search-box-input>
+
+    <market-search-box-btn
+      iconPath="img/svg/icon__search.svg"
+      [isDisabled]="form.invalid"
+      (btnClick)="submit()">
+    </market-search-box-btn>
+
+    <market-search-box-btn
+      [isPressed]="!filterCollapsed"
+      iconPath="img/svg/icon__filter.svg"
+      [dataCounter]="modifiedFiltersCounter$ | async"
+      (btnClick)="handleFilterBtnClick()">
+    </market-search-box-btn>
+
+  </form>
+
+  <market-search-box-results *ngIf="suggestionsEnabled && suggestionsType">
+
+    <market-search-box-history *ngIf="suggestionsType === 'history'"></market-search-box-history>
+    <market-search-box-products *ngIf="suggestionsType === 'products'"></market-search-box-products>
+
+  </market-search-box-results>
+
+
+</div>
+

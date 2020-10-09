@@ -13,5 +13,8 @@ export * from './redirect-to';
 export * from './query-params';
 export * from './inn-kpp-to-legal-id';
 export * from './get-flat-property-array';
+export * from './get-flat-object-array';
 export * from './delayed-retry';
+export * from './unsubscribe-list';
+export * from './get-prop-value-by-path';
 export * from './legal-id';

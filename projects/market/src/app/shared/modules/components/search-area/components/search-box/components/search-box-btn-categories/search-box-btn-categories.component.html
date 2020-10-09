@@ -1,0 +1,18 @@
+<div class="sbbc">
+  <button class="btn" [ngClass]="{'not-clickable': categorySelected}" (click)="!categorySelected && openPanel(btnEl)" #btnEl>
+    <ng-container *ngIf="categorySelected; else categoryEmptyTpl">
+      <span class="title" title="{{categorySelected?.name}}">{{categorySelected?.name}}</span>
+      <span class="icon" (click)="deselectCategory(); $event.stopPropagation()">
+        <i nz-icon nzType="close-circle" nzTheme="fill"></i>
+      </span>
+    </ng-container>
+    <ng-template #categoryEmptyTpl>
+      <span class="title">Каталог</span>
+      <span class="icon">
+        <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+      </span>
+    </ng-template>
+  </button>
+
+</div>
+

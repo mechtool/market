@@ -1,0 +1,13 @@
+<div class="sbr" [ngClass]="{'not-shown': !resultsTitle, 'collapsed': filterCollapsed}">
+
+  <ng-container *ngIf="suggestionsSpinnerShown | async; else data">
+    <market-spinner></market-spinner>
+  </ng-container>
+  <ng-template #data>
+    <h3 class="title" *ngIf="resultsTitle">{{resultsTitle}}</h3>
+    <div class="inner">
+      <ng-content></ng-content>
+    </div>
+  </ng-template>
+
+</div>

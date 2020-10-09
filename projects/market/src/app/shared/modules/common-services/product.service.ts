@@ -1,22 +1,12 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {
-  AllGroupQueryFiltersModel,
-  CountryCode,
-  ProductOfferResponseModel,
-  ProductOffersListResponseModel
-} from './models';
+import { AllGroupQueryFiltersModel, CountryCode, ProductOfferResponseModel, ProductOffersListResponseModel } from './models';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class ProductService {
-
-  constructor(
-    private _bnetService: BNetService,
-    private _localStorageService: LocalStorageService,
-  ) {
-  }
+  constructor(private _bnetService: BNetService, private _localStorageService: LocalStorageService) {}
 
   getProductOffer(id: string, isConsiderLocation: boolean = false): Observable<ProductOfferResponseModel> {
     const fias = this._fias();
@@ -30,7 +20,7 @@ export class ProductService {
     return this._bnetService.getPopularProducts(categoryId);
   }
 
-  searchProductOffers(groupQuery: AllGroupQueryFiltersModel): Observable<ProductOffersListResponseModel> {
+  searchProductOffers(groupQuery: AllGroupQueryFiltersModel, cacheable = true): Observable<ProductOffersListResponseModel> {
     const fias = this._fias();
     const searchQuery = {
       q: groupQuery.query,
@@ -48,11 +38,12 @@ export class ProductService {
       sort: groupQuery.sort,
     };
 
-    return this._bnetService.searchProductOffers(searchQuery);
+    return this._bnetService.searchProductOffers(searchQuery, cacheable);
   }
 
   private _fias() {
-    return this._localStorageService.getUserLocation()?.fias === CountryCode.RUSSIA ?
-      undefined : this._localStorageService.getUserLocation()?.fias;
+    return this._localStorageService.getUserLocation()?.fias === CountryCode.RUSSIA
+      ? undefined
+      : this._localStorageService.getUserLocation()?.fias;
   }
 }

@@ -1,6 +1,6 @@
-<div class="result">
+<div class="result" *ngIf="productOffers">
 
-  <div class="result_info">
+  <div class="result_info" [ngClass]="{'lined': !productOffers?.length && isRequestFulfilled}">
     <div class="title" [ngSwitch]="showResult">
       <ng-container *ngSwitchCase="'emptyResults'" [ngTemplateOutlet]="emptyResults"></ng-container>
       <ng-container *ngSwitchCase="'emptyResultsAndCategoryPage'" [ngTemplateOutlet]="emptyResultsAndCategoryPage"></ng-container>
@@ -14,23 +14,27 @@
     ></market-results-sorter>
   </div>
 
-  <div class="line" *ngIf="!productOffers?.length && wasRequestProducts"></div>
-
-  <div class="content" itemscope="itemscope" *ngIf="productOffers?.length">
-
-    <div class="product_infinite_scroll" infinite-scroll #productInfiniteScroll
-         (window:scroll)="onScroll($event)"
-         style="{{transform}})">
-
-      <market-card *ngFor="let productOffer of productOffers">
-        <market-nomenclature-card
-          [productOffer]="productOffer"
-        ></market-nomenclature-card>
-      </market-card>
-    </div>
-
+  <div class="tags-slot">
+    <ng-content select="tags-slot"></ng-content>
   </div>
 
+  <virtual-scroller
+    [items]="productOffers"
+    [parentScroll]="scroll.window"
+    [enableUnequalChildrenSizes]="true"
+    [bufferAmount]="10"
+    [scrollDebounceTime]="150"
+    (vsEnd)="fetchMore($event)"
+    #scroll>
+
+    <div class="content" itemscope="itemscope" #container>
+        <market-card *ngFor="let productOffer of scroll.viewPortItems; let i = index">
+          <market-nomenclature-card
+            [productOffer]="productOffer"
+          ></market-nomenclature-card>
+        </market-card>
+    </div>
+  </virtual-scroller>
 
   <ng-template #notEmptyResults>
     <strong>Результаты поиска</strong>
@@ -47,7 +51,7 @@
   <ng-template #emptyResultsAndCategoryPage>
     <strong>Результаты поиска</strong>
     <span>В категории "{{category?.name}}" по вашему запросу ничего не найдено.
-      <br/>Нажмите <a [routerLink]="['/search']" [queryParams]="queryParams">"Искать во всех категориях"</a>, чтобы повторить поиск среди всех товаров торговой площадки."</span>
+      <br/>Нажмите <a [routerLink]="['/category']" [queryParams]="queryParams">"Искать во всех категориях"</a>, чтобы повторить поиск среди всех товаров торговой площадки."</span>
   </ng-template>
 
 </div>

@@ -8,6 +8,7 @@ import { NaviCounterPipe } from './navi-counter.pipe';
 import { FoundPipe } from './found.pipe';
 import { PlaceJoinerPipe } from './place-joiner.pipe';
 import { StockPipe } from './stock.pipe';
+import { SafeHtmlPipe } from './safe-html.pipe';
 import { CurrencyPricePipe } from './currency.pipe';
 import { AbbreviatedBusinessNamePipe } from './abbreviated-business-name.pipe';
 import { CurrencyPipe } from '@angular/common';
@@ -31,6 +32,7 @@ import { MinPricePipe } from './min-price.pipe';
     NaviCounterPipe,
     FoundPipe,
     StockPipe,
+    SafeHtmlPipe,
     CurrencyPricePipe,
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
@@ -51,6 +53,7 @@ import { MinPricePipe } from './min-price.pipe';
     NaviCounterPipe,
     FoundPipe,
     StockPipe,
+    SafeHtmlPipe,
     CurrencyPricePipe,
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,

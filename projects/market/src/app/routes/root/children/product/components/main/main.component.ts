@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AllGroupQueryFiltersModel, SuggestionCategoryItemModel, SuggestionProductItemModel } from '#shared/modules/common-services/models';
-import { Router } from '@angular/router';
-import { queryParamsFrom } from '#shared/utils';
+import { AllGroupQueryFiltersModel } from '#shared/modules/common-services/models';
+import { Params, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ExternalProvidersService, LocalStorageService, NotificationsService, SuggestionService } from '#shared/modules/common-services';
 
@@ -12,9 +11,6 @@ import { ExternalProvidersService, LocalStorageService, NotificationsService, Su
   styleUrls: ['./main.component.scss', './main.component-768.scss'],
 })
 export class MainComponent implements OnInit {
-  productsSuggestions: SuggestionProductItemModel[];
-  categoriesSuggestions: SuggestionCategoryItemModel[];
-
   constructor(
     private _router: Router,
     private _suggestionService: SuggestionService,
@@ -30,22 +26,27 @@ export class MainComponent implements OnInit {
     this._externalProvidersService.fireGTMEvent(tag);
   }
 
-  searchSuggestions(query: string) {
-    this._suggestionService.searchSuggestions(query).subscribe(
-      (res) => {
-        this.productsSuggestions = res.products;
-        this.categoriesSuggestions = res.categories;
-      },
-      (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      },
-    );
-  }
+  navigateToCategoryRoute(filterGroup: AllGroupQueryFiltersModel) {
+    this._localStorageService.putSearchText(filterGroup.query);
 
-  navigateToSearchRoute(filters: AllGroupQueryFiltersModel) {
-    this._localStorageService.putSearchText(filters.query);
-    this._router.navigate(['/search'], {
-      queryParams: queryParamsFrom(filters),
+    const categoryId = filterGroup.filters?.categoryId || null;
+    this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], {
+      queryParams: queryParamsFromNew(filterGroup),
     });
   }
+}
+
+// TODO: перенести в общий блок (category.component.ts)
+export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
+  return {
+    q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
+    supplierId: groupQuery.filters?.supplierId,
+    trademark: groupQuery.filters?.trademark,
+    isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
+    isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
+    inStock: !groupQuery.filters?.inStock ? undefined : 'true',
+    withImages: !groupQuery.filters?.withImages ? undefined : 'true',
+    priceFrom: groupQuery.filters?.priceFrom === 0 ? undefined : groupQuery.filters.priceFrom,
+    priceTo: groupQuery.filters?.priceTo === 1000000 ? undefined : groupQuery.filters.priceTo,
+  };
 }
