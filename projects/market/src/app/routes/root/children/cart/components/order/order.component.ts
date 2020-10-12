@@ -698,6 +698,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       maxDaysForShipment: product.maxDaysForShipment,
       orderQtyMin: product.orderQtyMin,
       orderQtyStep: product.orderQtyStep,
+      stockAmount: product.stockAmount,
+      nsymb: product.unitOkei?.nsymb,
       availableToOrder: new FormControl(availableToOrder, [Validators.requiredTrue]),
       vat: vatConverter[product.vat] || 0,
       total: product.itemTotal?.total,

@@ -3,11 +3,12 @@ import { MultiplierPipe } from './multiplier.pipe';
 import { DeclensionPipe } from './declension.pipe';
 import { ArrayJoinerPipe } from './array-joiner.pipe';
 import { AvailabilityPipe } from './availability.pipe';
-import { SumLettersPipe } from '#shared/modules/pipes/sum-letters.pipe';
+import { SumLettersPipe } from './sum-letters.pipe';
 import { NaviCounterPipe } from './navi-counter.pipe';
 import { FoundPipe } from './found.pipe';
 import { PlaceJoinerPipe } from './place-joiner.pipe';
-import { StockPipe } from '#shared/modules/pipes/stock.pipe';
+import { StockPipe } from './stock.pipe';
+import { AvailableQuantityProductsPipe } from './available-quantity-products.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { StockPipe } from '#shared/modules/pipes/stock.pipe';
     SumLettersPipe,
     NaviCounterPipe,
     FoundPipe,
-    StockPipe
+    StockPipe,
+    AvailableQuantityProductsPipe
   ],
   exports: [
     MultiplierPipe,
@@ -30,7 +32,8 @@ import { StockPipe } from '#shared/modules/pipes/stock.pipe';
     SumLettersPipe,
     NaviCounterPipe,
     FoundPipe,
-    StockPipe
+    StockPipe,
+    AvailableQuantityProductsPipe
   ],
 })
 export class PipesModule {

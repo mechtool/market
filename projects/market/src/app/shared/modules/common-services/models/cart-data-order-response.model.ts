@@ -29,6 +29,9 @@ export class CartDataOrderResponseModel {
       };
       vat: 'VAT_10' | 'VAT_20' | 'VAT_WITHOUT';
       maxDaysForShipment: number;
+      orderQtyMin: number,
+      orderQtyStep: number,
+      stockAmount: number,
       _links: CartDataOrderRelationResponseModel;
     }
   ];
