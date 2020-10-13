@@ -76,6 +76,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   foundCities: string[];
   foundStreets: string[];
   foundHouses: string[];
+  minDate = new Date();
   private foundLocations: LocationModel[];
   private validDeliveryFiasCode: string[];
 

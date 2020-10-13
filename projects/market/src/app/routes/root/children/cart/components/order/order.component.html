@@ -340,6 +340,7 @@
                   <ListItem
                     DatePicker
                     [extra]="currentDateFormat(form.controls.deliveryDesirableDate.value)"
+                    [minDate]="minDate"
                     arrow="horizontal"
                     mode="datetime"
                     formControlName="deliveryDesirableDate">
