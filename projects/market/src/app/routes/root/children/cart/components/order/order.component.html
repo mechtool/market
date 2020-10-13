@@ -317,7 +317,7 @@
               </div>
 
 
-              <div class="form-group form-group-long">
+              <div class="form-group form-group-long desktop">
                 <label>Желаемая дата и время доставки</label>
 
                 <nz-date-picker
@@ -332,6 +332,22 @@
                   formControlName="deliveryDesirableDate"
                 ></nz-date-picker>
               </div>
+
+              <div class="form-group form-group-long mobile">
+                <label>Желаемая дата и время доставки</label>
+
+                <List [className]="'date-picker-list'">
+                  <ListItem
+                    DatePicker
+                    [extra]="currentDateFormat(form.controls.deliveryDesirableDate.value)"
+                    arrow="horizontal"
+                    mode="datetime"
+                    formControlName="deliveryDesirableDate">
+                    <Brief>Нажмите для ввода даты</Brief>
+                  </ListItem>
+                </List>
+              </div>
+
             </div>
 
             <div class="order__shipping_form__title">Контактное лицо с вашей стороны</div>

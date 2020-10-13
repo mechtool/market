@@ -1,0 +1,13 @@
+@media all and (max-width: 400px) {
+
+  .form-group-long {
+
+    &.desktop {
+      display: none;
+    }
+
+    &.mobile {
+      display: block;
+    }
+  }
+}

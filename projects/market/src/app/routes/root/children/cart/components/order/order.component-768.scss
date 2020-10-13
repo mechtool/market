@@ -1,0 +1,242 @@
+@media all and (max-width: 768px) {
+  .section_tab__supplier .supplier_title .tooltip_wrap {
+    display: block;
+  }
+
+  .table_list .btn_more {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+  }
+
+  .table_list {
+    display: block;
+    border-bottom: none;
+  }
+
+  .table_row {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #bdbdbd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 20px 20px 25px 20px;
+  }
+
+  .table_cell {
+    display: flex;
+    align-items: flex-start;
+    border-top: none;
+    height: auto;
+  }
+
+  .table_cell[data-title]:before {
+    content: attr(data-title);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-12);
+    color: var(--color-primary);
+    opacity: 0.6;
+    width: 70px;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .table_row.table_header {
+    display: none;
+  }
+
+  .table_list__products .table_row {
+    border-bottom-color: #bdbdbd;
+  }
+
+  .table_list__products .cell_left {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .table_list__products .cell_right {
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 120px;
+    margin-right: 35px;
+  }
+
+  .table_list__products .table_cell {
+    padding: 0;
+    width: 100%;
+  }
+
+  .table_list__products .cell_image {
+    position: static;
+    margin-right: 0;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 56px;
+      max-height: 56px;
+    }
+  }
+
+  .table_list__products .cell_title {
+    margin-top: 10px;
+    font-size: var(--font-size-12);
+  }
+
+  .table_list__products .cell_title span {
+    display: block;
+    line-height: 15px;
+    margin-bottom: 10px;
+  }
+
+  .table_list__products .cell_article {
+    flex-wrap: wrap;
+    height: auto;
+    margin-bottom: 6px;
+    margin-top: 5px;
+    align-items: flex-start;
+  }
+
+  .table_list__products .cell_available {
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .table_list__products .price {
+    font-size: var(--font-size-18);
+    color: var(--color-primary);
+  }
+
+  .table_list__products .cell_nds {
+    margin-left: 0;
+    margin-top: 5px;
+    font-size: var(--font-size-10);
+    color: var(--color-primary);
+  }
+
+  .table_list__basket .cell_more {
+    display: none;
+  }
+
+  .table_list__basket .table_row {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  .table_list__basket .table_row.table_header {
+    display: none;
+  }
+
+  .table_list__basket .cell_left {
+    width: 125px;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .table_list__products.table_list__basket .cell_right {
+    width: calc(100% - 80px);
+    display: flex;
+    flex-direction: column;
+    margin-right: 0;
+    flex-shrink: 1;
+  }
+
+  .table_list__basket .cell_title {
+    min-width: auto;
+  }
+
+  .table_list__basket .cell_count {
+    flex-wrap: wrap;
+  }
+
+  .table_list__basket .switch_count {
+    margin-bottom: 8px;
+  }
+
+  .table_list__basket .table_cell[data-title]:before {
+    width: 65px;
+  }
+
+  .table_list__basket .cell_count[data-title]:before {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .table_list__basket .cell_available {
+    margin-bottom: 6px;
+  }
+
+  .table_list__basket .cell_price_one {
+    display: none;
+  }
+
+  .table_list__basket .cell_sum {
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .table_list__basket .cell_sum[data-title]:before {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .table_list__basket .tooltip_wrap {
+    position: absolute;
+    left: 20px;
+    bottom: 28px;
+  }
+
+  .table_list__basket .cell_nds {
+    display: inline-block;
+    margin-left: 8px;
+  }
+
+  .order {
+    padding: 20px 20px 30px;
+    border: 1px solid #ececec;
+    border-radius: 4px;
+    margin-bottom: 25px;
+  }
+
+  .section_tab__title {
+    display: block;
+  }
+
+  .section_tab__moving {
+    width: 100%;
+    height: auto;
+    background-color: #ffffff;
+    padding-left: 0;
+    padding-right: 0;
+    z-index: 1;
+    position: relative;
+    top: 0;
+    left: 0;
+    transition: left 0.2s;
+  }
+
+  .section_tab__moving.d-none {
+    display: block;
+  }
+
+  body.section_show .section_tab.showed {
+    padding-bottom: 40px;
+  }
+
+  .section_tab__moving.showed {
+    position: absolute;
+    left: 0;
+  }
+
+  .input_error {
+    position: static;
+    padding-left: 0;
+    margin-top: 5px;
+  }
+}

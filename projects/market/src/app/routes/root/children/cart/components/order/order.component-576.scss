@@ -1,0 +1,69 @@
+@media all and (max-width: 576px) {
+  .info_group__small,
+  .info_group__supplier {
+    width: 100%;
+    max-width: none;
+  }
+  .info_group__label {
+    flex-grow: 1;
+    width: 50%;
+  }
+  .info_group__value {
+    width: 50%;
+    text-align: left;
+    font-size: var(--font-size-13);
+    font-weight: var(--font-weight-medium);
+  }
+  .wrapper_delivery_input {
+    display: block;
+    width: 100%;
+  }
+  .section_tab__supplier .supplier_title .tooltip_wrap {
+    display: block;
+    margin-left: auto;
+  }
+  .table_list__products .cell_right {
+    width: 100px;
+  }
+  .order_label {
+    width: auto;
+    min-width: 65px;
+  }
+  .order_spec_full {
+    flex-wrap: wrap;
+  }
+  .order__customer {
+    max-width: calc(100% - 65px);
+  }
+  .order__total_price {
+    justify-content: center;
+  }
+  .order__total_label {
+    font-weight: var(--font-weight-normal);
+  }
+  .order__total_nds {
+    text-align: center;
+    opacity: 0.5;
+    font-size: var(--font-size-12);
+  }
+  .order__total_btn {
+    flex-direction: column;
+
+    .form_error {
+      margin: 15px 0 0 0;
+    }
+  }
+  .order__total_btn .btn {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .order__shipping_interval {
+    height: auto;
+  }
+  .tabs_wrap .tab_item {
+    font-size: var(--font-size-13);
+  }
+  .table_list__basket .cell_left {
+    width: 80px;
+  }
+}

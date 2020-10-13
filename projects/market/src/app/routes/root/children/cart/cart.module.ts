@@ -22,6 +22,7 @@ import { CartOrderComponent, CartOrderQtyCounterComponent, OrderSentComponent } 
 import { NgxMaskModule } from 'ngx-mask';
 import { CartModalService } from './cart-modal.service';
 import { OrderUnavailableComponent } from './components/order/components/order-unavailable';
+import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { OrderUnavailableComponent } from './components/order/components/order-u
     PipesModule,
     LineClampModule,
     NzInputModule,
+    NgZorroAntdMobileModule,
   ],
   declarations: [
     CartComponent,

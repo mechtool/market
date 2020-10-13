@@ -9,7 +9,13 @@ import ru from '@angular/common/locales/ru';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
-import { AuthService, CartService, CommonServicesModule, CookieService, UserService } from '#shared/modules/common-services';
+import {
+  AuthService,
+  CartService,
+  CommonServicesModule,
+  CookieService,
+  UserService
+} from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgxMaskModule } from 'ngx-mask';
@@ -27,6 +33,7 @@ import {
 
 import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd';
+import { LOCAL_PROVIDER_TOKEN, NgZorroAntdMobileModule, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { PipesModule } from '#shared/modules/pipes';
@@ -59,6 +66,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     PipesModule,
     CardModule,
     LineClampModule,
+    NgZorroAntdMobileModule,
     NomenclatureCardModule,
     NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
@@ -80,6 +88,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     { provide: LOCALE_ID, useValue: 'ru' },
     { provide: NZ_I18N, useValue: ru_RU },
     { provide: NZ_ICONS, useValue: icons },
+    { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
@@ -89,4 +98,5 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

@@ -48,6 +48,7 @@
     "ng-recaptcha": "^6.0.2",
     "ng-yandex-metrika": "^3.0.2",
     "ng-zorro-antd": "9.2.1",
+    "ng-zorro-antd-mobile": "^2.0.7",
     "ngx-cookie-service": "^3.0.0",
     "ngx-infinite-scroll": "^9.0.0",
     "ngx-mask": "9.1.0",

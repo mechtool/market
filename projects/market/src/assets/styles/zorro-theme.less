@@ -1,4 +1,5 @@
 @import "../node_modules/ng-zorro-antd/ng-zorro-antd.less";
+@import "../node_modules/ng-zorro-antd-mobile/ng-zorro-antd-mobile.less";
 
 // Здесь переопределяются стили NG-ZORRO
 
@@ -316,6 +317,24 @@ nz-spin {
 @media all and (max-width: 400px) {
   .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
     min-width: 120px;
+  }
+
+  //mobile date-picker
+  .am-list-body .am-list-item:last-child {
+    border: 1px solid #d6d6d6;
+  }
+  .am-list-item .am-list-line {
+
+    .am-list-extra {
+      flex-basis: 100%;
+      text-align: left;
+      font-size: var(--font-size-14);
+      color: var(--color-primary);
+    }
+
+    .am-list-brief {
+      margin-top: 0;
+    }
   }
 }
 

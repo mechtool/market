@@ -49,7 +49,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'market-cart-order',
   templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss'],
+  styleUrls: [
+    './order.component.scss',
+    './order.component-1380.scss',
+    './order.component-992.scss',
+    './order.component-768.scss',
+    './order.component-576.scss',
+    './order.component-400.scss',
+    './order.component-360.scss',
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartOrderComponent implements OnInit, OnDestroy {
@@ -65,7 +73,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
   selectedAddress: LocationModel;
-
   foundCities: string[];
   foundStreets: string[];
   foundHouses: string[];
@@ -212,11 +219,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _findOrderInCart(cartData: CartDataResponseModel): any {
-    const relationObject = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
-    return cartData.content.find((orderItem) => {
-      return this.orderRelationHref && this.orderRelationHref === orderItem._links?.[relationObject]?.href;
-    });
+  currentDateFormat(date, format: string = 'yyyy-MM-dd HH:mm'): any {
+    if (date) {
+      const pad = (n: number): string => (n < 10 ? `0${n}` : n.toString());
+      return format
+        .replace('yyyy', date.getFullYear())
+        .replace('MM', pad(date.getMonth() + 1))
+        .replace('dd', pad(date.getDate()))
+        .replace('HH', pad(date.getHours()))
+        .replace('mm', pad(date.getMinutes()))
+        .replace('ss', pad(date.getSeconds()));
+    }
   }
 
   removeItem(orderItem: any) {
@@ -360,6 +373,13 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   disabledDate(current: Date): boolean {
     return differenceInCalendarDays(current, new Date()) < 1;
+  }
+
+  private _findOrderInCart(cartData: CartDataResponseModel): any {
+    const relationObject = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
+    return cartData.content.find((orderItem) => {
+      return this.orderRelationHref && this.orderRelationHref === orderItem._links?.[relationObject]?.href;
+    });
   }
 
   private _getFoundLocations(order: CartDataOrderModel): Observable<string[]> {
