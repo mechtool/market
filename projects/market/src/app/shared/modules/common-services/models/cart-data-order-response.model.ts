@@ -1,5 +1,6 @@
 import { CartDataOrderRelationResponseModel } from './cart-data-order-relation-response.model'
 import { CartDataOrderOkeiResponseModel } from './cart-data-order-unit-okei-response.model';
+import { TradeOfferStockEnumModel } from '#shared/modules';
 
 export class CartDataOrderResponseModel {
   supplier: {
@@ -32,6 +33,7 @@ export class CartDataOrderResponseModel {
       orderQtyMin: number,
       orderQtyStep: number,
       stockAmount: number,
+      stockLevel: TradeOfferStockEnumModel,
       _links: CartDataOrderRelationResponseModel;
     }
   ];

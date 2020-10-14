@@ -720,6 +720,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       orderQtyMin: product.orderQtyMin,
       orderQtyStep: product.orderQtyStep,
       stockAmount: product.stockAmount,
+      stockLevel: product.stockLevel,
       nsymb: product.unitOkei?.nsymb,
       availableToOrder: new FormControl(availableToOrder, [Validators.requiredTrue]),
       vat: vatConverter[product.vat] || 0,

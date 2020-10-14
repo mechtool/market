@@ -8,7 +8,6 @@ import { NaviCounterPipe } from './navi-counter.pipe';
 import { FoundPipe } from './found.pipe';
 import { PlaceJoinerPipe } from './place-joiner.pipe';
 import { StockPipe } from './stock.pipe';
-import { AvailableQuantityProductsPipe } from './available-quantity-products.pipe';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,6 @@ import { AvailableQuantityProductsPipe } from './available-quantity-products.pip
     NaviCounterPipe,
     FoundPipe,
     StockPipe,
-    AvailableQuantityProductsPipe
   ],
   exports: [
     MultiplierPipe,
@@ -33,7 +31,6 @@ import { AvailableQuantityProductsPipe } from './available-quantity-products.pip
     NaviCounterPipe,
     FoundPipe,
     StockPipe,
-    AvailableQuantityProductsPipe
   ],
 })
 export class PipesModule {

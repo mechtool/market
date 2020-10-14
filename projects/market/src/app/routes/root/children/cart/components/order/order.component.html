@@ -155,7 +155,7 @@
                   data-title="Доступность:"
                   [ngClass]="{'not-available': item.controls.availableToOrder.errors}"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
-                  {{!!item.controls.availableToOrder.errors | marketAvailableQuantityProducts : item.controls.stockAmount.value : item.controls.nsymb.value}}
+                  {{!!item.controls.availableToOrder.errors ? 'Недоступно' : item.controls.stockAmount.value | marketStock : item.controls.stockLevel.value}}
                 </div>
                 <div class="table_cell cell_count" data-title="Количество:"
                      [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
