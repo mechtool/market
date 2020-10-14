@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ExternalProvidersService, UserService } from '#shared/modules';
+import { AuthService, ExternalProvidersService, UserService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs/operators';
 import { fromEvent, Observable } from 'rxjs';
@@ -10,15 +10,25 @@ import { fromEvent, Observable } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private _userService: UserService, private _router: Router, private _externalProvidersService: ExternalProvidersService) {
+  constructor(
+    private _userService: UserService,
+    private _router: Router,
+    private _externalProvidersService: ExternalProvidersService,
+    private _authService: AuthService,
+  ) {
     this._routeChanges$().subscribe((res) => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();
       this._externalProvidersService.hitYandexMetrika();
     });
 
-    this._authedUserWindowCloseChanges$().subscribe((uin) => {
-      this._userService.setUserLastLoginTimestamp(uin, Date.now());
-    });
+    this._authedUserWindowCloseChanges$()
+      .pipe(
+        tap(() => {
+          const revokeToken = this._authService.revoke().subscribe(() => revokeToken.unsubscribe());
+        }))
+      .subscribe((uin) => {
+        this._userService.setUserLastLoginTimestamp(uin, Date.now());
+      });
   }
 
   private _routeChanges$(): Observable<NavigationEnd> {

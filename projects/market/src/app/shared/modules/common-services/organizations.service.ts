@@ -1,11 +1,12 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
   AccessKeyModel,
-  AccessKeyResponseModel, DocumentResponseModel,
+  AccessKeyResponseModel,
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
-  OrganizationUserResponseModel, ParticipationRequestRequestModel,
+  OrganizationUserResponseModel,
+  ParticipationRequestRequestModel,
   ParticipationRequestResponseModel,
   RegisterOrganizationRequestModel,
   UpdateOrganizationContactPersonRequestModel,
@@ -51,8 +52,8 @@ export class OrganizationsService {
 
   getParticipationRequests(
     query: ParticipationRequestRequestModel = { page: 0, size: 100 }
-    ): Observable<ParticipationRequestResponseModel[]> {
-      // TODO: ограничение в 100 элементов убрать в дальнейшем
+  ): Observable<ParticipationRequestResponseModel[]> {
+    // TODO: ограничение в 100 элементов убрать в дальнейшем
     return this._bnetService.getParticipationRequests(query)
       .pipe(
         map((res) => {

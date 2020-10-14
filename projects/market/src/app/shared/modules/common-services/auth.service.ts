@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, tap, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
@@ -23,12 +23,16 @@ export class AuthService {
     private _userService: UserService,
     private _organizationsService: OrganizationsService,
     private _router: Router,
-  ) {}
+  ) {
+  }
 
   logout(path: string = '/') {
-    const routePath = this.isPathWithAuth(path) ? '/' : path;
-    this._userService.setUserData(null);
-    redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
+    const revokeToken = this.revoke().subscribe(() => {
+      const routePath = this.isPathWithAuth(path) ? '/' : path;
+      this._userService.setUserData(null);
+      revokeToken.unsubscribe();
+      redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
+    });
   }
 
   login(path: string = '/', redirectable = true): Observable<any> {
@@ -74,6 +78,10 @@ export class AuthService {
 
   refresh(authRefreshRequest: AuthRefreshRequestModel): Observable<AuthResponseModel> {
     return this._apiService.post(`${API_URL}/auth/refresh`, authRefreshRequest);
+  }
+
+  revoke() {
+    return this._apiService.post(`${API_URL}/auth/revoke`);
   }
 
   goTo(url: string): void {

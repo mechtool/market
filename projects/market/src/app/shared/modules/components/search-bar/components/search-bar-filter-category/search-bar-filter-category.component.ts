@@ -109,7 +109,6 @@ export class SearchBarFilterCategoryComponent implements OnInit {
     if (this.selectedCategoryIndex) {
       setTimeout(() => {
         const categoryElementToScroll = this._container.get(this.selectedCategoryIndex)['rootNodes'][0];
-        console.log(categoryElementToScroll);
         categoryElementToScroll.scrollIntoView({ block: 'center' });
       }, 0);
     }
