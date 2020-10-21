@@ -277,6 +277,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   checkForValidityAndCreateOrder() {
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_TRY);
     if (!this.userInfo) {
       this._authModalService.openAuthDecisionMakerModal(
         `Чтобы оформить заказ необходимо зарегистрироваться или войти под своей учетной записью "1С".
