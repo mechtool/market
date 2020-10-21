@@ -279,8 +279,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   checkForValidityAndCreateOrder() {
     if (!this.userInfo) {
       this._authModalService.openAuthDecisionMakerModal(
-        `Чтобы оформить заказ необходимо зарегистрироваться или войти в свой аккаунт в 1С.
-        Не переживайте: данные в корзине сохранятся.`,
+        `Чтобы оформить заказ необходимо зарегистрироваться или войти под своей учетной записью "1С".
+        Данные в корзине сохранятся.`,
       );
       return;
     }
