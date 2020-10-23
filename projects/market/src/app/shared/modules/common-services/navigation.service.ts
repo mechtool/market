@@ -67,6 +67,12 @@ export class NavigationService {
         routerLink: ['/supplier'],
       },
       {
+        label: 'Акции',
+        attributeId: 'promo_menu_id',
+        icon: 'favorite',
+        routerLink: ['/promo'],
+      },
+      {
         label: 'Корзина',
         attributeId: 'basket_menu_id',
         icon: 'basket',
@@ -134,6 +140,12 @@ export class NavigationService {
         attributeId: 'supplier_menu_id',
         icon: 'supplier',
         routerLink: ['/supplier'],
+      },
+      {
+        label: 'Акции',
+        attributeId: 'promo_menu_id',
+        icon: 'favorite',
+        routerLink: ['/promo'],
       },
       {
         label: 'Корзина',

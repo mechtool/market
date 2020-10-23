@@ -21,11 +21,18 @@ ol {
   line-height: normal;
 }
 
-a:hover {
-  color: inherit;
-  border-bottom: 1px solid #fedc8b;
-  text-decoration: none;
+span {
+  a {
+    border-bottom: 1px solid;
+
+    &:hover {
+      color: inherit;
+      border-bottom: 1px solid #fedc8b;
+      text-decoration: none;
+    }
+  }
 }
+
 
 .description {
   line-height: 1.5;

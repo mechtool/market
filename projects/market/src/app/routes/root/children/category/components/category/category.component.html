@@ -39,6 +39,14 @@
           <span class="description">{{item.description}}</span>
           <img class="cover" src="{{item.imgUrl}}" alt="{{item.title}}" title="{{item.title}}">
       </market-main-banners-banner>
+
+      <!--todo Временно, удалить после окончания акций-->
+      <market-main-banners-banner *ngIf="categoryId === '616'"
+        title="Все для офиса!" btnLink="/promo/school-office" btnText="Условия акции">
+        <span class="description">до 10% на заказы в категории «Товары для школы и офиса»</span>
+        <img class="cover" src="assets/img/tmp/banner_2.png" alt="Канцтовары" title="Канцтовары">
+      </market-main-banners-banner>
+
     </div>
   </ng-template>
 

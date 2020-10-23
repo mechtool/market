@@ -170,10 +170,6 @@ export class BreadcrumbsGuard implements CanActivate {
       case '/promo':
         breadcrumbsItems = [
           {
-            label: 'Личный кабинет',
-            routerLink: '/',
-          },
-          {
             label: 'Акции',
           },
         ];
@@ -181,10 +177,6 @@ export class BreadcrumbsGuard implements CanActivate {
         return true;
       case '/promo/:id':
         breadcrumbsItems = [
-          {
-            label: 'Личный кабинет',
-            routerLink: '/',
-          },
           {
             label: 'Акции',
             routerLink: '/promo',
