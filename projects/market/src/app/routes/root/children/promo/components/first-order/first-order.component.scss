@@ -23,12 +23,12 @@ ol {
 
 span {
   a {
-    border-bottom: 1px solid;
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
 
     &:hover {
-      color: inherit;
-      border-bottom: 1px solid #fedc8b;
-      text-decoration: none;
+      border: none;
     }
   }
 }
