@@ -41,9 +41,17 @@
           [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
       </a>
       <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
-        <li class="item" *ngFor="let subItem of item.items">
+        <li class="item sub_item" *ngFor="let subItem of item.items">
           <a [ngClass]="{'active': subItem.label === navItemActive?.label}" (click)="navigateNavItem(subItem)">
-            <span class="icon icon-point"></span>
+            <span
+              class="icon"
+              [attr.title]="subItem.counter || null"
+              [attr.data-counter]="subItem.counter | marketNaviCounter">
+              <img
+                src="assets/img/svg/icon__{{subItem.icon}}.svg"
+                alt="{{subItem.label}}"
+                title="{{subItem.label}}">
+            </span>
             <span id="{{subItem.attributeId}}" class="label" [attr.data-counter]="subItem.counter | marketNaviCounter">
                 {{subItem.label}}
               </span>

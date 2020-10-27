@@ -81,25 +81,20 @@ export class NavigationService {
         counter: 0,
       },
       {
-        label: 'Личный кабинет',
-        attributeId: 'personal_menu_id',
-        icon: 'personal',
-        items: [
-          {
-            label: 'Войти',
-            attributeId: 'login_menu_id',
-            command: () => {
-              this._authService.login(`${location.pathname}${location.search}`);
-            },
-          },
-          {
-            label: 'Зарегистрироваться',
-            attributeId: 'register_menu_id',
-            command: () => {
-              this._authService.register();
-            },
-          },
-        ],
+        label: 'Зарегистрироваться',
+        attributeId: 'register_menu_id',
+        icon: 'sign_up',
+        command: () => {
+          this._authService.register();
+        },
+      },
+      {
+        label: 'Войти',
+        attributeId: 'login_menu_id',
+        icon: 'enter',
+        command: () => {
+          this._authService.login(`${location.pathname}${location.search}`);
+        },
       },
       {
         label: 'О проекте',
@@ -111,11 +106,13 @@ export class NavigationService {
             label: 'О сервисе',
             attributeId: 'about_service_menu_id',
             url: 'https://1cbn.ru/trading.html',
+            icon: 'point',
           },
           {
             label: 'Условия использования',
             attributeId: 'terms_of_use_menu_id',
             url: 'https://1cbn.ru/agreement',
+            icon: 'point',
           },
         ],
       },
@@ -164,17 +161,20 @@ export class NavigationService {
             label: 'Мои заказы',
             attributeId: 'orders_menu_id',
             routerLink: ['/my/orders'],
+            icon: 'order',
             counter: 0,
           },
           {
             label: 'Мои организации',
             attributeId: 'organization_menu_id',
             routerLink: ['/my/organizations'],
+            icon: 'organization',
             counter: 0,
           },
           {
             label: 'Выход',
             attributeId: 'logout_menu_id',
+            icon: 'logout',
             command: () => {
               this._authService.logout(
                 `${location.pathname}${location.search}`
@@ -193,11 +193,13 @@ export class NavigationService {
             label: 'О сервисе',
             attributeId: 'about_service_menu_id',
             url: 'https://1cbn.ru/trading.html',
+            icon: 'point',
           },
           {
             label: 'Условия использования',
             attributeId: 'terms_of_use_menu_id',
             url: 'https://1cbn.ru/agreement',
+            icon: 'point',
           },
         ],
       },
