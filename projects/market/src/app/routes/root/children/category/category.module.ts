@@ -5,6 +5,7 @@ import { CategoryRoutingModule } from './category-routing.module';
 import { CategoriesComponent, CategoryComponent } from './components';
 import { CategoryListModule, SearchBarModule, SearchResultsModule } from '#shared/modules';
 import { ProductModule } from '../product';
+import { BannersModule } from '#shared/modules/components/banners/banner.module';
 
 @NgModule({
   imports: [
@@ -15,11 +16,8 @@ import { ProductModule } from '../product';
     SearchBarModule,
     SearchResultsModule,
     ProductModule,
+    BannersModule,
   ],
-  declarations: [
-    CategoryComponent,
-    CategoriesComponent,
-  ],
+  declarations: [CategoryComponent, CategoriesComponent],
 })
-export class CategoryModule {
-}
+export class CategoryModule {}

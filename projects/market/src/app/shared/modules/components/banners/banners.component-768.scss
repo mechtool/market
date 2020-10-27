@@ -1,0 +1,14 @@
+@media all and (max-width: 768px) {
+  .banners_main {
+    market-banner {
+      max-width: 100%;
+    }
+  }
+  .banners_carousel {
+    .banner_block {
+      market-banner {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 export * from './about-supplier';
 export * from './account-list';
-export * from './banner-card';
+export * from './banners';
 export * from './category-list';
 export * from './error-code-alert';
 export * from './card';

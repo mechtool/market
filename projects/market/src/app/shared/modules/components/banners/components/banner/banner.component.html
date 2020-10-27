@@ -1,0 +1,20 @@
+<a  class="banner_item banner_item__big"
+    rel="noopener noreferrer"
+    href="{{item.btnLink}}"
+    target="{{isLinkExternal ? '_blank' : ''}}">
+
+  <div class="banner__info">
+    <h3>{{item.title}}</h3>
+    <div class="banner__descr">
+      <p class="description">{{item.description}}</p>
+    </div>
+    <div class="banner__btn">
+      <span class="btn btn_std btn_banner">{{item.btnText}}</span>
+    </div>
+  </div>
+
+  <div class="banner__img">
+    <img class="cover" src="{{item.imgUrl}}" alt="{{item.title}}" title="{{item.title}}">
+  </div>
+
+</a>

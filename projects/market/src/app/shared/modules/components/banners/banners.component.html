@@ -1,0 +1,32 @@
+<div class="banners_main" *ngIf="!showCarousel">
+  <ng-container
+    *ngFor="let bannerItem of bannerItems"
+    [ngTemplateOutlet]="bannerItemTpl"
+    [ngTemplateOutletContext]="{ bannerItem: bannerItem }">
+  </ng-container>
+</div>
+
+<div class="banners_carousel" *ngIf="showCarousel">
+  <nz-carousel [nzEffect]="'fade'">
+    <div nz-carousel-content *ngFor="let bannerItemsGroup of bannerItemsGroups">
+      <ng-container
+        [ngTemplateOutlet]="bannerItemsGroupTpl"
+        [ngTemplateOutletContext]="{ bannerItemsGroup: bannerItemsGroup }">
+      </ng-container>
+    </div>
+  </nz-carousel>
+</div>
+
+<ng-template let-bannerItemsGroup="bannerItemsGroup" #bannerItemsGroupTpl>
+  <div class="banner_block" [ngClass]="{'banner_block_w100': groupDivider === 1, 'banner_block_w50': groupDivider === 2, 'banner_block_w33': groupDivider === 3}">
+    <ng-container
+      *ngFor="let bannerItem of bannerItemsGroup"
+      [ngTemplateOutlet]="bannerItemTpl"
+      [ngTemplateOutletContext]="{ bannerItem: bannerItem }">
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template let-bannerItem="bannerItem" #bannerItemTpl>
+  <market-banner [item]="bannerItem"></market-banner>
+</ng-template>

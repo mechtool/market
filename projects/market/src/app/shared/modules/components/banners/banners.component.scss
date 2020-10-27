@@ -1,0 +1,52 @@
+.banners_main {
+  display: flex;
+  margin: 20px -10px;
+  width: auto;
+
+  market-banner {
+    flex: 1;
+    margin: 10px;
+    max-width: 50%;
+  }
+}
+
+.banners_carousel {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+
+  [nz-carousel-content] {
+    width: 100%;
+    overflow: hidden;
+    padding: 0 0 26px 0;
+  }
+
+  .banner_block {
+    display: flex;
+
+    &.banner_block_w100 {
+      market-banner {
+        width: 100%;
+      }
+    }
+
+    &.banner_block_w50 {
+      market-banner {
+        width: 50%;
+      }
+    }
+
+    &.banner_block_w33 {
+      market-banner {
+        width: 33.33333%;
+      }
+    }
+
+    market-banner {
+      margin-right: 20px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

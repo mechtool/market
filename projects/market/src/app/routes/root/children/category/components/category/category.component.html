@@ -12,7 +12,7 @@
     (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 
-  <ng-container *ngTemplateOutlet="banners"></ng-container>
+  <market-banners [bannerItems]="supplierBannerItems" *ngIf="supplierBannerItems?.length">></market-banners>
 
   <market-main-popular
     *ngIf="isNotSearchUsed && supplierBannerItems"
@@ -29,25 +29,5 @@
     (sortingChanged)="changeSortingAndRefresh($event)"
   ></market-search-results>
 
-  <ng-template #banners>
-    <div class="banners_suppliers" *ngIf="supplierBannerItems?.length">
-      <market-main-banners-banner
-        *ngFor="let item of supplierBannerItems"
-        title="{{item.title}}"
-        btnLink="{{item.btnLink}}"
-        btnText="Подобрать товары">
-          <span class="description">{{item.description}}</span>
-          <img class="cover" src="{{item.imgUrl}}" alt="{{item.title}}" title="{{item.title}}">
-      </market-main-banners-banner>
-
-      <!--todo Временно, удалить после окончания акций-->
-      <market-main-banners-banner *ngIf="categoryId === '616'"
-        title="Все для офиса!" btnLink="/promo/school-office" btnText="Условия акции">
-        <span class="description">до 10% на заказы в категории «Товары для школы и офиса»</span>
-        <img class="cover" src="assets/img/tmp/banner_2.png" alt="Канцтовары" title="Канцтовары">
-      </market-main-banners-banner>
-
-    </div>
-  </ng-template>
 
 </div>

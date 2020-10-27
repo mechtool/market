@@ -1,7 +1,6 @@
 :host {
   display: flex;
-  width: 33.3333%;
-  flex-basis: 33.3333%;
+  user-select: none;
 }
 
 .btn_std {
@@ -107,4 +106,8 @@
   .banner__info {
     width: 100%;
   }
+}
+
+.cover {
+  width: 95px;
 }

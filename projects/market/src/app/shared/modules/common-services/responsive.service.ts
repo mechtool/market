@@ -15,14 +15,16 @@ export class ResponsiveService {
     this._setScreenWidth(window.innerWidth);
     this._setMediaBreakpoint(window.innerWidth);
     fromEvent(window, 'resize')
-      .pipe(
-        debounceTime(1000),
-      ).subscribe((evt: any) => {
-        this._setScreenWidth(evt.target.innerWidth);
-        this._setMediaBreakpoint(evt.target.innerWidth);
-      }, (err) => {
-        console.log('error');
-      });
+      .pipe(debounceTime(300))
+      .subscribe(
+        (evt: any) => {
+          this._setScreenWidth(evt.target.innerWidth);
+          this._setMediaBreakpoint(evt.target.innerWidth);
+        },
+        (err) => {
+          console.log('error');
+        },
+      );
   }
 
   public screenWidthGreaterThan(val: number): boolean {
@@ -48,6 +50,4 @@ export class ResponsiveService {
       this.mediaBreakpoint$.next('xxl');
     }
   }
-
 }
-

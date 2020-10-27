@@ -40,15 +40,7 @@ export class CategoryComponent {
   }
 
   get isNotSearchUsed(): boolean {
-    const queryParamsInFilter = [
-      'q',
-      'supplierId',
-      'trademark',
-      'inStock',
-      'withImages',
-      'priceFrom',
-      'priceTo',
-    ];
+    const queryParamsInFilter = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'priceFrom', 'priceTo'];
     const queryParamsList = Object.keys(this._activatedRoute.snapshot.queryParams);
     return !queryParamsList.some((queryParam) => queryParamsInFilter.includes(queryParam));
   }

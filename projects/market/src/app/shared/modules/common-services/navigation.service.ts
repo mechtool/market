@@ -1,7 +1,7 @@
-import { ComponentRef, Injectable, ViewContainerRef, } from '@angular/core';
+import { ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { fromEvent } from 'rxjs';
+import { BehaviorSubject, fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
 import { CategoryModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
@@ -14,6 +14,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 @Injectable()
 export class NavigationService {
   private _isNavBarMinified = false;
+  isNavBarMinified$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _isMenuOpened = false;
   private _mainCategorySelectedId: string = null;
   private _userCategories: CategoryModel[];
@@ -176,9 +177,7 @@ export class NavigationService {
             attributeId: 'logout_menu_id',
             icon: 'logout',
             command: () => {
-              this._authService.logout(
-                `${location.pathname}${location.search}`
-              );
+              this._authService.logout(`${location.pathname}${location.search}`);
             },
           },
         ],
@@ -204,9 +203,7 @@ export class NavigationService {
         ],
       },
     ];
-    return this._userService.userData$.asObservable().pipe(
-      map((auth) => (auth ? authedNavItems : notAuthedNavItems))
-    );
+    return this._userService.userData$.asObservable().pipe(map((auth) => (auth ? authedNavItems : notAuthedNavItems)));
   }
 
   constructor(
@@ -226,19 +223,11 @@ export class NavigationService {
   }
 
   screenWidthGreaterThan(val: number): boolean {
-    return (
-      window.innerWidth > val ||
-      document.documentElement.clientWidth > val ||
-      document.body.clientWidth > val
-    );
+    return window.innerWidth > val || document.documentElement.clientWidth > val || document.body.clientWidth > val;
   }
 
   screenWidthLessThan(val: number): boolean {
-    return (
-      window.innerWidth < val ||
-      document.documentElement.clientWidth < val ||
-      document.body.clientWidth < val
-    );
+    return window.innerWidth < val || document.documentElement.clientWidth < val || document.body.clientWidth < val;
   }
 
   openMenu() {
@@ -254,13 +243,12 @@ export class NavigationService {
     });
 
     this.overlayRef = this._overlay.create(config);
-    this.componentRef = this.overlayRef.attach(
-      new ComponentPortal(NavbarNavComponent, this._viewContainerRef)
-    );
+    this.componentRef = this.overlayRef.attach(new ComponentPortal(NavbarNavComponent, this._viewContainerRef));
 
     this._isMenuOpened = true;
     this.overlayRef.backdropClick().subscribe(() => {
       this._isNavBarMinified = true;
+      this.isNavBarMinified$.next(this._isNavBarMinified);
       this._isMenuOpened = false;
       this.overlayRef.dispose();
       if (window.innerWidth > 992) {
@@ -311,6 +299,7 @@ export class NavigationService {
   handleOpenerClick() {
     if (this.screenWidthLessThan(1300) && this.screenWidthGreaterThan(992)) {
       this._isNavBarMinified = true;
+      this.isNavBarMinified$.next(this._isNavBarMinified);
       if (!this.isMenuOpened) {
         this.openMenu();
       } else {
@@ -320,6 +309,7 @@ export class NavigationService {
 
     if (this.screenWidthGreaterThan(1300)) {
       this._isNavBarMinified = !this._isNavBarMinified;
+      this.isNavBarMinified$.next(this._isNavBarMinified);
     }
   }
 
@@ -334,9 +324,7 @@ export class NavigationService {
   }
 
   setInitialMainCategorySelectedId(): void {
-    this.setMainCategorySelectedId(
-      this.screenWidthLessThan(768) ? null : this._userCategories[0].id
-    );
+    this.setMainCategorySelectedId(this.screenWidthLessThan(768) ? null : this._userCategories[0].id);
   }
 
   private _updateLayoutOnResolutionChanges(): void {
@@ -347,6 +335,7 @@ export class NavigationService {
           this.setMainCategorySelectedId(this._userCategories[0].id);
           if (evt.target.innerWidth > 1300) {
             this._isNavBarMinified = false;
+            this.isNavBarMinified$.next(this._isNavBarMinified);
             this.selectedPortal = this._componentPortal;
             if (this.overlayRef && this.overlayRef.hasAttached()) {
               this.overlayRef.dispose();
@@ -354,6 +343,7 @@ export class NavigationService {
           }
           if (evt.target.innerWidth > 992 && evt.target.innerWidth <= 1300) {
             this._isNavBarMinified = true;
+            this.isNavBarMinified$.next(this._isNavBarMinified);
             if (this._isMenuOpened) {
               this.overlayRef.dispose();
               this.openMenu();
@@ -365,6 +355,7 @@ export class NavigationService {
           }
           if (evt.target.innerWidth <= 992) {
             this._isNavBarMinified = false;
+            this.isNavBarMinified$.next(this._isNavBarMinified);
             this.selectedPortal = null;
             if (this._isMenuOpened) {
               this.overlayRef.dispose();
@@ -377,7 +368,7 @@ export class NavigationService {
         },
         (err) => {
           console.log('error');
-        }
+        },
       );
   }
 
@@ -390,16 +381,15 @@ export class NavigationService {
   }
 
   private _setInitialNavBarType(): void {
-    this._isNavBarMinified = !!(
-      this.screenWidthGreaterThan(992) && this.screenWidthLessThan(1300)
-    );
+    this._isNavBarMinified = !!(this.screenWidthGreaterThan(992) && this.screenWidthLessThan(1300));
+    this.isNavBarMinified$.next(this._isNavBarMinified);
   }
 
   private _closeCategoriesLayerOnNavigation(): void {
     this._router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        pairwise()
+        pairwise(),
       )
       .subscribe((event: any[]) => {
         if (event[0].url.includes('showCategories')) {
