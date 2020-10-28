@@ -34,5 +34,4 @@ export const categoryPromotion = {
       imgUrl: 'assets/img/tmp/banner_2.png',
     },
   ],
-  3321: [],
 };

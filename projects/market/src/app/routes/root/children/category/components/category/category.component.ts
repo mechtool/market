@@ -16,9 +16,9 @@ import {
   ProductService,
   SpinnerService,
 } from '#shared/modules/common-services';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { hasRequiredParameters, queryParamsWithoutCategoryIdFrom } from '#shared/utils';
-import { categoryPromotion } from '#environments/promotions';
+import { BannerItemModel } from '#shared/modules/components/banners/models/banner-item.model';
 
 @Component({
   templateUrl: './category.component.html',
@@ -34,10 +34,8 @@ export class CategoryComponent {
   productsTotal: number;
   sort: SortModel;
   page: number;
-
-  get supplierBannerItems(): any[] {
-    return categoryPromotion[this.categoryId] || null;
-  }
+  bannerItems: BannerItemModel[];
+  isPopularEnabled = false;
 
   get isNotSearchUsed(): boolean {
     const queryParamsInFilter = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'priceFrom', 'priceTo'];
@@ -112,7 +110,7 @@ export class CategoryComponent {
   private _init(): void {
     combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(
-        switchMap(([params, queryParams]) => {
+        tap(([params, queryParams]) => {
           this.categoryId = params.categoryId;
           this.query = queryParams.q;
           this.sort = queryParams.sort;
@@ -127,7 +125,15 @@ export class CategoryComponent {
             priceTo: queryParams.priceTo,
             categoryId: this.categoryId,
           };
-
+          this.isPopularEnabled = this._categoryService.categoryIdsPopularEnabled.includes(this.categoryId);
+        }),
+        switchMap(() => {
+          return this._categoryService.getCategoryBannerItems(this.categoryId);
+        }),
+        tap((bannerItems) => {
+          this.bannerItems = bannerItems;
+        }),
+        switchMap(() => {
           return this._categoryService.getCategoryTree(this.categoryId);
         }),
         switchMap((categoryModel) => {

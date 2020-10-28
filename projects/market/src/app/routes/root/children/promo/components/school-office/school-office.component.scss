@@ -38,7 +38,14 @@ span {
 }
 
 .banners_suppliers {
-  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px -10px;
+
+  market-banner {
+    width: 33.33333%;
+    padding: 10px;
+  }
 }
 
 .preview {
@@ -49,5 +56,29 @@ span {
 @media all and (max-width: 768px) {
   .preview {
     max-width: 256px;
+  }
+}
+
+@media all and (max-width: 1580px) {
+  .banners_suppliers {
+    market-banner {
+      width: 50%;
+    }
+  }
+}
+
+@media all and (max-width: 1300px) {
+  .banners_suppliers {
+    market-banner {
+      width: 50%;
+    }
+  }
+}
+
+@media all and (max-width: 768px) {
+  .banners_suppliers {
+    market-banner {
+      width: 100%;
+    }
   }
 }

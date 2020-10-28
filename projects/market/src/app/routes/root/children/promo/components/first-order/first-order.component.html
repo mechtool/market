@@ -6,7 +6,7 @@
   ваш заказ будет доставлен с пометкой "скидка". Скидка к заказу будет применена поставщиком при выставлении счета.</span>
 
 <div class="banners_suppliers">
-  <market-banners [bannerItems]="supplierItems"></market-banners>
+  <market-banner *ngFor="let bannerItem of supplierItems" [item]="bannerItem"></market-banner>
 </div>
 
 <h3>Как применить скидку на заказ?</h3>

@@ -12,10 +12,10 @@
     (cityChange)="changeCityAndRefresh($event)"
   ></market-search-bar>
 
-  <market-banners [bannerItems]="supplierBannerItems" *ngIf="supplierBannerItems?.length">></market-banners>
+  <market-banners [bannerItems]="bannerItems" *ngIf="bannerItems?.length">></market-banners>
 
   <market-main-popular
-    *ngIf="isNotSearchUsed && supplierBannerItems"
+    *ngIf="isNotSearchUsed && isPopularEnabled"
     [categoryId]="categoryId"
   ></market-main-popular>
 
