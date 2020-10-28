@@ -7,7 +7,7 @@
 </div>
 
 <div class="banners_carousel" *ngIf="showCarousel">
-  <nz-carousel [nzEffect]="'fade'">
+  <nz-carousel [nzEffect]="'fade'" [nzAutoPlay]="autoPlay">
     <div nz-carousel-content *ngFor="let bannerItemsGroup of bannerItemsGroups">
       <ng-container
         [ngTemplateOutlet]="bannerItemsGroupTpl"

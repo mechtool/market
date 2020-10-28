@@ -12,6 +12,7 @@ import { NavigationService } from '#shared/modules/common-services/navigation.se
 })
 export class BannersComponent implements OnInit {
   @Input() bannerItems: BannerItemModel[];
+  @Input() autoPlay = true;
   bannerItemsGroups: BannerItemModel[][];
   showCarousel = false;
   groupDivider: number = null;
