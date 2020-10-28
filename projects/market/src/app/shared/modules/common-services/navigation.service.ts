@@ -1,7 +1,7 @@
 import { ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { BehaviorSubject, fromEvent, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent } from 'rxjs';
 import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
 import { CategoryModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
@@ -84,7 +84,7 @@ export class NavigationService {
       {
         label: 'Зарегистрироваться',
         attributeId: 'register_menu_id',
-        icon: 'sign_up',
+        icon: 'personal',
         command: () => {
           this._authService.register();
         },
@@ -154,33 +154,26 @@ export class NavigationService {
         counter: 0,
       },
       {
-        label: 'Личный кабинет',
-        attributeId: 'personal_menu_id',
-        icon: 'personal',
-        items: [
-          {
-            label: 'Мои заказы',
-            attributeId: 'orders_menu_id',
-            routerLink: ['/my/orders'],
-            icon: 'order',
-            counter: 0,
-          },
-          {
-            label: 'Мои организации',
-            attributeId: 'organization_menu_id',
-            routerLink: ['/my/organizations'],
-            icon: 'organization',
-            counter: 0,
-          },
-          {
-            label: 'Выход',
-            attributeId: 'logout_menu_id',
-            icon: 'logout',
-            command: () => {
-              this._authService.logout(`${location.pathname}${location.search}`);
-            },
-          },
-        ],
+        label: 'Мои заказы',
+        attributeId: 'orders_menu_id',
+        routerLink: ['/my/orders'],
+        icon: 'order',
+        counter: 0,
+      },
+      {
+        label: 'Мои организации',
+        attributeId: 'organization_menu_id',
+        routerLink: ['/my/organizations'],
+        icon: 'organization',
+        counter: 0,
+      },
+      {
+        label: 'Выход',
+        attributeId: 'logout_menu_id',
+        icon: 'logout',
+        command: () => {
+          this._authService.logout(`${location.pathname}${location.search}`);
+        },
       },
       {
         label: 'О проекте',
