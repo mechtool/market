@@ -79,8 +79,10 @@
     }
 
     &__value {
-      a {
-        color: var(--color-black);
+      a:hover {
+        color: inherit;
+        border-bottom: 1px solid #fedc8b;
+        text-decoration: none;
       }
     }
 
@@ -88,6 +90,7 @@
       width: 15px;
       height: 15px;
       border-radius: 2px;
+      margin-right: 10px;
     }
   }
 }

@@ -112,14 +112,11 @@ export class SupplierTradeOffersListComponent {
 
   fromPackages(matrix: TradeOfferPriceMatrixModel[]) {
     if (matrix?.length) {
-      const fromPackages = matrix.sort((one, two) => one.price - two.price)[0].fromPackages;
+      const fromPackages = [...matrix]
+        .sort((one, two) => one.price - two.price)[0].fromPackages;
       return `от ${fromPackages} шт.`;
     }
     return null;
-  }
-
-  routeToTradeOffer(tradeOfferId: string) {
-    this._router.navigate([`./supplier/${this.supplier.id}/offer/${tradeOfferId}`]);
   }
 
   tradeOffersLoading(nextPage: number) {

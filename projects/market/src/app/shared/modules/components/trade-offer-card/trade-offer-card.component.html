@@ -1,40 +1,34 @@
-<div class="catalog_item__link" (click)="clickTradeOffer()" *ngIf="tradeOffer">
-  <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
-
-  <span class="catalog_item__descr">
-
-    <span class="catalog_item__title"
-          nz-tooltip
-          nzTooltipTitle="{{tradeOffer.supplierName}}">
-          {{tradeOffer.supplierName}}
-    </span>
-
-    <span class="catalog_item__about"
-          nz-tooltip
-          nzTooltipTitle="{{tradeOffer.description}}">
-      {{tradeOffer.description}}
-    </span>
-
-    <span class="catalog_item__info">
-
-      <span class="catalog_item__count tooltip"
+<div class="catalog_item__link" *ngIf="tradeOffer">
+  <a [routerLink]="'/supplier/' + tradeOffer.supplierId + '/offer/' + tradeOffer.id">
+    <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
+    <span class="catalog_item__descr">
+      <span class="catalog_item__title"
             nz-tooltip
-            nzTooltipTitle="Наличие товара"
-            *ngIf="tradeOffer.stock || tradeOffer.amount">
-        {{tradeOffer.amount | marketStock : tradeOffer.stock : false}}</span>
-
-      <span class="catalog_item__price"
+            nzTooltipTitle="{{tradeOffer.supplierName}}">
+            {{tradeOffer.supplierName}}
+      </span>
+      <span class="catalog_item__about"
             nz-tooltip
-            nzTooltipTitle="Цена"
-            *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+            nzTooltipTitle="{{tradeOffer.description}}">
+        {{tradeOffer.description}}
+      </span>
+      <span class="catalog_item__info">
+        <span class="catalog_item__count tooltip"
+              nz-tooltip
+              nzTooltipTitle="Наличие товара"
+              *ngIf="tradeOffer.stock || tradeOffer.amount">
+          {{tradeOffer.amount | marketStock : tradeOffer.stock : false}}</span>
 
+        <span class="catalog_item__price"
+              nz-tooltip
+              nzTooltipTitle="Цена"
+              *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+      </span>
     </span>
-  </span>
-
-  <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
+    <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
     <span class="tooltip"
           nz-tooltip
           nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
-  </div>
-
+    </div>
+  </a>
 </div>

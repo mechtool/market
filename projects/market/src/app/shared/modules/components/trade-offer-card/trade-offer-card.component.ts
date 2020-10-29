@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TradeOfferDto } from '#shared/modules';
-import { Router } from '@angular/router';
 import { currencyCode, stringToRGB } from '#shared/utils';
 
 @Component({
@@ -24,12 +23,5 @@ export class TradeOfferCardComponent {
 
   get currencyCode(): string {
     return currencyCode(this.tradeOffer?.currencyCode);
-  }
-
-  constructor(private _router: Router) {
-  }
-
-  clickTradeOffer() {
-    this._router.navigate([`/supplier/${this.tradeOffer.supplierId}/offer/${this.tradeOffer.id}`]);
   }
 }

@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CategoryModel } from '#shared/modules/common-services/models';
 import { CategoryService, NotificationsService } from '#shared/modules/common-services';
@@ -19,7 +18,6 @@ export class CategoryListComponent implements OnChanges {
   constructor(
     private _categoryService: CategoryService,
     private _notificationsService: NotificationsService,
-    private _router: Router,
   ) {
   }
 
@@ -32,10 +30,5 @@ export class CategoryListComponent implements OnChanges {
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         });
-  }
-
-  chooseCategory(category: CategoryModel) {
-    this.category = category;
-    this._router.navigate([`./category/${category.id}`]);
   }
 }

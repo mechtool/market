@@ -6,6 +6,10 @@
   display: block;
   border-bottom: none;
 
+  .backlight:hover {
+    background-color: var(--color-accent-lighter);
+  }
+
   .table_row {
     display: flex;
     align-items: center;
@@ -39,6 +43,7 @@
   }
 
   .cell_image {
+    margin-left: 5px;
     width: 55px;
     flex-shrink: 0;
     position: absolute;

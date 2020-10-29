@@ -1,15 +1,17 @@
-<div class="catalog_item__inner" (click)="clickSupplier()" *ngIf="supplier">
-  <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
-  <span class="catalog_item__descr">
-        <span class="catalog_item__title"
-              nz-tooltip
-              nzTooltipTitle="{{name}}">
-            {{name}}
-        </span>
-        <span class="catalog_item__about"
-              nz-tooltip
-              nzTooltipTitle="{{description}}">
-            {{description}}
-        </span>
+<div class="catalog_item__inner" *ngIf="supplier">
+  <a [routerLink]="'/supplier/' + supplier.id">
+    <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
+    <span class="catalog_item__descr">
+      <span class="catalog_item__title"
+            nz-tooltip
+            nzTooltipTitle="{{name}}">
+          {{name}}
+      </span>
+      <span class="catalog_item__about"
+            nz-tooltip
+            nzTooltipTitle="{{description}}">
+          {{description}}
+      </span>
     </span>
+  </a>
 </div>

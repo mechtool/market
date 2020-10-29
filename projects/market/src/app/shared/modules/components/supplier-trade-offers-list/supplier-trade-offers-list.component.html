@@ -9,7 +9,6 @@
 </div>
 
 <div class="catalog_header" *ngIf="tradeOffersTotal >= 0">
-
   <div class="catalog_header__count">
     <span class="catalog_header__title">Результаты поиска</span>
     <ng-container *ngIf="tradeOffersTotal > 0; else emptyTradeOffers">
@@ -18,8 +17,7 @@
       </strong>
     </ng-container>
     <ng-template #emptyTradeOffers>
-      <strong *ngIf="tradeOffersTotal === 0">поставщик не опубликовал торговые предложения для выбранного региона или
-        для ваших организаций</strong>
+      <strong *ngIf="tradeOffersTotal === 0">поставщик не опубликовал торговые предложения для выбранного региона или для ваших организаций</strong>
     </ng-template>
   </div>
 
@@ -30,11 +28,8 @@
   ></market-results-sorter>
 </div>
 
-
 <div class="table_list table_list__products" *ngIf="tradeOffers?.length">
-
   <div class="table_row table_header">
-
     <div class="cell_pre">
       <div class="cell_left">
         <div class="table_cell cell_title">
@@ -61,15 +56,13 @@
     </div>
   </div>
 
-
   <div class="trade_offers_infinite_scroll" infiniteScroll (scrolled)="tradeOffersLoading(page + 1)">
-
-    <div class="table_row" *ngFor="let tradeOffer of tradeOffers">
+    <a [routerLink]="'/supplier/' + supplier.id + '/offer/' + tradeOffer.id" class="table_row backlight"
+       *ngFor="let tradeOffer of tradeOffers">
       <div class="cell_pre">
         <div class="cell_left">
           <div class="table_cell cell_title">
-            <a (click)="routeToTradeOffer(tradeOffer.id)"
-               title="Браслет Honor Band 5 четвертая версия">{{tradeOffer.productName}}</a>
+            {{tradeOffer.productName}}
           </div>
           <div class="table_cell cell_article" data-title="Артикул:">
             {{tradeOffer.productPartNumber || tradeOffer.supplierPartNumber}}
@@ -84,7 +77,8 @@
         <div class="cell_right">
           <div class="cell_image">
             <span *ngIf="!tradeOffer.imageUrls" class="empty__img"></span>
-            <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}" alt="" title="">
+            <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}"
+                 alt="{{tradeOffer.productName}}" title="">
           </div>
           <div class="table_cell cell_price">
               <span *ngIf="tradeOffer.price?.matrix?.length"
@@ -108,12 +102,10 @@
           [minQuantity]="minQuantity(tradeOffer.price?.matrix, tradeOffer.packageMultiplicity)"
           [orderStep]="tradeOffer.packageMultiplicity"
         ></market-product-side>
-        <a (click)="routeToTradeOffer(tradeOffer.id)" class="btn btn-gray btn__product_link">О товаре</a>
+        <a [routerLink]="'/supplier/' + supplier.id + '/offer/' + tradeOffer.id" class="btn btn-gray btn__product_link">О товаре</a>
       </div>
-    </div>
+    </a>
 
   </div>
-
-
 </div>
 

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { SuppliersItemModel } from '#shared/modules';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
@@ -33,12 +32,5 @@ export class SupplierCardComponent {
       return `${this.supplier?.description.slice(0, 100)}...`;
     }
     return this.supplier?.description;
-  }
-
-  constructor(private _router: Router) {
-  }
-
-  clickSupplier() {
-    this._router.navigate([`./supplier/${this.supplier.id}`]);
   }
 }
