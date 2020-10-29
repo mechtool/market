@@ -117,7 +117,7 @@ export class NavbarNavComponent implements OnInit {
       navItem.command();
     }
     if (navItem.routerLink) {
-      if (window.innerWidth <= 992) {
+      if (this._navService.screenWidthLessThan(992)) {
         this._navService.closeMenu();
       }
       this._router.navigate(navItem.routerLink, {});
@@ -173,6 +173,9 @@ export class NavbarNavComponent implements OnInit {
   }
 
   goToRoot() {
+    if (this._navService.screenWidthLessThan(992)) {
+      this._navService.closeMenu();
+    }
     this._navService.goTo();
   }
 

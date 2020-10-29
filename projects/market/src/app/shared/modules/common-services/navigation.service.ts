@@ -224,7 +224,7 @@ export class NavigationService {
   }
 
   screenWidthLessThan(val: number): boolean {
-    return window.innerWidth < val || document.documentElement.clientWidth < val || document.body.clientWidth < val;
+    return window.innerWidth <= val || document.documentElement.clientWidth <= val || document.body.clientWidth <= val;
   }
 
   openMenu() {
