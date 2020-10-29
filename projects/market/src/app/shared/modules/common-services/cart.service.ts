@@ -10,12 +10,12 @@ import {
   CartDataOrderModel,
   CartDataResponseModel,
   CartUpdateItemQuantityRequestModel,
-  RelationEnumModel
+  RelationEnumModel,
 } from './models';
 
 @Injectable()
 export class CartService {
-  private _cartLocation$: BehaviorSubject<string> = new BehaviorSubject(null);
+  _cartLocation$: BehaviorSubject<string> = new BehaviorSubject(null);
   private _cartData$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   private set _cartLocation(cartLocation: string) {
@@ -29,68 +29,47 @@ export class CartService {
   }
 
   get cartCounter$(): Observable<number> {
-    return this.getCartData$()
-      .pipe(
-        map((res) => {
-          return res.content.reduce((accum, curr) => {
-            accum += curr.items.length;
-            return accum;
-          }, 0);
-        })
-      );
+    return this.getCartData$().pipe(
+      map((res) => {
+        return res?.content.reduce((accum, curr) => {
+          accum += curr.items.length;
+          return accum;
+        }, 0);
+      }),
+    );
   }
 
-  constructor(
-    private _bnetService: BNetService,
-    private _localStorageService: LocalStorageService,
-  ) {
+  constructor(private _bnetService: BNetService, private _localStorageService: LocalStorageService) {
     this._fillCartLocationAndDataFromStorage();
   }
 
   // Создание корзины
   createCart(): Observable<string> {
-    return this._bnetService.createCart()
-      .pipe(
-        map((res) => res.headers.get('Location')),
-        map(
-          (res) => {
-            this.setCart(res);
-            return res;
-          },
-        ));
+    return this._bnetService.createCart().pipe(
+      map((res) => res.headers.get('Location')),
+      tap((res) => {
+        this.setCart(res);
+      }),
+    );
   }
 
   // Мердж текущего содержимого корзины с содержимым от сервера TODO
-  setActualCartData(secondTime?: boolean): Observable<CartDataModel> {
+  setActualCartData(): Observable<CartDataModel> {
     let currentCartData = null;
-    return zip(
-      this.getCart$(),
-      this.getCartData$()
-    ).pipe(
-      map(([cartLocation, cartData]) => {
+    return zip(this.getCart$(), this.getCartData$()).pipe(
+      tap(([cartLocation, cartData]) => {
         currentCartData = cartData;
-        return cartLocation;
       }),
-      switchMap((href) => {
-        return this._bnetService.getCartDataByCartLocation(href);
-      }),
-      catchError((error) => {
-        if (error.status === 404 || secondTime) {
-          return this.createCart();
-        }
-        // todo Нужно докрутить логики на различные типы ошибок (500 и т.д) Что делать когда 500 и др. ошибки?
-        return throwError(error);
-      }),
-      switchMap((res: any) => {
-        if (typeof res === 'string') {
-          return this._bnetService.getCartDataByCartLocation(res);
-        }
-        return of(res);
+      switchMap(([cartLocation]) => {
+        return this._bnetService.getCartDataByCartLocation(cartLocation);
       }),
       map((res) => {
         return this._mergeCardDataCurrentWithResponse(res, currentCartData);
       }),
-      tap((res) => this.setCartData(res))
+      catchError(() => {
+        return throwError(null);
+      }),
+      tap((res) => this.setCartData(res)),
     );
   }
 
@@ -164,9 +143,7 @@ export class CartService {
     relationHref: string,
     data?: CartAddItemRequestModel | CartCreateOrderRequestModel | CartUpdateItemQuantityRequestModel | any,
   ): Observable<any> {
-    return this.handleRelation(relationType, relationHref, data).pipe(
-      switchMap(_ => this.setActualCartData())
-    );
+    return this.handleRelation(relationType, relationHref, data).pipe(switchMap((_) => this.setActualCartData()));
   }
 
   // Обновление содержимого корзины из сторейджа
@@ -217,4 +194,3 @@ export class CartService {
     return { content, _links: data._links };
   }
 }
-

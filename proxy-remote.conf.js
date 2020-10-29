@@ -39,6 +39,7 @@ const PROXY_CONFIG = [
     bypass: (req, res, proxyOptions) => {
       const pathsObject = {
         '/proxifier/auth': /^\/proxifier\/auth\/?$/i,
+        '/proxifier/auth/revoke': /^\/proxifier\/auth\/revoke\/?$/i,
         '/proxifier/categories': /^\/proxifier\/categories\/?$/i,
         '/proxifier/product-offers/popular': /^\/proxifier\/product-offers\/popular\/?$/i,
         '/proxifier/product-offers': /^\/proxifier\/product-offers\/?$/i,
@@ -82,6 +83,12 @@ const PROXY_CONFIG = [
       if (req.method === 'POST' && pathsObject['/proxifier/auth'].test(req.originalUrl.split('?')[0])) {
         res.status(201);
         res.end(authData);
+        return true;
+      }
+
+      if (req.method === 'POST' && pathsObject['/proxifier/auth/revoke'].test(req.originalUrl.split('?')[0])) {
+        res.status(204);
+        res.end('');
         return true;
       }
 

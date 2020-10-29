@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import {
   AuthResponseModel,
@@ -51,7 +51,7 @@ export class UserService {
     return this._bnetService.getCategories().pipe(
       catchError((err) => {
         this.categories$.next(null);
-        return null;
+        return throwError(null);
       }),
       tap((res: CategoryResponseModel) => {
         const tree = convertListToTree(res.categories);

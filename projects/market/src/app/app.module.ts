@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, Injector, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -9,13 +9,7 @@ import ru from '@angular/common/locales/ru';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory } from './config/api.factory';
-import {
-  AuthService,
-  CartService,
-  CommonServicesModule,
-  CookieService,
-  UserService
-} from '#shared/modules/common-services';
+import { CommonServicesModule } from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgxMaskModule } from 'ngx-mask';
@@ -41,6 +35,7 @@ import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
 import { LineClampModule } from '#shared/modules';
 import { MetrikaModule } from 'ng-yandex-metrika';
+import { APP_CONFIG } from './config/app.config.token';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -89,14 +84,14 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     { provide: NZ_I18N, useValue: ru_RU },
     { provide: NZ_ICONS, useValue: icons },
     { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
+    { provide: APP_CONFIG, useValue: { techRouteAddress: '/tech', retryNum: 3, retryDelay: 300 } },
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,
-      deps: [UserService, CartService, AuthService, CookieService],
+      deps: [Injector],
       multi: true,
     },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

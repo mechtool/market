@@ -3,11 +3,9 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  templateUrl: './tech.component.html',
+  styleUrls: ['./tech.component.scss'],
 })
-export class LoginComponent {
-
+export class TechComponent {
   constructor() {}
-
 }

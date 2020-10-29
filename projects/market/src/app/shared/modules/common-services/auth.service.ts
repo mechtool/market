@@ -1,7 +1,7 @@
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
@@ -23,8 +23,7 @@ export class AuthService {
     private _userService: UserService,
     private _organizationsService: OrganizationsService,
     private _router: Router,
-  ) {
-  }
+  ) {}
 
   logout(path: string = '/') {
     const revokeToken = this.revoke().subscribe(() => {
@@ -54,6 +53,9 @@ export class AuthService {
         map(() => {
           this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
           return null;
+        }),
+        catchError((_) => {
+          return throwError(null);
         }),
       );
     }
