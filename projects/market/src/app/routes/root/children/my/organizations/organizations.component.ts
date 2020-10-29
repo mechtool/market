@@ -169,6 +169,7 @@ export class OrganizationsComponent implements OnInit {
             this._setActiveTabType('b');
             break;
           case 'c':
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.MODAL_CHECK_INN_SHOW);
             this._createRequisitesCheckerModal();
             break;
           default:

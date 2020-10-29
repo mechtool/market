@@ -3,9 +3,10 @@ import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent } from 'rxjs';
 import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
-import { CategoryModel, NavItemModel } from './models';
+import { CategoryModel, MetrikaEventModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
+import { ExternalProvidersService } from './external-providers.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -86,6 +87,7 @@ export class NavigationService {
         attributeId: 'register_menu_id',
         icon: 'personal',
         command: () => {
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.REGISTER);
           this._authService.register();
         },
       },
@@ -94,6 +96,7 @@ export class NavigationService {
         attributeId: 'login_menu_id',
         icon: 'enter',
         command: () => {
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.SIGN_IN);
           this._authService.login(`${location.pathname}${location.search}`);
         },
       },
@@ -202,6 +205,7 @@ export class NavigationService {
   constructor(
     private _userService: UserService,
     private _authService: AuthService,
+    private _externalProvidersService: ExternalProvidersService,
     private _overlay: Overlay,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
