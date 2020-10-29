@@ -1,29 +1,27 @@
-<div class="nomenclature-card" *ngIf="productOffer">
-  <a [routerLink]="'/product/' + productOffer.product.id">
-    <span class="cover">
-      <span *ngIf="!imageUrl"
-            class="empty__img"></span>
+<a class="nomenclature-card" *ngIf="productOffer" [routerLink]="'/product/' + productOffer.product.id">
+  <span class="cover">
+    <span *ngIf="!imageUrl"
+          class="empty__img"></span>
 
-      <img *ngIf="imageUrl"
-           src="{{imageUrl}}"
-           alt="{{productOffer.product.productName}}"
-           title="{{productOffer.product.productName}}">
-    </span>
-      <span class="body">
-      <span class="title"
-            nz-tooltip
-            nzTooltipTitle="{{productOffer.product.productName}}">
-        {{productOffer.product.productName}}
-      </span>
-      <span class="meta">
-        <span class="count"
-              nz-tooltip
-              nzTooltipTitle="Количество предложений от поставщиков">{{productOffer.offersTotal | number:'1.0'}}</span>
-        <span
-          class="price"
+    <img *ngIf="imageUrl"
+         src="{{imageUrl}}"
+         alt="{{productOffer.product.productName}}"
+         title="{{productOffer.product.productName}}">
+  </span>
+  <span class="body">
+    <span class="title"
           nz-tooltip
-          nzTooltipTitle="Минимальная цена"><span>{{productOffer.offersMinPrice | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span></span>
-      </span>
+          nzTooltipTitle="{{productOffer.product.productName}}">
+      {{productOffer.product.productName}}
     </span>
-  </a>
-</div>
+    <span class="meta">
+      <span class="count"
+            nz-tooltip
+            nzTooltipTitle="Количество предложений от поставщиков">{{productOffer.offersTotal | number:'1.0'}}</span>
+      <span
+        class="price"
+        nz-tooltip
+        nzTooltipTitle="Минимальная цена"><span>{{productOffer.offersMinPrice | marketMultiplier:'.01' | currency:'RUB':'symbol':'1.0'}}</span></span>
+    </span>
+  </span>
+</a>
