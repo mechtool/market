@@ -3,7 +3,7 @@ import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent } from 'rxjs';
 import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
-import { CategoryModel, MetrikaEventModel, NavItemModel } from './models';
+import { CategoryModel, MetrikaEventTypeModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { ExternalProvidersService } from './external-providers.service';
@@ -87,7 +87,7 @@ export class NavigationService {
         attributeId: 'register_menu_id',
         icon: 'personal',
         command: () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.REGISTER);
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER);
           this._authService.register();
         },
       },
@@ -96,7 +96,7 @@ export class NavigationService {
         attributeId: 'login_menu_id',
         icon: 'enter',
         command: () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.SIGN_IN);
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
           this._authService.login(`${location.pathname}${location.search}`);
         },
       },

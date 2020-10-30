@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd';
 import { AuthService } from '#shared/modules/common-services/auth.service';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
-import { MetrikaEventModel } from '#shared/modules/common-services/models';
+import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
 import { EmptyOrganizationsInfoComponent } from '../components/empty-organizations-info/empty-organizations-info.component';
 import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
 
@@ -34,7 +34,7 @@ export class AuthModalService {
     });
     modal.afterClose.subscribe((result) => {
       if (!result) {
-        this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.MODAL_AUTH_CLOSE);
+        this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_CLOSE);
       }
       const pathTo = loginRedirectPath;
       const pathFrom = `${location.pathname}${location.search}`;

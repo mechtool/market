@@ -84,7 +84,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     { provide: NZ_I18N, useValue: ru_RU },
     { provide: NZ_ICONS, useValue: icons },
     { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
-    { provide: APP_CONFIG, useValue: { techRouteAddress: '/tech', retryNum: 3, retryDelay: 300 } },
+    { provide: APP_CONFIG, useValue: { retryNum: 3, retryDelay: 300 } },
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,

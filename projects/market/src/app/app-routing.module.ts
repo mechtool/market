@@ -6,11 +6,6 @@ import { BreadcrumbsGuard, DelayedPreloadingStrategy } from '#shared/modules/set
 
 const routes: Routes = [
   {
-    path: 'tech',
-    data: { preload: false },
-    loadChildren: () => import('./routes/tech/tech.module').then((m) => m.TechModule),
-  },
-  {
     path: '',
     canActivate: [BreadcrumbsGuard, SsoTicketGuard],
     runGuardsAndResolvers: 'always',

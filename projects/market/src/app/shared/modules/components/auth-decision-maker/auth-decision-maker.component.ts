@@ -3,7 +3,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { Subject } from 'rxjs';
 import { AuthService } from '#shared/modules/common-services/auth.service';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
-import { MetrikaEventModel } from '#shared/modules/common-services/models/metrika-event.model';
+import { MetrikaEventTypeModel } from '#shared/modules/common-services/models/metrika-event-type.model';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -19,13 +19,13 @@ export class AuthDecisionMakerComponent {
   constructor(private _authService: AuthService, private _externalProvidersService: ExternalProvidersService) {}
 
   login(): void {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.MODAL_AUTH_SIGN_IN);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_SIGN_IN);
     this._destroy();
     this._authService.login(this.loginRedirectPath);
   }
 
   register(): void {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.MODAL_AUTH_REGISTER);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_REGISTER);
     this._destroy();
     this._authService.register('/my/organizations?tab=c;/cart');
   }

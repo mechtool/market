@@ -1,7 +1,7 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { Location } from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
-import { MetrikaEventModel } from '#shared/modules/common-services/models';
+import { MetrikaEventTypeModel, MetrikaEventOptionsModel } from './models';
 
 @Injectable()
 export class ExternalProvidersService {
@@ -31,7 +31,12 @@ export class ExternalProvidersService {
     this._yandexMetrikaPrevPath = newPath;
   }
 
-  fireYandexMetrikaEvent(eventType: MetrikaEventModel): void {
-    this._metrika.fireEvent(eventType);
+  fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): void {
+    if (!options) {
+      this._metrika.fireEvent(eventType);
+    }
+    if (options) {
+      this._metrika.fireEvent(eventType, options);
+    }
   }
 }

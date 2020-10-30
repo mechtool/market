@@ -1,5 +1,13 @@
-import { catchError, map, switchMap, take, tap } from 'rxjs/operators';
-import { AuthService, CartService, CookieService, UserService } from '#shared/modules/common-services';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import {
+  AuthService,
+  CartService,
+  CookieService,
+  ExternalProvidersService,
+  MetrikaEventAppInitProblemsEnumModel,
+  MetrikaEventTypeModel,
+  UserService,
+} from '#shared/modules/common-services';
 import { defer, Observable, of, throwError, zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Injector } from '@angular/core';
@@ -10,8 +18,8 @@ let cartService = null;
 let authService = null;
 let cookieService = null;
 let userService = null;
+let externalProvidersService = null;
 let router = null;
-let techRouteAddress = null;
 let retryNum = null;
 let retryDelay = null;
 
@@ -20,8 +28,8 @@ export function ApiFactory(injector: Injector): () => Promise<any> {
   authService = injector.get(AuthService);
   cookieService = injector.get(CookieService);
   userService = injector.get(UserService);
+  externalProvidersService = injector.get(ExternalProvidersService);
   router = injector.get(Router);
-  techRouteAddress = injector.get(APP_CONFIG).techRouteAddress;
   retryNum = injector.get(APP_CONFIG).retryNum;
   retryDelay = injector.get(APP_CONFIG).retryDelay;
 
@@ -34,25 +42,23 @@ function init() {
   return new Promise((resolve, reject) => {
     return zip(setCart(), updateUserCategoriesRetriable$())
       .pipe(
+        switchMap(() => loginIfCookieAuthed$()),
         tap(() => {
           userService.watchUserDataChangesForUserStatusCookie();
         }),
-        switchMap((res) => {
-          return cookieService.isUserStatusCookieAuthed ? authService.login(location.pathname, false) : of(null);
-        }),
       )
       .subscribe(
-        (res) => {
-          if (res) {
-            authService.redirectExternalSsoAuth(res);
+        (serviceUrl) => {
+          if (serviceUrl) {
+            authService.redirectExternalSsoAuth(serviceUrl);
           }
-          if (!res) {
+          if (!serviceUrl) {
             resolve();
           }
         },
-        () => {
-          router.navigateByUrl(techRouteAddress);
-          resolve();
+        (e) => {
+          externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.APP_INIT_PROBLEMS, { params: e });
+          reject();
         },
       );
   });
@@ -64,22 +70,51 @@ function setCart() {
   }).pipe(
     take(1),
     switchMap((_) => setActualCartDataRetriable$()),
-    catchError((_) => {
-      return throwError(null);
+    catchError((e) => throwError(e)),
+  );
+}
+
+function loginIfCookieAuthed$(): Observable<any> {
+  return of(cookieService.isUserStatusCookieAuthed).pipe(
+    switchMap((isAuthed) => {
+      return isAuthed ? authService.login(location.pathname, false) : of(null);
+    }),
+    switchMap(() => {
+      return throwError({
+        data: MetrikaEventAppInitProblemsEnumModel.SIGN_IN,
+      });
     }),
   );
 }
 
 function createCartRetriable$(): Observable<any> {
-  return delayedRetryWith(cartService.createCart());
+  return delayedRetryWith(cartService.createCart()).pipe(
+    catchError((e) => {
+      return throwError({
+        data: MetrikaEventAppInitProblemsEnumModel.CART_CREATE,
+      });
+    }),
+  );
 }
 
 function setActualCartDataRetriable$(): Observable<any> {
-  return delayedRetryWith(cartService.setActualCartData());
+  return delayedRetryWith(cartService.setActualCartData()).pipe(
+    catchError((e) => {
+      return throwError({
+        data: `${MetrikaEventAppInitProblemsEnumModel.CART_GET_BY_LOCATION}: ${e}`,
+      });
+    }),
+  );
 }
 
 function updateUserCategoriesRetriable$(): Observable<any> {
-  return delayedRetryWith(userService.updateUserCategories());
+  return delayedRetryWith(userService.updateUserCategories()).pipe(
+    catchError((e) => {
+      return throwError({
+        data: MetrikaEventAppInitProblemsEnumModel.CATEGORY_LIST,
+      });
+    }),
+  );
 }
 
 function delayedRetryWith(source: Observable<any>): Observable<any> {

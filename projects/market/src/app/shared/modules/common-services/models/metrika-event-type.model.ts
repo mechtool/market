@@ -1,4 +1,4 @@
-export enum MetrikaEventModel {
+export enum MetrikaEventTypeModel {
   ORDER_CREATE = 'ORDER_CREATE',
   ORDER_PUT = 'ORDER_PUT',
   ORDER_TRY = 'TRY_ORDER',
@@ -10,4 +10,5 @@ export enum MetrikaEventModel {
   MODAL_AUTH_REGISTER = 'LOGIN1C_REGISTER_MODAL',
   MODAL_AUTH_CLOSE = 'AUTH_CLOSE_MODAL',
   MODAL_CHECK_INN_SHOW = 'ORG_REGISTER_START',
+  APP_INIT_PROBLEMS = 'APP_INIT_PROBLEMS',
 }

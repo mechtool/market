@@ -13,7 +13,7 @@ import { AccessKeyComponent } from './components/access-key/access-key.component
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
-import { MetrikaEventModel } from '#shared/modules/common-services/models';
+import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
 
 type TabType = 'a' | 'b' | 'c';
 
@@ -120,7 +120,7 @@ export class OrganizationsComponent implements OnInit {
           }
           this.checkedLegalRequisites = null;
           this.goToTab('a');
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORG_REGISTER);
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORG_REGISTER);
         },
         (err) => {
           this._notificationsService.error('Произошла ошибка при регистрации организации');
@@ -169,7 +169,7 @@ export class OrganizationsComponent implements OnInit {
             this._setActiveTabType('b');
             break;
           case 'c':
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.MODAL_CHECK_INN_SHOW);
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_CHECK_INN_SHOW);
             this._createRequisitesCheckerModal();
             break;
           default:

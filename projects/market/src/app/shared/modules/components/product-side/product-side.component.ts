@@ -1,7 +1,7 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MetrikaEventModel, OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
+import { MetrikaEventTypeModel, OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
 import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
 
 enum Operation {
@@ -84,7 +84,7 @@ export class ProductSideComponent implements OnInit {
       })
       .subscribe(
         () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
           this.spinnerOf();
           this._cdr.detectChanges();
         },
@@ -111,7 +111,7 @@ export class ProductSideComponent implements OnInit {
           })
           .subscribe(
             () => {
-              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
               this.spinnerOf();
             },
             (err) => {
@@ -125,7 +125,7 @@ export class ProductSideComponent implements OnInit {
           .handleRelationAndUpdateData(RelationEnumModel.ITEM_REMOVE, `${cartLocation}/items/${this.tradeOfferId}`)
           .subscribe(
             () => {
-              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventModel.ORDER_PUT);
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
             },
             (err) => {
               this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');

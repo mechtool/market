@@ -1,0 +1,33 @@
+.maintenance {
+  display: none;
+  flex-direction: column;
+  text-align: center;
+
+  .icon-wrapper {
+    margin: 0 0 16px 0;
+  }
+
+  .icon {
+    width: 48px;
+  }
+
+  .title {
+    font-size: 2rem;
+    line-height: 1.5;
+    border-bottom: 1px solid #e6e6e6;
+    margin: 0 0 8px 0;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    margin: 0 0 4px 0;
+  }
+
+  .subsubtitle {
+    font-size: 1.25rem;
+    line-height: normal;
+    font-weight: normal;
+    color: #a9a9a9;
+  }
+}

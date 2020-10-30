@@ -56,9 +56,11 @@ export class CartService {
   // Мердж текущего содержимого корзины с содержимым от сервера TODO
   setActualCartData(): Observable<CartDataModel> {
     let currentCartData = null;
+    let currentCartLocation = null;
     return zip(this.getCart$(), this.getCartData$()).pipe(
       tap(([cartLocation, cartData]) => {
         currentCartData = cartData;
+        currentCartLocation = cartLocation;
       }),
       switchMap(([cartLocation]) => {
         return this._bnetService.getCartDataByCartLocation(cartLocation);
@@ -67,7 +69,7 @@ export class CartService {
         return this._mergeCardDataCurrentWithResponse(res, currentCartData);
       }),
       catchError(() => {
-        return throwError(null);
+        return throwError(currentCartLocation);
       }),
       tap((res) => this.setCartData(res)),
     );

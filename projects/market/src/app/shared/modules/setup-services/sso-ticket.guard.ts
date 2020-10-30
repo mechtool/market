@@ -18,9 +18,7 @@ export class SsoTicketGuard implements CanActivate {
 
     if (next.queryParams.ticket) {
       return this._authService.login(`${location.pathname}${location.search}`).pipe(
-        delayedRetry(300, 3),
         catchError((e) => {
-          this._router.navigateByUrl(this.appConfig.techRouteAddress);
           return of(false);
         }),
       );
