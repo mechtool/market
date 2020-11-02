@@ -87,7 +87,7 @@ export class NavigationService {
         attributeId: 'register_menu_id',
         icon: 'personal',
         command: () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER);
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER).subscribe();
           this._authService.register();
         },
       },
@@ -96,7 +96,7 @@ export class NavigationService {
         attributeId: 'login_menu_id',
         icon: 'enter',
         command: () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN).subscribe();
           this._authService.login(`${location.pathname}${location.search}`);
         },
       },

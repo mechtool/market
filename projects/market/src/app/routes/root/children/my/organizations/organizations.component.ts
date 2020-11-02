@@ -110,6 +110,7 @@ export class OrganizationsComponent implements OnInit {
       .pipe(
         switchMap((_) => this._organizationsService.getUserOrganizations()),
         tap((res) => this._userService.setUserOrganizations(res)),
+        tap(() => this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORG_REGISTER).subscribe()),
       )
       .subscribe(
         () => {
@@ -120,7 +121,6 @@ export class OrganizationsComponent implements OnInit {
           }
           this.checkedLegalRequisites = null;
           this.goToTab('a');
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORG_REGISTER);
         },
         (err) => {
           this._notificationsService.error('Произошла ошибка при регистрации организации');
@@ -169,7 +169,7 @@ export class OrganizationsComponent implements OnInit {
             this._setActiveTabType('b');
             break;
           case 'c':
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_CHECK_INN_SHOW);
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_CHECK_INN_SHOW).subscribe();
             this._createRequisitesCheckerModal();
             break;
           default:

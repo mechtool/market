@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MetrikaEventTypeModel, OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
 import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
+import { tap } from 'rxjs/operators';
 
 enum Operation {
   REMOVE,
@@ -82,9 +83,13 @@ export class ProductSideComponent implements OnInit {
         tradeOfferId: this.tradeOfferId,
         quantity: this.minQuantity,
       })
+      .pipe(
+        tap(() => {
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+        }),
+      )
       .subscribe(
         () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
           this.spinnerOf();
           this._cdr.detectChanges();
         },
@@ -109,9 +114,13 @@ export class ProductSideComponent implements OnInit {
           .handleRelationAndUpdateData(RelationEnumModel.ITEM_UPDATE_QUANTITY, `${cartLocation}/items/${this.tradeOfferId}/quantity`, {
             quantity: value,
           })
+          .pipe(
+            tap(() => {
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+            }),
+          )
           .subscribe(
             () => {
-              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
               this.spinnerOf();
             },
             (err) => {
@@ -123,10 +132,13 @@ export class ProductSideComponent implements OnInit {
         this.orderStatus = OrderStatusModal.TO_CART;
         this._cartService
           .handleRelationAndUpdateData(RelationEnumModel.ITEM_REMOVE, `${cartLocation}/items/${this.tradeOfferId}`)
+          .pipe(
+            tap(() => {
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+            }),
+          )
           .subscribe(
-            () => {
-              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
-            },
+            () => {},
             (err) => {
               this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
               this.rollBackTotalPositions(Operation.REMOVE);

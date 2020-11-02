@@ -46,6 +46,11 @@ function init() {
         tap(() => {
           userService.watchUserDataChangesForUserStatusCookie();
         }),
+        catchError((e) => {
+          return externalProvidersService
+            .fireYandexMetrikaEvent(MetrikaEventTypeModel.APP_INIT_PROBLEMS, { params: e })
+            .pipe(switchMap(() => throwError(null)));
+        }),
       )
       .subscribe(
         (serviceUrl) => {
@@ -57,7 +62,6 @@ function init() {
           }
         },
         (e) => {
-          externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.APP_INIT_PROBLEMS, { params: e });
           reject();
         },
       );

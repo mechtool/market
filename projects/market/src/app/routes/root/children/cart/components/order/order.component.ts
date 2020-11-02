@@ -251,8 +251,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             }),
           );
         }),
+        tap(() => {
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+        }),
         switchMap((res) => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
           return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
         }),
       )
@@ -276,7 +278,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   checkForValidityAndCreateOrder() {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY).subscribe();
     if (!this.userInfo) {
       this._authModalService.openAuthDecisionMakerModal(
         `Чтобы оформить заказ необходимо зарегистрироваться или войти под своей учетной записью "1С".
@@ -517,8 +519,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       quantityControl.valueChanges
         .pipe(
           tap((_) => (this.isOrderLoading = true)),
+          tap((_) => {
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+          }),
           switchMap((orderQuantity) => {
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
             if (orderQuantity < item.controls.orderQtyMin.value) {
               return this._cartService.handleRelation(
                 RelationEnumModel.ITEM_REMOVE,
@@ -635,16 +639,22 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     const relationHref = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
     this._cartService
       .handleRelation(relationHref, this.orderRelationHref, data)
-      .pipe(switchMap((_) => this._cartService.setActualCartData()))
+      .pipe(
+        switchMap((_) => this._cartService.setActualCartData()),
+        tap(() => {
+          this._externalProvidersService
+            .fireYandexMetrikaEvent(
+              this.orderType === 'order' ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
+            )
+            .subscribe();
+        }),
+      )
       .subscribe(
         (res) => {
           this._cartModalService.openOrderSentModal();
           this.cartDataChange.emit(res);
           this.items.clear();
           this._cdr.detectChanges();
-          this._externalProvidersService.fireYandexMetrikaEvent(
-            this.orderType === 'order' ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
-          );
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

@@ -5,6 +5,8 @@ import { ExternalProvidersService } from '#shared/modules/common-services/extern
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
 import { EmptyOrganizationsInfoComponent } from '../components/empty-organizations-info/empty-organizations-info.component';
 import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
+import { switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 /**
  * URL пути находящиеся под аутентификацией
@@ -32,16 +34,21 @@ export class AuthModalService {
     modal.componentInstance.destroyModalChange.subscribe(() => {
       modal.destroy(true);
     });
-    modal.afterClose.subscribe((result) => {
-      if (!result) {
-        this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_CLOSE);
-      }
-      const pathTo = loginRedirectPath;
-      const pathFrom = `${location.pathname}${location.search}`;
-      if (this._isPathWithAuth(PATHS_WITH_AUTHORIZATION, pathTo)) {
-        this._authService.goTo(this._isPathWithAuth(PATHS_WITH_AUTHORIZATION, pathFrom) ? '/' : pathFrom);
-      }
-    });
+    modal.afterClose
+      .pipe(
+        tap((res) => {
+          if (!res) {
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_CLOSE).subscribe();
+          }
+        }),
+      )
+      .subscribe((result) => {
+        const pathTo = loginRedirectPath;
+        const pathFrom = `${location.pathname}${location.search}`;
+        if (this._isPathWithAuth(PATHS_WITH_AUTHORIZATION, pathTo)) {
+          this._authService.goTo(this._isPathWithAuth(PATHS_WITH_AUTHORIZATION, pathFrom) ? '/' : pathFrom);
+        }
+      });
   }
 
   openEmptyOrganizationsInfoModal(description: string) {

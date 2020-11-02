@@ -19,13 +19,13 @@ export class AuthDecisionMakerComponent {
   constructor(private _authService: AuthService, private _externalProvidersService: ExternalProvidersService) {}
 
   login(): void {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_SIGN_IN);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_SIGN_IN).subscribe();
     this._destroy();
     this._authService.login(this.loginRedirectPath);
   }
 
   register(): void {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_REGISTER);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_REGISTER).subscribe();
     this._destroy();
     this._authService.register('/my/organizations?tab=c;/cart');
   }

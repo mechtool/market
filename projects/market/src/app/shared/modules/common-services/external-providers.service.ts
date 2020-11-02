@@ -2,6 +2,9 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 import { Location } from '@angular/common';
 import { Metrika } from 'ng-yandex-metrika';
 import { MetrikaEventTypeModel, MetrikaEventOptionsModel } from './models';
+import { delayedRetry } from '#shared/utils';
+import { from, Observable, of, throwError } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class ExternalProvidersService {
@@ -31,12 +34,15 @@ export class ExternalProvidersService {
     this._yandexMetrikaPrevPath = newPath;
   }
 
-  fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): void {
-    if (!options) {
-      this._metrika.fireEvent(eventType);
-    }
-    if (options) {
-      this._metrika.fireEvent(eventType, options);
-    }
+  fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): Observable<any> {
+    return of(null).pipe(
+      switchMap(() => {
+        return from(!options ? this._metrika.fireEvent(eventType) : this._metrika.fireEvent(eventType, options));
+      }),
+      switchMap((res) => {
+        return !res ? throwError(null) : of(res);
+      }),
+      delayedRetry(300, 5),
+    );
   }
 }
