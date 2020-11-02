@@ -79,7 +79,7 @@ function loginIfCookieAuthed$(): Observable<any> {
     switchMap((isAuthed) => {
       return isAuthed ? authService.login(location.pathname, false) : of(null);
     }),
-    switchMap(() => {
+    catchError(() => {
       return throwError({
         data: MetrikaEventAppInitProblemsEnumModel.SIGN_IN,
       });
