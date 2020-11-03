@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { UserService } from '#shared/modules/common-services/user.service';
+import { UserStateService } from '#shared/modules/common-services/user-state.service';
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { CategoryModel } from '#shared/modules/common-services/models/category.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
@@ -25,6 +26,7 @@ import { take } from 'rxjs/operators';
 export class NavbarNavComponent implements OnInit {
   private _navService: NavigationService;
   private _userService: UserService;
+  private _userStateService: UserStateService;
   private _cartService: CartService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
@@ -42,7 +44,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   get userLogin(): string {
-    return this._userService.userData$?.value?.userInfo?.login || null;
+    return this._userStateService.userData$?.value?.userInfo?.login || null;
   }
 
   get cartNavItem(): NavItemModel {
@@ -96,6 +98,7 @@ export class NavbarNavComponent implements OnInit {
   ) {
     this._navService = this.injector.get(NavigationService);
     this._userService = this.injector.get(UserService);
+    this._userStateService = this.injector.get(UserStateService);
     this._cartService = this.injector.get(CartService);
   }
 

@@ -2,7 +2,7 @@ import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, Http
 import { Injectable, Injector } from '@angular/core';
 import { throwError, of } from 'rxjs';
 import { catchError, filter, map, switchMap, tap, take } from 'rxjs/operators';
-import { AuthResponseModel, AuthService, UserService } from '#shared/modules/common-services';
+import { AuthResponseModel, AuthService, UserService, UserStateService } from '#shared/modules/common-services';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
@@ -11,7 +11,8 @@ export class ApiInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const authService = this._injector.get(AuthService);
     const userService = this._injector.get(UserService);
-    const userData = userService.userData$.value;
+    const userStateService = this._injector.get(UserStateService);
+    const userData = userStateService.userData$.value;
 
     const headerSettings = this._setHeaderSettings(req, userData);
     const headers = new HttpHeaders(headerSettings);
@@ -20,7 +21,7 @@ export class ApiInterceptor implements HttpInterceptor {
       filter((event: HttpEvent<any>) => event instanceof HttpResponse),
       catchError((err) => {
         if (err.status === 401) {
-          const userData = userService.userData$.value;
+          const userData = userStateService.userData$.value;
           if (userData) {
             return authService.refresh({ refreshToken: userData.refreshToken }).pipe(
               catchError(() => {

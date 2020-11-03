@@ -1,21 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpRequest,
-  HttpResponse,
-  HttpEvent,
-} from '@angular/common/http';
-import { throwError } from 'rxjs';
-import {
-  map,
-  catchError,
-  filter,
-} from 'rxjs/operators';
+import { HttpClient, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable()
 export class ApiService {
-
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) {}
 
   request(method: any, url: string, body?: any, init?: any) {
     let req = null;
@@ -24,14 +13,10 @@ export class ApiService {
     } else {
       req = new HttpRequest(method, url, init);
     }
-    return this._http.request(req)
-      .pipe(
-        filter((event: HttpEvent<any>) => event instanceof HttpResponse),
-        map((res: HttpResponse<any>) => res.body),
-        catchError((error) => {
-          return throwError(error);
-        }),
-      );
+    return this._http.request(req).pipe(
+      filter((event: HttpEvent<any>) => event instanceof HttpResponse),
+      map((res: HttpResponse<any>) => res.body),
+    );
   }
 
   get<T>(url: string, init?: any) {
@@ -62,5 +47,4 @@ export class ApiService {
     }
     return this.request('DELETE', url, init);
   }
-
 }

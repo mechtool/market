@@ -60,7 +60,8 @@
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
             },
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "projects/market/tsconfig.worker.json"
           },
           "configurations": {
             "dev": {
@@ -159,6 +160,7 @@
             "tsConfig": [
               "projects/market/tsconfig.app.json",
               "projects/market/tsconfig.spec.json",
+              "projects/market/tsconfig.worker.json",
               "e2e/tsconfig.json"
             ],
             "exclude": ["**/node_modules/**"]

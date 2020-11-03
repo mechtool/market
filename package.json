@@ -54,6 +54,7 @@
     "ngx-mask": "9.1.0",
     "ngx-webstorage-service": "^4.1.0",
     "normalize.css": "^8.0.1",
+    "observable-webworker": "^3.2.6",
     "puppeteer": "^5.2.1",
     "puppeteer-cluster": "^0.22.0",
     "rxjs": "~6.5.5",

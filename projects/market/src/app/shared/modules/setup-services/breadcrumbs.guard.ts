@@ -9,6 +9,7 @@ import {
   ProductService,
   TradeOffersService,
   UserService,
+  UserStateService,
 } from '#shared/modules/common-services';
 import { BreadcrumbItemModel } from '#shared/modules/common-services/models';
 import { of } from 'rxjs';
@@ -61,6 +62,7 @@ export class BreadcrumbsGuard implements CanActivate {
     private _organizationsService: OrganizationsService,
     private _tradeOffersService: TradeOffersService,
     private _userService: UserService,
+    private _userStateService: UserStateService,
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
@@ -250,7 +252,7 @@ export class BreadcrumbsGuard implements CanActivate {
     const nextPageWithAuthentication = pathsWithAuthentication.some((regEx) => regEx.test(urlWithoutQueryParams));
     const nextPageWithAuthorization = pathsWithAuthorization.some((regEx) => regEx.test(urlWithoutQueryParams));
     return (
-      (nextPageWithAuthentication && !this._userService.userData$.getValue()) ||
+      (nextPageWithAuthentication && !this._userStateService.userData$.getValue()) ||
       (nextPageWithAuthorization && !this._userService.organizations$.getValue()?.length)
     );
   }

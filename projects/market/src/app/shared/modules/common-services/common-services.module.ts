@@ -1,6 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from './api.service';
+import { ApiWorkerService } from './api-worker.service';
 import { BNetService } from './bnet.service';
 import { AuthService } from './auth.service';
 import { CacheService } from './cache.service';
@@ -12,6 +13,7 @@ import { SuggestionService } from './suggestion.service';
 import { ProductService } from './product.service';
 import { OrganizationsService } from './organizations.service';
 import { UserService } from './user.service';
+import { UserStateService } from './user-state.service';
 import { LocalStorageService } from './local-storage.service';
 import { CookieService } from './cookie.service';
 import { LocationService } from './location.service';
@@ -35,6 +37,7 @@ export class CommonServicesModule {
       ngModule: CommonServicesModule,
       providers: [
         ApiService,
+        ApiWorkerService,
         BNetService,
         AuthService,
         CacheService,
@@ -48,6 +51,7 @@ export class CommonServicesModule {
         ProductService,
         OrganizationsService,
         UserService,
+        UserStateService,
         LocationService,
         SupplierService,
         TradeOffersService,

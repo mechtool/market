@@ -37,12 +37,13 @@ import {
   UserOrganizationModel,
 } from './models';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { ApiWorkerService } from './api-worker.service';
 
 const API_URL = environment.apiUrl;
 
 @Injectable()
 export class BNetService {
-  constructor(private _apiService: ApiService, private _http: HttpClient) {}
+  constructor(private _apiService: ApiService, private _apiWorkerService: ApiWorkerService, private _http: HttpClient) {}
 
   getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
@@ -169,9 +170,14 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/suppliers`, { params });
   }
 
-  getCategories(query?: CategoryRequestModel): Observable<CategoryResponseModel> {
+  getCategories(query?: CategoryRequestModel, withWebWorker = false): Observable<CategoryResponseModel> {
     const params = this._params(query);
-    return this._apiService.get(`${API_URL}/categories`, { params });
+    if (!withWebWorker) {
+      return this._apiService.get(`${API_URL}/categories`, { params });
+    }
+    if (withWebWorker) {
+      return this._apiWorkerService.get(`${API_URL}/categories`, { params });
+    }
   }
 
   sendFeedback(feedback: FeedbackRequestModel, token: string): Observable<any> {
@@ -229,8 +235,8 @@ export class BNetService {
   }
 
   private _params(searchQuery: any): HttpParams {
+    let params = new HttpParams();
     if (searchQuery) {
-      let params = new HttpParams();
       Object.keys(searchQuery).forEach((queryParam) => {
         if (searchQuery[queryParam]?.toString()) {
           if (Array.isArray(searchQuery[queryParam])) {
@@ -242,7 +248,7 @@ export class BNetService {
           }
         }
       });
-      return params;
     }
+    return params;
   }
 }

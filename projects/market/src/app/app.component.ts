@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService, ExternalProvidersService, UserService } from '#shared/modules/common-services';
+import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs/operators';
 import { fromEvent, Observable } from 'rxjs';
@@ -12,6 +12,7 @@ import { fromEvent, Observable } from 'rxjs';
 export class AppComponent {
   constructor(
     private _userService: UserService,
+    private _userStateService: UserStateService,
     private _router: Router,
     private _externalProvidersService: ExternalProvidersService,
     private _authService: AuthService,
@@ -25,7 +26,8 @@ export class AppComponent {
       .pipe(
         tap(() => {
           const revokeToken = this._authService.revoke().subscribe(() => revokeToken.unsubscribe());
-        }))
+        }),
+      )
       .subscribe((uin) => {
         this._userService.setUserLastLoginTimestamp(uin, Date.now());
       });
@@ -38,10 +40,10 @@ export class AppComponent {
   private _authedUserWindowCloseChanges$(): Observable<string> {
     return fromEvent(window, 'beforeunload').pipe(
       filter((ev) => {
-        return !!this._userService.userData$.value?.userInfo.userId;
+        return !!this._userStateService.userData$.value?.userInfo.userId;
       }),
       tap((ev) => ev.preventDefault()),
-      map((res) => this._userService.userData$.value.userInfo.userId),
+      map((res) => this._userStateService.userData$.value.userInfo.userId),
     );
   }
 }

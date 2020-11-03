@@ -14,13 +14,13 @@ import { BNetService } from './bnet.service';
 import { CookieService } from './cookie.service';
 import { UserStatusEnumModel } from './models/user-status-enum.model';
 import { OrganizationsService } from './organizations.service';
+import { UserStateService } from './user-state.service';
 
 @Injectable()
 export class UserService {
   organizations$: BehaviorSubject<UserOrganizationModel[]> = new BehaviorSubject(null);
   ownParticipationRequests$: BehaviorSubject<any[]> = new BehaviorSubject(null);
   categories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
-  userData$: BehaviorSubject<AuthResponseModel> = new BehaviorSubject(null);
   participationRequests$: BehaviorSubject<ParticipationRequestResponseModel[]> = new BehaviorSubject(null);
   newAccountDocumentsCounter$: BehaviorSubject<number> = new BehaviorSubject(0);
 
@@ -28,10 +28,11 @@ export class UserService {
     private _bnetService: BNetService,
     private _organizationsService: OrganizationsService,
     private _cookieService: CookieService,
+    private _userStateService: UserStateService,
   ) {}
 
   setUserData(data: any): void {
-    this.userData$.next(data);
+    this._userStateService.userData$.next(data);
   }
 
   setUserOrganizations(data: any): Observable<any> {
@@ -87,7 +88,7 @@ export class UserService {
             return of(null);
           }),
           tap((docs: DocumentResponseModel[]) => {
-            const uin = this.userData$.value?.userInfo.userId;
+            const uin = this._userStateService.userData$.getValue()?.userInfo.userId;
             const lastLoginTimestamp = this.getUserLastLoginTimestamp(uin);
             if (lastLoginTimestamp) {
               const counter = docs.filter((doc) => doc.sentDate > lastLoginTimestamp).length;
@@ -103,7 +104,7 @@ export class UserService {
   }
 
   watchUserDataChangesForUserStatusCookie() {
-    this.userData$.subscribe((res) => {
+    this._userStateService.userData$.subscribe((res) => {
       this._cookieService.setUserStatusCookie(res ? UserStatusEnumModel.AUTHED : UserStatusEnumModel.NOT_AUTHED);
     });
   }

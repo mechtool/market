@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CartService, NotificationsService, SpinnerService, UserService } from '#shared/modules/common-services';
+import { CartService, NotificationsService, SpinnerService, UserService, UserStateService } from '#shared/modules/common-services';
 import { CartDataModel, CartDataResponseModel } from '#shared/modules/common-services/models';
 import { take, switchMap } from 'rxjs/operators';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
@@ -20,6 +20,7 @@ export class CartComponent implements OnInit {
   constructor(
     private _cartService: CartService,
     private _userService: UserService,
+    private _userStateService: UserStateService,
     private _notificationsService: NotificationsService,
     private _spinnerService: SpinnerService,
   ) {}
@@ -59,6 +60,6 @@ export class CartComponent implements OnInit {
   }
 
   private _getUserInfo() {
-    return this._userService.userData$.value?.userInfo;
+    return this._userStateService.userData$.value?.userInfo;
   }
 }

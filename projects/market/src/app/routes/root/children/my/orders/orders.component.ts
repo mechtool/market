@@ -1,6 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { DocumentDto } from '#shared/modules/common-services/models';
-import { EdiService, LocalStorageService, NotificationsService, SpinnerService, UserService } from '#shared/modules/common-services';
+import {
+  EdiService,
+  LocalStorageService,
+  NotificationsService,
+  SpinnerService,
+  UserService,
+  UserStateService,
+} from '#shared/modules/common-services';
 import { Observable } from 'rxjs';
 
 const PAGE_SIZE = 100;
@@ -25,6 +32,7 @@ export class OrdersComponent implements OnDestroy {
   constructor(
     private _ediService: EdiService,
     private _userService: UserService,
+    private _userStateService: UserStateService,
     private _localStorageService: LocalStorageService,
     private _notificationsService: NotificationsService,
     private _spinnerService: SpinnerService,
@@ -33,7 +41,7 @@ export class OrdersComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    const uin = this._userService.userData$.value?.userInfo.userId;
+    const uin = this._userStateService.userData$.value?.userInfo.userId;
     if (uin) {
       this._userService.setUserLastLoginTimestamp(uin, Date.now());
       this._userService.updateNewAccountDocumentsCounter().subscribe();

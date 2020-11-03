@@ -10,6 +10,7 @@ import { ExternalProvidersService } from './external-providers.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { UserStateService } from './user-state.service';
 
 @UntilDestroy({ checkProperties: true })
 @Injectable()
@@ -199,11 +200,12 @@ export class NavigationService {
         ],
       },
     ];
-    return this._userService.userData$.asObservable().pipe(map((auth) => (auth ? authedNavItems : notAuthedNavItems)));
+    return this._userStateService.userData$.asObservable().pipe(map((auth) => (auth ? authedNavItems : notAuthedNavItems)));
   }
 
   constructor(
     private _userService: UserService,
+    private _userStateService: UserStateService,
     private _authService: AuthService,
     private _externalProvidersService: ExternalProvidersService,
     private _overlay: Overlay,
