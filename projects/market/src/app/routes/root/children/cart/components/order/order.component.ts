@@ -19,6 +19,7 @@ import {
   DeliveryMethod,
   Level,
   LocationModel,
+  MetrikaEventOrderTryReasonEnumModel,
   MetrikaEventTypeModel,
   RelationEnumModel,
   UserOrganizationModel,
@@ -37,6 +38,7 @@ import {
   NotificationsService,
   TradeOffersService,
   UserService,
+  UserStateService,
 } from '#shared/modules/common-services';
 import { DeliveryMethodModel } from './models/delivery-method.model';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
@@ -165,6 +167,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _cartService: CartService,
     private _userService: UserService,
+    private _userStateService: UserStateService,
     private _locationService: LocationService,
     private _bnetService: BNetService,
     private _router: Router,
@@ -284,6 +287,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         `Чтобы оформить заказ необходимо зарегистрироваться или войти под своей учетной записью "1С".
         Данные в корзине сохранятся.`,
       );
+      this._externalProvidersService
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+          params: { data: MetrikaEventOrderTryReasonEnumModel.NOT_AUTHED },
+        })
+        .subscribe();
       return;
     }
 
@@ -291,12 +299,25 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this._authModalService.openEmptyOrganizationsInfoModal(
         'Чтобы оформить заказ необходимо иметь хотя бы одну зарегистрированную организацию.',
       );
+      this._externalProvidersService
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+          params: {
+            data: MetrikaEventOrderTryReasonEnumModel.NO_ORGANIZATIONS,
+            login: this.userInfo.login,
+          },
+        })
+        .subscribe();
       return;
     }
 
     if (!this.orderRelationHref) {
       this.changeSelectedTabIndex(0);
       this._cartModalService.openOrderUnavailableModal();
+      this._externalProvidersService
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+          params: { data: MetrikaEventOrderTryReasonEnumModel.NO_LINK, login: this.userInfo.login },
+        })
+        .subscribe();
       return;
     }
 
@@ -313,6 +334,15 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
         this.elementInputCity?.nativeElement.focus();
       }
+
+      this._externalProvidersService
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+          params: {
+            data: MetrikaEventOrderTryReasonEnumModel.FIELDS_NOT_VALID,
+            login: this.userInfo.login,
+          },
+        })
+        .subscribe();
 
       return;
     }
