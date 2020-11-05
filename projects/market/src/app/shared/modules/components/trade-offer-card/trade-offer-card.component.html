@@ -21,7 +21,7 @@
       <span class="catalog_item__price"
             nz-tooltip
             nzTooltipTitle="Цена"
-            *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+            *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0-4'}}</span>
     </span>
   </span>
   <div class="tooltip_wrap" *ngIf="tradeOffer.audience">

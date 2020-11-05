@@ -168,11 +168,11 @@
                 </div>
                 <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
                   <span
-                    class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+                    class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0-4'}}</span>
                 </div>
                 <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="orderType === 'order'">
                   <span
-                    class="price">{{item.controls.total.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</span>
+                    class="price">{{item.controls.total.value | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0-4'}}</span>
 
                   <span
                     class="cell_nds"
@@ -458,10 +458,10 @@
     <div class="order__total">
       <div class="order__total_price" *ngIf="orderType === 'order'">
         <div class="order__total_label">Итого:</div>
-        <div class="order__total_value">{{total | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
+        <div class="order__total_value">{{total | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0-4'}}</div>
       </div>
       <div class="order__total_nds" *ngIf="orderType === 'order'">Включая
-        НДС {{totalVat | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0'}}</div>
+        НДС {{totalVat | marketMultiplier:'.01' | currency:currencyCode:'symbol':'1.0-4'}}</div>
       <div class="order__total_btn">
         <button id="checkoutButton" nz-button type="submit" nzType="primary"
                 [disabled]="!form.valid && selectedTabIndex == 1">{{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
