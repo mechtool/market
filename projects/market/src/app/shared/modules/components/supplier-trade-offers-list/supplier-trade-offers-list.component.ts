@@ -113,7 +113,7 @@ export class SupplierTradeOffersListComponent {
   fromPackages(matrix: TradeOfferPriceMatrixModel[]) {
     if (matrix?.length) {
       const fromPackages = [...matrix]
-        .sort((one, two) => one.price - two.price)[0].fromPackages;
+        .sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
       return `от ${fromPackages} шт.`;
     }
     return null;
