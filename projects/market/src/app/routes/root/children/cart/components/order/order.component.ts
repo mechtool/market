@@ -302,7 +302,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this._externalProvidersService
         .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
           params: {
-            data: MetrikaEventOrderTryReasonEnumModel.NO_ORGANIZATIONS,
+            data: `${this.userInfo.login} ${MetrikaEventOrderTryReasonEnumModel.NO_ORGANIZATIONS}`,
             login: this.userInfo.login,
           },
         })
@@ -315,7 +315,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this._cartModalService.openOrderUnavailableModal();
       this._externalProvidersService
         .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
-          params: { data: MetrikaEventOrderTryReasonEnumModel.NO_LINK, login: this.userInfo.login },
+          params: {
+            data: `${this.userInfo.login} ${MetrikaEventOrderTryReasonEnumModel.NO_LINK}`,
+            login: this.userInfo.login,
+          },
         })
         .subscribe();
       return;
@@ -338,7 +341,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this._externalProvidersService
         .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
           params: {
-            data: MetrikaEventOrderTryReasonEnumModel.FIELDS_NOT_VALID,
+            data: `${this.userInfo.login} ${MetrikaEventOrderTryReasonEnumModel.FIELDS_NOT_VALID}`,
             login: this.userInfo.login,
           },
         })
