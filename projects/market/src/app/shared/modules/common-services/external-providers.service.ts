@@ -5,6 +5,7 @@ import { MetrikaEventTypeModel, MetrikaEventOptionsModel } from './models';
 import { delayedRetry } from '#shared/utils';
 import { from, Observable, of, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { UserStateService } from './user-state.service';
 
 @Injectable()
 export class ExternalProvidersService {
@@ -12,7 +13,12 @@ export class ExternalProvidersService {
   private _yandexTranslatePopupEl: HTMLElement = null;
   private _yandexMetrikaPrevPath = this._location.path();
 
-  constructor(private _rendererFactory: RendererFactory2, private _location: Location, private _metrika: Metrika) {
+  constructor(
+    private _rendererFactory: RendererFactory2,
+    private _location: Location,
+    private _metrika: Metrika,
+    private _userStateService: UserStateService,
+  ) {
     this._renderer = _rendererFactory.createRenderer(null, null);
   }
 
@@ -35,9 +41,14 @@ export class ExternalProvidersService {
   }
 
   fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): Observable<any> {
+    const login = this._userStateService.userData$.getValue()?.userInfo.login;
+    const opts = options;
+    if (opts?.params && login) {
+      opts.params['логин'] = login;
+    }
     return of(null).pipe(
       switchMap(() => {
-        return from(!options ? this._metrika.fireEvent(eventType) : this._metrika.fireEvent(eventType, options));
+        return from(!opts ? this._metrika.fireEvent(eventType) : this._metrika.fireEvent(eventType, opts));
       }),
       switchMap((res) => {
         return !res ? throwError(null) : of(res);

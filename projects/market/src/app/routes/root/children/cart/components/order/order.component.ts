@@ -19,7 +19,9 @@ import {
   DeliveryMethod,
   Level,
   LocationModel,
-  MetrikaEventOrderTryReasonEnumModel,
+  MetrikaEventOrderFailParametrizedEnumModel,
+  MetrikaEventOrderFailParametrizedModel,
+  MetrikaEventOrderTryParametrizedModel,
   MetrikaEventTypeModel,
   RelationEnumModel,
   UserOrganizationModel,
@@ -281,15 +283,30 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   checkForValidityAndCreateOrder() {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY).subscribe();
+    this._externalProvidersService
+      .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
+        ...(this.orderRelationHref && {
+          params: {
+            [MetrikaEventOrderTryParametrizedModel.title]: {
+              [MetrikaEventOrderTryParametrizedModel.orderLink]: this.orderRelationHref,
+            },
+          },
+        }),
+      })
+      .subscribe();
     if (!this.userInfo) {
       this._authModalService.openAuthDecisionMakerModal(
         `Чтобы оформить заказ необходимо зарегистрироваться или войти под своей учетной записью "1С".
         Данные в корзине сохранятся.`,
       );
       this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
-          params: { data: MetrikaEventOrderTryReasonEnumModel.NOT_AUTHED },
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+          params: {
+            [MetrikaEventOrderFailParametrizedModel.title]: {
+              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NOT_AUTHED,
+              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
+            },
+          },
         })
         .subscribe();
       return;
@@ -300,10 +317,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         'Чтобы оформить заказ необходимо иметь хотя бы одну зарегистрированную организацию.',
       );
       this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
           params: {
-            data: `${this.userInfo.login} ${MetrikaEventOrderTryReasonEnumModel.NO_ORGANIZATIONS}`,
-            login: this.userInfo.login,
+            [MetrikaEventOrderFailParametrizedModel.title]: {
+              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_ORGANIZATIONS,
+              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
+            },
           },
         })
         .subscribe();
@@ -314,10 +333,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this.changeSelectedTabIndex(0);
       this._cartModalService.openOrderUnavailableModal();
       this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
           params: {
-            data: `${this.userInfo.login} ${MetrikaEventOrderTryReasonEnumModel.NO_LINK}`,
-            login: this.userInfo.login,
+            [MetrikaEventOrderFailParametrizedModel.title]: {
+              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_LINK,
+              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
+            },
           },
         })
         .subscribe();
@@ -339,10 +360,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       }
 
       this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_REASON, {
+        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
           params: {
-            data: `${this.userInfo.login} ${MetrikaEventOrderTryReasonEnumModel.FIELDS_NOT_VALID}`,
-            login: this.userInfo.login,
+            [MetrikaEventOrderFailParametrizedModel.title]: {
+              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.FIELDS_NOT_VALID,
+              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
+            },
           },
         })
         .subscribe();

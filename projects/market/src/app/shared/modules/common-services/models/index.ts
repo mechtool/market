@@ -70,4 +70,5 @@ export * from './access-key-response.model';
 export * from './metrika-event-type.model';
 export * from './metrika-event-options.model';
 export * from './metrika-event-app-init-problems-enum.model';
-export * from './metrika-event-order-try-reason-enum.model';
+export * from './metrika-event-order-try-parametrized.model';
+export * from './metrika-event-order-fail-parametrized.model';
