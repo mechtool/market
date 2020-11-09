@@ -1,4 +1,5 @@
 import { ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
+import { Location } from '@angular/common';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent } from 'rxjs';
@@ -20,7 +21,7 @@ export class NavigationService {
   private _isMenuOpened = false;
   private _mainCategorySelectedId: string = null;
   private _userCategories: CategoryModel[];
-  private _componentPortal: ComponentPortal<NavbarNavComponent>;
+  private readonly _componentPortal: ComponentPortal<NavbarNavComponent>;
   selectedPortal: Portal<any> | null;
   overlayRef: OverlayRef;
   componentRef: ComponentRef<any>;
@@ -89,7 +90,7 @@ export class NavigationService {
         icon: 'personal',
         command: () => {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER).subscribe();
-          this._authService.register();
+          this._authService.register(this._location.path());
         },
       },
       {
@@ -98,7 +99,7 @@ export class NavigationService {
         icon: 'enter',
         command: () => {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN).subscribe();
-          this._authService.login(`${location.pathname}${location.search}`);
+          this._authService.login(this._location.path());
         },
       },
       {
@@ -176,7 +177,7 @@ export class NavigationService {
         attributeId: 'logout_menu_id',
         icon: 'logout',
         command: () => {
-          this._authService.logout(`${location.pathname}${location.search}`);
+          this._authService.logout(this._location.path());
         },
       },
       {
@@ -211,6 +212,7 @@ export class NavigationService {
     private _overlay: Overlay,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
+    private _location: Location,
   ) {
     this._componentPortal = new ComponentPortal(NavbarNavComponent);
     this._setUserCategories();

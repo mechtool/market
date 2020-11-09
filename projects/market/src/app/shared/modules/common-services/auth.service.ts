@@ -1,6 +1,7 @@
-import { Observable, of, throwError } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
@@ -18,7 +19,12 @@ const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organi
 
 @Injectable()
 export class AuthService {
+  get origin(): string {
+    return this._document.location.origin;
+  }
+
   constructor(
+    @Inject(DOCUMENT) private _document: Document,
     private _apiService: ApiService,
     private _userService: UserService,
     private _organizationsService: OrganizationsService,
@@ -30,7 +36,7 @@ export class AuthService {
       const routePath = this.isPathWithAuth(path) ? '/' : path;
       this._userService.setUserData(null);
       revokeToken.unsubscribe();
-      redirectTo(`${ITS_URL}/logout?service=${location.origin}&relativeBackUrl=${routePath}`);
+      redirectTo(`${ITS_URL}/logout?service=${this.origin}&relativeBackUrl=${routePath}`);
     });
   }
 
@@ -38,12 +44,13 @@ export class AuthService {
     const pathName = path.split('?')[0];
     const ticket = getParamFromQueryString('ticket');
     const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
+    const currentPathname = this._document.location.pathname;
     const url =
-      pathName === location.pathname
-        ? `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`
-        : `${location.origin}${pathName}`;
+      pathName === currentPathname
+        ? `${this.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`
+        : `${this.origin}${pathName}`;
     if (ticket) {
-      const serviceName = `${location.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
+      const serviceName = `${this.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
       return this.auth({ ticket, serviceName }).pipe(
         tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
         switchMap((_) => this._organizationsService.getUserOrganizations()),
@@ -51,7 +58,7 @@ export class AuthService {
         switchMap((res) => this._userService.updateParticipationRequests()),
         switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
         map(() => {
-          this.goTo(`${location.pathname}${queryStringWithoutTicket}`);
+          this.goTo(`${currentPathname}${queryStringWithoutTicket}`);
           return null;
         }),
         catchError((_) => {
@@ -68,7 +75,7 @@ export class AuthService {
   }
 
   register(path: string = '/') {
-    redirectTo(`${ITS_URL}/registration?redirect=${location.origin}${path}`);
+    redirectTo(`${ITS_URL}/registration?redirect=${this.origin}${path}`);
   }
 
   auth(authRequest: AuthRequestModel): Observable<AuthResponseModel> {
@@ -93,7 +100,7 @@ export class AuthService {
   }
 
   redirectExternalSsoAuth(url: string): void {
-    location.assign(`${ITS_URL}/login?service=${url}`);
+    this._document.location.assign(`${ITS_URL}/login?service=${url}`);
   }
 
   private isPathWithAuth(currentUrl: string): boolean {
