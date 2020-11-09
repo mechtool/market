@@ -90,7 +90,7 @@ export class NavigationService {
         icon: 'personal',
         command: () => {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER).subscribe();
-          this._authService.register(this._location.path());
+          this._authService.register(`/my/organizations?tab=c;${this._location.path()}`);
         },
       },
       {

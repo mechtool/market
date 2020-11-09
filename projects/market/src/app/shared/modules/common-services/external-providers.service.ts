@@ -42,9 +42,16 @@ export class ExternalProvidersService {
 
   fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): Observable<any> {
     const login = this._userStateService.userData$.getValue()?.userInfo.login;
-    const opts = options;
+    let opts = options;
     if (opts?.params && login) {
       opts.params['логин'] = login;
+    }
+    if (!opts?.params && login) {
+      opts = {
+        params: {
+          логин: login,
+        },
+      };
     }
     return of(null).pipe(
       switchMap(() => {
