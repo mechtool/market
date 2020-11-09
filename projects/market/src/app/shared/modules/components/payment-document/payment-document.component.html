@@ -69,10 +69,10 @@
       <td>{{i + 1}}</td>
       <td>{{product.productName}}</td>
       <td>{{product.amount}} {{product.baseUnit.shortName}}.</td>
-      <td *ngIf="product.price">{{product.price | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+      <td *ngIf="product.price">{{product.price | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
       <td *ngIf="!product.price">-</td>
-      <td>{{product.tax?.vatSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
-      <td>{{product.totalPrice | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+      <td>{{product.tax?.vatSum | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
+      <td>{{product.totalPrice | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
     </tr>
   </table>
 
@@ -80,15 +80,15 @@
     <table>
       <tr>
         <th>Итого:</th>
-        <td>{{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+        <td>{{document.totalSum | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
       </tr>
       <tr>
         <th>В том числе НДС:</th>
-        <td>{{outcomeVat | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+        <td>{{outcomeVat | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
       </tr>
       <tr>
         <th>Всего к оплате:</th>
-        <td>{{document.totalSum | marketMultiplier:'1.00' | currency:'RUB':'руб.':'1.0'}}</td>
+        <td>{{document.totalSum | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
       </tr>
     </table>
   </div>

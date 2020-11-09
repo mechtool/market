@@ -11,12 +11,7 @@ import {
   TradeOfferVatEnumModel,
 } from '#shared/modules';
 import { Router } from '@angular/router';
-import {
-  absoluteImagePath,
-  currencyCode,
-  hasRequiredParameters,
-  queryParamsWithoutSupplierIdFrom
-} from '#shared/utils';
+import { absoluteImagePath, hasRequiredParameters, queryParamsWithoutSupplierIdFrom } from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 
 @Component({
@@ -55,10 +50,6 @@ export class SupplierTradeOffersListComponent {
       return matrix.sort((one, two) => one.price - two.price)[0].price;
     }
     return null;
-  }
-
-  currencyCode(currencyNum: string): string {
-    return currencyCode(currencyNum);
   }
 
   minQuantity(matrix: TradeOfferPriceMatrixModel[], packageMultiplicity: number): number {

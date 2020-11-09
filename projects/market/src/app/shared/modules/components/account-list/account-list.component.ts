@@ -13,7 +13,8 @@ export class AccountListComponent {
   @Input() page: number;
   @Output() loadDocuments: EventEmitter<number> = new EventEmitter();
 
-  constructor(private _paymentDocumentService: PaymentDocumentModalService) {}
+  constructor(private _paymentDocumentService: PaymentDocumentModalService) {
+  }
 
   name(name: string) {
     return resizeBusinessStructure(name);

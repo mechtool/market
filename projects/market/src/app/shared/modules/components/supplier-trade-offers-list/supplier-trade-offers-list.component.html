@@ -81,7 +81,7 @@
           </div>
           <div class="table_cell cell_price">
               <span *ngIf="tradeOffer.price?.matrix?.length"
-                    class="price">{{price(tradeOffer.price.matrix) | marketMultiplier:'.01' | currency:currencyCode(tradeOffer.price.currencyCode):'symbol':'1.0-4'}}</span>
+                    class="price">{{price(tradeOffer.price.matrix) | marketMultiplier:'.01' | currencyPrice: tradeOffer.price.currencyCode}}</span>
             <span *ngIf="!tradeOffer.price?.matrix?.length" class="price">цена по запросу</span>
 
             <span *ngIf="tradeOffer.price?.matrix?.length" class="cell_nds">{{vat(tradeOffer.price)}}</span>

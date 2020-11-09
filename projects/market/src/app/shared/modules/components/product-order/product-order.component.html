@@ -16,10 +16,8 @@
       <h3>Добавить товар в корзину</h3>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span *ngIf="price" itemprop="price">{{price | marketMultiplier:'.01' | currency:currencyCode:'symbol': '1.0-4'}}</span>
+        <span *ngIf="price" itemprop="price">{{price | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
         <span *ngIf="!price" itemprop="price">цена по запросу</span>
-<!--        {{currencyCode | json}}-->
-<!--        {{price | json}}-->
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
       <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
@@ -45,7 +43,7 @@
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
         <span *ngIf="price"
-              itemprop="price">{{price | marketMultiplier:'.01' | currency:currencyCode:'symbol': '1.0-4'}}</span>
+              itemprop="price">{{price | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
         <span *ngIf="!price" itemprop="price">цена по запросу</span>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
@@ -79,7 +77,7 @@
     <div class="price_matrix__group" *ngFor="let item of matrix">
       <span class="price_matrix__label">От {{item.fromPackages}} шт.</span>
       <span
-        class="price_matrix__value">{{item.price | marketMultiplier:'.01' | currency:currencyCode:'symbol': '1.0-4'}}</span>
+        class="price_matrix__value">{{item.price | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
       <span class="price_matrix__nds">{{vat}}</span>
     </div>
   </div>

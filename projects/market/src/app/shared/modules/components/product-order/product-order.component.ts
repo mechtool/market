@@ -11,7 +11,6 @@ import {
   TradeOfferVatEnumModel
 } from '#shared/modules/common-services/models';
 import { CartService, NotificationsService } from '#shared/modules/common-services';
-import { currencyCode } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -40,10 +39,6 @@ export class ProductOrderComponent implements OnInit {
 
   get price(): number {
     return this._price ? this._price : this._closest(this.matrix);
-  }
-
-  get currencyCode(): string {
-    return currencyCode(this.tradeOffer.termsOfSale.price?.currencyCode);
   }
 
   get vatInfo() {

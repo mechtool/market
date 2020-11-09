@@ -1,9 +1,11 @@
 <div class="section_paragraph">
   <h3>Особенности предложения</h3>
   <div class="info_group__small">
-    <div class="info_group" *ngIf="tradeOffer.stock?.stockBalanceSummary || tradeOffer.termsOfSale?.temporarilyOutOfSales">
+    <div class="info_group"
+         *ngIf="tradeOffer.stock?.stockBalanceSummary || tradeOffer.termsOfSale?.temporarilyOutOfSales">
       <span class="info_group__label">В наличии</span>
-      <span class="info_group__value">{{tradeOffer.stock?.stockBalanceSummary?.amount | marketStock : tradeOffer.stock?.stockBalanceSummary?.level : tradeOffer.termsOfSale?.temporarilyOutOfSales}}</span>
+      <span
+        class="info_group__value">{{tradeOffer.stock?.stockBalanceSummary?.amount | marketStock : tradeOffer.stock?.stockBalanceSummary?.level : tradeOffer.termsOfSale?.temporarilyOutOfSales}}</span>
     </div>
     <div class="info_group">
       <span class="info_group__label">В упаковке</span>
@@ -19,7 +21,7 @@
     </div>
     <div class="info_group" *ngIf="orderRestrictions">
       <span class="info_group__label">Минимальная общая сумма заказа</span>
-      <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currency:'RUB':'symbol' : '1.0-4'}}</span>
+      <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
     </div>
   </div>
 </div>

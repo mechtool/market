@@ -1,5 +1,7 @@
 export function currencyCode(currencyNum: string): string {
   switch (currencyNum) {
+    case '643':
+      return OkvCode.DEFAULT_OKV_RUB_CODE;
     case '840':
       return OkvCode.OKV_USD_CODE;
     case '978':
@@ -11,7 +13,7 @@ export function currencyCode(currencyNum: string): string {
     case '398':
       return OkvCode.OKV_KZT_CODE;
     default:
-      return OkvCode.DEFAULT_OKV_RUB_CODE;
+      return null;
   }
 }
 

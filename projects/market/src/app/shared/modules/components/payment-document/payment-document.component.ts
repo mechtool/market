@@ -1,6 +1,12 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Component, Input, OnInit } from '@angular/core';
-import { CommerceMlDocumentResponseModel, EdiService, NotificationsService, Outcome, Product } from '#shared/modules/common-services';
+import {
+  CommerceMlDocumentResponseModel,
+  EdiService,
+  NotificationsService,
+  Outcome,
+  Product
+} from '#shared/modules/common-services';
 import { defer, Observable } from 'rxjs';
 
 enum DocumentType {
@@ -22,7 +28,8 @@ export class PaymentDocumentComponent implements OnInit {
   sumLetters: string;
   isError: boolean;
 
-  constructor(private _ediService: EdiService, private _notificationsService: NotificationsService) {}
+  constructor(private _ediService: EdiService, private _notificationsService: NotificationsService) {
+  }
 
   ngOnInit(): void {
     this._getDocumentConditionally$().subscribe(
