@@ -116,7 +116,7 @@ export class OrganizationsComponent implements OnInit {
         () => {
           const tabSplitted = this._activatedRoute.snapshot.queryParams?.tab?.split(';');
           if (tabSplitted.length > 1) {
-            this._router.navigateByUrl('/cart');
+            this._router.navigateByUrl(tabSplitted[1]);
             return;
           }
           this.checkedLegalRequisites = null;

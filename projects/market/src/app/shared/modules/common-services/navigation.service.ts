@@ -99,7 +99,7 @@ export class NavigationService {
         icon: 'enter',
         command: () => {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN).subscribe();
-          this._authService.login(this._location.path());
+          this._authService.login(`${location.pathname}${location.search}`);
         },
       },
       {
