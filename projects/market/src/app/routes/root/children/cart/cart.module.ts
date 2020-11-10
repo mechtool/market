@@ -3,18 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from '#shared/modules/pipes/pipes.module';
-import {
-  NzAutocompleteModule,
-  NzButtonModule,
-  NzDatePickerModule,
-  NzDropDownModule,
-  NzEmptyModule,
-  NzFormModule,
-  NzInputModule,
-  NzRadioModule,
-  NzTabsModule,
-  NzToolTipModule,
-} from 'ng-zorro-antd';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
 import { CartComponent } from './cart.component';
@@ -23,6 +11,16 @@ import { NgxMaskModule } from 'ngx-mask';
 import { CartModalService } from './cart-modal.service';
 import { OrderUnavailableComponent } from './components/order/components/order-unavailable';
 import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @NgModule({
   imports: [
@@ -46,14 +44,7 @@ import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
     NzInputModule,
     NgZorroAntdMobileModule,
   ],
-  declarations: [
-    CartComponent,
-    CartOrderComponent,
-    CartOrderQtyCounterComponent,
-    OrderUnavailableComponent,
-    OrderSentComponent,
-  ],
-  providers: [CartModalService]
+  declarations: [CartComponent, CartOrderComponent, CartOrderQtyCounterComponent, OrderUnavailableComponent, OrderSentComponent],
+  providers: [CartModalService],
 })
-export class CartModule {
-}
+export class CartModule {}

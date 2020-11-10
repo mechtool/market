@@ -26,7 +26,6 @@ import {
 } from './routes/root/components';
 
 import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
-import { NZ_I18N, ru_RU } from 'ng-zorro-antd';
 import { LOCAL_PROVIDER_TOKEN, NgZorroAntdMobileModule, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -36,6 +35,7 @@ import { SetupServicesModule } from '#shared/modules/setup-services';
 import { LineClampModule } from '#shared/modules';
 import { MetrikaModule } from 'ng-yandex-metrika';
 import { APP_CONFIG } from './config/app.config.token';
+import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -91,9 +91,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
       deps: [Injector],
       multi: true,
     },
-    { provide: DEFAULT_CURRENCY_CODE, useValue: '' }
+    { provide: DEFAULT_CURRENCY_CODE, useValue: '' },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

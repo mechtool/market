@@ -13,15 +13,13 @@ import {
   SearchBarCategoryDesktopElementDirective,
   SearchBarCategoryMobileElementDirective,
 } from './components';
-import {
-  NzAutocompleteModule,
-  NzButtonModule,
-  NzCheckboxModule,
-  NzDropDownModule,
-  NzFormModule,
-  NzInputModule,
-  NzSliderModule,
-} from 'ng-zorro-antd';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 
 @NgModule({
   imports: [

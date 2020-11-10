@@ -140,7 +140,6 @@ export class OrganizationsComponent implements OnInit {
         const modal = this._modalService.create({
           nzContent: AccessKeyComponent,
           nzViewContainerRef: this._viewContainerRef,
-          nzGetContainer: () => document.body,
           nzComponentParams: {
             organizationName: org?.organizationName || null,
             inn: org?.legalRequisites?.inn || null,
@@ -188,7 +187,6 @@ export class OrganizationsComponent implements OnInit {
     const modal = this._modalService.create({
       nzContent: RequisitesCheckerComponent,
       nzViewContainerRef: this._viewContainerRef,
-      nzGetContainer: () => document.body,
       nzFooter: null,
       nzWidth: 480,
     });

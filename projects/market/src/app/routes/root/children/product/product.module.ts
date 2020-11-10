@@ -23,9 +23,12 @@ import {
   SearchResultsModule,
   TradeOfferCardModule,
 } from '#shared/modules';
-import { NzAlertModule, NzCarouselModule, NzDropDownModule, NzTabsModule } from 'ng-zorro-antd';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 import { BannersModule } from '#shared/modules/components/banners/banner.module';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 
 @NgModule({
   imports: [

@@ -17,8 +17,8 @@ import {
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzTabsModule } from 'ng-zorro-antd';
 import { SupplierTradeOffersListModule } from '#shared/modules/components/supplier-trade-offers-list';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 
 @NgModule({
   imports: [
@@ -40,11 +40,6 @@ import { SupplierTradeOffersListModule } from '#shared/modules/components/suppli
     CardModule,
     SupplierTradeOffersListModule,
   ],
-  declarations: [
-    SupplierListComponent,
-    SupplierSingleComponent,
-    TradeOfferComponent,
-  ],
+  declarations: [SupplierListComponent, SupplierSingleComponent, TradeOfferComponent],
 })
-export class SupplierModule {
-}
+export class SupplierModule {}

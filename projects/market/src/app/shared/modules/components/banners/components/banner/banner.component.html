@@ -1,8 +1,21 @@
-<a  class="banner_item banner_item__big"
-    rel="noopener noreferrer"
-    href="{{item.btnLink}}"
-    target="{{isLinkExternal ? '_blank' : ''}}">
+<ng-container *ngIf="!isLinkExternal; else externalTpl">
+  <a class="banner_item banner_item__big"
+     rel="noopener noreferrer"
+     [routerLink]="[item.btnLink]">
+    <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+  </a>
+</ng-container>
 
+<ng-template #externalTpl>
+  <a class="banner_item banner_item__big"
+     rel="noopener noreferrer"
+     href="{{item.btnLink}}"
+     target="_blank">
+    <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
+  </a>
+</ng-template>
+
+<ng-template #contentTpl>
   <div class="banner__info">
     <h3>{{item.title}}</h3>
     <div class="banner__descr">
@@ -16,5 +29,4 @@
   <div class="banner__img">
     <img class="cover" src="{{item.imgUrl}}" alt="{{item.title}}" title="{{item.title}}">
   </div>
-
-</a>
+</ng-template>

@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
@@ -25,6 +25,7 @@ export class AuthService {
 
   constructor(
     @Inject(DOCUMENT) private _document: Document,
+    private _location: Location,
     private _apiService: ApiService,
     private _userService: UserService,
     private _organizationsService: OrganizationsService,
@@ -43,7 +44,7 @@ export class AuthService {
   login(path: string = '/', redirectable = true): Observable<any> {
     const pathName = path.split('?')[0];
     const ticket = getParamFromQueryString('ticket');
-    const queryStringWithoutTicket = getQueryStringWithoutParam('ticket');
+    const queryStringWithoutTicket = getQueryStringWithoutParam(this._document.location.search, 'ticket');
     const currentPathname = this._document.location.pathname;
     const url =
       pathName === currentPathname
@@ -94,8 +95,9 @@ export class AuthService {
   }
 
   goTo(url: string): void {
-    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true }).then(() => {
+    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true }).then((x) => {
       this._router.navigateByUrl(url);
+      this._location.replaceState(this._location.path().split('?')[0], '');
     });
   }
 

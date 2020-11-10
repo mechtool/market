@@ -3,17 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NomenclatureCardComponent } from './nomenclature-card.component';
 import { PipesModule } from '../../pipes';
-import { NzToolTipModule } from 'ng-zorro-antd';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    PipesModule,
-    NzToolTipModule,
-  ],
+  imports: [CommonModule, RouterModule, PipesModule, NzToolTipModule],
   exports: [NomenclatureCardComponent],
   declarations: [NomenclatureCardComponent],
 })
-export class NomenclatureCardModule {
-}
+export class NomenclatureCardModule {}

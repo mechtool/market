@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard, SsoTicketGuard } from '#shared/modules';
+import { AuthGuard } from '#shared/modules';
 import { RootComponent } from './routes/root/root.component';
 import { BreadcrumbsGuard, DelayedPreloadingStrategy } from '#shared/modules/setup-services';
 
 const routes: Routes = [
   {
     path: '',
-    canActivate: [BreadcrumbsGuard, SsoTicketGuard],
+    canActivate: [BreadcrumbsGuard],
     runGuardsAndResolvers: 'always',
     component: RootComponent,
     children: [

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NzButtonModule, NzEmptyModule, NzCheckboxModule } from 'ng-zorro-antd';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { OrganizationsRoutingModule } from './organizations-routing.module';
 import { OrganizationsComponent } from './organizations.component';
@@ -22,6 +21,9 @@ import { OrganizationAccessKeysComponent } from './components/organization-acces
 import { AccessKeyRemovalVerifierComponent } from './components/access-key-removal-verifier/access-key-removal-verifier.component';
 import { OrganizationRequestsComponent } from './components/organization-requests/organization-requests.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 
 @NgModule({
   imports: [
@@ -55,7 +57,6 @@ import { NgxMaskModule } from 'ngx-mask';
     AccessKeyStatusPipe,
     PhoneFormattersPipe,
   ],
-  providers: [SingleOrganizationGuard]
+  providers: [SingleOrganizationGuard],
 })
-export class OrganizationsModule {
-}
+export class OrganizationsModule {}

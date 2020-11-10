@@ -5,21 +5,12 @@ import { ProductOrderComponent } from './product-order.component';
 import { PipesModule } from '#shared/modules/pipes';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzToolTipModule } from 'ng-zorro-antd';
 import { ProductSideModule } from '#shared/modules/components/product-side';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    PipesModule,
-    ReactiveFormsModule,
-    NzModalModule,
-    NzToolTipModule,
-    ProductSideModule,
-  ],
+  imports: [CommonModule, RouterModule, PipesModule, ReactiveFormsModule, NzModalModule, NzToolTipModule, ProductSideModule],
   exports: [ProductOrderComponent],
   declarations: [ProductOrderComponent],
 })
-export class ProductOrderModule {
-}
+export class ProductOrderModule {}

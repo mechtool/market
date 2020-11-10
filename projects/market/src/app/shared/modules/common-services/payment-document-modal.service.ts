@@ -1,11 +1,9 @@
 import { Injectable, TemplateRef } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Injectable()
 export class PaymentDocumentModalService {
-
-  constructor(private _modalService: NzModalService) {
-  }
+  constructor(private _modalService: NzModalService) {}
 
   show(template: TemplateRef<any>) {
     this._modalService.create({

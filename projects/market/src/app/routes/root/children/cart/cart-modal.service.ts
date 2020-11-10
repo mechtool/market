@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd';
 import { OrderUnavailableComponent } from './components/order/components/order-unavailable';
 import { OrderSentComponent } from './components/order/components/order-sent';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Injectable()
 export class CartModalService {
-
-  constructor(private _modalService: NzModalService){}
+  constructor(private _modalService: NzModalService) {}
 
   openOrderUnavailableModal() {
     const modal = this._modalService.create({
@@ -26,6 +25,4 @@ export class CartModalService {
       modal.destroy();
     });
   }
-
 }
-

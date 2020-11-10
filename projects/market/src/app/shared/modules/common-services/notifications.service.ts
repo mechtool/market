@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Injectable()
 export class NotificationsService {
-
-  constructor(private _messageService: NzMessageService) {
-  }
+  constructor(private _messageService: NzMessageService) {}
 
   info(message: string) {
     this._messageService.info(message);

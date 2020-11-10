@@ -245,46 +245,55 @@ nz-spin {
 
 // Tab
 // TODO: как будет время переделать все по уму
-@tabs-card-head-background: #f9f9f9;
-@tabs-card-active-color: var(--color-primary);
-@tabs-hover-color: var(--color-primary);
-@tabs-active-color: var(--color-primary);
-.ant-tabs-bar {
-  border: none;
+
+.ant-tabs-top>.ant-tabs-nav, .ant-tabs-top>div>.ant-tabs-nav {
   margin-bottom: 0;
 }
 
-.ant-tabs-nav {
-  margin-bottom: 2px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+.ant-tabs-top>.ant-tabs-nav:before, .ant-tabs-top>div>.ant-tabs-nav:before {
+  border: none;
 }
 
-.ant-tabs-nav-scroll {
-  margin-top: 20px;
-}
-
-.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab, .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab {
   user-select: none;
-  font-size: var(--font-size-15);
-  font-weight: var(--font-weight-base);
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, .65);
   margin-right: 0;
   height: 40px;
   min-width: 160px;
   align-items: center;
-  text-align: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
   border: 1px solid #f9f9f9;
+  padding: 8px 16px;
+  line-height: 22px;
+  background: #f9f9f9;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 2px 2px 0 0;
+  transition: all .3s cubic-bezier(.645,.045,.355,1);
+  justify-content: center;
+}
 
-  &-active {
-    background: #f2f2f2;
-    font-weight: var(--font-weight-base);
-    border: 1px solid #f2f2f2;
-  }
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-disabled, .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-disabled {
+  color: rgba(0, 0, 0, .25);
+}
 
-  &:not(.ant-tabs-tab-disabled):hover {
-    background-color: var(--color-accent-light);
-  }
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: inherit;
+  font-weight: normal;
+}
 
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active, .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab.ant-tabs-tab-active {
+  background: #f2f2f2;
+}
+
+.ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab:not(.ant-tabs-tab-disabled):hover, .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab:not(.ant-tabs-tab-disabled):hover {
+  background: var(--color-accent-light);
+}
+
+.ant-tabs-tab-btn:active, .ant-tabs-tab-btn:focus {
+  color: inherit;
 }
 
 .ant-empty-image {
@@ -292,21 +301,11 @@ nz-spin {
 }
 
 @media all and (max-width: 576px) {
-  .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+  .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab, .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab {
     min-width: 150px;
     font-size: var(--font-size-12);
     letter-spacing: 0.05em;
     width: auto;
-  }
-
-  .ant-tabs-tab-prev.ant-tabs-tab-arrow-show,
-  .ant-tabs-tab-next.ant-tabs-tab-arrow-show {
-    opacity: 0;
-  }
-
-  .ant-tabs-nav-container-scrolling {
-    padding-right: 0;
-    padding-left: 0;
   }
 
   .ant-modal-wrap {
@@ -315,7 +314,7 @@ nz-spin {
 }
 
 @media all and (max-width: 400px) {
-  .ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab {
+  .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab, .ant-tabs-card.ant-tabs-top>div>.ant-tabs-nav .ant-tabs-tab {
     min-width: 120px;
   }
 

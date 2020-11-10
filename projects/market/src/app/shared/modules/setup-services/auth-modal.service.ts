@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd';
 import { AuthService } from '#shared/modules/common-services/auth.service';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
@@ -7,6 +6,8 @@ import { EmptyOrganizationsInfoComponent } from '../components/empty-organizatio
 import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
 import { switchMap, switchMapTo, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Location } from '@angular/common';
 
 /**
  * URL пути находящиеся под аутентификацией
@@ -19,9 +20,10 @@ export class AuthModalService {
     private _modalService: NzModalService,
     private _authService: AuthService,
     private _externalProvidersService: ExternalProvidersService,
+    private _location: Location,
   ) {}
 
-  openAuthDecisionMakerModal(description: string, loginRedirectPath: string = `${location.pathname}${location.search}`) {
+  openAuthDecisionMakerModal(description: string, loginRedirectPath: string = this._location.path()) {
     const modal = this._modalService.create({
       nzContent: AuthDecisionMakerComponent,
       nzFooter: null,

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BannersComponent } from './banners.component';
 import { BannerComponent } from './components/banner/banner.component';
-import { NzCarouselModule } from 'ng-zorro-antd';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 
 @NgModule({
   imports: [CommonModule, RouterModule, NzCarouselModule],

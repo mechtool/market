@@ -22,17 +22,18 @@ import { TradeOffersService } from './trade-offers.service';
 import { CartService } from './cart.service';
 import { EdiService } from './edi.service';
 import { NotificationsService } from './notifications.service';
-import { NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { PaymentDocumentModalService } from './payment-document-modal.service';
 import { SpinnerService } from './spinner.service';
 import { FeedbackService } from './feedback.service';
 import { ExternalProvidersService } from './external-providers.service';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
 })
 export class CommonServicesModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<CommonServicesModule> {
     return {
       ngModule: CommonServicesModule,
       providers: [

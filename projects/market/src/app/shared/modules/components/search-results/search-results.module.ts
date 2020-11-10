@@ -6,9 +6,10 @@ import { SearchResultComponent } from './search-results.component';
 import { NomenclatureCardModule } from '../nomenclature-card';
 import { CardModule } from '../card/card.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { NzIconModule, NzSpinModule } from 'ng-zorro-antd';
 import { PipesModule } from '#shared/modules/pipes';
 import { SorterModule } from '../sorter';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @NgModule({
   imports: [
@@ -23,11 +24,7 @@ import { SorterModule } from '../sorter';
     PipesModule,
     SorterModule,
   ],
-  declarations: [
-    SearchResultComponent,
-  ],
+  declarations: [SearchResultComponent],
   exports: [SearchResultComponent],
 })
-export class SearchResultsModule {
-}
-
+export class SearchResultsModule {}

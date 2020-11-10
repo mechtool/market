@@ -7,7 +7,7 @@ import {
   AccessKeyResponseModel,
   OrganizationResponseModel,
   OrganizationUserResponseModel,
-  ParticipationRequestResponseModel
+  ParticipationRequestResponseModel,
 } from '#shared/modules/common-services/models';
 import { AccessKeyComponent } from '../access-key/access-key.component';
 import { switchMap, tap, map, filter } from 'rxjs/operators';
@@ -45,7 +45,6 @@ const ERROR_GET_ORG_USERS = 'Произошла ошибка при получе
 const ERROR_GET_ORG_REQUESTS = 'Произошла ошибка при получении запросов на добавление в организацию.';
 const ERROR_GET_ORG_ACCESS_KEYS = 'Произошла ошибка при получении списка одноразовых паролей.';
 
-
 @UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './single-organization.component.html',
@@ -62,7 +61,7 @@ export class SingleOrganizationComponent implements OnInit {
   users: OrganizationUserResponseModel[];
   participationRequests: ParticipationRequestResponseModel[];
   accessKeys: AccessKeyResponseModel[];
-  legalRequisites: { inn: string; kpp?: string; };
+  legalRequisites: { inn: string; kpp?: string };
   isEditable: boolean;
   isAdmin: boolean;
   currentUserId: string;
@@ -78,8 +77,7 @@ export class SingleOrganizationComponent implements OnInit {
     private _notificationsService: NotificationsService,
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this._watchParamsChanges();
@@ -98,13 +96,12 @@ export class SingleOrganizationComponent implements OnInit {
   }
 
   createAccessKeyComponentModal(): void {
-    this._organizationsService.obtainAccessKey(this.orgId)
-      .subscribe((res) => {
+    this._organizationsService.obtainAccessKey(this.orgId).subscribe(
+      (res) => {
         this._resetAccessKeys(this.orgId);
         this._modal = this._modalService.create({
           nzContent: AccessKeyComponent,
           nzViewContainerRef: this._viewContainerRef,
-          nzGetContainer: () => document.body,
           nzComponentParams: {
             organizationName: this.organizationData.name || null,
             inn: this.organizationData.legalRequisites?.inn || null,
@@ -114,24 +111,24 @@ export class SingleOrganizationComponent implements OnInit {
           nzFooter: null,
           nzWidth: 480,
         });
-
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error(ERROR_GET_ACCESS_KEY);
-      });
+      },
+    );
   }
 
   createRemoveUserModal(userId: string): void {
     const foundUser = this.users.find((res) => {
       return res.uin === userId;
     });
-    if (foundUser && foundUser.userGrants.isAdmin && this.users.filter(r => r.userGrants.isAdmin).length <= 1) {
+    if (foundUser && foundUser.userGrants.isAdmin && this.users.filter((r) => r.userGrants.isAdmin).length <= 1) {
       this._notificationsService.error(ERROR_DELETE_LAST_ADMIN);
       return;
     }
     this._modal = this._modalService.create({
       nzContent: UserRemovalVerifierComponent,
       nzViewContainerRef: this._viewContainerRef,
-      nzGetContainer: () => document.body,
       nzComponentParams: {
         userId,
         personName: foundUser?.person?.personName,
@@ -151,7 +148,6 @@ export class SingleOrganizationComponent implements OnInit {
     this._modal = this._modalService.create({
       nzContent: AccessKeyRemovalVerifierComponent,
       nzViewContainerRef: this._viewContainerRef,
-      nzGetContainer: () => document.body,
       nzComponentParams: {
         accessKeyId,
       },
@@ -167,13 +163,12 @@ export class SingleOrganizationComponent implements OnInit {
   }
 
   createMakeRequestDecisionModal(requestId: string): void {
-    const request = this.participationRequests.find(req => req.requestId === requestId);
+    const request = this.participationRequests.find((req) => req.requestId === requestId);
     this._modal = this._modalService.create({
       nzContent: RequestDecisionMakerComponent,
       nzViewContainerRef: this._viewContainerRef,
-      nzGetContainer: () => document.body,
       nzComponentParams: {
-        request
+        request,
       },
       nzFooter: null,
       nzWidth: 480,
@@ -183,28 +178,27 @@ export class SingleOrganizationComponent implements OnInit {
       .pipe(
         switchMap((res: [string, boolean]) => this._makeDecisionParticipationRequest(res)),
         switchMap((res: boolean) => {
-          return zip(
-            of(res),
-            this._userService.updateParticipationRequests(),
-          );
+          return zip(of(res), this._userService.updateParticipationRequests());
         }),
         tap(() => {
           this._resetParticipationRequests(this.orgId);
-        })
+        }),
       )
-      .subscribe((res: [boolean, any]) => {
-        this._modal.destroy();
-        if (res[0]) {
-          this._resetUsers(this.orgId);
-          this._resetActiveTab('b');
-        }
-      }, (err) => {
-        this._notificationsService.error(ERROR_ACCEPT_REJECT_USER_TO_ORG);
-      });
+      .subscribe(
+        (res: [boolean, any]) => {
+          this._modal.destroy();
+          if (res[0]) {
+            this._resetUsers(this.orgId);
+            this._resetActiveTab('b');
+          }
+        },
+        (err) => {
+          this._notificationsService.error(ERROR_ACCEPT_REJECT_USER_TO_ORG);
+        },
+      );
   }
 
   updateOrganization(data: UpdateOrganizationType): void {
-
     const contactPerson = {
       fullName: data.contactFio,
       email: data.contactEmail,
@@ -218,23 +212,28 @@ export class SingleOrganizationComponent implements OnInit {
       address: data.organizationAddress,
     };
 
-    this._organizationsService.updateOrganization(this.orgId, {
-      contacts,
-      name: data.organizationName,
-      description: data.organizationDescription,
-    }).pipe(
-      switchMap((res) => {
-        return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson);
-      }),
-      switchMap(_ => this._organizationsService.getUserOrganizations()),
-      tap(res => this._userService.setUserOrganizations(res)),
-    )
-      .subscribe((_) => {
-        this.isEditable = false;
-        this._resetOrganizationData(this.orgId);
-      }, (err) => {
-        this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
-      });
+    this._organizationsService
+      .updateOrganization(this.orgId, {
+        contacts,
+        name: data.organizationName,
+        description: data.organizationDescription,
+      })
+      .pipe(
+        switchMap((res) => {
+          return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson);
+        }),
+        switchMap((_) => this._organizationsService.getUserOrganizations()),
+        tap((res) => this._userService.setUserOrganizations(res)),
+      )
+      .subscribe(
+        (_) => {
+          this.isEditable = false;
+          this._resetOrganizationData(this.orgId);
+        },
+        (err) => {
+          this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
+        },
+      );
   }
 
   private _makeDecisionParticipationRequest([requestId, accept]: [string, boolean]): any {
@@ -250,32 +249,38 @@ export class SingleOrganizationComponent implements OnInit {
   }
 
   private _deleteUserFromOrganization(userId: string): void {
-    this._organizationsService.deleteUserFromOrganization(this.orgId, userId).subscribe((res) => {
-      this._modal.destroy();
-      this._resetUsers(this.orgId);
-    }, (err) => {
-      this._notificationsService.error(ERROR_REMOVE_USER_FROM_ORG);
-    });
+    this._organizationsService.deleteUserFromOrganization(this.orgId, userId).subscribe(
+      (res) => {
+        this._modal.destroy();
+        this._resetUsers(this.orgId);
+      },
+      (err) => {
+        this._notificationsService.error(ERROR_REMOVE_USER_FROM_ORG);
+      },
+    );
   }
 
   private _deleteAccessKey(accessKeyId: string): void {
-    this._organizationsService.deleteAccessKey(accessKeyId).subscribe((res) => {
-      this._modal.destroy();
-      this._resetAccessKeys(this.orgId);
-    }, (err) => {
-      this._notificationsService.error(ERROR_DELETE_ACCESS_KEY);
-    });
+    this._organizationsService.deleteAccessKey(accessKeyId).subscribe(
+      (res) => {
+        this._modal.destroy();
+        this._resetAccessKeys(this.orgId);
+      },
+      (err) => {
+        this._notificationsService.error(ERROR_DELETE_ACCESS_KEY);
+      },
+    );
   }
 
   private _watchParamsChanges(): void {
-    this._activatedRoute.params
-      .subscribe(
-        (res) => {
-          this.init(res.id);
-        },
-        (err) => {
-          this._notificationsService.error(ERROR_DEFAULT);
-        });
+    this._activatedRoute.params.subscribe(
+      (res) => {
+        this.init(res.id);
+      },
+      (err) => {
+        this._notificationsService.error(ERROR_DEFAULT);
+      },
+    );
   }
 
   private _resetActiveTab(tabType: TabType = 'a'): void {
@@ -286,56 +291,70 @@ export class SingleOrganizationComponent implements OnInit {
     const orgIndex = this._userService.organizations$.value.findIndex((org) => {
       return org.organizationId === organizationId && org.userGrants?.isAdmin;
     });
-    this.isAdmin = (orgIndex !== -1);
+    this.isAdmin = orgIndex !== -1;
   }
 
   private _resetOrganizationData(organizationId: string): void {
-    iif(() => {
-      return this.isAdmin;
-    }, this._organizationsService.getOrganizationProfile(organizationId), this._organizationsService.getOrganization(organizationId))
-      .subscribe((res) => {
+    iif(
+      () => {
+        return this.isAdmin;
+      },
+      this._organizationsService.getOrganizationProfile(organizationId),
+      this._organizationsService.getOrganization(organizationId),
+    ).subscribe(
+      (res) => {
         this.organizationData = res;
         this.legalRequisites = {
           inn: res.legalRequisites?.inn,
-          kpp: res.legalRequisites?.kpp || null
+          kpp: res.legalRequisites?.kpp || null,
         };
-      }, (err) => {
+      },
+      (err) => {
         this._notificationsService.error(ERROR_GET_ORG_INFO);
-      });
+      },
+    );
   }
 
   private _resetUsers(organizationId: string): void {
-    this._organizationsService.getOrganizationUsers(organizationId).subscribe((res) => {
-      this.users = res;
-    }, (err) => {
-      this._notificationsService.error(ERROR_GET_ORG_USERS);
-    });
+    this._organizationsService.getOrganizationUsers(organizationId).subscribe(
+      (res) => {
+        this.users = res;
+      },
+      (err) => {
+        this._notificationsService.error(ERROR_GET_ORG_USERS);
+      },
+    );
   }
 
   private _resetParticipationRequests(organizationId: string): void {
-    this._organizationsService.getParticipationRequests({
-      organizationIds: [organizationId],
-      page: 0,
-      size: PAGE_SIZE,
-    })
-      .subscribe((res) => {
-        this.participationRequests = res;
-      }, (err) => {
-        this._notificationsService.error(ERROR_GET_ORG_REQUESTS);
-      });
+    this._organizationsService
+      .getParticipationRequests({
+        organizationIds: [organizationId],
+        page: 0,
+        size: PAGE_SIZE,
+      })
+      .subscribe(
+        (res) => {
+          this.participationRequests = res;
+        },
+        (err) => {
+          this._notificationsService.error(ERROR_GET_ORG_REQUESTS);
+        },
+      );
   }
 
   private _resetAccessKeys(organizationId: string): void {
-    this._organizationsService.getAccessKeysByOrganizationId(organizationId).subscribe((res) => {
-      this.accessKeys = res;
-    }, (err) => {
-      this._notificationsService.error(ERROR_GET_ORG_ACCESS_KEYS);
-    });
+    this._organizationsService.getAccessKeysByOrganizationId(organizationId).subscribe(
+      (res) => {
+        this.accessKeys = res;
+      },
+      (err) => {
+        this._notificationsService.error(ERROR_GET_ORG_ACCESS_KEYS);
+      },
+    );
   }
 
   private _resetIsEditable(): void {
     this.isEditable = false;
   }
-
-
 }
