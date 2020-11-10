@@ -7,6 +7,13 @@ import { Component } from '@angular/core';
 export class PromoFirstOrderComponent {
   supplierItems = [
     {
+      title: 'КОМУС',
+      btnLink: '/supplier/d51a02b9-ba4f-4f0a-9288-ea8216fffac2',
+      btnText: 'Подобрать товары',
+      description: '- 10% на "Товары для школы и офиса", доставка по РФ от 3000 р.',
+      imgUrl: 'assets/img/promo/first-order/komus.png',
+    },
+    {
       title: 'КОФРУСС',
       btnLink: '/supplier/8f70e68f-148f-4747-a5a5-fa491aff3e78',
       btnText: 'Подобрать товары',
