@@ -6,7 +6,8 @@
     <img *ngIf="imageUrl"
          src="{{imageUrl}}"
          alt="{{productOffer.product.productName}}"
-         title="{{productOffer.product.productName}}">
+         title="{{productOffer.product.productName}}"
+         onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
   </span>
   <span class="body">
     <span class="title"

@@ -77,7 +77,8 @@
           <div class="cell_image">
             <span *ngIf="!tradeOffer.imageUrls" class="empty__img"></span>
             <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}"
-                 alt="{{tradeOffer.productName}}" title="">
+                 alt="{{tradeOffer.productName}}" title="{{tradeOffer.productName}}"
+                 onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
           </div>
           <div class="table_cell cell_price">
               <span *ngIf="tradeOffer.price?.matrix?.length"
