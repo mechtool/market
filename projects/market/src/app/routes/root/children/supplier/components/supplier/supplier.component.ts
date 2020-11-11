@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Title, Meta } from '@angular/platform-browser';
 import { combineLatest, throwError } from 'rxjs';
 import {
   CountryCode,
@@ -12,7 +11,7 @@ import {
   TradeOfferSummaryModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 
 import {
@@ -46,8 +45,6 @@ export class SupplierSingleComponent {
   }
 
   constructor(
-    private _title: Title,
-    private _meta: Meta,
     private _productService: ProductService,
     private _tradeOffersService: TradeOffersService,
     private _supplierService: SupplierService,
@@ -103,15 +100,6 @@ export class SupplierSingleComponent {
           this.supplier = this._mapSupplier(organization);
           this.request.supplierInn = this.supplier.inn;
           return this._tradeOffersService.search(this.request);
-        }),
-        tap(() => {
-          this._title.setTitle(`Магазин ${this.supplier.name} на «1С:Торговая площадка»`);
-          this._meta.updateTag({
-            name: 'description',
-            content: `Доставка. Самовывоз.${this.supplier.phone ? ` Телефон: ${this.supplier.phone}` : ''}
-            ${this.supplier.email ? ` Email: ${this.supplier.email}` : ''}
-            ${this.supplier.address ? ` Адрес: ${this.supplier.address}` : ''}`,
-          });
         }),
         catchError((err) => {
           return throwError(err);
