@@ -1,9 +1,10 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MetrikaEventTypeModel, OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
 import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
-import { tap } from 'rxjs/operators';
+import { filter, map, pairwise, startWith, tap } from 'rxjs/operators';
+import { combineLatest, defer, fromEvent, merge, Observable, of } from 'rxjs';
 
 enum Operation {
   REMOVE,
@@ -16,17 +17,15 @@ enum Operation {
   templateUrl: './product-side.component.html',
   styleUrls: ['./product-side.component.scss'],
 })
-export class ProductSideComponent implements OnInit {
+export class ProductSideComponent implements OnInit, AfterViewInit {
+  @ViewChild('inputEl') inputEl: ElementRef;
   @Input() tradeOfferId: string;
   @Input() minQuantity: number;
   @Input() orderStep: number;
   orderStatus: OrderStatusModal;
   form: FormGroup;
   isAdded: boolean;
-
-  get focusIsNotFormTotalPositions() {
-    return document.activeElement.attributes['formcontrolname']?.value !== 'totalPositions';
-  }
+  prevCount: number = null;
 
   constructor(
     private _fb: FormBuilder,
@@ -38,8 +37,31 @@ export class ProductSideComponent implements OnInit {
     this.form = this._fb.group({
       totalPositions: 0,
     });
+  }
 
+  ngAfterViewInit() {
     this._changeTotalPositions();
+  }
+
+  private _inputIsFocused$(): Observable<boolean> {
+    let elementQuery = null;
+    let elementQueryFocusChanges$ = null;
+    let elementQueryBlurChanges$ = null;
+    if (this.inputEl?.nativeElement) {
+      elementQuery = this.inputEl.nativeElement;
+      elementQueryFocusChanges$ = fromEvent(elementQuery, 'focus');
+      elementQueryBlurChanges$ = fromEvent(elementQuery, 'blur');
+    }
+
+    return defer(() => {
+      return !elementQuery
+        ? of(false)
+        : merge(elementQueryFocusChanges$, elementQueryBlurChanges$).pipe(
+            map((event: FocusEvent) => {
+              return event.type === 'focus';
+            }),
+          );
+    });
   }
 
   ngOnInit(): void {
@@ -101,51 +123,58 @@ export class ProductSideComponent implements OnInit {
   }
 
   private _changeTotalPositions() {
-    this.form.controls.totalPositions.valueChanges.subscribe((value) => {
-      const cartLocation = this._cartService.getCart$().value;
-      if (this.focusIsNotFormTotalPositions && value >= this.minQuantity) {
-        if (value % this.orderStep !== 0) {
-          /* todo Возможно данный блок нужно будет переделать, решить после закрытия задачи BNET-3597 */
-          value = value - (value % this.orderStep);
-          this.form.controls.totalPositions.setValue(value, { onlySelf: true, emitEvent: false });
+    return combineLatest([this._inputIsFocused$().pipe(startWith(false)), this.form.controls.totalPositions.valueChanges])
+      .pipe(filter(([isFocused]) => isFocused === false))
+      .subscribe(([, value]) => {
+        const cartLocation = this._cartService.getCart$()?.getValue();
+
+        if (value >= this.minQuantity && value !== this.prevCount) {
+          if (value % this.orderStep !== 0) {
+            /* todo Возможно данный блок нужно будет переделать, решить после закрытия задачи BNET-3597 */
+            value = value - (value % this.orderStep);
+            this.form.controls.totalPositions.setValue(value, { onlySelf: true, emitEvent: false });
+          }
+          this.isAdded = true;
+          this._cartService
+            .handleRelationAndUpdateData(RelationEnumModel.ITEM_UPDATE_QUANTITY, `${cartLocation}/items/${this.tradeOfferId}/quantity`, {
+              quantity: value,
+            })
+            .pipe(
+              tap(() => {
+                this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+              }),
+            )
+            .subscribe(
+              () => {
+                this.spinnerOf();
+                this.prevCount = value;
+              },
+              (err) => {
+                this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
+                this.rollBackTotalPositions();
+              },
+            );
         }
-        this.isAdded = true;
-        this._cartService
-          .handleRelationAndUpdateData(RelationEnumModel.ITEM_UPDATE_QUANTITY, `${cartLocation}/items/${this.tradeOfferId}/quantity`, {
-            quantity: value,
-          })
-          .pipe(
-            tap(() => {
-              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
-            }),
-          )
-          .subscribe(
-            () => {
-              this.spinnerOf();
-            },
-            (err) => {
-              this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
-              this.rollBackTotalPositions();
-            },
-          );
-      } else if (this.focusIsNotFormTotalPositions && (!value || value < this.minQuantity)) {
-        this.orderStatus = OrderStatusModal.TO_CART;
-        this._cartService
-          .handleRelationAndUpdateData(RelationEnumModel.ITEM_REMOVE, `${cartLocation}/items/${this.tradeOfferId}`)
-          .pipe(
-            tap(() => {
-              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
-            }),
-          )
-          .subscribe(
-            () => {},
-            (err) => {
-              this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
-              this.rollBackTotalPositions(Operation.REMOVE);
-            },
-          );
-      }
-    });
+        if (!value || value < this.minQuantity) {
+          this.orderStatus = OrderStatusModal.TO_CART;
+          this._cartService
+            .handleRelationAndUpdateData(RelationEnumModel.ITEM_REMOVE, `${cartLocation}/items/${this.tradeOfferId}`)
+            .pipe(
+              tap(() => {
+                this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+              }),
+            )
+            .subscribe(
+              () => {
+                this.prevCount = value;
+              },
+              (err) => {
+                this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
+                this.rollBackTotalPositions(Operation.REMOVE);
+              },
+            );
+        }
+      });
   }
 
   private rollBackTotalPositions(operation?: Operation) {
