@@ -60,8 +60,17 @@ export const innConditionValidator: ValidatorFn = (formControl: FormControl): Va
     return { innCondition: true };
   }
 
+  if (inn.length !== 10 && inn.length !== 12) {
+    return { innLengthCondition: true }
+  }
+
   return checkInnValidity(inn.toString()) ? null : { innControlNumberCondition: true };
 };
+
+export const kppConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
+  const kpp = formControl.value;
+  return kpp?.substring(0, 1) === '0' ? { kppStartZeroCondition: true } : null;
+}
 
 export const innKppConditionValidator: ValidatorFn = (fg: FormGroup): ValidationErrors => {
   const inn = fg.get('inn').value;

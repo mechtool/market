@@ -1,7 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { innConditionValidator, innKppConditionValidator } from './requisites-condition.validator';
+import {
+  innConditionValidator,
+  innKppConditionValidator,
+  kppConditionValidator
+} from './requisites-condition.validator';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -24,7 +28,8 @@ export class RequisitesCheckerComponent implements OnInit {
     this.form = this._fb.group(
       {
         inn: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), innConditionValidator]),
-        kpp: new FormControl('', [Validators.pattern('^[0-9]*$'), Validators.min(100000000), Validators.max(999999999)]),
+        kpp: new FormControl('', [Validators.pattern('^[0-9]*$'),
+          Validators.min(100000000), Validators.max(999999999), kppConditionValidator]),
       },
       { validator: innKppConditionValidator },
     );

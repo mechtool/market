@@ -13,19 +13,36 @@
              (keypress)="onlyNumberKey($event)"
              id="formINN"
              autocomplete="off"
-             [ngClass]="{'error': form.controls.inn.errors?.innControlNumberCondition && (form.controls.inn.value.length === 10 || form.controls.inn.value.length === 12)}"
+             [ngClass]="{'error': form.controls.inn.errors?.innControlNumberCondition || form.controls.inn.errors?.innLengthCondition}"
              formControlName="inn">
 
       <div class="input_error"
-           *ngIf="form.controls.inn.errors?.innControlNumberCondition && (form.controls.inn.value.length === 10 || form.controls.inn.value.length === 12)">
+           *ngIf="form.controls.inn.errors?.innControlNumberCondition">
         Введен недействительный ИНН
+      </div>
+      <div class="input_error"
+           *ngIf="form.controls.inn.errors?.innLengthCondition">
+        Длина должна быть 10 или 12 цифр
       </div>
     </div>
 
     <div class="description" *ngIf="enterKpp">Укажите КПП организации</div>
 
     <div class="form-group form-group-std" *ngIf="enterKpp">
-      <input type="text" (keypress)="onlyNumberKey($event)" id="formKPP" autocomplete="off" formControlName="kpp">
+      <input type="text"
+             (keypress)="onlyNumberKey($event)"
+             id="formKPP"
+             autocomplete="off"
+             [ngClass]="{'error': form.controls.kpp.invalid}"
+      formControlName="kpp">
+      <div class="input_error"
+           *ngIf="form.controls.kpp?.errors?.kppStartZeroCondition">
+        Введен недействительный КПП
+      </div>
+      <div class="input_error"
+           *ngIf="form.controls.kpp.invalid && !form.controls.kpp?.errors?.kppStartZeroCondition">
+        Длина должна быть 9 цифр
+      </div>
     </div>
 
     <div class="form-group form-group-btn">
