@@ -60,7 +60,7 @@ export const innConditionValidator: ValidatorFn = (formControl: FormControl): Va
     return { innCondition: true };
   }
 
-  return checkInnValidity(inn.toString()) ? null : { innCondition: true };
+  return checkInnValidity(inn.toString()) ? null : { innControlNumberCondition: true };
 };
 
 export const innKppConditionValidator: ValidatorFn = (fg: FormGroup): ValidationErrors => {

@@ -9,7 +9,17 @@
     <div class="description" *ngIf="enterKpp">ИНН</div>
 
     <div class="form-group form-group-std">
-      <input type="text" (keypress)="onlyNumberKey($event)" id="formINN" autocomplete="off" formControlName="inn">
+      <input type="text"
+             (keypress)="onlyNumberKey($event)"
+             id="formINN"
+             autocomplete="off"
+             [ngClass]="{'error': form.controls.inn.errors?.innControlNumberCondition && (form.controls.inn.value.length === 10 || form.controls.inn.value.length === 12)}"
+             formControlName="inn">
+
+      <div class="input_error"
+           *ngIf="form.controls.inn.errors?.innControlNumberCondition && (form.controls.inn.value.length === 10 || form.controls.inn.value.length === 12)">
+        Введен недействительный ИНН
+      </div>
     </div>
 
     <div class="description" *ngIf="enterKpp">Укажите КПП организации</div>

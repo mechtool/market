@@ -56,3 +56,16 @@ form {
   margin-top: 22px;
   text-align: center;
 }
+
+input[type='text'] {
+  &.error {
+    border-color: #f6837b;
+    outline-color: #f6837b;
+    color: #6a6a6a;
+  }
+}
+
+.input_error {
+  text-align: center;
+  color: #f6837b;
+}
