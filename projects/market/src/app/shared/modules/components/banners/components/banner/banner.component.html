@@ -1,8 +1,8 @@
 <ng-container *ngIf="!isLinkExternal; else externalTpl">
-<!--todo переделать href на routerLink и queryParams-->
   <a class="banner_item banner_item__big"
      rel="noopener noreferrer"
-     href="{{item.btnLink}}">
+     [routerLink]="item.btnLink"
+     [queryParams]="item.btnQueryParams">
     <ng-container *ngTemplateOutlet="contentTpl"></ng-container>
   </a>
 </ng-container>

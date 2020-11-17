@@ -1,5 +1,10 @@
-::ng-deep .cookie-info-content .ant-alert-close-icon .anticon-close {
-  color: #000;
+.cookie-info-content ::ng-deep {
+  .ant-alert-close-icon .anticon-close {
+    color: #000;
+  }
+  .ant-alert.ant-alert-no-icon .ant-alert-close-icon {
+    top: 12px;
+  }
 }
 
 .cookie-info-content {
