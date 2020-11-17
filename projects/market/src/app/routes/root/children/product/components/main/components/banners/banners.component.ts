@@ -11,7 +11,7 @@ export class MainBannersComponent {
       title: 'Скидка 10% на первый заказ!',
       btnLink: '/promo/first-order',
       btnText: 'Подробнее',
-      description: 'До 15 ноября скидки от Поставщиков',
+      description: 'до 31 декабря скидки от Поставщиков',
       imgUrl: 'assets/img/tmp/banner_1.png',
     },
     {
@@ -23,7 +23,7 @@ export class MainBannersComponent {
     },
     {
       title: 'Все для магазина и ресторана!',
-      btnLink: '/supplier/889f29b7-7766-4da1-9397-06ab88cbc7cd',
+      btnLink: '/category/3321',
       btnText: 'Подробнее',
       description: '> 7000 товаров в категории «Продукты, напитки, табак»',
       imgUrl: 'assets/img/tmp/banner_3.png',

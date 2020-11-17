@@ -34,4 +34,34 @@ export const categoryPromotion = {
       imgUrl: 'assets/img/tmp/banner_2.png',
     },
   ],
+  3321: [
+    {
+      title: 'МЕТРО',
+      btnLink: '/supplier/889f29b7-7766-4da1-9397-06ab88cbc7cd?categoryId=3321&isDelivery=true&isPickup=true&sort=minPriceAsc',
+      btnText: 'Подобрать товары',
+      description: '>7000 товаров в категории "Продукты, напитки, табак", заказ от 10000 р.',
+      imgUrl: 'assets/img/promo/metro.jpg',
+    },
+    {
+      title: 'КОМУС',
+      btnLink: '/supplier/d51a02b9-ba4f-4f0a-9288-ea8216fffac2?categoryId=3321&isDelivery=true&isPickup=true',
+      btnText: 'Подобрать товары',
+      description: '- 10% на "Продукты, напитки, табак", цены указаны со скидкой, заказ от 3000 р.',
+      imgUrl: 'assets/img/promo/school-office/komus.png',
+    },
+    {
+      title: 'КИТ ХОББИ',
+      btnLink: '/supplier/e911cf76-6ed8-4c03-b6be-4e8aee3465fe',
+      btnText: 'Подобрать товары',
+      description: '- 5% на "Чай, кофе, какао", доставка по РФ от 1900 р.',
+      imgUrl: 'assets/img/promo/school-office/kit-hobby.jpg',
+    },
+    {
+      title: 'КОФРУСС',
+      btnLink: '/supplier/8f70e68f-148f-4747-a5a5-fa491aff3e78',
+      btnText: 'Подобрать товары',
+      description: '- 10% первый заказ на "Чай, Кофе, Какао", доставка по РФ.',
+      imgUrl: 'assets/img/promo/kofruss.png',
+    }
+  ]
 };
