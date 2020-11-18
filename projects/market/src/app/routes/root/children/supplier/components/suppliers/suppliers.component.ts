@@ -66,10 +66,10 @@ export class SupplierListComponent {
   }
 
   private _initForm() {
-    this._spinnerService.show();
     combineLatest([this._activatedRoute.queryParams])
       .pipe(
         switchMap(([queryParams]) => {
+          this._spinnerService.show();
           this.query = queryParams.q;
           return this._getSuppliers(0);
         }),

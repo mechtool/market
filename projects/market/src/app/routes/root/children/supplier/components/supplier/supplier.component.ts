@@ -80,10 +80,10 @@ export class SupplierSingleComponent {
   }
 
   private _init() {
-    this._spinnerService.show();
     combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(
         switchMap(([params, queryParams]) => {
+          this._spinnerService.show();
           this._collectFilters(params, queryParams);
           this._collectRequest();
           const supplierId = params.supplierId;
