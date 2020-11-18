@@ -1,7 +1,6 @@
-import { Input, Output, Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { UserOrganizationModel } from '#shared/modules/common-services/models/user-organization.model';
-import { stringToHex } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -18,10 +17,6 @@ export class ActiveOrganizationsComponent {
   @Output() getAccessKeyRequestChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {
-  }
-
-  setHexColor(str: string): string {
-    return stringToHex(str);
   }
 
   emitRequestAccessKey(org) {

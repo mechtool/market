@@ -1,5 +1,6 @@
-<a class="catalog_item__link" *ngIf="tradeOffer" [routerLink]="'/supplier/' + tradeOffer.supplierId + '/offer/' + tradeOffer.id">
-  <span class="catalog_item__img" [style]="{'background-color': argb}"></span>
+<a class="catalog_item__link" *ngIf="tradeOffer"
+   [routerLink]="'/supplier/' + tradeOffer.supplierId + '/offer/' + tradeOffer.id">
+  <span class="catalog_item__img" style="{{tradeOffer.supplierId | organizationLogo}}"></span>
   <span class="catalog_item__descr">
     <span class="catalog_item__title"
           nz-tooltip

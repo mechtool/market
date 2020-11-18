@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TradeOfferDto } from '#shared/modules';
-import { stringToRGB } from '#shared/utils';
 
 @Component({
   selector: 'market-trade-offer-info-card',
@@ -17,7 +16,4 @@ export class TradeOfferCardComponent {
 
   @Input() tradeOffer: TradeOfferDto;
 
-  get argb() {
-    return stringToRGB(this.tradeOffer?.supplierId);
-  }
 }

@@ -19,8 +19,8 @@
     <div class="table_row table_data" *ngFor="let document of documents" (click)="openDocument(payment_document)">
       <div class="table_cell cell_title" data-title="Отправитель:">
         <div class="supplier_title">
-          <span class="supplier_image" [style]="{'background-color': orgLogo(document.party)}"></span>
-          <span class="supplier_name">{{name(document.party)}}</span>
+          <span class="supplier_image" style="{{document.party | organizationLogo}}"></span>
+          <span class="supplier_name">{{document.party | abbreviatedBusinessName}}</span>
         </div>
       </div>
       <div class="table_cell cell_number" data-title="Счет:">

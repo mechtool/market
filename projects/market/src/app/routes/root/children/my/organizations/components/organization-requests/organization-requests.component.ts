@@ -1,7 +1,6 @@
-import { Input, Output, Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { stringToHex } from '#shared/utils';
-import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
+import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -18,10 +17,6 @@ export class OrganizationRequestsComponent {
   @Output() makeRequestDecisionRequestChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {
-  }
-
-  setHexColor(str: string): string {
-    return stringToHex(str);
   }
 
   emitMakeRequestDecisionRequestChange(requestId: string) {

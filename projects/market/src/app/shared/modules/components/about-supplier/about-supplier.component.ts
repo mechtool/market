@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { SuppliersItemModel } from '#shared/modules';
-import { resizeBusinessStructure } from '#shared/utils';
+import { SuppliersItemModel } from '#shared/modules/common-services/models';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -16,16 +15,6 @@ import { resizeBusinessStructure } from '#shared/utils';
 })
 
 export class AboutSupplierComponent {
-
   @Input() supplier: SuppliersItemModel;
-  @Input() supplierLogo: string;
   @Input() showStoreButton: boolean;
-
-  get name() {
-    return resizeBusinessStructure(this.supplier.name);
-  }
-
-  constructor() {
-  }
-
 }

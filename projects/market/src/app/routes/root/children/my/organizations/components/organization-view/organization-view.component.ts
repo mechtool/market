@@ -1,7 +1,6 @@
-import { Input, Output, Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { Router } from '@angular/router';
-import { stringToHex } from '#shared/utils';
 
 @Component({
   selector: 'market-organization-view',
@@ -17,14 +16,10 @@ export class OrganizationViewComponent implements OnInit {
   @Output() editOrganizationChange: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    private _router: Router){
+    private _router: Router) {
   }
 
   ngOnInit() {
-  }
-
-  setHexColor(str: string): string {
-    return stringToHex(str);
   }
 
   goToSupplierStore() {

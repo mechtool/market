@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ImagesLinkModel, ProductDto, TradeOfferStockEnumModel } from '#shared/modules/common-services/models';
-import { absoluteImagePath, resizeBusinessStructure } from '#shared/utils';
+import { absoluteImagePath } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -16,7 +16,6 @@ export class ProductGalleryComponent {
   @Input() stockLevel: TradeOfferStockEnumModel;
   @Input() stockAmount: number;
   @Input() temporarilyOutOfSales: boolean;
-  @Input() supplierLogo: string;
 
   get images(): ImagesLinkModel[] {
     if (this.product.images?.length > 10) {
@@ -24,10 +23,6 @@ export class ProductGalleryComponent {
       return this.product.images.slice(0, 10);
     }
     return this.product.images || null;
-  }
-
-  get name() {
-    return resizeBusinessStructure(this.supplierName);
   }
 
   constructor() {

@@ -25,7 +25,6 @@
     [stockLevel]="tradeOffer.stock?.stockBalanceSummary?.level"
     [stockAmount]="tradeOffer.stock?.stockBalanceSummary?.amount"
     [temporarilyOutOfSales]="tradeOffer.termsOfSale.temporarilyOutOfSales"
-    [supplierLogo]="supplierLogo"
   ></market-product-gallery>
 </ng-template>
 
@@ -46,7 +45,6 @@
     <nz-tab nzTitle="О поставщике">
       <market-about-supplier
         [supplier]="supplier"
-        [supplierLogo]="supplierLogo"
         [showStoreButton]="true"
       ></market-about-supplier>
     </nz-tab>

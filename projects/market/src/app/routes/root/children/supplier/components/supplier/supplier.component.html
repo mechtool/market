@@ -1,8 +1,8 @@
 <div class="content-wrapper page_inner">
 
   <div class="page_header" *ngIf="supplier">
-    <span class="supplier_image" [style]="{'background-color': supplierLogo}"></span>
-    <h2>{{name}}</h2>
+    <span class="supplier_image" style="{{supplier.id | organizationLogo}}"></span>
+    <h2>{{supplier?.name | abbreviatedBusinessName}}</h2>
   </div>
 
   <nz-tabset nzTabPosition="top" nzType="card">
@@ -24,7 +24,6 @@
     <nz-tab nzTitle="О поставщике">
       <market-about-supplier
         [supplier]="supplier"
-        [supplierLogo]="supplierLogo"
         [showStoreButton]="false"
       ></market-about-supplier>
     </nz-tab>

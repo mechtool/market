@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { SuppliersItemModel } from '#shared/modules';
-import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
+import { SuppliersItemModel } from '#shared/modules/common-services/models';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -19,18 +18,4 @@ export class SupplierCardComponent {
 
   @Input() supplier: SuppliersItemModel;
 
-  get argb() {
-    return stringToRGB(this.supplier?.id);
-  }
-
-  get name() {
-    return resizeBusinessStructure(this.supplier?.name);
-  }
-
-  get description() {
-    if (this.supplier?.description?.length > 100) {
-      return `${this.supplier?.description.slice(0, 100)}...`;
-    }
-    return this.supplier?.description;
-  }
 }

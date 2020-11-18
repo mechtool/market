@@ -24,19 +24,21 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { PipesModule } from '#shared/modules';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    NzModalModule,
-    NzButtonModule,
-    NzEmptyModule,
-    NzCheckboxModule,
-    NgxMaskModule,
-    ReactiveFormsModule,
-    OrganizationsRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NzModalModule,
+        NzButtonModule,
+        NzEmptyModule,
+        NzCheckboxModule,
+        NgxMaskModule,
+        ReactiveFormsModule,
+        OrganizationsRoutingModule,
+        PipesModule,
+    ],
   declarations: [
     OrganizationsComponent,
     ActiveOrganizationsComponent,

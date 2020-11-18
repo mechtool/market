@@ -1,6 +1,5 @@
-import { Input, Output, Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { stringToHex } from '#shared/utils';
 import { OrganizationUserResponseModel } from '#shared/modules/common-services/models/organization-user-response.model';
 
 @UntilDestroy({ checkProperties: true })
@@ -18,10 +17,6 @@ export class OrganizationUsersComponent {
   @Output() removeUserRequestChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {
-  }
-
-  setHexColor(str: string): string {
-    return stringToHex(str);
   }
 
   emitRemoveUserRequestChange(userId: string) {

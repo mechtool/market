@@ -1,18 +1,5 @@
-<div class="catalog_header">
-  <div class="catalog_header__btns">
-    <div class="dropdown catalog_sort">
-      <span nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
-        <span class="dropdown_control catalog_sort__control_lg">{{currentSortType.label}}</span>
-        <span class="dropdown_control catalog_sort__control_sm">Сортировать</span>
-      </span>
-
-      <nz-dropdown-menu #menu="nzDropdownMenu">
-        <ul nz-menu nzSelectable>
-          <li class="catalog_sort__item" nz-menu-item *ngFor="let item of sortTypes"
-              (click)="chooseSort(item)">{{item.label}}</li>
-        </ul>
-      </nz-dropdown-menu>
-
-    </div>
-  </div>
+<div class="catalog_sort">
+  <nz-select nzAllowClear nzPlaceHolder="Сортировать" [formControl]="sortControl">
+    <nz-option *ngFor="let item of sortTypes" [nzValue]="item.type" [nzLabel]="item.label"></nz-option>
+  </nz-select>
 </div>

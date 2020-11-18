@@ -1,6 +1,5 @@
-import { Input, Output, Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { stringToHex } from '#shared/utils';
 import { AccessKeyResponseModel } from '#shared/modules/common-services/models/access-key-response.model';
 
 @UntilDestroy({ checkProperties: true })
@@ -18,10 +17,6 @@ export class OrganizationAccessKeysComponent {
   @Output() removeAccessKeyRequestChange: EventEmitter<any> = new EventEmitter();
 
   constructor() {
-  }
-
-  setHexColor(str: string): string {
-    return stringToHex(str);
   }
 
   emitRemoveAccessKeyRequestChange(accessKeyId: string) {

@@ -9,7 +9,9 @@ import { FoundPipe } from './found.pipe';
 import { PlaceJoinerPipe } from './place-joiner.pipe';
 import { StockPipe } from './stock.pipe';
 import { CurrencyPricePipe } from './currency.pipe';
+import { AbbreviatedBusinessNamePipe } from './abbreviated-business-name.pipe';
 import { CurrencyPipe } from '@angular/common';
+import { OrganizationLogoPipe } from './organization-logo.pipe';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { CurrencyPipe } from '@angular/common';
     FoundPipe,
     StockPipe,
     CurrencyPricePipe,
+    AbbreviatedBusinessNamePipe,
+    OrganizationLogoPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -35,6 +39,8 @@ import { CurrencyPipe } from '@angular/common';
     FoundPipe,
     StockPipe,
     CurrencyPricePipe,
+    AbbreviatedBusinessNamePipe,
+    OrganizationLogoPipe,
   ],
   providers: [
     CurrencyPipe

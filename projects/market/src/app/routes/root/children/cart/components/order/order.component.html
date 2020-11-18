@@ -11,7 +11,7 @@
                [nzDisabled]="availableUserOrganizations?.length === 1">
             <div class="supplier_title">
               <div class="supplier_image">
-                <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(consumerName)}"></div>
+                <div class="supplier_image-color" style="{{consumerName | organizationLogo : true}}"></div>
               </div>
               <div class="supplier_name">
                 {{consumerName}}
@@ -25,8 +25,7 @@
                 (click)="setConsumer(organization)">
               <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
                 <div class="supplier_image">
-                  <div class="supplier_image-color"
-                       [ngStyle]="{'background-color': setHexColor(organization?.organizationName)}"></div>
+                  <div class="supplier_image-color" style="{{organization.organizationId | organizationLogo : true}}"></div>
                 </div>
                 <div class="supplier_name">
                   {{organization?.organizationName}}
@@ -40,7 +39,7 @@
         <div class="order_label">Поставщик:</div>
         <div class="order_value supplier_title">
           <span class="supplier_image">
-            <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(supplierName)}"></div>
+            <div class="supplier_image-color" style="{{supplierName | organizationLogo : true}}"></div>
           </span>
           <span class="supplier_name">
             {{supplierName}}
@@ -424,7 +423,7 @@
           <h3>Поставщик</h3>
           <p class="supplier_title">
           <span class="supplier_image">
-            <div class="supplier_image-color" [ngStyle]="{'background-color': setHexColor(supplierName)}"></div>
+            <div class="supplier_image-color" style="{{supplierName | organizationLogo : true}}"></div>
           </span>
             <span class="supplier_name">
             {{supplierName}}
@@ -458,7 +457,8 @@
     <div class="order__total">
       <div class="order__total_price" *ngIf="orderType === 'order'">
         <div class="order__total_label">Итого:</div>
-        <div class="order__total_value">{{total | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</div>
+        <div
+          class="order__total_value">{{total | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</div>
       </div>
       <div class="order__total_nds" *ngIf="orderType === 'order'">Включая
         НДС {{totalVat | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</div>

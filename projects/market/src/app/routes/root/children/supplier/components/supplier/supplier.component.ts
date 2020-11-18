@@ -12,7 +12,6 @@ import {
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Params } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
-import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 
 import {
   LocalStorageService,
@@ -33,16 +32,11 @@ export class SupplierSingleComponent {
   request: TradeOffersRequestModel;
   tradeOffersList: TradeOffersListResponseModel;
   tradeOffers: TradeOfferSummaryModel[];
-  supplierLogo: string;
   tradeOffersTotal: number;
   page: number;
   query: string;
   filters: DefaultSearchAvailableModel;
   sort: SortModel;
-
-  get name() {
-    return resizeBusinessStructure(this.supplier?.name);
-  }
 
   constructor(
     private _productService: ProductService,
@@ -93,7 +87,6 @@ export class SupplierSingleComponent {
           this._collectFilters(params, queryParams);
           this._collectRequest();
           const supplierId = params.supplierId;
-          this.supplierLogo = stringToRGB(supplierId);
           return this._organizationsService.getOrganization(supplierId);
         }),
         switchMap((organization) => {

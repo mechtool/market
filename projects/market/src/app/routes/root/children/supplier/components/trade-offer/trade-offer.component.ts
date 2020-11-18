@@ -14,7 +14,6 @@ import {
 } from '#shared/modules/common-services';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
-import { stringToRGB } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy({ checkProperties: true })
@@ -28,7 +27,6 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 export class TradeOfferComponent {
   product: ProductDto;
   supplier: SuppliersItemModel;
-  supplierLogo: string;
   tradeOffer: TradeOfferResponseModel;
 
   get hasProductDescription(): boolean {
@@ -61,7 +59,6 @@ export class TradeOfferComponent {
           this.tradeOffer = tradeOffer;
           this.product = ProductDto.fromTradeOffer(tradeOffer);
           this.supplier = this._mapSupplier(tradeOffer.supplier);
-          this.supplierLogo = stringToRGB(this.supplier.id);
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

@@ -67,7 +67,6 @@
 	transition: box-shadow .3s;
   color: var(--color-primary);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-12);
 }
 
 .count {
@@ -80,6 +79,7 @@
   transition: background-color 0.3s, border 0.3s;
   border: 1px solid #E0E0E0;
   border-radius: 2px 0 0 2px;
+  font-size: var(--font-size-12);
 }
 
 .price {
@@ -95,5 +95,6 @@
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
   white-space: nowrap;
+  font-size: var(--font-size-10);
 }
 

@@ -1,7 +1,6 @@
-import { Input, Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
-import { stringToHex } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -17,12 +16,6 @@ export class SentRequestsComponent {
 
   constructor() {
   }
-
-  setHexColor(str: string): string {
-    return stringToHex(str);
-  }
-
-
 }
 
 

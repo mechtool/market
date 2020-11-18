@@ -13,8 +13,8 @@
     </div>
     <div class="table_row" *ngFor="let request of requests">
       <div class="table_cell cell_title">
-        <span class="supplier_title" >
-          <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(request?.requesterNotes)}"></span>
+        <span class="supplier_title">
+          <span class="supplier_image" style="{{request.requesterNotes | organizationLogo : true}}"></span>
           <span class="supplier_name">
             {{request?.requesterNotes}}
           </span>
@@ -41,7 +41,7 @@
     <nz-empty
       nzNotFoundImage="./assets/img/svg/empty.svg"
       [nzNotFoundContent]="contentTpl"
-      >
+    >
       <ng-template #contentTpl>
         <span>Список запросов пуст</span>
       </ng-template>

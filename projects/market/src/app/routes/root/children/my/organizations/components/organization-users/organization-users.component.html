@@ -17,7 +17,7 @@
     <div class="table_row" *ngFor="let user of users">
       <div class="table_cell cell_title">
         <span class="supplier_title" >
-          <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(user?.person?.personName)}"></span>
+          <span class="supplier_image" style="{{user.uin | organizationLogo : true}}"></span>
           <span class="supplier_name">
             {{user?.person?.personName}}
           </span>

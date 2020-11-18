@@ -13,6 +13,7 @@ import {
 } from '#shared/modules/common-services';
 import { BreadcrumbItemModel } from '#shared/modules/common-services/models';
 import { of } from 'rxjs';
+import { resizeBusinessStructure } from '#shared/utils';
 
 /**
  * URL пути страниц без breadcrumbs
@@ -63,7 +64,8 @@ export class BreadcrumbsGuard implements CanActivate {
     private _tradeOffersService: TradeOffersService,
     private _userService: UserService,
     private _userStateService: UserStateService,
-  ) {}
+  ) {
+  }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     const urlWithoutQueryParams = state.url.split('?')[0];
@@ -211,7 +213,7 @@ export class BreadcrumbsGuard implements CanActivate {
       case '/my/organizations/:id':
         const organizationId = urlSplitted[3];
         return this._organizationsService.getOrganization(organizationId).pipe(
-          map((res) => {
+          map((org) => {
             this._breadcrumbsService.setItems([
               {
                 label: 'Мои организации',
@@ -219,8 +221,8 @@ export class BreadcrumbsGuard implements CanActivate {
                 queryParams: { tab: 'a' },
               },
               {
-                label: `${res.name}`,
-                routerLink: `/my/organizations/${res.id}`,
+                label: `${resizeBusinessStructure(org.name)}`,
+                routerLink: `/my/organizations/${org.id}`,
               },
             ]);
             return true;

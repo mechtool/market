@@ -1,7 +1,6 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { DocumentDto } from '#shared/modules/common-services/models';
-import { resizeBusinessStructure, stringToRGB } from '#shared/utils';
 import { PaymentDocumentModalService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
@@ -16,14 +15,6 @@ export class OrderListComponent {
   @Output() loadDocuments: EventEmitter<number> = new EventEmitter();
 
   constructor(private _paymentDocumentService: PaymentDocumentModalService) {
-  }
-
-  name(name: string) {
-    return resizeBusinessStructure(name);
-  }
-
-  orgLogo(name: string) {
-    return stringToRGB(name);
   }
 
   documentsLoading(nextPage: number) {

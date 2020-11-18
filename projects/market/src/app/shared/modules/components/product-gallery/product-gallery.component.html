@@ -14,13 +14,13 @@
         <span class="product_specs__item__label">Штрихкоды:</span>
         <span class="product_specs__item__value">{{product.productBarCodes}}</span>
       </div>
-      <div class="product_specs__item" *ngIf="name">
+      <div class="product_specs__item" *ngIf="supplierName">
         <span class="product_specs__item__label">Поставщик:</span>
-        <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
+        <div class="supplier_image" style="{{supplierId | organizationLogo}}"></div>
 
         <span class="product_specs__item__value" id="supplierNameRouterLink">
             <a [routerLink]="['/supplier/' + supplierId]">
-              <strong>{{name}}</strong>
+              <strong>{{supplierName | abbreviatedBusinessName}}</strong>
             </a>
         </span>
       </div>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="pic" *ngIf="product.images?.length === 1">
-      <img src="{{firstImageUrl(product.images)}}" alt="">
+      <img src="{{firstImageUrl(product.images)}}" alt="{{product.productName}}">
     </div>
 
     <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
@@ -67,10 +67,10 @@
       <span class="product_specs__item__label">Штрихкоды:</span>
       <span class="product_specs__item__value">{{product.productBarCodes}}</span>
     </div>
-    <div class="product_specs__item" *ngIf="name">
+    <div class="product_specs__item" *ngIf="supplierName">
       <span class="product_specs__item__label">Поставщик:</span>
-      <div class="supplier_image" [style]="{'background-color': supplierLogo}"></div>
-      <span class="product_specs__item__value"><strong>&nbsp;&nbsp;{{name}}</strong></span>
+      <div class="supplier_image" style="{{supplierId | organizationLogo}}"></div>
+      <span class="product_specs__item__value"><strong>{{supplierName | abbreviatedBusinessName}}</strong></span>
     </div>
     <div class="product_specs__item" *ngIf="stockAmount || stockLevel || temporarilyOutOfSales">
       <span class="product_specs__item__label">Наличие:</span>

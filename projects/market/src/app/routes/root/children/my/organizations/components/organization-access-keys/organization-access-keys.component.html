@@ -19,8 +19,8 @@
     </div>
     <div class="table_row" *ngFor="let accessKey of accessKeys">
       <div class="table_cell cell_title">
-        <span class="supplier_title" >
-          <span class="supplier_image" [ngStyle]="{'background-color': setHexColor(accessKey?.accessCode)}"></span>
+        <span class="supplier_title">
+          <span class="supplier_image" style="{{accessKey.accessCode | organizationLogo : true}}"></span>
           <span class="supplier_name">
             {{accessKey?.accessCode}}
           </span>
@@ -53,7 +53,7 @@
     <nz-empty
       nzNotFoundImage="./assets/img/svg/empty.svg"
       [nzNotFoundContent]="contentTpl"
-      >
+    >
       <ng-template #contentTpl>
         <span>Список одноразовых паролей пуст</span>
       </ng-template>

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SortModel } from '#shared/modules/common-services/models';
+import { FormBuilder, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -8,12 +9,12 @@ import { SortModel } from '#shared/modules/common-services/models';
   styleUrls: [
     './sorter.component.scss',
     './sorter.component-992.scss',
-    './sorter.component-768.scss',
-    './sorter.component-576.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SorterComponent {
+export class SorterComponent implements OnInit {
+
+  sortControl: FormControl;
 
   sortTypes = [
     { type: SortModel.ASC, label: 'По возрастанию цены' },
@@ -23,17 +24,17 @@ export class SorterComponent {
   @Input() sort: SortModel;
   @Output() sortChange: EventEmitter<SortModel> = new EventEmitter();
 
-  constructor() {
+  constructor(private _fb: FormBuilder) {
   }
 
-  get currentSortType(): any {
-    if (this.sort) {
-      return this.sortTypes.find(type => type.type === this.sort);
-    }
-    return this.sortTypes[0];
+  ngOnInit(): void {
+    this.sortControl = this._fb.control(this.sort ? this.sort : null);
+    this._controlsSort();
   }
 
-  chooseSort(item: any) {
-    this.sortChange.emit(item.type);
+  private _controlsSort() {
+    this.sortControl.valueChanges.subscribe((sort) => {
+      this.sortChange.emit(sort);
+    });
   }
 }
