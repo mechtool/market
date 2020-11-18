@@ -63,6 +63,13 @@ export const categoryPromotion = {
     {
       title: 'КИТ ХОББИ',
       btnLink: '/supplier/e911cf76-6ed8-4c03-b6be-4e8aee3465fe',
+      btnQueryParams: {
+        categoryId: '3321',
+        isDelivery: true,
+        isPickup: true,
+        priceTo: 10000,
+        sort: 'minPriceDesc'
+      },
       btnText: 'Подобрать товары',
       description: '- 5% на "Чай, кофе, какао", доставка по РФ от 1900 р.',
       imgUrl: 'assets/img/promo/school-office/kit-hobby.jpg',
