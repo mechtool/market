@@ -7,6 +7,12 @@
       margin: 0;
       padding: 0;
 
+      .label {
+        h1 {
+          font-size: 16px;
+        }
+      }
+
       &:hover {
         cursor: default;
         .opener {
@@ -22,8 +28,7 @@
         display: block;
         cursor: pointer;
         margin-left: auto;
-        background: url(../../../../../../../assets/img/svg/icon__close.svg)
-          no-repeat center center;
+        background: url(../../../../../../../assets/img/svg/icon__close.svg) no-repeat center center;
         min-width: 40px;
 
         &:hover {
@@ -146,7 +151,7 @@
         height: 2px;
         background-color: #4f4f4f;
         &::before {
-          content: "";
+          content: '';
           display: block;
           width: 16px;
           height: 2px;
@@ -155,7 +160,7 @@
           top: -5px;
         }
         &:after {
-          content: "";
+          content: '';
           display: block;
           width: 16px;
           height: 2px;

@@ -70,6 +70,8 @@
 
   .panel {
     margin: 40px 0 0 0;
+    height: calc(100vh - 178px);
+    overflow-y: auto;
 
     .list {
       padding: 0;
@@ -128,7 +130,7 @@
     }
 
     .icon {
-      position:relative;
+      position: relative;
       width: 40px;
       flex-shrink: 0;
       display: flex;
@@ -185,8 +187,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    flex: 1;
-    padding: 0 0 25px 0;
+    position: absolute;
+    bottom: 25px;
+    padding: 0;
     font-size: var(--font-size-13);
 
     .list {
@@ -268,7 +271,6 @@
 
     .list-secondary {
       .item {
-
         a {
           display: flex;
           justify-content: center;
@@ -349,7 +351,7 @@
 }
 
 .categories_list:after {
-  content: "";
+  content: '';
   width: 100%;
   height: 100%;
   position: absolute;
@@ -388,7 +390,7 @@
 }
 
 .categories_list .nav_item:after {
-  content: "";
+  content: '';
   width: 8px;
   height: 14px;
   background: url(../../../../../../../assets/img/svg/icon__arrow_right.svg) no-repeat;
@@ -404,7 +406,7 @@
 }
 
 .categories_panel:after {
-  content: "";
+  content: '';
   width: 100%;
   height: 100%;
   position: absolute;
