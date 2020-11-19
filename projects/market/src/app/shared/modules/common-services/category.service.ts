@@ -25,6 +25,17 @@ export class CategoryService {
     this._setPromo();
   }
 
+  getCategory(categoryId: string): Observable<CategoryModel> {
+    if (categoryId !== CATEGORY_OTHER) {
+      return this.getCategories().pipe(
+        map((res) => {
+          return deepTreeSearch(res, 'id', (k, v) => v === categoryId);
+        }),
+      );
+    }
+    return of(null);
+  }
+
   getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
     if (categoryId !== CATEGORY_OTHER) {
       return this.getCategories().pipe(

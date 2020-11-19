@@ -1,12 +1,10 @@
 <div class="result" *ngIf="productOffers">
 
   <div class="result_info">
-    <div class="title">
-      <strong>Результаты поиска</strong>
-      <span *ngIf="productOffers.length">{{productsTotal | marketFound}}
-        <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
-      <span *ngIf="!productOffers?.length && isRequestFulfilled">По вашему запросу ничего не найдено.
-        <br/>Попробуйте изменить параметры поиска и поискать заново.</span>
+    <div class="title" [ngSwitch]="showResult">
+      <ng-container *ngSwitchCase="'emptyResults'" [ngTemplateOutlet]="emptyResults"></ng-container>
+      <ng-container *ngSwitchCase="'emptyResultsAndCategoryPage'" [ngTemplateOutlet]="emptyResultsAndCategoryPage"></ng-container>
+      <ng-container *ngSwitchCase="'notEmptyResults'" [ngTemplateOutlet]="notEmptyResults"></ng-container>
     </div>
 
     <market-results-sorter
@@ -29,6 +27,25 @@
     </div>
 
   </div>
+
+
+  <ng-template #notEmptyResults>
+    <strong>Результаты поиска</strong>
+    <span>{{productsTotal | marketFound}}
+      <b>{{foundCount}}</b> {{foundCount | marketDeclension: 'товар': 'товара': 'товаров'}}</span>
+  </ng-template>
+
+  <ng-template #emptyResults>
+    <strong>Результаты поиска</strong>
+    <span>По вашему запросу ничего не найдено.
+        <br/>Попробуйте изменить параметры поиска и поискать заново.</span>
+  </ng-template>
+
+  <ng-template #emptyResultsAndCategoryPage>
+    <strong>Результаты поиска</strong>
+    <span>В категории "{{category?.name}}" по вашему запросу ничего не найдено.
+      <br/>Нажмите <a [routerLink]="['/search']" [queryParams]="queryParams">"Искать во всех категориях"</a>, чтобы повторить поиск среди всех товаров торговой площадки."</span>
+  </ng-template>
 
 </div>
 

@@ -16,7 +16,7 @@ import {
   ProductService,
   SpinnerService,
 } from '#shared/modules/common-services';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { hasRequiredParameters, queryParamsWithoutCategoryIdFrom } from '#shared/utils';
 import { BannerItemModel } from '#shared/modules/components/banners/models/banner-item.model';
 
@@ -25,7 +25,7 @@ import { BannerItemModel } from '#shared/modules/components/banners/models/banne
   styleUrls: ['./category.component.scss'],
 })
 export class CategoryComponent {
-  categoryModel: CategoryModel;
+  category: CategoryModel;
   query = '';
   categoryId: string;
   filters: DefaultSearchAvailableModel;
@@ -134,10 +134,10 @@ export class CategoryComponent {
           this.bannerItems = bannerItems;
         }),
         switchMap(() => {
-          return this._categoryService.getCategoryTree(this.categoryId);
+          return this._categoryService.getCategory(this.categoryId);
         }),
-        switchMap((categoryModel) => {
-          this.categoryModel = categoryModel.find((category) => category.id === this.categoryId);
+        switchMap((category) => {
+          this.category = category;
           return this._productService.searchProductOffers({
             query: this.query,
             filters: this.filters,

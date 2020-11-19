@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
+import { CategoryModel, ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
+import { combineLatest } from 'rxjs';
+import { CategoryService } from '#shared/modules/common-services';
 
 @Component({
   selector: 'market-search-results',
@@ -15,6 +17,7 @@ import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
   ],
 })
 export class SearchResultComponent {
+  @Input() category: CategoryModel;
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
   @Input() page: number;
@@ -24,15 +27,34 @@ export class SearchResultComponent {
   @Output() sortingChanged: EventEmitter<SortModel> = new EventEmitter();
 
   isRequestFulfilled: boolean;
+  queryParams: any;
+
+  get showResult() {
+    if (this.productOffers?.length) {
+      return 'notEmptyResults';
+    }
+    if (this.category && this.isRequestFulfilled) {
+      return 'emptyResultsAndCategoryPage';
+    }
+    if (this.isRequestFulfilled) {
+      return 'emptyResults';
+    }
+  }
 
   get foundCount() {
     return this.productsTotal < MAX_VALUE ? this.productsTotal : MAX_VALUE;
   }
 
-  constructor(private _activatedRoute: ActivatedRoute) {
-    this._activatedRoute.queryParams.subscribe((queryParams) => {
-      this.isRequestFulfilled = containParameters(queryParams);
-    });
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+    private _categoryService: CategoryService,
+  ) {
+
+    combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
+      .subscribe(([params, queryParams]) => {
+        this.isRequestFulfilled = containParameters(queryParams);
+        this.queryParams = queryParams;
+      });
   }
 
   productOffersLoading(nextPage: number) {

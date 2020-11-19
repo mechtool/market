@@ -6,6 +6,16 @@
   span::before {
     content: ' – ';
   }
+
+  a {
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
+
+    &:hover {
+      border: none;
+    }
+  }
 }
 
 .content {
