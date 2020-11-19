@@ -116,9 +116,7 @@ function createCartRetriable$(): Observable<any> {
 function setActualCartDataRetriable$(): Observable<any> {
   return delayedRetryWith(cartService.setActualCartData()).pipe(
     catchError((e) => {
-      return throwError({
-        data: `${MetrikaEventAppInitProblemsEnumModel.CART_GET_BY_LOCATION}: ${e}`,
-      });
+      return createCartRetriable$();
     }),
   );
 }
