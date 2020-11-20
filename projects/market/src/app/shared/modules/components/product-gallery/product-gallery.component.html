@@ -43,7 +43,9 @@
     </div>
 
     <div class="pic" *ngIf="product.images?.length === 1">
-      <img src="{{firstImageUrl(product.images)}}" alt="{{product.productName}}">
+      <img src="{{firstImageUrl(product.images)}}"
+           alt="{{product.productName}}"
+           onerror="src='./assets/img/svg/clean_xl.svg'; onerror='';">
     </div>
 
     <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
