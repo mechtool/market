@@ -13,13 +13,6 @@ export const categoryPromotion = {
       imgUrl: 'assets/img/promo/school-office/komus.png',
     },
     {
-      title: 'КИТ ХОББИ',
-      btnLink: '/supplier/e911cf76-6ed8-4c03-b6be-4e8aee3465fe',
-      btnText: 'Подобрать товары',
-      description: '- 5% в категории «Товары для офиса», доставка по РФ от 1900 р.',
-      imgUrl: 'assets/img/promo/school-office/kit-hobby.jpg',
-    },
-    {
       title: 'А-ЦИФРА',
       btnLink: '/supplier/e945ff97-41e5-4b41-9936-17810d1141de',
       btnText: 'Подобрать товары',
@@ -59,20 +52,6 @@ export const categoryPromotion = {
       btnText: 'Подобрать товары',
       description: '- 10% на "Продукты, напитки, табак", цены указаны со скидкой, заказ от 3000 р.',
       imgUrl: 'assets/img/promo/school-office/komus.png',
-    },
-    {
-      title: 'КИТ ХОББИ',
-      btnLink: '/supplier/e911cf76-6ed8-4c03-b6be-4e8aee3465fe',
-      btnQueryParams: {
-        categoryId: '3321',
-        isDelivery: true,
-        isPickup: true,
-        priceTo: 10000,
-        sort: 'minPriceDesc'
-      },
-      btnText: 'Подобрать товары',
-      description: '- 5% на "Чай, кофе, какао", доставка по РФ от 1900 р.',
-      imgUrl: 'assets/img/promo/school-office/kit-hobby.jpg',
     },
     {
       title: 'КОФРУСС',
