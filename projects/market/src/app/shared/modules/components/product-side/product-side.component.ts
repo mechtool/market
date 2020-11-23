@@ -1,7 +1,12 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MetrikaEventTypeModel, OrderStatusModal, RelationEnumModel } from '#shared/modules/common-services/models';
+import {
+  MetrikaEventTypeModel,
+  OrderStatusModal,
+  RelationEnumModel,
+  TradeOfferResponseModel,
+} from '#shared/modules/common-services/models';
 import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
 import { filter, map, pairwise, startWith, tap } from 'rxjs/operators';
 import { combineLatest, defer, fromEvent, merge, Observable, of } from 'rxjs';
@@ -19,13 +24,17 @@ enum Operation {
 })
 export class ProductSideComponent implements OnInit, AfterViewInit {
   @ViewChild('inputEl') inputEl: ElementRef;
-  @Input() tradeOfferId: string;
+  @Input() tradeOffer: TradeOfferResponseModel;
   @Input() minQuantity: number;
   @Input() orderStep: number;
   orderStatus: OrderStatusModal;
   form: FormGroup;
   isAdded: boolean;
   prevCount: number = null;
+
+  get tradeOfferId(): string {
+    return this.tradeOffer?.id;
+  }
 
   constructor(
     private _fb: FormBuilder,
@@ -107,6 +116,32 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
       })
       .pipe(
         tap(() => {
+          const tag = {
+            event: 'addToCart',
+            ecommerce: {
+              currencyCode: 'RUB',
+              add: {
+                products: [
+                  {
+                    name: this.tradeOffer.offerDescription?.title || '',
+                    id: this.tradeOfferId || '',
+                    price: this.tradeOffer.termsOfSale?.price?.matrix?.[0]?.price || '',
+                    brand:
+                      this.tradeOffer.product?.ref1cNomenclature?.manufacturer?.tradeMark ||
+                      this.tradeOffer.product?.supplierNomenclature?.manufacturer?.tradeMark ||
+                      '',
+                    category:
+                      this.tradeOffer.product?.ref1cNomenclature?.categoryName ||
+                      this.tradeOffer.product?.supplierNomenclature?.ref1Cn?.categoryName ||
+                      '',
+                    variant: this.tradeOffer.supplier?.name || '',
+                    dimension1: this.tradeOffer.offerDescription?.description || '',
+                  },
+                ],
+              },
+            },
+          };
+          this._externalProvidersService.fireGTMEvent(tag);
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
         }),
       )

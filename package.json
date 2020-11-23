@@ -41,6 +41,7 @@
     "@angular/platform-browser-dynamic": "~10.2.0",
     "@angular/router": "~10.2.0",
     "@ngneat/until-destroy": "^8.0.3",
+    "angular-google-tag-manager": "^1.2.3",
     "classlist.js": "^1.1.20150312",
     "css-vars-ponyfill": "^2.4.1",
     "ng-recaptcha": "^6.0.2",

@@ -11,6 +11,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CategoryService,
+  ExternalProvidersService,
   LocalStorageService,
   NotificationsService,
   ProductService,
@@ -51,6 +52,7 @@ export class CategoryComponent {
     private _localStorageService: LocalStorageService,
     private _notificationsService: NotificationsService,
     private _spinnerService: SpinnerService,
+    private _externalProvidersService: ExternalProvidersService,
   ) {
     this._init();
   }
@@ -143,6 +145,14 @@ export class CategoryComponent {
             filters: this.filters,
             sort: this.sort,
           });
+        }),
+        tap((productOffers) => {
+          const topProductIDs = productOffers._embedded.productOffers?.slice(0, 3)?.map((productOffer) => productOffer.product?.id) || [];
+          const tag = {
+            event: 'ListingPage',
+            products: topProductIDs,
+          };
+          this._externalProvidersService.fireGTMEvent(tag);
         }),
         catchError((err) => {
           return throwError(err);

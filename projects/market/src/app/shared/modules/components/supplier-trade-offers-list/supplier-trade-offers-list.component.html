@@ -98,7 +98,7 @@
       </a>
       <div class="table_cell cell_buy">
         <market-product-side
-          [tradeOfferId]="tradeOffer.id"
+          [tradeOffer]="tradeOffer"
           [minQuantity]="minQuantity(tradeOffer.price?.matrix, tradeOffer.packageMultiplicity)"
           [orderStep]="tradeOffer.packageMultiplicity"
         ></market-product-side>

@@ -6,6 +6,7 @@ import { delayedRetry } from '#shared/utils';
 import { from, Observable, of, throwError } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { UserStateService } from './user-state.service';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 @Injectable()
 export class ExternalProvidersService {
@@ -17,6 +18,7 @@ export class ExternalProvidersService {
     private _rendererFactory: RendererFactory2,
     private _location: Location,
     private _metrika: Metrika,
+    private _gtmService: GoogleTagManagerService,
     private _userStateService: UserStateService,
   ) {
     this._renderer = _rendererFactory.createRenderer(null, null);
@@ -62,5 +64,9 @@ export class ExternalProvidersService {
       }),
       delayedRetry(300, 5),
     );
+  }
+
+  fireGTMEvent(tag: any): void {
+    this._gtmService.pushTag(tag);
   }
 }

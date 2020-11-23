@@ -36,6 +36,7 @@ import { LineClampModule } from '#shared/modules';
 import { MetrikaModule } from 'ng-yandex-metrika';
 import { APP_CONFIG } from './config/app.config.token';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
+import { environment } from '#environments/environment';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -78,6 +79,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     }),
   ],
   providers: [
+    { provide: 'googleTagManagerId', useValue: environment.gtmID },
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: '6Ld7utQZAAAAAFFHDpsosgD-fw3jA0xwD_f25wZ1' },
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     { provide: LOCALE_ID, useValue: 'ru' },

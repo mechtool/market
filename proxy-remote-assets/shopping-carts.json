@@ -17,7 +17,7 @@
           "productName":"Fine Life Пакет-майка полиэтиленовый 38х62см",
           "productDescription":"Срок годности не ограничен",
           "barCodes":[
-            
+
           ],
           "partNumber":"641228",
           "unitOkei":{
@@ -39,13 +39,13 @@
           "maxDaysForShipment":null,
           "_links":{
             "marketplace:shopping-cart-update-item-quantity":{
-              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/1566cf51-01c5-47b2-bf68-e68a5cfe297f/quantity"
+              "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/1566cf51-01c5-47b2-bf68-e68a5cfe297f/quantity"
             },
             "marketplace:shopping-cart-remove-item":{
-              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/1566cf51-01c5-47b2-bf68-e68a5cfe297f"
+              "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/1566cf51-01c5-47b2-bf68-e68a5cfe297f"
             },
             "marketplace:trade-offer-view":{
-              "href":"https://bnet-api-stage.1c.ru/market/trade-offers/storefront/1566cf51-01c5-47b2-bf68-e68a5cfe297f"
+              "href":"https://market.1cbn.rus:4200/proxifier/trade-offers/storefront/1566cf51-01c5-47b2-bf68-e68a5cfe297f"
             }
           }
         }
@@ -77,10 +77,10 @@
       ],
       "_links":{
         "self":{
-          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-9e9703ce-7b9d-49a9-b5b8-8a9798dc5345"
+          "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-9e9703ce-7b9d-49a9-b5b8-8a9798dc5345"
         },
         "marketplace:make-order":{
-          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/9e9703ce-7b9d-49a9-b5b8-8a9798dc5345"
+          "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/9e9703ce-7b9d-49a9-b5b8-8a9798dc5345"
         }
       }
     },
@@ -125,13 +125,13 @@
           "maxDaysForShipment":null,
           "_links":{
             "marketplace:shopping-cart-update-item-quantity":{
-              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/54607354-65bf-40a4-938f-f9a39e0a63fc/quantity"
+              "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/54607354-65bf-40a4-938f-f9a39e0a63fc/quantity"
             },
             "marketplace:shopping-cart-remove-item":{
-              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/54607354-65bf-40a4-938f-f9a39e0a63fc"
+              "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/54607354-65bf-40a4-938f-f9a39e0a63fc"
             },
             "marketplace:trade-offer-view":{
-              "href":"https://bnet-api-stage.1c.ru/market/trade-offers/storefront/54607354-65bf-40a4-938f-f9a39e0a63fc"
+              "href":"https://market.1cbn.rus:4200/proxifier/trade-offers/storefront/54607354-65bf-40a4-938f-f9a39e0a63fc"
             }
           }
         }
@@ -524,10 +524,10 @@
       },
       "_links":{
         "self":{
-          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-10f042fa-6b77-47bf-9208-b6a02f4c06eb"
+          "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-10f042fa-6b77-47bf-9208-b6a02f4c06eb"
         },
         "marketplace:make-order":{
-          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/10f042fa-6b77-47bf-9208-b6a02f4c06eb"
+          "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/10f042fa-6b77-47bf-9208-b6a02f4c06eb"
         }
       }
     },
@@ -572,13 +572,13 @@
           "maxDaysForShipment":null,
           "_links":{
             "marketplace:shopping-cart-update-item-quantity":{
-              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/55cff843-f545-4e71-b9d2-0a1de46d713d/quantity"
+              "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/55cff843-f545-4e71-b9d2-0a1de46d713d/quantity"
             },
             "marketplace:shopping-cart-remove-item":{
-              "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/55cff843-f545-4e71-b9d2-0a1de46d713d"
+              "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items/55cff843-f545-4e71-b9d2-0a1de46d713d"
             },
             "marketplace:trade-offer-view":{
-              "href":"https://bnet-api-stage.1c.ru/market/trade-offers/storefront/55cff843-f545-4e71-b9d2-0a1de46d713d"
+              "href":"https://market.1cbn.rus:4200/proxifier/trade-offers/storefront/55cff843-f545-4e71-b9d2-0a1de46d713d"
             }
           }
         }
@@ -656,17 +656,17 @@
       },
       "_links":{
         "self":{
-          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-03ba77c8-c01f-454e-a712-179cfcf2ea67"
+          "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items-03ba77c8-c01f-454e-a712-179cfcf2ea67"
         },
         "marketplace:make-order":{
-          "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/03ba77c8-c01f-454e-a712-179cfcf2ea67"
+          "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/order/03ba77c8-c01f-454e-a712-179cfcf2ea67"
         }
       }
     }
   ],
   "_links":{
     "marketplace:shopping-cart-add-item":{
-      "href":"https://bnet-api-stage.1c.ru/market/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items"
+      "href":"https://market.1cbn.rus:4200/proxifier/shopping-carts/10e760bf-abb1-4e74-a90a-54e1a70def3f/items"
     }
   }
 }

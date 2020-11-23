@@ -174,10 +174,23 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
     private _externalProvidersService: ExternalProvidersService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
+    const tag = {
+      event: 'BasketPage',
+      currencyCode: 'RUB',
+      value: this.order?.orderTotal?.total || '',
+      products_info: this.order.items?.map((item) => {
+        return {
+          id: item.tradeOfferId || '',
+          price: item.price || '',
+          quantity: item.quantity || '',
+        };
+      }),
+    };
+    this._externalProvidersService.fireGTMEvent(tag);
+
     this._getDeliveryMethods(this.order.deliveryOptions)
       .pipe(
         tap((res) => {
@@ -242,6 +255,27 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this._cartService
       .handleRelation(RelationEnumModel.ITEM_REMOVE, orderItem._links.value[RelationEnumModel.ITEM_REMOVE].href)
       .pipe(
+        tap(() => {
+          const tag = {
+            event: 'removeFromCart',
+            ecommerce: {
+              remove: {
+                products: [
+                  {
+                    name: orderItem?.tradeOfferId?.value || '',
+                    id: orderItem?.productName?.value || '',
+                    price: orderItem?.price?.value || '',
+                    brand: '',
+                    category: '',
+                    variant: this.order?.supplier?.name || '',
+                    quantity: orderItem?.quantity?.value || '',
+                  },
+                ],
+              },
+            },
+          };
+          this._externalProvidersService.fireGTMEvent(tag);
+        }),
         catchError((err) => {
           return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
             tap((res) => {
@@ -280,6 +314,29 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   checkForValidityAndCreateOrder() {
+    const tag = {
+      event: 'checkout',
+      ecommerce: {
+        currencyCode: 'RUB',
+        value: this.order?.orderTotal?.total,
+        checkout: {
+          actionField: { step: 1, option: 'checkout' },
+          products: this.order.items?.map((item) => {
+            return {
+              name: item.productName || '',
+              id: item.tradeOfferId || '',
+              price: item.price || '',
+              brand: '',
+              category: '',
+              variant: this.order?.supplier?.name || '',
+              quantity: item.quantity || '',
+            };
+          }),
+        },
+      },
+    };
+    this._externalProvidersService.fireGTMEvent(tag);
+
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER).subscribe();
     this._externalProvidersService
       .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
@@ -455,17 +512,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryCity')
       .valueChanges.pipe(
-      switchMap((city) => {
-        if (city?.length > 1) {
-          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
-          return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
-        }
-        return of([]);
-      }),
-    )
+        switchMap((city) => {
+          if (city?.length > 1) {
+            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
+            return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
+          }
+          return of([]);
+        }),
+      )
       .subscribe(
         (cities) => {
           this.selectedAddress = null;
@@ -483,19 +540,19 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryStreet')
       .valueChanges.pipe(
-      switchMap((street) => {
-        if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
-          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-          const query = {
-            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-            deliveryStreet: street,
-          };
-          return this._locationService.searchAddresses(query, Level.STREET);
-        }
-        return of([]);
-      }),
-    )
+        switchMap((street) => {
+          if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
+            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+            const query = {
+              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+              deliveryStreet: street,
+            };
+            return this._locationService.searchAddresses(query, Level.STREET);
+          }
+          return of([]);
+        }),
+      )
       .subscribe(
         (cities) => {
           this.selectedAddress = null;
@@ -512,18 +569,18 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryHouse')
       .valueChanges.pipe(
-      switchMap((house) => {
-        if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
-          const query = {
-            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-            deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
-            deliveryHouse: house,
-          };
-          return this._locationService.searchAddresses(query, Level.HOUSE);
-        }
-        return of([]);
-      }),
-    )
+        switchMap((house) => {
+          if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
+            const query = {
+              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+              deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
+              deliveryHouse: house,
+            };
+            return this._locationService.searchAddresses(query, Level.HOUSE);
+          }
+          return of([]);
+        }),
+      )
       .subscribe(
         (cities) => {
           this.foundHouses = cities.map((city) => city.house);
@@ -574,10 +631,31 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           }),
           switchMap((orderQuantity) => {
             if (orderQuantity < item.controls.orderQtyMin.value) {
-              return this._cartService.handleRelation(
-                RelationEnumModel.ITEM_REMOVE,
-                item.value['_links'][RelationEnumModel.ITEM_REMOVE].href,
-              );
+              return this._cartService
+                .handleRelation(RelationEnumModel.ITEM_REMOVE, item.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
+                .pipe(
+                  tap(() => {
+                    const tag = {
+                      event: 'removeFromCart',
+                      ecommerce: {
+                        remove: {
+                          products: [
+                            {
+                              name: item?.controls?.tradeOfferId?.value || '',
+                              id: item?.controls?.productName?.value || '',
+                              price: item?.controls?.price?.value || '',
+                              brand: '',
+                              category: '',
+                              variant: this.order?.supplier?.name || '',
+                              quantity: item?.controls?.quantity?.value || '',
+                            },
+                          ],
+                        },
+                      },
+                    };
+                    this._externalProvidersService.fireGTMEvent(tag);
+                  }),
+                );
             }
 
             if (orderQuantity % item.controls.orderQtyStep.value !== 0) {
@@ -664,15 +742,15 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       deliveryOptions: {
         ...(this.deliveryAvailable
           ? {
-            deliveryTo: {
-              fiasCode: this.selectedAddress.fias,
-              title: this.selectedAddress.fullName,
-              countryOksmCode: '643',
-            },
-          }
+              deliveryTo: {
+                fiasCode: this.selectedAddress.fias,
+                title: this.selectedAddress.fullName,
+                countryOksmCode: '643',
+              },
+            }
           : {
-            pickupFrom: this.pickupArea,
-          }),
+              pickupFrom: this.pickupArea,
+            }),
       },
     };
     let comment = '';
@@ -692,6 +770,31 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((_) => this._cartService.setActualCartData()),
         tap(() => {
+          const tag = {
+            event: 'transactionDL',
+            ecommerce: {
+              currencyCode: 'RUB',
+              purchase: {
+                actionField: {
+                  id: Math.random(),
+                  revenue: this.order?.orderTotal?.total || '',
+                },
+                products: this.order.items?.map((item) => {
+                  return {
+                    name: item.productName || '',
+                    id: item.tradeOfferId || '',
+                    price: item.price || '',
+                    brand: '',
+                    category: '',
+                    variant: this.order?.supplier?.name || '',
+                    dimension1: '',
+                    quantity: item.quantity || '',
+                  };
+                }),
+              },
+            },
+          };
+          this._externalProvidersService.fireGTMEvent(tag);
           this._externalProvidersService
             .fireYandexMetrikaEvent(
               this.orderType === 'order' ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
@@ -799,8 +902,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return !order.customersAudience?.length
       ? userOrganizations
       : userOrganizations?.filter((org) => {
-        return this._checkAudienceForAvailability(order.customersAudience, org);
-      });
+          return this._checkAudienceForAvailability(order.customersAudience, org);
+        });
   }
 
   private _initConsumer(availableOrganizations: UserOrganizationModel[], order: CartDataOrderModel) {
