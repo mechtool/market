@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
   CountryCode,
-  ProductOfferRequestModel,
   ProductOfferResponseModel,
   ProductOffersListResponseModel
 } from './models';
@@ -19,11 +18,15 @@ export class ProductService {
   ) {
   }
 
-  getProductOffer(id: string, query?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
-    return this._bnetService.getProductOffer(id, query);
+  getProductOffer(id: string, isConsiderLocation: boolean = false): Observable<ProductOfferResponseModel> {
+    const fias = this._fias();
+    if (fias && isConsiderLocation) {
+      return this._bnetService.getProductOffer(id, { pickupArea: fias, deliveryArea: fias });
+    }
+    return this._bnetService.getProductOffer(id, {});
   }
 
-    getPopularProductOffers(categoryId?: string): Observable<ProductOffersListResponseModel> {
+  getPopularProductOffers(categoryId?: string): Observable<ProductOffersListResponseModel> {
     return this._bnetService.getPopularProducts(categoryId);
   }
 

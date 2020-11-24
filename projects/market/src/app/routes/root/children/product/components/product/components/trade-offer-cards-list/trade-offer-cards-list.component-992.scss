@@ -1,13 +1,9 @@
 @media all and (max-width: 992px) {
-  .content-main {
+  .product_about {
     padding: 0 20px 40px;
     display: flex;
     flex-direction: column;
     border-left: none;
-  }
-
-  .content-wrapper {
-    order: 3;
   }
 
   .catalog_header {
@@ -18,25 +14,12 @@
       margin-top: 15px;
       margin-right: 0;
       text-align: center;
-
-      & + .catalog_header__btns {
-        margin-top: 10px;
-      }
     }
   }
 
-  .product {
-    &_content {
-      display: block;
-    }
-
-    &_main {
-      display: flex;
-      flex-direction: column;
-    }
-
-    &_about {
-      order: 3;
+  .catalog {
+    &.margin_top {
+      margin-top: auto;
     }
   }
 }

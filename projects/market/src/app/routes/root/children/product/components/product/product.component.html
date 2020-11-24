@@ -1,10 +1,39 @@
 <div class="product" *ngIf="product">
-  <market-product-gallery [product]="product"></market-product-gallery>
+  <div class="product_gallery_tabs">
+    <div class="product_gallery">
+      <ng-container *ngTemplateOutlet="product_gallery"></ng-container>
+    </div>
+    <div class="product_side">
+      <ng-container *ngTemplateOutlet="product_side"></ng-container>
+    </div>
+    <div class="product_tabs">
+      <ng-container *ngTemplateOutlet="product_tabs"></ng-container>
+    </div>
+  </div>
+  <div class="product_side">
+    <ng-container *ngTemplateOutlet="product_side"></ng-container>
+  </div>
+</div>
 
+<ng-template #product_gallery>
+  <market-product-gallery
+    [product]="product"
+  ></market-product-gallery>
+</ng-template>
+
+<ng-template #product_side>
+  <market-product-order
+    [tradeOffer]="tradeOffer"
+    isProductPage="true"
+  ></market-product-order>
+</ng-template>
+
+<ng-template #product_tabs>
   <nz-tabset nzTabPosition="top" nzType="card">
     <nz-tab [nzTitle]="offerTotal">
       <market-trade-offer-cards-list
         [sort]="sort"
+        [offersFoundInUserRegion]="offersFoundInUserRegion"
         [tradeOffers]="tradeOffers"
         (sortChange)="sortChange($event)"
       ></market-trade-offer-cards-list>
@@ -16,7 +45,7 @@
       ></market-product-description>
     </nz-tab>
   </nz-tabset>
-</div>
+</ng-template>
 
 
 

@@ -4,4 +4,7 @@ export class ProductOfferRequestModel {
   suppliers?: string[];
   inStock?: boolean;
   inSales?: boolean;
+  country?: string;
+  pickupArea?: string;
+  deliveryArea?: string;
 }

@@ -15,14 +15,14 @@ import {
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
-const LAST_DATE_USER_ACCOUNT_STORAGE_KEY = 'last_date_user_account';
 const CART_LOCATION_STORAGE_KEY = 'cart_location';
 const CART_DATA_STORAGE_KEY = 'cart_data';
 const USER_AND_COOKIES_AGREEMENT_STORAGE_KEY = 'user_and_cookies_agreement';
 
 @Injectable()
 export class LocalStorageService {
-  constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {}
+  constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {
+  }
 
   getSearchQueriesHistoryList(query?: string): SuggestionResponseModel {
     let searchQueries;

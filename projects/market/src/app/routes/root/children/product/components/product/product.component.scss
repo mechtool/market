@@ -1,3 +1,17 @@
+.product {
+  display: flex;
+
+  &_gallery_tabs {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .product_side {
+      display: none;
+    }
+  }
+}
+
 nz-tabset {
   margin-top: 20px;
 }

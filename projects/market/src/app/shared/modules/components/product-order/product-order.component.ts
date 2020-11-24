@@ -20,6 +20,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 })
 export class ProductOrderComponent implements OnInit {
   @Input() tradeOffer: TradeOfferResponseModel;
+  @Input() isProductPage = false;
   @ViewChild('matrixModal') modalRef: NzModalRef;
   orderStatus: OrderStatusModal;
   vat: string;
@@ -64,7 +65,7 @@ export class ProductOrderComponent implements OnInit {
     this._closeModalOnResolutionChanges();
     this._cartService.getCartData$().subscribe(
       (res) => {
-        const tradeOfferId = this.tradeOffer.id;
+        const tradeOfferId = this.tradeOffer?.id;
         const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
           return [...curr.items, ...accum];
         }, []);

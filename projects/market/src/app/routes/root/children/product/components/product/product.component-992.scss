@@ -1,0 +1,13 @@
+@media all and (max-width: 992px) {
+  .product_gallery_tabs {
+    width: 100%;
+
+    .product_side {
+      display: block;
+    }
+  }
+
+  .product_side {
+    display: none;
+  }
+}

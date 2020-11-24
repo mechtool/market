@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { SortModel, TradeOfferDto } from '#shared/modules';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { LocalStorageService, SortModel, TradeOfferDto } from '#shared/modules';
 
 @Component({
   selector: 'market-trade-offer-cards-list',
@@ -9,39 +9,27 @@ import { SortModel, TradeOfferDto } from '#shared/modules';
     './trade-offer-cards-list.component-1300.scss',
     './trade-offer-cards-list.component-992.scss',
     './trade-offer-cards-list.component-768.scss',
-    './trade-offer-cards-list.component-576.scss',
   ],
 })
-export class TradeOfferCardsListComponent implements OnChanges {
+export class TradeOfferCardsListComponent implements OnInit {
 
-  sortTypes = [
-    { type: SortModel.ASC, label: 'По возрастанию цены' },
-    { type: SortModel.DESC, label: 'По убыванию цены' }
-  ];
+  userRegion: string;
 
   @Input() sort: SortModel;
   @Input() tradeOffers: TradeOfferDto[];
+  @Input() offersFoundInUserRegion: boolean;
   @Output() sortChange: EventEmitter<SortModel> = new EventEmitter();
 
-  constructor() {
+  constructor(private _localStorageService: LocalStorageService) {
   }
 
-  get currentSortType(): any {
-    if (this.sort) {
-      return this.sortTypes.find(type => type.type === this.sort);
-    }
-    return this.sortTypes[0];
+  ngOnInit(): void {
+    this.userRegion = this._localStorageService.getUserLocation().name;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.tradeOffers && this.sort) {
-      this._compare(this.sort);
-    }
-  }
-
-  chooseSort(item: any) {
-    this._compare(item.type);
-    this.sortChange.emit(item.type);
+  chooseSort(sort: any) {
+    this._compare(sort);
+    this.sortChange.emit(sort);
   }
 
   private _compare(sort: SortModel) {
@@ -56,11 +44,9 @@ export class TradeOfferCardsListComponent implements OnChanges {
     if (!value && sort === SortModel.DESC) {
       return Number.MIN_SAFE_INTEGER;
     }
-
     if (!value && sort === SortModel.ASC) {
       return Number.MAX_SAFE_INTEGER;
     }
-
     return value;
   }
 }
