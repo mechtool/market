@@ -76,6 +76,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
       clickmap: true,
       trackLinks: true,
       accurateTrackBounce: true,
+      ecommerce: 'dataLayer',
     }),
   ],
   providers: [

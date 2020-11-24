@@ -8,6 +8,7 @@ export * from './convert-object-to-query-string';
 export * from './get-image';
 export * from './get-param-from-query-string';
 export * from './get-query-string-without-param';
+export * from './remove-query-param-from-string';
 export * from './redirect-to';
 export * from './query-params';
 export * from './inn-kpp-to-legal-id';

@@ -12,7 +12,7 @@ import { defer, Observable, of, throwError, zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Injector } from '@angular/core';
 import { Location } from '@angular/common';
-import { delayedRetry } from '#shared/utils';
+import { delayedRetry, removeURLParameter } from '#shared/utils';
 import { APP_CONFIG } from './app.config.token';
 
 let cartService = null;
@@ -69,6 +69,9 @@ function init() {
           }
         },
         (e) => {
+          if (isTicketInQueryParams()) {
+            location.replaceState(removeURLParameter(location.path(), 'ticket'));
+          }
           reject();
         },
       );
