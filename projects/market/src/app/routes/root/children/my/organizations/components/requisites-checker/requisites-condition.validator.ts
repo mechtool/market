@@ -18,36 +18,36 @@ const checkInnValidity = (i): boolean => {
   if (inn.length === 12) {
     return (
       inn[10] ===
-        String(
-          ((7 * inn[0] +
-            2 * inn[1] +
-            4 * inn[2] +
-            10 * inn[3] +
-            3 * inn[4] +
-            5 * inn[5] +
-            9 * inn[6] +
-            4 * inn[7] +
-            6 * inn[8] +
-            8 * inn[9]) %
-            11) %
-            10,
-        ) &&
+      String(
+        ((7 * inn[0] +
+          2 * inn[1] +
+          4 * inn[2] +
+          10 * inn[3] +
+          3 * inn[4] +
+          5 * inn[5] +
+          9 * inn[6] +
+          4 * inn[7] +
+          6 * inn[8] +
+          8 * inn[9]) %
+          11) %
+        10,
+      ) &&
       inn[11] ===
-        String(
-          ((3 * inn[0] +
-            7 * inn[1] +
-            2 * inn[2] +
-            4 * inn[3] +
-            10 * inn[4] +
-            3 * inn[5] +
-            5 * inn[6] +
-            9 * inn[7] +
-            4 * inn[8] +
-            6 * inn[9] +
-            8 * inn[10]) %
-            11) %
-            10,
-        )
+      String(
+        ((3 * inn[0] +
+          7 * inn[1] +
+          2 * inn[2] +
+          4 * inn[3] +
+          10 * inn[4] +
+          3 * inn[5] +
+          5 * inn[6] +
+          9 * inn[7] +
+          4 * inn[8] +
+          6 * inn[9] +
+          8 * inn[10]) %
+          11) %
+        10,
+      )
     );
   }
 
@@ -61,7 +61,7 @@ export const innConditionValidator: ValidatorFn = (formControl: FormControl): Va
   }
 
   if (inn.length !== 10 && inn.length !== 12) {
-    return { innLengthCondition: true }
+    return { innLengthCondition: true };
   }
 
   return checkInnValidity(inn.toString()) ? null : { innControlNumberCondition: true };
@@ -69,7 +69,7 @@ export const innConditionValidator: ValidatorFn = (formControl: FormControl): Va
 
 export const kppConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
   const kpp = formControl.value;
-  return kpp?.substring(0, 1) === '0' ? { kppStartZeroCondition: true } : null;
+  return kpp && kpp.length !== 9 ? { kppLengthCondition: true } : null;
 }
 
 export const innKppConditionValidator: ValidatorFn = (fg: FormGroup): ValidationErrors => {

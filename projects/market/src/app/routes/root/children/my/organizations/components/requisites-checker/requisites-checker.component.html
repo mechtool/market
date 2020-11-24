@@ -34,13 +34,9 @@
              id="formKPP"
              autocomplete="off"
              [ngClass]="{'error': form.controls.kpp.invalid}"
-      formControlName="kpp">
+             formControlName="kpp">
       <div class="input_error"
-           *ngIf="form.controls.kpp?.errors?.kppStartZeroCondition">
-        Введен недействительный КПП
-      </div>
-      <div class="input_error"
-           *ngIf="form.controls.kpp.invalid && !form.controls.kpp?.errors?.kppStartZeroCondition">
+           *ngIf="form.controls.kpp.invalid">
         Длина должна быть 9 цифр
       </div>
     </div>

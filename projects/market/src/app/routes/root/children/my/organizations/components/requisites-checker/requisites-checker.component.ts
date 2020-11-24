@@ -18,7 +18,8 @@ export class RequisitesCheckerComponent implements OnInit {
   form: FormGroup;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _fb: FormBuilder) {}
+  constructor(private _fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this._initForm();
@@ -28,8 +29,7 @@ export class RequisitesCheckerComponent implements OnInit {
     this.form = this._fb.group(
       {
         inn: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), innConditionValidator]),
-        kpp: new FormControl('', [Validators.pattern('^[0-9]*$'),
-          Validators.min(100000000), Validators.max(999999999), kppConditionValidator]),
+        kpp: new FormControl('', [Validators.pattern('^[0-9]*$'), kppConditionValidator]),
       },
       { validator: innKppConditionValidator },
     );
