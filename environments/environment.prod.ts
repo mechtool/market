@@ -3,5 +3,6 @@ export const environment = {
   imgUrl: 'https://api.1cbn.ru',
   itsUrl: 'https://login.1c.ru',
   gtmID: 'GTM-TW5RXQF',
+  metrikaID: 67089850,
   production: true,
 };

@@ -71,7 +71,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     CookieAgreementModule,
     FeedbackModule,
     MetrikaModule.forRoot({
-      id: 67089850,
+      id: environment.metrikaID,
       webvisor: true,
       clickmap: true,
       trackLinks: true,
