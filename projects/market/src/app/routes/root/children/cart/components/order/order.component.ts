@@ -262,8 +262,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
               remove: {
                 products: [
                   {
-                    name: orderItem?.tradeOfferId?.value || '',
-                    id: orderItem?.productName?.value || '',
+                    name: orderItem?.productName?.value || '',
+                    id: orderItem?.tradeOfferId?.value || '',
                     price: orderItem?.price?.value || '',
                     brand: '',
                     category: '',
@@ -641,8 +641,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
                         remove: {
                           products: [
                             {
-                              name: item?.controls?.tradeOfferId?.value || '',
-                              id: item?.controls?.productName?.value || '',
+                              name: item?.controls?.productName?.value || '',
+                              id: item?.controls?.tradeOfferId?.value || '',
                               price: item?.controls?.price?.value || '',
                               brand: '',
                               category: '',
