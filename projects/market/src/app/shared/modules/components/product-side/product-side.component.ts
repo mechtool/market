@@ -10,6 +10,7 @@ import {
 import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
 import { filter, map, pairwise, startWith, tap } from 'rxjs/operators';
 import { combineLatest, defer, fromEvent, merge, Observable, of } from 'rxjs';
+import { currencyCode } from '#shared/utils';
 
 enum Operation {
   REMOVE,
@@ -119,13 +120,17 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
           const tag = {
             event: 'addToCart',
             ecommerce: {
-              currencyCode: 'RUB',
+              currencyCode: this.tradeOffer.termsOfSale?.price?.currencyCode
+                ? currencyCode(this.tradeOffer.termsOfSale.price.currencyCode)
+                : 'RUB',
               add: {
                 products: [
                   {
                     name: this.tradeOffer.offerDescription?.title || '',
                     id: this.tradeOfferId || '',
-                    price: this.tradeOffer.termsOfSale?.price?.matrix?.[0]?.price || '',
+                    price: this.tradeOffer.termsOfSale?.price?.matrix?.[0]?.price
+                      ? this.tradeOffer.termsOfSale.price.matrix[0].price / 100
+                      : '',
                     brand:
                       this.tradeOffer.product?.ref1cNomenclature?.manufacturer?.tradeMark ||
                       this.tradeOffer.product?.supplierNomenclature?.manufacturer?.tradeMark ||

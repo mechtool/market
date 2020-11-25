@@ -29,7 +29,7 @@ import {
 import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
-import { absoluteImagePath, innKppToLegalId } from '#shared/utils';
+import { absoluteImagePath, innKppToLegalId, currencyCode } from '#shared/utils';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import {
@@ -89,7 +89,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get unavailableToOrderTradeOfferIds(): string[] {
-    const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable'];
+    const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable', 'SupplierPolicyViolated'];
     return this.order.makeOrderViolations?.filter((x) => unavailableToOrderStatuses.includes(x.code)).map((x) => x.tradeOfferId) || [];
   }
 
@@ -179,12 +179,12 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const tag = {
       event: 'BasketPage',
-      currencyCode: 'RUB',
-      value: this.order?.orderTotal?.total || '',
+      currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
+      value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
       products_info: this.order.items?.map((item) => {
         return {
           id: item.tradeOfferId || '',
-          price: item.price || '',
+          price: item.price ? item.price / 100 : '',
           quantity: item.quantity || '',
         };
       }),
@@ -264,7 +264,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
                   {
                     name: orderItem?.productName?.value || '',
                     id: orderItem?.tradeOfferId?.value || '',
-                    price: orderItem?.price?.value || '',
+                    price: orderItem?.price?.value ? orderItem.price.value / 100 : '',
                     brand: '',
                     category: '',
                     variant: this.order?.supplier?.name || '',
@@ -317,15 +317,15 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     const tag = {
       event: 'checkout',
       ecommerce: {
-        currencyCode: 'RUB',
-        value: this.order?.orderTotal?.total,
+        currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
+        value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
         checkout: {
           actionField: { step: 1, option: 'checkout' },
           products: this.order.items?.map((item) => {
             return {
               name: item.productName || '',
               id: item.tradeOfferId || '',
-              price: item.price || '',
+              price: item.price ? item.price / 100 : '',
               brand: '',
               category: '',
               variant: this.order?.supplier?.name || '',
@@ -643,7 +643,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
                             {
                               name: item?.controls?.productName?.value || '',
                               id: item?.controls?.tradeOfferId?.value || '',
-                              price: item?.controls?.price?.value || '',
+                              price: item?.controls?.price?.value ? item.controls.price.value / 100 : '',
                               brand: '',
                               category: '',
                               variant: this.order?.supplier?.name || '',
@@ -773,17 +773,17 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           const tag = {
             event: 'transactionDL',
             ecommerce: {
-              currencyCode: 'RUB',
+              currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
               purchase: {
                 actionField: {
                   id: Math.random(),
-                  revenue: this.order?.orderTotal?.total || '',
+                  revenue: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
                 },
                 products: this.order.items?.map((item) => {
                   return {
                     name: item.productName || '',
                     id: item.tradeOfferId || '',
-                    price: item.price || '',
+                    price: item.price ? item.price / 100 : '',
                     brand: '',
                     category: '',
                     variant: this.order?.supplier?.name || '',

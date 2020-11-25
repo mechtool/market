@@ -5,21 +5,19 @@ import {
   NotificationsService,
   ProductService,
   TradeOfferResponseModel,
-  TradeOffersService
+  TradeOffersService,
 } from '#shared/modules/common-services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDto, SortModel, TradeOfferDto, TradeOffersModel } from '#shared/modules/common-services/models';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { currencyCode } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './product.component.html',
-  styleUrls: [
-    './product.component.scss',
-    './product.component-992.scss'
-  ],
+  styleUrls: ['./product.component.scss', './product.component-992.scss'],
 })
 export class ProductComponent {
   productId: string;
@@ -86,13 +84,13 @@ export class ProductComponent {
         tap((model) => {
           const tag = {
             ecommerce: {
-              currencyCode: 'RUB',
+              currencyCode: model?.offers?.[0].currency?.code ? currencyCode(model.offers[0].currency.code) : 'RUB',
               impressions:
                 model?.offers?.map((offer, index) => {
                   return {
                     name: model.product?.productName || '',
                     id: offer.id || '',
-                    price: offer.price || '',
+                    price: offer.price ? offer.price / 100 : '',
                     brand: model.product?.manufacturer?.tradeMark || '',
                     category: model.product?.categoryName || '',
                     variant: offer.supplier?.name || '',
@@ -114,7 +112,8 @@ export class ProductComponent {
           return throwError(err);
         }),
       )
-      .subscribe((tradeOffer) => {
+      .subscribe(
+        (tradeOffer) => {
           this.tradeOffer = tradeOffer;
         },
         (err) => {

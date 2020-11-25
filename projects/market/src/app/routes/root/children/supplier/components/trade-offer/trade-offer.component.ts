@@ -53,7 +53,7 @@ export class TradeOfferComponent {
                   {
                     name: tradeOffer.offerDescription?.title || '',
                     id: tradeOffer.id || '',
-                    price: tradeOffer.termsOfSale?.price?.matrix?.[0]?.price || '',
+                    price: tradeOffer.termsOfSale?.price?.matrix?.[0]?.price ? tradeOffer.termsOfSale.price.matrix[0].price / 100 : '',
                     brand:
                       tradeOffer.product?.ref1cNomenclature?.manufacturer?.tradeMark ||
                       tradeOffer.product?.supplierNomenclature?.manufacturer?.tradeMark ||
