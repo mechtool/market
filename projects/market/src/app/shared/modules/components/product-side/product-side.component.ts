@@ -126,7 +126,10 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
               add: {
                 products: [
                   {
-                    name: this.tradeOffer.offerDescription?.title || '',
+                    name:
+                      this.tradeOffer.product?.ref1cNomenclature?.productName ||
+                      this.tradeOffer.product?.supplierNomenclature?.productName ||
+                      '',
                     id: this.tradeOfferId || '',
                     price: this.tradeOffer.termsOfSale?.price?.matrix?.[0]?.price
                       ? this.tradeOffer.termsOfSale.price.matrix[0].price / 100
