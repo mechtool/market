@@ -108,7 +108,9 @@
   border: 1px solid #e0e0e0;
   border-radius: 2px 0 0 2px;
   transition: background-color 0.3s, border 0.3s;
-  font-size: var(--font-size-12);
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
 }
 
 .catalog_item__count.tooltip .tooltip_inner {

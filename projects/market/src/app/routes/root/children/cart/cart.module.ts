@@ -1,4 +1,4 @@
-import { LineClampModule } from './../../../../shared/modules/directives/line-clamp/line-clamp.module';
+import { LineClampModule } from '#shared/modules/directives/line-clamp';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    NzButtonModule,
     NzFormModule,
     NzDropDownModule,
     NzTabsModule,
@@ -44,7 +45,14 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzInputModule,
     NgZorroAntdMobileModule,
   ],
-  declarations: [CartComponent, CartOrderComponent, CartOrderQtyCounterComponent, OrderUnavailableComponent, OrderSentComponent],
+  declarations: [
+    CartComponent,
+    CartOrderComponent,
+    CartOrderQtyCounterComponent,
+    OrderUnavailableComponent,
+    OrderSentComponent,
+  ],
   providers: [CartModalService],
 })
-export class CartModule {}
+export class CartModule {
+}

@@ -1,7 +1,7 @@
 <div class="section_paragraph" *ngIf="supplier">
   <h3>Поставщик</h3>
   <div class="supplier_title info_group">
-    <span class="supplier_image" style="{{supplier.id | organizationLogo}}"></span>
+    <span class="supplier_image" style="{{supplier.inn | organizationLogo}}"></span>
     <span class="supplier_name">{{supplier?.name | abbreviatedBusinessName}}</span>
   </div>
   <div class="info_group__supplier">

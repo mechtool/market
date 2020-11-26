@@ -1,5 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { ImagesLinkModel, ProductDto, TradeOfferStockEnumModel } from '#shared/modules/common-services/models';
+import {
+  ImagesLinkModel,
+  ProductDto,
+  SuppliersItemModel,
+  TradeOfferStockEnumModel
+} from '#shared/modules/common-services/models';
 import { absoluteImagePath } from '#shared/utils';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -11,8 +16,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 })
 export class ProductGalleryComponent {
   @Input() product: ProductDto;
-  @Input() supplierId: string;
-  @Input() supplierName: string;
+  @Input() supplier: SuppliersItemModel;
   @Input() stockLevel: TradeOfferStockEnumModel;
   @Input() stockAmount: number;
   @Input() temporarilyOutOfSales: boolean;

@@ -6,9 +6,9 @@
             <span class="info_group__label">Наименование</span>
             <span class="info_group__value">
                 <span class="supplier_title">
-                    <span *ngIf="organizationData" class="supplier_image" style="{{organizationData.id | organizationLogo : true}}"></span>
+                    <span *ngIf="organizationData" class="supplier_image" style="{{organizationData.legalRequisites.inn | organizationLogo : true}}"></span>
                     <span class="supplier_name">
-                        {{organizationData?.name}}
+                      {{organizationData?.name | abbreviatedBusinessName}}
                     </span>
                 </span>
             </span>

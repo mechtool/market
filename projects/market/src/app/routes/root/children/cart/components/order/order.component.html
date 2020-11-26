@@ -11,10 +11,10 @@
                [nzDisabled]="availableUserOrganizations?.length === 1">
             <div class="supplier_title">
               <div class="supplier_image">
-                <div class="supplier_image-color" style="{{consumerName | organizationLogo : true}}"></div>
+                <div class="supplier_image-color" style="{{consumerINN | organizationLogo : true}}"></div>
               </div>
               <div class="supplier_name">
-                {{consumerName}}
+                {{consumerName | abbreviatedBusinessName}}
               </div>
             </div>
           </div>
@@ -25,10 +25,10 @@
                 (click)="setConsumer(organization)">
               <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
                 <div class="supplier_image">
-                  <div class="supplier_image-color" style="{{organization.organizationId | organizationLogo : true}}"></div>
+                  <div class="supplier_image-color" style="{{organization.legalRequisites.inn | organizationLogo : true}}"></div>
                 </div>
                 <div class="supplier_name">
-                  {{organization?.organizationName}}
+                  {{organization?.organizationName | abbreviatedBusinessName}}
                 </div>
               </div>
             </li>
@@ -39,10 +39,10 @@
         <div class="order_label">Поставщик:</div>
         <div class="order_value supplier_title">
           <span class="supplier_image">
-            <div class="supplier_image-color" style="{{supplierName | organizationLogo : true}}"></div>
+            <div class="supplier_image-color" style="{{supplierINN | organizationLogo : true}}"></div>
           </span>
           <span class="supplier_name">
-            {{supplierName}}
+            {{supplierName | abbreviatedBusinessName}}
           </span>
         </div>
       </div>
@@ -126,8 +126,7 @@
           <div class="table_row" *ngFor="let item of itemsControls; let i = index">
             <ng-container [formGroupName]="i">
               <div class="cell_left">
-                <div
-                  class="cell_image"
+                <div class="cell_image"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   <img src="{{item.controls.imageUrl.value}}"
                        alt="{{item.controls.productName.value}}"
@@ -152,9 +151,24 @@
                 <div
                   class="table_cell cell_available"
                   data-title="Доступность:"
-                  [ngClass]="{'not-available': item.controls.availableToOrder.errors}"
+                  [ngClass]="{'not-available': item.controls.availableToOrder.invalid}"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
-                  {{!!item.controls.availableToOrder.errors ? 'Недоступно' : item.controls.stockAmount.value | marketStock : item.controls.stockLevel.value}}
+
+                  <img *ngIf="item.controls.availableToOrder.valid && item.controls.warning.value.length"
+                       class="img_warning"
+                       src="./assets/img/svg/warning.svg"
+                       nz-tooltip
+                       nzTooltipTitle="{{item.controls.warning.value}}"
+                       alt="">
+
+                  <img *ngIf="item.controls.availableToOrder.invalid"
+                       class="img_warning"
+                       src="./assets/img/svg/error.svg"
+                       nz-tooltip
+                       nzTooltipTitle="{{item.controls.warning.value}}"
+                       alt="">
+
+                  {{!!item.controls.availableToOrder.invalid ? 'Недоступно' : item.controls.stockAmount.value | marketStock : item.controls.stockLevel.value}}
                 </div>
                 <div class="table_cell cell_count" data-title="Количество:"
                      [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
@@ -423,10 +437,10 @@
           <h3>Поставщик</h3>
           <p class="supplier_title">
           <span class="supplier_image">
-            <div class="supplier_image-color" style="{{supplierName | organizationLogo : true}}"></div>
+            <div class="supplier_image-color" style="{{supplierINN | organizationLogo : true}}"></div>
           </span>
             <span class="supplier_name">
-            {{supplierName}}
+              {{supplierName | abbreviatedBusinessName}}
           </span>
           </p>
           <div class="info_group__supplier">
@@ -456,18 +470,43 @@
 
     <div class="order__total">
       <div class="order__total_price" *ngIf="orderType === 'order'">
-        <div class="order__total_label">Итого:</div>
-        <div
-          class="order__total_value">{{total | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</div>
-      </div>
-      <div class="order__total_nds" *ngIf="orderType === 'order'">Включая
-        НДС {{totalVat | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</div>
-      <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="submit" nzType="primary"
-                [disabled]="!form.valid && selectedTabIndex == 1">{{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
-        <div class="form_error" *ngIf="!form.valid && unavailableToOrderTradeOfferIds.length">Удалите недоступные
-          позиции из заказа
+
+        <div class="order__total_label">
+          Итого:
         </div>
+
+        <div class="order__total_value">
+          {{total | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}
+        </div>
+
+      </div>
+
+      <div class="order__total_nds" *ngIf="orderType === 'order'">
+        Включая НДС {{totalVat | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}
+      </div>
+
+      <div class="form_error" *ngIf="form.invalid && unavailableToOrder">
+        <p>
+          <img class="img_warning"
+               src="./assets/img/svg/error.svg"
+               alt="">
+          Удалите недоступные позиции из заказа
+        </p>
+      </div>
+
+      <div class="form_warning" *ngIf="!unavailableToOrder && minOrderAmountViolations">
+        <p>
+          <img class="img_warning"
+             src="./assets/img/svg/warning.svg"
+             alt="">
+          {{minOrderAmountViolations.message}}
+        </p>
+      </div>
+
+      <div class="order__total_btn">
+        <button id="checkoutButton" nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">
+          {{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}
+        </button>
       </div>
     </div>
 

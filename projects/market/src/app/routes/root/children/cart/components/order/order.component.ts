@@ -42,12 +42,17 @@ import {
   UserService,
   UserStateService,
 } from '#shared/modules/common-services';
-import { DeliveryMethodModel } from './models/delivery-method.model';
+import { DeliveryMethodModel, DeliveryOptionsModel } from './models';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
 import { AuthModalService } from '#shared/modules/setup-services/auth-modal.service';
 import { CartModalService } from '../../cart-modal.service';
-import { DeliveryOptionsModel } from './models';
 import { HttpErrorResponse } from '@angular/common/http';
+
+const VATS = {
+  VAT_10: 10,
+  VAT_20: 20,
+  VAT_WITHOUT: 0,
+};
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -88,25 +93,33 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.order.tags?.includes('Order') ? 'order' : 'priceRequest' || 'order';
   }
 
-  get unavailableToOrderTradeOfferIds(): string[] {
-    const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable', 'SupplierPolicyViolated'];
-    return this.order.makeOrderViolations?.filter((x) => unavailableToOrderStatuses.includes(x.code)).map((x) => x.tradeOfferId) || [];
+  get unavailableToOrder(): boolean {
+    const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable'];
+    return this.order.makeOrderViolations?.some((x) => unavailableToOrderStatuses.includes(x.code));
+  }
+
+  get minOrderAmountViolations(): any {
+    return this.order.makeOrderViolations?.find((x) => 'SupplierPolicyViolated' === x.code && !x.tradeOfferId);
   }
 
   get consumerName(): string {
     return this.form.get('consumerName').value?.trim();
   }
 
+  get consumerINN(): string {
+    return this.form.get('consumerINN').value;
+  }
+
   get supplierName(): string {
     return this.order.supplier?.name?.trim();
   }
 
-  get supplierINN(): number {
-    return +this.order.supplier?.inn;
+  get supplierINN(): string {
+    return this.order.supplier?.inn;
   }
 
-  get supplierKPP(): number {
-    return +this.order.supplier?.kpp;
+  get supplierKPP(): string {
+    return this.order.supplier?.kpp;
   }
 
   get supplierPhone(): string {
@@ -713,7 +726,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     if (order) {
       this.items.clear();
       order.items.forEach((product) => {
-        this.items.push(this._createItem(product, this.unavailableToOrderTradeOfferIds));
+        this.items.push(this._createItem(product));
       });
       this.order.items = order.items;
       this._cartService.partiallyUpdateStorageByOrder(this.order);
@@ -845,7 +858,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       contactEmail: new FormControl(userInfo?.email || '', [Validators.required, Validators.email]),
       commentForSupplier: new FormControl(''),
       deliveryDesirableDate: new FormControl(''),
-      items: this._fb.array(order.items.map((res) => this._createItem(res, this.unavailableToOrderTradeOfferIds))),
+      items: this._fb.array(order.items.map((product) => this._createItem(product))),
     });
   }
 
@@ -863,13 +876,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _createItem(product: any, unavailableToOrderTradeOfferIds: string[]): FormGroup {
-    const vatConverter = {
-      VAT_10: 10,
-      VAT_20: 20,
-      VAT_WITHOUT: 0,
-    };
-    const availableToOrder = !unavailableToOrderTradeOfferIds.includes(product.tradeOfferId);
+  private _createItem(product: any): FormGroup {
     return this._fb.group({
       tradeOfferId: product.tradeOfferId,
       productName: product.productName,
@@ -887,11 +894,25 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       stockAmount: product.stockAmount,
       stockLevel: product.stockLevel,
       nsymb: product.unitOkei?.nsymb,
-      availableToOrder: new FormControl(availableToOrder, [Validators.requiredTrue]),
-      vat: vatConverter[product.vat] || 0,
+      warning: this._warnings(product.tradeOfferId),
+      availableToOrder: new FormControl(this._availableToOrder(product.tradeOfferId), [Validators.requiredTrue]),
+      vat: VATS[product.vat] || 0,
       total: product.itemTotal?.total,
       _links: product._links,
     });
+  }
+
+  private _warnings(tradeOfferId: string): FormArray {
+    const violations = this.order.makeOrderViolations
+      .filter((x) => tradeOfferId === x.tradeOfferId)
+      .map((x) => new FormControl(x.message)) || null;
+    return violations ? new FormArray(violations) : null;
+  }
+
+  private _availableToOrder(tradeOfferId: string): boolean {
+    return this.order.makeOrderViolations
+      ?.filter((x) => ['TemporarilyOutOfSales', 'NoOfferAvailable'].includes(x.code))
+      .every((x) => x.tradeOfferId !== tradeOfferId);
   }
 
   private _setImageUrl(images: string[]): string {

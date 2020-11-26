@@ -48,10 +48,12 @@
   }
   .order__total_btn {
     flex-direction: column;
-
-    .form_error {
-      margin: 15px 0 0 0;
-    }
+  }
+  .form_error {
+    text-align: center;
+  }
+  .form_warning {
+    text-align: center;
   }
   .order__total_btn .btn {
     margin-left: auto;

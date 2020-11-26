@@ -11,6 +11,7 @@ export class TradeOfferDto {
   amount?: number;
   supplierId?: string;
   supplierName?: string;
+  supplierInn?: string;
   audience?: AudienceModel[];
 
   static fromTradeOffer(offer: TradeOffersModel): TradeOfferDto {
@@ -23,6 +24,7 @@ export class TradeOfferDto {
       amount: offer.stockBalanceSummary?.amount,
       supplierId: offer.supplier?.id,
       supplierName: offer.supplier?.name,
+      supplierInn: offer.supplier?.inn,
       audience: offer.audience,
     };
   }

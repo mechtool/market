@@ -3,6 +3,7 @@ export class SuppliersItemModel {
   name: string;
   inn: string;
   kpp?: string;
+  legalId?: string;
   description?: string;
   email?: string;
   phone?: string;

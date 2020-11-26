@@ -3,6 +3,7 @@ import { DocumentResponseModel } from './document-response.model';
 export class DocumentDto {
   id: number;
   party: string;
+  partyInn: string;
   orderNumber: string;
   orderDate: number;
   price: number;
@@ -12,6 +13,7 @@ export class DocumentDto {
     return {
       id: model.id,
       party: model.destinationOrganization.title,
+      partyInn: model.destinationOrganization.inn,
       orderNumber: model.documentTitle,
       orderDate: model.sentDate,
       price: model.moneyAmount,
@@ -23,6 +25,7 @@ export class DocumentDto {
     return {
       id: model.id,
       party: model.sourceOrganization.title,
+      partyInn: model.sourceOrganization.inn,
       orderNumber: model.documentTitle,
       orderDate: model.sentDate,
       price: model.moneyAmount,

@@ -20,8 +20,7 @@
 <ng-template #product_gallery>
   <market-product-gallery
     [product]="product"
-    [supplierName]="supplier.name"
-    [supplierId]="supplier.id"
+    [supplier]="supplier"
     [stockLevel]="tradeOffer.stock?.stockBalanceSummary?.level"
     [stockAmount]="tradeOffer.stock?.stockBalanceSummary?.amount"
     [temporarilyOutOfSales]="tradeOffer.termsOfSale.temporarilyOutOfSales"

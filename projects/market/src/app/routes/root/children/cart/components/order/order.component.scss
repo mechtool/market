@@ -231,8 +231,7 @@ button.btn:hover {
   cursor: pointer;
   width: 265px;
   font-weight: var(--font-weight-medium);
-  padding-right: 30px;
-  padding-left: 55px;
+  margin-left: 50px;
 }
 
 .table_list__products .table_header .cell_title {
@@ -718,12 +717,25 @@ input[type='number'].switch_count__value {
   display: flex;
   align-items: center;
   margin-top: 15px;
+}
 
-  .form_error {
-    font-size: var(--font-size-base);
-    opacity: 0.8;
-    margin: 0 0 0 25px;
-  }
+.form_error {
+  font-size: var(--font-size-13);
+  margin: 10px 0 0 0;
+  color: var(--color-accent-secondary);
+}
+
+.form_warning {
+  font-size: var(--font-size-13);
+  margin: 10px 0 0 0;
+  opacity: 0.8;
+  color: var(--color-black);
+}
+
+.img_warning {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
 }
 
 .order__shipping_type .form-group_title {

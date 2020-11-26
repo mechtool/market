@@ -1,7 +1,7 @@
 <div class="content-wrapper page_inner">
 
   <div class="page_header" *ngIf="supplier">
-    <span class="supplier_image" style="{{supplier.id | organizationLogo}}"></span>
+    <span class="supplier_image" style="{{supplier.inn | organizationLogo}}"></span>
     <h2>{{supplier?.name | abbreviatedBusinessName}}</h2>
   </div>
 

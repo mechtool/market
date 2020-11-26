@@ -14,13 +14,13 @@
         <span class="product_specs__item__label">Штрихкоды:</span>
         <span class="product_specs__item__value">{{product.productBarCodes}}</span>
       </div>
-      <div class="product_specs__item" *ngIf="supplierName">
+      <div class="product_specs__item" *ngIf="supplier">
         <span class="product_specs__item__label">Поставщик:</span>
-        <div class="supplier_image" style="{{supplierId | organizationLogo}}"></div>
+        <div class="supplier_image" style="{{supplier.inn | organizationLogo}}"></div>
 
         <span class="product_specs__item__value" id="supplierNameRouterLink">
-            <a [routerLink]="['/supplier/' + supplierId]">
-              <strong>{{supplierName | abbreviatedBusinessName}}</strong>
+            <a [routerLink]="['/supplier/' + supplier.id]">
+              <strong>{{supplier.name | abbreviatedBusinessName}}</strong>
             </a>
         </span>
       </div>
@@ -69,10 +69,10 @@
       <span class="product_specs__item__label">Штрихкоды:</span>
       <span class="product_specs__item__value">{{product.productBarCodes}}</span>
     </div>
-    <div class="product_specs__item" *ngIf="supplierName">
+    <div class="product_specs__item" *ngIf="supplier">
       <span class="product_specs__item__label">Поставщик:</span>
-      <div class="supplier_image" style="{{supplierId | organizationLogo}}"></div>
-      <span class="product_specs__item__value"><strong>{{supplierName | abbreviatedBusinessName}}</strong></span>
+      <div class="supplier_image" style="{{supplier.inn | organizationLogo}}"></div>
+      <span class="product_specs__item__value"><strong>{{supplier.name | abbreviatedBusinessName}}</strong></span>
     </div>
     <div class="product_specs__item" *ngIf="stockAmount || stockLevel || temporarilyOutOfSales">
       <span class="product_specs__item__label">Наличие:</span>

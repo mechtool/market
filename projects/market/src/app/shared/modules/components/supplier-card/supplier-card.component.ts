@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { SuppliersItemModel } from '#shared/modules/common-services/models';
+import { legalIdToInn } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -17,5 +18,6 @@ import { SuppliersItemModel } from '#shared/modules/common-services/models';
 export class SupplierCardComponent {
 
   @Input() supplier: SuppliersItemModel;
+  legalIdToInn = legalIdToInn;
 
 }
