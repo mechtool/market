@@ -82,8 +82,8 @@
   }
 
   .table_list__products .cell_title {
-    margin-top: 10px;
     font-size: var(--font-size-12);
+    font-weight: var(--font-weight-demi);
   }
 
   .table_list__products .cell_title span {
@@ -98,12 +98,20 @@
     margin-bottom: 6px;
     margin-top: 5px;
     align-items: flex-start;
+
+    &.d-none {
+      display: none;
+    }
   }
 
   .table_list__products .cell_available {
     flex-wrap: wrap;
     margin-bottom: 10px;
     align-items: flex-start;
+
+    &.d-none {
+      display: none;
+    }
   }
 
   .table_list__products .price {
@@ -148,6 +156,9 @@
 
   .table_list__basket .cell_title {
     min-width: auto;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 0;
   }
 
   .table_list__basket .cell_count {
@@ -159,11 +170,11 @@
   }
 
   .table_list__basket .table_cell[data-title]:before {
+    padding-top: 2px;
     width: 65px;
   }
 
   .table_list__basket .cell_count[data-title]:before {
-    width: 100%;
     margin-bottom: 5px;
   }
 
@@ -179,10 +190,10 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: flex-start;
+    margin-top: 10px;
   }
 
   .table_list__basket .cell_sum[data-title]:before {
-    width: 100%;
     margin-bottom: 0;
   }
 

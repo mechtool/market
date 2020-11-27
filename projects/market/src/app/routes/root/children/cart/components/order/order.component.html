@@ -135,40 +135,41 @@
                 </div>
               </div>
               <div class="cell_right">
-                <div
-                  class="table_cell cell_title"
+
+                <div class="table_cell cell_title"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
-                  <span title="{{item.controls.productName.value}}" marketLineClamp [rows]="2">
                     {{item.controls.productName.value}}
-                  </span>
                 </div>
-                <div
+
+                <div [ngClass]="{'d-none': !item.controls.partNumber.value}"
                   class="table_cell cell_article"
                   data-title="Артикул:"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   {{item.controls.partNumber.value}}
                 </div>
+
                 <div
                   class="table_cell cell_available"
                   data-title="Доступность:"
-                  [ngClass]="{'not-available': item.controls.availableToOrder.invalid}"
+                  [ngClass]="{'not-available': item.controls.availableToOrder.invalid, 'd-none': (item.controls.availableToOrder.valid && !item.controls.stockAmount.value && !item.controls.stockLevel.value)}"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
 
-                 <img *ngIf="item.controls.availableToOrder.valid && item.controls.warning.value?.length"
-                       class="img_warning"
-                       src="./assets/img/svg/warning.svg"
-                       nz-tooltip
-                       nzTooltipTitle="{{item.controls.warning.value}}"
-                       alt="">
+                  <p nz-tooltip
+                     nzTooltipTitle="{{item.controls.warning.value}}">
 
-                  <img *ngIf="item.controls.availableToOrder.invalid"
-                       class="img_warning"
-                       src="./assets/img/svg/error.svg"
-                       nz-tooltip
-                       nzTooltipTitle="{{item.controls.warning.value}}"
-                       alt="">
+                    <img *ngIf="item.controls.availableToOrder.valid && item.controls.warning.value?.length"
+                         class="img_warning"
+                         src="./assets/img/svg/warning.svg"
+                         alt="">
 
-                  {{!!item.controls.availableToOrder.invalid ? 'Недоступно' : item.controls.stockAmount.value | marketStock : item.controls.stockLevel.value}}
+                    <img *ngIf="item.controls.availableToOrder.invalid"
+                         class="img_warning"
+                         src="./assets/img/svg/error.svg"
+                         alt="">
+
+                    {{item.controls.availableToOrder.invalid ? 'Недоступно' : item.controls.stockAmount.value | marketStock : item.controls.stockLevel.value}}
+                  </p>
+
                 </div>
                 <div class="table_cell cell_count" data-title="Количество:"
                      [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
@@ -504,7 +505,7 @@
       </div>
 
       <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="submit" nzType="primary" [disabled]="!form.valid && selectedTabIndex == 1">
+        <button id="checkoutButton" nz-button type="submit" nzType="primary" [disabled]="form.invalid && selectedTabIndex == 1">
           {{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
       </div>

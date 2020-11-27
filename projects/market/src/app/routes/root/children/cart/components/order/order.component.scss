@@ -177,7 +177,7 @@ button.btn:hover {
 .table_cell {
   display: table-cell;
   vertical-align: middle;
-  padding: 6px 10px 6px 5px;
+  padding: 6px 0 6px 5px;
   height: 55px;
   font-size: var(--font-size-13);
   line-height: 17px;
@@ -204,6 +204,7 @@ button.btn:hover {
 
 .cell_title {
   flex-wrap: wrap;
+  padding-right: 10px;
 }
 
 .cell_title span:hover {
@@ -265,12 +266,12 @@ button.btn:hover {
 
 .table_list__products .cell_article {
   cursor: pointer;
-  width: 200px;
+  width: 180px;
 }
 
 .table_list__products .cell_available {
   cursor: pointer;
-  width: 145px;
+  width: 165px;
 }
 
 .not-available {
@@ -278,7 +279,7 @@ button.btn:hover {
 }
 
 .price {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-13);
   font-weight: var(--font-weight-bold);
   line-height: 19px;
   color: #000000;
@@ -314,7 +315,7 @@ button.btn:hover {
 
 .table_list__basket .cell_count {
   width: 160px;
-  min-width: 140px;
+  min-width: 150px;
 }
 
 .table_list__basket .cell_price_one {
@@ -342,7 +343,7 @@ button.btn:hover {
 }
 
 .price_one {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-13);
   color: #000000;
 }
 
@@ -735,7 +736,6 @@ input[type='number'].switch_count__value {
 .img_warning {
   width: 25px;
   height: 25px;
-  margin-right: 5px;
   padding-bottom: 4px;
 }
 
