@@ -904,14 +904,18 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   private _warnings(tradeOfferId: string): FormArray {
     const violations = this.order.makeOrderViolations
-      .filter((x) => tradeOfferId === x.tradeOfferId)
+      ?.filter((x) => tradeOfferId === x.tradeOfferId)
       .map((x) => new FormControl(x.message)) || null;
     return violations ? new FormArray(violations) : null;
   }
 
   private _availableToOrder(tradeOfferId: string): boolean {
+    if (!this.order.makeOrderViolations) {
+      return true;
+    }
+
     return this.order.makeOrderViolations
-      ?.filter((x) => ['TemporarilyOutOfSales', 'NoOfferAvailable'].includes(x.code))
+      .filter((x) => ['TemporarilyOutOfSales', 'NoOfferAvailable'].includes(x.code))
       .every((x) => x.tradeOfferId !== tradeOfferId);
   }
 

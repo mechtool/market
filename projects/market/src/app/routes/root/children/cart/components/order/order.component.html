@@ -154,7 +154,7 @@
                   [ngClass]="{'not-available': item.controls.availableToOrder.invalid}"
                   (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
 
-                  <img *ngIf="item.controls.availableToOrder.valid && item.controls.warning.value.length"
+                 <img *ngIf="item.controls.availableToOrder.valid && item.controls.warning.value?.length"
                        class="img_warning"
                        src="./assets/img/svg/warning.svg"
                        nz-tooltip
