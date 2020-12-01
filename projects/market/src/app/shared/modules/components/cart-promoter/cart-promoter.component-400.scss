@@ -1,0 +1,27 @@
+@media all and (max-width: 400px) {
+  .cart-promoter {
+    width: 270px;
+  }
+
+  .description {
+    font-size: var(--font-size-15);
+  }
+
+  .action__btns {
+    justify-content: center;
+  }
+
+  .ant-btn-primary {
+    font-size: var(--font-size-12);
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .ant-btn-link {
+    font-size: var(--font-size-12);
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+}
+

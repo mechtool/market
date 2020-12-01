@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'market-auth-decision-maker',
   templateUrl: './cart-promoter.component.html',
-  styleUrls: ['./cart-promoter.component.scss'],
+  styleUrls: [
+    './cart-promoter.component.scss',
+    './cart-promoter.component-400.scss',
+  ],
 })
 export class CartPromoterComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
