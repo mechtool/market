@@ -4,6 +4,7 @@ export * from './banners';
 export * from './category-list';
 export * from './error-code-alert';
 export * from './card';
+export * from './cart-promoter';
 export * from './nomenclature-card';
 export * from './order-list';
 export * from './payment-document';

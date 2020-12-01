@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
@@ -21,6 +21,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 export class ProductOrderComponent implements OnInit {
   @Input() tradeOffer: TradeOfferResponseModel;
   @Input() isProductPage = false;
+  @Output() isMadeOrder: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('matrixModal') modalRef: NzModalRef;
   orderStatus: OrderStatusModal;
   vat: string;
@@ -63,7 +64,11 @@ export class ProductOrderComponent implements OnInit {
   ngOnInit() {
     this.vat = this._getVat();
     this._closeModalOnResolutionChanges();
-    this._cartService.getCartData$().subscribe(
+    this._cartService.getCartData$()
+      .pipe(
+        debounceTime(400)
+      )
+      .subscribe(
       (res) => {
         const tradeOfferId = this.tradeOffer?.id;
         const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {

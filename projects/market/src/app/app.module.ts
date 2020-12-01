@@ -37,6 +37,7 @@ import { MetrikaModule } from 'ng-yandex-metrika';
 import { APP_CONFIG } from './config/app.config.token';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
 import { environment } from '#environments/environment';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -70,6 +71,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     BreadcrumbsModule,
     CookieAgreementModule,
     FeedbackModule,
+    NgIdleKeepaliveModule.forRoot(),
     MetrikaModule.forRoot({
       id: environment.metrikaID,
       webvisor: true,

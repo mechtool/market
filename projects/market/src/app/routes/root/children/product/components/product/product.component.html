@@ -24,6 +24,7 @@
 <ng-template #product_side>
   <market-product-order
     [tradeOffer]="tradeOffer"
+    (isMadeOrder)="madeOrder($event)"
     isProductPage="true"
   ></market-product-order>
 </ng-template>

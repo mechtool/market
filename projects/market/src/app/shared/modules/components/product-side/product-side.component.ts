@@ -1,5 +1,15 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   MetrikaEventTypeModel,
@@ -8,7 +18,7 @@ import {
   TradeOfferResponseModel,
 } from '#shared/modules/common-services/models';
 import { CartService, ExternalProvidersService, NotificationsService } from '#shared/modules/common-services';
-import { filter, map, pairwise, startWith, tap } from 'rxjs/operators';
+import { filter, map, startWith, tap } from 'rxjs/operators';
 import { combineLatest, defer, fromEvent, merge, Observable, of } from 'rxjs';
 import { currencyCode } from '#shared/utils';
 
@@ -28,6 +38,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
   @Input() tradeOffer: TradeOfferResponseModel;
   @Input() minQuantity: number;
   @Input() orderStep: number;
+  @Output() isMadeOrder: EventEmitter<boolean> = new EventEmitter();
   orderStatus: OrderStatusModal;
   form: FormGroup;
   isAdded: boolean;
@@ -67,10 +78,10 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
       return !elementQuery
         ? of(false)
         : merge(elementQueryFocusChanges$, elementQueryBlurChanges$).pipe(
-            map((event: FocusEvent) => {
-              return event.type === 'focus';
-            }),
-          );
+          map((event: FocusEvent) => {
+            return event.type === 'focus';
+          }),
+        );
     });
   }
 
@@ -156,10 +167,12 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
       .subscribe(
         () => {
           this.spinnerOf();
+          this.isMadeOrder.emit(true);
           this._cdr.detectChanges();
         },
         (err) => {
           this._notificationsService.error('Невозможно добавить товар в корзину. Внутренняя ошибка сервера.');
+          this.isMadeOrder.emit(false);
           this.rollBackTotalPositions(Operation.ADD);
         },
       );
@@ -190,10 +203,12 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
             .subscribe(
               () => {
                 this.spinnerOf();
+                this.isMadeOrder.emit(true);
                 this.prevCount = value;
               },
               (err) => {
                 this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
+                this.isMadeOrder.emit(false);
                 this.rollBackTotalPositions();
               },
             );
@@ -210,9 +225,11 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
             .subscribe(
               () => {
                 this.prevCount = value;
+                this.isMadeOrder.emit(false);
               },
               (err) => {
                 this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
+                this.isMadeOrder.emit(false);
                 this.rollBackTotalPositions(Operation.REMOVE);
               },
             );

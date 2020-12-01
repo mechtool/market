@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
+  CartPromoterService,
   ExternalProvidersService,
   NotificationsService,
   ProductService,
@@ -19,7 +20,7 @@ import { currencyCode } from '#shared/utils';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss', './product.component-992.scss'],
 })
-export class ProductComponent {
+export class ProductComponent implements OnDestroy {
   productId: string;
   product: ProductDto;
 
@@ -45,6 +46,7 @@ export class ProductComponent {
     private _declensionPipe: DeclensionPipe,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
+    private cartPromoterService: CartPromoterService,
   ) {
     this._activatedRoute.queryParams.subscribe(
       (param) => {
@@ -57,6 +59,10 @@ export class ProductComponent {
     this._initProductOffers();
   }
 
+  ngOnDestroy(): void {
+    this.cartPromoterService.stop();
+  }
+
   sortChange($event: SortModel) {
     this.sort = $event;
     this._router.navigate([`/product/${this.productId}`], {
@@ -64,6 +70,14 @@ export class ProductComponent {
         sort: $event,
       },
     });
+  }
+
+  madeOrder(isMadeOrder: boolean) {
+    if (isMadeOrder) {
+      this.cartPromoterService.start();
+    } else {
+      this.cartPromoterService.stop();
+    }
   }
 
   private _initProductOffers() {

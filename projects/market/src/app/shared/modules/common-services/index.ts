@@ -4,6 +4,7 @@ export * from './api-worker.service';
 export * from './bnet.service';
 export * from './auth.service';
 export * from './cache.service';
+export * from './cart-promoter.service';
 export * from './edi.service';
 export * from './feedback.service';
 export * from './navigation.service';

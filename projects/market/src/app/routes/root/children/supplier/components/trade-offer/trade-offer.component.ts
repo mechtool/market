@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { throwError } from 'rxjs';
 import { ProductDto, SuppliersItemModel, TradeOfferResponseModel, TradeOfferSupplierModel } from '#shared/modules/common-services/models';
 import {
+  CartPromoterService,
   ExternalProvidersService,
   NotificationsService,
   OrganizationsService,
@@ -17,7 +18,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   templateUrl: './trade-offer.component.html',
   styleUrls: ['./trade-offer.component.scss', './trade-offer.component-992.scss'],
 })
-export class TradeOfferComponent {
+export class TradeOfferComponent implements OnDestroy {
   product: ProductDto;
   supplier: SuppliersItemModel;
   tradeOffer: TradeOfferResponseModel;
@@ -33,8 +34,21 @@ export class TradeOfferComponent {
     private _activatedRoute: ActivatedRoute,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
+    private cartPromoterService: CartPromoterService,
   ) {
     this._initTradeOffer();
+  }
+
+  ngOnDestroy(): void {
+    this.cartPromoterService.stop();
+  }
+
+  madeOrder(isMadeOrder: boolean) {
+    if (isMadeOrder) {
+      this.cartPromoterService.start();
+    } else {
+      this.cartPromoterService.stop();
+    }
   }
 
   private _initTradeOffer() {

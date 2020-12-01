@@ -1,7 +1,7 @@
 <div *ngIf="tradeOffer">
   <div class="product_side" *ngIf="orderStatus === 0">
     <div class="to_cart__wrap">
-      <h3>Добавить товар в корзину</h3>
+      <h3>Добавить товар в <a [routerLink]="['/cart']">корзину</a></h3>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price">
         Товар не продается
@@ -13,7 +13,7 @@
 
   <div class="product_side" *ngIf="orderStatus === 1">
     <div class="to_cart__wrap">
-      <h3>Добавить товар в корзину</h3>
+      <h3>Добавить товар в <a [routerLink]="['/cart']">корзину</a></h3>
       <p class="to_cart__supplier" *ngIf="isProductPage">от {{tradeOffer?.supplier.name | abbreviatedBusinessName}}</p>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
@@ -41,7 +41,7 @@
 
   <div class="product_side" *ngIf="orderStatus === 2">
     <div class="to_cart__wrap">
-      <h3>Товар добавлен в корзину</h3>
+      <h3>Товар добавлен в <a [routerLink]="['/cart']">корзину</a></h3>
       <p class="to_cart__supplier" *ngIf="isProductPage">от {{tradeOffer?.supplier.name | abbreviatedBusinessName}}</p>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
@@ -93,6 +93,7 @@
       [tradeOffer]="tradeOffer"
       [minQuantity]="minQuantity"
       [orderStep]="tradeOffer.termsOfSale.packageMultiplicity"
+      (isMadeOrder)="isMadeOrder.emit($event)"
     ></market-product-side>
   </div>
 </ng-template>

@@ -28,6 +28,7 @@ import { FeedbackService } from './feedback.service';
 import { ExternalProvidersService } from './external-providers.service';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { CartPromoterService } from './cart-promoter.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -43,6 +44,7 @@ export class CommonServicesModule {
         AuthService,
         CacheService,
         CategoryService,
+        CartPromoterService,
         NavigationService,
         BreadcrumbsService,
         LocalStorageService,

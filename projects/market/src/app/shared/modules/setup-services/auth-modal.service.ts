@@ -4,8 +4,7 @@ import { ExternalProvidersService } from '#shared/modules/common-services/extern
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
 import { EmptyOrganizationsInfoComponent } from '../components/empty-organizations-info/empty-organizations-info.component';
 import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
-import { switchMap, switchMapTo, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Location } from '@angular/common';
 
@@ -21,7 +20,8 @@ export class AuthModalService {
     private _authService: AuthService,
     private _externalProvidersService: ExternalProvidersService,
     private _location: Location,
-  ) {}
+  ) {
+  }
 
   openAuthDecisionMakerModal(description: string, loginRedirectPath: string = this._location.path()) {
     const modal = this._modalService.create({
