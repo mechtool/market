@@ -15,12 +15,15 @@
       "prefix": "market",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "allowedCommonJsDependencies": [
               "@ant-design/colors"
             ],
             "buildOptimizer": true,
+            "customWebpackConfig": {
+              "path": "projects/market/src/extra-webpack.config.ts"
+            },
             "vendorChunk": true,
             "extractLicenses": true,
             "namedChunks": true,
@@ -30,6 +33,7 @@
             "outputHashing": "all",
             "outputPath": "dist/market/dev",
             "index": "projects/market/src/index.html",
+            "indexTransform": "projects/market/src/index-html-transform.ts",
             "main": "projects/market/src/main.ts",
             "polyfills": "projects/market/src/polyfills.ts",
             "tsConfig": "projects/market/tsconfig.app.json",
@@ -109,7 +113,7 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
             "browserTarget": "market:build",
             "disableHostCheck": true,
@@ -140,13 +144,13 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular-builders/custom-webpack:extract-i18n",
           "options": {
             "browserTarget": "market:build"
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
             "main": "projects/market/src/test.ts",
             "polyfills": "projects/market/src/polyfills.ts",

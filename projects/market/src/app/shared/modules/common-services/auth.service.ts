@@ -34,7 +34,7 @@ export class AuthService {
 
   logout(path: string = '/') {
     const revokeToken = this.revoke().subscribe(() => {
-      const routePath = this.isPathWithAuth(path) ? '/' : path;
+      const routePath = path === '' || this.isPathWithAuth(path) ? '/' : path;
       this._userService.setUserData(null);
       revokeToken.unsubscribe();
       redirectTo(`${ITS_URL}/logout?service=${this.origin}&relativeBackUrl=${routePath}`);

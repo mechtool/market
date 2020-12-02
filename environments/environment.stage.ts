@@ -3,6 +3,5 @@ export const environment = {
   imgUrl: 'https://bnet-api-stage.1c.ru',
   itsUrl: 'https://login-dev.1c.ru',
   gtmID: 'GTM-TW5RXQF',
-  metrikaID: 44147844,
   production: false,
 };

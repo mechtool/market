@@ -33,7 +33,6 @@ import { PipesModule } from '#shared/modules/pipes';
 import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
 import { LineClampModule } from '#shared/modules';
-import { MetrikaModule } from 'ng-yandex-metrika';
 import { APP_CONFIG } from './config/app.config.token';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
 import { environment } from '#environments/environment';
@@ -72,14 +71,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     CookieAgreementModule,
     FeedbackModule,
     NgIdleKeepaliveModule.forRoot(),
-    MetrikaModule.forRoot({
-      id: environment.metrikaID,
-      webvisor: true,
-      clickmap: true,
-      trackLinks: true,
-      accurateTrackBounce: true,
-      ecommerce: 'dataLayer',
-    }),
   ],
   providers: [
     { provide: 'googleTagManagerId', useValue: environment.gtmID },

@@ -20,8 +20,7 @@ export class AuthModalService {
     private _authService: AuthService,
     private _externalProvidersService: ExternalProvidersService,
     private _location: Location,
-  ) {
-  }
+  ) {}
 
   openAuthDecisionMakerModal(description: string, loginRedirectPath: string = this._location.path()) {
     const modal = this._modalService.create({
@@ -40,7 +39,7 @@ export class AuthModalService {
       .pipe(
         tap((res) => {
           if (!res) {
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_CLOSE).subscribe();
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_CLOSE);
           }
         }),
       )

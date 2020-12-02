@@ -301,7 +301,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           );
         }),
         tap(() => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
         }),
         switchMap((res) => {
           return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
@@ -350,18 +350,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     };
     this._externalProvidersService.fireGTMEvent(tag);
 
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER).subscribe();
-    this._externalProvidersService
-      .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
-        ...(this.orderRelationHref && {
-          params: {
-            [MetrikaEventOrderTryParametrizedModel.title]: {
-              [MetrikaEventOrderTryParametrizedModel.orderLink]: this.orderRelationHref,
-            },
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
+      ...(this.orderRelationHref && {
+        params: {
+          [MetrikaEventOrderTryParametrizedModel.title]: {
+            [MetrikaEventOrderTryParametrizedModel.orderLink]: this.orderRelationHref,
           },
-        }),
-      })
-      .subscribe();
+        },
+      }),
+    });
     if (!this.userInfo) {
       this._authModalService.openAuthDecisionMakerModal(
         `Для отправки заказа необходимо войти на сайт под учетной записью "Интернет-поддержки пользователей (1С:ИТС)",
@@ -369,16 +367,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         В случае их отсутствия - зарегистрируйте новую учетную запись.
         Данные в корзине сохранятся.`,
       );
-      this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-          params: {
-            [MetrikaEventOrderFailParametrizedModel.title]: {
-              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NOT_AUTHED,
-              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-            },
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NOT_AUTHED,
+            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
           },
-        })
-        .subscribe();
+        },
+      });
       return;
     }
 
@@ -386,32 +382,28 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       this._authModalService.openEmptyOrganizationsInfoModal(
         'Чтобы оформить заказ необходимо иметь хотя бы одну зарегистрированную организацию.',
       );
-      this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-          params: {
-            [MetrikaEventOrderFailParametrizedModel.title]: {
-              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_ORGANIZATIONS,
-              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-            },
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_ORGANIZATIONS,
+            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
           },
-        })
-        .subscribe();
+        },
+      });
       return;
     }
 
     if (!this.orderRelationHref) {
       this.changeSelectedTabIndex(0);
       this._cartModalService.openOrderUnavailableModal();
-      this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-          params: {
-            [MetrikaEventOrderFailParametrizedModel.title]: {
-              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_LINK,
-              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-            },
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_LINK,
+            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
           },
-        })
-        .subscribe();
+        },
+      });
       return;
     }
 
@@ -429,16 +421,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         this.elementInputCity?.nativeElement.focus();
       }
 
-      this._externalProvidersService
-        .fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-          params: {
-            [MetrikaEventOrderFailParametrizedModel.title]: {
-              [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.FIELDS_NOT_VALID,
-              ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-            },
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.FIELDS_NOT_VALID,
+            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
           },
-        })
-        .subscribe();
+        },
+      });
 
       return;
     }
@@ -642,7 +632,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         .pipe(
           tap((_) => (this.isOrderLoading = true)),
           tap((_) => {
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
           }),
           switchMap((orderQuantity) => {
             if (orderQuantity < item.controls.orderQtyMin.value) {
@@ -810,11 +800,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             },
           };
           this._externalProvidersService.fireGTMEvent(tag);
-          this._externalProvidersService
-            .fireYandexMetrikaEvent(
-              this.orderType === 'order' ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
-            )
-            .subscribe();
+          this._externalProvidersService.fireYandexMetrikaEvent(
+            this.orderType === 'order' ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
+          );
         }),
       )
       .subscribe(
@@ -905,9 +893,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _warnings(tradeOfferId: string): FormArray {
-    const violations = this.order.makeOrderViolations
-      ?.filter((x) => tradeOfferId === x.tradeOfferId)
-      .map((x) => new FormControl(x.message)) || null;
+    const violations =
+      this.order.makeOrderViolations?.filter((x) => tradeOfferId === x.tradeOfferId).map((x) => new FormControl(x.message)) || null;
     return violations ? new FormArray(violations) : null;
   }
 

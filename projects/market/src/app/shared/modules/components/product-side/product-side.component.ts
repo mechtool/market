@@ -1,15 +1,5 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   MetrikaEventTypeModel,
@@ -78,10 +68,10 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
       return !elementQuery
         ? of(false)
         : merge(elementQueryFocusChanges$, elementQueryBlurChanges$).pipe(
-          map((event: FocusEvent) => {
-            return event.type === 'focus';
-          }),
-        );
+            map((event: FocusEvent) => {
+              return event.type === 'focus';
+            }),
+          );
     });
   }
 
@@ -161,7 +151,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
             },
           };
           this._externalProvidersService.fireGTMEvent(tag);
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
         }),
       )
       .subscribe(
@@ -197,7 +187,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
             })
             .pipe(
               tap(() => {
-                this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+                this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
               }),
             )
             .subscribe(
@@ -219,7 +209,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
             .handleRelationAndUpdateData(RelationEnumModel.ITEM_REMOVE, `${cartLocation}/items/${this.tradeOfferId}`)
             .pipe(
               tap(() => {
-                this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT).subscribe();
+                this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
               }),
             )
             .subscribe(

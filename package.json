@@ -47,7 +47,6 @@
     "classlist.js": "^1.1.20150312",
     "css-vars-ponyfill": "^2.4.1",
     "ng-recaptcha": "^6.0.2",
-    "ng-yandex-metrika": "^3.0.2",
     "ng-zorro-antd": "^10.1.1",
     "ng-zorro-antd-mobile": "^3.0.3",
     "ngx-cookie-service": "^10.1.1",
@@ -63,6 +62,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^10.0.1",
     "@angular-devkit/build-angular": "~0.1002.0",
     "@angular/cli": "~10.2.0",
     "@angular/compiler-cli": "~10.2.0",
@@ -71,7 +71,10 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "@types/puppeteer": "^5.4.0",
+    "@types/webpack-dev-server": "^3.11.1",
+    "cheerio": "^1.0.0-rc.3",
     "codelyzer": "^6.0.0",
+    "html-minifier": "^4.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",

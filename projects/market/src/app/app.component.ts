@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs/operators';
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'market-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+  routeChangeSubscription: Subscription;
+
   constructor(
     private _userService: UserService,
     private _userStateService: UserStateService,
@@ -31,6 +33,10 @@ export class AppComponent {
       .subscribe((uin) => {
         this._userService.setUserLastLoginTimestamp(uin, Date.now());
       });
+  }
+
+  ngOnDestroy() {
+    this.routeChangeSubscription.unsubscribe();
   }
 
   private _routeChanges$(): Observable<NavigationEnd> {

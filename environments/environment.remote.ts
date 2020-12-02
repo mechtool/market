@@ -3,6 +3,5 @@ export const environment = {
   imgUrl: 'img-proxifier',
   itsUrl: 'https://login.1c.ru',
   gtmID: 'GTM-TW5RXQF',
-  metrikaID: 44147844,
   production: false,
 };
