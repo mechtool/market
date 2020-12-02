@@ -1,5 +1,5 @@
 <div class="logo">
-  <div class="opener" (click)="handleOpenerClick()">
+  <div class="opener" (click)="goToRoot()">
     <img src="assets/img/svg/icon__site.svg" alt="1С:Торговая площадка" title="1С:Торговая площадка">
   </div>
   <div class="label" (click)="goToRoot()">
@@ -16,7 +16,7 @@
   </button>
 </div>
 
-<div class="panel scrollbar">
+<div class="panel scrollbar" (mouseenter)="openMenuWidthLessThan1300()" (mouseleave)="closeMenuWidthLessThan1300()">
   <ul class="list">
     <li
       class="item"

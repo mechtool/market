@@ -84,7 +84,8 @@ export class NavbarNavComponent implements OnInit {
     return this._navService.isNavBarMinified && !this._navService.isMenuOpened;
   }
 
-  @HostListener('document:keydown.escape', ['$event']) onKeyDownHandler(event: KeyboardEvent) {
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeyDownHandler(event: KeyboardEvent) {
     if (this.areCategoriesShowed) {
       this.closeCategoriesLayer();
     }
@@ -120,7 +121,7 @@ export class NavbarNavComponent implements OnInit {
       navItem.command();
     }
     if (navItem.routerLink) {
-      if (this._navService.screenWidthLessThan(992)) {
+      if (this._navService.screenWidthLessThan(1300)) {
         this._navService.closeMenu();
       }
       this._router.navigate(navItem.routerLink, {});
@@ -171,15 +172,22 @@ export class NavbarNavComponent implements OnInit {
     this._navService.setMainCategorySelectedId(id);
   }
 
-  handleOpenerClick() {
-    this._navService.handleOpenerClick();
+  openMenuWidthLessThan1300() {
+    if (!this._navService.isMenuOpened && this._navService.screenWidthLessThan(1300)) {
+      this._navService.openMenu();
+    }
+  }
+
+  closeMenuWidthLessThan1300() {
+    if (this._navService.isMenuOpened && this._navService.screenWidthLessThan(1300)) {
+      this._navService.closeMenu();
+    }
   }
 
   goToRoot() {
-    if (this._navService.screenWidthLessThan(992)) {
-      this._navService.closeMenu();
+    if (this._navService.screenWidthGreaterThan(992)) {
+      this._navService.goTo();
     }
-    this._navService.goTo();
   }
 
   private _setNavigation() {

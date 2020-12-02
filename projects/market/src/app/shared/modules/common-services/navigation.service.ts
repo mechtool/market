@@ -297,23 +297,6 @@ export class NavigationService {
     this._mainCategorySelectedId = id;
   }
 
-  handleOpenerClick() {
-    if (this.screenWidthLessThan(1300) && this.screenWidthGreaterThan(992)) {
-      this._isNavBarMinified = true;
-      this.isNavBarMinified$.next(this._isNavBarMinified);
-      if (!this.isMenuOpened) {
-        this.openMenu();
-      } else {
-        this.closeMenu();
-      }
-    }
-
-    if (this.screenWidthGreaterThan(1300)) {
-      this._isNavBarMinified = !this._isNavBarMinified;
-      this.isNavBarMinified$.next(this._isNavBarMinified);
-    }
-  }
-
   goTo(route: string[] = ['/']) {
     this._router.navigate(route);
   }
