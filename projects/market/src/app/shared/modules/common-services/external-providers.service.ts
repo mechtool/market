@@ -32,7 +32,7 @@ export class ExternalProvidersService {
   ) {
     this._renderer = _rendererFactory.createRenderer(null, null);
     this._ym = isPlatformBrowser(this._platformId) ? window.ym || null : null;
-    this._isMetrikaAvailable = this._ym && this._metrikaID;
+    this._isMetrikaAvailable = !!(this._ym && this._metrikaID);
   }
 
   resetYandexTranslatePopupPosition(): void {
