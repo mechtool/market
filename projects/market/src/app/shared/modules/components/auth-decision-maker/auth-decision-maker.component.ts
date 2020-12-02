@@ -9,7 +9,10 @@ import { MetrikaEventTypeModel } from '#shared/modules/common-services/models/me
 @Component({
   selector: 'market-auth-decision-maker',
   templateUrl: './auth-decision-maker.component.html',
-  styleUrls: ['./auth-decision-maker.component.scss'],
+  styleUrls: [
+    './auth-decision-maker.component.scss',
+    './auth-decision-maker.component-400.scss',
+  ],
 })
 export class AuthDecisionMakerComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
