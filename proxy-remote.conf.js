@@ -40,6 +40,7 @@ const PROXY_CONFIG = [
       const pathsObject = {
         '/proxifier/auth': /^\/proxifier\/auth\/?$/i,
         '/proxifier/auth/revoke': /^\/proxifier\/auth\/revoke\/?$/i,
+        '/proxifier/auth/refresh': /^\/proxifier\/auth\/refresh\/?$/i,
         '/proxifier/categories': /^\/proxifier\/categories\/?$/i,
         '/proxifier/product-offers/popular': /^\/proxifier\/product-offers\/popular\/?$/i,
         '/proxifier/product-offers': /^\/proxifier\/product-offers\/?$/i,
@@ -87,7 +88,13 @@ const PROXY_CONFIG = [
       }
 
       if (req.method === 'POST' && pathsObject['/proxifier/auth/revoke'].test(req.originalUrl.split('?')[0])) {
-        res.status(204);
+        res.status(401);
+        res.end('');
+        return true;
+      }
+
+      if (req.method === 'POST' && pathsObject['/proxifier/auth/refresh'].test(req.originalUrl.split('?')[0])) {
+        res.status(403);
         res.end('');
         return true;
       }
@@ -268,7 +275,7 @@ const PROXY_CONFIG = [
       }
 
       if (req.method === 'GET' && pathsObject['/proxifier/suppliers'].test(req.originalUrl.split('?')[0])) {
-        res.status(200);
+        res.status(401);
         res.end(suppliers);
         return true;
       }

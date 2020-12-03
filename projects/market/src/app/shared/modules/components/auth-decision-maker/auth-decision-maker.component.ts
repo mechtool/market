@@ -9,10 +9,7 @@ import { MetrikaEventTypeModel } from '#shared/modules/common-services/models/me
 @Component({
   selector: 'market-auth-decision-maker',
   templateUrl: './auth-decision-maker.component.html',
-  styleUrls: [
-    './auth-decision-maker.component.scss',
-    './auth-decision-maker.component-400.scss',
-  ],
+  styleUrls: ['./auth-decision-maker.component.scss', './auth-decision-maker.component-400.scss'],
 })
 export class AuthDecisionMakerComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
@@ -24,11 +21,6 @@ export class AuthDecisionMakerComponent {
   login(): void {
     const tag = {
       event: 'login',
-      ecommerce: {
-        checkout_option: {
-          actionField: { step: 2, option: 'login' },
-        },
-      },
     };
     this._externalProvidersService.fireGTMEvent(tag);
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_SIGN_IN);

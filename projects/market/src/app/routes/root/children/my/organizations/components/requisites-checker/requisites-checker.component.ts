@@ -1,11 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  innConditionValidator,
-  innKppConditionValidator,
-  kppConditionValidator
-} from './requisites-condition.validator';
+import { innConditionValidator, innKppConditionValidator, kppConditionValidator } from './requisites-condition.validator';
+import { currencyCode } from '#shared/utils';
+import { ExternalProvidersService } from '#shared/modules';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -18,8 +16,7 @@ export class RequisitesCheckerComponent implements OnInit {
   form: FormGroup;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _fb: FormBuilder) {
-  }
+  constructor(private _fb: FormBuilder, private _externalProvidersService: ExternalProvidersService) {}
 
   ngOnInit() {
     this._initForm();
@@ -58,5 +55,10 @@ export class RequisitesCheckerComponent implements OnInit {
       ...(this.form.get('kpp').value && { kpp: this.form.get('kpp').value }),
     };
     this.legalRequisitesChange.emit(data);
+
+    const tag = {
+      event: 'inn',
+    };
+    this._externalProvidersService.fireGTMEvent(tag);
   }
 }

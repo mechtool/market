@@ -1,8 +1,8 @@
 import { DOCUMENT, Location } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of, Subject, throwError } from 'rxjs';
+import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
@@ -32,13 +32,22 @@ export class AuthService {
     private _router: Router,
   ) {}
 
-  logout(path: string = '/') {
-    const revokeToken = this.revoke().subscribe(() => {
-      const routePath = path === '' || this.isPathWithAuth(path) ? '/' : path;
-      this._userService.setUserData(null);
-      revokeToken.unsubscribe();
-      redirectTo(`${ITS_URL}/logout?service=${this.origin}&relativeBackUrl=${routePath}`);
-    });
+  logout(path: string = '/'): Observable<any> {
+    return of(null).pipe(
+      tap(() => {
+        const routePath = path === '' || this.isPathWithAuth(path) ? '/' : path;
+        this._userService.setUserData(null);
+        redirectTo(`${ITS_URL}/logout?service=${this.origin}&relativeBackUrl=${routePath}`);
+      }),
+      switchMap(() =>
+        this.revoke().pipe(
+          catchError(() => {
+            return of(null);
+          }),
+        ),
+      ),
+      delay(3e2),
+    );
   }
 
   login(path: string = '/', redirectable = true): Observable<any> {

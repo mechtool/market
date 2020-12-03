@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map, take, tap } from 'rxjs/operators';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -19,7 +19,7 @@ export class AppComponent implements OnDestroy {
     private _externalProvidersService: ExternalProvidersService,
     private _authService: AuthService,
   ) {
-    this._routeChanges$().subscribe((res) => {
+    this.routeChangeSubscription = this._routeChanges$().subscribe((res) => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();
       this._externalProvidersService.hitYandexMetrika();
     });
@@ -27,7 +27,7 @@ export class AppComponent implements OnDestroy {
     this._authedUserWindowCloseChanges$()
       .pipe(
         tap(() => {
-          const revokeToken = this._authService.revoke().subscribe(() => revokeToken.unsubscribe());
+          this._authService.revoke().pipe(take(1)).subscribe();
         }),
       )
       .subscribe((uin) => {

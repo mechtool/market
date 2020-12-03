@@ -177,7 +177,7 @@ export class NavigationService {
         attributeId: 'logout_menu_id',
         icon: 'logout',
         command: () => {
-          this._authService.logout(this._location.path());
+          this._authService.logout(this._location.path()).subscribe();
         },
       },
       {

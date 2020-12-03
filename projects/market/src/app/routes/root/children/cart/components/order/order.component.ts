@@ -26,11 +26,11 @@ import {
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, innKppToLegalId, currencyCode } from '#shared/utils';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   BNetService,
@@ -173,6 +173,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.order._links?.[RelationEnumModel.PRICEREQUEST_CREATE]?.href;
   }
 
+  formValidChangeSubscription: Subscription;
+
   constructor(
     private _cdr: ChangeDetectorRef,
     private _fb: FormBuilder,
@@ -211,6 +213,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
           this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.organizations$.value, this.order);
           this._initConsumer(this.availableUserOrganizations, this.order);
+          this._handleFormValidChange();
         }),
         switchMap((res) => {
           return this._getFoundLocations(this.order);
@@ -225,6 +228,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._cartService.pullStorageCartData();
+    this.formValidChangeSubscription.unsubscribe();
   }
 
   citySelected() {
@@ -849,6 +853,20 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       commentForSupplier: new FormControl(''),
       deliveryDesirableDate: new FormControl(''),
       items: this._fb.array(order.items.map((product) => this._createItem(product))),
+    });
+  }
+
+  private _handleFormValidChange() {
+    this.formValidChangeSubscription = this.form.statusChanges.pipe(filter(() => this.form.valid)).subscribe((res) => {
+      const tag = {
+        event: 'login',
+        ecommerce: {
+          checkout_option: {
+            actionField: { step: 2, option: 'delivery' },
+          },
+        },
+      };
+      this._externalProvidersService.fireGTMEvent(tag);
     });
   }
 
