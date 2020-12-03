@@ -1,0 +1,12 @@
+@media all and (max-width: 400px) {
+  .banner_item {
+    .banner__img {
+      width: auto;
+      justify-content: start;
+
+      img {
+        max-width: 65%;
+      }
+    }
+  }
+}

@@ -4,7 +4,10 @@ import { BannerItemModel } from '../../models';
 @Component({
   selector: 'market-banner',
   templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.scss'],
+  styleUrls: [
+    './banner.component.scss',
+    './banner.component-400.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BannerComponent {
