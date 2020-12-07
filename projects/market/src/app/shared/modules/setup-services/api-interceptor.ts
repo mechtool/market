@@ -29,7 +29,7 @@ export class ApiInterceptor implements HttpInterceptor {
             }),
             switchMap((res) => {
               const req = modifiedReq.clone({
-                headers: modifiedReq.headers.set('Authorization', res.accessToken),
+                headers: modifiedReq.headers.set('Authorization', `Bearer ${res.accessToken}`),
               });
               return next.handle(req);
             }),
