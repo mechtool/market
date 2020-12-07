@@ -43,7 +43,7 @@ export class ApiInterceptor implements HttpInterceptor {
   private _modifyReq(req: HttpRequest<any>, bearerToken: string): HttpRequest<any> {
     return req.clone({
       setHeaders: {
-        ...(bearerToken && { Authorization: bearerToken }),
+        ...(bearerToken && { Authorization: `Bearer ${bearerToken}` }),
         ...(!req.headers.has('Content-type') && { 'Content-type': 'application/json' }),
       },
     });
