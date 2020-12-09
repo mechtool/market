@@ -17,12 +17,14 @@ export class SpinnerService {
       this._overlayRef = this._overlay.create(this._overlayConfig);
     }
 
-    const spinnerOverlayPortal = new ComponentPortal(SpinnerOverlayComponent);
-    const component = this._overlayRef.attach(spinnerOverlayPortal);
+    if (!this._overlayRef.hasAttached()) {
+      const spinnerOverlayPortal = new ComponentPortal(SpinnerOverlayComponent);
+      const component = this._overlayRef.attach(spinnerOverlayPortal);
+    }
   }
 
   hide() {
-    if (!!this._overlayRef) {
+    if (this._overlayRef.hasAttached()) {
       this._overlayRef.detach();
     }
   }

@@ -29,6 +29,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   userLocation: LocationModel;
 
   @Input() query: string;
+  @Input() page: number;
   @Input() minQueryLength = 3;
   @Input() maxQueryLength = 20;
   @Input() placeholder = 'Поиск товаров';
@@ -95,6 +96,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
       this.submitClick.emit({
         query: this.queryOrNull,
         filters: this.filters,
+        page: this.page,
       });
       this.visibleSuggestions = false;
     }
@@ -105,6 +107,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.submitClick.emit({
       query: null,
       filters: this.filters,
+      page: this.page,
     });
   }
 
@@ -116,6 +119,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.submitClick.emit({
       query: this.queryOrNull,
       filters: this.filters,
+      page: this.page,
     });
   }
 

@@ -6,6 +6,7 @@
 
   <market-search-bar
     [query]="query"
+    [page]="page"
     [filters]="filters"
     [suggestionsOff]="true"
     (submitClick)="changeQueryParamsAndRefresh($event)"
@@ -20,15 +21,12 @@
   ></market-main-popular>
 
   <market-search-results
-    [productOffers]="productOffers"
-    [productsTotal]="productsTotal"
+    [popularComponentHeight]="popularComponentHeight"
+    [bannersComponentHeight]="bannersComponentHeight"
+    [categoryListComponentHeight]="categoryListComponentHeight"
     [category]="category"
-    [page]="page"
-    [sort]="sort"
-    [visibleSort]="productOffers?.length > 1"
-    (loadProducts)="loadProducts($event)"
     (sortingChanged)="changeSortingAndRefresh($event)"
+    (pageChanged)="changePage($event)"
   ></market-search-results>
-
 
 </div>

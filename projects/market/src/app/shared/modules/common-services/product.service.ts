@@ -44,6 +44,7 @@ export class ProductService {
       deliveryArea: groupQuery.filters?.isDelivery ? fias : undefined,
       pickupArea: groupQuery.filters?.isPickup ? fias : undefined,
       page: groupQuery.page,
+      size: groupQuery.size,
       sort: groupQuery.sort,
     };
 

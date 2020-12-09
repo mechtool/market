@@ -2,6 +2,7 @@
   <market-search-bar
     [query]="query"
     [filters]="filters"
+    [page]="page"
     [productsSuggestions]="productsSuggestions"
     [categoriesSuggestions]="categoriesSuggestions"
     (queryChange)="searchSuggestions($event)"
@@ -10,24 +11,18 @@
   ></market-search-bar>
 
   <market-search-results
-    [productOffers]="productOffers"
-    [productsTotal]="productsTotal"
-    [page]="page"
-    [visibleSort]="productOffers?.length > 1"
-    [sort]="sort"
-    (loadProducts)="loadProducts($event)"
     (sortingChanged)="changeSortingAndRefresh($event)"
+    (pageChanged)="changePage($event)"
+    (visibleBanners)="changeVisibleBanners($event)"
   ></market-search-results>
 
   <market-main-banners
-    *ngIf="productsTotal === 0"
+    *ngIf="visibleBanners"
   ></market-main-banners>
 
   <market-main-popular
-    *ngIf="productsTotal === 0"
+    *ngIf="visibleBanners"
   ></market-main-popular>
-
-
 
 </div>
 

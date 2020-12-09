@@ -5,5 +5,6 @@ export class AllGroupQueryFiltersModel {
   query?: string;
   filters?: DefaultSearchAvailableModel;
   page?: number;
+  size?: number;
   sort?: SortModel;
 }

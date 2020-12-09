@@ -1,4 +1,4 @@
-<div class="result" *ngIf="productOffers">
+<div class="result">
 
   <div class="result_info">
     <div class="title" [ngSwitch]="showResult">
@@ -14,11 +14,14 @@
     ></market-results-sorter>
   </div>
 
-  <div class="line" *ngIf="!productOffers?.length && isRequestFulfilled"></div>
+  <div class="line" *ngIf="!productOffers?.length && wasRequestProducts"></div>
 
-  <div class="content" itemscope="itemscope" *ngIf="productOffers.length">
+  <div class="content" itemscope="itemscope" *ngIf="productOffers?.length">
 
-    <div class="product_infinite_scroll" infiniteScroll (scrolled)="productOffersLoading(page + 1)">
+    <div class="product_infinite_scroll" infinite-scroll #productInfiniteScroll
+         (window:scroll)="onScroll($event)"
+         style="{{transform}})">
+
       <market-card *ngFor="let productOffer of productOffers">
         <market-nomenclature-card
           [productOffer]="productOffer"

@@ -23,6 +23,7 @@ export function queryParamsFrom(groupQuery: AllGroupQueryFiltersModel): Params {
     priceFrom: groupQuery.filters?.priceFrom,
     priceTo: groupQuery.filters?.priceTo,
     sort: groupQuery.sort,
+    page: groupQuery.page,
   };
 }
 
@@ -42,6 +43,7 @@ export function queryParamsWithoutCategoryIdFrom(groupQuery: AllGroupQueryFilter
     priceFrom: groupQuery.filters?.priceFrom,
     priceTo: groupQuery.filters?.priceTo,
     sort: groupQuery.sort,
+    page: groupQuery.page,
   };
 }
 
@@ -61,6 +63,7 @@ export function queryParamsWithoutSupplierIdFrom(groupQuery: AllGroupQueryFilter
     priceFrom: groupQuery.filters?.priceFrom,
     priceTo: groupQuery.filters?.priceTo,
     sort: groupQuery.sort,
+    page: groupQuery.page,
   };
 }
 

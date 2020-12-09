@@ -1,7 +1,6 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { CartService } from '#shared/modules/common-services/cart.service';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'market-mobile-nav',

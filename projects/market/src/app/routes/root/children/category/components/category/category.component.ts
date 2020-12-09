@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
+import { AfterContentChecked, Component, ElementRef, ViewChild } from '@angular/core';
 import { combineLatest, throwError } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
   CategoryModel,
   DefaultSearchAvailableModel,
-  ProductOffersListResponseModel,
-  ProductOffersModel,
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,26 +15,34 @@ import {
   ProductService,
   SpinnerService,
 } from '#shared/modules/common-services';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { hasRequiredParameters, queryParamsWithoutCategoryIdFrom } from '#shared/utils';
 import { BannerItemModel } from '#shared/modules/components/banners/models/banner-item.model';
+import { BannersComponent } from '#shared/modules/components/banners';
+import { MainPopularComponent } from '../../../product';
+import { CategoryListComponent } from '#shared/modules/components/category-list';
 
 @Component({
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
 })
-export class CategoryComponent {
-  category: CategoryModel;
+export class CategoryComponent implements AfterContentChecked {
+  private sort: SortModel;
+
   query = '';
-  categoryId: string;
-  filters: DefaultSearchAvailableModel;
-  productOffersList: ProductOffersListResponseModel;
-  productOffers: ProductOffersModel[];
-  productsTotal: number;
-  sort: SortModel;
   page: number;
-  bannerItems: BannerItemModel[];
+  categoryId: string;
+  category: CategoryModel;
   isPopularEnabled = false;
+  bannerItems: BannerItemModel[];
+  popularComponentHeight: number;
+  bannersComponentHeight: number;
+  categoryListComponentHeight: number;
+  filters: DefaultSearchAvailableModel;
+
+  @ViewChild(BannersComponent, { read: ElementRef }) elementBannersComponent: ElementRef;
+  @ViewChild(MainPopularComponent, { read: ElementRef }) elementMainPopularComponent: ElementRef;
+  @ViewChild(CategoryListComponent, { read: ElementRef }) elementCategoryListComponent: ElementRef;
 
   get isNotSearchUsed(): boolean {
     const queryParamsInFilter = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'priceFrom', 'priceTo'];
@@ -57,37 +63,17 @@ export class CategoryComponent {
     this._init();
   }
 
-  loadProducts(nextPage: number) {
-    if (nextPage === this.productOffersList.page.number + 1 && nextPage < this.productOffersList.page.totalPages) {
-      this.page = nextPage;
-      this._spinnerService.show();
-
-      this._productService
-        .searchProductOffers({
-          query: this.query,
-          filters: this.filters,
-          page: nextPage,
-          sort: this.sort,
-        })
-        .subscribe(
-          (productOffers) => {
-            this.productOffersList = productOffers;
-            this.productOffers.push(...this.productOffersList._embedded.productOffers);
-            this.productsTotal = this.productOffersList.page.totalElements;
-            this._spinnerService.hide();
-          },
-          (err) => {
-            this._spinnerService.hide();
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-          },
-        );
-    }
+  ngAfterContentChecked(): void {
+    this.bannersComponentHeight = this.elementBannersComponent?.nativeElement?.firstElementChild?.offsetHeight;
+    this.popularComponentHeight = this.elementMainPopularComponent?.nativeElement?.firstElementChild?.offsetHeight;
+    this.categoryListComponentHeight = this.elementCategoryListComponent?.nativeElement?.firstElementChild?.offsetHeight;
   }
 
   changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(groupQuery.query);
     const categoryId = groupQuery.filters?.categoryId || this.categoryId;
-    this.addOrRemoveSorting(groupQuery);
+    this._addOrRemoveSorting(groupQuery);
+    this._addPage(groupQuery);
     const params = queryParamsWithoutCategoryIdFrom(groupQuery);
     this._router.navigate([`/category/${categoryId}`], {
       queryParams: params,
@@ -109,13 +95,25 @@ export class CategoryComponent {
     });
   }
 
+  changePage(page: number) {
+    this.page = page;
+    this.changeQueryParamsAndRefresh({
+      query: this.query,
+      filters: this.filters,
+      sort: this.sort,
+      page: this.page,
+    });
+  }
+
   private _init(): void {
     combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams])
       .pipe(
-        tap(([params, queryParams]) => {
+        switchMap(([params, queryParams]) => {
           this.categoryId = params.categoryId;
           this.query = queryParams.q;
           this.sort = queryParams.sort;
+          this.page = queryParams.page || 0;
+
           this.filters = {
             supplierId: queryParams.supplierId,
             trademark: queryParams.trademark,
@@ -128,42 +126,18 @@ export class CategoryComponent {
             categoryId: this.categoryId,
           };
           this.isPopularEnabled = this._categoryService.categoryIdsPopularEnabled.includes(this.categoryId);
-        }),
-        switchMap(() => {
           return this._categoryService.getCategoryBannerItems(this.categoryId);
         }),
-        tap((bannerItems) => {
+        switchMap((bannerItems) => {
           this.bannerItems = bannerItems;
-        }),
-        switchMap(() => {
           return this._categoryService.getCategory(this.categoryId);
-        }),
-        switchMap((category) => {
-          this.category = category;
-          return this._productService.searchProductOffers({
-            query: this.query,
-            filters: this.filters,
-            sort: this.sort,
-          });
-        }),
-        tap((productOffers) => {
-          const topProductIDs = productOffers._embedded.productOffers?.slice(0, 3)?.map((productOffer) => productOffer.product?.id) || [];
-          const tag = {
-            event: 'ListingPage',
-            products: topProductIDs,
-          };
-          this._externalProvidersService.fireGTMEvent(tag);
         }),
         catchError((err) => {
           return throwError(err);
         }),
       )
-      .subscribe(
-        (productOffers) => {
-          this.productOffersList = productOffers;
-          this.productOffers = this.productOffersList._embedded.productOffers;
-          this.productsTotal = this.productOffersList.page.totalElements;
-          this.page = this.productOffersList.page.number;
+      .subscribe((category) => {
+          this.category = category;
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
@@ -171,9 +145,13 @@ export class CategoryComponent {
       );
   }
 
-  private addOrRemoveSorting(groupQuery: AllGroupQueryFiltersModel) {
+  private _addOrRemoveSorting(groupQuery: AllGroupQueryFiltersModel) {
     if (hasRequiredParameters(groupQuery)) {
       groupQuery.sort = this.sort;
     }
+  }
+
+  private _addPage(groupQuery: AllGroupQueryFiltersModel) {
+    groupQuery.page = this.page;
   }
 }
