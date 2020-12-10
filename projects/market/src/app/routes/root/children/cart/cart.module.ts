@@ -6,10 +6,14 @@ import { PipesModule } from '#shared/modules/pipes/pipes.module';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
 import { CartComponent } from './cart.component';
-import { CartOrderComponent, CartOrderQtyCounterComponent, OrderSentComponent } from './components';
+import {
+  CartOrderComponent,
+  CartOrderQtyCounterComponent,
+  OrderSentComponent,
+  OrderUnavailableComponent
+} from './components';
 import { NgxMaskModule } from 'ngx-mask';
 import { CartModalService } from './cart-modal.service';
-import { OrderUnavailableComponent } from './components/order/components/order-unavailable';
 import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';

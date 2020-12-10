@@ -126,6 +126,13 @@
     color: var(--color-primary);
   }
 
+  .table_list__basket .cell_more_mobile {
+    display: block;
+    bottom: 30px;
+    left: 50px;
+    position: absolute;
+  }
+
   .table_list__basket .cell_more {
     display: none;
   }

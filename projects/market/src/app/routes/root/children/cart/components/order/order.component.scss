@@ -294,6 +294,15 @@ button.btn:hover {
   color: #000000;
 }
 
+.table_list__basket .cell_more_mobile {
+  display: none;
+  img {
+    width: 20px;
+    height: auto;
+    opacity: 0.3;
+  }
+}
+
 .cell_more {
   width: auto;
   justify-self: flex-end;

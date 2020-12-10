@@ -171,6 +171,7 @@
                   </p>
 
                 </div>
+
                 <div class="table_cell cell_count" data-title="Количество:"
                      [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
                   <market-cart-order-qty-counter
@@ -180,10 +181,12 @@
                     [orderStep]="item.controls.orderQtyStep.value"
                   ></market-cart-order-qty-counter>
                 </div>
+
                 <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
                   <span
                     class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</span>
                 </div>
+
                 <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="orderType === 'order'">
                   <span
                     class="price">{{item.controls.total.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</span>
@@ -200,6 +203,7 @@
                 </span>
 
                 </div>
+
                 <div class="table_cell cell_more">
                   <div class="table_cell__inner more_actions__dropdown dropdown">
                     <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span></button>
@@ -207,13 +211,20 @@
                             [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
                     <nz-dropdown-menu #itemModal="nzDropdownMenu">
                       <div class="dropdown_block">
-                        <div class="dropdown_item dropdown_item__hover" (click)="removeItem(item.controls)">Удалить
-                          из заказа
+
+                        <div class="dropdown_item dropdown_item__hover"
+                             (click)="removeItem(item.controls)">Удалить из заказа
                         </div>
+
                       </div>
                     </nz-dropdown-menu>
                   </div>
                 </div>
+
+                <div class="table_cell cell_more_mobile">
+                  <img src="assets/img/svg/trash-can.svg" alt="Удалить из заказа" title="Удалить из заказа" (click)="removeItem(item.controls)">
+                </div>
+
               </div>
             </ng-container>
           </div>
