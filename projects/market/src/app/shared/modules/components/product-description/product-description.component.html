@@ -5,7 +5,8 @@
 
 <div class="section_paragraph" *ngIf="product?.features?.length">
   <h3>Краткие характеристики</h3>
-  <ul>
-    <li *ngFor="let item of product.features">{{feature(item)}}</li>
-  </ul>
+  <div class="feature" *ngFor="let item of product.features">
+    <span>{{item.featureName}}</span>
+    <span>{{item|marketFeatureValue}}</span>
+  </div>
 </div>

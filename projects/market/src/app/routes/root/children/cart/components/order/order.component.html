@@ -236,10 +236,10 @@
       <section id="section_tab__information" class="section_tab section_tab__limited">
         <div class="section_paragraph">
           <div class="order__shipping">
-            <div class="form-group_title">Укажите способ доставки</div>
+            <div class="form-group_title">Выберите предпочтительный способ поставки из предлагаемых поставщиком</div>
             <div class="form-group_radio order__shipping_type">
               <nz-radio-group formControlName="deliveryMethod">
-                <label nz-radio [nzValue]="opt.value" *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
+                <label nz-radio [nzValue]="opt.value" [nzDisabled]="opt.disabled" *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
               </nz-radio-group>
             </div>
             <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">

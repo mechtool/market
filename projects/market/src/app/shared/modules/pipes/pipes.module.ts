@@ -12,6 +12,7 @@ import { CurrencyPricePipe } from './currency.pipe';
 import { AbbreviatedBusinessNamePipe } from './abbreviated-business-name.pipe';
 import { CurrencyPipe } from '@angular/common';
 import { OrganizationLogoPipe } from './organization-logo.pipe';
+import { FeatureValuePipe } from './feature-value.pipe';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { OrganizationLogoPipe } from './organization-logo.pipe';
     CurrencyPricePipe,
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
+    FeatureValuePipe,
   ],
   exports: [
     MultiplierPipe,
@@ -41,6 +43,7 @@ import { OrganizationLogoPipe } from './organization-logo.pipe';
     CurrencyPricePipe,
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
+    FeatureValuePipe,
   ],
   providers: [
     CurrencyPipe
