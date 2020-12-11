@@ -103,18 +103,13 @@ export class TradeOfferTermsOfSaleModel {
 }
 
 export class TradeOfferDeliveryDescriptionModel {
-  deliveryRegions: TradeOfferDeliveryRegionsModel[];
-  pickupFrom: TradeOfferPickupFromModel[];
+  deliveryRegions: TradeOfferRegionsModel[];
+  pickupFrom: TradeOfferRegionsModel[];
 }
 
-export class TradeOfferDeliveryRegionsModel {
+export class TradeOfferRegionsModel {
   fiasCodes: string[];
   name: string;
-  countryOksmCode: string;
-}
-
-export class TradeOfferPickupFromModel {
-  fiasCodes: string[];
   address: string;
   countryOksmCode: string;
 }

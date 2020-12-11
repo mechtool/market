@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { CountryCode, TradeOfferResponseModel } from '#shared/modules/common-services/models';
+import { TradeOfferResponseModel } from '#shared/modules/common-services/models';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -34,7 +34,7 @@ export class TermsOfSaleComponent {
   }
 
   get minQuantity(): string {
-    if (this.tradeOffer.termsOfSale.price?.matrix) {
+    if (this.tradeOffer.termsOfSale.price?.matrix?.length) {
       const fromPackages = [...this.tradeOffer.termsOfSale.price.matrix]
         .sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
 
@@ -46,75 +46,6 @@ export class TermsOfSaleComponent {
       }
     }
     return null;
-  }
-
-  get offerDescription() {
-    if (this.tradeOffer.offerDescription?.title && this.tradeOffer.offerDescription?.description) {
-      return `${this.tradeOffer.offerDescription.title} ${this.tradeOffer.offerDescription.description}`;
-    }
-    if (this.tradeOffer.offerDescription?.title) {
-      return this.tradeOffer.offerDescription.title;
-    }
-    if (this.tradeOffer.offerDescription?.description) {
-      return this.tradeOffer.offerDescription?.description;
-    }
-    return null;
-  }
-
-  get orderRestrictions(): number {
-    if (this.tradeOffer.termsOfSale.orderRestrictions?.sum) {
-      return this.tradeOffer.termsOfSale.orderRestrictions.sum.minimum;
-    }
-    return null;
-  }
-
-  get maxDaysForShipment(): number {
-    return this.tradeOffer.termsOfSale.maxDaysForShipment;
-  }
-
-  get deliveryMethod(): string {
-    if (this.tradeOffer.deliveryDescription?.deliveryRegions && this.tradeOffer.deliveryDescription?.pickupFrom) {
-      return 'доставка и самовывоз';
-    }
-    if (this.tradeOffer.deliveryDescription?.deliveryRegions) {
-      return 'доставка';
-    }
-    if (this.tradeOffer.deliveryDescription?.pickupFrom) {
-      return 'самовывоз';
-    }
-    return null;
-  }
-
-  get delivery(): string {
-    if (this.tradeOffer.deliveryDescription?.deliveryRegions) {
-      let deliveryRegions = '';
-      this.tradeOffer.deliveryDescription.deliveryRegions
-        .forEach((tradeOfferDelivery, index, array) => {
-          if (tradeOfferDelivery.name) {
-            if (index + 1 < array.length) {
-              deliveryRegions += `${tradeOfferDelivery.name}, `;
-            } else {
-              deliveryRegions += tradeOfferDelivery.name;
-            }
-          }
-        });
-
-      if (!deliveryRegions.length) {
-        // todo пересмотреть, нужно ли в этом месте завязывать логику на коды всего мира
-        this.tradeOffer.deliveryDescription.deliveryRegions
-          .forEach((tradeOfferDelivery) => {
-            if (tradeOfferDelivery.countryOksmCode === CountryCode.RUSSIA) {
-              deliveryRegions = 'Доставка осуществляется по всей России';
-            }
-          });
-      }
-
-      return deliveryRegions;
-    }
-    return null;
-  }
-
-  constructor() {
   }
 
 }

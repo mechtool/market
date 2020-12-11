@@ -11,7 +11,7 @@
       <span class="info_group__label">В упаковке</span>
       <span class="info_group__value">{{packaging}}</span>
     </div>
-    <div class="info_group" *ngIf="minQuantity">
+    <div class="info_group" *ngIf="tradeOffer.termsOfSale.price?.matrix?.length">
       <span class="info_group__label">Заказ возможен</span>
       <span class="info_group__value">{{minQuantity}}</span>
     </div>
@@ -19,35 +19,41 @@
       <span class="info_group__label">Шаг заказа</span>
       <span class="info_group__value">{{packageMultiplicity}}</span>
     </div>
-    <div class="info_group" *ngIf="orderRestrictions">
+    <div class="info_group" *ngIf="tradeOffer.termsOfSale.orderRestrictions?.sum">
       <span class="info_group__label">Минимальная общая сумма заказа</span>
-      <span class="info_group__value">{{orderRestrictions | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
+      <span
+        class="info_group__value">{{tradeOffer.termsOfSale.orderRestrictions.sum.minimum | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
     </div>
   </div>
 </div>
 
 <div class="section_paragraph">
   <div class="info_group__small">
-    <div class="info_group" *ngIf="maxDaysForShipment">
+    <div class="info_group" *ngIf="tradeOffer.termsOfSale.maxDaysForShipment">
       <span class="info_group__label">Срок поставки</span>
       <span
-        class="info_group__value">{{maxDaysForShipment}} {{maxDaysForShipment | marketDeclension: 'день': 'дня': 'дней'}}</span>
+        class="info_group__value">{{tradeOffer.termsOfSale.maxDaysForShipment}} {{tradeOffer.termsOfSale.maxDaysForShipment | marketDeclension: 'день': 'дня': 'дней'}}</span>
     </div>
-    <div class="info_group" *ngIf="deliveryMethod">
+    <div class="info_group">
       <span class="info_group__label">Способ поставки</span>
-      <span class="info_group__value">{{deliveryMethod}}</span>
+      <span class="info_group__value">{{tradeOffer.deliveryDescription|marketDeliveryMethod}}</span>
     </div>
   </div>
 
-  <div *ngIf="delivery">
+  <div *ngIf="tradeOffer.deliveryDescription?.deliveryRegions?.length || !tradeOffer.deliveryDescription?.pickupFrom?.length">
     <h3>Регионы доставки</h3>
-    <p>{{delivery}}</p>
+    <p>{{tradeOffer.deliveryDescription.deliveryRegions | marketLocalityJoiner}}</p>
+  </div>
+
+  <div *ngIf="tradeOffer.deliveryDescription?.pickupFrom">
+    <h3>Адреса самовывоза</h3>
+    <p>{{tradeOffer.deliveryDescription.pickupFrom | marketLocalityJoiner: true}}</p>
   </div>
 </div>
 
 <div class="section_paragraph">
-  <div *ngIf="offerDescription">
+  <div *ngIf="tradeOffer.offerDescription">
     <h3>Описание предложения</h3>
-    <p>{{offerDescription}}</p>
+    <p>{{tradeOffer.offerDescription|marketOfferDescriptionJoiner}}</p>
   </div>
 </div>

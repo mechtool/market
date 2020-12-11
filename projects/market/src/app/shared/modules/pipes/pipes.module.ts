@@ -13,6 +13,9 @@ import { AbbreviatedBusinessNamePipe } from './abbreviated-business-name.pipe';
 import { CurrencyPipe } from '@angular/common';
 import { OrganizationLogoPipe } from './organization-logo.pipe';
 import { FeatureValuePipe } from './feature-value.pipe';
+import { LocalityJoinerPipe } from './locality-joiner.pipe';
+import { OfferDescriptionJoinerPipe } from './offer-description-joiner.pipe';
+import { DeliveryMethodPipe } from './delivery-method.pipe';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { FeatureValuePipe } from './feature-value.pipe';
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
     FeatureValuePipe,
+    LocalityJoinerPipe,
+    OfferDescriptionJoinerPipe,
+    DeliveryMethodPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -44,6 +50,9 @@ import { FeatureValuePipe } from './feature-value.pipe';
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
     FeatureValuePipe,
+    LocalityJoinerPipe,
+    OfferDescriptionJoinerPipe,
+    DeliveryMethodPipe,
   ],
   providers: [
     CurrencyPipe
