@@ -39,14 +39,14 @@ export class ProductComponent implements OnDestroy {
   }
 
   constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private _declensionPipe: DeclensionPipe,
     private _productService: ProductService,
     private _tradeOffersService: TradeOffersService,
-    private _activatedRoute: ActivatedRoute,
-    private _router: Router,
-    private _declensionPipe: DeclensionPipe,
+    private _cartPromoterService: CartPromoterService,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
-    private cartPromoterService: CartPromoterService,
   ) {
     this._activatedRoute.queryParams.subscribe(
       (param) => {
@@ -60,7 +60,7 @@ export class ProductComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.cartPromoterService.stop();
+    this._cartPromoterService.stop();
   }
 
   sortChange($event: SortModel) {
@@ -74,9 +74,9 @@ export class ProductComponent implements OnDestroy {
 
   madeOrder(isMadeOrder: boolean) {
     if (isMadeOrder) {
-      this.cartPromoterService.start();
+      this._cartPromoterService.start();
     } else {
-      this.cartPromoterService.stop();
+      this._cartPromoterService.stop();
     }
   }
 
@@ -131,7 +131,11 @@ export class ProductComponent implements OnDestroy {
           this.tradeOffer = tradeOffer;
         },
         (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          if (err.status === 404) {
+            this._router.navigate(['/404']);
+          } else {
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          }
         },
       );
   }

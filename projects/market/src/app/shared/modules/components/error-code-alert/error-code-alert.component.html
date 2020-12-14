@@ -18,6 +18,8 @@
   </div>
 </ng-template>
 <ng-template #close>
-  <span>Закрыть</span>
-  <img src="assets/img/svg/icon__close.svg" alt="×">
+  <a [routerLink]="['/']">
+    <span>Закрыть</span>
+    <img src="assets/img/svg/icon__close.svg" alt="×">
+  </a>
 </ng-template>

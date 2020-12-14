@@ -10,7 +10,7 @@ import {
   TradeOffersRequestModel,
   TradeOfferSummaryModel,
 } from '#shared/modules/common-services/models';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { catchError, switchMap } from 'rxjs/operators';
 
 import {
@@ -39,14 +39,15 @@ export class SupplierSingleComponent {
   sort: SortModel;
 
   constructor(
-    private _productService: ProductService,
-    private _tradeOffersService: TradeOffersService,
-    private _supplierService: SupplierService,
-    private _organizationsService: OrganizationsService,
+    private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    private _notificationsService: NotificationsService,
-    private _localStorageService: LocalStorageService,
+    private _productService: ProductService,
     private _spinnerService: SpinnerService,
+    private _supplierService: SupplierService,
+    private _tradeOffersService: TradeOffersService,
+    private _localStorageService: LocalStorageService,
+    private _organizationsService: OrganizationsService,
+    private _notificationsService: NotificationsService,
   ) {
     this._init();
   }
@@ -105,7 +106,11 @@ export class SupplierSingleComponent {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          if (err.status === 404) {
+            this._router.navigate(['/404']);
+          } else {
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          }
         },
       );
   }

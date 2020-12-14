@@ -1,6 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { throwError } from 'rxjs';
-import { ProductDto, SuppliersItemModel, TradeOfferResponseModel, TradeOfferSupplierModel } from '#shared/modules/common-services/models';
+import {
+  ProductDto,
+  SuppliersItemModel,
+  TradeOfferResponseModel,
+  TradeOfferSupplierModel
+} from '#shared/modules/common-services/models';
 import {
   CartPromoterService,
   ExternalProvidersService,
@@ -9,7 +14,7 @@ import {
   ProductService,
   TradeOffersService,
 } from '#shared/modules/common-services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -28,26 +33,27 @@ export class TradeOfferComponent implements OnDestroy {
   }
 
   constructor(
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _productService: ProductService,
     private _tradeOffersService: TradeOffersService,
+    private _cartPromoterService: CartPromoterService,
     private _organizationsService: OrganizationsService,
-    private _activatedRoute: ActivatedRoute,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
-    private cartPromoterService: CartPromoterService,
   ) {
     this._initTradeOffer();
   }
 
   ngOnDestroy(): void {
-    this.cartPromoterService.stop();
+    this._cartPromoterService.stop();
   }
 
   madeOrder(isMadeOrder: boolean) {
     if (isMadeOrder) {
-      this.cartPromoterService.start();
+      this._cartPromoterService.start();
     } else {
-      this.cartPromoterService.stop();
+      this._cartPromoterService.stop();
     }
   }
 
@@ -55,8 +61,7 @@ export class TradeOfferComponent implements OnDestroy {
     this._activatedRoute.params
       .pipe(
         switchMap((params) => {
-          const tradeOfferId = params.tradeOfferId;
-          return this._tradeOffersService.get(tradeOfferId);
+          return this._tradeOffersService.get(params.tradeOfferId);
         }),
         tap((tradeOffer) => {
           const tag = {
@@ -95,7 +100,11 @@ export class TradeOfferComponent implements OnDestroy {
           this.supplier = this._mapSupplier(tradeOffer.supplier);
         },
         (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          if (err.status === 404) {
+            this._router.navigate(['/404']);
+          } else {
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          }
         },
       );
   }
