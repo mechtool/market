@@ -579,8 +579,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.form.controls.deliveryArea
       .get('deliveryHouse')
       .valueChanges.pipe(
-      switchMap((house) => {
+      switchMap((house: string) => {
         if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
+
+          if (house.includes('литер')) {
+            /* todo сервис https://api.orgaddress.1c.ru не может найти адрес если передать текст в формате 'text=Санкт-Петербург г, Ленина ул, 12/36, литер А'
+            при этом 'text=Санкт-Петербург г, Ленина ул, 12/36, литер' успешно находится, поэтому пришлось подоткнуть тут данный костыль*/
+            const count = house.indexOf('литер') + 5;
+            house = house.substr(0, count);
+          }
+
           const query = {
             deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
             deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
