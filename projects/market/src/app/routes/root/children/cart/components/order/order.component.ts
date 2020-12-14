@@ -568,7 +568,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.selectedAddress = null;
           this.foundHouses = [];
           this.foundLocations = [];
-          this.foundStreets = cities.map((city) => city.street);
+          this.foundStreets = cities.map((city) => city.street).filter((street) => street);
           this._cdr.detectChanges();
         },
         (err) => {
@@ -601,7 +601,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     )
       .subscribe(
         (cities) => {
-          this.foundHouses = cities.map((city) => city.house);
+          this.foundHouses = cities.map((city) => city.house).filter((house) => house);
           this.foundLocations = cities;
           this.houseSelected();
           this._cdr.detectChanges();
