@@ -24,11 +24,13 @@
       </div>
       <div class="info_group" *ngIf="supplier.phone">
         <span class="info_group__label">Телефон</span>
-        <span class="info_group__value">{{supplier.phone}}</span>
+        <span *ngIf="!showPhone" class="info_group__link" (click)="showPhoneTrue()">Показать телефон {{supplier.phone|marketHiddenSymbols}}</span>
+        <span *ngIf="showPhone" class="info_group__value">{{supplier.phone}}</span>
       </div>
       <div class="info_group" *ngIf="supplier.email">
         <span class="info_group__label">E-mail</span>
-        <span class="info_group__value"><a href="mailto:{{supplier.email}}">{{supplier.email}}</a></span>
+        <span *ngIf="!showEmail" class="info_group__link" (click)="showEmailTrue()">Показать email {{supplier.email|marketHiddenSymbols}}</span>
+        <span *ngIf="showEmail" class="info_group__value"><a href="mailto:{{supplier.email}}">{{supplier.email}}</a></span>
       </div>
     </div>
   </div>

@@ -97,6 +97,18 @@
     }
   }
 
+  &__link {
+    padding-right: 2px;
+    flex-grow: 1;
+    text-align: right;
+    font-size: var(--font-size-15);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
   &__small {
     max-width: 270px;
   }

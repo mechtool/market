@@ -835,6 +835,18 @@ input[type='number'].switch_count__value {
   text-align: right;
 }
 
+.info_group__link {
+  padding-right: 2px;
+  flex-grow: 1;
+  text-align: right;
+  font-size: var(--font-size-15);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-accent);
+  }
+}
+
 .info_group__value a:hover {
   border-bottom: 1px solid var(--color-accent-light);
 }

@@ -1,9 +1,6 @@
-import { Inject, Injectable, Renderer2, RendererFactory2, PLATFORM_ID } from '@angular/core';
-import { Location, isPlatformBrowser } from '@angular/common';
-import { MetrikaEventTypeModel, MetrikaEventOptionsModel } from './models';
-import { delayedRetry } from '#shared/utils';
-import { from, Observable, of, throwError } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Inject, Injectable, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { isPlatformBrowser, Location } from '@angular/common';
+import { MetrikaEventOptionsModel, MetrikaEventTypeModel } from './models';
 import { UserStateService } from './user-state.service';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { environment } from '#environments/environment';

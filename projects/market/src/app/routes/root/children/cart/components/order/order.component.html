@@ -465,15 +465,17 @@
               <span class="info_group__value">{{supplierKPP}}</span>
             </div>
           </div>
-          <h3>Контакная информация</h3>
-          <div class="info_group__supplier">
-            <div class="info_group">
+          <div class="info_group__supplier" *ngIf="supplierPhone || supplierEmail">
+            <h3>Контакная информация</h3>
+            <div class="info_group" *ngIf="supplierPhone">
               <span class="info_group__label">Телефон</span>
-              <span class="info_group__value">{{supplierPhone}}</span>
+              <span *ngIf="!showPhone" class="info_group__link" (click)="showPhoneTrue()">Показать телефон {{supplierPhone|marketHiddenSymbols}}</span>
+              <span *ngIf="showPhone" class="info_group__value">{{supplierPhone}}</span>
             </div>
-            <div class="info_group">
+            <div class="info_group" *ngIf="supplierEmail">
               <span class="info_group__label">E-mail</span>
-              <span class="info_group__value">{{supplierEmail}}</span>
+              <span *ngIf="!showEmail" class="info_group__link" (click)="showEmailTrue()">Показать email {{supplierEmail|marketHiddenSymbols}}</span>
+              <span *ngIf="showEmail" class="info_group__value">{{supplierEmail}}</span>
             </div>
           </div>
         </div>

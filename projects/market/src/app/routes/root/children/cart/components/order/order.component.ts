@@ -174,6 +174,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   formValidChangeSubscription: Subscription;
+  showPhone = false;
+  showEmail = false;
 
   constructor(
     private _cdr: ChangeDetectorRef,
@@ -493,6 +495,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   disabledDate(current: Date): boolean {
     return differenceInCalendarDays(current, new Date()) < 1;
+  }
+
+  showPhoneTrue() {
+    this.showPhone = true;
+    this._externalProvidersService.fireGTMEvent({ event: 'PhoneClick' })
+  }
+
+  showEmailTrue() {
+    this.showEmail = true;
+    this._externalProvidersService.fireGTMEvent({ event: 'EmailClick' })
   }
 
   private _findOrderInCart(cartData: CartDataResponseModel): any {

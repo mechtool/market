@@ -16,6 +16,7 @@ import { FeatureValuePipe } from './feature-value.pipe';
 import { LocalityJoinerPipe } from './locality-joiner.pipe';
 import { OfferDescriptionJoinerPipe } from './offer-description-joiner.pipe';
 import { DeliveryMethodPipe } from './delivery-method.pipe';
+import { HiddenSymbolsPipe } from './hidden-symbols.pipe';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { DeliveryMethodPipe } from './delivery-method.pipe';
     LocalityJoinerPipe,
     OfferDescriptionJoinerPipe,
     DeliveryMethodPipe,
+    HiddenSymbolsPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -53,6 +55,7 @@ import { DeliveryMethodPipe } from './delivery-method.pipe';
     LocalityJoinerPipe,
     OfferDescriptionJoinerPipe,
     DeliveryMethodPipe,
+    HiddenSymbolsPipe,
   ],
   providers: [
     CurrencyPipe

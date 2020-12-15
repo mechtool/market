@@ -158,7 +158,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
       this.userLocation = this._localStorageService.getUserLocation();
     } else {
       this._localStorageService.putUserLocation(Megacity.ALL[0]);
-      this.userLocation = { name: 'Россия' };
+      this.userLocation = this._localStorageService.getUserLocation();
     }
   }
 
