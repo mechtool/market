@@ -13,6 +13,7 @@ export class CommerceMlDocumentResponseModel {
   products: Product[];
   signatory: string;
   outcome: Outcome[];
+  address: Address;
 }
 
 class Organization {
@@ -28,6 +29,11 @@ class Organization {
 export class Outcome {
   key: string;
   value: string;
+}
+
+class Address {
+  deliveryMethod: string;
+  place: string;
 }
 
 export class Product {

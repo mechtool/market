@@ -99,6 +99,7 @@
 
   <p>Исполнитель: {{document.signatory}}</p>
   <p *ngIf="document.comment">Комментарий: {{document.comment}}</p>
+  <p *ngIf="document.address">{{document.address.deliveryMethod}} по адресу: {{document.address.place}}</p>
 </div>
 
 <div class="error" *ngIf="isError">
