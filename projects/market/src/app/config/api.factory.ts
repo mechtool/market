@@ -4,6 +4,8 @@ import {
   CartService,
   CookieService,
   ExternalProvidersService,
+  LocalStorageService,
+  Megacity,
   MetrikaEventAppInitProblemsEnumModel,
   MetrikaEventTypeModel,
   UserService,
@@ -24,6 +26,7 @@ let location = null;
 let router = null;
 let retryNum = null;
 let retryDelay = null;
+let localStorageService = null;
 
 export function ApiFactory(injector: Injector): () => Promise<any> {
   cartService = injector.get(CartService);
@@ -31,6 +34,7 @@ export function ApiFactory(injector: Injector): () => Promise<any> {
   cookieService = injector.get(CookieService);
   userService = injector.get(UserService);
   externalProvidersService = injector.get(ExternalProvidersService);
+  localStorageService = injector.get(LocalStorageService);
   location = injector.get(Location);
   router = injector.get(Router);
   retryNum = injector.get(APP_CONFIG).retryNum;
@@ -49,6 +53,11 @@ function init() {
           return defer(() => {
             return isTicketInQueryParams() || isCookieAuthed() ? login$() : of(null);
           });
+        }),
+        tap(() => {
+          if (!localStorageService.hasUserLocation()) {
+            localStorageService.putUserLocation(Megacity.ALL[0]);
+          }
         }),
         tap(() => {
           userService.watchUserDataChangesForUserStatusCookie();

@@ -1,16 +1,29 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
   LocationModel,
-  Megacity,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
 } from '../../common-services/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { LocalStorageService, NotificationsService, ResponsiveService, SpinnerService } from '#shared/modules/common-services';
+import {
+  LocalStorageService,
+  NotificationsService,
+  ResponsiveService,
+  SpinnerService
+} from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -78,7 +91,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this._initUserLocation();
+    this.userLocation = this._localStorageService.getUserLocation();
     if (!this.suggestionsOff) {
       this._subscribeOnQueryChanges();
     }
@@ -151,15 +164,6 @@ export class SearchBarComponent implements OnInit, OnChanges {
     this.form = this._fb.group({
       query: ['', [Validators.required, Validators.minLength(this.minQueryLength)]],
     });
-  }
-
-  private _initUserLocation(): void {
-    if (this._localStorageService.hasUserLocation()) {
-      this.userLocation = this._localStorageService.getUserLocation();
-    } else {
-      this._localStorageService.putUserLocation(Megacity.ALL[0]);
-      this.userLocation = this._localStorageService.getUserLocation();
-    }
   }
 
   private _subscribeOnQueryChanges(): void {
