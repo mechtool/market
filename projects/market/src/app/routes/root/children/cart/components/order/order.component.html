@@ -470,12 +470,12 @@
             <div class="info_group" *ngIf="supplierPhone">
               <span class="info_group__label">Телефон</span>
               <span *ngIf="!showPhone" class="info_group__link" (click)="showPhoneTrue()">Показать телефон {{supplierPhone|marketHiddenSymbols}}</span>
-              <span *ngIf="showPhone" class="info_group__value">{{supplierPhone}}</span>
+              <span *ngIf="showPhone" class="info_group__value"><a [attr.href]="'tel:' + supplierPhone">{{supplierPhone}}</a></span>
             </div>
             <div class="info_group" *ngIf="supplierEmail">
               <span class="info_group__label">E-mail</span>
               <span *ngIf="!showEmail" class="info_group__link" (click)="showEmailTrue()">Показать email {{supplierEmail|marketHiddenSymbols}}</span>
-              <span *ngIf="showEmail" class="info_group__value">{{supplierEmail}}</span>
+              <span *ngIf="showEmail" class="info_group__value"><a [attr.href]="'mailto:' + supplierEmail">{{supplierEmail}}</a></span>
             </div>
           </div>
         </div>
