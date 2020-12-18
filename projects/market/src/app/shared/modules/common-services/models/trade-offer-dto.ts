@@ -13,6 +13,7 @@ export class TradeOfferDto {
   supplierName?: string;
   supplierInn?: string;
   audience?: AudienceModel[];
+  hasDiscount?: boolean;
 
   static fromTradeOffer(offer: TradeOffersModel): TradeOfferDto {
     return {
@@ -26,6 +27,7 @@ export class TradeOfferDto {
       supplierName: offer.supplier?.name,
       supplierInn: offer.supplier?.inn,
       audience: offer.audience,
+      hasDiscount: offer.priceMatrix?.some((matrix) => matrix.priceBeforeDiscount),
     };
   }
 }

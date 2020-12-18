@@ -17,10 +17,12 @@ import { LocalityJoinerPipe } from './locality-joiner.pipe';
 import { OfferDescriptionJoinerPipe } from './offer-description-joiner.pipe';
 import { DeliveryMethodPipe } from './delivery-method.pipe';
 import { HiddenSymbolsPipe } from './hidden-symbols.pipe';
+import { MinPricePipe } from './min-price.pipe';
 
 @NgModule({
   declarations: [
     MultiplierPipe,
+    MinPricePipe,
     DeclensionPipe,
     PlaceJoinerPipe,
     ArrayJoinerPipe,
@@ -40,6 +42,7 @@ import { HiddenSymbolsPipe } from './hidden-symbols.pipe';
   ],
   exports: [
     MultiplierPipe,
+    MinPricePipe,
     DeclensionPipe,
     PlaceJoinerPipe,
     ArrayJoinerPipe,

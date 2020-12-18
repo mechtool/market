@@ -28,6 +28,7 @@
     align-items: flex-start;
     border-top: none;
     height: auto;
+    margin-left: auto;
   }
 
   .table_cell[data-title]:before {
@@ -62,6 +63,7 @@
   }
 
   .table_list__products .table_cell {
+    display: flex;
     padding: 0;
     width: 100%;
   }
@@ -194,10 +196,12 @@
   }
 
   .table_list__basket .cell_sum {
+    display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: flex-start;
     margin-top: 10px;
+    margin-left: auto;
   }
 
   .table_list__basket .cell_sum[data-title]:before {

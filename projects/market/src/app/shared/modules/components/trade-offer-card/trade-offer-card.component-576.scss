@@ -73,7 +73,13 @@
   .catalog_item__link .tooltip_wrap {
     left: 20px;
     top: auto;
+    bottom: 70px;
+  }
+
+  .catalog_item__link .discount {
+    left: 20px;
     bottom: 20px;
+    top: auto;
   }
 
   .catalog_suppliers .catalog_item__info {

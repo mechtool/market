@@ -1,5 +1,6 @@
 <div *ngIf="tradeOffer">
   <div class="product_side" *ngIf="orderStatus === 0">
+    <!--todo Данный блок не используется, возможно стоит удалить + связанную с ним логику и стили-->
     <div class="to_cart__wrap">
       <h3>Добавить товар в <a [routerLink]="['/cart']">корзину</a></h3>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
@@ -17,8 +18,18 @@
       <p class="to_cart__supplier" *ngIf="isProductPage">от {{tradeOffer?.supplier.name | abbreviatedBusinessName}}</p>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <span *ngIf="price" itemprop="price">{{price | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
-        <span *ngIf="!price" itemprop="price">цена по запросу</span>
+        <p *ngIf="tradeOffer?.termsOfSale.price.hasDiscount">
+          <span class="price_before_discount"
+                nz-tooltip
+                nzTooltipTitle="Цена без скидки"
+                itemprop="price">{{tradeOffer?.termsOfSale.price.matrix | marketMinPrice: true | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
+        </p>
+        <p>
+          <span *ngIf="tradeOffer?.termsOfSale.price.matrix?.length"
+                itemprop="price">{{tradeOffer?.termsOfSale.price.matrix | marketMinPrice | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
+
+          <span *ngIf="!tradeOffer?.termsOfSale.price.matrix?.length" itemprop="price">цена по запросу</span>
+        </p>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
       <p class="to_cart__low_price" *ngIf="isProductPage">НИЗКАЯ ЦЕНА</p>
@@ -79,10 +90,21 @@
   <div class="price_matrix" *ngIf="matrix?.length > 1">
     <h3>Матрица цен</h3>
     <div class="price_matrix__group" *ngFor="let item of matrix">
-      <span class="price_matrix__label">От {{item.fromPackages}} шт.</span>
-      <span
-        class="price_matrix__value">{{item.price | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
-      <span class="price_matrix__nds">{{vat}}</span>
+      <p>
+        <span class="price_matrix__label">
+          От {{item.fromPackages}} {{tradeOffer.product.ref1cNomenclature?.baseUnitOkei?.nsymb || tradeOffer.product.supplierNomenclature?.baseUnitOkei?.nsymb}}.
+        </span>
+
+        <span class="price_matrix__value">{{item.price | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
+
+        <span class="price_matrix__nds">{{vat}}</span>
+
+        <img class="discount"
+             src="./assets/img/svg/discount.svg" alt="Скидки"
+             nz-tooltip
+             nzTooltipTitle="Цена без скидки {{item.priceBeforeDiscount | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}"
+             *ngIf="item.priceBeforeDiscount">
+      </p>
     </div>
   </div>
 </ng-template>

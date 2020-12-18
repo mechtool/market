@@ -34,6 +34,7 @@ export class TradeOfferSummaryPriceModel {
   currencyCode: string;
   vat: TradeOfferVatEnumModel;
   includesVAT: boolean;
+  hasDiscount: boolean;
   matrix: TradeOfferPriceMatrixModel[];
 }
 

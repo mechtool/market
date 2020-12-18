@@ -206,8 +206,18 @@ button.btn:hover {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   line-height: 19px;
-  color: #000000;
+  color: var(--color-black);
   white-space: normal;
+}
+
+.priceBeforeDiscount {
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-medium);
+  line-height: 19px;
+  color: var(--color-black);
+  white-space: normal;
+  text-decoration: line-through;
+  opacity: 0.5;
 }
 
 .cell_nds {
@@ -215,7 +225,7 @@ button.btn:hover {
   font-weight: var(--font-weight-light);
   opacity: 0.8;
   white-space: nowrap;
-  color: #000000;
+  color: var(--color-black);
   margin-left: 4px;
 }
 
@@ -225,7 +235,7 @@ button.btn:hover {
   margin-left: 4px;
   opacity: 0.8;
   white-space: nowrap;
-  color: #000000;
+  color: var(--color-black);
 }
 
 .tooltip_wrap {

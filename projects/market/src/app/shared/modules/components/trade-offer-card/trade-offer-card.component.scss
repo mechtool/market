@@ -128,7 +128,14 @@
 
 .catalog_item__link {
 
-  & .tooltip_wrap {
+  .discount {
+    position: absolute;
+    width: 20px;
+    right: 10px;
+    top: 10px;
+  }
+
+  .tooltip_wrap {
     position: absolute;
     top: 30px;
     left: 110px;

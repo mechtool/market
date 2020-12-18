@@ -925,6 +925,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       imageUrl: this._setImageUrl(product.imageUrls),
       quantity: product.quantity,
       price: product.price,
+      priceBeforeDiscount: product.priceBeforeDiscount,
       priceIncludesVAT: product.priceIncludesVAT || false,
       maxDaysForShipment: product.maxDaysForShipment,
       orderQtyMin: product.orderQtyMin,

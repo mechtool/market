@@ -30,6 +30,13 @@
   display: block;
 }
 
+.discount {
+  width: 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
 .tooltip {
   // todo вынести в глобальный конфиг, много где дублируется
   position: relative;
@@ -90,6 +97,14 @@
     line-height: 23px;
     margin-bottom: 5px;
     text-align: center;
+
+    .price_before_discount {
+      font-weight: var(--font-weight-medium);
+      font-size: var(--font-size-14);
+      opacity: 0.5;
+      text-decoration: line-through;
+      cursor: pointer;
+    }
   }
 
   &__nds {
@@ -125,7 +140,7 @@ a.attention-link {
 }
 
 .price_matrix {
-  width: 220px;
+  width: 250px;
 
   h3 {
     font-weight: var(--font-weight-medium);
@@ -140,7 +155,7 @@ a.attention-link {
     align-items: flex-start;
     position: relative;
     line-height: 22px;
-    padding: 4px 10px;
+    padding: 4px 0;
     border-bottom: 1px solid #f5f5f5;
   }
 
@@ -154,6 +169,7 @@ a.attention-link {
     padding-right: 2px;
     flex-grow: 1;
     text-align: right;
+    cursor: pointer;
   }
 
   &__nds {

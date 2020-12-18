@@ -25,9 +25,15 @@
             *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currencyPrice: tradeOffer.currencyCode}}</span>
     </span>
   </span>
+
   <div class="tooltip_wrap" *ngIf="tradeOffer.audience">
     <span class="tooltip"
           nz-tooltip
           nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
   </div>
+
+  <img class="discount" *ngIf="tradeOffer.hasDiscount"
+       src="./assets/img/svg/discount.svg" alt="Скидки"
+       nz-tooltip
+       nzTooltipTitle="Поставщик установил скидку на торговое предложение">
 </a>

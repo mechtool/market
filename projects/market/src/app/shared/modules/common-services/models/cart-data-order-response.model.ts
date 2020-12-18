@@ -22,6 +22,7 @@ export class CartDataOrderResponseModel {
       unitOkei: CartDataOrderOkeiResponseModel;
       quantity: number;
       price?: number;
+      priceBeforeDiscount?: number;
       priceIncludesVAT?: boolean;
       itemTotal: {
         total: number;

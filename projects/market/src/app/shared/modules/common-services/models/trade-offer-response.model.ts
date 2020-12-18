@@ -39,6 +39,7 @@ export class TradeOfferRef1cNomenclatureModel {
   productPartNumber: string;
   imageUrls: string[];
   baseUnitOkeiCode: string;
+  baseUnitOkei: TradeOfferBaseUnitOkei;
   manufacturer: {
     id: string;
     name: string;
@@ -59,6 +60,7 @@ export class TradeOfferSupplierNomenclature {
   productPartNumber: string;
   productBarCodes: string[];
   baseUnitOkeiCode: string;
+  baseUnitOkei: TradeOfferBaseUnitOkei;
   requisites: TradeOffer1SnRequisitesModel[];
   imageUrls: string[];
   ref1Cn: {
@@ -67,6 +69,12 @@ export class TradeOfferSupplierNomenclature {
     parentCategories: TradeOfferParentCategoriesModel[];
     requisites: TradeOffer1cRequisitesModel[];
   };
+}
+
+export class TradeOfferBaseUnitOkei {
+  code: string;
+  nsymb: string;
+  name: string;
 }
 
 export class TradeOffer1cRequisitesModel {
@@ -89,6 +97,7 @@ export class TradeOfferTermsOfSaleModel {
     currencyCode: string;
     vat: TradeOfferVatEnumModel;
     includesVAT: boolean;
+    hasDiscount: boolean;
     matrix: TradeOfferPriceMatrixModel[];
   };
   orderRestrictions: {

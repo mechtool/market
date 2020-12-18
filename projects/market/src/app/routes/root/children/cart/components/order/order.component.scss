@@ -179,7 +179,7 @@ button.btn:hover {
   vertical-align: middle;
   padding: 6px 0 6px 5px;
   height: 55px;
-  font-size: var(--font-size-13);
+  font-size: var(--font-size-12);
   line-height: 17px;
   border-top: 1px solid #ededed;
 }
@@ -230,7 +230,7 @@ button.btn:hover {
 
 .table_list__products .cell_title {
   cursor: pointer;
-  width: 265px;
+  width: 235px;
   font-weight: var(--font-weight-medium);
   margin-left: 50px;
 }
@@ -279,19 +279,19 @@ button.btn:hover {
 }
 
 .price {
-  font-size: var(--font-size-13);
+  font-size: var(--font-size-12);
   font-weight: var(--font-weight-bold);
   line-height: 19px;
-  color: #000000;
+  color: var(--color-black);
   white-space: nowrap;
 }
 
 .cell_nds {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-10);
   font-weight: var(--font-weight-light);
   opacity: 0.8;
   white-space: nowrap;
-  color: #000000;
+  color: var(--color-black);
 }
 
 .table_list__basket .cell_more_mobile {
@@ -320,6 +320,7 @@ button.btn:hover {
 
 .table_list__basket .cell_title {
   min-width: 210px;
+  height: auto;
 }
 
 .table_list__basket .cell_count {
@@ -328,7 +329,8 @@ button.btn:hover {
 }
 
 .table_list__basket .cell_price_one {
-  width: 120px;
+  display: grid;
+  width: 150px;
   flex-wrap: wrap;
   white-space: nowrap;
 }
@@ -338,22 +340,32 @@ button.btn:hover {
 }
 
 .table_list__basket .cell_sum {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+  display: grid;
+  align-items: center;
   min-width: 100px;
   white-space: nowrap;
   flex-wrap: wrap;
+  width: min-content;
 }
 
 .table_list__basket .table_header .cell_sum {
   white-space: normal;
+  align-items: center;
 }
 
 .price_one {
-  font-size: var(--font-size-13);
-  color: #000000;
+  font-size: var(--font-size-12);
+  color: var(--color-black);
+}
+
+.price_before_discount {
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  text-decoration: line-through;
+  opacity: 0.5;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 .table_list__basket .cell_right {
@@ -492,7 +504,7 @@ button.btn:hover {
 }
 
 .section_tab__title p {
-  color: #000000;
+  color: var(--color-black);
   text-align: center;
   margin: 15px 0 0;
   line-height: 19px;

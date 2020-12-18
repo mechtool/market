@@ -42,19 +42,13 @@ export class SupplierTradeOffersListComponent {
     return this.tradeOffersTotal < MAX_VALUE ? this.tradeOffersTotal : MAX_VALUE;
   }
 
-  constructor(private _router: Router, private _localStorageService: LocalStorageService) {
-  }
-
-  price(matrix: TradeOfferPriceMatrixModel[]): number {
-    if (matrix?.length) {
-      return matrix.sort((one, two) => one.price - two.price)[0].price;
-    }
-    return null;
+  constructor(private _router: Router,
+              private _localStorageService: LocalStorageService) {
   }
 
   minQuantity(matrix: TradeOfferPriceMatrixModel[], packageMultiplicity: number): number {
     if (matrix?.length) {
-      return matrix.sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
+      return [...matrix].sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
     }
     return packageMultiplicity;
   }

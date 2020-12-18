@@ -25,7 +25,8 @@
                 (click)="setConsumer(organization)">
               <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
                 <div class="supplier_image">
-                  <div class="supplier_image-color" style="{{organization.legalRequisites.inn | organizationLogo : true}}"></div>
+                  <div class="supplier_image-color"
+                       style="{{organization.legalRequisites.inn | organizationLogo : true}}"></div>
                 </div>
                 <div class="supplier_name">
                   {{organization?.organizationName | abbreviatedBusinessName}}
@@ -127,7 +128,7 @@
             <ng-container [formGroupName]="i">
               <div class="cell_left">
                 <div class="cell_image"
-                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                     (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   <img src="{{item.controls.imageUrl.value}}"
                        alt="{{item.controls.productName.value}}"
                        title="{{item.controls.productName.value}}"
@@ -137,14 +138,14 @@
               <div class="cell_right">
 
                 <div class="table_cell cell_title"
-                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
-                    {{item.controls.productName.value}}
+                     (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                  {{item.controls.productName.value}}
                 </div>
 
                 <div [ngClass]="{'d-none': !item.controls.partNumber.value}"
-                  class="table_cell cell_article"
-                  data-title="Артикул:"
-                  (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+                     class="table_cell cell_article"
+                     data-title="Артикул:"
+                     (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
                   {{item.controls.partNumber.value}}
                 </div>
 
@@ -174,6 +175,7 @@
 
                 <div class="table_cell cell_count" data-title="Количество:"
                      [ngClass]="{'not_clickable': item.controls.availableToOrder.errors}">
+                  <!--todo Оставить на сайте только один джостик, есть еще market-product-side, пробовал заменить на него, вроде все ок, пропадает лаг при нажатии на - или + -->
                   <market-cart-order-qty-counter
                     formControlName="quantity"
                     [isDisabled]="isOrderLoading"
@@ -183,30 +185,34 @@
                 </div>
 
                 <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
-                  <span
-                    class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</span>
+                  <p *ngIf="item.controls.priceBeforeDiscount.value">
+                    <span nz-tooltip
+                          nzTooltipTitle="Цена без скидки"
+                          class="price_before_discount">{{item.controls.priceBeforeDiscount.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</span>
+                  </p>
+
+                  <p>
+                    <span class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
+                  </p>
                 </div>
 
                 <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="orderType === 'order'">
-                  <span
-                    class="price">{{item.controls.total.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}</span>
+                  <p>
+                    <span class="price">{{item.controls.total.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
+                  </p>
 
-                  <span
-                    class="cell_nds"
-                    *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">
-                    НДС {{item.controls.vat.value / 100 | percent}}
-                </span>
-                  <span
-                    class="cell_nds"
-                    *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">
-                    без НДС
-                </span>
-
+                  <p>
+                    <span class="cell_nds"
+                        *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">НДС {{item.controls.vat.value / 100 | percent}}</span>
+                    <span class="cell_nds"
+                        *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">без НДС</span>
+                  </p>
                 </div>
 
                 <div class="table_cell cell_more">
                   <div class="table_cell__inner more_actions__dropdown dropdown">
-                    <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span></button>
+                    <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span>
+                    </button>
                     <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown
                             [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
                     <nz-dropdown-menu #itemModal="nzDropdownMenu">
@@ -222,7 +228,8 @@
                 </div>
 
                 <div class="table_cell cell_more_mobile">
-                  <img src="assets/img/svg/trash-can.svg" alt="Удалить из заказа" title="Удалить из заказа" (click)="removeItem(item.controls)">
+                  <img src="assets/img/svg/trash-can.svg" alt="Удалить из заказа" title="Удалить из заказа"
+                       (click)="removeItem(item.controls)">
                 </div>
 
               </div>
@@ -239,7 +246,8 @@
             <div class="form-group_title">Выберите предпочтительный способ поставки из предлагаемых поставщиком</div>
             <div class="form-group_radio order__shipping_type">
               <nz-radio-group formControlName="deliveryMethod">
-                <label nz-radio [nzValue]="opt.value" [nzDisabled]="opt.disabled" *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
+                <label nz-radio [nzValue]="opt.value" [nzDisabled]="opt.disabled"
+                       *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
               </nz-radio-group>
             </div>
             <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">
@@ -469,13 +477,17 @@
             <h3>Контакная информация</h3>
             <div class="info_group" *ngIf="supplierPhone">
               <span class="info_group__label">Телефон</span>
-              <span *ngIf="!showPhone" class="info_group__link" (click)="showPhoneTrue()">Показать телефон {{supplierPhone|marketHiddenSymbols}}</span>
-              <span *ngIf="showPhone" class="info_group__value"><a [attr.href]="'tel:' + supplierPhone">{{supplierPhone}}</a></span>
+              <span *ngIf="!showPhone" class="info_group__link"
+                    (click)="showPhoneTrue()">Показать телефон {{supplierPhone|marketHiddenSymbols}}</span>
+              <span *ngIf="showPhone" class="info_group__value"><a
+                [attr.href]="'tel:' + supplierPhone">{{supplierPhone}}</a></span>
             </div>
             <div class="info_group" *ngIf="supplierEmail">
               <span class="info_group__label">E-mail</span>
-              <span *ngIf="!showEmail" class="info_group__link" (click)="showEmailTrue()">Показать email {{supplierEmail|marketHiddenSymbols}}</span>
-              <span *ngIf="showEmail" class="info_group__value"><a [attr.href]="'mailto:' + supplierEmail">{{supplierEmail}}</a></span>
+              <span *ngIf="!showEmail" class="info_group__link"
+                    (click)="showEmailTrue()">Показать email {{supplierEmail|marketHiddenSymbols}}</span>
+              <span *ngIf="showEmail" class="info_group__value"><a
+                [attr.href]="'mailto:' + supplierEmail">{{supplierEmail}}</a></span>
             </div>
           </div>
         </div>
@@ -511,14 +523,15 @@
       <div class="form_warning" *ngIf="!unavailableToOrder && minOrderAmountViolations">
         <p>
           <img class="img_warning"
-             src="./assets/img/svg/warning.svg"
-             alt="">
+               src="./assets/img/svg/warning.svg"
+               alt="">
           {{minOrderAmountViolations.message}}
         </p>
       </div>
 
       <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="submit" nzType="primary" [disabled]="form.invalid && selectedTabIndex == 1">
+        <button id="checkoutButton" nz-button type="submit" nzType="primary"
+                [disabled]="form.invalid && selectedTabIndex == 1">
           {{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
       </div>

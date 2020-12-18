@@ -27,14 +27,10 @@ export class ProductOrderComponent implements OnInit {
   vat: string;
   form: FormGroup;
   isVisible = false;
-  private _price: number;
+  price: number;
 
   get minQuantity(): number {
     return this.matrix?.length ? this.matrix[0].fromPackages : this.tradeOffer.termsOfSale?.packageMultiplicity;
-  }
-
-  get price(): number {
-    return this._price ? this._price : this._closest(this.matrix);
   }
 
   get vatInfo() {
@@ -62,33 +58,33 @@ export class ProductOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.vat = this._getVat();
     this._closeModalOnResolutionChanges();
     this._cartService.getCartData$()
       .pipe(
         debounceTime(400)
       )
       .subscribe(
-      (res) => {
-        const tradeOfferId = this.tradeOffer?.id;
-        const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
-          return [...curr.items, ...accum];
-        }, []);
-        const foundTradeOffer = cartTradeOffers.find((x) => {
-          return x.tradeOfferId === tradeOfferId;
-        });
-        if (foundTradeOffer) {
-          this._price = foundTradeOffer.itemTotal?.total;
-          this.orderStatus = OrderStatusModal.IN_CART;
-        } else {
-          this._price = null;
-          this.orderStatus = OrderStatusModal.TO_CART;
-        }
-      },
-      (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      },
-    );
+        (res) => {
+          this.vat = this._getVat();
+          const tradeOfferId = this.tradeOffer?.id;
+          const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
+            return [...curr.items, ...accum];
+          }, []);
+          const foundTradeOffer = cartTradeOffers.find((x) => {
+            return x.tradeOfferId === tradeOfferId;
+          });
+          if (foundTradeOffer) {
+            this.price = foundTradeOffer.itemTotal?.total;
+            this.orderStatus = OrderStatusModal.IN_CART;
+          } else {
+            this.price = null;
+            this.orderStatus = OrderStatusModal.TO_CART;
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
   }
 
   private _closeModalOnResolutionChanges(): void {
@@ -121,12 +117,5 @@ export class ProductOrderComponent implements OnInit {
       default:
         return null;
     }
-  }
-
-  private _closest(matrix: TradeOfferPriceMatrixModel[]) {
-    if (matrix?.length) {
-      return matrix.sort((one, two) => one.price - two.price)[0].price;
-    }
-    return null;
   }
 }

@@ -25,6 +25,7 @@ enum Operation {
 })
 export class ProductSideComponent implements OnInit, AfterViewInit {
   @ViewChild('inputEl') inputEl: ElementRef;
+  // todo переписать логику, для работы компонента достаточно tradeOfferId + несколько полей для метрики
   @Input() tradeOffer: TradeOfferResponseModel;
   @Input() minQuantity: number;
   @Input() orderStep: number;
