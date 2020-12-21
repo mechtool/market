@@ -291,9 +291,9 @@
                          id="city_delivery_address_input"
                          formControlName="deliveryCity"
                          autocomplete="off"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToCityNotAvailable || form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
-                         placeholder="Город"
+                         placeholder="Город*"
                          (keyup.enter)="citySelected()"
                          [nzAutocomplete]="auto_city">
 
@@ -308,9 +308,9 @@
                          id="street_delivery_address_input"
                          formControlName="deliveryStreet"
                          autocomplete="off"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable || form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
-                         placeholder="Улица"
+                         placeholder="Улица*"
                          (keyup.enter)="streetSelected()"
                          [nzAutocomplete]="auto_street">
 
@@ -340,6 +340,16 @@
                 <div class="input_error"
                      *ngIf="form.controls.deliveryArea.errors?.deliveryNotAvailable">
                   Нет доставки по указанному адресу
+                </div>
+
+                <div class="input_error"
+                     *ngIf="form.controls.deliveryArea.errors?.deliveryToCityNotAvailable">
+                  Нет доставки в указанный город
+                </div>
+
+                <div class="input_error"
+                     *ngIf="form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable">
+                  Нет доставки на указанную улицу
                 </div>
 
                 <div class="input_error"

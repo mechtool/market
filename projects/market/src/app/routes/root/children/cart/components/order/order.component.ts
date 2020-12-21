@@ -234,20 +234,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     this.formValidChangeSubscription.unsubscribe();
   }
 
-  citySelected() {
-    if (this.form.get('deliveryArea').get('deliveryCity').value?.length) {
-      this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
-      this.elementInputStreet?.nativeElement.focus();
-    }
-  }
-
-  streetSelected() {
-    if (this.form.get('deliveryArea').get('deliveryStreet').value?.length) {
-      this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
-      this.elementInputHouse?.nativeElement.focus();
-    }
-  }
-
   setPickupArea(pickupPoint) {
     this.form.patchValue({
       pickupArea: pickupPoint,
@@ -550,7 +536,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.selectedAddress = null;
           this.foundStreets = [];
           this.foundHouses = [];
-          this.foundLocations = [];
+          this.foundLocations = cities;
           this.foundCities = cities.map((city) => city.locality).filter((value, index, self) => self.indexOf(value) === index);
           this._cdr.detectChanges();
         },
@@ -579,7 +565,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         (cities) => {
           this.selectedAddress = null;
           this.foundHouses = [];
-          this.foundLocations = [];
+          this.foundLocations = cities;
           this.foundStreets = cities.map((city) => city.street).filter((street) => street);
           this._cdr.detectChanges();
         },
@@ -624,30 +610,83 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       );
   }
 
+  citySelected() {
+    const city = this.form.controls.deliveryArea.value.deliveryCity;
+    const location = this.foundLocations.find((loc) => loc.locality === city);
+
+    if (location) {
+
+      if (this._deliveryByRussia()) {
+        this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
+        this.elementInputStreet?.nativeElement.focus();
+
+      } else {
+        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
+          if (isAvailable) {
+            this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
+            this.elementInputStreet?.nativeElement.focus();
+          } else {
+            this.form.controls.deliveryArea.setErrors({ deliveryToCityNotAvailable: true }, { emitEvent: true });
+            this.elementInputCity?.nativeElement.blur();
+          }
+        });
+      }
+
+    } else {
+      this.form.controls.deliveryArea.setErrors({ deliveryToCityNotAvailable: true }, { emitEvent: true });
+      this.elementInputCity?.nativeElement.blur();
+    }
+  }
+
+  streetSelected() {
+    const street = this.form.controls.deliveryArea.value.deliveryStreet;
+    const location = this.foundLocations.find((loc) => loc.street === street);
+
+    if (location) {
+
+      if (this._deliveryByRussia()) {
+        this.selectedAddress = location;
+        this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
+        this.elementInputHouse?.nativeElement.focus();
+      } else {
+        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
+          if (isAvailable) {
+            this.selectedAddress = location;
+            this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
+            this.elementInputHouse?.nativeElement.focus();
+          } else {
+            this.form.controls.deliveryArea.setErrors({ deliveryToStreetNotAvailable: true }, { emitEvent: true });
+            this.elementInputStreet?.nativeElement.blur();
+          }
+        });
+      }
+
+    } else {
+      this.form.controls.deliveryArea.setErrors({ deliveryToStreetNotAvailable: true }, { emitEvent: true });
+      this.elementInputStreet?.nativeElement.blur();
+    }
+  }
+
   private houseSelected() {
     const house = this.form.controls.deliveryArea.value.deliveryHouse;
     const location = this.foundLocations.find((loc) => loc.house === house);
 
-    if (!location) {
-      this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
-    } else {
-      const hasRussianCode = this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
+    if (location) {
 
-      if (hasRussianCode) {
+      if (this._deliveryByRussia()) {
         this.selectedAddress = location;
-      } else if (this.validDeliveryFiasCode?.length) {
+      } else {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
             this.selectedAddress = location;
-          } else {
-            this.form.controls.deliveryArea.setErrors({ deliveryNotAvailable: true }, { emitEvent: true });
           }
         });
-      } else {
-        // todo Пока считаем, что если поставщик не указал ни самовывоз, ни доставку, то он доставляет по все России
-        this.selectedAddress = location;
       }
     }
+  }
+
+  private _deliveryByRussia(): boolean {
+    return !this.validDeliveryFiasCode?.length || this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
   }
 
   private _watchItemQuantityChanges() {
