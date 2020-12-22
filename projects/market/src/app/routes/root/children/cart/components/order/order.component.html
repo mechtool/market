@@ -89,13 +89,6 @@
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="Поставщик"
-              nzDisabled="{{!order?.supplier}}">
-        <div class="tab-content">
-          <ng-container *ngTemplateOutlet="supplierData"></ng-container>
-        </div>
-      </nz-tab>
-
     </nz-tabset>
 
     <ng-template #tableProducts>
@@ -461,49 +454,6 @@
       </section>
     </ng-template>
 
-    <ng-template #supplierData>
-      <section id="section_tab__supplier" class="section_tab section_tab__supplier section_tab__limited">
-        <div class="section_paragraph">
-          <h3>Поставщик</h3>
-          <p class="supplier_title">
-          <span class="supplier_image">
-            <div class="supplier_image-color" style="{{supplierINN | organizationLogo : true}}"></div>
-          </span>
-            <span class="supplier_name">
-              {{supplierName | abbreviatedBusinessName}}
-          </span>
-          </p>
-          <div class="info_group__supplier">
-            <div class="info_group">
-              <span class="info_group__label">ИНН</span>
-              <span class="info_group__value">{{supplierINN}}</span>
-            </div>
-            <div class="info_group" *ngIf="supplierKPP">
-              <span class="info_group__label">КПП</span>
-              <span class="info_group__value">{{supplierKPP}}</span>
-            </div>
-          </div>
-          <div class="info_group__supplier" *ngIf="supplierPhone || supplierEmail">
-            <h3>Контакная информация</h3>
-            <div class="info_group" *ngIf="supplierPhone">
-              <span class="info_group__label">Телефон</span>
-              <span *ngIf="!showPhone" class="info_group__link"
-                    (click)="showPhoneTrue()">Показать телефон {{supplierPhone|marketHiddenSymbols}}</span>
-              <span *ngIf="showPhone" class="info_group__value"><a
-                [attr.href]="'tel:' + supplierPhone">{{supplierPhone}}</a></span>
-            </div>
-            <div class="info_group" *ngIf="supplierEmail">
-              <span class="info_group__label">E-mail</span>
-              <span *ngIf="!showEmail" class="info_group__link"
-                    (click)="showEmailTrue()">Показать email {{supplierEmail|marketHiddenSymbols}}</span>
-              <span *ngIf="showEmail" class="info_group__value"><a
-                [attr.href]="'mailto:' + supplierEmail">{{supplierEmail}}</a></span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </ng-template>
-
     <div class="order__total">
       <div class="order__total_price" *ngIf="orderType === 'order'">
 
@@ -540,10 +490,11 @@
       </div>
 
       <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="submit" nzType="primary"
-                [disabled]="form.invalid && selectedTabIndex == 1">
+        <button id="checkoutButton" nz-button type="submit" nzType="primary">
           {{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
+        <button nz-button nzType="link" type="button" (click)="back()" *ngIf="selectedTabIndex === 0 && isHistoryAvailable">Продолжить подбор</button>
+        <button nz-button nzType="link" type="button" (click)="changeSelectedTabIndex(0)" *ngIf="selectedTabIndex === 1">Вернуться к товарам</button>
       </div>
     </div>
 

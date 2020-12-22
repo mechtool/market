@@ -1,8 +1,8 @@
-import { ComponentRef, Injectable, ViewContainerRef } from '@angular/core';
+import { ComponentRef, Injectable, OnDestroy, ViewContainerRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { BehaviorSubject, fromEvent } from 'rxjs';
+import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
 import { debounceTime, filter, map, pairwise } from 'rxjs/operators';
 import { CategoryModel, MetrikaEventTypeModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
@@ -15,7 +15,7 @@ import { UserStateService } from './user-state.service';
 
 @UntilDestroy({ checkProperties: true })
 @Injectable()
-export class NavigationService {
+export class NavigationService implements OnDestroy {
   private _isNavBarMinified = false;
   isNavBarMinified$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _isMenuOpened = false;
@@ -25,6 +25,8 @@ export class NavigationService {
   selectedPortal: Portal<any> | null;
   overlayRef: OverlayRef;
   componentRef: ComponentRef<any>;
+  history: string[] = [];
+  historySubscription: Subscription;
 
   private _viewContainerRef: ViewContainerRef;
 
@@ -214,6 +216,7 @@ export class NavigationService {
     private _activatedRoute: ActivatedRoute,
     private _location: Location,
   ) {
+    this.setHistory();
     this._componentPortal = new ComponentPortal(NavbarNavComponent);
     this._setUserCategories();
     this.setInitialMainCategorySelectedId();
@@ -221,6 +224,27 @@ export class NavigationService {
     this._renderInitialNavBar();
     this._setInitialNavBarType();
     this._closeCategoriesLayerOnNavigation();
+  }
+
+  ngOnDestroy() {
+    this.historySubscription?.unsubscribe();
+  }
+
+  setHistory() {
+    this.historySubscription = this._router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.history.push(event.urlAfterRedirects);
+      }
+    });
+  }
+
+  back(): void {
+    this.history.pop();
+    if (this.history.length > 1) {
+      this._location.back();
+    } else {
+      this._router.navigateByUrl('/');
+    }
   }
 
   screenWidthGreaterThan(val: number): boolean {

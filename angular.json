@@ -18,7 +18,8 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "allowedCommonJsDependencies": [
-              "@ant-design/colors"
+              "@ant-design/colors",
+              "@tweenjs/tween.js"
             ],
             "buildOptimizer": true,
             "customWebpackConfig": {
