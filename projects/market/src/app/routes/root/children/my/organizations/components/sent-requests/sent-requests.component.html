@@ -16,7 +16,7 @@
         <span>Дата</span>
       </div>
     </div>
-    <div class="table_row" *ngFor="let req of requests">
+    <div class="table_row" [ngClass]="{'new_info': lastVisitLt(req.requestDate)}" *ngFor="let req of requests">
       <div class="table_cell cell_title">
         <span class="supplier_title">
           <span class="supplier_image" style="{{req.organization.legalRequisites.inn | organizationLogo : true}}"></span>
@@ -30,7 +30,7 @@
       </div>
       <div class="table_cell cell_date">
         <div class="table_cell__inner">
-          {{req.requestStatus?.resolutionDate || req.requestDate | date:'dd MMMM yyyy г.' }}
+          {{req.requestStatus?.resolutionDate || req.requestDate | date:'HH:mm dd MMMM yyyy г.' }}
         </div>
       </div>
     </div>

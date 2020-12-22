@@ -11,7 +11,12 @@
 .table_row {
   display: table-row;
   position: relative;
+
+  &.new_info {
+    background-color: var(--color-accent-lighter);
+  }
 }
+
 
 .table_header {
   opacity: .6;

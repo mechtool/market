@@ -18,6 +18,7 @@ const USER_LOCATION_STORAGE_KEY = 'user_location';
 const CART_LOCATION_STORAGE_KEY = 'cart_location';
 const CART_DATA_STORAGE_KEY = 'cart_data';
 const USER_AND_COOKIES_AGREEMENT_STORAGE_KEY = 'user_and_cookies_agreement';
+const LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY = 'later_visit_my_organizations';
 
 @Injectable()
 export class LocalStorageService {
@@ -172,6 +173,14 @@ export class LocalStorageService {
 
   putUserAndCookiesAgreement() {
     this._storage.set(USER_AND_COOKIES_AGREEMENT_STORAGE_KEY, true);
+  }
+
+  putDateOfLaterVisitMyOrganizations(date: number): void {
+    this._storage.set(LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY, date);
+  }
+
+  getDateOfLaterVisitMyOrganizations(): string {
+    return this._storage.get(LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY);
   }
 
   private toHexId(text: string): string {

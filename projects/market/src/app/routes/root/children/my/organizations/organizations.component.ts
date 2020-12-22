@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { OrganizationsService } from '#shared/modules/common-services/organizations.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { UserService } from '#shared/modules/common-services/user.service';
@@ -14,6 +14,7 @@ import { OrganizationResponseModel } from '#shared/modules/common-services/model
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
+import { LocalStorageService } from '#shared/modules';
 
 type TabType = 'a' | 'b' | 'c';
 
@@ -24,6 +25,7 @@ type TabType = 'a' | 'b' | 'c';
 export class OrganizationsComponent implements OnInit {
   existingOrganization: OrganizationResponseModel = null;
   checkedLegalRequisites = {};
+  newSentRequests: number;
   private _activeTabType: TabType;
 
   get activeTabType(): TabType {
@@ -46,15 +48,17 @@ export class OrganizationsComponent implements OnInit {
   }
 
   constructor(
-    private _modalService: NzModalService,
-    private _viewContainerRef: ViewContainerRef,
-    private _organizationsService: OrganizationsService,
-    private _notificationsService: NotificationsService,
-    private _userService: UserService,
-    private _activatedRoute: ActivatedRoute,
-    private _router: Router,
     private _externalProvidersService: ExternalProvidersService,
-  ) {}
+    private _notificationsService: NotificationsService,
+    private _organizationsService: OrganizationsService,
+    private _localStorageService: LocalStorageService,
+    private _viewContainerRef: ViewContainerRef,
+    private _activatedRoute: ActivatedRoute,
+    private _modalService: NzModalService,
+    private _userService: UserService,
+    private _router: Router,
+  ) {
+  }
 
   ngOnInit() {
     this._setActiveTabType('a');
@@ -240,8 +244,18 @@ export class OrganizationsComponent implements OnInit {
 
   private _setUserParticipationRequests() {
     this._organizationsService.getOwnParticipationRequests().subscribe(
-      (res) => {
-        this._userService.ownParticipationRequests$.next(res);
+      (participationRequests) => {
+        this._userService.ownParticipationRequests$.next(participationRequests);
+
+        const lastVisit = this._localStorageService.getDateOfLaterVisitMyOrganizations();
+        this.newSentRequests = undefined;
+        if (lastVisit) {
+          participationRequests.forEach((request) => {
+            if (new Date(lastVisit) < new Date(request.requestDate)) {
+              this.newSentRequests = ++this.newSentRequests || 1;
+            }
+          });
+        }
       },
       (err) => {
         this._notificationsService.error('Произошла ошибка при получении запросов на присоединение');

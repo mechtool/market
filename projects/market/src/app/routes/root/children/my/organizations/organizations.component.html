@@ -10,14 +10,14 @@
       class="tab_item tab_item__main"
       [ngClass]="{'active': activeTabType == 'a'}"
       (click)="goToTab('a')">
-        <span class="data_counter data_counter__gray" [attr.data_counter]="(userOrganizations$ | async)?.length || null">Действующие</span>
+        <span class="data_counter data_counter__gray">Действующие</span>
     </span>
 
     <span
       class="tab_item tab_long"
       [ngClass]="{'active': activeTabType == 'b'}"
       (click)="goToTab('b')">
-        <span class="data_counter" [attr.data_counter]="(userOwnParticipationRequests$ | async)?.length || null">Отправленные запросы</span>
+        <span class="data_counter" [attr.data_counter]="newSentRequests">Отправленные запросы</span>
     </span>
 
     <span
