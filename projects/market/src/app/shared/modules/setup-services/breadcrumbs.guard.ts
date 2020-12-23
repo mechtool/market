@@ -21,6 +21,7 @@ import { resizeBusinessStructure } from '#shared/utils';
  */
 const pathsObjectWithoutBreadcrumbs = {
   '/': /^\/$/i,
+  '/blank': /^\/blank$/i,
   '/404': /^\/404$/i,
   '/500': /^\/500$/i,
   '/search': /^\/search$/i,
@@ -64,8 +65,7 @@ export class BreadcrumbsGuard implements CanActivate {
     private _tradeOffersService: TradeOffersService,
     private _userService: UserService,
     private _userStateService: UserStateService,
-  ) {
-  }
+  ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     const urlWithoutQueryParams = state.url.split('?')[0];

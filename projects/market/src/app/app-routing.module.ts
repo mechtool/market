@@ -37,6 +37,11 @@ const routes: Routes = [
         loadChildren: () => import('./routes/root/children/cart/cart.module').then((m) => m.CartModule),
       },
       {
+        path: 'blank',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/blank/blank.module').then((m) => m.BlankModule),
+      },
+      {
         path: 'category',
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/category/category.module').then((m) => m.CategoryModule),

@@ -315,29 +315,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   checkForValidityAndCreateOrder() {
-    const tag = {
-      event: 'checkout',
-      ecommerce: {
-        currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
-        value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
-        checkout: {
-          actionField: { step: 1, option: 'checkout' },
-          products: this.order.items?.map((item) => {
-            return {
-              name: item.productName || '',
-              id: item.tradeOfferId || '',
-              price: item.price ? item.price / 100 : '',
-              brand: '',
-              category: '',
-              variant: this.order?.supplier?.name || '',
-              quantity: item.quantity || '',
-            };
-          }),
-        },
-      },
-    };
-    this._externalProvidersService.fireGTMEvent(tag);
-
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER);
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
       ...(this.orderRelationHref && {
@@ -780,6 +757,29 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _createOrder() {
+    const tag = {
+      event: 'checkout',
+      ecommerce: {
+        currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
+        value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
+        checkout: {
+          actionField: { step: 1, option: 'checkout' },
+          products: this.order.items?.map((item) => {
+            return {
+              name: item.productName || '',
+              id: item.tradeOfferId || '',
+              price: item.price ? item.price / 100 : '',
+              brand: '',
+              category: '',
+              variant: this.order?.supplier?.name || '',
+              quantity: item.quantity || '',
+            };
+          }),
+        },
+      },
+    };
+    this._externalProvidersService.fireGTMEvent(tag);
+
     const data = {
       customerOrganizationId: this.form.get('consumerId').value,
       contacts: {

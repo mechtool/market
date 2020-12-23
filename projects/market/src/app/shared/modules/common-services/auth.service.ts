@@ -104,7 +104,7 @@ export class AuthService {
   }
 
   goTo(url: string): void {
-    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true }).then((x) => {
+    this._router.navigateByUrl('/blank', { skipLocationChange: true }).then((x) => {
       this._router.navigateByUrl(url);
       this._location.replaceState(this._location.path().split('?')[0], '');
     });
