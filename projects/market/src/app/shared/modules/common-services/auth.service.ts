@@ -1,8 +1,8 @@
 import { DOCUMENT, Location } from '@angular/common';
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, Subject, throwError } from 'rxjs';
-import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
 import { ApiService } from './api.service';
@@ -30,7 +30,8 @@ export class AuthService {
     private _userService: UserService,
     private _organizationsService: OrganizationsService,
     private _router: Router,
-  ) {}
+  ) {
+  }
 
   logout(path: string = '/'): Observable<any> {
     return of(null).pipe(
@@ -55,12 +56,11 @@ export class AuthService {
     const ticket = getParamFromQueryString('ticket');
     const queryStringWithoutTicket = getQueryStringWithoutParam(this._document.location.search, 'ticket');
     const currentPathname = this._document.location.pathname;
-    const url =
-      pathName === currentPathname
-        ? `${this.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`
-        : `${this.origin}${pathName}`;
+
     if (ticket) {
-      const serviceName = `${this.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`;
+      const queryParams = encodeURIComponent(decodeURIComponent(queryStringWithoutTicket));
+      const serviceName = `${this.origin}${pathName}${queryParams}`;
+
       return this.auth({ ticket, serviceName }).pipe(
         tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
         switchMap((_) => this._organizationsService.getUserOrganizations()),
@@ -76,9 +76,15 @@ export class AuthService {
         }),
       );
     }
+
+    const url = pathName === currentPathname
+      ? `${this.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`
+      : `${this.origin}${pathName}`;
+
     if (!ticket && redirectable) {
       this.redirectExternalSsoAuth(url);
     }
+
     if (!ticket && !redirectable) {
       return of(url);
     }

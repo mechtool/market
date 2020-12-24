@@ -6,10 +6,10 @@ export function getQueryStringWithoutParam(str: string, paramName: string): stri
   delete objURL[paramName];
   // tslint:disable-next-line:max-line-length prefer-template
   return Object.keys(objURL)
-    .map((key) => key + '=' + objURL[key])
+    .map((key) => `${key}=${objURL[key]}`)
     .join('&')
     ? `?${Object.keys(objURL)
-        .map((key) => key + '=' + objURL[key])
+        .map((key) => `${key}=${objURL[key]}`)
         .join('&')}`
     : '';
 }
