@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Inject,
   OnDestroy,
@@ -27,7 +26,6 @@ import {
   distinctUntilChanged,
   expand,
   filter,
-  map,
   pairwise,
   startWith,
   switchMap,
@@ -50,6 +48,7 @@ const PROPS_AUTO_SUBMIT = [
   'isPickup',
   'inStock',
   'withImages',
+  'hasDiscount',
   'priceFrom',
   'priceTo',
   'location.fias',
@@ -70,6 +69,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   form: FormGroup;
   availableCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   filteredCategories: CategoryModel[] = null;
+
   get areAdditionalFiltersEnabled() {
     return this._searchAreaService.areAdditionalFiltersEnabled;
   }
@@ -111,7 +111,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     private _fb: FormBuilder,
     private _cdr: ChangeDetectorRef,
     private _notificationsService: NotificationsService,
-  ) {}
+  ) {
+  }
 
   resetControl(controlName: string) {
     this.form.get(controlName).patchValue(this._filterFormConfig[controlName]);
@@ -216,6 +217,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       isDelivery: this._filterFormConfig.isDelivery,
       inStock: this._filterFormConfig.inStock,
       withImages: this._filterFormConfig.withImages,
+      hasDiscount: this._filterFormConfig.hasDiscount,
       priceFrom: this._filterFormConfig.priceFrom,
       priceTo: this._filterFormConfig.priceTo,
       location: this._filterFormConfig.location,
@@ -237,6 +239,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         isPickup: this._filterFormConfig.isPickup,
         inStock: this._filterFormConfig.inStock,
         withImages: this._filterFormConfig.withImages,
+        hasDiscount: this._filterFormConfig.hasDiscount,
         priceFrom: new FormControl(this._filterFormConfig.priceFrom, [priceConditionValidator]),
         priceTo: new FormControl(this._filterFormConfig.priceTo, [priceConditionValidator]),
         priceRange: new FormControl([this._filterFormConfig.priceFrom, this._filterFormConfig.priceTo]),
@@ -301,10 +304,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           return supplierName.trim().length <= 2
             ? of(null)
             : this._searchAreaService.searchSuppliers(supplierName, 0, PAGE_SIZE).pipe(
-                catchError((err) => {
-                  return of(null);
-                }),
-              );
+              catchError((err) => {
+                return of(null);
+              }),
+            );
         }),
       )
       .subscribe(
@@ -336,10 +339,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           return foundMegaCity || locationName.trim().length <= 1
             ? of(Megacity.ALL)
             : this._searchAreaService.searchLocations(locationName).pipe(
-                catchError((err) => {
-                  return of(null);
-                }),
-              );
+              catchError((err) => {
+                return of(null);
+              }),
+            );
         }),
       )
       .subscribe(
@@ -432,8 +435,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     const readyToSubmit =
       obj1 !== null
         ? PROPS_AUTO_SUBMIT.some((prop) => {
-            return getPropValueByPath(prop, obj1) !== getPropValueByPath(prop, obj2);
-          })
+          return getPropValueByPath(prop, obj1) !== getPropValueByPath(prop, obj2);
+        })
         : true;
     if (readyToSubmit && this.form.valid) {
       this._submit();
@@ -488,7 +491,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private _updateModifiedFiltersCounter() {
     let counter = 0;
-    const formPropertiesList = ['trademark', 'isDelivery', 'isPickup', 'inStock', 'withImages', 'priceFrom', 'priceTo', 'subCategoryId'];
+    const formPropertiesList = ['trademark', 'isDelivery', 'isPickup', 'inStock', 'withImages', 'hasDiscount', 'priceFrom', 'priceTo', 'subCategoryId'];
     if (this._searchAreaService.markerIsSupplierControlVisible === true) {
       formPropertiesList.push('supplier.id');
     }

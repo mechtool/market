@@ -99,6 +99,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
         ...(this._isFormControlValueSubmittable('filters.isPickup') && { isPickup: this.form.get('filters.isPickup').value }),
         ...(this._isFormControlValueSubmittable('filters.inStock') && { inStock: this.form.get('filters.inStock').value }),
         ...(this._isFormControlValueSubmittable('filters.withImages') && { withImages: this.form.get('filters.withImages').value }),
+        ...(this._isFormControlValueSubmittable('filters.hasDiscount') && { hasDiscount: this.form.get('filters.hasDiscount').value }),
         ...(this._isFormControlValueSubmittable('filters.priceFrom') && { priceFrom: this.form.get('filters.priceFrom').value }),
         ...(this._isFormControlValueSubmittable('filters.priceTo') && { priceTo: this.form.get('filters.priceTo').value }),
         ...(this._isFormControlValueSubmittable('filters.subCategoryId') && {
@@ -137,6 +138,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
           ...(this.filters.isPickup !== undefined && this.filters.isPickup !== null && { isPickup: this.filters.isPickup }),
           ...(this.filters.inStock !== undefined && this.filters.inStock !== null && { inStock: this.filters.inStock }),
           ...(this.filters.withImages !== undefined && this.filters.withImages !== null && { withImages: this.filters.withImages }),
+          ...(this.filters.hasDiscount !== undefined && this.filters.hasDiscount !== null && { hasDiscount: this.filters.hasDiscount }),
           ...(this.filters.priceFrom && { priceFrom: this.filters.priceFrom }),
           ...(this.filters.priceTo && { priceTo: this.filters.priceTo }),
           ...((this.filters.priceFrom || this.filters.priceTo) && {

@@ -1,23 +1,20 @@
-import { Inject, Injectable, Injector, OnDestroy, ViewContainerRef } from '@angular/core';
+import { Inject, Injectable, Injector, ViewContainerRef } from '@angular/core';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 import { BNetService } from '#shared/modules/common-services/bnet.service';
 import { UserService } from '#shared/modules/common-services/user.service';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import {
   CategoryModel,
-  CategoryRequestModel,
-  CategoryResponseModel,
   Level,
   LocationModel,
   OrganizationResponseModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
   SuppliersItemModel,
-  SuppliersResponseModel,
 } from '#shared/modules/common-services/models';
 import { SearchItemHistoryModel } from './models/search-item-history.model';
 import { BehaviorSubject, defer, Observable, of, Subject } from 'rxjs';
-import { CategoryItemModel, SearchFilterLocationItemModel, SearchResultsTitleEnumModel } from './models';
+import { CategoryItemModel, SearchResultsTitleEnumModel } from './models';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -30,7 +27,7 @@ import { deepTreeSearch, getFlatObjectArray } from '#shared/utils';
 const CATEGORY_OTHER = '6341';
 
 @Injectable()
-export class SearchAreaService implements OnDestroy {
+export class SearchAreaService {
   markerIsSupplierControlVisible = true;
   suggestionsEnabled = false;
   suggestionsType: 'history' | 'products' = null;
@@ -91,8 +88,6 @@ export class SearchAreaService implements OnDestroy {
   ) {
     this._initForm();
   }
-
-  ngOnDestroy() {}
 
   private _initForm() {
     this.form = this._fb.group({});
@@ -178,7 +173,11 @@ export class SearchAreaService implements OnDestroy {
   }
 
   searchSuppliers(query: string, _page: number, _size: number): Observable<SuppliersItemModel[]> {
-    return this._bnetService.searchSuppliers({ q: query, page: _page, size: _size }).pipe(map((res) => res._embedded.suppliers));
+    return this._bnetService.searchSuppliers({
+      q: query,
+      page: _page,
+      size: _size
+    }).pipe(map((res) => res._embedded.suppliers));
   }
 
   getOrganizationById(id: string): Observable<OrganizationResponseModel> {

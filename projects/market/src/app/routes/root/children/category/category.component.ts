@@ -43,7 +43,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private _isPopularProductsShown = false;
 
   get isNotSearchUsed(): boolean {
-    const queryParamsToCheck = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'priceFrom', 'priceTo'];
+    const queryParamsToCheck = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'hasDiscount', 'priceFrom', 'priceTo'];
     const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
     const paramMap = this._activatedRoute.snapshot.paramMap;
 
@@ -182,6 +182,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       ...(queryParamMap?.has('isPickup') && { isPickup: queryParamMap.get('isPickup') === 'true' }),
       ...(queryParamMap?.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
       ...(queryParamMap?.has('withImages') && { withImages: queryParamMap.get('withImages') === 'true' }),
+      ...(queryParamMap?.has('hasDiscount') && { hasDiscount: queryParamMap.get('hasDiscount') === 'true' }),
       ...(queryParamMap?.has('priceFrom') && { priceFrom: +queryParamMap.get('priceFrom') }),
       ...(queryParamMap?.has('priceTo') && { priceTo: +queryParamMap.get('priceTo') }),
       ...(queryParamMap?.has('subCategoryId') && { subCategoryId: queryParamMap.get('subCategoryId') }),
@@ -373,6 +374,7 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
     isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',
     withImages: !groupQuery.filters?.withImages ? undefined : 'true',
+    hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
     priceFrom: groupQuery.filters?.priceFrom === 0 ? undefined : groupQuery.filters.priceFrom,
     priceTo: groupQuery.filters?.priceTo === 1000000 ? undefined : groupQuery.filters.priceTo,
     subCategoryId: groupQuery.filters?.subCategoryId,

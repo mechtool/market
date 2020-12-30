@@ -5,6 +5,7 @@ export class DefaultSearchAvailableModel {
   isPickup?: boolean;
   inStock?: boolean;
   withImages?: boolean;
+  hasDiscount?: boolean;
   priceFrom?: number;
   priceTo?: number;
   categoryId?: string;

@@ -31,6 +31,7 @@ export class ProductService {
       tradeMarks: [groupQuery.filters?.trademark],
       inStock: groupQuery.filters?.inStock,
       withImages: groupQuery.filters?.withImages,
+      hasDiscount: groupQuery.filters?.hasDiscount,
       deliveryArea: groupQuery.filters?.isDelivery ? fias : undefined,
       pickupArea: groupQuery.filters?.isPickup ? fias : undefined,
       page: groupQuery.page,

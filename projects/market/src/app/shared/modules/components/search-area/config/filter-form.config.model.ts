@@ -9,6 +9,7 @@ export class FilterFormConfigModel {
   isPickup: boolean;
   inStock: boolean;
   withImages: boolean;
+  hasDiscount: boolean;
   priceFrom: number;
   priceTo: number;
   location: {
