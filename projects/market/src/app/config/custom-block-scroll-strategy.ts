@@ -7,7 +7,7 @@ export class CustomBlockScrollStrategy implements ScrollStrategy {
   }
   disable() {
     document.documentElement.classList.remove('cdk-global-custom-scrollblock');
-    document.documentElement.style.overflow = 'visible auto';
+    document.documentElement.style.overflow = null;
   }
   attach() {}
 }
