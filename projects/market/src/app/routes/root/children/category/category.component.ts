@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 import { DefaultSearchAvailableModel } from '#shared/modules/common-services/models/default-search-available.model';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Params, Router } from '@angular/router';
@@ -18,7 +18,7 @@ import {
 import { BannerItemModel } from '#shared/modules/components/banners/models';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { SpinnerService } from '#shared/modules';
-import { debounceTime, delay, filter, map, skip, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, skip, switchMap, take, tap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './category.component.html',
@@ -86,7 +86,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
   scrollPosition: number;
 
   urlSubscription: Subscription;
-  isFromHistory = false;
 
   constructor(
     private _router: Router,
@@ -206,10 +205,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
           return defer(() => {
             return categoryId
               ? zip(
-                  this._categoryService.getCategory(categoryId),
-                  this._categoryService.getCategoryBannerItems(categoryId),
-                  of(this._categoryService.categoryIdsPopularEnabled.includes(categoryId)),
-                )
+                this._categoryService.getCategory(categoryId),
+                this._categoryService.getCategoryBannerItems(categoryId),
+                of(this._categoryService.categoryIdsPopularEnabled.includes(categoryId)),
+              )
               : zip(of(null), this._categoryService.getCategoryBannerItems(''), of(true));
           });
         }),
@@ -375,8 +374,8 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',
     withImages: !groupQuery.filters?.withImages ? undefined : 'true',
     hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
-    priceFrom: groupQuery.filters?.priceFrom === 0 ? undefined : groupQuery.filters.priceFrom,
-    priceTo: groupQuery.filters?.priceTo === 1000000 ? undefined : groupQuery.filters.priceTo,
+    priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
+    priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
     subCategoryId: groupQuery.filters?.subCategoryId,
   };
 }
@@ -393,7 +392,7 @@ function removeURLParameter(url, parameter) {
     const prefix = `${encodeURIComponent(parameter)}=`;
     const pars = urlparts[1].split(/[&;]/g);
 
-    for (let i = pars.length; i-- > 0; ) {
+    for (let i = pars.length; i-- > 0;) {
       if (pars[i].lastIndexOf(prefix, 0) !== -1) {
         pars.splice(i, 1);
       }

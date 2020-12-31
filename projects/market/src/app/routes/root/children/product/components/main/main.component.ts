@@ -47,7 +47,7 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',
     withImages: !groupQuery.filters?.withImages ? undefined : 'true',
     hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
-    priceFrom: groupQuery.filters?.priceFrom === 0 ? undefined : groupQuery.filters.priceFrom,
-    priceTo: groupQuery.filters?.priceTo === 1000000 ? undefined : groupQuery.filters.priceTo,
+    priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
+    priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
   };
 }

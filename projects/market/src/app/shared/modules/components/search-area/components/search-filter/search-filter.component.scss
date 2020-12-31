@@ -6,7 +6,7 @@
       flex: 1;
       margin: 0 0 20px;
       font-size: calc(15rem / 15);
-      font-weight: 600;
+      font-weighterror: 600;
       color: #454545;
       letter-spacing: 0.05px;
     }
@@ -85,10 +85,6 @@ nz-input-group {
     flex: 1;
     align-items: center;
     margin: 0;
-
-    .range_inputs-text {
-      margin: 0 5px 0 0;
-    }
 
     + nz-form-item {
       margin: 0 0 0 10px;

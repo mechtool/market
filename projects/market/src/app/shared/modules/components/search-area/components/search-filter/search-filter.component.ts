@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { SearchAreaService } from '../../search-area.service';
+import { SearchAreaService } from '#shared/modules/components/search-area/search-area.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   locationNameConditionValidator,
@@ -78,19 +78,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   private _supplierNameChangeSubscription: Subscription;
   private _priceFromChangeSubscription: Subscription;
   private _priceToChangeSubscription: Subscription;
-  private _priceRangeChangeSubscription: Subscription;
   private _locationNameChangeSubscription: Subscription;
   private _initialSupplierNameSubscription: Subscription;
   private _categorySearchQueryChangeSubscription: Subscription;
   private _serviceFormCategoryIdChangeSubscription: Subscription;
-
-  get minPrice(): number {
-    return this._filterFormConfig.priceFrom;
-  }
-
-  get maxPrice(): number {
-    return this._filterFormConfig.priceTo;
-  }
 
   get filterCollapsed(): boolean {
     return this._searchAreaService.filterCollapsed;
@@ -132,7 +123,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this._handleSupplierNameChanges();
     this._handleLocationNameChanges();
-    this._handlePriceChanges();
     this._handleCategorySearchQueryChanges();
   }
 
@@ -186,7 +176,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       this._supplierNameChangeSubscription,
       this._priceFromChangeSubscription,
       this._priceToChangeSubscription,
-      this._priceRangeChangeSubscription,
       this._locationNameChangeSubscription,
       this._initialSupplierNameSubscription,
       this._categorySearchQueryChangeSubscription,
@@ -242,7 +231,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         hasDiscount: this._filterFormConfig.hasDiscount,
         priceFrom: new FormControl(this._filterFormConfig.priceFrom, [priceConditionValidator]),
         priceTo: new FormControl(this._filterFormConfig.priceTo, [priceConditionValidator]),
-        priceRange: new FormControl([this._filterFormConfig.priceFrom, this._filterFormConfig.priceTo]),
         categorySearchQuery: this._filterFormConfig.categorySearchQuery,
         subCategoryId: this._filterFormConfig.subCategoryId,
       },
@@ -353,33 +341,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
-  }
-
-  private _handlePriceChanges(): void {
-    this._priceFromChangeSubscription = this.form.get('priceFrom').valueChanges.subscribe((price) => {
-      this.form.get('priceFrom').setValue(+price, { onlySelf: true, emitEvent: false });
-      this.form.get('priceRange').setValue([+price, this.form.get('priceRange').value[1]], {
-        onlySelf: true,
-        emitEvent: false,
-      });
-    });
-
-    this._priceToChangeSubscription = this.form.get('priceTo').valueChanges.subscribe((price) => {
-      this.form.get('priceTo').setValue(+price, { onlySelf: true, emitEvent: false });
-      this.form.get('priceRange').setValue([this.form.get('priceRange').value[0], +price], {
-        onlySelf: true,
-        emitEvent: false,
-      });
-    });
-
-    this._priceRangeChangeSubscription = this.form.get('priceRange').valueChanges.subscribe((prices) => {
-      this.form.get('priceFrom').setValue(+prices[0], { onlySelf: true, emitEvent: false });
-      this.form.get('priceTo').setValue(+prices[1], { onlySelf: true, emitEvent: false });
-      this.form.get('priceRange').setValue([+prices[0], +prices[1]], {
-        onlySelf: true,
-        emitEvent: false,
-      });
-    });
   }
 
   private _handleCategorySearchQueryChanges(): void {

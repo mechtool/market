@@ -124,21 +124,17 @@
         <label nz-checkbox formControlName="hasDiscount">Со скидкой</label>
       </div>
 
-      <div class="form-group_title">Цена</div>
+      <div class="form-group_title">Цена ₽</div>
       <div class="range_wrap range_price">
-        <nz-slider nzRange nzMin="{{minPrice}}" nzMax="{{maxPrice}}" formControlName="priceRange"
-                   [nzTooltipVisible]="'never'"></nz-slider>
 
         <div class="range_inputs">
-
           <nz-form-item>
-            <div class="range_inputs-text">От</div>
             <nz-form-control>
               <input nz-input type="number"
-                     [ngClass]="{'error': false}"
+                     [ngClass]="{'error': form.controls.priceFrom.invalid || form.errors?.priceRangeCondition}"
                      name="price_from"
                      class="range_input range_from price_from"
-                     placeholder="{{minPrice}} ₽"
+                     placeholder="от"
                      autocomplete="off"
                      formControlName="priceFrom"/>
             </nz-form-control>
@@ -146,18 +142,16 @@
 
 
           <nz-form-item>
-            <div class="range_inputs-text range_inputs-delimiter">До</div>
             <nz-form-control>
               <input nz-input type="number"
-                     [ngClass]="{'error': false}"
+                     [ngClass]="{'error': form.controls.priceTo.invalid || form.errors?.priceRangeCondition}"
                      name="price_to"
                      class="range_input range_to price_to"
-                     placeholder="{{maxPrice}} ₽"
+                     placeholder="до"
                      autocomplete="off"
                      formControlName="priceTo"/>
             </nz-form-control>
           </nz-form-item>
-
         </div>
       </div>
 

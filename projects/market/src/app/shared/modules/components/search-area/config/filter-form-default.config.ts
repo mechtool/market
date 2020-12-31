@@ -9,8 +9,8 @@ export const filterFormDefaultConfig = {
   isPickup: true,
   inStock: false,
   withImages: false,
-  priceFrom: 0,
-  priceTo: 1000000,
+  priceFrom: null,
+  priceTo: null,
   location: {
     fias: '',
     name: '',

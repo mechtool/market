@@ -1,8 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { innConditionValidator, innKppConditionValidator, kppConditionValidator } from './requisites-condition.validator';
-import { currencyCode } from '#shared/utils';
+import {
+  innConditionValidator,
+  innKppConditionValidator,
+  kppConditionValidator
+} from './requisites-condition.validator';
 import { ExternalProvidersService } from '#shared/modules';
 
 @UntilDestroy({ checkProperties: true })
@@ -16,7 +19,8 @@ export class RequisitesCheckerComponent implements OnInit {
   form: FormGroup;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _fb: FormBuilder, private _externalProvidersService: ExternalProvidersService) {}
+  constructor(private _fb: FormBuilder, private _externalProvidersService: ExternalProvidersService) {
+  }
 
   ngOnInit() {
     this._initForm();
