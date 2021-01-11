@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { SearchAreaService } from '#shared/modules/components/search-area/search-area.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   locationNameConditionValidator,
   priceConditionValidator,
@@ -229,8 +229,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         inStock: this._filterFormConfig.inStock,
         withImages: this._filterFormConfig.withImages,
         hasDiscount: this._filterFormConfig.hasDiscount,
-        priceFrom: new FormControl(this._filterFormConfig.priceFrom, [priceConditionValidator]),
-        priceTo: new FormControl(this._filterFormConfig.priceTo, [priceConditionValidator]),
+        priceFrom: new FormControl(this._filterFormConfig.priceFrom,
+          [priceConditionValidator, Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
+        priceTo: new FormControl(this._filterFormConfig.priceTo,
+          [priceConditionValidator, Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
         categorySearchQuery: this._filterFormConfig.categorySearchQuery,
         subCategoryId: this._filterFormConfig.subCategoryId,
       },
