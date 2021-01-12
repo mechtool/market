@@ -1,9 +1,15 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse
+} from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { throwError, of, Subject, defer } from 'rxjs';
-import { catchError, filter, map, switchMap, tap, take, takeUntil } from 'rxjs/operators';
-import { AuthResponseModel, AuthService, UserService, UserStateService } from '#shared/modules/common-services';
-import { redirectTo } from '#shared/utils';
+import { throwError } from 'rxjs';
+import { catchError, filter, switchMap, tap } from 'rxjs/operators';
+import { AuthService, LocalStorageService, UserService, UserStateService } from '#shared/modules/common-services';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
@@ -13,6 +19,7 @@ export class ApiInterceptor implements HttpInterceptor {
     const authService = this._injector.get(AuthService);
     const userService = this._injector.get(UserService);
     const userStateService = this._injector.get(UserStateService);
+    const localStorageService = this._injector.get(LocalStorageService);
     const { accessToken = null, refreshToken = null } = userStateService.userData$.getValue() || {};
     const modifiedReq = this._modifyReq(req, accessToken);
 
@@ -20,6 +27,7 @@ export class ApiInterceptor implements HttpInterceptor {
       filter((event: HttpEvent<any>) => event instanceof HttpResponse),
       catchError((err: HttpErrorResponse) => {
         if (err.url.includes('auth/refresh')) {
+          localStorageService.removeUserData();
           return err.status === 403 ? authService.logout() : authService.logout('/');
         }
         if (accessToken && err.status === 401) {

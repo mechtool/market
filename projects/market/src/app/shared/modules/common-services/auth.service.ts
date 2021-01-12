@@ -1,10 +1,10 @@
 import { DOCUMENT, Location } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
+import { fromEvent, Observable, of, Subscription, throwError } from 'rxjs';
+import { catchError, delay, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
-import { getParamFromQueryString, getQueryStringWithoutParam, redirectTo } from '#shared/utils';
+import { redirectTo, unsubscribeList } from '#shared/utils';
 import { ApiService } from './api.service';
 import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel } from './models';
 import { UserService } from './user.service';
@@ -18,7 +18,10 @@ const ITS_URL = environment.itsUrl;
 const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organizations\/(?:([^\/]+?))\/?$/i, /^\/my\/orders$/i];
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnDestroy{
+  loginMessageSubscription: Subscription;
+  registerMessageSubscription: Subscription;
+
   get origin(): string {
     return this._document.location.origin;
   }
@@ -31,6 +34,10 @@ export class AuthService {
     private _organizationsService: OrganizationsService,
     private _router: Router,
   ) {
+  }
+
+  ngOnDestroy() {
+    unsubscribeList([this.loginMessageSubscription, this.registerMessageSubscription])
   }
 
   logout(path: string = '/'): Observable<any> {
@@ -51,47 +58,65 @@ export class AuthService {
     );
   }
 
-  login(path: string = '/', redirectable = true): Observable<any> {
-    const pathName = path.split('?')[0];
-    const ticket = getParamFromQueryString('ticket');
-    const queryStringWithoutTicket = getQueryStringWithoutParam(this._document.location.search, 'ticket');
-    const currentPathname = this._document.location.pathname;
+  login(): Observable<any> {
+    this.createPopup('loginPopup', `${ITS_URL}/login?service=${this.origin}`);
 
-    if (ticket) {
-      const queryParams = encodeURIComponent(decodeURIComponent(queryStringWithoutTicket));
-      const serviceName = `${this.origin}${pathName}${queryParams}`;
-
-      return this.auth({ ticket, serviceName }).pipe(
-        tap((authResponse: AuthResponseModel) => this._userService.setUserData(authResponse)),
-        switchMap((_) => this._organizationsService.getUserOrganizations()),
-        switchMap((res) => this._userService.setUserOrganizations(res)),
-        switchMap((res) => this._userService.updateParticipationRequests()),
-        switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
-        map(() => {
-          this.goTo(`${currentPathname}${queryStringWithoutTicket}`);
-          return null;
-        }),
-        catchError((_) => {
-          return throwError(null);
-        }),
-      );
+    if (!this.loginMessageSubscription) {
+      this.loginMessageSubscription = fromEvent(window, 'message')
+        .pipe(
+          filter((event: MessageEvent) => event.source['name'] === 'loginPopup'),
+          take(1),
+          switchMap((event) => {
+            return this.auth({ serviceName: this.origin, ticket: event.data })
+          }),
+          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
+        )
+        .subscribe();
     }
 
-    const url = pathName === currentPathname
-      ? `${this.origin}${pathName}${encodeURIComponent(queryStringWithoutTicket)}`
-      : `${this.origin}${pathName}`;
-
-    if (!ticket && redirectable) {
-      this.redirectExternalSsoAuth(url);
-    }
-
-    if (!ticket && !redirectable) {
-      return of(url);
-    }
+    return of(null);
   }
 
-  register(path: string = '/') {
-    redirectTo(`${ITS_URL}/registration?redirect=${this.origin}${path}`);
+  setUserDependableData$(userData): Observable<any> {
+    return of(null).pipe(
+      tap(() => this._userService.setUserData(userData)),
+      switchMap((_) => this._organizationsService.getUserOrganizations()),
+      switchMap((res) => this._userService.setUserOrganizations(res)),
+      switchMap((res) => this._userService.updateParticipationRequests()),
+      switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
+      catchError((_) => throwError(null)),
+    )
+  }
+
+  register() {
+    this.createPopup('registerPopup', `${ITS_URL}/registration?redirect=${this.origin}`);
+
+    if (!this.registerMessageSubscription) {
+      this.registerMessageSubscription = fromEvent(window, 'message')
+        .pipe(
+          filter((event: MessageEvent) => event.source['name'] === 'registerPopup'),
+          take(1),
+          switchMap((event) => {
+            return this.auth({ serviceName: this.origin, ticket: event.data })
+          }),
+          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
+        )
+        .subscribe();
+    }
+
+    return of(null);
+  }
+
+  createPopup(name, url) {
+    const width = 500;
+    const height = 500;
+    const pos = {
+      x: (screen.width / 2) - (width / 2),
+      y: (screen.height/2) - (height / 2)
+    };
+    const params = `width=${width}, height=${height}, left=${pos.x}, top=${pos.y}, toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no`;
+
+    window.open(url, name, params);
   }
 
   auth(authRequest: AuthRequestModel): Observable<AuthResponseModel> {
@@ -114,10 +139,6 @@ export class AuthService {
       this._router.navigateByUrl(url);
       this._location.replaceState(this._location.path().split('?')[0], '');
     });
-  }
-
-  redirectExternalSsoAuth(url: string): void {
-    this._document.location.assign(`${ITS_URL}/login?service=${url}`);
   }
 
   private isPathWithAuth(currentUrl: string): boolean {

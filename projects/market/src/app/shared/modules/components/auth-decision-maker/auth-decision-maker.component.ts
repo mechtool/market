@@ -25,7 +25,7 @@ export class AuthDecisionMakerComponent {
     this._externalProvidersService.fireGTMEvent(tag);
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_SIGN_IN);
     this._destroy();
-    this._authService.login(this.loginRedirectPath);
+    this._authService.login();
   }
 
   register(): void {
@@ -40,7 +40,7 @@ export class AuthDecisionMakerComponent {
     this._externalProvidersService.fireGTMEvent(tag);
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_REGISTER);
     this._destroy();
-    this._authService.register('/my/organizations?tab=c;/cart');
+    this._authService.register();
   }
 
   private _destroy() {

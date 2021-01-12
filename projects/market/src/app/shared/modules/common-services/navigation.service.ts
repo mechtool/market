@@ -19,6 +19,7 @@ import { CustomBlockScrollStrategy } from '../../../config/custom-block-scroll-s
 export class NavigationService implements OnDestroy {
   private _isNavBarMinified = false;
   isNavBarMinified$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  navItems$: BehaviorSubject<NavItemModel[]> = new BehaviorSubject(null);
   private _isMenuOpened = false;
   private _userCategories: CategoryModel[];
   private readonly _componentPortal: ComponentPortal<NavbarNavComponent>;
@@ -42,150 +43,6 @@ export class NavigationService implements OnDestroy {
     return this._isMenuOpened;
   }
 
-  get navItems$() {
-    const notAuthedNavItems: NavItemModel[] = [
-      {
-        label: 'Товары',
-        attributeId: 'product_menu_id',
-        icon: 'search',
-        command: () => {
-          this.navigateReloadable(['/category']);
-        },
-      },
-      {
-        label: 'Поставщики',
-        attributeId: 'supplier_menu_id',
-        icon: 'supplier',
-        routerLink: ['/supplier'],
-      },
-      {
-        label: 'Акции',
-        attributeId: 'promo_menu_id',
-        icon: 'favorite',
-        routerLink: ['/promo'],
-      },
-      {
-        label: 'Корзина',
-        attributeId: 'basket_menu_id',
-        icon: 'basket',
-        styleClass: 'delimiter',
-        routerLink: ['/cart'],
-        counter: 0,
-      },
-      {
-        label: 'Зарегистрироваться',
-        attributeId: 'register_menu_id',
-        icon: 'personal',
-        command: () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER);
-          this._authService.register(`/my/organizations?tab=c;${this._location.path()}`);
-        },
-      },
-      {
-        label: 'Войти',
-        attributeId: 'login_menu_id',
-        icon: 'enter',
-        command: () => {
-          this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
-          this._authService.login(this._location.path());
-        },
-      },
-      {
-        label: 'О проекте',
-        attributeId: 'info_menu_id',
-        icon: 'info',
-        styleClass: 'delimiter',
-        items: [
-          {
-            label: 'О сервисе',
-            attributeId: 'about_service_menu_id',
-            url: 'https://1cbn.ru/trading.html',
-            icon: 'point',
-          },
-          {
-            label: 'Условия использования',
-            attributeId: 'terms_of_use_menu_id',
-            url: 'https://1cbn.ru/agreement',
-            icon: 'point',
-          },
-        ],
-      },
-    ];
-    const authedNavItems: NavItemModel[] = [
-      {
-        label: 'Товары',
-        attributeId: 'product_menu_id',
-        icon: 'search',
-        command: () => {
-          this.navigateReloadable(['/category']);
-        },
-      },
-      {
-        label: 'Поставщики',
-        attributeId: 'supplier_menu_id',
-        icon: 'supplier',
-        routerLink: ['/supplier'],
-      },
-      {
-        label: 'Акции',
-        attributeId: 'promo_menu_id',
-        icon: 'favorite',
-        routerLink: ['/promo'],
-      },
-      {
-        label: 'Корзина',
-        attributeId: 'basket_menu_id',
-        icon: 'basket',
-        styleClass: 'delimiter',
-        routerLink: ['/cart'],
-        counter: 0,
-      },
-      {
-        label: 'Мои заказы',
-        attributeId: 'orders_menu_id',
-        routerLink: ['/my/orders'],
-        icon: 'order',
-        counter: 0,
-      },
-      {
-        label: 'Мои организации',
-        attributeId: 'organization_menu_id',
-        routerLink: ['/my/organizations'],
-        icon: 'organization',
-        counter: 0,
-      },
-      {
-        label: 'Выход',
-        attributeId: 'logout_menu_id',
-        icon: 'logout',
-        command: () => {
-          this._authService.logout(this._location.path()).subscribe();
-        },
-      },
-      {
-        label: 'О проекте',
-        attributeId: 'info_menu_id',
-        icon: 'info',
-        styleClass: 'delimiter',
-        items: [
-          {
-            label: 'О сервисе',
-            attributeId: 'about_service_menu_id',
-            url: 'https://1cbn.ru/trading.html',
-            icon: 'point',
-          },
-          {
-            label: 'Условия использования',
-            attributeId: 'terms_of_use_menu_id',
-            url: 'https://1cbn.ru/agreement',
-            icon: 'point',
-          },
-        ],
-      },
-    ];
-    return this._userStateService.userData$.asObservable().pipe(map((auth) => (auth ? authedNavItems : notAuthedNavItems)));
-  }
-
   constructor(
     private _userService: UserService,
     private _userStateService: UserStateService,
@@ -202,6 +59,149 @@ export class NavigationService implements OnDestroy {
     this._updateLayoutOnResolutionChanges();
     this._renderInitialNavBar();
     this._setInitialNavBarType();
+    this._userStateService.userData$.subscribe((auth) => {
+      const notAuthedNavItems: NavItemModel[] = [
+        {
+          label: 'Товары',
+          attributeId: 'product_menu_id',
+          icon: 'search',
+          command: () => {
+            this.navigateReloadable(['/category']);
+          },
+        },
+        {
+          label: 'Поставщики',
+          attributeId: 'supplier_menu_id',
+          icon: 'supplier',
+          routerLink: ['/supplier'],
+        },
+        {
+          label: 'Акции',
+          attributeId: 'promo_menu_id',
+          icon: 'favorite',
+          routerLink: ['/promo'],
+        },
+        {
+          label: 'Корзина',
+          attributeId: 'basket_menu_id',
+          icon: 'basket',
+          styleClass: 'delimiter',
+          routerLink: ['/cart'],
+          counter: 0,
+        },
+        {
+          label: 'Зарегистрироваться',
+          attributeId: 'register_menu_id',
+          icon: 'personal',
+          command: () => {
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER);
+            this._authService.register();
+          },
+        },
+        {
+          label: 'Войти',
+          attributeId: 'login_menu_id',
+          icon: 'enter',
+          command: () => {
+            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
+            this._authService.login();
+          },
+        },
+        {
+          label: 'О проекте',
+          attributeId: 'info_menu_id',
+          icon: 'info',
+          styleClass: 'delimiter',
+          items: [
+            {
+              label: 'О сервисе',
+              attributeId: 'about_service_menu_id',
+              url: 'https://1cbn.ru/trading.html',
+              icon: 'point',
+            },
+            {
+              label: 'Условия использования',
+              attributeId: 'terms_of_use_menu_id',
+              url: 'https://1cbn.ru/agreement',
+              icon: 'point',
+            },
+          ],
+        },
+      ];
+      const authedNavItems: NavItemModel[] = [
+        {
+          label: 'Товары',
+          attributeId: 'product_menu_id',
+          icon: 'search',
+          command: () => {
+            this.navigateReloadable(['/category']);
+          },
+        },
+        {
+          label: 'Поставщики',
+          attributeId: 'supplier_menu_id',
+          icon: 'supplier',
+          routerLink: ['/supplier'],
+        },
+        {
+          label: 'Акции',
+          attributeId: 'promo_menu_id',
+          icon: 'favorite',
+          routerLink: ['/promo'],
+        },
+        {
+          label: 'Корзина',
+          attributeId: 'basket_menu_id',
+          icon: 'basket',
+          styleClass: 'delimiter',
+          routerLink: ['/cart'],
+          counter: 0,
+        },
+        {
+          label: 'Мои заказы',
+          attributeId: 'orders_menu_id',
+          routerLink: ['/my/orders'],
+          icon: 'order',
+          counter: 0,
+        },
+        {
+          label: 'Мои организации',
+          attributeId: 'organization_menu_id',
+          routerLink: ['/my/organizations'],
+          icon: 'organization',
+          counter: 0,
+        },
+        {
+          label: 'Выход',
+          attributeId: 'logout_menu_id',
+          icon: 'logout',
+          command: () => {
+            this._authService.logout(this._location.path()).subscribe();
+          },
+        },
+        {
+          label: 'О проекте',
+          attributeId: 'info_menu_id',
+          icon: 'info',
+          styleClass: 'delimiter',
+          items: [
+            {
+              label: 'О сервисе',
+              attributeId: 'about_service_menu_id',
+              url: 'https://1cbn.ru/trading.html',
+              icon: 'point',
+            },
+            {
+              label: 'Условия использования',
+              attributeId: 'terms_of_use_menu_id',
+              url: 'https://1cbn.ru/agreement',
+              icon: 'point',
+            },
+          ],
+        },
+      ];
+      this.navItems$.next((auth ? authedNavItems : notAuthedNavItems));
+    })
   }
 
   ngOnDestroy() {

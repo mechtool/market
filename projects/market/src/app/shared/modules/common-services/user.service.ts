@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import {
-  AuthResponseModel,
   CategoryModel,
   CategoryResponseModel,
   DocumentResponseModel,
@@ -12,7 +11,7 @@ import {
 import { convertListToTree, innKppToLegalId } from '#shared/utils';
 import { BNetService } from './bnet.service';
 import { CookieService } from './cookie.service';
-import { UserStatusEnumModel } from './models/user-status-enum.model';
+import { LocalStorageService } from './local-storage.service';
 import { OrganizationsService } from './organizations.service';
 import { UserStateService } from './user-state.service';
 
@@ -28,6 +27,7 @@ export class UserService {
     private _bnetService: BNetService,
     private _organizationsService: OrganizationsService,
     private _cookieService: CookieService,
+    private _localStorageService: LocalStorageService,
     private _userStateService: UserStateService,
   ) {}
 
@@ -105,7 +105,12 @@ export class UserService {
 
   watchUserDataChangesForUserStatusCookie() {
     this._userStateService.userData$.subscribe((res) => {
-      this._cookieService.setUserStatusCookie(res ? UserStatusEnumModel.AUTHED : UserStatusEnumModel.NOT_AUTHED);
+      if (res) {
+        this._localStorageService.putUserData(res);
+      }
+      if (!res) {
+        this._localStorageService.removeUserData();
+      }
     });
   }
 

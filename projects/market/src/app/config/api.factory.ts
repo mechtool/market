@@ -2,7 +2,6 @@ import { catchError, switchMap, take, tap } from 'rxjs/operators';
 import {
   AuthService,
   CartService,
-  CookieService,
   ExternalProvidersService,
   LocalStorageService,
   Megacity,
@@ -14,12 +13,11 @@ import { defer, Observable, of, throwError, zip } from 'rxjs';
 import { Router } from '@angular/router';
 import { Injector } from '@angular/core';
 import { Location } from '@angular/common';
-import { delayedRetry, removeURLParameter } from '#shared/utils';
+import { delayedRetry, getQueryParam } from '#shared/utils';
 import { APP_CONFIG } from './app.config.token';
 
 let cartService = null;
 let authService = null;
-let cookieService = null;
 let userService = null;
 let externalProvidersService = null;
 let location = null;
@@ -31,7 +29,6 @@ let localStorageService = null;
 export function ApiFactory(injector: Injector): () => Promise<any> {
   cartService = injector.get(CartService);
   authService = injector.get(AuthService);
-  cookieService = injector.get(CookieService);
   userService = injector.get(UserService);
   externalProvidersService = injector.get(ExternalProvidersService);
   localStorageService = injector.get(LocalStorageService);
@@ -46,14 +43,10 @@ export function ApiFactory(injector: Injector): () => Promise<any> {
 }
 
 function init() {
+  handleLoginPopup();
   return new Promise((resolve, reject) => {
-    return zip(setCart(), updateUserCategoriesRetriable$())
+    return zip(handleAuthFromStorage$(), setCart$(), updateUserCategoriesRetriable$())
       .pipe(
-        switchMap(() => {
-          return defer(() => {
-            return isTicketInQueryParams() || isCookieAuthed() ? login$() : of(null);
-          });
-        }),
         tap(() => {
           if (!localStorageService.hasUserLocation()) {
             localStorageService.putUserLocation(Megacity.ALL[0]);
@@ -66,45 +59,27 @@ function init() {
           externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.APP_INIT_PROBLEMS, { params: e });
           return throwError(null);
         }),
-      )
-      .subscribe(
-        (serviceUrl) => {
-          if (serviceUrl) {
-            authService.redirectExternalSsoAuth(serviceUrl);
-          }
-          if (!serviceUrl) {
-            resolve();
-          }
-        },
-        (e) => {
-          if (isTicketInQueryParams()) {
-            location.replaceState(removeURLParameter(location.path(), 'ticket'));
-          }
-          reject();
-        },
-      );
+      ).subscribe(resolve, reject);
   });
 }
 
-function isTicketInQueryParams(): boolean {
-  return location.path().includes('ticket=ST');
+function handleLoginPopup() {
+  const ticket = getQueryParam('ticket', location.path());
+  if (ticket) {
+    window.opener.postMessage(ticket);
+    window.close();
+  }
 }
 
-function isCookieAuthed(): boolean {
-  return cookieService.isUserStatusCookieAuthed;
+function handleAuthFromStorage$(): Observable<any> {
+  if (localStorageService.hasUserData()) {
+    const userData = localStorageService.getUserData();
+    return authService.setUserDependableData$(userData);
+  }
+  return of(null);
 }
 
-function login$(): Observable<any> {
-  return authService.login(location.path(), false).pipe(
-    catchError(() => {
-      return throwError({
-        data: MetrikaEventAppInitProblemsEnumModel.SIGN_IN,
-      });
-    }),
-  );
-}
-
-function setCart(): Observable<any> {
+function setCart$(): Observable<any> {
   return defer(() => {
     return !cartService.hasCart() ? createCartRetriable$() : of(null);
   }).pipe(

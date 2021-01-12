@@ -17,6 +17,7 @@ const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
 const CART_LOCATION_STORAGE_KEY = 'cart_location';
 const CART_DATA_STORAGE_KEY = 'cart_data';
+const USER_DATA_STORAGE_KEY = 'user_data';
 const COOKIES_AGREEMENT_STORAGE_KEY = 'cookies_agreement';
 const LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY = 'later_visit_my_organizations';
 
@@ -108,6 +109,22 @@ export class LocalStorageService {
     };
     filterHistoryList.push(query);
     this._storage.set(SEARCH_QUERIES_HISTORY_STORAGE_KEY, filterHistoryList);
+  }
+
+  getUserData(): LocationModel {
+    return this._storage.get(USER_DATA_STORAGE_KEY);
+  }
+
+  putUserData(userData: any) {
+    this._storage.set(USER_DATA_STORAGE_KEY, userData);
+  }
+
+  hasUserData(): boolean {
+    return this._storage.get(USER_DATA_STORAGE_KEY) !== undefined;
+  }
+
+  removeUserData(): void {
+    this._storage.remove(USER_DATA_STORAGE_KEY);
   }
 
   getUserLocation(): LocationModel {

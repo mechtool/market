@@ -136,7 +136,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _setNavigation() {
-    this._navService.navItems$.pipe(take(1)).subscribe(
+    this._navService.navItems$.subscribe(
       (res) => {
         this.navItems = res;
         this._setNavItemActive(this._getActiveItem(this.navItems));
