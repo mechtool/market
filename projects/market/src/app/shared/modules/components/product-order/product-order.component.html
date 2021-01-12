@@ -18,17 +18,17 @@
       <p class="to_cart__supplier" *ngIf="isProductPage">от {{tradeOffer?.supplier.name | abbreviatedBusinessName}}</p>
       <ng-container *ngTemplateOutlet="product_side"></ng-container>
       <div class="to_cart__total_price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-        <p *ngIf="tradeOffer?.termsOfSale.price.hasDiscount">
+        <p *ngIf="tradeOffer?.termsOfSale.price?.hasDiscount">
           <span class="price_before_discount"
                 nz-tooltip
                 nzTooltipTitle="Цена без скидки"
-                itemprop="price">{{tradeOffer?.termsOfSale.price.matrix | marketMinPrice: true | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
+                itemprop="price">{{tradeOffer?.termsOfSale.price?.matrix | marketMinPrice: true | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
         </p>
         <p>
-          <span *ngIf="tradeOffer?.termsOfSale.price.matrix?.length"
-                itemprop="price">{{tradeOffer?.termsOfSale.price.matrix | marketMinPrice | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
+          <span *ngIf="tradeOffer?.termsOfSale.price?.matrix?.length"
+                itemprop="price">{{tradeOffer?.termsOfSale.price?.matrix | marketMinPrice | marketMultiplier:'.01' | currencyPrice: tradeOffer.termsOfSale.price?.currencyCode}}</span>
 
-          <span *ngIf="!tradeOffer?.termsOfSale.price.matrix?.length" itemprop="price">цена по запросу</span>
+          <span *ngIf="!tradeOffer?.termsOfSale.price?.matrix?.length" itemprop="price">цена по запросу</span>
         </p>
       </div>
       <p class="to_cart__nds">{{vatInfo}}</p>
