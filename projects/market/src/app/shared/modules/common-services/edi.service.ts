@@ -47,7 +47,8 @@ export class EdiService {
   }
 
   private _legalIds() {
-    const userOrganizations = this._userService.organizations$.getValue();
+    const limit = 100;
+    const userOrganizations = this._userService.organizations$.getValue()?.slice(0, limit);
     if (userOrganizations) {
       return userOrganizations.map((org) => {
         return innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);

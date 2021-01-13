@@ -116,7 +116,8 @@ export class UserService {
 
   // TODO: отрефакторить чтобы не было повторений _legalIds и в EdiService
   private _legalIds() {
-    const userOrganizations = this.organizations$.getValue();
+    const limit = 100;
+    const userOrganizations = this.organizations$.getValue()?.slice(0, limit);
     if (userOrganizations) {
       return userOrganizations.map((org) => {
         return innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
