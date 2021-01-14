@@ -77,6 +77,12 @@ nz-input-group {
   }
 }
 
+.range_wrap.range_price {
+  &.d-none {
+    display: none;
+  }
+}
+
 .range_inputs {
   display: flex;
   margin-top: 15px;

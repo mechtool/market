@@ -32,6 +32,7 @@ export class ProductService {
       inStock: groupQuery.filters?.inStock,
       withImages: groupQuery.filters?.withImages,
       hasDiscount: groupQuery.filters?.hasDiscount,
+      features: groupQuery.filters.features,
       deliveryArea: groupQuery.filters?.isDelivery ? fias : undefined,
       pickupArea: groupQuery.filters?.isPickup ? fias : undefined,
       page: groupQuery.page,

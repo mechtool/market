@@ -23,6 +23,7 @@ import { APP_CONFIG, AppConfigModel } from '../../../../config';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CategoryService } from '#shared/modules/common-services/category.service';
 import { deepTreeSearch, getFlatObjectArray } from '#shared/utils';
+import { ProductOffersSummaryFeatureModel } from '#shared/modules/common-services/models/product-offers-summary.model';
 
 const CATEGORY_OTHER = '6341';
 
@@ -50,6 +51,11 @@ export class SearchAreaService {
   historicalQueries$: BehaviorSubject<SearchItemHistoryModel[]> = new BehaviorSubject([]);
   productQueries$: BehaviorSubject<SuggestionProductItemModel[]> = new BehaviorSubject([]);
   categoryQueries$: BehaviorSubject<SuggestionCategoryItemModel[]> = new BehaviorSubject([]);
+
+  summaryFeaturesData$: BehaviorSubject<{
+    hasProducts: boolean,
+    featuresQueries: string[],
+    values: ProductOffersSummaryFeatureModel[] }> = new BehaviorSubject(null);
 
   activeResultsItemChange$: Subject<{ text: string; type: string }> = new Subject();
   upDownKeyboardInputCtrlEvent$: Subject<any> = new Subject();
@@ -152,8 +158,16 @@ export class SearchAreaService {
     }
   }
 
-  private _hasSearchHistoryInBrowser(): boolean {
-    return this._localStorageService.hasSearchQueriesHistory();
+  newSummaryFeaturesData$(data: { hasProducts: boolean, featuresQueries: string[], values: ProductOffersSummaryFeatureModel[] }): void {
+    if (data) {
+      if (data.hasProducts) {
+        window['oldStateDynamicSearchFilters'] = data.values;
+      } else {
+        data.values = window['oldStateDynamicSearchFilters'];
+      }
+
+      this.summaryFeaturesData$.next(data);
+    }
   }
 
   putSearchQueryToBrowser(searchQuery: SearchItemHistoryModel): void {
@@ -212,6 +226,10 @@ export class SearchAreaService {
         });
       }),
     );
+  }
+
+  private _hasSearchHistoryInBrowser(): boolean {
+    return this._localStorageService.hasSearchQueriesHistory();
   }
 
   private _getFlatChildrenCategories(categoryId: string): Observable<CategoryModel[]> {

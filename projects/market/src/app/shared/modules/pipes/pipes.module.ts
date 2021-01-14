@@ -19,6 +19,7 @@ import { OfferDescriptionJoinerPipe } from './offer-description-joiner.pipe';
 import { DeliveryMethodPipe } from './delivery-method.pipe';
 import { HiddenSymbolsPipe } from './hidden-symbols.pipe';
 import { MinPricePipe } from './min-price.pipe';
+import { CastControlPipe } from './cast-control.pipe';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { MinPricePipe } from './min-price.pipe';
     OfferDescriptionJoinerPipe,
     DeliveryMethodPipe,
     HiddenSymbolsPipe,
+    CastControlPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -62,6 +64,7 @@ import { MinPricePipe } from './min-price.pipe';
     OfferDescriptionJoinerPipe,
     DeliveryMethodPipe,
     HiddenSymbolsPipe,
+    CastControlPipe,
   ],
   providers: [
     CurrencyPipe

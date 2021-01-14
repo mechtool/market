@@ -12,4 +12,5 @@ export class DefaultSearchAvailableModel {
   deliveryArea?: string;
   pickupArea?: string;
   subCategoryId?: string;
+  features?: string[];
 }

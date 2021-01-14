@@ -34,6 +34,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   productOffersList: ProductOffersListResponseModel;
   productOffers: ProductOffersModel[];
+  summaryFeaturesDate: any;
   productsTotal: number;
   sort: SortModel | any;
   page = 0;
@@ -43,7 +44,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   private _isPopularProductsShown = false;
 
   get isNotSearchUsed(): boolean {
-    const queryParamsToCheck = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'hasDiscount', 'priceFrom', 'priceTo'];
+    const queryParamsToCheck = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo'];
     const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
     const paramMap = this._activatedRoute.snapshot.paramMap;
 
@@ -182,6 +183,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       ...(queryParamMap?.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
       ...(queryParamMap?.has('withImages') && { withImages: queryParamMap.get('withImages') === 'true' }),
       ...(queryParamMap?.has('hasDiscount') && { hasDiscount: queryParamMap.get('hasDiscount') === 'true' }),
+      ...(queryParamMap?.has('features') && { features: queryParamMap.getAll('features') }),
       ...(queryParamMap?.has('priceFrom') && { priceFrom: +queryParamMap.get('priceFrom') }),
       ...(queryParamMap?.has('priceTo') && { priceTo: +queryParamMap.get('priceTo') }),
       ...(queryParamMap?.has('subCategoryId') && { subCategoryId: queryParamMap.get('subCategoryId') }),
@@ -270,6 +272,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
           this.productOffersList = productOffers as ProductOffersListResponseModel;
           this.productOffers = this.productOffersList._embedded.productOffers;
           this.productsTotal = this.productOffersList.page.totalElements;
+          this.summaryFeaturesDate = {
+            hasProducts: this.productsTotal > 0,
+            featuresQueries: this.filters?.features,
+            values: this.productOffersList._embedded.summary?.features
+          };
         },
         (err) => {
           this._spinnerService.hide();
@@ -353,6 +360,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
         this.productOffersList = productOffers;
         this.productOffers = this.productOffersList._embedded.productOffers;
         this.productsTotal = this.productOffersList.page.totalElements;
+        this.summaryFeaturesDate = {
+          hasProducts: this.productsTotal > 0,
+          featuresQueries: this.filters?.features,
+          values: this.productOffersList._embedded.summary?.features
+        };
         this._spinnerService.hide();
       },
       (err) => {
@@ -374,6 +386,7 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',
     withImages: !groupQuery.filters?.withImages ? undefined : 'true',
     hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
+    features: !groupQuery.filters?.features?.length ? undefined : groupQuery.filters.features,
     priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
     priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
     subCategoryId: groupQuery.filters?.subCategoryId,

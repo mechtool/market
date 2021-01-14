@@ -12,13 +12,14 @@ export const locationNameConditionValidator: ValidatorFn = (formGroup: FormGroup
   return !isSelected && locationName?.length ? { locationNameCondition: true } : null;
 };
 
-export const priceConditionValidator: ValidatorFn = (control: AbstractControl): ValidationErrors => {
-  const price = +control.value;
-  return price < 0 ? { priceFromCondition: true } : null;
-};
-
 export const priceRangeConditionValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors => {
   const priceFrom = formGroup.get('priceFrom').value;
   const priceTo = formGroup.get('priceTo').value;
   return priceFrom && priceTo && priceFrom >= priceTo ? { priceRangeCondition: true } : null;
+};
+
+export const numFeatureRangeConditionValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors => {
+  const numValueFrom = formGroup.get('numValueFrom').value;
+  const numValueTo = formGroup.get('numValueTo').value;
+  return numValueFrom && numValueTo && numValueFrom >= numValueTo ? { numFeatureRangeCondition: true } : null;
 };

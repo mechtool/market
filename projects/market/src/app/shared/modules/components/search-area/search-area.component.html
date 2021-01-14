@@ -9,7 +9,9 @@
         <ng-content select="main-slot"></ng-content>
       </div>
       <div class="filter">
-        <market-search-filter (formInitialized)="attachForm($event)"></market-search-filter>
+        <market-search-filter
+          (formInitialized)="attachForm($event)">
+        </market-search-filter>
       </div>
     </div>
   </div>

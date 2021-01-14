@@ -70,7 +70,9 @@
         </nz-input-group>
 
         <nz-autocomplete nzBackfill #supplierAutocompleteTpl>
-          <nz-auto-option [nzDisabled]="true" *ngIf="form.get('supplier.name').value.length <= 2">Введите более 2 символов</nz-auto-option>
+          <nz-auto-option [nzDisabled]="true" *ngIf="form.get('supplier.name').value.length <= 2">Введите более 2
+            символов
+          </nz-auto-option>
           <nz-auto-option *ngFor="let supplier of suppliersToChoose"
                           (click)="selectSupplier(supplier); $event.stopPropagation()"
                           [nzValue]="supplier.name | abbreviatedBusinessName"
@@ -187,6 +189,64 @@
 
       </div>
     </ng-container>
+
+    <div *ngIf="(form|marketCastControl: 'featuresData').length" formArrayName="featuresData">
+      <div class="form-group_title">Фильтры характеристик товара</div>
+
+      <div class="form-group_checkbox" *ngFor="let feature of form|marketCastControl: 'featuresData'">
+
+        <ng-container [formGroup]="feature" [ngSwitch]="feature.value.type">
+
+          <ng-container *ngSwitchCase="'BOOLEAN'">
+            <label nz-checkbox formControlName="boolValue">{{feature.value.featureName}}</label>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'ENUMERATION'">
+            <div class="form-group_title">{{feature.value.featureName}}</div>
+
+            <div class="form-group_checkbox" *ngFor="let enumFeature of feature|marketCastControl: 'enumValues'">
+              <ng-container [formGroup]="enumFeature">
+                <label nz-checkbox formControlName="enumValue">{{enumFeature.value.valueName}}</label>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'NUMBER'">
+            <div class="range_wrap range_price"
+                 [ngClass]="{'d-none': feature.value.min === feature.value.max && feature.value.numValueFrom === null && feature.value.numValueTo === null}">
+
+              <div class="form-group_title">{{feature.value.featureName}}</div>
+
+              <div class="range_inputs">
+                <nz-form-item>
+                  <nz-form-control>
+                    <input nz-input type="number"
+                           [ngClass]="{'error': feature.controls.numValueFrom.invalid || feature.errors?.numFeatureRangeCondition}"
+                           name="num_value_from"
+                           class="range_input range_from price_from"
+                           placeholder="от {{feature.value.min}}"
+                           autocomplete="off"
+                           formControlName="numValueFrom"/>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-control>
+                    <input nz-input type="number"
+                           [ngClass]="{'error': feature.controls.numValueTo.invalid || feature.errors?.numFeatureRangeCondition}"
+                           name="num_value_to"
+                           class="range_input range_to price_to"
+                           placeholder="до {{feature.value.max}}"
+                           autocomplete="off"
+                           formControlName="numValueTo"/>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
 
     <div class="filter_btns">
       <button nz-button type="submit" nzType="primary" [disabled]="!form.valid"

@@ -10,6 +10,8 @@ export class FilterFormConfigModel {
   inStock: boolean;
   withImages: boolean;
   hasDiscount: boolean;
+  features: string[];
+  featuresData: string[];
   priceFrom: number;
   priceTo: number;
   location: {

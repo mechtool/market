@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchAreaService } from './search-area.service';
-import { FormGroup } from '@angular/forms';
-import { debounceTime, filter, map, tap } from 'rxjs/operators';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { unsubscribeList } from '#shared/utils';
 import { Subscription } from 'rxjs';
 import { DefaultSearchAvailableModel } from '#shared/modules/common-services/models/default-search-available.model';
@@ -22,6 +22,10 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
     this._query = val || '';
   }
   @Input() filters: DefaultSearchAvailableModel = null;
+  @Input() set summaryFeaturesData(data: any) {
+    this._searchAreaService.newSummaryFeaturesData$(data);
+  }
+
   @Input() set markerIsSupplierControlVisible(val: boolean) {
     this._searchAreaService.markerIsSupplierControlVisible = val;
   }
@@ -65,7 +69,11 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
 
   private _submitChangesSubscription: Subscription;
 
-  constructor(private _searchAreaService: SearchAreaService) {}
+  constructor(
+    private _searchAreaService: SearchAreaService,
+    private _fb: FormBuilder,
+  ) {
+  }
 
   ngOnInit() {
     this._submitChangesSubscription = this._searchAreaService.submitChanges$
@@ -100,6 +108,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
         ...(this._isFormControlValueSubmittable('filters.inStock') && { inStock: this.form.get('filters.inStock').value }),
         ...(this._isFormControlValueSubmittable('filters.withImages') && { withImages: this.form.get('filters.withImages').value }),
         ...(this._isFormControlValueSubmittable('filters.hasDiscount') && { hasDiscount: this.form.get('filters.hasDiscount').value }),
+        ...(this._isFormControlValueSubmittable('filters.features') && { features: this.form.get('filters.features').value }),
         ...(this._isFormControlValueSubmittable('filters.priceFrom') && { priceFrom: this.form.get('filters.priceFrom').value }),
         ...(this._isFormControlValueSubmittable('filters.priceTo') && { priceTo: this.form.get('filters.priceTo').value }),
         ...(this._isFormControlValueSubmittable('filters.subCategoryId') && {
@@ -120,7 +129,9 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
     if (controlName === 'filters.location.fias') {
       valuesNotSubmittable.push('643');
     }
-    return !valuesNotSubmittable.some((x) => x === this.form.get(controlName).value);
+    const value = this.form.get(controlName).value;
+
+    return Array.isArray(value) && !value.length ? false : !valuesNotSubmittable.some((x) => x === value);
   }
 
   private _fillForm(controlName: string): void {
@@ -150,6 +161,11 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
           ...(this.filters.supplierId && { supplier: { id: this.filters.supplierId } }),
           ...(this.filters.subCategoryId && { subCategoryId: this.filters.subCategoryId }),
         });
+
+        if (this.filters.features?.length) {
+          (this.form.get(controlName).get('features') as FormArray).clear();
+          this.filters.features.forEach((val) => (this.form.get(controlName).get('features') as FormArray).push(this._fb.control(val)));
+        }
       }
     }
   }

@@ -10,10 +10,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { SearchAreaService } from '#shared/modules/components/search-area/search-area.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   locationNameConditionValidator,
-  priceConditionValidator,
+  numFeatureRangeConditionValidator,
   priceRangeConditionValidator,
   supplierNameConditionValidator,
 } from './search-filter-conditions.validator';
@@ -37,7 +37,12 @@ import { CategoryModel, LocationModel, Megacity, SuppliersItemModel } from '#sha
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { FILTER_FORM_CONFIG, FilterFormConfigModel } from '../../config';
+import { FeatureType } from '../../models';
 import { DOCUMENT } from '@angular/common';
+import {
+  ProductOffersSummaryFeatureEnumValuesModel,
+  ProductOffersSummaryFeatureModel
+} from '#shared/modules/common-services/models/product-offers-summary.model';
 
 const PAGE_SIZE = 20;
 const SCREEN_WIDTH_BREAKPOINT = 992;
@@ -51,6 +56,7 @@ const PROPS_AUTO_SUBMIT = [
   'hasDiscount',
   'priceFrom',
   'priceTo',
+  'features',
   'location.fias',
   'subCategoryId',
 ];
@@ -70,18 +76,17 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   availableCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   filteredCategories: CategoryModel[] = null;
 
+  get features(): FormArray {
+    return this.form?.controls?.features as FormArray;
+  }
+
+  get featuresData(): FormArray {
+    return this.form?.controls?.featuresData as FormArray;
+  }
+
   get areAdditionalFiltersEnabled() {
     return this._searchAreaService.areAdditionalFiltersEnabled;
   }
-
-  private _refreshFormSubscription: Subscription;
-  private _supplierNameChangeSubscription: Subscription;
-  private _priceFromChangeSubscription: Subscription;
-  private _priceToChangeSubscription: Subscription;
-  private _locationNameChangeSubscription: Subscription;
-  private _initialSupplierNameSubscription: Subscription;
-  private _categorySearchQueryChangeSubscription: Subscription;
-  private _serviceFormCategoryIdChangeSubscription: Subscription;
 
   get filterCollapsed(): boolean {
     return this._searchAreaService.filterCollapsed;
@@ -94,6 +99,17 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   get serviceForm(): FormGroup {
     return this._searchAreaService.form;
   }
+
+  private _refreshFormSubscription: Subscription;
+  private _supplierNameChangeSubscription: Subscription;
+  private _priceFromChangeSubscription: Subscription;
+  private _priceToChangeSubscription: Subscription;
+  private _locationNameChangeSubscription: Subscription;
+  private _initialSupplierNameSubscription: Subscription;
+  private _categorySearchQueryChangeSubscription: Subscription;
+  private _serviceFormCategoryIdChangeSubscription: Subscription;
+  private _featuresDataChangeSubscription: Subscription;
+  private _newSummaryFeaturesDataChangeSubscription: Subscription;
 
   constructor(
     @Inject(DOCUMENT) private _document: Document,
@@ -111,63 +127,27 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this._setAvailableCategories();
-    if (!this.serviceForm.get('filters')) {
+
+    if (this.serviceForm.get('filters')) {
+      this.form = this.serviceForm.get('filters') as FormGroup;
+    } else {
       this._initForm();
       this._refreshForm();
       this._setInitialFormLocation();
       this._setInitialFormSupplier();
       this._attachForm();
     }
-    if (this.serviceForm.get('filters')) {
-      this.form = this.serviceForm.get('filters') as FormGroup;
-    }
+
     this._handleSupplierNameChanges();
     this._handleLocationNameChanges();
     this._handleCategorySearchQueryChanges();
+    this._handleFeaturesDataChanges();
+    this._handleNewSummaryFeaturesDataChange();
   }
 
   ngAfterViewInit() {
     this._setInitialScrollPosition();
     this._handleServiceFormCategoryIdChanges();
-  }
-
-  private _setInitialScrollPosition(): void {
-    const availableCategoriesStream$ = this.availableCategories$.pipe(filter((res) => res && this.form.get('subCategoryId').value)).pipe(
-      delay(this._searchAreaService.retryDelay),
-      takeWhile((url) => {
-        return this._viewPort.measureRenderedContentSize() !== 0;
-      }),
-    );
-
-    availableCategoriesStream$
-      .pipe(
-        expand((res) => availableCategoriesStream$),
-        take(1),
-      )
-      .subscribe((res) => {
-        this._scrollToCategory();
-        this._updateModifiedFiltersCounter();
-      });
-  }
-
-  private _handleServiceFormCategoryIdChanges(): void {
-    this._serviceFormCategoryIdChangeSubscription = this.serviceForm
-      .get('base.categoryId')
-      .valueChanges.pipe(distinctUntilChanged())
-      .subscribe((res) => {
-        this.form.get('subCategoryId').patchValue('');
-        this.serviceForm.get('base.categoryId').patchValue(res, { emitEvent: false, onlySelf: true });
-        this._scrollToCategory();
-        this._updateModifiedFiltersCounter();
-        this._submit();
-      });
-  }
-
-  private _scrollToCategory() {
-    const categoryIndex = this.filteredCategories.findIndex((x) => x.id === this.form.get('subCategoryId').value);
-    if (categoryIndex > -1) {
-      this._viewPort.scrollToIndex(categoryIndex, 'smooth');
-    }
   }
 
   ngOnDestroy() {
@@ -180,6 +160,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       this._initialSupplierNameSubscription,
       this._categorySearchQueryChangeSubscription,
       this._serviceFormCategoryIdChangeSubscription,
+      this._featuresDataChangeSubscription,
+      this._newSummaryFeaturesDataChangeSubscription,
     ]);
   }
 
@@ -215,7 +197,61 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       subCategoryId: this._filterFormConfig.subCategoryId,
     });
+
+    (this.form.controls.features as FormArray).clear();
+    (this.form.controls.featuresData as FormArray).clear();
+
     this.serviceForm.get('base.categoryId').patchValue('');
+  }
+
+  selectSupplier(supplier: SuppliersItemModel) {
+    this.form.get('supplier.isSelected').patchValue(true);
+    this.form.get('supplier.id').patchValue(supplier.id);
+    this.suppliersToChoose = null;
+  }
+
+  selectSupplierOnEnter() {
+    const foundSupplier = this.suppliersToChoose?.find((supplier) => {
+      return supplier.name.toLowerCase() === this.form.get('supplier.name').value.toLowerCase();
+    });
+    if (foundSupplier) {
+      this.form.get('supplier.isSelected').patchValue(true);
+      this.form.get('supplier.id').patchValue(foundSupplier.id);
+    }
+  }
+
+  selectLocation(location: LocationModel) {
+    this.form.get('location.isSelected').patchValue(true);
+    this.form.get('location.fias').patchValue(location.fias);
+    this._searchAreaService.putUserLocation(location);
+  }
+
+  selectLocationOnEnter() {
+    const foundLocation = this.locationsToChoose?.find((location) => {
+      return location.name.toLowerCase() === this.form.get('location.name').value.toLowerCase();
+    });
+    if (foundLocation) {
+      this.form.get('location.isSelected').patchValue(true);
+      this.form.get('location.fias').patchValue(foundLocation.fias);
+      this._searchAreaService.putUserLocation(foundLocation);
+    }
+  }
+
+  setCategoryId(target: any) {
+    const el: HTMLElement = target.closest('.category_item');
+    if (el) {
+      const id = el.dataset.id.toString();
+      const formValue = this.form.get('subCategoryId').value.toString();
+      if (!formValue) {
+        this.form.get('subCategoryId').patchValue(el.dataset.id);
+      } else if (formValue === id) {
+        this.form.get('subCategoryId').patchValue('');
+      }
+    }
+  }
+
+  isFocused(el: HTMLElement): boolean {
+    return el === this._document.activeElement;
   }
 
   private _initForm() {
@@ -229,10 +265,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         inStock: this._filterFormConfig.inStock,
         withImages: this._filterFormConfig.withImages,
         hasDiscount: this._filterFormConfig.hasDiscount,
-        priceFrom: new FormControl(this._filterFormConfig.priceFrom,
-          [priceConditionValidator, Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
-        priceTo: new FormControl(this._filterFormConfig.priceTo,
-          [priceConditionValidator, Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
+        features: this._fb.array(this._filterFormConfig.features),
+        featuresData: this._fb.array(this._filterFormConfig.featuresData),
+        priceFrom: new FormControl(this._filterFormConfig.priceFrom, [Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
+        priceTo: new FormControl(this._filterFormConfig.priceTo, [Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
         categorySearchQuery: this._filterFormConfig.categorySearchQuery,
         subCategoryId: this._filterFormConfig.subCategoryId,
       },
@@ -253,6 +289,45 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         validator: [supplierNameConditionValidator],
       },
     );
+  }
+
+  private _setInitialScrollPosition(): void {
+    const availableCategoriesStream$ = this.availableCategories$.pipe(filter((res) => res && this.form.get('subCategoryId').value)).pipe(
+      delay(this._searchAreaService.retryDelay),
+      takeWhile((url) => {
+        return this._viewPort.measureRenderedContentSize() !== 0;
+      }),
+    );
+
+    availableCategoriesStream$
+      .pipe(
+        expand((res) => availableCategoriesStream$),
+        take(1),
+      )
+      .subscribe((res) => {
+        this._scrollToCategory();
+        this._updateModifiedFiltersCounter();
+      });
+  }
+
+  private _handleServiceFormCategoryIdChanges(): void {
+    this._serviceFormCategoryIdChangeSubscription = this.serviceForm
+      .get('base.categoryId')
+      .valueChanges.pipe(distinctUntilChanged())
+      .subscribe((res) => {
+        this.form.get('subCategoryId').patchValue('');
+        this.serviceForm.get('base.categoryId').patchValue(res, { emitEvent: false, onlySelf: true });
+        this._scrollToCategory();
+        this._updateModifiedFiltersCounter();
+        this._submit();
+      });
+  }
+
+  private _scrollToCategory() {
+    const categoryIndex = this.filteredCategories.findIndex((category) => category.id === this.form.get('subCategoryId').value);
+    if (categoryIndex > -1) {
+      this._viewPort.scrollToIndex(categoryIndex, 'smooth');
+    }
   }
 
   private _setLocationFormPart(): FormGroup {
@@ -357,6 +432,53 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  private _handleFeaturesDataChanges() {
+    this._featuresDataChangeSubscription = this.form.controls.featuresData
+      .valueChanges
+      .subscribe((value: any[]) => {
+
+        this.features.clear();
+
+        value.forEach((val) => {
+          if (val.type === FeatureType.BOOLEAN && val.boolValue !== null) {
+            this.features.push(this._fb.control(`${val.featureId}:${val.boolValue}`));
+          }
+
+          if (val.type === FeatureType.ENUMERATION && val.enumValues.some((x) => x.enumValue)) {
+            this.features.push(this._fb.control(`${val.featureId}:[${val.enumValues.filter((f) => f.enumValue).map((f) => f.valueId).join('|')}]`));
+          }
+
+          if (val.type === FeatureType.NUMBER && (val.numValueFrom || val.numValueTo)) {
+            if (val.numValueFrom && val.numValueTo) {
+
+              this.features.push(this._fb.control(`${val.featureId}:${val.numValueFrom}~${val.numValueTo}`));
+            } else if (!val.numValueFrom) {
+
+              this.features.push(this._fb.control(`${val.featureId}:~${val.numValueTo}`));
+            } else {
+
+              this.features.push(this._fb.control(`${val.featureId}:${val.numValueFrom}~`));
+            }
+          }
+
+          if (val.type === FeatureType.DATE) {
+            // todo дописать логику когда появится
+          }
+
+          if (val.type === FeatureType.STRING) {
+            // todo дописать логику когда появится
+          }
+        });
+      });
+  }
+
+  private _handleNewSummaryFeaturesDataChange() {
+    this._newSummaryFeaturesDataChangeSubscription = this._searchAreaService.summaryFeaturesData$
+      .subscribe((data) => {
+        this.initFeaturesData(data?.values, data?.featuresQueries);
+      });
+  }
+
   private _setInitialFormLocation(): void {
     if (this._searchAreaService.hasUserLocation()) {
       const userLocation = this._searchAreaService.getUserLocation();
@@ -395,12 +517,22 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _submitIfNeeded([obj1, obj2]: [any, any]): void {
-    const readyToSubmit =
-      obj1 !== null
-        ? PROPS_AUTO_SUBMIT.some((prop) => {
-          return getPropValueByPath(prop, obj1) !== getPropValueByPath(prop, obj2);
-        })
-        : true;
+    const readyToSubmit = obj1 !== null
+      ? PROPS_AUTO_SUBMIT.some((prop) => {
+
+        const oldObj = getPropValueByPath(prop, obj1);
+        const newObj = getPropValueByPath(prop, obj2);
+
+        if (Array.isArray(newObj)) {
+          if (oldObj.length === 0 && newObj.length === 0) {
+            return false;
+          }
+          return oldObj.length !== newObj.length || newObj.some((value) => !oldObj.includes(value));
+        }
+
+        return oldObj !== newObj;
+      })
+      : true;
     if (readyToSubmit && this.form.valid) {
       this._submit();
     }
@@ -419,68 +551,103 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  selectSupplier(supplier: SuppliersItemModel) {
-    this.form.get('supplier.isSelected').patchValue(true);
-    this.form.get('supplier.id').patchValue(supplier.id);
-    this.suppliersToChoose = null;
-  }
-
-  selectSupplierOnEnter() {
-    const foundSupplier = this.suppliersToChoose?.find((x) => {
-      return x.name.toLowerCase() === this.form.get('supplier.name').value.toLowerCase();
-    });
-    if (foundSupplier) {
-      this.form.get('supplier.isSelected').patchValue(true);
-      this.form.get('supplier.id').patchValue(foundSupplier.id);
-    }
-  }
-
-  selectLocation(location: LocationModel) {
-    this.form.get('location.isSelected').patchValue(true);
-    this.form.get('location.fias').patchValue(location.fias);
-    this._searchAreaService.putUserLocation(location);
-  }
-
-  selectLocationOnEnter() {
-    const foundLocation = this.locationsToChoose?.find((x) => {
-      return x.name.toLowerCase() === this.form.get('location.name').value.toLowerCase();
-    });
-    if (foundLocation) {
-      this.form.get('location.isSelected').patchValue(true);
-      this.form.get('location.fias').patchValue(foundLocation.fias);
-      this._searchAreaService.putUserLocation(foundLocation);
-    }
-  }
-
   private _updateModifiedFiltersCounter() {
     let counter = 0;
-    const formPropertiesList = ['trademark', 'isDelivery', 'isPickup', 'inStock', 'withImages', 'hasDiscount', 'priceFrom', 'priceTo', 'subCategoryId'];
+    const formPropertiesList = ['trademark', 'isDelivery', 'isPickup', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId'];
     if (this._searchAreaService.markerIsSupplierControlVisible === true) {
       formPropertiesList.push('supplier.id');
     }
     formPropertiesList.forEach((item) => {
-      if (this.form.get(item).value !== getPropValueByPath(item, this._filterFormConfig)) {
+      if (Array.isArray(this.form.get(item).value)) {
+        counter += this.form.get(item).value.length;
+      }
+
+      if (!Array.isArray(this.form.get(item).value) && this.form.get(item).value !== getPropValueByPath(item, this._filterFormConfig)) {
         counter++;
       }
     });
     this._searchAreaService.modifiedFiltersCounter$.next(counter);
   }
 
-  setCategoryId(target: any) {
-    const el: HTMLElement = target.closest('.category_item');
+  private initFeaturesData(values: ProductOffersSummaryFeatureModel[], featuresQueries: string[]) {
 
-    if (el) {
-      const id = el.dataset.id.toString();
-      const formValue = this.form.get('subCategoryId').value.toString();
-      if (!formValue) {
-        this.form.get('subCategoryId').patchValue(el.dataset.id);
-      } else if (formValue === id) {
-        this.form.get('subCategoryId').patchValue('');
-      }
-    }
+    values?.sort(this.compareByFeatureType())
+      .filter((val) => val.booleanValues || val.enumValues || val.numberValues)
+      .forEach((val) => {
+
+        if (val.booleanValues) {
+          this.featuresData?.push(this._fb.group({
+            featureId: val.featureId,
+            featureName: val.featureName,
+            type: FeatureType.BOOLEAN,
+            boolValue: this.boolValueIfHas(val, featuresQueries),
+          }));
+        }
+
+        if (val.enumValues) {
+          this.featuresData?.push(this._fb.group({
+            featureId: val.featureId,
+            featureName: val.featureName,
+            type: FeatureType.ENUMERATION,
+            enumValues: this._fb.array(this.groupEnumValuesFrom(val, featuresQueries)),
+          }));
+        }
+
+        if (val.numberValues) {
+          this.featuresData?.push(this._fb.group({
+            featureId: val.featureId,
+            featureName: val.featureName,
+            type: FeatureType.NUMBER,
+            min: val.numberValues?.min,
+            max: val.numberValues?.max,
+            numValueFrom: this._fb.control(this.numValueIfHas(val, featuresQueries, true),
+              [Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
+            numValueTo: this._fb.control(this.numValueIfHas(val, featuresQueries, false),
+              [Validators.min(0), Validators.max(Number.MAX_SAFE_INTEGER)]),
+          }, {
+            validator: [numFeatureRangeConditionValidator],
+          }));
+        }
+      });
   }
 
-  isFocused(el: HTMLElement): boolean {
-    return el === this._document.activeElement;
+  private groupEnumValuesFrom(value: ProductOffersSummaryFeatureModel, featuresQueries: string[]): FormGroup[] {
+    return value?.enumValues.map((val, index) => {
+      return this._fb.group({
+        valueId: val.valueId,
+        valueName: val.valueName,
+        enumValue: this.enumValueIfHas(value, val, featuresQueries) ? true : null,
+      })
+    });
+  }
+
+  private enumValueIfHas(feature: ProductOffersSummaryFeatureModel,
+                         enumFeature: ProductOffersSummaryFeatureEnumValuesModel, queries: string[]): boolean {
+    return queries?.some((x) => x.includes(enumFeature.valueId) && x.includes(feature.featureId));
+  }
+
+  private boolValueIfHas(feature: ProductOffersSummaryFeatureModel, queries: string[]): boolean {
+    const find = queries?.find((x) => x.includes(feature.featureId));
+    const value = find?.substr(find.indexOf(':') + 1);
+    return value?.length ? 'true' === value : null;
+  }
+
+  private numValueIfHas(feature: ProductOffersSummaryFeatureModel, queries: string[], isFrom: boolean) {
+    const find = queries?.find((x) => x.includes(feature.featureId));
+    const value = find?.substr(isFrom ? find.indexOf(':') + 1 : find.indexOf('~') + 1,
+      isFrom ? (find.indexOf('~') - find.indexOf(':') - 1) : undefined);
+    return value?.length && Number.isInteger(+value) ? +value : null;
+  }
+
+  private compareByFeatureType() {
+    return (one, two) => {
+      if (one.booleanValues && two.booleanValues || one.enumValues && two.enumValues || one.numberValues && two.numberValues) {
+        return 0;
+      }
+      if ((one.booleanValues && (two.enumValues || two.numberValues)) || (one.enumValues && two.numberValues)) {
+        return -1;
+      }
+      return 1;
+    };
   }
 }
