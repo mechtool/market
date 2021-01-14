@@ -8,7 +8,7 @@ import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@ang
 import ru from '@angular/common/locales/ru';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiFactory, AppRouteReuseStrategy, APP_CONFIG } from './config';
+import { ApiFactory, APP_CONFIG } from './config';
 import { CommonServicesModule } from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -87,7 +87,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
       multi: true,
     },
     { provide: DEFAULT_CURRENCY_CODE, useValue: '' },
-    { provide: RouteReuseStrategy, useClass: AppRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })

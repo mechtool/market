@@ -111,6 +111,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   private _featuresDataChangeSubscription: Subscription;
   private _newSummaryFeaturesDataChangeSubscription: Subscription;
 
+  get searchType(): 'category' | 'supplier' {
+    return this._searchAreaService.searchType;
+  }
+
   constructor(
     @Inject(DOCUMENT) private _document: Document,
     @Inject(FILTER_FORM_CONFIG) private _filterFormConfig: FilterFormConfigModel,
@@ -126,19 +130,20 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this._setAvailableCategories();
-
-    if (this.serviceForm.get('filters')) {
-      this.form = this.serviceForm.get('filters') as FormGroup;
-    } else {
+    if (!this.serviceForm.get('filters')) {
       this._initForm();
       this._refreshForm();
       this._setInitialFormLocation();
       this._setInitialFormSupplier();
       this._attachForm();
+    } else {
+      this.form = this.serviceForm.get('filters') as FormGroup;
+    }
+    if (this.searchType !== 'supplier') {
+      this._handleSupplierNameChanges();
     }
 
-    this._handleSupplierNameChanges();
+    this._setAvailableCategories();
     this._handleLocationNameChanges();
     this._handleCategorySearchQueryChanges();
     this._handleFeaturesDataChanges();
@@ -147,7 +152,9 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this._setInitialScrollPosition();
-    this._handleServiceFormCategoryIdChanges();
+    if (this.searchType !== 'supplier') {
+      this._handleServiceFormCategoryIdChanges();
+    }
   }
 
   ngOnDestroy() {
@@ -188,10 +195,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       isDelivery: this._filterFormConfig.isDelivery,
       inStock: this._filterFormConfig.inStock,
       withImages: this._filterFormConfig.withImages,
-      hasDiscount: this._filterFormConfig.hasDiscount,
       priceFrom: this._filterFormConfig.priceFrom,
       priceTo: this._filterFormConfig.priceTo,
       location: this._filterFormConfig.location,
+      hasDiscount: this._filterFormConfig.hasDiscount,
       ...(this._searchAreaService.markerIsSupplierControlVisible && {
         supplier: this._filterFormConfig.supplier,
       }),
@@ -539,16 +546,32 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _setAvailableCategories() {
-    const categoryId = this.serviceForm.get('base.categoryId').value || null;
-    this._searchAreaService.getSubCategories(categoryId).subscribe(
-      (res) => {
-        this.filteredCategories = res;
-        this.availableCategories$.next([...res]);
-      },
-      () => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      },
-    );
+    if (this.searchType !== 'supplier') {
+      const categoryId = this.serviceForm.get('base.categoryId')?.value || null;
+      this._searchAreaService.getSubCategories(categoryId).subscribe(
+        (res) => {
+          this.filteredCategories = res;
+          this.availableCategories$.next([...res]);
+        },
+        () => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
+    }
+    if (this.searchType === 'supplier') {
+      const supplierId = this.serviceForm.get('filters.supplier.id')?.value || null;
+      if (supplierId) {
+        this._searchAreaService.getSupplierCategories(supplierId).subscribe(
+          (res) => {
+            this.filteredCategories = res;
+            this.availableCategories$.next([...res]);
+          },
+          () => {
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          },
+        )
+      }
+    }
   }
 
   private _updateModifiedFiltersCounter() {

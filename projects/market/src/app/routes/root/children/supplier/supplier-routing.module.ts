@@ -7,13 +7,13 @@ const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuard],
-    component: SupplierListComponent
+    component: SupplierListComponent,
   }, {
     path: ':supplierId',
     children: [
       {
         path: '',
-        component: SupplierSingleComponent
+        component: SupplierSingleComponent,
       }, {
         path: 'offer/:tradeOfferId',
         component: TradeOfferComponent,

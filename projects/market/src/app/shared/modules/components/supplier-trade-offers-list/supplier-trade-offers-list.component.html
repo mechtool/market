@@ -1,13 +1,3 @@
-<div class="search_bar">
-  <market-search-bar
-    [query]="query"
-    [filters]="filters"
-    [suggestionsOff]="true"
-    (submitClick)="changeQueryParamsAndRefresh($event)"
-    (cityChange)="changeCityAndRefresh($event)"
-  ></market-search-bar>
-</div>
-
 <div class="catalog_header" *ngIf="tradeOffersTotal >= 0">
   <div class="catalog_header__count">
     <span class="catalog_header__title">Результаты поиска</span>

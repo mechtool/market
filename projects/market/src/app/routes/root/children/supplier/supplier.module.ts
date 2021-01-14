@@ -10,6 +10,7 @@ import {
   ProductDescriptionModule,
   ProductGalleryModule,
   ProductOrderModule,
+  SearchAreaModule,
   SearchBarModule,
   SupplierCardModule,
   TermsOfSaleModule,
@@ -39,6 +40,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
     ProductOrderModule,
     CardModule,
     SupplierTradeOffersListModule,
+    SearchAreaModule,
   ],
   declarations: [SupplierListComponent, SupplierSingleComponent, TradeOfferComponent],
 })

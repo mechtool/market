@@ -8,17 +8,35 @@
   <nz-tabset nzTabPosition="top" nzType="card">
 
     <nz-tab nzTitle="Торговые предложения">
-      <market-supplier-trade-offers-list
-        [supplier]="supplier"
-        [tradeOffers]="tradeOffers"
-        [tradeOffersTotal]="tradeOffersTotal"
-        [page]="page"
-        [query]="query"
-        [filters]="filters"
-        [sort]="sort"
-        (loadTradeOffers)="loadTradeOffers($event)"
-        (cityChange)="changeCityAndRefresh($event)"
-      ></market-supplier-trade-offers-list>
+
+      <div class="area-container">
+        <market-search-area
+          [searchType]="'supplier'"
+          [markerIsSupplierControlVisible]="false"
+          [areCategoriesShown]="false"
+          [filters]="filters"
+          [query]="query"
+          [filterCollapsed]="true"
+          (submitClick)="navigateToSupplierRoute($event)"
+          *ngIf="supplier"
+        >
+
+          <ng-container ngProjectAs="main-slot">
+            <market-supplier-trade-offers-list
+              [supplier]="supplier"
+              [tradeOffers]="tradeOffers"
+              [tradeOffersTotal]="tradeOffersTotal"
+              [page]="page"
+              [query]="query"
+              [filters]="filters"
+              [sort]="sort"
+              (loadTradeOffers)="loadTradeOffers($event)"
+            ></market-supplier-trade-offers-list>
+          </ng-container>
+
+        </market-search-area>
+      </div>
+
     </nz-tab>
 
     <nz-tab nzTitle="О поставщике">

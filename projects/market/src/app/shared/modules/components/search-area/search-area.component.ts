@@ -30,6 +30,10 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
     this._searchAreaService.markerIsSupplierControlVisible = val;
   }
 
+  @Input() set searchType(val: 'category' | 'supplier') {
+    this._searchAreaService.searchType = val;
+  }
+
   @Input() set filterCollapsed(val: boolean) {
     this._searchAreaService.filterCollapsed = val;
   }
@@ -49,6 +53,10 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
 
   get query(): string {
     return this._query;
+  }
+
+  get searchType(): 'category' | 'supplier' {
+    return this._searchAreaService.searchType;
   }
 
   get filterCollapsed(): boolean {
@@ -114,7 +122,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
         ...(this._isFormControlValueSubmittable('filters.subCategoryId') && {
           subCategoryId: this.form.get('filters.subCategoryId').value,
         }),
-        ...(this._isFormControlValueSubmittable('base.categoryId') && { categoryId: this.form.get('base.categoryId').value }),
+        ...(this.searchType !== 'supplier' && this._isFormControlValueSubmittable('base.categoryId') && { categoryId: this.form.get('base.categoryId').value }),
         ...(this._isFormControlValueSubmittable('filters.location.fias') && {
           deliveryArea: this.form.get('filters.location.fias').value,
           pickupArea: this.form.get('filters.location.fias').value,

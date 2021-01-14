@@ -23,7 +23,24 @@ export class SearchResultComponent implements OnInit {
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
   @Input() page: number;
-  @Input() scrollPosition: number;
+  private _scrollPosition: number;
+  @Input() set scrollPosition(val: number) {
+    this._scrollPosition = val;
+    if (this._scrollPosition) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: this._scrollPosition,
+          left: 0,
+          behavior: 'smooth',
+        });
+      }, 300);
+    }
+  }
+
+  get scrollPosition(): number {
+    return this._scrollPosition;
+  }
+
   @Input() visibleSort = false;
   @Input() sort;
   @Output() pageChanged: EventEmitter<{ fetchable: boolean; newPage: any }> = new EventEmitter();
@@ -74,7 +91,6 @@ export class SearchResultComponent implements OnInit {
         filter((res) => {
           return !this._navigationService.isMenuOpened;
         }),
-        debounceTime(300),
         pairwise(),
         filter((res) => {
           return !this.productOffers || this.productOffers.length >= this.chunkSize;

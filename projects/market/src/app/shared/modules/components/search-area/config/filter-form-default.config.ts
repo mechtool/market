@@ -9,6 +9,7 @@ export const filterFormDefaultConfig = {
   isPickup: true,
   inStock: false,
   withImages: false,
+  hasDiscount: false,
   features: [],
   featuresData: [],
   priceFrom: null,

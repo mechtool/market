@@ -20,11 +20,13 @@ import { ProductService } from '#shared/modules/common-services/product.service'
 import { SpinnerService } from '#shared/modules';
 import { filter, map, skip, switchMap, take, tap } from 'rxjs/operators';
 
+const PAGE_SIZE = 30;
+
 @Component({
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.scss'],
 })
-export class CategoryComponent implements OnInit, OnDestroy {
+export class CategoryComponent implements OnDestroy {
   id = Math.random();
   category: CategoryModel = null;
   filters: DefaultSearchAvailableModel;
@@ -99,6 +101,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private _spinnerService: SpinnerService,
     private _location: Location,
   ) {
+    this._handleNavigationForStoringScrollPosition();
+    this._init();
+  }
+
+
+  ngOnDestroy() {
+    unsubscribeList([this.urlSubscription]);
+  }
+
+  private _handleNavigationForStoringScrollPosition() {
     this._router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -126,50 +138,117 @@ export class CategoryComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {
-    this._init();
-    if (window['categoryScrollPosition'] && window['isHistoryBack']) {
-      this.scrollPosition = window['categoryScrollPosition'];
-      delete window['categoryScrollPosition'];
-      delete window['isHistoryBack'];
-    } else {
-      delete window['categoryScrollPosition'];
-      delete window['isHistoryBack'];
-    }
+  private _getRequestFilters(paramMap, queryParamMap) {
+    const reqFilters = {
+      ...(queryParamMap.has('supplierId') && { supplierId: queryParamMap.get('supplierId') }),
+      ...(queryParamMap.has('trademark') && { trademark: queryParamMap.get('trademark') }),
+      ...(queryParamMap.has('isDelivery') && { isDelivery: queryParamMap.get('isDelivery') !== 'false' }),
+      ...(queryParamMap.has('isPickup') && { isPickup: queryParamMap.get('isPickup') !== 'false' }),
+      ...(queryParamMap.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
+      ...(queryParamMap.has('withImages') && { withImages: queryParamMap.get('withImages') === 'true' }),
+      ...(queryParamMap.has('hasDiscount') && { hasDiscount: queryParamMap.get('hasDiscount') === 'true' }),
+      ...(queryParamMap.has('priceFrom') && { priceFrom: +queryParamMap.get('priceFrom') }),
+      ...(queryParamMap.has('priceTo') && { priceTo: +queryParamMap.get('priceTo') }),
+      ...(queryParamMap.has('features') && { features: queryParamMap.getAll('features') }),
+      ...(paramMap.has('id') && paramMap.get('id') !== '' && { categoryId: paramMap.get('id') }),
+      ...(queryParamMap.has('subCategoryId') && { categoryId: queryParamMap.get('subCategoryId') }),
+    };
+    return reqFilters;
   }
 
-  ngOnDestroy() {
-    unsubscribeList([this.urlSubscription]);
-  }
 
   private _init(): void {
-    this.urlSubscription = combineLatest([this._activatedRoute.paramMap, this._activatedRoute.queryParamMap]).subscribe(() => {
-      // TODO: для дизейбла некоторых полей
-      if (this._activatedRoute.snapshot.paramMap.get('id')) {
-        this.areAdditionalFiltersEnabled = true;
-      }
-      if (!this._activatedRoute.snapshot.paramMap.get('id')) {
-        if (this._activatedRoute.snapshot.queryParamMap.get('q') && this._activatedRoute.snapshot.queryParamMap.get('q').length >= 3) {
-          this.areAdditionalFiltersEnabled = true;
-        }
-        if (this._activatedRoute.snapshot.queryParamMap.get('supplierId')) {
-          this.areAdditionalFiltersEnabled = true;
-        }
-        if (this._activatedRoute.snapshot.queryParamMap.get('trademark')) {
-          this.areAdditionalFiltersEnabled = true;
-        }
-        if (this._activatedRoute.snapshot.queryParamMap.get('subCategoryId')) {
-          this.areAdditionalFiltersEnabled = true;
-        }
-      }
-      this.sort = this._activatedRoute.snapshot.queryParamMap.get('sort') || null;
+    let categoryId = '';
+    this.urlSubscription = combineLatest([this._activatedRoute.paramMap, this._activatedRoute.queryParamMap]).pipe(
+      tap(() => {
+        this._spinnerService.show();
 
-      this._setFilters(this._activatedRoute.snapshot.paramMap, this._activatedRoute.snapshot.queryParamMap);
-      if (this._activatedRoute.snapshot.paramMap.get('id') === '') {
-        this._categoryService.getCategoryBannerItems('').subscribe((bannerItems) => {
-          this.bannerItems = bannerItems;
+        const paramMap = this._activatedRoute.snapshot.paramMap;
+        const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
+
+        this._setFilters(paramMap, queryParamMap);
+        this._setAdditionalFiltersVisibility(paramMap, queryParamMap);
+        this._setSorting(queryParamMap);
+        this._setScrollPosition();
+
+        categoryId = paramMap.get('id');
+        this.page = +queryParamMap.get('page') || 0;
+        this.req = {
+          query: queryParamMap.get('q') || '',
+          filters: this._getRequestFilters(paramMap, queryParamMap),
+          size: PAGE_SIZE,
+          ...(this.sort && { sort: this.sort }),
+          ...(this.page && { page: this.page }),
+        };
+      }),
+      switchMap((res) => {
+        return defer(() => {
+          return categoryId
+            ? zip(
+              this._categoryService.getCategory(categoryId),
+              this._categoryService.getCategoryBannerItems(categoryId),
+              of(this._categoryService.categoryIdsPopularEnabled.includes(categoryId)),
+            )
+            : zip(of(null), this._categoryService.getCategoryBannerItems(''), of(true));
+        }).pipe(
+          tap(([category, bannerItems, isPopularProductsShown]: [CategoryModel, BannerItemModel[], boolean]) => {
+            this.category = category;
+            this.bannerItems = bannerItems;
+            this._isPopularProductsShown = isPopularProductsShown;
+          })
+        )
+      }),
+      filter((res) => {
+        const pass = !!categoryId || !this.isNotSearchUsed;
+        if (!pass) {
+          this._spinnerService.hide();
+        }
+        return pass;
+      }),
+      switchMap(() => {
+        const searchProductRequests$ = Array.from(Array(this.page + 1).keys()).map((n) => {
+          return this._productService.searchProductOffers({ ...this.req, page: n });
         });
-      }
+
+        const req$ = forkJoin(searchProductRequests$).pipe(
+          map((res: ProductOffersListResponseModel[]) => {
+            const productOffers = [];
+            res.forEach((item) => {
+              productOffers.push(...item._embedded.productOffers);
+            });
+            const x = {
+              _embedded: {
+                productOffers,
+              },
+              page: {
+                totalElements: res[0].page.totalElements,
+                totalPages: res[0].page.totalPages,
+                number: searchProductRequests$.length,
+              },
+            };
+            return x;
+          }),
+        );
+
+        return defer(() => {
+          return this.page === 0 ? this._productService.searchProductOffers(this.req) : req$;
+        });
+      })
+    ).subscribe((productOffers) => {
+      this._spinnerService.hide();
+
+      this.productOffersList = productOffers as ProductOffersListResponseModel;
+      this.productOffers = this.productOffersList._embedded.productOffers;
+      this.productsTotal = this.productOffersList.page.totalElements;
+      this.summaryFeaturesDate = {
+        hasProducts: this.productsTotal > 0,
+        featuresQueries: this.filters?.features,
+        values: this.productOffersList._embedded.summary?.features
+      };
+
+    }, (e) => {
+      this._spinnerService.hide();
+      this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
     });
   }
 
@@ -178,8 +257,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.filters = {
       ...(queryParamMap?.has('supplierId') && { supplierId: queryParamMap.get('supplierId') }),
       ...(queryParamMap?.has('trademark') && { trademark: queryParamMap.get('trademark') }),
-      ...(queryParamMap?.has('isDelivery') && { isDelivery: queryParamMap.get('isDelivery') === 'true' }),
-      ...(queryParamMap?.has('isPickup') && { isPickup: queryParamMap.get('isPickup') === 'true' }),
+      ...(queryParamMap?.has('isDelivery') && { isDelivery: queryParamMap.get('isDelivery') !== 'false' }),
+      ...(queryParamMap?.has('isPickup') && { isPickup: queryParamMap.get('isPickup') !== 'false' }),
       ...(queryParamMap?.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
       ...(queryParamMap?.has('withImages') && { withImages: queryParamMap.get('withImages') === 'true' }),
       ...(queryParamMap?.has('hasDiscount') && { hasDiscount: queryParamMap.get('hasDiscount') === 'true' }),
@@ -191,98 +270,53 @@ export class CategoryComponent implements OnInit, OnDestroy {
     };
   }
 
+  private _setAdditionalFiltersVisibility(paramMap: Params, queryParamMap: Params) {
+
+    if (paramMap.get('id')) {
+      this.areAdditionalFiltersEnabled = true;
+    }
+    if (!paramMap.get('id')) {
+      if (queryParamMap.get('q') && queryParamMap.get('q').length >= 3) {
+        this.areAdditionalFiltersEnabled = true;
+      }
+      if (queryParamMap.get('supplierId')) {
+        this.areAdditionalFiltersEnabled = true;
+      }
+      if (queryParamMap.get('trademark')) {
+        this.areAdditionalFiltersEnabled = true;
+      }
+      if (queryParamMap.get('subCategoryId')) {
+        this.areAdditionalFiltersEnabled = true;
+      }
+    }
+  }
+
+  private _setSorting(queryParamMap: Params) {
+    this.sort = queryParamMap.get('sort') || null;
+  }
+
+  private _setScrollPosition() {
+    if (window['categoryScrollPosition'] && window['isHistoryBack']) {
+      this.scrollPosition = window['categoryScrollPosition'];
+      delete window['categoryScrollPosition'];
+      delete window['isHistoryBack'];
+    } else {
+      delete window['categoryScrollPosition'];
+      delete window['isHistoryBack'];
+    }
+  }
+
   navigateInCategoryRoute(filterGroup: AllGroupQueryFiltersModel): void {
     const categoryId = filterGroup.filters?.categoryId || null;
+    const page = this._activatedRoute.snapshot.queryParamMap.get('page');
 
     const navigationExtras = {
       queryParams: {
         ...queryParamsFromNew(filterGroup),
-        ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page: this._activatedRoute.snapshot.queryParamMap.get('page') }),
+        ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page }),
       },
     };
-    from(this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], navigationExtras))
-      .pipe(
-        filter((res) => res === null),
-        switchMap((res) => {
-          return defer(() => {
-            return categoryId
-              ? zip(
-                this._categoryService.getCategory(categoryId),
-                this._categoryService.getCategoryBannerItems(categoryId),
-                of(this._categoryService.categoryIdsPopularEnabled.includes(categoryId)),
-              )
-              : zip(of(null), this._categoryService.getCategoryBannerItems(''), of(true));
-          });
-        }),
-        tap(([category, bannerItems, isPopularProductsShown]: [CategoryModel, BannerItemModel[], boolean]) => {
-          this.category = category;
-          this.bannerItems = bannerItems;
-          this._isPopularProductsShown = isPopularProductsShown;
-        }),
-        filter((res) => {
-          return !!categoryId || !this.isNotSearchUsed;
-        }),
-        switchMap(() => {
-          this._spinnerService.show();
-          this.page = +this._activatedRoute.snapshot.queryParamMap.get('page') || 0;
-          this.req = {
-            query: filterGroup.query,
-            filters: filterGroup.filters,
-            size: 30,
-            ...(this.sort && { sort: this.sort }),
-            ...(this.page && { page: this.page }),
-          };
-          if (filterGroup.filters.subCategoryId) {
-            this.req.filters.categoryId = filterGroup.filters.subCategoryId;
-          }
-
-          const searchProductRequests$ = Array.from(Array(this.page + 1).keys()).map((n) => {
-            return this._productService.searchProductOffers({ ...this.req, page: n });
-          });
-
-          const req$ = forkJoin(searchProductRequests$).pipe(
-            map((res: ProductOffersListResponseModel[]) => {
-              const productOffers = [];
-              res.forEach((item) => {
-                productOffers.push(...item._embedded.productOffers);
-              });
-              const x = {
-                _embedded: {
-                  productOffers,
-                },
-                page: {
-                  totalElements: res[0].page.totalElements,
-                  totalPages: res[0].page.totalPages,
-                  number: searchProductRequests$.length,
-                },
-              };
-              return x;
-            }),
-          );
-
-          return defer(() => {
-            return this.page === 0 ? this._productService.searchProductOffers(this.req) : req$;
-          });
-        }),
-        take(1),
-      )
-      .subscribe(
-        (productOffers) => {
-          this._spinnerService.hide();
-          this.productOffersList = productOffers as ProductOffersListResponseModel;
-          this.productOffers = this.productOffersList._embedded.productOffers;
-          this.productsTotal = this.productOffersList.page.totalElements;
-          this.summaryFeaturesDate = {
-            hasProducts: this.productsTotal > 0,
-            featuresQueries: this.filters?.features,
-            values: this.productOffersList._embedded.summary?.features
-          };
-        },
-        (err) => {
-          this._spinnerService.hide();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
+    this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], navigationExtras);
   }
 
   loadProducts(params: { fetchable: boolean; newPage: any }): void {

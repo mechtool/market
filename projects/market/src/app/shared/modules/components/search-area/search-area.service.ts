@@ -4,7 +4,7 @@ import { BNetService } from '#shared/modules/common-services/bnet.service';
 import { UserService } from '#shared/modules/common-services/user.service';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import {
-  CategoryModel,
+  CategoryModel, CategoryRequestModel,
   Level,
   LocationModel,
   OrganizationResponseModel,
@@ -15,7 +15,7 @@ import {
 import { SearchItemHistoryModel } from './models/search-item-history.model';
 import { BehaviorSubject, defer, Observable, of, Subject } from 'rxjs';
 import { CategoryItemModel, SearchResultsTitleEnumModel } from './models';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, pluck, switchMap, tap } from 'rxjs/operators';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { OverlayService } from '#shared/modules/common-services/overlay.service';
@@ -29,6 +29,7 @@ const CATEGORY_OTHER = '6341';
 
 @Injectable()
 export class SearchAreaService {
+  searchType: 'category' | 'supplier' = 'category';
   markerIsSupplierControlVisible = true;
   suggestionsEnabled = false;
   suggestionsType: 'history' | 'products' = null;
@@ -225,6 +226,12 @@ export class SearchAreaService {
           return !categoryId ? of(res.categories) : this._getFlatChildrenCategories(categoryId);
         });
       }),
+    );
+  }
+
+  getSupplierCategories(supplierId: string): Observable<CategoryModel[]> {
+    return this._bnetService.getCategories({ suppliers: [supplierId] }).pipe(
+      pluck('categories')
     );
   }
 
