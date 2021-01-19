@@ -73,7 +73,7 @@ export class SearchBarComponent implements OnInit, OnChanges {
   }
 
   get filterIsEmpty(): boolean {
-    return !this.filters?.categoryId && !this.filters?.trademark && !this.filters?.supplierId;
+    return !this.filters?.categoryId && !this.filters?.tradeMark && !this.filters?.supplierId;
   }
 
   get filterCount(): number {

@@ -46,7 +46,7 @@ export class CategoryComponent implements OnDestroy {
   private _isPopularProductsShown = false;
 
   get isNotSearchUsed(): boolean {
-    const queryParamsToCheck = ['q', 'supplierId', 'trademark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo'];
+    const queryParamsToCheck = ['q', 'supplierId', 'tradeMark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo'];
     const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
     const paramMap = this._activatedRoute.snapshot.paramMap;
 
@@ -59,7 +59,7 @@ export class CategoryComponent implements OnDestroy {
     if (queryParamMap.has('supplierId')) {
       return false;
     }
-    if (queryParamMap.has('trademark')) {
+    if (queryParamMap.has('tradeMark')) {
       return false;
     }
     if (queryParamMap.has('subCategoryId')) {
@@ -141,7 +141,7 @@ export class CategoryComponent implements OnDestroy {
   private _getRequestFilters(paramMap, queryParamMap) {
     const reqFilters = {
       ...(queryParamMap.has('supplierId') && { supplierId: queryParamMap.get('supplierId') }),
-      ...(queryParamMap.has('trademark') && { trademark: queryParamMap.get('trademark') }),
+      ...(queryParamMap.has('tradeMark') && { tradeMark: queryParamMap.get('tradeMark') }),
       ...(queryParamMap.has('isDelivery') && { isDelivery: queryParamMap.get('isDelivery') !== 'false' }),
       ...(queryParamMap.has('isPickup') && { isPickup: queryParamMap.get('isPickup') !== 'false' }),
       ...(queryParamMap.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
@@ -256,7 +256,7 @@ export class CategoryComponent implements OnDestroy {
     this.query = queryParamMap?.has('q') ? queryParamMap.get('q') : '';
     this.filters = {
       ...(queryParamMap?.has('supplierId') && { supplierId: queryParamMap.get('supplierId') }),
-      ...(queryParamMap?.has('trademark') && { trademark: queryParamMap.get('trademark') }),
+      ...(queryParamMap?.has('tradeMark') && { tradeMark: queryParamMap.get('tradeMark') }),
       ...(queryParamMap?.has('isDelivery') && { isDelivery: queryParamMap.get('isDelivery') !== 'false' }),
       ...(queryParamMap?.has('isPickup') && { isPickup: queryParamMap.get('isPickup') !== 'false' }),
       ...(queryParamMap?.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
@@ -282,7 +282,7 @@ export class CategoryComponent implements OnDestroy {
       if (queryParamMap.get('supplierId')) {
         this.areAdditionalFiltersEnabled = true;
       }
-      if (queryParamMap.get('trademark')) {
+      if (queryParamMap.get('tradeMark')) {
         this.areAdditionalFiltersEnabled = true;
       }
       if (queryParamMap.get('subCategoryId')) {
@@ -414,7 +414,7 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
   return {
     q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
     supplierId: groupQuery.filters?.supplierId,
-    trademark: groupQuery.filters?.trademark,
+    tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
     isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',

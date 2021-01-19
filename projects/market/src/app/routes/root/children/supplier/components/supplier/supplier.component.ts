@@ -70,7 +70,7 @@ export class SupplierSingleComponent implements OnDestroy {
       inSales: queryParamMap.get('inStock') === 'true',
       size: PAGE_SIZE,
       ...(queryParamMap.has('q') && { q: queryParamMap.get('q') }),
-      ...(queryParamMap.has('trademark') && { trademark: queryParamMap.get('trademark') }),
+      ...(queryParamMap.has('tradeMark') && { tradeMark: queryParamMap.get('tradeMark') }),
       // tslint:disable-next-line:max-line-length
       ...(queryParamMap.has('priceFrom') && Number.isInteger(+queryParamMap.get('priceFrom')) && { priceFrom: +queryParamMap.get('priceFrom') * 100 }),
       // tslint:disable-next-line:max-line-length
@@ -167,7 +167,7 @@ export class SupplierSingleComponent implements OnDestroy {
   private _setFilters(paramMap: Params, queryParamMap: Params) {
     this.query = queryParamMap?.has('q') ? queryParamMap.get('q') : '';
     this.filters = {
-      ...(queryParamMap?.has('trademark') && { trademark: queryParamMap.get('trademark') }),
+      ...(queryParamMap?.has('tradeMark') && { tradeMark: queryParamMap.get('tradeMark') }),
       ...(queryParamMap?.has('priceFrom') && { priceFrom: +queryParamMap.get('priceFrom') }),
       ...(queryParamMap?.has('priceTo') && { priceTo: +queryParamMap.get('priceTo') }),
       ...(queryParamMap?.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
@@ -201,7 +201,7 @@ export class SupplierSingleComponent implements OnDestroy {
 export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
   return {
     q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
-    trademark: groupQuery.filters?.trademark,
+    tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
     isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',

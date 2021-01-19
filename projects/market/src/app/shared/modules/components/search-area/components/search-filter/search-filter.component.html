@@ -98,15 +98,15 @@
                  autocomplete="off"
                  id="{{componentId}}_brand"
                  placeholder="Искать бренд"
-                 formControlName="trademark">
+                 formControlName="tradeMark">
         </nz-input-group>
 
         <ng-template #trademarkClearTpl>
           <div class="input_clear">
             <img src="assets/img/svg/icon__close.svg"
                  alt=""
-                 (click)="resetControl('trademark')"
-                 *ngIf="form.get('trademark').value.length">
+                 (click)="resetControl('tradeMark')"
+                 *ngIf="form.get('tradeMark').value.length">
           </div>
         </ng-template>
       </nz-form-control>
@@ -198,7 +198,9 @@
         <ng-container [formGroup]="feature" [ngSwitch]="feature.value.type">
 
           <ng-container *ngSwitchCase="'BOOLEAN'">
-            <label nz-checkbox formControlName="boolValue">{{feature.value.featureName}}</label>
+            <label class="feature_wrap"
+                   [ngClass]="{'d-none': feature.value.values.length < 2 && feature.value.boolValue === null}"
+                   nz-checkbox formControlName="boolValue">{{feature.value.featureName}}</label>
           </ng-container>
 
           <ng-container *ngSwitchCase="'ENUMERATION'">
@@ -212,7 +214,7 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'NUMBER'">
-            <div class="range_wrap range_price"
+            <div class="feature_wrap"
                  [ngClass]="{'d-none': feature.value.min === feature.value.max && feature.value.numValueFrom === null && feature.value.numValueTo === null}">
 
               <div class="form-group_title">{{feature.value.featureName}}</div>

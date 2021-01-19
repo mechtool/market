@@ -48,7 +48,7 @@ const PAGE_SIZE = 20;
 const SCREEN_WIDTH_BREAKPOINT = 992;
 const PROPS_AUTO_SUBMIT = [
   'supplier.id',
-  'trademark',
+  'tradeMark',
   'isDelivery',
   'isPickup',
   'inStock',
@@ -190,7 +190,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   reset(): void {
     this.form.patchValue({
-      trademark: this._filterFormConfig.trademark,
+      tradeMark: this._filterFormConfig.tradeMark,
       isPickup: this._filterFormConfig.isPickup,
       isDelivery: this._filterFormConfig.isDelivery,
       inStock: this._filterFormConfig.inStock,
@@ -266,7 +266,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       {
         location: this._setLocationFormPart(),
         supplier: this._setSupplierFormPart(),
-        trademark: this._filterFormConfig.trademark,
+        tradeMark: this._filterFormConfig.tradeMark,
         isDelivery: this._filterFormConfig.isDelivery,
         isPickup: this._filterFormConfig.isPickup,
         inStock: this._filterFormConfig.inStock,
@@ -576,7 +576,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private _updateModifiedFiltersCounter() {
     let counter = 0;
-    const formPropertiesList = ['trademark', 'isDelivery', 'isPickup', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId'];
+    const formPropertiesList = ['tradeMark', 'isDelivery', 'isPickup', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId'];
     if (this._searchAreaService.markerIsSupplierControlVisible === true) {
       formPropertiesList.push('supplier.id');
     }
@@ -603,6 +603,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
             featureId: val.featureId,
             featureName: val.featureName,
             type: FeatureType.BOOLEAN,
+            values: this._fb.array(val.booleanValues.map((v) => this._fb.control(v))),
             boolValue: this.boolValueIfHas(val, featuresQueries),
           }));
         }

@@ -258,9 +258,9 @@ export class SearchBarFilterComponent implements OnInit {
     if (this.supplier) {
       this.filters.supplierId = this.supplier.id;
     }
-    const trademark = this.filtersForm.controls.trademark.value;
-    if (trademark) {
-      this.filters.trademark = trademark;
+    const tradeMark = this.filtersForm.controls.tradeMark.value;
+    if (tradeMark) {
+      this.filters.tradeMark = tradeMark;
     }
 
     this.filters.isDelivery = this.filtersForm.controls.isDelivery.value;
@@ -325,7 +325,7 @@ export class SearchBarFilterComponent implements OnInit {
     this.filtersForm = this._fb.group(
       {
         supplier: this.supplierForm(),
-        trademark: this.filters?.trademark,
+        tradeMark: this.filters?.tradeMark,
         isDelivery: this.isNotFalse(this.filters?.isDelivery),
         isPickup: this.isNotFalse(this.filters?.isPickup),
         inStock: this.filters?.inStock,
@@ -493,12 +493,12 @@ export class SearchBarFilterComponent implements OnInit {
       },
     );
 
-    this.filtersForm.controls.trademark.valueChanges.subscribe((trademark) => {
-      this.filtersForm.controls.trademark.setValue(trademark, { onlySelf: true, emitEvent: false });
-      if (trademark.length) {
-        this._addActiveFilter('trademark');
+    this.filtersForm.controls.tradeMark.valueChanges.subscribe((tradeMark) => {
+      this.filtersForm.controls.tradeMark.setValue(tradeMark, { onlySelf: true, emitEvent: false });
+      if (tradeMark.length) {
+        this._addActiveFilter('tradeMark');
       } else {
-        this._removeActiveFilter('trademark');
+        this._removeActiveFilter('tradeMark');
       }
     });
 
@@ -557,8 +557,8 @@ export class SearchBarFilterComponent implements OnInit {
     if (this.filters?.supplierId && showSupplierMarker) {
       this.activeFilters.add('supplierId');
     }
-    if (this.filters?.trademark) {
-      this.activeFilters.add('trademark');
+    if (this.filters?.tradeMark) {
+      this.activeFilters.add('tradeMark');
     }
     if (this.filters?.isDelivery === false) {
       this.activeFilters.add('isDelivery');

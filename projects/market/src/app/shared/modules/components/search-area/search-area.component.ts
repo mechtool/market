@@ -110,7 +110,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
       query: this.form.get('base.query').value,
       filters: {
         ...(this._isFormControlValueSubmittable('filters.supplier.id') && { supplierId: this.form.get('filters.supplier.id').value }),
-        ...(this._isFormControlValueSubmittable('filters.trademark') && { trademark: this.form.get('filters.trademark').value }),
+        ...(this._isFormControlValueSubmittable('filters.tradeMark') && { tradeMark: this.form.get('filters.tradeMark').value }),
         ...(this._isFormControlValueSubmittable('filters.isDelivery') && { isDelivery: this.form.get('filters.isDelivery').value }),
         ...(this._isFormControlValueSubmittable('filters.isPickup') && { isPickup: this.form.get('filters.isPickup').value }),
         ...(this._isFormControlValueSubmittable('filters.inStock') && { inStock: this.form.get('filters.inStock').value }),
@@ -152,7 +152,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
     if (controlName === 'filters') {
       if (this.filters) {
         this.form.get(controlName).patchValue({
-          ...(this.filters.trademark && { trademark: this.filters.trademark }),
+          ...(this.filters.tradeMark && { tradeMark: this.filters.tradeMark }),
           ...(this.filters.isDelivery !== undefined && this.filters.isDelivery !== null && { isDelivery: this.filters.isDelivery }),
           ...(this.filters.isPickup !== undefined && this.filters.isPickup !== null && { isPickup: this.filters.isPickup }),
           ...(this.filters.inStock !== undefined && this.filters.inStock !== null && { inStock: this.filters.inStock }),

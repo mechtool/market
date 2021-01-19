@@ -4,7 +4,7 @@ export class FilterFormConfigModel {
     name: string;
     isSelected: boolean;
   };
-  trademark: string;
+  tradeMark: string;
   isDelivery: boolean;
   isPickup: boolean;
   inStock: boolean;

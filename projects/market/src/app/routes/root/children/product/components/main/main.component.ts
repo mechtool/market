@@ -41,7 +41,7 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
   return {
     q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
     supplierId: groupQuery.filters?.supplierId,
-    trademark: groupQuery.filters?.trademark,
+    tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
     isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',

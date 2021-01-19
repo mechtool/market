@@ -28,7 +28,7 @@ export class ProductService {
       priceFrom: groupQuery.filters?.priceFrom ? groupQuery.filters.priceFrom * 100 : undefined,
       priceTo: groupQuery.filters?.priceTo ? groupQuery.filters.priceTo * 100 : undefined,
       suppliers: [groupQuery.filters?.supplierId],
-      tradeMarks: [groupQuery.filters?.trademark],
+      tradeMarks: [groupQuery.filters?.tradeMark],
       inStock: groupQuery.filters?.inStock,
       withImages: groupQuery.filters?.withImages,
       hasDiscount: groupQuery.filters?.hasDiscount,

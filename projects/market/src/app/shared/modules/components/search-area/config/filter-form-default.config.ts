@@ -4,7 +4,7 @@ export const filterFormDefaultConfig = {
     name: '',
     isSelected: false,
   },
-  trademark: '',
+  tradeMark: '',
   isDelivery: true,
   isPickup: true,
   inStock: false,
