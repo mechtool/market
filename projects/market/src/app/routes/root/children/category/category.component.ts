@@ -420,8 +420,7 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
     inStock: !groupQuery.filters?.inStock ? undefined : 'true',
     withImages: !groupQuery.filters?.withImages ? undefined : 'true',
     hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
-    // tslint:disable-next-line:max-line-length
-    features: !groupQuery.filters?.features?.length ? undefined : groupQuery.filters.features.filter( (value, index, self) => self.indexOf(value) === index),
+    features: !groupQuery.filters?.features?.length ? undefined : groupQuery.filters.features,
     priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
     priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
     subCategoryId: groupQuery.filters?.subCategoryId,

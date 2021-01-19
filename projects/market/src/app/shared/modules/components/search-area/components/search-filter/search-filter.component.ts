@@ -594,6 +594,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initFeaturesData(values: ProductOffersSummaryFeatureModel[], featuresQueries: string[]) {
 
+    this.featuresData.clear();
+
     values?.sort(this.compareByFeatureType())
       .filter((val) => val.booleanValues || val.enumValues || val.numberValues)
       .forEach((val) => {
