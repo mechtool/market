@@ -114,12 +114,17 @@
 .cell_pre {
   display: flex;
   align-items: center;
+  width: calc(100% - 160px);
 }
 
 .cell_left,
 .cell_right {
   display: flex;
   align-items: center;
+}
+
+.cell_left {
+  width: 75%;
 }
 
 .table_cell {

@@ -67,12 +67,14 @@ export class SupplierSingleComponent implements OnDestroy {
   private _createReq(queryParamMap, supplierInn) {
     const req = {
       supplierInn,
-      inSales: false,
+      inSales: queryParamMap.get('inStock') === 'true',
       size: PAGE_SIZE,
       ...(queryParamMap.has('q') && { q: queryParamMap.get('q') }),
       ...(queryParamMap.has('trademark') && { trademark: queryParamMap.get('trademark') }),
-      ...(queryParamMap.has('priceFrom') && { priceFrom: queryParamMap.get('priceFrom') }),
-      ...(queryParamMap.has('priceTo') && { priceTo: queryParamMap.get('priceTo') }),
+      // tslint:disable-next-line:max-line-length
+      ...(queryParamMap.has('priceFrom') && Number.isInteger(+queryParamMap.get('priceFrom')) && { priceFrom: +queryParamMap.get('priceFrom') * 100 }),
+      // tslint:disable-next-line:max-line-length
+      ...(queryParamMap.has('priceTo') && Number.isInteger(+queryParamMap.get('priceTo')) && { priceTo: +queryParamMap.get('priceTo') * 100 }),
       ...(queryParamMap.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
       ...(queryParamMap.has('withImages') && { withImages: queryParamMap.get('withImages') === 'true' }),
       ...(queryParamMap.has('hasDiscount') && { hasDiscount: queryParamMap.get('hasDiscount') === 'true' }),
