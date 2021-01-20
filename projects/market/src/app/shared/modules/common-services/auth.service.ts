@@ -19,8 +19,7 @@ const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organi
 
 @Injectable()
 export class AuthService implements OnDestroy{
-  loginMessageSubscription: Subscription;
-  registerMessageSubscription: Subscription;
+  messageSubscription: Subscription;
 
   get origin(): string {
     return this._document.location.origin;
@@ -37,7 +36,7 @@ export class AuthService implements OnDestroy{
   }
 
   ngOnDestroy() {
-    unsubscribeList([this.loginMessageSubscription, this.registerMessageSubscription])
+    unsubscribeList([this.messageSubscription])
   }
 
   logout(path: string = '/'): Observable<any> {
@@ -60,20 +59,7 @@ export class AuthService implements OnDestroy{
 
   login(): Observable<any> {
     this.createPopup('loginPopup', `${ITS_URL}/login?service=${this.origin}`);
-
-    if (!this.loginMessageSubscription) {
-      this.loginMessageSubscription = fromEvent(window, 'message')
-        .pipe(
-          filter((event: MessageEvent) => event.source['name'] === 'loginPopup'),
-          take(1),
-          switchMap((event) => {
-            return this.auth({ serviceName: this.origin, ticket: event.data })
-          }),
-          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
-        )
-        .subscribe();
-    }
-
+    this._subscribeToMessageEvent();
     return of(null);
   }
 
@@ -88,22 +74,9 @@ export class AuthService implements OnDestroy{
     )
   }
 
-  register() {
+  register(): Observable<any> {
     this.createPopup('registerPopup', `${ITS_URL}/registration?redirect=${this.origin}`);
-
-    if (!this.registerMessageSubscription) {
-      this.registerMessageSubscription = fromEvent(window, 'message')
-        .pipe(
-          filter((event: MessageEvent) => event.source['name'] === 'registerPopup'),
-          take(1),
-          switchMap((event) => {
-            return this.auth({ serviceName: this.origin, ticket: event.data })
-          }),
-          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
-        )
-        .subscribe();
-    }
-
+    this._subscribeToMessageEvent();
     return of(null);
   }
 
@@ -117,6 +90,20 @@ export class AuthService implements OnDestroy{
     const params = `width=${width}, height=${height}, left=${pos.x}, top=${pos.y}, toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no`;
 
     window.open(url, name, params);
+  }
+
+  private _subscribeToMessageEvent() {
+    if (!this.messageSubscription) {
+      this.messageSubscription = fromEvent(window, 'message')
+        .pipe(
+          take(1),
+          switchMap((event: MessageEvent) => {
+            return this.auth({ serviceName: this.origin, ticket: event.data })
+          }),
+          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
+        )
+        .subscribe();
+    }
   }
 
   auth(authRequest: AuthRequestModel): Observable<AuthResponseModel> {

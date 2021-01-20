@@ -66,7 +66,7 @@ function init() {
 function handleLoginPopup() {
   const ticket = getQueryParam('ticket', location.path());
   if (ticket) {
-    window.opener.postMessage(ticket);
+    window.opener.postMessage(ticket, '*');
     window.close();
   }
 }
