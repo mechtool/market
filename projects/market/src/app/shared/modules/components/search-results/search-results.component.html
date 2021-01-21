@@ -25,9 +25,6 @@
     (vsEnd)="loadProducts($event)"
     #scroll>
 
-    <!--[bufferAmount]="10"
-    [scrollDebounceTime]="150"-->
-
     <div class="content" itemscope="itemscope" #container>
         <market-card *ngFor="let productOffer of scroll.viewPortItems; let i = index">
           <market-nomenclature-card

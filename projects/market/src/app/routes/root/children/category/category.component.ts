@@ -38,7 +38,7 @@ export class CategoryComponent implements OnDestroy {
 
   sort: SortModel | any;
   page = 0;
-  pageSize = 30;
+  pageSize = 60;
   pos: number;
   areAdditionalFiltersEnabled = false;
   request: any = null;
@@ -131,7 +131,6 @@ export class CategoryComponent implements OnDestroy {
 
     if (this.unlocked && params.page > this.productOffersList?.page.number && params.page < this.productOffersList?.page.totalPages) {
       this.unlocked = false;
-      this._spinnerService.show();
       this.request = { ...this.request, page: params.page, sort: this.sort, size: this.pageSize };
 
       this._productService.searchProductOffers(this.request)
@@ -140,11 +139,9 @@ export class CategoryComponent implements OnDestroy {
             this.productOffers.push(...this.productOffersList._embedded.productOffers);
             this.productsTotal = this.productOffersList.page.totalElements;
             this.unlocked = true;
-            this._spinnerService.hide();
           },
           (err) => {
             this.unlocked = true;
-            this._spinnerService.hide();
           },
         );
     }
@@ -276,20 +273,7 @@ export class CategoryComponent implements OnDestroy {
 
   private _setFilters(paramMap: Params, queryParamMap: Params) {
     this.query = queryParamMap?.has('q') ? queryParamMap.get('q') : '';
-    this.filters = {
-      ...(queryParamMap?.has('supplierId') && { supplierId: queryParamMap.get('supplierId') }),
-      ...(queryParamMap?.has('tradeMark') && { tradeMark: queryParamMap.get('tradeMark') }),
-      ...(queryParamMap?.has('isDelivery') && { isDelivery: queryParamMap.get('isDelivery') !== 'false' }),
-      ...(queryParamMap?.has('isPickup') && { isPickup: queryParamMap.get('isPickup') !== 'false' }),
-      ...(queryParamMap?.has('inStock') && { inStock: queryParamMap.get('inStock') === 'true' }),
-      ...(queryParamMap?.has('withImages') && { withImages: queryParamMap.get('withImages') === 'true' }),
-      ...(queryParamMap?.has('hasDiscount') && { hasDiscount: queryParamMap.get('hasDiscount') === 'true' }),
-      ...(queryParamMap?.has('features') && { features: queryParamMap.getAll('features') }),
-      ...(queryParamMap?.has('priceFrom') && { priceFrom: +queryParamMap.get('priceFrom') }),
-      ...(queryParamMap?.has('priceTo') && { priceTo: +queryParamMap.get('priceTo') }),
-      ...(queryParamMap?.has('subCategoryId') && { subCategoryId: queryParamMap.get('subCategoryId') }),
-      ...(paramMap?.has('id') && { categoryId: paramMap.get('id') }),
-    };
+    this.filters = this._getRequestFilters(paramMap, queryParamMap);
   }
 
   private _setAdditionalFiltersVisibility(paramMap: Params, queryParamMap: Params) {

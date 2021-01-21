@@ -75,16 +75,12 @@ export class SupplierListComponent implements AfterViewInit {
       }
 
       if (nextPage > this.supplierData.page.number && nextPage < this.supplierData.page.totalPages) {
-        this._spinnerService.show();
-
         this._getSuppliers(nextPage).subscribe(
           (suppliers) => {
             this.supplierData = suppliers;
             this.suppliers.push(...this.supplierData._embedded.suppliers);
-            this._spinnerService.hide();
           },
           (err) => {
-            this._spinnerService.hide();
             this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
           },
         );

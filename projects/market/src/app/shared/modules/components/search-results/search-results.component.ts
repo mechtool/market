@@ -3,8 +3,6 @@ import { CategoryModel, ProductOffersModel, SortModel } from '#shared/modules/co
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
-import { combineLatest } from 'rxjs';
-import { CategoryService, NavigationService, SpinnerService } from '#shared/modules/common-services';
 import { IPageInfo, VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 @Component({
@@ -22,7 +20,7 @@ export class SearchResultComponent implements AfterViewInit {
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
   @Input() page: number;
-  @Input() pageSize = 30;
+  @Input() pageSize = 60;
   @Input() visibleSort = false;
   @Input() sort;
 
@@ -53,11 +51,8 @@ export class SearchResultComponent implements AfterViewInit {
 
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _categoryService: CategoryService,
-    private _spinnerService: SpinnerService,
-    private _navigationService: NavigationService,
   ) {
-    combineLatest([this._activatedRoute.params, this._activatedRoute.queryParams]).subscribe(([params, queryParams]) => {
+    this._activatedRoute.queryParams.subscribe((queryParams) => {
       this.isRequestFulfilled = containParameters(queryParams);
       this.queryParams = queryParams;
     });
@@ -68,7 +63,7 @@ export class SearchResultComponent implements AfterViewInit {
     if (index) {
       this._scrollToIndex(index, 200).then(() => setTimeout(() => {
           this.unlocked = true;
-        }, 1500)
+        }, 2000)
       );
     } else {
       this.unlocked = true;
