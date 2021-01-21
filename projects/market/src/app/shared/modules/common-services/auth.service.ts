@@ -20,6 +20,8 @@ const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organi
 @Injectable()
 export class AuthService implements OnDestroy{
   messageSubscription: Subscription;
+  popupRef: WindowProxy = null;
+  popupRefName: string = null;
 
   get origin(): string {
     return this._document.location.origin;
@@ -57,12 +59,6 @@ export class AuthService implements OnDestroy{
     );
   }
 
-  login(): Observable<any> {
-    this.createPopup('loginPopup', `${ITS_URL}/login?service=${this.origin}`);
-    this._subscribeToMessageEvent();
-    return of(null);
-  }
-
   setUserDependableData$(userData): Observable<any> {
     return of(null).pipe(
       tap(() => this._userService.setUserData(userData)),
@@ -74,13 +70,59 @@ export class AuthService implements OnDestroy{
     )
   }
 
-  register(): Observable<any> {
-    this.createPopup('registerPopup', `${ITS_URL}/registration?redirect=${this.origin}`);
-    this._subscribeToMessageEvent();
-    return of(null);
+  login(): Observable<any> {
+    const popupName = 'loginPopup';
+    return this._createPopupAndSubscribe(popupName, `${ITS_URL}/login?service=${this.origin}`);
   }
 
-  createPopup(name, url) {
+  register(): Observable<any> {
+    const popupName = 'registerPopup';
+    return this._createPopupAndSubscribe(popupName, `${ITS_URL}/registration?redirect=${this.origin}`);
+  }
+
+  private _createPopupAndSubscribe(popupName, url) {
+    if (!this.popupRef) {
+      this._createPopup(popupName, url);
+      this.popupRefName = popupName;
+      this._subscribeToMessageEvent();
+      return of(null);
+    }
+    try {
+      if (!this.popupRef.window) {
+        this.popupRef = null;
+        this.messageSubscription.unsubscribe();
+        this.messageSubscription = null;
+        this._createPopup(popupName, url);
+        this.popupRefName = popupName;
+        this._subscribeToMessageEvent();
+        return of(null);
+      }
+    } catch (e) {
+      this.popupRef = null;
+      this.messageSubscription.unsubscribe();
+      this.messageSubscription = null;
+      this._createPopup(popupName, url);
+      this.popupRefName = popupName;
+      this._subscribeToMessageEvent();
+      return of(null);
+    }
+
+    if (this.popupRefName === popupName) {
+      this.popupRef.focus();
+    }
+    if (this.popupRefName !== popupName) {
+      this.popupRef.close();
+      this.popupRef = null;
+      this.messageSubscription.unsubscribe();
+      this.messageSubscription = null;
+      this._createPopup(popupName, url);
+      this.popupRefName = popupName;
+      this._subscribeToMessageEvent();
+      return of(null);
+    }
+  }
+
+  private _createPopup(name, url) {
     const width = 500;
     const height = 500;
     const pos = {
@@ -88,8 +130,8 @@ export class AuthService implements OnDestroy{
       y: (screen.height/2) - (height / 2)
     };
     const params = `width=${width}, height=${height}, left=${pos.x}, top=${pos.y}, toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no`;
-
-    window.open(url, name, params);
+    this.popupRef = window.open(url, name, params);
+    this.popupRef.focus();
   }
 
   private _subscribeToMessageEvent() {
