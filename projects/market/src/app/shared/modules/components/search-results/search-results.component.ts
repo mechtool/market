@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CategoryModel, ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
@@ -15,7 +15,7 @@ import { IPageInfo, VirtualScrollerComponent } from 'ngx-virtual-scroller';
     './search-results.component-576.scss',
   ],
 })
-export class SearchResultComponent implements AfterViewInit {
+export class SearchResultComponent {
   @Input() category: CategoryModel;
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
@@ -23,9 +23,30 @@ export class SearchResultComponent implements AfterViewInit {
   @Input() pageSize = 60;
   @Input() visibleSort = false;
   @Input() sort;
+  @Input()
+  set scrollCommand(command: string) {
+    if (command === 'scroll') {
+      const index = +this._activatedRoute.snapshot.queryParamMap.get('pos');
+      if (index) {
+        this._scrollToIndex(index, 200).then(() => setTimeout(() => {
+            this.unlocked = true;
+          }, 1200)
+        );
+      } else {
+        this.unlocked = true;
+        this.scrollChanged.emit(null);
+      }
+    }
+
+    if (command === 'stand') {
+      this.unlocked = true;
+      this.scrollChanged.emit(null);
+    }
+  }
 
   @Output() sortingChanged: EventEmitter<SortModel> = new EventEmitter();
   @Output() positionChanged: EventEmitter<{ pos: number; page: number }> = new EventEmitter();
+  @Output() scrollChanged: EventEmitter<string> = new EventEmitter();
 
   @ViewChild(VirtualScrollerComponent) private virtualScroller: VirtualScrollerComponent;
 
@@ -58,18 +79,6 @@ export class SearchResultComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    const index = +this._activatedRoute.snapshot.queryParamMap.get('pos');
-    if (index) {
-      this._scrollToIndex(index, 200).then(() => setTimeout(() => {
-          this.unlocked = true;
-        }, 2000)
-      );
-    } else {
-      this.unlocked = true;
-    }
-  }
-
   sortChange(sort: SortModel) {
     this.sortingChanged.emit(sort);
   }
@@ -88,6 +97,7 @@ export class SearchResultComponent implements AfterViewInit {
 
     if (this.virtualScroller) {
       this.virtualScroller.scrollToIndex(index);
+      this.scrollChanged.emit(null);
       return;
     }
 

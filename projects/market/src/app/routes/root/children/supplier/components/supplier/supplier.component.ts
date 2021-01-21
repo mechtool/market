@@ -124,10 +124,10 @@ export class SupplierSingleComponent implements OnDestroy {
 
   private _init() {
     this.urlSubscription = combineLatest([this._activatedRoute.paramMap, this._activatedRoute.queryParamMap]).pipe(
-      tap((organization) => {
+      tap(() => {
         this._spinnerService.show();
       }),
-      switchMap((res) => {
+      switchMap(() => {
         const paramMap = this._activatedRoute.snapshot.paramMap;
         const supplierId = paramMap.get('supplierId');
         return this._organizationsService.getOrganization(supplierId);

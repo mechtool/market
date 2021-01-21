@@ -28,9 +28,11 @@
       [page]="page"
       [sort]="sort"
       [pageSize]="pageSize"
+      [scrollCommand]="scrollCommand"
       [visibleSort]="productOffers?.length > 1"
       (sortingChanged)="changeSortingAndRefresh($event)"
-      (positionChanged)="loadProducts($event)">
+      (positionChanged)="loadProducts($event)"
+      (scrollChanged)="scrollCommand = $event">
 
       <ng-container ngProjectAs="tags-slot" *ngIf="showTags">
         <market-tag (click)="resetUrlFilters()">

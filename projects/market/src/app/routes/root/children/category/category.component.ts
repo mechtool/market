@@ -40,10 +40,10 @@ export class CategoryComponent implements OnDestroy {
   page = 0;
   pageSize = 60;
   pos: number;
+  scrollCommand: string;
   areAdditionalFiltersEnabled = false;
   request: any = null;
   urlSubscription: Subscription;
-
   private _isPopularProductsShown = false;
   private unlocked = true;
 
@@ -246,6 +246,11 @@ export class CategoryComponent implements OnDestroy {
         values: this.productOffersList._embedded.summary?.features
       };
 
+      if (this._activatedRoute.snapshot.queryParamMap.has('pos')) {
+        this.scrollCommand = 'scroll';
+      } else {
+        this.scrollCommand = 'stand';
+      }
       this._spinnerService.hide();
 
     }, (err) => {
@@ -322,6 +327,7 @@ export class CategoryComponent implements OnDestroy {
       }
     } else {
       url = removeURLParameters(this._router.url, 'page', 'pos');
+      this._router.navigateByUrl(url, { skipLocationChange: true })
     }
     this._location.go(url);
   }
