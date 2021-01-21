@@ -2,7 +2,7 @@ import { DOCUMENT, Location } from '@angular/common';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { fromEvent, Observable, of, Subscription, throwError } from 'rxjs';
-import { catchError, delay, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, delay, switchMap, take, tap } from 'rxjs/operators';
 import { environment } from '#environments/environment';
 import { redirectTo, unsubscribeList } from '#shared/utils';
 import { ApiService } from './api.service';
@@ -102,7 +102,13 @@ export class AuthService implements OnDestroy{
           }),
           switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
         )
-        .subscribe();
+        .subscribe(() => {
+          if (!this._userService.organizations$?.value.length) {
+            this._router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => this._router.navigate(['./my', 'organizations'], {
+              queryParams: { tab: 'c' },
+            }));
+          }
+        });
     }
   }
 

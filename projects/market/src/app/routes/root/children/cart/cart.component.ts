@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { CartService, NotificationsService, SpinnerService, UserService, UserStateService } from '#shared/modules/common-services';
 import { CartDataModel, CartDataResponseModel } from '#shared/modules/common-services/models';
 import { take, switchMap } from 'rxjs/operators';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
+import { Subscription } from "rxjs";
+import { unsubscribeList } from "#shared/utils";
 
 type CartDataCommonModel = CartDataResponseModel | CartDataModel;
 
@@ -12,10 +14,11 @@ type CartDataCommonModel = CartDataResponseModel | CartDataModel;
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss', './cart.component-768.scss'],
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   cartData: CartDataCommonModel;
   userInfo: UserInfoModel;
   isCartDataLoaded = false;
+  userDataSubscription: Subscription;
 
   constructor(
     private _cartService: CartService,
@@ -27,7 +30,9 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this._spinnerService.show();
-    this.userInfo = this._getUserInfo();
+    this.userDataSubscription = this._userStateService.userData$.subscribe((res) => {
+      this.userInfo = res?.userInfo;
+    })
     this._cartService
       .setActualCartData()
       .pipe(
@@ -50,6 +55,10 @@ export class CartComponent implements OnInit {
       );
   }
 
+  ngOnDestroy() {
+    unsubscribeList([this.userDataSubscription]);
+  }
+
   setProps(cartData: any) {
     if (!cartData?.content) {
       this.cartData = null;
@@ -59,7 +68,4 @@ export class CartComponent implements OnInit {
     }
   }
 
-  private _getUserInfo() {
-    return this._userStateService.userData$.value?.userInfo;
-  }
 }
