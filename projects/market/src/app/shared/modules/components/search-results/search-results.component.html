@@ -22,10 +22,11 @@
     [items]="productOffers"
     [parentScroll]="scroll.window"
     [enableUnequalChildrenSizes]="true"
-    [bufferAmount]="10"
-    [scrollDebounceTime]="150"
-    (vsEnd)="fetchMore($event)"
+    (vsEnd)="loadProducts($event)"
     #scroll>
+
+    <!--[bufferAmount]="10"
+    [scrollDebounceTime]="150"-->
 
     <div class="content" itemscope="itemscope" #container>
         <market-card *ngFor="let productOffer of scroll.viewPortItems; let i = index">

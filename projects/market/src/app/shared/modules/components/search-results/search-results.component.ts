@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CategoryModel, ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
 import { ActivatedRoute } from '@angular/router';
 import { containParameters } from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
-import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { CategoryService, NavigationService, SpinnerService } from '#shared/modules/common-services';
 import { IPageInfo, VirtualScrollerComponent } from 'ngx-virtual-scroller';
-import { debounceTime, distinctUntilChanged, filter, pairwise, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'market-search-results',
@@ -18,43 +17,23 @@ import { debounceTime, distinctUntilChanged, filter, pairwise, tap } from 'rxjs/
     './search-results.component-576.scss',
   ],
 })
-export class SearchResultComponent implements OnInit {
+export class SearchResultComponent implements AfterViewInit {
   @Input() category: CategoryModel;
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
   @Input() page: number;
-  private _scrollPosition: number;
-  @Input() set scrollPosition(val: number) {
-    this._scrollPosition = val;
-    if (this._scrollPosition) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: this._scrollPosition,
-          left: 0,
-          behavior: 'smooth',
-        });
-      }, 300);
-    }
-  }
-
-  get scrollPosition(): number {
-    return this._scrollPosition;
-  }
-
+  @Input() pageSize = 30;
   @Input() visibleSort = false;
   @Input() sort;
-  @Output() pageChanged: EventEmitter<{ fetchable: boolean; newPage: any }> = new EventEmitter();
+
   @Output() sortingChanged: EventEmitter<SortModel> = new EventEmitter();
-  @ViewChild(VirtualScrollerComponent)
-  private virtualScroller: VirtualScrollerComponent;
-  scrollChange$: BehaviorSubject<any> = new BehaviorSubject(null);
-  scrollChangeSubscription: Subscription;
-  @Input() chunkSize = 30;
+  @Output() positionChanged: EventEmitter<{ pos: number; page: number }> = new EventEmitter();
+
+  @ViewChild(VirtualScrollerComponent) private virtualScroller: VirtualScrollerComponent;
 
   isRequestFulfilled: boolean;
   queryParams: any;
-
-  isPageUsed = false;
+  private unlocked = false;
 
   get showResult() {
     if (this.productOffers?.length) {
@@ -84,51 +63,43 @@ export class SearchResultComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.scrollChangeSubscription = this.scrollChange$
-      .pipe(
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-        filter((res) => {
-          return !this._navigationService.isMenuOpened;
-        }),
-        pairwise(),
-        filter((res) => {
-          return !this.productOffers || this.productOffers.length >= this.chunkSize;
-        }),
-      )
-      .subscribe(
-        ([prevEvent, currEvent]) => {
-          if (!this.isPageUsed) {
-            this.isPageUsed = true;
-            if (this.scrollPosition) {
-              window.scrollTo({
-                top: this.scrollPosition,
-                left: 0,
-                behavior: 'smooth',
-              });
-            }
-            if (!this.scrollPosition && this.page) {
-              const scrollToIndex = this.page * this.chunkSize;
-              this.virtualScroller.scrollToIndex(scrollToIndex);
-            }
-            return;
-          }
-          const fetchable = currEvent.endIndex + 1 === this.productOffers.length && (currEvent.endIndex + 1) % this.chunkSize === 0;
-          const params = {
-            fetchable,
-            newPage: Math.floor((currEvent.endIndex + 1) / this.chunkSize),
-          };
-          this.pageChanged.emit(params);
-        },
-        () => {},
+  ngAfterViewInit(): void {
+    const index = +this._activatedRoute.snapshot.queryParamMap.get('pos');
+    if (index) {
+      this._scrollToIndex(index, 200).then(() => setTimeout(() => {
+          this.unlocked = true;
+        }, 1500)
       );
+    } else {
+      this.unlocked = true;
+    }
   }
 
   sortChange(sort: SortModel) {
     this.sortingChanged.emit(sort);
   }
 
-  fetchMore(event: IPageInfo) {
-    this.scrollChange$.next(event);
+  loadProducts(event: IPageInfo) {
+    if (this.unlocked) {
+      const nextPage = Math.floor((event.endIndex + 1) / this.pageSize);
+      this.positionChanged.emit({ pos: event.startIndex, page: nextPage })
+    }
+  }
+
+  private async _scrollToIndex(index: number, logout: number) {
+    if (logout < 0) {
+      return;
+    }
+
+    if (this.virtualScroller) {
+      this.virtualScroller.scrollToIndex(index);
+      return;
+    }
+
+    await this._sleep(10).then(() => this._scrollToIndex(index, --logout));
+  }
+
+  private _sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

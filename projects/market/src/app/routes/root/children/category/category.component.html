@@ -1,16 +1,16 @@
 <market-category-list
-  [category]="category"
-></market-category-list>
+  [category]="category">
+</market-category-list>
 
 <market-search-area
   [filters]="filters"
   [query]="query"
   [enableSuggestions]="true"
   [areAdditionalFiltersEnabled]="areAdditionalFiltersEnabled"
-  [filterCollapsed]="isFilterCollapsed"
+  [filterCollapsed]=false
   [summaryFeaturesData]="summaryFeaturesDate"
-  (submitClick)="navigateInCategoryRoute($event)"
->
+  (submitClick)="navigateInCategoryRoute($event)">
+
   <ng-container ngProjectAs="upper-slot" *ngIf="bannerItems?.length">
     <market-banners [bannerItems]="bannerItems"></market-banners>
   </ng-container>
@@ -18,8 +18,8 @@
   <ng-container ngProjectAs="main-slot">
     <market-main-popular
       *ngIf="isNotSearchUsed && isPopularProductsShown"
-      [categoryId]="category?.id"
-    ></market-main-popular>
+      [categoryId]="category?.id">
+    </market-main-popular>
 
     <market-search-results
       [productOffers]="productOffers"
@@ -27,19 +27,17 @@
       [category]="category"
       [page]="page"
       [sort]="sort"
-      [scrollPosition]="scrollPosition"
+      [pageSize]="pageSize"
       [visibleSort]="productOffers?.length > 1"
-      (pageChanged)="loadProducts($event)"
       (sortingChanged)="changeSortingAndRefresh($event)"
-    >
+      (positionChanged)="loadProducts($event)">
 
       <ng-container ngProjectAs="tags-slot" *ngIf="showTags">
         <market-tag (click)="resetUrlFilters()">
           Сбросить все фильтры
         </market-tag>
       </ng-container>
+
     </market-search-results>
-
   </ng-container>
-
 </market-search-area>

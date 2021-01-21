@@ -46,3 +46,14 @@
 .product_supplier-name .product_supplier-type {
   margin-right: 5px;
 }
+
+
+virtual-scroller {
+  height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}

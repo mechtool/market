@@ -67,6 +67,50 @@ export function queryParamsWithoutSupplierIdFrom(groupQuery: AllGroupQueryFilter
   };
 }
 
+/**
+ * Добавление queryParams в url
+ */
+export function addURLParameters(url: string, params: Map<string, any>) {
+  params.forEach((value, key) => {
+    const hasQueryParams = url.includes('?');
+    url = `${url}${hasQueryParams ? '&' : '?'}${key}=${value}`;
+  });
+  return url;
+}
+
+/**
+ * Изменение queryParams в url
+ */
+export function updateUrlParameters(url: string, params: Map<string, any>) {
+  params.forEach((value, key) => {
+    const regex = new RegExp(`(${key}=)[^&]+`);
+    url = url.replace(regex, `$1${value}`);
+  })
+  return url;
+}
+
+/**
+ * Удаление queryParams в url
+ */
+export function removeURLParameters(url, ...params) {
+  const urlParts = url.split('?');
+  if (urlParts.length >= 2) {
+    const pars = urlParts[1].split(/[&;]/g);
+
+    for (let i = 0; i < params.length; i++) {
+      const prefix = `${encodeURIComponent(params[i])}=`;
+
+      for (let j = pars.length; j-- > 0;) {
+        if (pars[j].lastIndexOf(prefix, 0) !== -1) {
+          pars.splice(j, 1);
+        }
+      }
+    }
+    return urlParts[0] + (pars.length > 0 ? `?${pars.join('&')}` : '');
+  }
+  return url;
+}
+
 function hasRequiredRequestParams(groupQuery: AllGroupQueryFiltersModel): boolean {
   return !!groupQuery.query || !!groupQuery.filters?.categoryId || !!groupQuery.filters?.tradeMark || !!groupQuery.filters?.supplierId;
 }

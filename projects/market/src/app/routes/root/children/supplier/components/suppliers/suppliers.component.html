@@ -3,13 +3,12 @@
   <market-search-bar
     [query]="query"
     placeholder="Поиск поставщиков"
-    (submitClick)="queryParametersChange($event)"
+    (submitClick)="changeQueryParameters($event)"
     [suggestionsOff]="true"
     [filterVisible]="false"
     minQueryLength="3"
     maxQueryLength="100"
   ></market-search-bar>
-
 
   <div class="catalog_header">
     <div class="catalog_header__count">
@@ -18,14 +17,20 @@
     </div>
   </div>
 
-  <div class="catalog catalog_suppliers">
+  <virtual-scroller
+    [items]="suppliers"
+    [parentScroll]="scroll.window"
+    [enableUnequalChildrenSizes]="true"
+    (vsEnd)="loadSuppliers($event)"
+    #scroll>
 
-    <div class="suppliers_infinite_scroll" infiniteScroll (scrolled)="supplierLoading()">
-      <market-card *ngFor="let item of suppliers">
-        <market-supplier-card [supplier]="item"></market-supplier-card>
+    <div class='content' #container>
+      <market-card *ngFor="let supplier of scroll.viewPortItems; let i = index">
+        <market-supplier-card
+          [supplier]="supplier">
+        </market-supplier-card>
       </market-card>
     </div>
 
-  </div>
-
+  </virtual-scroller>
 </div>
