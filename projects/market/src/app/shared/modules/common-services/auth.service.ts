@@ -147,7 +147,7 @@ export class AuthService implements OnDestroy{
         .subscribe(() => {
           if (!this._userService.organizations$?.value.length) {
             this._router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => this._router.navigate(['./my', 'organizations'], {
-              queryParams: { tab: 'c' },
+              queryParams: { tab: `c;${this._location.path()}` },
             }));
           }
         });

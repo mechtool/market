@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '#shared/modules/common-services/auth.service';
+import { UserStateService } from '#shared/modules/common-services/user-state.service';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
 import { EmptyOrganizationsInfoComponent } from '../components/empty-organizations-info/empty-organizations-info.component';
 import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
-import { tap } from 'rxjs/operators';
+import { filter, switchMap, take, tap } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Location } from '@angular/common';
+import { fromEvent } from 'rxjs';
 
 /**
  * URL пути находящиеся под аутентификацией
@@ -18,6 +20,7 @@ export class AuthModalService {
   constructor(
     private _modalService: NzModalService,
     private _authService: AuthService,
+    private _userStateService: UserStateService,
     private _externalProvidersService: ExternalProvidersService,
     private _location: Location,
   ) {}
@@ -42,13 +45,15 @@ export class AuthModalService {
             this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_CLOSE);
           }
         }),
+        filter((res) => !!res),
+        switchMap((res) => {
+          return this._userStateService.userData$;
+        }),
+        filter((res) => !!res),
+        take(1),
       )
       .subscribe((result) => {
-        const pathTo = loginRedirectPath;
-        const pathFrom = `${location.pathname}${location.search}`;
-        if (this._isPathWithAuth(PATHS_WITH_AUTHORIZATION, pathTo)) {
-          this._authService.goTo(this._isPathWithAuth(PATHS_WITH_AUTHORIZATION, pathFrom) ? '/' : pathFrom);
-        }
+        this._authService.goTo(loginRedirectPath);
       });
   }
 
