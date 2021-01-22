@@ -3,7 +3,8 @@
   <nz-input-group [nzSuffix]="queryClearTpl">
     <input
       placeholder="{{placeholder}}"
-      autocomplete="off"
+      autocomplete="false"
+      list="null"
       nz-input
       [(ngModel)]="queryText"
       #queryInputEl

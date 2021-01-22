@@ -19,7 +19,8 @@
         <nz-input-group [nzSuffix]="regionClearTpl">
           <input nz-input type="text"
                  [ngClass]="{'error': false}"
-                 autocomplete="off"
+                 autocomplete="false"
+                 list="null"
                  id="{{componentId}}_location"
                  placeholder="Россия"
                  formControlName="name"
@@ -58,7 +59,8 @@
         <nz-form-label nzFor="{{componentId}}_inn">ИНН или наименование поставщика</nz-form-label>
         <nz-input-group [nzSuffix]="supplierNameClearTpl">
           <input nz-input type="text"
-                 autocomplete="off"
+                 autocomplete="false"
+                 list="null"
                  id="{{componentId}}_inn"
                  placeholder="Искать поставщика"
                  formControlName="name"
@@ -95,7 +97,8 @@
         <nz-form-label nzFor="{{componentId}}_brand">Наименование бренда производителя</nz-form-label>
         <nz-input-group [nzSuffix]="trademarkClearTpl">
           <input nz-input type="text"
-                 autocomplete="off"
+                 autocomplete="false"
+                 list="null"
                  id="{{componentId}}_brand"
                  placeholder="Искать бренд"
                  formControlName="tradeMark">
@@ -137,7 +140,8 @@
                      name="price_from"
                      class="range_input range_from price_from"
                      placeholder="от"
-                     autocomplete="off"
+                     autocomplete="false"
+                     list="null"
                      formControlName="priceFrom"/>
             </nz-form-control>
           </nz-form-item>
@@ -150,7 +154,8 @@
                      name="price_to"
                      class="range_input range_to price_to"
                      placeholder="до"
-                     autocomplete="off"
+                     autocomplete="false"
+                     list="null"
                      formControlName="priceTo"/>
             </nz-form-control>
           </nz-form-item>
@@ -167,7 +172,8 @@
           <nz-form-control>
             <nz-form-label nzFor="{{componentId}}_category">Поиск подкатегории</nz-form-label>
             <input nz-input type="text"
-                   autocomplete="off"
+                   autocomplete="false"
+                   list="null"
                    id="{{componentId}}_category"
                    placeholder="Искать подкатегорию"
                    formControlName="categorySearchQuery">
@@ -227,7 +233,8 @@
                            name="num_value_from"
                            class="range_input range_from price_from"
                            placeholder="от {{feature.value.min}}"
-                           autocomplete="off"
+                           autocomplete="false"
+                           list="null"
                            formControlName="numValueFrom"/>
                   </nz-form-control>
                 </nz-form-item>
@@ -239,7 +246,8 @@
                            name="num_value_to"
                            class="range_input range_to price_to"
                            placeholder="до {{feature.value.max}}"
-                           autocomplete="off"
+                           autocomplete="false"
+                           list="null"
                            formControlName="numValueTo"/>
                   </nz-form-control>
                 </nz-form-item>

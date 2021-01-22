@@ -9,7 +9,8 @@
         <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
         <input nz-input type="text"
                [ngClass]="{'error': filtersForm.controls.supplier.errors && focusIsNotFormFilterInn}"
-               autocomplete="off"
+               autocomplete="false"
+               list="null"
                name="formFilterInn"
                id="formFilterInn"
                placeholder="Начните вводить"
@@ -29,7 +30,8 @@
       <nz-form-control>
         <nz-form-label nzFor="formFilterBrand">Наименование бренда производителя</nz-form-label>
         <input nz-input type="text"
-               autocomplete="off"
+               autocomplete="false"
+               list="null"
                name="formFilterBrand"
                id="formFilterBrand"
                placeholder="Укажите бренд"
@@ -68,7 +70,8 @@
                    id="formPriceFrom"
                    class="range_input range_from price_from"
                    placeholder="{{MIN_PRICE}} ₽"
-                   autocomplete="off"
+                   autocomplete="false"
+                   list="null"
                    formControlName="priceFrom"/>
           </nz-form-control>
         </nz-form-item>
@@ -84,7 +87,8 @@
                    id="formPriceTo"
                    class="range_input range_to price_to"
                    placeholder="{{MAX_PRICE}} ₽"
-                   autocomplete="off"
+                   autocomplete="false"
+                   list="null"
                    formControlName="priceTo"/>
           </nz-form-control>
         </nz-form-item>
@@ -115,7 +119,8 @@
                  name="formFilterCategory"
                  id="formFilterCategory"
                  placeholder="Укажите название категории"
-                 autocomplete="off"
+                 autocomplete="false"
+                 list="null"
                  formControlName="categoryName">
         </nz-form-control>
       </nz-form-item>
@@ -150,7 +155,8 @@
             <nz-form-label nzFor="formFilterInn">ИНН или наименованию поставщика</nz-form-label>
             <input nz-input type="text"
                    [ngClass]="{'error': filtersForm.controls.supplier.errors && focusIsNotFormFilterInn}"
-                   autocomplete="off"
+                   autocomplete="false"
+                   list="null"
                    name="formFilterInnMobile"
                    id="formFilterInnMobile"
                    placeholder="Начните вводить"
@@ -207,7 +213,8 @@
                        id="formPriceFromMobile"
                        class="range_input range_from price_from"
                        placeholder="{{MIN_PRICE}} ₽"
-                       autocomplete="off"
+                       autocomplete="false"
+                       list="null"
                        formControlName="priceFrom"/>
               </nz-form-control>
             </nz-form-item>
@@ -221,7 +228,8 @@
                        id="formPriceToMobile"
                        class="range_input range_to price_to"
                        placeholder="{{MAX_PRICE}} ₽"
-                       autocomplete="off"
+                       autocomplete="false"
+                       list="null"
                        formControlName="priceTo"/>
               </nz-form-control>
             </nz-form-item>
@@ -250,7 +258,8 @@
         </p>
 
         <input nz-input type="text"
-               autocomplete="off"
+               autocomplete="false"
+               list="null"
                id="formUserRegionLocationMobile"
                name="formUserRegionLocationMobile"
                placeholder="Введите город"
@@ -285,7 +294,8 @@
                name="formFilterCategoryMobile"
                id="formFilterCategoryMobile"
                placeholder="Укажите название категории"
-               autocomplete="off"
+               autocomplete="false"
+               list="null"
                formControlName="categoryName">
 
         <market-search-bar-filter-category

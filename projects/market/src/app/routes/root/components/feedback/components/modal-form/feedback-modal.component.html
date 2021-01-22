@@ -11,7 +11,8 @@
       <label for="userName">Как к Вам обращаться?</label>
       <input type="text"
              id="userName"
-             autocomplete="off"
+             autocomplete="false"
+             list="null"
              maxlength="100"
              formControlName="userName">
     </div>
@@ -20,7 +21,8 @@
       <label for="emailOrPhone">Ваш email или телефон *</label>
       <input type="text"
              id="emailOrPhone"
-             autocomplete="off"
+             autocomplete="false"
+             list="null"
              maxlength="100"
              [ngClass]="{'error': form.controls.emailOrPhone.errors && (form.controls.emailOrPhone.touched || form.controls.emailOrPhone.dirty)}"
              formControlName="emailOrPhone">

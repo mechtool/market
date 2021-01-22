@@ -283,7 +283,8 @@
                          #elementInputCity
                          id="city_delivery_address_input"
                          formControlName="deliveryCity"
-                         autocomplete="off"
+                         autocomplete="false"
+                         list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToCityNotAvailable || form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Город*"
@@ -300,7 +301,8 @@
                          #elementInputStreet
                          id="street_delivery_address_input"
                          formControlName="deliveryStreet"
-                         autocomplete="off"
+                         autocomplete="false"
+                         list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable || form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Улица*"
@@ -317,7 +319,8 @@
                          #elementInputHouse
                          id="house_delivery_address_input"
                          formControlName="deliveryHouse"
-                         autocomplete="off"
+                         autocomplete="false"
+                         list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Дом"
@@ -394,7 +397,8 @@
               <input
                 type="text"
                 id="contactName"
-                autocomplete="off"
+                autocomplete="false"
+                list="null"
                 [ngClass]="{'error': form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
                 formControlName="contactName">
               <ng-container
@@ -408,7 +412,8 @@
               <input
                 type="text"
                 id="contactPhone"
-                autocomplete="off"
+                autocomplete="false"
+                list="null"
                 [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
                 prefix="+7"
                 mask="(000) 000 00 00"
@@ -429,7 +434,8 @@
               <input
                 type="email"
                 id="contactEmail"
-                autocomplete="off"
+                autocomplete="false"
+                list="null"
                 [ngClass]="{'error': form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
                 formControlName="contactEmail">
               <ng-container

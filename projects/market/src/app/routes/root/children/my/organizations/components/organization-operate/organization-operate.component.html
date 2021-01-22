@@ -9,12 +9,12 @@
 
     <div class="form-group form-group-std">
       <label for="inn">ИНН</label>
-      <input type="text" id="inn" autocomplete="off" formControlName="inn">
+      <input type="text" id="inn" autocomplete="false" list="null" formControlName="inn">
     </div>
 
     <div class="form-group form-group-std" *ngIf="form.get('kpp').value">
       <label for="kpp">КПП</label>
-      <input type="text" id="kpp" autocomplete="off" formControlName="kpp">
+      <input type="text" id="kpp" autocomplete="false" list="null" formControlName="kpp">
     </div>
 
     <div
@@ -24,7 +24,8 @@
         <input
           type="text"
           id="organizationName"
-          autocomplete="off"
+          autocomplete="false"
+          list="null"
           maxlength="300"
           formControlName="organizationName">
         <ng-container *ngIf="form.controls.organizationName.errors && (form.controls.organizationName.touched || form.controls.organizationName.dirty)">
@@ -50,7 +51,8 @@
         <input
           type="text"
           id="organizationEmail"
-          autocomplete="off"
+          autocomplete="false"
+          list="null"
           maxlength="100"
           formControlName="organizationEmail">
         <ng-container *ngIf="form.controls.organizationEmail.errors && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)">
@@ -63,7 +65,8 @@
       <input
         type="text"
         id="organizationPhone"
-        autocomplete="off"
+        autocomplete="false"
+        list="null"
         [ngClass]="{'error': form.controls.organizationPhone.errors && (form.controls.organizationPhone.touched || form.controls.organizationPhone.dirty)}"
         prefix="+7"
         mask="(000) 000 00 00"
@@ -78,7 +81,8 @@
       <label for="organizationWebsite">Сайт компании</label>
       <input type="text"
              id="organizationWebsite"
-             autocomplete="off"
+             autocomplete="false"
+             list="null"
              maxlength="100"
              formControlName="organizationWebsite">
     </div>
@@ -86,7 +90,8 @@
     <div class="form-group form-group-std">
       <label for="organizationAddress">Адрес компании</label>
       <input type="text" id="organizationAddress"
-             autocomplete="off"
+             autocomplete="false"
+             list="null"
              maxlength="500"
              formControlName="organizationAddress">
     </div>
@@ -100,7 +105,8 @@
         <input
           type="text"
           id="contactFio"
-          autocomplete="off"
+          autocomplete="false"
+          list="null"
           maxlength="100"
           formControlName="contactFio">
         <ng-container *ngIf="form.controls.contactFio.errors && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">
@@ -115,7 +121,8 @@
         <input
           type="text"
           id="contactEmail"
-          autocomplete="off"
+          autocomplete="false"
+          list="null"
           maxlength="100"
           formControlName="contactEmail">
         <ng-container *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
@@ -129,7 +136,8 @@
       <input
         type="text"
         id="contactPhone"
-        autocomplete="off"
+        autocomplete="false"
+        list="null"
         [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
         prefix="+7"
         mask="(000) 000 00 00"
