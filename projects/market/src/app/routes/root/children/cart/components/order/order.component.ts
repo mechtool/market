@@ -74,6 +74,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   @ViewChild('elementInputCity') elementInputCity: ElementRef;
   @ViewChild('elementInputStreet') elementInputStreet: ElementRef;
   @ViewChild('elementInputHouse') elementInputHouse: ElementRef;
+  @ViewChild('elementInputContactEmail') elementInputContactEmail: ElementRef;
+  @ViewChild('elementInputContactPhone') elementInputContactPhone: ElementRef;
+  @ViewChild('elementInputContactName') elementInputContactName: ElementRef;
   @Input() order: CartDataOrderModel;
   @Input() userInfo: UserInfoModel;
   @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
@@ -378,12 +381,30 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.selectedTabIndex === 1) {
+
+        if (!this.selectedAddress && this.deliveryAvailable) {
+          this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
+          this.elementInputCity?.nativeElement.focus();
+        }
+
         Object.keys(this.form.controls).forEach((key) => {
           this.form.controls[key].markAsTouched();
         });
 
-        if (!this.selectedAddress && this.deliveryAvailable) {
-          this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
+
+        if (this.form.invalid && this.form.controls.deliveryArea.valid) {
+
+          if (this.form.controls.contactEmail.invalid) {
+            this.elementInputContactEmail?.nativeElement.focus();
+          }
+
+          if (this.form.controls.contactPhone.invalid) {
+            this.elementInputContactPhone?.nativeElement.focus();
+          }
+
+          if (this.form.controls.contactName.invalid) {
+            this.elementInputContactName?.nativeElement.focus();
+          }
         }
       }
 
@@ -898,10 +919,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       deliveryMethod: new FormControl(deliveryMethods[0]?.value, [Validators.required]),
       deliveryArea: this._createDeliveryAreaForm(),
       pickupArea: new FormControl(order.deliveryOptions?.pickupPoints?.[0]),
-      contactName: new FormControl(userInfo?.fullName || '', [Validators.required]),
-      contactPhone: new FormControl(userInfo?.phone || '', [Validators.required]),
-      contactEmail: new FormControl(userInfo?.email || '', [Validators.required, Validators.email]),
-      commentForSupplier: new FormControl(''),
+      contactName: new FormControl(userInfo?.fullName || '', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
+      contactPhone: new FormControl(userInfo?.phone || '', [Validators.required, Validators.maxLength(100)]),
+      contactEmail: new FormControl(userInfo?.email || '', [Validators.required, Validators.email, Validators.maxLength(100)]),
+      commentForSupplier: new FormControl('', [Validators.maxLength(900)]),
       deliveryDesirableDate: new FormControl(''),
       items: this._fb.array(order.items.map((product) => this._createItem(product))),
     });
