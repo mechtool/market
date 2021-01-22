@@ -526,7 +526,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (cities) => {
-          this.selectedAddress = null;
           this.foundHouses = [];
           this.foundLocations = cities;
           this.foundStreets = cities.map((city) => city.street).filter((street) => street);

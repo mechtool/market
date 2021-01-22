@@ -145,7 +145,6 @@ export class BreadcrumbsGuard implements CanActivate {
               },
               {
                 label: `${res.name}`,
-                routerLink: `/supplier/${res.id}`,
               },
             ]);
             return true;
