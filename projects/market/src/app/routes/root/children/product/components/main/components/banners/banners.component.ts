@@ -8,6 +8,13 @@ import { Component } from '@angular/core';
 export class MainBannersComponent {
   items = [
     {
+      title: 'Программный продукт в подарок!',
+      btnLink: '/promo/podarok',
+      btnText: 'Подробнее',
+      description: 'Сделай заказ и получи программный продукт на выбор',
+      imgUrl: 'assets/img/promo/podarok/banner2.png',
+    },
+    {
       title: 'Скидка 10% на первый заказ!',
       btnLink: '/promo/first-order',
       btnText: 'Подробнее',

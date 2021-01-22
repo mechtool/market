@@ -42,6 +42,7 @@ const pathsObjectWithBreadcrumbs = {
   '/cart': /^\/cart$/i,
   '/promo': /^\/promo$/i,
   '/promo/:id': /^\/promo\/(?:([^\/]+?))$/i,
+  '/promo/:id/:subId': /^\/promo\/(?:([^\/]+?))\/(?:([^\/]+?))\/?$/i,
   '/my/orders': /^\/my\/orders$/i,
   '/my/organizations': /^\/my\/organizations$/i,
   '/my/organizations/:id': /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
@@ -195,6 +196,15 @@ export class BreadcrumbsGuard implements CanActivate {
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
       case '/promo/:id':
+        breadcrumbsItems = [
+          {
+            label: 'Акции',
+            routerLink: '/promo',
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/promo/:id/:subId':
         breadcrumbsItems = [
           {
             label: 'Акции',

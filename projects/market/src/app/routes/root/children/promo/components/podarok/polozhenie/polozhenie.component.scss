@@ -1,0 +1,82 @@
+h2 {
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 23px;
+  margin-bottom: 15px;
+  margin-top: 35px;
+}
+
+h3 {
+  margin-bottom: 15px;
+  margin-top: 35px;
+}
+
+ol {
+  list-style-type: decimal;
+  list-style-position: inside;
+}
+
+span,
+ol {
+  line-height: normal;
+}
+
+a {
+  color: inherit;
+  border-bottom: 1px solid #fedc8b;
+  text-decoration: none;
+
+  &:hover {
+    border: none;
+  }
+}
+
+.description {
+  line-height: 1.5;
+}
+
+.banners_suppliers {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px -10px;
+
+  market-banner {
+    width: 33.33333%;
+    padding: 10px;
+  }
+}
+
+.preview {
+  max-width: 512px;
+  margin: 12px 0;
+}
+
+@media all and (max-width: 768px) {
+  .preview {
+    max-width: 256px;
+  }
+}
+
+@media all and (max-width: 1580px) {
+  .banners_suppliers {
+    market-banner {
+      width: 50%;
+    }
+  }
+}
+
+@media all and (max-width: 1300px) {
+  .banners_suppliers {
+    market-banner {
+      width: 50%;
+    }
+  }
+}
+
+@media all and (max-width: 768px) {
+  .banners_suppliers {
+    market-banner {
+      width: 100%;
+    }
+  }
+}

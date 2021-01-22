@@ -1,6 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PromoFirstOrderComponent, PromoListComponent, PromoSchoolOfficeComponent } from './components';
+import {
+  PromoListComponent,
+  PromoFirstOrderComponent,
+  PromoSchoolOfficeComponent,
+  PromoPodarokPolozhenieComponent,
+  PromoPodarokComponent
+} from './components';
 
 const routes: Routes = [
   {
@@ -14,6 +20,24 @@ const routes: Routes = [
   {
     path: 'school-office',
     component: PromoSchoolOfficeComponent,
+  },
+  {
+    path: 'podarok',
+    children: [
+      {
+        path: '',
+        component: PromoPodarokComponent,
+      },
+      {
+        path: 'polozhenie',
+        component: PromoPodarokPolozhenieComponent,
+      },
+      {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full',
+      }
+    ]
   },
   {
     path: '**',
