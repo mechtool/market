@@ -11,7 +11,7 @@ export class MainBannersComponent {
       title: 'Программный продукт в подарок!',
       btnLink: '/promo/podarok',
       btnText: 'Подробнее',
-      description: 'Сделай заказ и получи программный продукт на выбор',
+      description: 'Сделай заказ - выиграй программный продукт 1С, всем участникам промокод 1С Интерес',
       imgUrl: 'assets/img/promo/podarok/banner2.png',
     },
     {
