@@ -1,26 +1,26 @@
 <div class="content-wrapper page_inner">
 
   <div class="page_header">
-    <h2>Мои организации</h2>
+    <h2>{{pageHeader}}</h2>
   </div>
 
   <div class="tabs_wrap tabs_wrap__moving">
 
-    <span
+    <span *ngIf="activeTabType !== 'c'"
       class="tab_item tab_item__main"
       [ngClass]="{'active': activeTabType == 'a'}"
       (click)="goToTab('a')">
         <span class="data_counter data_counter__gray">Действующие</span>
     </span>
 
-    <span
+    <span *ngIf="activeTabType !== 'c'"
       class="tab_item tab_long"
       [ngClass]="{'active': activeTabType == 'b'}"
       (click)="goToTab('b')">
         <span class="data_counter" [attr.data_counter]="newSentRequests">Отправленные запросы</span>
     </span>
 
-    <span
+    <span *ngIf="activeTabType !== 'c'"
       class="tab_item tab_long"
       [ngClass]="{'active': activeTabType == 'c'}"
       (click)="goToTab('c')">Добавить организацию

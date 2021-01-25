@@ -28,6 +28,13 @@ export class OrganizationsComponent implements OnInit {
   newSentRequests: number;
   private _activeTabType: TabType;
 
+  get pageHeader(): string {
+    if (this.activeTabType === 'c') {
+      return 'Регистрация новой организации';
+    }
+    return 'Мои организации';
+  }
+
   get activeTabType(): TabType {
     return this._activeTabType;
   }
