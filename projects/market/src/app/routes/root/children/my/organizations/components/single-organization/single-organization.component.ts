@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationsService, OrganizationsService, UserService } from '#shared/modules/common-services';
 import {
@@ -10,27 +10,13 @@ import {
   ParticipationRequestResponseModel,
 } from '#shared/modules/common-services/models';
 import { AccessKeyComponent } from '../access-key/access-key.component';
-import { switchMap, tap, map, filter } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { UserRemovalVerifierComponent } from '../user-removal-verifier/user-removal-verifier.component';
 import { RequestDecisionMakerComponent } from '../request-decision-maker/request-decision-maker.component';
 import { AccessKeyRemovalVerifierComponent } from '../access-key-removal-verifier/access-key-removal-verifier.component';
-import { iif, of, Observable, zip } from 'rxjs';
+import { iif, Observable, of, zip } from 'rxjs';
 
 type TabType = 'a' | 'b' | 'c' | 'd';
-type UpdateOrganizationType = {
-  inn: string;
-  kpp: string;
-  organizationName: string;
-  organizationDescription: string;
-  organizationEmail: string;
-  organizationPhone: string;
-  organizationWebsite: string;
-  organizationAddress: string;
-  contactFio: string;
-  contactRole: string;
-  contactEmail: string;
-  contactPhone: string;
-};
 const PAGE_SIZE = 100;
 
 const ERROR_DEFAULT = 'Невозможно обработать запрос. Внутренняя ошибка сервера.';
@@ -77,10 +63,13 @@ export class SingleOrganizationComponent implements OnInit {
     private _notificationsService: NotificationsService,
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
-  ) {}
+    private _router: Router,
+  ) {
+  }
 
   ngOnInit() {
     this._watchParamsChanges();
+    this._watchQueryParamsChanges();
   }
 
   init(organizationId: string) {
@@ -94,6 +83,13 @@ export class SingleOrganizationComponent implements OnInit {
       this._resetIsEditable();
     }
   }
+
+  goToTab(tabType: TabType) {
+    this._router.navigateByUrl(this._router.url.split('?')[0], { skipLocationChange: true }).then(() => {
+      this._router.navigateByUrl(`/my/organizations/${this.organizationData?.id}?tab=${tabType}`);
+    });
+  }
+
 
   createAccessKeyComponentModal(): void {
     this._organizationsService.obtainAccessKey(this.orgId).subscribe(
@@ -136,8 +132,8 @@ export class SingleOrganizationComponent implements OnInit {
       nzFooter: null,
       nzWidth: 480,
     });
-    this._modal.componentInstance.userRemovalChange.subscribe((userId) => {
-      this._deleteUserFromOrganization(userId);
+    this._modal.componentInstance.userRemovalChange.subscribe((id) => {
+      this._deleteUserFromOrganization(id);
     });
     this._modal.componentInstance.destroyModalChange.subscribe(() => {
       this._modal.destroy();
@@ -198,7 +194,7 @@ export class SingleOrganizationComponent implements OnInit {
       );
   }
 
-  updateOrganization(data: UpdateOrganizationType): void {
+  updateOrganization(data: any): void {
     const contactPerson = {
       fullName: data.contactFio,
       email: data.contactEmail,
@@ -234,6 +230,32 @@ export class SingleOrganizationComponent implements OnInit {
           this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
         },
       );
+  }
+
+  private _watchQueryParamsChanges() {
+    this._activatedRoute.queryParams.pipe(filter((res) => res.tab)).subscribe(
+      (res) => {
+        const tabValue = res.tab
+        switch (tabValue) {
+          case 'a':
+          case 'b':
+          case 'c':
+          case 'd':
+            if (this.isAdmin) {
+              this.activeTabType = tabValue;
+            } else {
+              this.activeTabType = 'a';
+            }
+            break;
+          default:
+            this.activeTabType = 'a';
+            break;
+        }
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
   }
 
   private _makeDecisionParticipationRequest([requestId, accept]: [string, boolean]): any {

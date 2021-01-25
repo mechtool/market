@@ -9,7 +9,7 @@
     <span
       class="tab_item tab_item__main"
       [ngClass]="{'active': activeTabType == 'a'}"
-      (click)="activeTabType = 'a'">Профиль
+      (click)="goToTab('a')">Профиль
     </span>
 
     <ng-container *ngIf="isAdmin">
@@ -17,21 +17,21 @@
       <span
         class="tab_item tab_long"
         [ngClass]="{'active': activeTabType == 'b'}"
-        (click)="activeTabType = 'b'; isEditable = false">
+        (click)="isEditable = false; goToTab('b')">
           <span class="data_counter data_counter__gray">Пользователи</span>
       </span>
 
       <span
         class="tab_item tab_long"
         [ngClass]="{'active': activeTabType == 'c'}"
-        (click)="activeTabType = 'c'; isEditable = false">
+        (click)="isEditable = false; goToTab('c')">
           <span class="data_counter data_counter__gray" [attr.data_counter]="participationRequests?.length || null">Запросы</span>
       </span>
 
       <span
         class="tab_item tab_long"
         [ngClass]="{'active': activeTabType == 'd'}"
-        (click)="activeTabType = 'd'; isEditable = false">Одноразовые пароли
+        (click)="isEditable = false; goToTab('d')">Одноразовые пароли
       </span>
 
       <span
@@ -46,38 +46,34 @@
 
   <ng-container *ngIf="activeTabType == 'a'">
 
-    <market-organization-operate
+    <market-organization-operate *ngIf="isEditable"
       operationType="edit"
       [organizationData]="organizationData"
       [legalRequisites]="legalRequisites"
-      (organizationDataChange)="updateOrganization($event)"
-      *ngIf="isEditable"></market-organization-operate>
+      (organizationDataChange)="updateOrganization($event)">
+    </market-organization-operate>
 
-    <market-organization-view
+    <market-organization-view *ngIf="!isEditable"
       [isAdmin]="isAdmin"
       [organizationData]="organizationData"
-      (editOrganizationChange)="isEditable = true"
-      *ngIf="!isEditable">
+      (editOrganizationChange)="isEditable = true">
     </market-organization-view>
 
   </ng-container>
 
-  <market-organization-users
+  <market-organization-users *ngIf="activeTabType == 'b'"
     [users]="users"
     (removeUserRequestChange)="createRemoveUserModal($event)"
-    *ngIf="activeTabType == 'b'"
   ></market-organization-users>
 
-  <market-organization-requests
+  <market-organization-requests *ngIf="activeTabType == 'c'"
     [requests]="participationRequests"
     (makeRequestDecisionRequestChange)="createMakeRequestDecisionModal($event)"
-    *ngIf="activeTabType == 'c'"
   ></market-organization-requests>
 
-  <market-organization-access-keys
+  <market-organization-access-keys *ngIf="activeTabType == 'd'"
     [accessKeys]="accessKeys"
     (removeAccessKeyRequestChange)="createRemoveAccessKeyModal($event)"
-    *ngIf="activeTabType == 'd'"
   ></market-organization-access-keys>
 
 </div>

@@ -42,7 +42,7 @@
             <span class="info_group__value">{{organizationData?.contacts?.address}}</span>
         </div>
     </div>
-    <h3>Организация</h3>
+    <h3 *ngIf="organizationData?.contactPerson?.fullName || organizationData?.contactPerson?.phone || organizationData?.contactPerson?.email">Контакты ответственного сотрудника</h3>
     <div class="info_group__profile">
       <div class="info_group" *ngIf="organizationData?.contactPerson?.fullName">
           <span class="info_group__label">Имя</span>
