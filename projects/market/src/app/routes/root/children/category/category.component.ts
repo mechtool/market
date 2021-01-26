@@ -48,7 +48,7 @@ export class CategoryComponent implements OnDestroy {
   private unlocked = true;
 
   get isNotSearchUsed(): boolean {
-    const queryParamsToCheck = ['q', 'supplierId', 'tradeMark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo'];
+    const queryParamsToCheck = ['q', 'supplierId', 'tradeMark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId', 'isDelivery', 'isPickup', 'sort'];
     const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
     const paramMap = this._activatedRoute.snapshot.paramMap;
 
