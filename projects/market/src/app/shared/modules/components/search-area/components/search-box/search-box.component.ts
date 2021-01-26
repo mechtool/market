@@ -181,7 +181,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
     this._keyUpChangeSubscription = this.keyUpChange$
       .pipe(
         filter((event) => {
-          return !this._searchAreaService.areSuggestionsEnabled ? (event.code === 'Enter' ? true : false) : true;
+          return !this._searchAreaService.areSuggestionsEnabled ? (event.key === 'Enter') : true;
         }),
       )
       .subscribe((event: KeyboardEvent) => {
@@ -266,7 +266,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   }
 
   private _onKeyUp(event: KeyboardEvent): void {
-    switch (event.code) {
+    switch (event.key) {
       case 'Enter':
         this._searchAreaService.isActiveResultsItemTypeHistorical = false;
         if (this.form.valid) {

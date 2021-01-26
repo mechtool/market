@@ -4,11 +4,9 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   forwardRef,
   Input,
   OnDestroy,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -33,11 +31,13 @@ import { unsubscribeList } from '#shared/utils';
 export class SearchBoxInputComponent implements ControlValueAccessor, AfterViewInit, OnDestroy {
   @ViewChild('queryInputEl') queryInputEl: ElementRef;
   @Input() placeholder = 'Поиск товаров';
+
   @Input()
   set queryText(val) {
     this._queryText = val;
     this.onChange(this._queryText);
   }
+
   private _queryText: string;
 
   private _elementQueryIsFocusedChangeSubscription: Subscription;
@@ -47,7 +47,8 @@ export class SearchBoxInputComponent implements ControlValueAccessor, AfterViewI
     return this._queryText;
   }
 
-  constructor(private _searchAreaService: SearchAreaService, private _cdr: ChangeDetectorRef) {}
+  constructor(private _searchAreaService: SearchAreaService, private _cdr: ChangeDetectorRef) {
+  }
 
   ngAfterViewInit() {
     this._elementQueryIsFocusedChangeSubscription = this._elementQueryIsFocused$().subscribe((isFocused) => {
@@ -83,7 +84,8 @@ export class SearchBoxInputComponent implements ControlValueAccessor, AfterViewI
     this.queryText = '';
   }
 
-  onChange(_: any) {}
+  onChange(_: any) {
+  }
 
   writeValue(val: string) {
     this._queryText = val;
@@ -94,5 +96,6 @@ export class SearchBoxInputComponent implements ControlValueAccessor, AfterViewI
     this.onChange = fn;
   }
 
-  registerOnTouched() {}
+  registerOnTouched() {
+  }
 }
