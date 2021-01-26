@@ -44,8 +44,11 @@ export function ApiFactory(injector: Injector): () => Promise<any> {
 
 function init() {
   handleLoginPopup();
+  handleAuthFromStorage();
+  setCart();
+
   return new Promise((resolve, reject) => {
-    return zip(handleAuthFromStorage$(), setCart$(), updateUserCategoriesRetriable$())
+    return zip(updateUserCategoriesRetriable$())
       .pipe(
         tap(() => {
           if (!localStorageService.hasUserLocation()) {
@@ -63,7 +66,7 @@ function init() {
   });
 }
 
-function handleLoginPopup() {
+function handleLoginPopup(): void {
   const ticket = getQueryParam('ticket', location.path());
   if (ticket) {
     window.opener.postMessage(ticket, '*');
@@ -71,22 +74,21 @@ function handleLoginPopup() {
   }
 }
 
-function handleAuthFromStorage$(): Observable<any> {
+function handleAuthFromStorage(): void {
   if (localStorageService.hasUserData()) {
     const userData = localStorageService.getUserData();
-    return authService.setUserDependableData$(userData);
+    authService.setUserDependableData$(userData).subscribe();
   }
-  return of(null);
 }
 
-function setCart$(): Observable<any> {
-  return defer(() => {
+function setCart(): void {
+  defer(() => {
     return !cartService.hasCartLocationLink() ? createCartRetriable$() : of(null);
   }).pipe(
     take(1),
     switchMap((_) => setActualCartDataRetriable$()),
     catchError((e) => throwError(e)),
-  );
+  ).subscribe();
 }
 
 function createCartRetriable$(): Observable<any> {
@@ -101,7 +103,7 @@ function createCartRetriable$(): Observable<any> {
 
 function setActualCartDataRetriable$(): Observable<any> {
   return delayedRetryWith(cartService.setActualCartData()).pipe(
-    catchError((err) => {
+    catchError((e) => {
       return createCartRetriable$();
     }),
   );
