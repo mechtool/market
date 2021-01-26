@@ -1128,3 +1128,13 @@ nz-date-picker {
   width: 100%;
   left: 500px;
 }
+
+.input_error_region {
+  opacity: 0.8;
+  position: absolute;
+  padding-left: 25px;
+  padding-right: 30px;
+  width: 70%;
+  bottom: -10px;
+  left: 500px;
+}

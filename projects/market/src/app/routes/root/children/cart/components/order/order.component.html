@@ -285,7 +285,7 @@
                          formControlName="deliveryCity"
                          autocomplete="false"
                          list="null"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToCityNotAvailable || form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToCityNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Город*"
                          (keyup.enter)="citySelected()"
@@ -303,7 +303,7 @@
                          formControlName="deliveryStreet"
                          autocomplete="false"
                          list="null"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable || form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Улица*"
                          (keyup.enter)="streetSelected()"
@@ -321,7 +321,7 @@
                          formControlName="deliveryHouse"
                          autocomplete="false"
                          list="null"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Дом"
                          [nzAutocomplete]="auto_house">
@@ -330,22 +330,21 @@
                     <nz-auto-option *ngFor="let house of foundHouses"
                                     [nzValue]="house">{{ house }}</nz-auto-option>
                   </nz-autocomplete>
-
                 </div>
 
-                <div class="input_error"
-                     *ngIf="form.controls.deliveryArea.errors?.deliveryNotAvailable">
-                  Нет доставки по указанному адресу
-                </div>
 
-                <div class="input_error"
+                <div class="input_error_region"
                      *ngIf="form.controls.deliveryArea.errors?.deliveryToCityNotAvailable">
-                  Нет доставки в указанный город
+                  Указанный адрес не входит в зону доставки поставщика.
+                  Список доступных зон доставки смотрите выше.
+                  Укажите адрес внутри одной из зон доставки<span *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
                 </div>
 
-                <div class="input_error"
+                <div class="input_error_region"
                      *ngIf="form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable">
-                  Нет доставки на указанную улицу
+                  Указанный адрес не входит в зону доставки поставщика.
+                  Список доступных зон доставки смотрите выше.
+                  Укажите адрес внутри одной из зон доставки<span *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
                 </div>
 
                 <div class="input_error"
