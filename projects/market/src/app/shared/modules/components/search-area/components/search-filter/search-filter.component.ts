@@ -100,6 +100,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     return this._searchAreaService.form;
   }
 
+  get categorySelected(): boolean {
+    return !!this.serviceForm.get('base.categoryId')?.value || !!this.form.get('subCategoryId')?.value;
+  }
+
   private _refreshFormSubscription: Subscription;
   private _supplierNameChangeSubscription: Subscription;
   private _priceFromChangeSubscription: Subscription;

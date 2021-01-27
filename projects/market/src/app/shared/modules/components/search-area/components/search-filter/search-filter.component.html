@@ -196,7 +196,7 @@
       </div>
     </ng-container>
 
-    <div *ngIf="(form|marketCastControl: 'featuresData').length" formArrayName="featuresData">
+    <div *ngIf="(form|marketCastControl: 'featuresData').length && categorySelected" formArrayName="featuresData">
       <div class="form-group_title">Фильтры характеристик товара</div>
 
       <div class="form-group_checkbox" *ngFor="let feature of form|marketCastControl: 'featuresData'">
