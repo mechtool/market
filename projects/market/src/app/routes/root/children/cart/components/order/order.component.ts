@@ -29,8 +29,8 @@ import {
 import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
-import { absoluteImagePath, currencyCode, innKppToLegalId } from '#shared/utils';
-import { Observable, of, Subscription } from 'rxjs';
+import { absoluteImagePath, currencyCode, innKppToLegalId, unsubscribeList } from '#shared/utils';
+import { combineLatest, Observable, of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   BNetService,
@@ -165,8 +165,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.order._links?.[RelationEnumModel.PRICEREQUEST_CREATE]?.href;
   }
 
-  formValidChangeSubscription: Subscription;
-
   constructor(
     private _cdr: ChangeDetectorRef,
     private _fb: FormBuilder,
@@ -206,7 +204,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
           this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.organizations$.value, this.order);
           this._initConsumer(this.availableUserOrganizations, this.order);
-          this._handleFormValidChange();
         }),
         switchMap((res) => {
           return this._getFoundLocations(this.order);
@@ -221,7 +218,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._cartService.pullStorageCartData();
-    this.formValidChangeSubscription.unsubscribe();
   }
 
   back() {
@@ -425,6 +421,31 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   changeSelectedTabIndex(tabIndex: number) {
     this.selectedTabIndex = tabIndex;
+
+    if (tabIndex === 1) {
+      const tag = {
+        event: 'checkout',
+        ecommerce: {
+          currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
+          value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
+          checkout: {
+            actionField: { step: 1, option: 'checkout' },
+            products: this.order.items?.map((item) => {
+              return {
+                name: item.productName || '',
+                id: item.tradeOfferId || '',
+                price: item.price ? item.price / 100 : '',
+                brand: '',
+                category: '',
+                variant: this.order?.supplier?.name || '',
+                quantity: item.quantity || '',
+              };
+            }),
+          },
+        },
+      };
+      this._externalProvidersService.fireGTMEvent(tag);
+    }
   }
 
   setConsumer(userOrganization: any): void {
@@ -626,12 +647,30 @@ export class CartOrderComponent implements OnInit, OnDestroy {
         this.selectedAddress = location;
         this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
         this.elementInputHouse?.nativeElement.focus();
+        const tag = {
+          event: 'login',
+          ecommerce: {
+            checkout_option: {
+              actionField: { step: 2, option: 'delivery' },
+            },
+          },
+        };
+        this._externalProvidersService.fireGTMEvent(tag);
       } else {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
             this.selectedAddress = location;
             this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
             this.elementInputHouse?.nativeElement.focus();
+            const tag = {
+              event: 'login',
+              ecommerce: {
+                checkout_option: {
+                  actionField: { step: 2, option: 'delivery' },
+                },
+              },
+            };
+            this._externalProvidersService.fireGTMEvent(tag);
           } else {
             this.form.controls.deliveryArea.setErrors({ deliveryToStreetNotAvailable: true }, { emitEvent: true });
             this.elementInputStreet?.nativeElement.blur();
@@ -777,28 +816,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   private _createOrder() {
-    const tag = {
-      event: 'checkout',
-      ecommerce: {
-        currencyCode: this.order?.orderTotal?.currencyCode ? currencyCode(this.order?.orderTotal?.currencyCode) : 'RUB',
-        value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
-        checkout: {
-          actionField: { step: 1, option: 'checkout' },
-          products: this.order.items?.map((item) => {
-            return {
-              name: item.productName || '',
-              id: item.tradeOfferId || '',
-              price: item.price ? item.price / 100 : '',
-              brand: '',
-              category: '',
-              variant: this.order?.supplier?.name || '',
-              quantity: item.quantity || '',
-            };
-          }),
-        },
-      },
-    };
-    this._externalProvidersService.fireGTMEvent(tag);
 
     const data = {
       customerOrganizationId: this.form.get('consumerId').value,
@@ -925,20 +942,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       commentForSupplier: new FormControl('', [Validators.maxLength(900)]),
       deliveryDesirableDate: new FormControl(''),
       items: this._fb.array(order.items.map((product) => this._createItem(product))),
-    });
-  }
-
-  private _handleFormValidChange() {
-    this.formValidChangeSubscription = this.form.statusChanges.pipe(filter(() => this.form.valid)).subscribe((res) => {
-      const tag = {
-        event: 'login',
-        ecommerce: {
-          checkout_option: {
-            actionField: { step: 2, option: 'delivery' },
-          },
-        },
-      };
-      this._externalProvidersService.fireGTMEvent(tag);
     });
   }
 

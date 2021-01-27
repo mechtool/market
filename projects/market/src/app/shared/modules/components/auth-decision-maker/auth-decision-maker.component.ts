@@ -30,7 +30,7 @@ export class AuthDecisionMakerComponent {
 
   register(): void {
     const tag = {
-      event: 'registration’',
+      event: 'registration',
       ecommerce: {
         checkout_option: {
           actionField: { step: 3, option: 'registration' },
