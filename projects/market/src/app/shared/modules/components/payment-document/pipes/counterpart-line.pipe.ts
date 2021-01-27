@@ -8,6 +8,6 @@ import { CommerceMlDocumentResponseModel } from '#shared/modules/common-services
 export class CounterPartLinePipe implements PipeTransform {
   transform(value: CommerceMlDocumentResponseModel, counterPartType: 'sender' | 'recipient' = 'sender'): string {
     const org = value[counterPartType];
-    return `${org.role}: ${resizeBusinessStructure(org.name)}, ИНН ${org.inn}${org.kpp ? `, КПП ${org.kpp}` : ''}`;
+    return `${org.role}: ${resizeBusinessStructure(org.name)}, ИНН ${org.inn}${org.kpp ? `, КПП ${org.kpp}` : ''}${org.address ? `,${org.address}` : ''}${org.contact ? `,${org.contact.type}: ${org.contact.value}` : ''}`;
   }
 }
