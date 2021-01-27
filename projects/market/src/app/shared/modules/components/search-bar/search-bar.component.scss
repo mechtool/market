@@ -167,6 +167,15 @@
           box-shadow: none;
         }
 
+        &:active {
+          background-color: var(--color-accent);
+          border: 2px solid var(--color-background-base);
+        }
+
+        &:hover {
+          background-color: var(--color-accent);
+        }
+
         &:focus {
           outline: none;
         }

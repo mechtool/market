@@ -16,8 +16,17 @@ button {
   }
 
   &.pressed {
-    background-color: #fdc82f;
-    border-color: #fdc82f;
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent-light);
+  }
+
+  &:active {
+    background-color: var(--color-accent);
+    border: 2px solid var(--color-background-base);
+  }
+
+  &:hover {
+    background-color: var(--color-accent);
   }
 }
 

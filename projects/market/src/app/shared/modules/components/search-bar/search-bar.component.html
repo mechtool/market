@@ -79,7 +79,9 @@
     </div>
   </form>
 
-  <div class="region">
+  <!--todo search-bar используется только в компоненте "Поставщики", а там смысла нет в данной кнопке-->
+  <!--todo не заморачиваюсь, так как от search-bar будем избавляться в задаче BNET-4090-->
+  <!--<div class="region">
     <a class="btn btn_region" nz-dropdown nzTrigger="click" nzPlacement="bottomRight"
        [nzDropdownMenu]="locationMenu"
        (nzVisibleChange)="changeLocationButton($event)" [(nzVisible)]="visibleLocationForm">{{userLocation.name}}</a>
@@ -90,6 +92,6 @@
         (stateLocationForm)="changeAndCloseLocation($event)"
       ></market-search-bar-location>
     </nz-dropdown-menu>
-  </div>
+  </div>-->
 
 </div>
