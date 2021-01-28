@@ -1,4 +1,4 @@
-<div class="banners_main" *ngIf="!showCarousel">
+<div class="banners_main" *ngIf="!carouselEnabled">
   <ng-container
     *ngFor="let bannerItem of bannerItems"
     [ngTemplateOutlet]="bannerItemTpl"
@@ -6,7 +6,7 @@
   </ng-container>
 </div>
 
-<div class="banners_carousel" *ngIf="showCarousel">
+<div class="banners_carousel" *ngIf="carouselEnabled">
   <nz-carousel [nzEffect]="'fade'" [nzAutoPlay]="autoPlay">
     <div nz-carousel-content *ngFor="let bannerItemsGroup of bannerItemsGroups">
       <ng-container
