@@ -1,5 +1,5 @@
 <div *ngIf="tradeOffer">
-  <div class="product_side" *ngIf="orderStatus === 0">
+  <div class="product_side" *ngIf="orderStatus === 'NOT_AVAILABLE'">
     <!--todo Данный блок не используется, возможно стоит удалить + связанную с ним логику и стили-->
     <div class="to_cart__wrap">
       <h3>Добавить товар в <a [routerLink]="['/cart']">корзину</a></h3>
@@ -12,7 +12,7 @@
   </div>
 
 
-  <div class="product_side" *ngIf="orderStatus === 1">
+  <div class="product_side" *ngIf="orderStatus === 'TO_CART'">
     <div class="to_cart__wrap">
       <h3>Добавить товар в <a [routerLink]="['/cart']">корзину</a></h3>
       <p class="to_cart__supplier" *ngIf="isProductPage">от {{tradeOffer?.supplier.name | abbreviatedBusinessName}}</p>
@@ -50,7 +50,7 @@
   </div>
 
 
-  <div class="product_side" *ngIf="orderStatus === 2">
+  <div class="product_side" *ngIf="orderStatus === 'IN_CART'">
     <div class="to_cart__wrap">
       <h3>Товар добавлен в <a [routerLink]="['/cart']">корзину</a></h3>
       <p class="to_cart__supplier" *ngIf="isProductPage">от {{tradeOffer?.supplier.name | abbreviatedBusinessName}}</p>

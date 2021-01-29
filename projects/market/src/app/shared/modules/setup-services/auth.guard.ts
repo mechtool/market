@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
   constructor(private _userStateService: UserStateService, private _authModalService: AuthModalService) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-    return this._userStateService.userData$.pipe(
+    return this._userStateService.currentUser$.pipe(
       switchMap((auth) => {
         return !!auth
           ? of(true)

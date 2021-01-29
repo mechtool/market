@@ -47,7 +47,7 @@ export class AuthModalService {
         }),
         filter((res) => !!res),
         switchMap((res) => {
-          return this._userStateService.userData$;
+          return this._userStateService.currentUser$;
         }),
         filter((res) => !!res),
         take(1),

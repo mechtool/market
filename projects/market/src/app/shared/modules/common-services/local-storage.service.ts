@@ -1,22 +1,18 @@
 import { Inject, Injectable } from '@angular/core';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import {
-  CartDataModel,
-  CartDataOrderModel,
-  CartDataResponseModel,
   LocationModel,
-  RelationEnumModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
   SuggestionResponseModel,
   SuggestionSearchQueryHistoryModel,
   TypeOfSearch,
 } from '../common-services/models';
+import { hexFrom } from '#shared/utils';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
-const CART_LOCATION_STORAGE_KEY = 'cart_location';
-const CART_DATA_STORAGE_KEY = 'cart_data';
+const CART_LOCATION_LINK_STORAGE_KEY = 'cart_location';
 const USER_DATA_STORAGE_KEY = 'user_data';
 const COOKIES_AGREEMENT_STORAGE_KEY = 'cookies_agreement';
 const LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY = 'later_visit_my_organizations';
@@ -72,7 +68,7 @@ export class LocalStorageService {
   putSearchText(_searchText: string): void {
     if (_searchText) {
       const historyList = this._storage.get(SEARCH_QUERIES_HISTORY_STORAGE_KEY) || [];
-      const hexId = this.toHexId(_searchText);
+      const hexId = hexFrom(_searchText);
       const filterHistoryList = historyList.filter((res) => res.id !== hexId);
       const query = {
         id: hexId,
@@ -143,50 +139,12 @@ export class LocalStorageService {
     this._storage.remove(USER_LOCATION_STORAGE_KEY);
   }
 
-  getCartLocation(): string {
-    return this._storage.get(CART_LOCATION_STORAGE_KEY);
+  getCartLocationLink(): string {
+    return this._storage.get(CART_LOCATION_LINK_STORAGE_KEY);
   }
 
-  putCartLocation(catLocation: string): void {
-    this._storage.set(CART_LOCATION_STORAGE_KEY, catLocation);
-  }
-
-  removeCartLocation(): void {
-    this._storage.remove(CART_LOCATION_STORAGE_KEY);
-  }
-
-  getCartData(): CartDataModel | CartDataResponseModel {
-    return this._storage.get(CART_DATA_STORAGE_KEY);
-  }
-
-  putCartData(data: any): void {
-    this._storage.set(CART_DATA_STORAGE_KEY, data);
-  }
-
-  removeCartData(): void {
-    this._storage.remove(CART_DATA_STORAGE_KEY);
-  }
-
-  patchCartDataByOrder(orderData: CartDataOrderModel): void {
-    const currentCartData = this.getCartData();
-    let foundInd;
-
-    if (currentCartData && orderData) {
-      const currentDataContent = currentCartData?.content;
-      const orderRelationRef = orderData._links?.[RelationEnumModel.ORDER_CREATE]?.href;
-      const orderFoundInCurrentDataContent = currentDataContent?.find((item, ind) => {
-        if (item._links?.[RelationEnumModel.ORDER_CREATE]?.href === orderRelationRef) {
-          foundInd = ind;
-          return true;
-        }
-        return false;
-      });
-      const newOrder = JSON.parse(JSON.stringify(orderFoundInCurrentDataContent));
-      newOrder.consumer = orderFoundInCurrentDataContent ? orderData.consumer || null : null;
-      newOrder.items = orderFoundInCurrentDataContent ? orderData.items || null : null;
-      currentCartData?.content.splice(foundInd, 1, newOrder);
-      this._storage.set(CART_DATA_STORAGE_KEY, currentCartData);
-    }
+  putCartLocationLink(catLocationLink: string): void {
+    this._storage.set(CART_LOCATION_LINK_STORAGE_KEY, catLocationLink);
   }
 
   getUserAndCookiesAgreement(): boolean {
@@ -203,13 +161,5 @@ export class LocalStorageService {
 
   getDateOfLaterVisitMyOrganizations(): string {
     return this._storage.get(LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY);
-  }
-
-  private toHexId(text: string): string {
-    let hex = '';
-    for (let i = 0; i < text.length; i++) {
-      hex += text.charCodeAt(i).toString(16);
-    }
-    return hex;
   }
 }

@@ -111,7 +111,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
     this.isAdded = true;
     this.form.controls.totalPositions.setValue(this.minQuantity, { onlySelf: true, emitEvent: false });
     this.orderStatus = OrderStatusModal.IN_CART;
-    const cartLocation = this._cartService.getCart$().value;
+    const cartLocation = this._cartService.getCartLocationLink$().value;
     this._cartService
       .handleRelationAndUpdateData(RelationEnumModel.ITEM_ADD, `${cartLocation}/items`, {
         tradeOfferId: this.tradeOfferId,
@@ -173,7 +173,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
     return combineLatest([this._inputIsFocused$().pipe(startWith(false)), this.form.controls.totalPositions.valueChanges])
       .pipe(filter(([isFocused]) => isFocused === false))
       .subscribe(([, value]) => {
-        const cartLocation = this._cartService.getCart$()?.getValue();
+        const cartLocation = this._cartService.getCartLocationLink$()?.getValue();
 
         if (value >= this.minQuantity && value !== this.prevCount) {
           if (value % this.orderStep !== 0) {

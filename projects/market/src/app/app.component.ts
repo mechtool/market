@@ -46,10 +46,10 @@ export class AppComponent implements OnDestroy {
   private _authedUserWindowCloseChanges$(): Observable<string> {
     return fromEvent(window, 'beforeunload').pipe(
       filter((ev) => {
-        return !!this._userStateService.userData$.value?.userInfo.userId;
+        return !!this._userStateService.currentUser$.value?.userInfo.userId;
       }),
       tap((ev) => ev.preventDefault()),
-      map((res) => this._userStateService.userData$.value.userInfo.userId),
+      map((res) => this._userStateService.currentUser$.value.userInfo.userId),
     );
   }
 }

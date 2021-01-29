@@ -13,7 +13,7 @@ import {
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  CartDataOrderModel,
+  CartDataOrderResponseModel,
   CartDataResponseModel,
   CountryCode,
   DeliveryMethod,
@@ -26,11 +26,11 @@ import {
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
-import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, currencyCode, innKppToLegalId, unsubscribeList } from '#shared/utils';
-import { combineLatest, Observable, of, Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   BNetService,
@@ -41,13 +41,13 @@ import {
   NotificationsService,
   TradeOffersService,
   UserService,
-  UserStateService,
 } from '#shared/modules/common-services';
-import { DeliveryMethodModel, DeliveryOptionsModel } from './models';
+import { DeliveryMethodModel } from './models';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
 import { AuthModalService } from '#shared/modules/setup-services/auth-modal.service';
 import { CartModalService } from '../../cart-modal.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { notBlankValidator } from '#shared/utils/common-validators';
 
 const VATS = {
   VAT_10: 10,
@@ -77,11 +77,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   @ViewChild('elementInputContactEmail') elementInputContactEmail: ElementRef;
   @ViewChild('elementInputContactPhone') elementInputContactPhone: ElementRef;
   @ViewChild('elementInputContactName') elementInputContactName: ElementRef;
-  @Input() order: CartDataOrderModel;
+  @Input() order: CartDataOrderResponseModel;
   @Input() userInfo: UserInfoModel;
-  @Output() cartDataChange: EventEmitter<any> = new EventEmitter();
+  @Output() cartDataChange: EventEmitter<CartDataResponseModel> = new EventEmitter();
   form: FormGroup;
-  availableUserOrganizations: UserOrganizationModel[];
   isOrderLoading = false;
   deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
@@ -92,10 +91,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   minDate = new Date();
   private foundLocations: LocationModel[];
   private validDeliveryFiasCode: string[];
-
-  get orderType(): 'order' | 'priceRequest' {
-    return this.order.tags?.includes('Order') ? 'order' : 'priceRequest' || 'order';
-  }
+  private cartDataSubscription: Subscription;
 
   get unavailableToOrder(): boolean {
     const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable'];
@@ -107,11 +103,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get consumerName(): string {
-    return this.form.get('consumerName').value?.trim();
+    return this.form.value.consumerName?.trim();
   }
 
   get consumerINN(): string {
-    return this.form.get('consumerINN').value;
+    return this.form.value.consumerINN;
   }
 
   get supplierName(): string {
@@ -123,19 +119,19 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get total(): number {
-    return +this.form.get('total').value;
+    return +this.form.value.total;
   }
 
   get totalVat(): number {
-    return +this.form.get('totalVat').value;
+    return +this.form.value.totalVat;
   }
 
   get deliveryMethod(): string {
-    return this.form.get('deliveryMethod').value?.trim();
+    return this.form.value.deliveryMethod?.trim();
   }
 
   get pickupArea(): any {
-    return this.form.get('pickupArea').value;
+    return this.form.value.pickupArea;
   }
 
   get pickupPoints(): any[] {
@@ -146,7 +142,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.order.deliveryOptions?.deliveryZones;
   }
 
-  get deliveryAvailable(): boolean {
+  get selectedDelivery(): boolean {
     return this.deliveryMethod === DeliveryMethod.DELIVERY;
   }
 
@@ -158,29 +154,95 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this.items.controls as FormGroup[];
   }
 
-  get orderRelationHref(): string {
-    if (this.orderType === 'order') {
-      return this.order._links?.[RelationEnumModel.ORDER_CREATE]?.href;
+  get noDeliveryAddressSelected(): boolean {
+    return !this.selectedAddress && this.selectedDelivery;
+  }
+
+  get isAnonymous(): boolean {
+    return !this.userInfo;
+  }
+
+  get isAuthenticated(): boolean {
+    return !!this.userInfo;
+  }
+
+  get isOrderType(): boolean {
+    // todo пересмотреть места использования в пользу конкретного типа ссылки
+    return this.order.tags?.includes('Order');
+  }
+
+  get unavailableItemsInOder(): boolean {
+    return this.isAuthenticated && !this.isMakeOrderOrRequestForPrice;
+  }
+
+  get isMakeOrderOrRequestForPrice(): boolean {
+    return !!(this.makeOrderLinkOrRequestForPriceLink)
+  }
+
+  get makeOrderLinkOrRequestForPriceLink(): string {
+    return this.makeOrderLink || this.requestForPriceLink
+  }
+
+  get abilityToPlaceOrder(): boolean {
+    return this.isAuthenticated && this.hasAvailableOrganizations && !!(this.makeOrderLinkOrRequestForPriceLink);
+  }
+
+  get needToRegisterAndPlaceOrder(): boolean {
+    return this.isAnonymous && !!(this.registerAndMakeOrderLink || this.registerAndRequestForPriceLink);
+  }
+
+  get hasAvailableOrganizations(): boolean {
+    return !!this.availableOrganizations?.length
+  }
+
+  get availableOrganizations(): UserOrganizationModel[] {
+    if (this.order.customersAudience?.length) {
+      return this._userService.organizations$.getValue()
+        .filter((org) => {
+          const legalId = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
+          return this.order?.customersAudience.some((aud) => aud.legalId === legalId);
+        });
     }
-    return this.order._links?.[RelationEnumModel.PRICEREQUEST_CREATE]?.href;
+    return this._userService.organizations$.getValue();
+  }
+
+
+  get makeOrderLink(): string {
+    return this.order._links?.[RelationEnumModel.MAKE_ORDER]?.href
+  }
+
+  get requestForPriceLink(): string {
+    return this.order._links?.[RelationEnumModel.REQUEST_FOR_PRICE]?.href
+  }
+
+  get registerAndMakeOrderLink(): string {
+    return this.order._links?.[RelationEnumModel.REGISTER_AND_MAKE_ORDER]?.href
+  }
+
+  get registerAndRequestForPriceLink(): string {
+    return this.order._links?.[RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE]?.href
+  }
+
+  get isHistoryAvailable() {
+    return this._navigationService.history.length > 1;
   }
 
   constructor(
-    private _cdr: ChangeDetectorRef,
+    private _router: Router,
     private _fb: FormBuilder,
+    private _cdr: ChangeDetectorRef,
+    private _bnetService: BNetService,
     private _cartService: CartService,
     private _userService: UserService,
-    private _userStateService: UserStateService,
     private _locationService: LocationService,
-    private _navigationService: NavigationService,
-    private _bnetService: BNetService,
-    private _router: Router,
-    private _tradeOffersService: TradeOffersService,
-    private _notificationsService: NotificationsService,
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
+    private _navigationService: NavigationService,
+    private _tradeOffersService: TradeOffersService,
+    private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const tag = {
@@ -197,35 +259,139 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     };
     this._externalProvidersService.fireGTMEvent(tag);
 
-    this._getDeliveryMethods(this.order.deliveryOptions)
-      .pipe(
-        tap((res) => {
-          this.deliveryMethods = res;
-          this.form = this._initForm(this.order, this.deliveryMethods, this.userInfo);
-          this.availableUserOrganizations = this._getAvailableOrganizations(this._userService.organizations$.value, this.order);
-          this._initConsumer(this.availableUserOrganizations, this.order);
-        }),
-        switchMap((res) => {
-          return this._getFoundLocations(this.order);
-        }),
-      )
-      .subscribe((validDeliveryArea) => {
-        this.validDeliveryFiasCode = validDeliveryArea;
-        this._watchDeliveryAreaUserChanges();
-        this._watchItemQuantityChanges();
-      });
+    this.cartDataSubscription = this._cartService.getCartData$().pipe(
+      tap(() => {
+        this._initDeliveryMethods();
+        this._initForm();
+      }),
+      tap(() => {
+        if (this.abilityToPlaceOrder) {
+          this.setConsumer(this.availableOrganizations[0]);
+        }
+      }),
+      tap(() => {
+        this._initValidDeliveryFiasCode();
+      }),
+    ).subscribe(() => {
+      this._watchDeliveryAreaUserChanges();
+      this._watchItemQuantityChanges();
+    });
   }
 
   ngOnDestroy() {
-    this._cartService.pullStorageCartData();
+    unsubscribeList([this.cartDataSubscription]);
   }
 
-  back() {
+  checkForValidityAndCreateOrder() {
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER);
+    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
+      ...(this.isMakeOrderOrRequestForPrice && {
+        params: {
+          [MetrikaEventOrderTryParametrizedModel.title]: {
+            [MetrikaEventOrderTryParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink,
+          },
+        },
+      }),
+    });
+
+    if (this.isAnonymous) {
+      this._authModalService.openAuthDecisionMakerModal(
+        `Для отправки заказа необходимо войти на сайт под учетной записью "Интернет-поддержки пользователей (1С:ИТС)",
+        указанной в вашем программном продукте "1С", или под вашей учетной записью облачного сервиса "1С:Предприятие через Интернет (1С:Фреш)".
+        В случае их отсутствия - зарегистрируйте новую учетную запись.
+        Данные в корзине сохранятся.`,
+      );
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NOT_AUTHED,
+            ...(this.isMakeOrderOrRequestForPrice && {
+              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink
+            }),
+          },
+        },
+      });
+      return;
+    }
+
+    if (!this.hasAvailableOrganizations) {
+      this._authModalService.openEmptyOrganizationsInfoModal(
+        'Чтобы оформить заказ необходимо иметь хотя бы одну зарегистрированную организацию.',
+      );
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_ORGANIZATIONS,
+            ...(this.isMakeOrderOrRequestForPrice && {
+              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink
+            }),
+          },
+        },
+      });
+      return;
+    }
+
+    if (this.unavailableItemsInOder) {
+      this.changeSelectedTabIndex(0);
+      this._cartModalService.openOrderUnavailableModal();
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_LINK,
+          },
+        },
+      });
+      return;
+    }
+
+    if (this.form.invalid || this.noDeliveryAddressSelected) {
+      if (this.selectedTabIndex === 0) {
+        this.changeSelectedTabIndex(1);
+        return;
+      }
+      if (this.selectedTabIndex === 1) {
+        if (this.noDeliveryAddressSelected) {
+          this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
+          this.elementInputCity?.nativeElement.focus();
+        }
+
+        Object.keys(this.form.controls).forEach((key) => {
+          this.form.controls[key].markAsTouched();
+        });
+
+        if (this.form.invalid && this.form.controls.deliveryArea.valid) {
+          if (this.form.controls.contactEmail.invalid) {
+            this.elementInputContactEmail?.nativeElement.focus();
+          }
+
+          if (this.form.controls.contactPhone.invalid) {
+            this.elementInputContactPhone?.nativeElement.focus();
+          }
+
+          if (this.form.controls.contactName.invalid) {
+            this.elementInputContactName?.nativeElement.focus();
+          }
+        }
+      }
+
+      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
+        params: {
+          [MetrikaEventOrderFailParametrizedModel.title]: {
+            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.FIELDS_NOT_VALID,
+            ...(this.isMakeOrderOrRequestForPrice && {
+              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink
+            }),
+          },
+        },
+      });
+      return;
+    }
+
+    this._createOrder();
+  }
+
+  navigationBack() {
     this._navigationService.back();
-  }
-
-  isHistoryAvailable() {
-    return this._navigationService.history.length > 1;
   }
 
   setPickupArea(pickupPoint) {
@@ -277,13 +443,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this._externalProvidersService.fireGTMEvent(tag);
         }),
         catchError((err) => {
-          return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
-            tap((res) => {
-              this.cartDataChange.emit(res);
-              const foundOrder = this._findOrderInCart(res);
-              if (foundOrder) {
-                this._resetOrder(foundOrder);
-              }
+          return this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().value).pipe(
+            tap((cartData) => {
+              this.cartDataChange.emit(cartData);
             }),
           );
         }),
@@ -291,19 +453,11 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
         }),
         switchMap((res) => {
-          return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
+          return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().value);
         }),
       )
-      .subscribe(
-        (res) => {
-          this.cartDataChange.emit(res);
-          if (res) {
-            const foundOrder = this._findOrderInCart(res);
-            if (foundOrder) {
-              this._resetOrder(foundOrder);
-            }
-          }
-          this._cartService.setActualCartData().subscribe();
+      .subscribe((carData) => {
+          this.cartDataChange.emit(carData);
         },
         (err) => {
           this.isOrderLoading = false;
@@ -311,112 +465,6 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
-  }
-
-  checkForValidityAndCreateOrder() {
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER);
-    this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
-      ...(this.orderRelationHref && {
-        params: {
-          [MetrikaEventOrderTryParametrizedModel.title]: {
-            [MetrikaEventOrderTryParametrizedModel.orderLink]: this.orderRelationHref,
-          },
-        },
-      }),
-    });
-    if (!this.userInfo) {
-      this._authModalService.openAuthDecisionMakerModal(
-        `Для отправки заказа необходимо войти на сайт под учетной записью "Интернет-поддержки пользователей (1С:ИТС)",
-        указанной в вашем программном продукте "1С", или под вашей учетной записью облачного сервиса "1С:Предприятие через Интернет (1С:Фреш)".
-        В случае их отсутствия - зарегистрируйте новую учетную запись.
-        Данные в корзине сохранятся.`,
-      );
-      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-        params: {
-          [MetrikaEventOrderFailParametrizedModel.title]: {
-            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NOT_AUTHED,
-            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-          },
-        },
-      });
-      return;
-    }
-
-    if (!this.availableUserOrganizations?.length) {
-      this._authModalService.openEmptyOrganizationsInfoModal(
-        'Чтобы оформить заказ необходимо иметь хотя бы одну зарегистрированную организацию.',
-      );
-      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-        params: {
-          [MetrikaEventOrderFailParametrizedModel.title]: {
-            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_ORGANIZATIONS,
-            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-          },
-        },
-      });
-      return;
-    }
-
-    if (!this.orderRelationHref) {
-      this.changeSelectedTabIndex(0);
-      this._cartModalService.openOrderUnavailableModal();
-      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-        params: {
-          [MetrikaEventOrderFailParametrizedModel.title]: {
-            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_LINK,
-            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-          },
-        },
-      });
-      return;
-    }
-
-    if (!this.form.valid || (!this.selectedAddress && this.deliveryAvailable)) {
-      if (this.selectedTabIndex === 0) {
-        this.changeSelectedTabIndex(1);
-        return;
-      }
-      if (this.selectedTabIndex === 1) {
-
-        if (!this.selectedAddress && this.deliveryAvailable) {
-          this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
-          this.elementInputCity?.nativeElement.focus();
-        }
-
-        Object.keys(this.form.controls).forEach((key) => {
-          this.form.controls[key].markAsTouched();
-        });
-
-
-        if (this.form.invalid && this.form.controls.deliveryArea.valid) {
-
-          if (this.form.controls.contactEmail.invalid) {
-            this.elementInputContactEmail?.nativeElement.focus();
-          }
-
-          if (this.form.controls.contactPhone.invalid) {
-            this.elementInputContactPhone?.nativeElement.focus();
-          }
-
-          if (this.form.controls.contactName.invalid) {
-            this.elementInputContactName?.nativeElement.focus();
-          }
-        }
-      }
-
-      this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
-        params: {
-          [MetrikaEventOrderFailParametrizedModel.title]: {
-            [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.FIELDS_NOT_VALID,
-            ...(this.orderRelationHref && { [MetrikaEventOrderFailParametrizedModel.orderLink]: this.orderRelationHref }),
-          },
-        },
-      });
-
-      return;
-    }
-
-    this._createOrder();
   }
 
   changeSelectedTabIndex(tabIndex: number) {
@@ -455,162 +503,28 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       consumerKPP: userOrganization.legalRequisites.kpp,
       consumerId: userOrganization.organizationId,
     });
-    this._cartService.partiallyUpdateStorageByOrder({
-      ...this.order,
-      ...{
-        consumer: {
-          name: userOrganization.organizationName || null,
-          inn: userOrganization.legalRequisites?.inn || null,
-          kpp: userOrganization.legalRequisites?.kpp || null,
-          id: userOrganization.organizationId || null,
-        },
-      },
-    });
   }
 
   goToTradeOffer(tradeOfferId: string) {
     if (tradeOfferId) {
       this._tradeOffersService.get(tradeOfferId).subscribe(
-        (res) => {
-          const supplierId = res.supplier?.bnetInternalId;
-          if (supplierId) {
-            this._router.navigate([`./supplier/${supplierId}/offer/${tradeOfferId}`]);
-          }
-          if (!supplierId) {
-            console.log('Не удалось получить поставщика по ТП');
-          }
+        (tradeOffer) => {
+          const supplierId = tradeOffer.supplier?.bnetInternalId;
+          this._router.navigate([`./supplier/${supplierId}/offer/${tradeOfferId}`]);
         },
         (err: HttpErrorResponse) => {
           if (err.status === 404) {
             this._notificationsService.error('Данный товар недоступен к просмотру');
-            return;
+          } else {
+            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
           }
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
-    }
-    if (!tradeOfferId) {
-      this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
     }
   }
 
   disabledDate(current: Date): boolean {
     return differenceInCalendarDays(current, new Date()) < 1;
-  }
-
-  private _findOrderInCart(cartData: CartDataResponseModel): any {
-    const relationObject = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
-    return cartData.content.find((orderItem) => {
-      return this.orderRelationHref && this.orderRelationHref === orderItem._links?.[relationObject]?.href;
-    });
-  }
-
-  private _getFoundLocations(order: CartDataOrderModel): Observable<string[]> {
-    if (order.deliveryOptions?.deliveryZones?.length) {
-      return of(
-        order.deliveryOptions.deliveryZones
-          .filter((zone) => zone.fiasCode || zone.countryOksmCode === CountryCode.RUSSIA)
-          .map((zone) => {
-            if (!zone.fiasCode) {
-              return zone.countryOksmCode;
-            }
-            return zone.fiasCode;
-          }),
-      );
-    }
-    return of([]);
-  }
-
-  private _watchDeliveryAreaUserChanges() {
-    this.form.controls.deliveryArea
-      .get('deliveryCity')
-      .valueChanges.pipe(
-        switchMap((city) => {
-          if (city?.length > 1) {
-            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
-            return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
-          }
-          return of([]);
-        }),
-      )
-      .subscribe(
-        (cities) => {
-          this.selectedAddress = null;
-          this.foundStreets = [];
-          this.foundHouses = [];
-          this.foundLocations = cities;
-          this.foundCities = cities.map((city) => city.locality).filter((value, index, self) => self.indexOf(value) === index);
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
-
-    this.form.controls.deliveryArea
-      .get('deliveryStreet')
-      .valueChanges.pipe(
-        switchMap((street) => {
-          if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
-            this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-            this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-            const query = {
-              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-              deliveryStreet: street,
-            };
-            return this._locationService.searchAddresses(query, Level.STREET);
-          }
-          return of([]);
-        }),
-      )
-      .subscribe(
-        (cities) => {
-          this.foundHouses = [];
-          this.foundLocations = cities;
-          this.foundStreets = cities.map((city) => city.street).filter((street) => street);
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
-
-    this.form.controls.deliveryArea
-      .get('deliveryHouse')
-      .valueChanges.pipe(
-        switchMap((house: string) => {
-          if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
-            if (house.includes('литер')) {
-              /* todo сервис https://api.orgaddress.1c.ru не может найти адрес если передать текст в формате 'text=Санкт-Петербург г, Ленина ул, 12/36, литер А'
-            при этом 'text=Санкт-Петербург г, Ленина ул, 12/36, литер' успешно находится, поэтому пришлось подоткнуть тут данный костыль*/
-              const count = house.indexOf('литер') + 5;
-              house = house.substr(0, count);
-            }
-
-            const query = {
-              deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-              deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
-              deliveryHouse: house,
-            };
-            return this._locationService.searchAddresses(query, Level.HOUSE);
-          }
-          return of([]);
-        }),
-      )
-      .subscribe(
-        (cities) => {
-          this.foundHouses = cities.map((city) => city.house).filter((house) => house);
-          this.foundLocations = cities;
-          this.houseSelected();
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
   }
 
   citySelected() {
@@ -700,12 +614,111 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  private _watchDeliveryAreaUserChanges() {
+    this.form.controls.deliveryArea
+      .get('deliveryCity')
+      .valueChanges.pipe(
+      switchMap((city) => {
+        if (city?.length > 1) {
+          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
+          return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
+        }
+        return of([]);
+      }),
+    )
+      .subscribe(
+        (cities) => {
+          this.selectedAddress = null;
+          this.foundStreets = [];
+          this.foundHouses = [];
+          this.foundLocations = cities;
+          this.foundCities = cities.map((city) => city.locality).filter((value, index, self) => self.indexOf(value) === index);
+          this._cdr.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
+
+    this.form.controls.deliveryArea
+      .get('deliveryStreet')
+      .valueChanges.pipe(
+      switchMap((street) => {
+        if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
+          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+          const query = {
+            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+            deliveryStreet: street,
+          };
+          return this._locationService.searchAddresses(query, Level.STREET);
+        }
+        return of([]);
+      }),
+    )
+      .subscribe(
+        (cities) => {
+          this.foundHouses = [];
+          this.foundLocations = cities;
+          this.foundStreets = cities.map((city) => city.street).filter((street) => street);
+          this._cdr.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
+
+    this.form.controls.deliveryArea
+      .get('deliveryHouse')
+      .valueChanges.pipe(
+      switchMap((house: string) => {
+        if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
+          if (house.includes('литер')) {
+            /* todo сервис https://api.orgaddress.1c.ru не может найти адрес если передать текст в формате 'text=Санкт-Петербург г, Ленина ул, 12/36, литер А'
+          при этом 'text=Санкт-Петербург г, Ленина ул, 12/36, литер' успешно находится, поэтому пришлось подоткнуть тут данный костыль*/
+            const count = house.indexOf('литер') + 5;
+            house = house.substr(0, count);
+          }
+
+          const query = {
+            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
+            deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
+            deliveryHouse: house,
+          };
+          return this._locationService.searchAddresses(query, Level.HOUSE);
+        }
+        return of([]);
+      }),
+    )
+      .subscribe(
+        (cities) => {
+          this.foundHouses = cities.map((city) => city.house).filter((house) => house);
+          this.foundLocations = cities;
+          this.houseSelected();
+          this._cdr.detectChanges();
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
+  }
+
+  private _initValidDeliveryFiasCode(): void {
+    this.validDeliveryFiasCode =
+      this.order.deliveryOptions?.deliveryZones?.filter((zone) => zone.fiasCode || zone.countryOksmCode === CountryCode.RUSSIA)
+        .map((zone) => !zone.fiasCode ? zone.countryOksmCode : zone.fiasCode)
+      || [];
+  }
+
   private _deliveryByRussia(): boolean {
     return !this.validDeliveryFiasCode?.length || this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
   }
 
   private _watchItemQuantityChanges() {
-    this.itemsControls?.forEach((item, ind) => {
+    this.itemsControls?.forEach((item) => {
       const quantityControl = item.controls.quantity;
       quantityControl.valueChanges
         .pipe(
@@ -714,7 +727,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
           }),
           switchMap((orderQuantity) => {
-            if (orderQuantity < item.controls.orderQtyMin.value) {
+            if (orderQuantity < item.value.orderQtyMin) {
               return this._cartService
                 .handleRelation(RelationEnumModel.ITEM_REMOVE, item.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
                 .pipe(
@@ -725,13 +738,13 @@ export class CartOrderComponent implements OnInit, OnDestroy {
                         remove: {
                           products: [
                             {
-                              name: item?.controls?.productName?.value || '',
-                              id: item?.controls?.tradeOfferId?.value || '',
-                              price: item?.controls?.price?.value ? item.controls.price.value / 100 : '',
+                              name: item.value.productName || '',
+                              id: item.value.tradeOfferId || '',
+                              price: item.value.price ? item.value.price / 100 : '',
                               brand: '',
                               category: '',
                               variant: this.order?.supplier?.name || '',
-                              quantity: item?.controls?.quantity?.value || '',
+                              quantity: item.value?.quantity || '',
                             },
                           ],
                         },
@@ -742,8 +755,8 @@ export class CartOrderComponent implements OnInit, OnDestroy {
                 );
             }
 
-            if (orderQuantity % item.controls.orderQtyStep.value !== 0) {
-              orderQuantity = orderQuantity - (orderQuantity % item.controls.orderQtyStep.value);
+            if (orderQuantity % item.value.orderQtyStep !== 0) {
+              orderQuantity = orderQuantity - (orderQuantity % item.value.orderQtyStep);
             }
 
             return this._cartService.handleRelation(
@@ -755,33 +768,20 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             );
           }),
           catchError((_) => {
-            return this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value).pipe(
-              tap((res) => {
-                this.cartDataChange.emit(res);
-                const foundOrder = this._findOrderInCart(res);
-                if (foundOrder) {
-                  this._resetOrder(foundOrder);
-                }
-              }),
-            );
+            return this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().getValue())
+              .pipe(
+                tap((cartData) => {
+                  this.cartDataChange.emit(cartData);
+                }),
+              );
           }),
           switchMap((res) => {
-            return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCart$().value);
+            return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().value);
           }),
         )
-        .subscribe(
-          (res) => {
-            if (res) {
-              this.cartDataChange.emit(res);
-              const foundOrder = this._findOrderInCart(res);
-              if (!foundOrder) {
-                this.items.clear();
-                this._cartService.setActualCartData().pipe(take(1)).subscribe();
-                this._cdr.detectChanges();
-              }
-              if (foundOrder) {
-                this._resetOrder(foundOrder);
-              }
+        .subscribe((cartData) => {
+            if (cartData) {
+              this.cartDataChange.emit(cartData);
             }
           },
           (err) => {
@@ -793,65 +793,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _resetOrder(order) {
-    if (order) {
-      this.items.clear();
-      order.items.forEach((product) => {
-        this.items.push(this._createItem(product));
-      });
-      this.order.items = order.items;
-      this._cartService.partiallyUpdateStorageByOrder(this.order);
-      this.isOrderLoading = false;
-      this._watchItemQuantityChanges();
-      this.form.patchValue({
-        total: order.orderTotal?.total,
-        totalVat: order.orderTotal?.totalVat,
-      });
-      this._cdr.detectChanges();
-    }
-    if (!order) {
-      this.items.clear();
-      this._cdr.detectChanges();
-    }
-  }
-
   private _createOrder() {
-
-    const data = {
-      customerOrganizationId: this.form.get('consumerId').value,
-      contacts: {
-        name: this.form.get('contactName').value,
-        phone: `+7${this.form.get('contactPhone').value}`,
-        email: this.form.get('contactEmail').value,
-      },
-      deliveryOptions: {
-        ...(this.deliveryAvailable
-          ? {
-              deliveryTo: {
-                fiasCode: this.selectedAddress.fias,
-                title: this.selectedAddress.fullName,
-                countryOksmCode: '643',
-              },
-            }
-          : {
-              pickupFrom: this.pickupArea,
-            }),
-      },
-    };
-    let comment = '';
-    if (this.form.get('deliveryDesirableDate').value) {
-      const dateFormatted = format(new Date(this.form.get('deliveryDesirableDate').value), 'dd-MM-yyyy HH:mm');
-      comment += `Желаемая дата доставки: ${dateFormatted}. `;
-    }
-    if (this.form.get('commentForSupplier').value) {
-      comment += `${this.form.get('commentForSupplier').value}`;
-    }
-    if (comment) {
-      data['comment'] = comment;
-    }
-    const relationHref = this.orderType === 'order' ? RelationEnumModel.ORDER_CREATE : RelationEnumModel.PRICEREQUEST_CREATE;
+    const relationType = this.isOrderType ? RelationEnumModel.MAKE_ORDER : RelationEnumModel.REQUEST_FOR_PRICE;
     this._cartService
-      .handleRelation(relationHref, this.orderRelationHref, data)
+      .handleRelation(relationType, this.makeOrderLinkOrRequestForPriceLink, this._createOrderData())
       .pipe(
         switchMap((_) => this._cartService.setActualCartData()),
         tap(() => {
@@ -881,16 +826,16 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           };
           this._externalProvidersService.fireGTMEvent(tag);
           this._externalProvidersService.fireYandexMetrikaEvent(
-            this.orderType === 'order' ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
+            this.isOrderType ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
           );
         }),
+        catchError((_) => {
+          return this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().getValue());
+        }),
       )
-      .subscribe(
-        (res) => {
+      .subscribe((cartData) => {
           this._cartModalService.openOrderSentModal();
-          this.cartDataChange.emit(res);
-          this.items.clear();
-          this._cdr.detectChanges();
+          this.cartDataChange.emit(cartData);
         },
         (err) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
@@ -898,50 +843,83 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       );
   }
 
-  private _getDeliveryMethods(opts: DeliveryOptionsModel): Observable<DeliveryMethodModel[]> {
-    const deliveryMethods: DeliveryMethodModel[] = [];
+  private _createOrderData() {
+    const comment = this._orderComment();
+    return {
+      customerOrganizationId: this.form.value.consumerId,
+      contacts: {
+        name: this.form.value.contactName,
+        phone: `+7${this.form.value.contactPhone}`,
+        email: this.form.value.contactEmail,
+      },
+      ...(comment && { comment }),
+      deliveryOptions: {
+        ...(this.selectedDelivery
+          ? {
+            deliveryTo: {
+              fiasCode: this.selectedAddress.fias,
+              title: this.selectedAddress.fullName,
+              countryOksmCode: '643',
+            },
+          }
+          : {
+            pickupFrom: this.pickupArea,
+          }),
+      },
+    };
+  }
+
+  private _orderComment() {
+    return `${this.form.value.deliveryDesirableDate ? `Желаемая дата доставки: ${format(new Date(this.form.value.deliveryDesirableDate), 'dd-MM-yyyy HH:mm')}.` : ''}
+    ${this.form.value.commentForSupplier ? ` ${this.form.value.commentForSupplier}` : ''}`;
+  }
+
+  private _initDeliveryMethods(): void {
+    const deliveryOptions = this.order.deliveryOptions;
+    this.deliveryMethods = [];
 
     if (
-      !opts ||
-      (!opts.deliveryZones?.length && !opts.pickupPoints?.length) ||
-      (opts.deliveryZones?.length && !opts.pickupPoints?.length)
+      !deliveryOptions ||
+      (!deliveryOptions.deliveryZones?.length && !deliveryOptions.pickupPoints?.length) ||
+      (deliveryOptions.deliveryZones?.length && !deliveryOptions.pickupPoints?.length)
     ) {
-      deliveryMethods.push(
+      this.deliveryMethods.push(
         { label: 'Доставка', value: DeliveryMethod.DELIVERY, disabled: false },
         { label: 'Самовывоз отсутствует', value: DeliveryMethod.PICKUP, disabled: true },
       );
-    } else if (opts.pickupPoints?.length && !opts.deliveryZones?.length) {
-      deliveryMethods.push(
+    } else if (deliveryOptions.pickupPoints?.length && !deliveryOptions.deliveryZones?.length) {
+      this.deliveryMethods.push(
         { label: 'Самовывоз', value: DeliveryMethod.PICKUP, disabled: false },
         { label: 'Доставка отсутствует', value: DeliveryMethod.DELIVERY, disabled: true },
       );
-    } else if (opts.pickupPoints?.length && opts.deliveryZones?.length) {
-      deliveryMethods.push(
+    } else if (deliveryOptions.pickupPoints?.length && deliveryOptions.deliveryZones?.length) {
+      this.deliveryMethods.push(
         { label: 'Самовывоз', value: DeliveryMethod.PICKUP, disabled: false },
         { label: 'Доставка', value: DeliveryMethod.DELIVERY, disabled: false },
       );
     }
-
-    return of(deliveryMethods);
   }
 
-  private _initForm(order: CartDataOrderModel, deliveryMethods: DeliveryMethodModel[], userInfo: UserInfoModel): FormGroup {
-    return this._fb.group({
+  private _initForm(): void {
+    this.form = this._fb.group({
       consumerName: new FormControl(''),
       consumerINN: new FormControl(''),
       consumerKPP: new FormControl(''),
       consumerId: new FormControl(''),
-      total: new FormControl(order.orderTotal?.total),
-      totalVat: new FormControl(order.orderTotal?.totalVat),
-      deliveryMethod: new FormControl(deliveryMethods[0]?.value, [Validators.required]),
+      total: new FormControl(this.order.orderTotal?.total),
+      totalVat: new FormControl(this.order.orderTotal?.totalVat),
+      deliveryMethod: new FormControl(this.deliveryMethods[0]?.value, [Validators.required]),
       deliveryArea: this._createDeliveryAreaForm(),
-      pickupArea: new FormControl(order.deliveryOptions?.pickupPoints?.[0]),
-      contactName: new FormControl(userInfo?.fullName || '', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
-      contactPhone: new FormControl(userInfo?.phone || '', [Validators.required, Validators.maxLength(100)]),
-      contactEmail: new FormControl(userInfo?.email || '', [Validators.required, Validators.email, Validators.maxLength(100)]),
+      pickupArea: new FormControl(this.order.deliveryOptions?.pickupPoints?.[0]),
+      contactName: new FormControl(this.userInfo?.fullName || '',
+        [Validators.required, notBlankValidator, Validators.maxLength(200)]),
+      contactPhone: new FormControl(this.userInfo?.phone || '',
+        [Validators.required, notBlankValidator, Validators.maxLength(100)]),
+      contactEmail: new FormControl(this.userInfo?.email || '',
+        [Validators.required, notBlankValidator, Validators.email, Validators.maxLength(100)]),
       commentForSupplier: new FormControl('', [Validators.maxLength(900)]),
       deliveryDesirableDate: new FormControl(''),
-      items: this._fb.array(order.items.map((product) => this._createItem(product))),
+      items: this._fb.array(this.order.items.map((product) => this._createItem(product))),
     });
   }
 
@@ -967,7 +945,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       barCodes: this._fb.array(product?.barCodes || []),
       partNumber: product.partNumber,
       packaging: product.packaging,
-      imageUrl: this._setImageUrl(product.imageUrls),
+      imageUrl: this._imageUrl(product.imageUrls),
       quantity: product.quantity,
       price: product.price,
       priceBeforeDiscount: product.priceBeforeDiscount,
@@ -1002,50 +980,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       .every((x) => x.tradeOfferId !== tradeOfferId);
   }
 
-  private _setImageUrl(images: string[]): string {
+  private _imageUrl(images: string[]): string {
     return images?.length ? absoluteImagePath(images[0]) : './assets/img/svg/clean.svg';
-  }
-
-  private _getAvailableOrganizations(userOrganizations: UserOrganizationModel[], order: CartDataOrderModel): UserOrganizationModel[] {
-    return !order.customersAudience?.length
-      ? userOrganizations
-      : userOrganizations?.filter((org) => {
-          return this._checkAudienceForAvailability(order.customersAudience, org);
-        });
-  }
-
-  private _initConsumer(availableOrganizations: UserOrganizationModel[], order: CartDataOrderModel) {
-    if (availableOrganizations?.length) {
-      if (!order.consumer || !availableOrganizations.map((o) => o.organizationId).includes(order.consumer.id)) {
-        if (!order.customersAudience?.length) {
-          this.setConsumer(availableOrganizations[0]);
-        }
-        if (order.customersAudience?.length) {
-          const foundUserOrganization = availableOrganizations.find((org) => {
-            return this._checkAudienceForAvailability(order.customersAudience, org);
-          });
-          if (foundUserOrganization) {
-            this.setConsumer(foundUserOrganization);
-          }
-        }
-      } else {
-        this._setConsumerFromOrder();
-      }
-    }
-  }
-
-  private _checkAudienceForAvailability(audienceArray: any[], org: any) {
-    const innKpp = innKppToLegalId(org.legalRequisites.inn, org.legalRequisites.kpp);
-    return audienceArray.map((aud) => aud.legalId).includes(innKpp);
-  }
-
-  private _setConsumerFromOrder() {
-    this.form.patchValue({
-      consumerName: this.order.consumer.name,
-      consumerINN: this.order.consumer.inn,
-      consumerKPP: this.order.consumer.kpp,
-      consumerId: this.order.consumer.id,
-    });
-    this._cartService.partiallyUpdateStorageByOrder(this.order);
   }
 }

@@ -20,7 +20,7 @@ export class ApiInterceptor implements HttpInterceptor {
     const userService = this._injector.get(UserService);
     const userStateService = this._injector.get(UserStateService);
     const localStorageService = this._injector.get(LocalStorageService);
-    const { accessToken = null, refreshToken = null } = userStateService.userData$.getValue() || {};
+    const { accessToken = null, refreshToken = null } = userStateService.currentUser$.getValue() || {};
     const modifiedReq = this._modifyReq(req, accessToken);
 
     return next.handle(modifiedReq).pipe(

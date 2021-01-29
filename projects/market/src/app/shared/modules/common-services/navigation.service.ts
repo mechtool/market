@@ -59,7 +59,7 @@ export class NavigationService implements OnDestroy {
     this._updateLayoutOnResolutionChanges();
     this._renderInitialNavBar();
     this._setInitialNavBarType();
-    this._userStateService.userData$.subscribe((auth) => {
+    this._userStateService.currentUser$.subscribe((auth) => {
       const notAuthedNavItems: NavItemModel[] = [
         {
           label: 'Товары',

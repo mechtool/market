@@ -6,16 +6,16 @@
 
   <nz-spin [nzSpinning]="isAdded" [nzIndicator]="indicatorTemplate">
 
-    <div class="to_cart__btn_wrap" *ngSwitchCase="0">
+    <div class="to_cart__btn_wrap" *ngSwitchCase="'NOT_AVAILABLE'">
       <button type="button" class="btn btn-yellow to_cart__btn" disabled></button>
     </div>
 
-    <div class="to_cart__btn_wrap" *ngSwitchCase="1">
+    <div class="to_cart__btn_wrap" *ngSwitchCase="'TO_CART'">
       <button type="button" class="btn btn-yellow to_cart__btn" (click)="addToCart()"></button>
     </div>
 
     <div class="switch_count color_scheme_yellow" data-counter="basket__count_products" [formGroup]="form"
-         *ngSwitchCase="2">
+         *ngSwitchCase="'IN_CART'">
       <button class="switch_count__decrease" (click)="decrease()"></button>
       <input
         type="number"

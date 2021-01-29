@@ -30,7 +30,7 @@ export class NavbarNavComponent implements OnInit {
   navItemActive: NavItemModel;
 
   get userLogin(): string {
-    return this._userStateService.userData$?.value?.userInfo?.login || null;
+    return this._userStateService.currentUser$?.value?.userInfo?.login || null;
   }
 
   get cartNavItem(): NavItemModel {

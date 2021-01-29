@@ -60,7 +60,7 @@ export class ExternalProvidersService {
 
   fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): void {
     if (this._isMetrikaAvailable) {
-      const login = this._userStateService.userData$.getValue()?.userInfo.login;
+      const login = this._userStateService.currentUser$.getValue()?.userInfo.login;
       let opts = options;
       if (opts?.params && login) {
         opts.params['логин'] = login;

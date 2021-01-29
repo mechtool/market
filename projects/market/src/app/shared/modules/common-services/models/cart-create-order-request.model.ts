@@ -1,4 +1,6 @@
-export class CartCreateOrderRequestModel {
+import { CartModel } from './cart.model';
+
+export class CartCreateOrderRequestModel implements CartModel {
   customerOrganizationId: 'string';
   contacts: {
     name: 'string';

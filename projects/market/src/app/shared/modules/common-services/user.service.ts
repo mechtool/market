@@ -32,7 +32,7 @@ export class UserService {
   ) {}
 
   setUserData(data: any): void {
-    this._userStateService.userData$.next(data);
+    this._userStateService.currentUser$.next(data);
   }
 
   setUserOrganizations(data: any): Observable<any> {
@@ -88,7 +88,7 @@ export class UserService {
             return of(null);
           }),
           tap((docs: DocumentResponseModel[]) => {
-            const uin = this._userStateService.userData$.getValue()?.userInfo.userId;
+            const uin = this._userStateService.currentUser$.getValue()?.userInfo.userId;
             const lastLoginTimestamp = this.getUserLastLoginTimestamp(uin);
             if (lastLoginTimestamp) {
               const counter = docs.filter((doc) => doc.sentDate > lastLoginTimestamp).length;
@@ -104,7 +104,7 @@ export class UserService {
   }
 
   watchUserDataChangesForUserStatusCookie() {
-    this._userStateService.userData$.subscribe((res) => {
+    this._userStateService.currentUser$.subscribe((res) => {
       if (res) {
         this._localStorageService.putUserData(res);
       }

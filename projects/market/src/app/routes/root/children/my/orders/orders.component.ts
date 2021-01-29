@@ -41,7 +41,7 @@ export class OrdersComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    const uin = this._userStateService.userData$.value?.userInfo.userId;
+    const uin = this._userStateService.currentUser$.value?.userInfo.userId;
     if (uin) {
       this._userService.setUserLastLoginTimestamp(uin, Date.now());
       this._userService.updateNewAccountDocumentsCounter().subscribe();

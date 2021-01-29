@@ -67,7 +67,7 @@ export class ProductOrderComponent implements OnInit {
         (res) => {
           this.vat = this._getVat();
           const tradeOfferId = this.tradeOffer?.id;
-          const cartTradeOffers = res.content?.reduce((accum, curr, item, ind) => {
+          const cartTradeOffers = res.content?.reduce((accum, curr) => {
             return [...curr.items, ...accum];
           }, []);
           const foundTradeOffer = cartTradeOffers.find((x) => {

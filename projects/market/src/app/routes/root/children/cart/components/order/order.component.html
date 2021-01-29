@@ -3,12 +3,12 @@
   <form class="form__order" action="" [formGroup]="form" (submit)="checkForValidityAndCreateOrder()">
 
     <div class="order_info">
-      <div class="order_spec" *ngIf="userInfo && availableUserOrganizations?.length">
+      <div class="order_spec" *ngIf="abilityToPlaceOrder">
         <div class="order_label">Доступный заказчик:</div>
         <div class="order__customer dropdown dropdown_selectable">
           <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click"
                [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'"
-               [nzDisabled]="availableUserOrganizations?.length === 1">
+               [nzDisabled]="availableOrganizations?.length === 1">
             <div class="supplier_title">
               <div class="supplier_image">
                 <div class="supplier_image-color" style="{{consumerINN | organizationLogo : true}}"></div>
@@ -21,7 +21,7 @@
         </div>
         <nz-dropdown-menu #organizationsList="nzDropdownMenu">
           <ul nz-menu style="width: 290px">
-            <li nz-menu-item *ngFor="let organization of availableUserOrganizations"
+            <li nz-menu-item *ngFor="let organization of availableOrganizations"
                 (click)="setConsumer(organization)">
               <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
                 <div class="supplier_image">
@@ -47,7 +47,7 @@
           </span>
         </div>
       </div>
-      <div class="order_spec">
+      <div class="order_spec" *ngIf="pickupPoints?.length || deliveryZones?.length">
         <div class="order_label">Доступные способы поставки:</div>
         <div class="order_value supplier_title">
           <span class="supplier_name">
@@ -82,8 +82,7 @@
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="{{orderType === 'order' ? 'Данные для заказа' : 'Данные для запроса цен'}}"
-              nzDisabled="{{!userInfo}}">
+      <nz-tab nzTitle="{{isOrderType ? 'Данные для заказа' : 'Данные для запроса цен'}}" nzDisabled="{{isAnonymous}}">
         <div class="tab-content">
           <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
         </div>
@@ -108,10 +107,10 @@
               <div class="table_cell cell_count" data-title="Количество:">
                 Количество
               </div>
-              <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
+              <div class="table_cell cell_price_one" *ngIf="isOrderType">
                 Цена
               </div>
-              <div class="table_cell cell_sum" data-title="Сумма:" *ngIf="orderType === 'order'">
+              <div class="table_cell cell_sum" data-title="Сумма:" *ngIf="isOrderType">
                 Сумма
               </div>
             </div>
@@ -177,7 +176,7 @@
                   ></market-cart-order-qty-counter>
                 </div>
 
-                <div class="table_cell cell_price_one" *ngIf="orderType === 'order'">
+                <div class="table_cell cell_price_one" *ngIf="isOrderType">
                   <p *ngIf="item.controls.priceBeforeDiscount.value">
                     <span nz-tooltip
                           nzTooltipTitle="Цена без скидки"
@@ -185,20 +184,22 @@
                   </p>
 
                   <p>
-                    <span class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
+                    <span
+                      class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
                   </p>
                 </div>
 
-                <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="orderType === 'order'">
+                <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="isOrderType">
                   <p>
-                    <span class="price">{{item.controls.total.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
+                    <span
+                      class="price">{{item.controls.total.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
                   </p>
 
                   <p>
                     <span class="cell_nds"
-                        *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">НДС {{item.controls.vat.value / 100 | percent}}</span>
+                          *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">НДС {{item.controls.vat.value / 100 | percent}}</span>
                     <span class="cell_nds"
-                        *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">без НДС</span>
+                          *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">без НДС</span>
                   </p>
                 </div>
 
@@ -243,7 +244,7 @@
                        *ngFor="let opt of deliveryMethods">{{ opt.label }}</label>
               </nz-radio-group>
             </div>
-            <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': deliveryAvailable}">
+            <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': selectedDelivery}">
 
               <div class="order_spec" *ngIf="pickupPoints?.length">
                 <div class="order__customer dropdown dropdown_selectable">
@@ -272,7 +273,7 @@
 
             </div>
 
-            <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !deliveryAvailable}">
+            <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !selectedDelivery}">
               <div class="form-group form-group-long">
 
                 <label>Укажите адрес доставки *</label>
@@ -332,26 +333,25 @@
                   </nz-autocomplete>
                 </div>
 
+                <ng-container *ngIf="form.controls.deliveryArea.invalid">
+                  <div class="input_error_region" *ngIf="form.controls.deliveryArea.errors?.deliveryToCityNotAvailable">
+                    Указанный адрес не входит в зону доставки поставщика.
+                    Список доступных зон доставки смотрите выше.
+                    Укажите адрес внутри одной из зон доставки<span
+                    *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
+                  </div>
 
-                <div class="input_error_region"
-                     *ngIf="form.controls.deliveryArea.errors?.deliveryToCityNotAvailable">
-                  Указанный адрес не входит в зону доставки поставщика.
-                  Список доступных зон доставки смотрите выше.
-                  Укажите адрес внутри одной из зон доставки<span *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
-                </div>
+                  <div class="input_error_region" *ngIf="form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable">
+                    Указанный адрес не входит в зону доставки поставщика.
+                    Список доступных зон доставки смотрите выше.
+                    Укажите адрес внутри одной из зон доставки<span
+                    *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
+                  </div>
 
-                <div class="input_error_region"
-                     *ngIf="form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable">
-                  Указанный адрес не входит в зону доставки поставщика.
-                  Список доступных зон доставки смотрите выше.
-                  Укажите адрес внутри одной из зон доставки<span *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
-                </div>
-
-                <div class="input_error"
-                     *ngIf="form.controls.deliveryArea.errors?.deliveryAreaCondition">
-                  Заполните эти поля
-                </div>
-
+                  <div class="input_error" *ngIf="form.controls.deliveryArea.errors?.deliveryAreaCondition">
+                    Заполните эти поля
+                  </div>
+                </ng-container>
               </div>
 
 
@@ -399,11 +399,21 @@
                 id="contactName"
                 autocomplete="false"
                 list="null"
-                [ngClass]="{'error': form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
+                [ngClass]="{'error': form.controls.contactName.invalid && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
                 formControlName="contactName">
               <ng-container
-                *ngIf="form.controls.contactName.errors && (form.controls.contactName.touched || form.controls.contactName.dirty)">
-                <div class="input_error" *ngIf="form.controls.contactName.errors.required">Заполните это поле</div>
+                *ngIf="form.controls.contactName.invalid && (form.controls.contactName.touched || form.controls.contactName.dirty)">
+                <div class="input_error" *ngIf="form.controls.contactName.errors?.required">
+                  Заполните это поле
+                </div>
+
+                <div class="input_error" *ngIf="form.controls.contactName.errors?.blank">
+                  Введено недопустимое значение
+                </div>
+
+                <div class="input_error" *ngIf="form.controls.contactName.errors?.maxlength">
+                  {{'Максимум ' + form.controls.contactName.errors?.maxlength.requiredLength + ' символов'}}
+                </div>
               </ng-container>
             </div>
 
@@ -415,16 +425,18 @@
                 id="contactPhone"
                 autocomplete="false"
                 list="null"
-                [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
+                [ngClass]="{'error': form.controls.contactPhone.invalid && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
                 prefix="+7"
                 mask="(000) 000 00 00"
                 [showMaskTyped]="true"
                 formControlName="contactPhone">
               <ng-container
-                *ngIf="form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
-                <div class="input_error" *ngIf="form.controls.contactPhone.errors.required">Заполните это поле</div>
-                <div class="input_error"
-                     *ngIf="!form.controls.contactPhone.errors.required && form.controls.contactPhone.errors.mask">
+                *ngIf="form.controls.contactPhone.invalid && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
+                <div class="input_error" *ngIf="form.controls.contactPhone.errors?.required">
+                  Заполните это поле
+                </div>
+
+                <div class="input_error" *ngIf="form.controls.contactPhone.errors.mask">
                   Некорректно заполнено поле
                 </div>
               </ng-container>
@@ -438,14 +450,22 @@
                 id="contactEmail"
                 autocomplete="false"
                 list="null"
-                [ngClass]="{'error': form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
+                [ngClass]="{'error': form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
                 formControlName="contactEmail">
               <ng-container
-                *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
-                <div class="input_error" *ngIf="form.controls.contactEmail.errors.required">Заполните это поле</div>
-                <div class="input_error"
-                     *ngIf="!form.controls.contactEmail.errors.required && form.controls.contactEmail.errors.email">
+                *ngIf="form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
+                <div class="input_error" *ngIf="form.controls.contactEmail.errors?.required">
+                  Заполните это поле
+                </div>
+
+                {{form.controls.contactEmail.errors | json}}
+
+                <div class="input_error" *ngIf="form.controls.contactEmail.errors?.email">
                   Некорректно заполнено поле
+                </div>
+
+                <div class="input_error" *ngIf="form.controls.contactEmail.errors?.maxlength">
+                  {{'Максимум ' + form.controls.contactEmail.errors?.maxlength.requiredLength + ' символов'}}
                 </div>
               </ng-container>
             </div>
@@ -454,7 +474,17 @@
             <div class="form-group">
               <label for="commentForSupplier">Комментарий для поставщика</label>
               <div class="textarea-wrap">
-                <textarea id="commentForSupplier" rows="6" formControlName="commentForSupplier"></textarea>
+                <textarea
+                  id="commentForSupplier"
+                  rows="6"
+                  [ngClass]="{'error': form.controls.commentForSupplier.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
+                  formControlName="commentForSupplier">
+                </textarea>
+                <ng-container *ngIf="form.controls.commentForSupplier.invalid">
+                  <div class="input_error" *ngIf="form.controls.commentForSupplier.errors?.maxlength">
+                    {{'Максимум ' + form.controls.commentForSupplier.errors?.maxlength.requiredLength + ' символов'}}
+                  </div>
+                </ng-container>
               </div>
             </div>
           </div>
@@ -463,7 +493,7 @@
     </ng-template>
 
     <div class="order__total">
-      <div class="order__total_price" *ngIf="orderType === 'order'">
+      <div class="order__total_price" *ngIf="isOrderType">
 
         <div class="order__total_label">
           Итого:
@@ -475,7 +505,7 @@
 
       </div>
 
-      <div class="order__total_nds" *ngIf="orderType === 'order'">
+      <div class="order__total_nds" *ngIf="isOrderType">
         Включая НДС {{totalVat | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}
       </div>
 
@@ -499,10 +529,14 @@
 
       <div class="order__total_btn">
         <button id="checkoutButton" nz-button type="submit" nzType="primary">
-          {{orderType === 'order' ? 'Оформить заказ' : 'Оформить запрос цен'}}
+          {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
-        <button nz-button nzType="link" type="button" (click)="back()" *ngIf="selectedTabIndex === 0 && isHistoryAvailable">Продолжить подбор</button>
-        <button nz-button nzType="link" type="button" (click)="changeSelectedTabIndex(0)" *ngIf="selectedTabIndex === 1">Вернуться к товарам</button>
+        <button nz-button nzType="link" type="button" (click)="navigationBack()"
+                *ngIf="selectedTabIndex === 0 && isHistoryAvailable">Продолжить подбор
+        </button>
+        <button nz-button nzType="link" type="button" (click)="changeSelectedTabIndex(0)"
+                *ngIf="selectedTabIndex === 1">Вернуться к товарам
+        </button>
       </div>
     </div>
 

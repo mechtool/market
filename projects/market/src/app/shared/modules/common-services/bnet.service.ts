@@ -6,10 +6,8 @@ import { Observable } from 'rxjs';
 import {
   AccessKeyModel,
   AccessKeyResponseModel,
-  CartAddItemRequestModel,
-  CartCreateOrderRequestModel,
   CartDataResponseModel,
-  CartUpdateItemQuantityRequestModel,
+  CartModel,
   CategoryRequestModel,
   CategoryResponseModel,
   CommerceMlDocumentResponseModel,
@@ -49,7 +47,8 @@ export class BNetService {
     private _cacheService: CacheService,
     private _apiWorkerService: ApiWorkerService,
     private _http: HttpClient,
-  ) {}
+  ) {
+  }
 
   getProductOffer(id: string, filterQuery?: ProductOfferRequestModel): Observable<ProductOfferResponseModel> {
     const params = this._params(filterQuery);
@@ -200,7 +199,7 @@ export class BNetService {
     return this._apiService.get(cartLocation);
   }
 
-  addItemToCart(relationHref: string, data: CartAddItemRequestModel): Observable<any> {
+  addItemToCart(relationHref: string, data: CartModel): Observable<any> {
     return this._apiService.post(relationHref, data);
   }
 
@@ -208,15 +207,15 @@ export class BNetService {
     return this._apiService.delete(relationHref);
   }
 
-  updateItemQuantityInCart(relationHref: string, data: CartUpdateItemQuantityRequestModel): Observable<any> {
+  updateItemQuantityInCart(relationHref: string, data: CartModel): Observable<any> {
     return this._apiService.put(relationHref, data);
   }
 
-  createOrder(relationHref: string, data: CartCreateOrderRequestModel): Observable<any> {
+  createOrder(relationHref: string, data: CartModel): Observable<any> {
     return this._apiService.post(relationHref, data);
   }
 
-  createPriceRequest(relationHref: string, data: CartCreateOrderRequestModel): Observable<any> {
+  createPriceRequest(relationHref: string, data: CartModel): Observable<any> {
     return this._apiService.post(relationHref, data);
   }
 

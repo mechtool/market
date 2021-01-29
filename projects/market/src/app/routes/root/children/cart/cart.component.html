@@ -4,16 +4,16 @@
     <h2>Корзина</h2>
   </div>
 
-  <ng-container *ngIf="isCartDataLoaded && cartData?.content?.length;">
+  <ng-container *ngIf="cartData?.content?.length;">
     <market-cart-order
       *ngFor="let order of cartData.content"
       [order]="order"
       [userInfo]="userInfo"
-      (cartDataChange)="setProps($event)"
+      (cartDataChange)="setCartData($event)"
     ></market-cart-order>
   </ng-container>
 
-  <ng-container *ngIf="isCartDataLoaded && !cartData?.content?.length">
+  <ng-container *ngIf="!cartData?.content?.length">
     <div class="empty">
       <nz-empty
         nzNotFoundImage="./assets/img/svg/empty.svg"

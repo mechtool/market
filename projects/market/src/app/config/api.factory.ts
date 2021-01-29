@@ -81,7 +81,7 @@ function handleAuthFromStorage$(): Observable<any> {
 
 function setCart$(): Observable<any> {
   return defer(() => {
-    return !cartService.hasCart() ? createCartRetriable$() : of(null);
+    return !cartService.hasCartLocationLink() ? createCartRetriable$() : of(null);
   }).pipe(
     take(1),
     switchMap((_) => setActualCartDataRetriable$()),
@@ -101,7 +101,7 @@ function createCartRetriable$(): Observable<any> {
 
 function setActualCartDataRetriable$(): Observable<any> {
   return delayedRetryWith(cartService.setActualCartData()).pipe(
-    catchError((e) => {
+    catchError((err) => {
       return createCartRetriable$();
     }),
   );

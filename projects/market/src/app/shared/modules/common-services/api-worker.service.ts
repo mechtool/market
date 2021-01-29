@@ -12,7 +12,7 @@ export class ApiWorkerService {
     if (body.params.keys().length) {
       fullUrl = `${fullUrl}?${body.params.toString()}`;
     }
-    const accessToken = this._userStateService.userData$.getValue()?.accessToken;
+    const accessToken = this._userStateService.currentUser$.getValue()?.accessToken;
     const headers = {
       ...(accessToken && { authorization: `Bearer ${accessToken}` }),
     };
