@@ -85,14 +85,26 @@ textarea:focus {
   border-color: var(--color-accent);
 }
 
-.form__registration_org .input_attention {
-  display: block;
-  position: absolute;
-  padding-left: 25px;
-  bottom: 12px;
-  left: 230px;
-  width: 100%;
-  opacity: 0.8;
+.form__registration_org {
+  .input_attention {
+    display: block;
+    position: absolute;
+    padding-left: 25px;
+    bottom: 12px;
+    left: 230px;
+    width: 100%;
+    opacity: 0.8;
+  }
+
+  .textarea_attention {
+    display: block;
+    position: absolute;
+    padding-left: 25px;
+    bottom: 12px;
+    left: 410px;
+    width: 100%;
+    opacity: 0.8;
+  }
 }
 
 .textarea-wrap {

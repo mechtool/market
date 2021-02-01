@@ -1,6 +1,7 @@
 import { Input, Output, Component, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Validators, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
+import { notBlankValidator } from '#shared/utils/common-validators';
 
 type OperationType = 'register'|'edit';
 
@@ -41,15 +42,24 @@ export class OrganizationOperateComponent implements OnChanges {
     this.form = this._fb.group({
       inn: new FormControl({ value: this.legalRequisites?.inn || '', disabled: true }, [Validators.required]),
       kpp: new FormControl({ value: this.legalRequisites?.kpp || '', disabled: true }),
-      organizationName: new FormControl(this.organizationData?.name || '', [Validators.required, Validators.minLength(3)]),
-      organizationDescription: new FormControl(this.organizationData?.description || ''),
-      organizationEmail: new FormControl(this.organizationData?.contacts?.email || '', [Validators.email]),
-      organizationPhone: new FormControl(this.organizationData?.contacts?.phone || ''),
-      organizationWebsite: new FormControl(this.organizationData?.contacts?.website || ''),
-      organizationAddress: new FormControl(this.organizationData?.contacts?.address || ''),
-      contactFio: new FormControl(this.organizationData?.contactPerson?.fullName || '', [Validators.required]),
-      contactEmail: new FormControl(this.organizationData?.contactPerson?.email || '', [Validators.required, Validators.email]),
-      contactPhone: new FormControl(this.organizationData?.contactPerson?.phone || '', [Validators.required]),
+      organizationName: new FormControl(this.organizationData?.name || '',
+        [Validators.required, notBlankValidator, Validators.minLength(3), Validators.maxLength(150)]),
+      organizationDescription: new FormControl(this.organizationData?.description || '',
+        [notBlankValidator, Validators.maxLength(1000)]),
+      organizationEmail: new FormControl(this.organizationData?.contacts?.email || '',
+        [Validators.email, Validators.maxLength(100)]),
+      organizationPhone: new FormControl(this.organizationData?.contacts?.phone || '',
+        [Validators.maxLength(16)]),
+      organizationWebsite: new FormControl(this.organizationData?.contacts?.website || '',
+        [notBlankValidator, Validators.maxLength(100)]),
+      organizationAddress: new FormControl(this.organizationData?.contacts?.address || '',
+        [notBlankValidator, Validators.maxLength(500)]),
+      contactFio: new FormControl(this.organizationData?.contactPerson?.fullName || '',
+        [Validators.required, notBlankValidator, Validators.maxLength(100)]),
+      contactEmail: new FormControl(this.organizationData?.contactPerson?.email || '',
+        [Validators.required, Validators.email, Validators.maxLength(100)]),
+      contactPhone: new FormControl(this.organizationData?.contactPerson?.phone || '',
+        [Validators.required, Validators.maxLength(16)]),
       ...(this.operationType === 'register' && { agree: new FormControl(false, [Validators.requiredTrue]) }),
     });
   }

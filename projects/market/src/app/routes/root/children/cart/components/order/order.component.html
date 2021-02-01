@@ -458,13 +458,11 @@
                   Заполните это поле
                 </div>
 
-                {{form.controls.contactEmail.errors | json}}
-
                 <div class="input_error" *ngIf="form.controls.contactEmail.errors?.email">
                   Некорректно заполнено поле
                 </div>
 
-                <div class="input_error" *ngIf="form.controls.contactEmail.errors?.maxlength">
+                <div class="input_error" *ngIf="!form.controls.contactEmail.errors?.email && form.controls.contactEmail.errors?.maxlength">
                   {{'Максимум ' + form.controls.contactEmail.errors?.maxlength.requiredLength + ' символов'}}
                 </div>
               </ng-container>
@@ -481,6 +479,10 @@
                   formControlName="commentForSupplier">
                 </textarea>
                 <ng-container *ngIf="form.controls.commentForSupplier.invalid">
+                  <div class="input_error" *ngIf="form.controls.commentForSupplier.errors?.blank">
+                    Введено недопустимое значение
+                  </div>
+
                   <div class="input_error" *ngIf="form.controls.commentForSupplier.errors?.maxlength">
                     {{'Максимум ' + form.controls.commentForSupplier.errors?.maxlength.requiredLength + ' символов'}}
                   </div>

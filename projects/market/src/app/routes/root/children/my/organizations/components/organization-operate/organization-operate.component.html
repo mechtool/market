@@ -3,7 +3,8 @@
     <h2>{{ operationType === 'register' ? 'Регистрация новой организации' : 'Редактировать профиль организации'}}</h2>
   </div>
 
-  <p class="form_title" *ngIf="operationType === 'register'"> Чтобы продолжить работу, <br>укажите данные {{subject}}:</p>
+  <p class="form_title" *ngIf="operationType === 'register'"> Чтобы продолжить работу, <br>укажите данные {{subject}}:
+  </p>
 
   <form class="form__registration_org" [formGroup]="form" (submit)="send()">
 
@@ -17,148 +18,215 @@
       <input type="text" id="kpp" autocomplete="false" list="null" formControlName="kpp">
     </div>
 
-    <div
-      class="form-group form-group-std"
-      [ngClass]="{'error': form.controls.organizationName.errors && (form.controls.organizationName.touched || form.controls.organizationName.dirty)}">
-        <label for="organizationName">Наименование {{shortSubject}} *</label>
-        <input
-          type="text"
-          id="organizationName"
-          autocomplete="false"
-          list="null"
-          maxlength="300"
-          formControlName="organizationName">
-        <ng-container *ngIf="form.controls.organizationName.errors && (form.controls.organizationName.touched || form.controls.organizationName.dirty)">
-          <div class="input_attention" *ngIf="form.controls.organizationName.errors.required">Заполните это поле</div>
-          <div class="input_attention" *ngIf="form.controls.organizationName.errors.minlength">Минимальная длина 3 символа</div>
-        </ng-container>
+    <div class="form-group form-group-std"
+      [ngClass]="{'error': form.controls.organizationName.invalid && (form.controls.organizationName.touched || form.controls.organizationName.dirty)}">
+      <label for="organizationName">Наименование {{shortSubject}} *</label>
+      <input
+        type="text"
+        id="organizationName"
+        autocomplete="false"
+        list="null"
+        formControlName="organizationName">
+      <ng-container
+        *ngIf="form.controls.organizationName.invalid && (form.controls.organizationName.touched || form.controls.organizationName.dirty)">
+        <div class="input_attention" *ngIf="form.controls.organizationName.errors.required">
+          Заполните это поле
+        </div>
+        <div class="input_attention"
+             *ngIf="!form.controls.organizationName.errors?.blank && form.controls.organizationName.errors.minlength">
+          {{'Минимум ' + form.controls.organizationName.errors?.minlength.requiredLength + ' символа'}}
+        </div>
+        <div class="input_attention" *ngIf="form.controls.organizationName.errors?.maxlength">
+          {{'Максимум ' + form.controls.organizationName.errors?.maxlength.requiredLength + ' символов'}}
+        </div>
+        <div class="input_attention" *ngIf="form.controls.organizationName.errors?.blank">
+          Введено недопустимое значение
+        </div>
+      </ng-container>
     </div>
 
-    <div class="form-group">
+    <div class="form-group"
+         [ngClass]="{'error': form.controls.organizationDescription.invalid && (form.controls.organizationDescription.touched || form.controls.organizationDescription.dirty)}">
       <label for="organizationDescription">Описание деятельности {{shortSubject}}</label>
       <div class="textarea-wrap">
         <textarea id="organizationDescription"
                   rows="6"
-                  maxlength="1000"
                   formControlName="organizationDescription"></textarea>
+        <ng-container
+          *ngIf="form.controls.organizationDescription.invalid && (form.controls.organizationDescription.touched || form.controls.organizationDescription.dirty)">
+          <div class="textarea_attention" *ngIf="form.controls.organizationDescription.errors?.blank">
+            Введено недопустимое значение
+          </div>
+          <div class="textarea_attention" *ngIf="form.controls.organizationDescription.errors?.maxlength">
+            {{'Максимум ' + form.controls.organizationDescription.errors?.maxlength.requiredLength + ' символов'}}
+          </div>
+        </ng-container>
       </div>
     </div>
 
-    <div
-      class="form-group form-group-std"
-      [ngClass]="{'error': form.controls.organizationEmail.errors && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)}">
-        <label for="organizationEmail">E-mail</label>
-        <input
-          type="text"
-          id="organizationEmail"
-          autocomplete="false"
-          list="null"
-          maxlength="100"
-          formControlName="organizationEmail">
-        <ng-container *ngIf="form.controls.organizationEmail.errors && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)">
-          <div class="input_attention" *ngIf="form.controls.organizationEmail.errors.email">Некорректно заполнено поле</div>
-        </ng-container>
+    <div class="form-group form-group-std"
+      [ngClass]="{'error': form.controls.organizationEmail.invalid && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)}">
+      <label for="organizationEmail">E-mail</label>
+      <input
+        type="text"
+        id="organizationEmail"
+        autocomplete="false"
+        list="null"
+        maxlength="100"
+        formControlName="organizationEmail">
+      <ng-container
+        *ngIf="form.controls.organizationEmail.invalid && (form.controls.organizationEmail.touched || form.controls.organizationEmail.dirty)">
+        <div class="input_attention" *ngIf="form.controls.organizationEmail.errors.email">
+          Некорректно заполнено поле
+        </div>
+        <div class="input_attention"
+             *ngIf="!form.controls.organizationEmail.errors.email && form.controls.organizationEmail.errors?.maxlength">
+          {{'Максимум ' + form.controls.organizationEmail.errors?.maxlength.requiredLength + ' символов'}}
+        </div>
+      </ng-container>
     </div>
 
-    <div class="form-group form-group-std">
+    <div class="form-group form-group-std"
+         [ngClass]="{'error': form.controls.organizationPhone.invalid && (form.controls.organizationPhone.touched || form.controls.organizationPhone.dirty)}">
       <label for="organizationPhone">Телефон</label>
       <input
         type="text"
         id="organizationPhone"
         autocomplete="false"
         list="null"
-        [ngClass]="{'error': form.controls.organizationPhone.errors && (form.controls.organizationPhone.touched || form.controls.organizationPhone.dirty)}"
         prefix="+7"
         mask="(000) 000 00 00"
         [showMaskTyped]="true"
         formControlName="organizationPhone">
-      <ng-container *ngIf="form.controls.organizationPhone.errors && (form.controls.organizationPhone.touched || form.controls.organizationPhone.dirty)">
-        <div class="input_attention" *ngIf="form.controls.organizationPhone.errors.mask">Некорректно заполнено поле</div>
+      <ng-container
+        *ngIf="form.controls.organizationPhone.invalid && (form.controls.organizationPhone.touched || form.controls.organizationPhone.dirty)">
+        <div class="input_attention" *ngIf="form.controls.organizationPhone.errors.mask">
+          Некорректно заполнено поле
+        </div>
       </ng-container>
     </div>
 
-    <div class="form-group form-group-std">
+    <div class="form-group form-group-std"
+         [ngClass]="{'error': form.controls.organizationWebsite.invalid && (form.controls.organizationWebsite.touched || form.controls.organizationWebsite.dirty)}">
       <label for="organizationWebsite">Сайт компании</label>
       <input type="text"
              id="organizationWebsite"
              autocomplete="false"
              list="null"
-             maxlength="100"
              formControlName="organizationWebsite">
+      <ng-container
+        *ngIf="form.controls.organizationWebsite.invalid && (form.controls.organizationWebsite.touched || form.controls.organizationWebsite.dirty)">
+        <div class="input_attention" *ngIf="form.controls.organizationWebsite.errors?.blank">
+          Введено недопустимое значение
+        </div>
+        <div class="input_attention" *ngIf="form.controls.organizationWebsite.errors?.maxlength">
+          {{'Максимум ' + form.controls.organizationWebsite.errors?.maxlength.requiredLength + ' символов'}}
+        </div>
+      </ng-container>
     </div>
 
-    <div class="form-group form-group-std">
+    <div class="form-group form-group-std"
+         [ngClass]="{'error': form.controls.organizationAddress.invalid && (form.controls.organizationAddress.touched || form.controls.organizationAddress.dirty)}">
       <label for="organizationAddress">Адрес компании</label>
       <input type="text" id="organizationAddress"
              autocomplete="false"
              list="null"
-             maxlength="500"
              formControlName="organizationAddress">
+      <ng-container
+        *ngIf="form.controls.organizationAddress.invalid && (form.controls.organizationAddress.touched || form.controls.organizationAddress.dirty)">
+        <div class="input_attention" *ngIf="form.controls.organizationAddress.errors?.blank">
+          Введено недопустимое значение
+        </div>
+        <div class="input_attention" *ngIf="form.controls.organizationAddress.errors?.maxlength">
+          {{'Максимум ' + form.controls.organizationAddress.errors?.maxlength.requiredLength + ' символов'}}
+        </div>
+      </ng-container>
     </div>
 
     <p class="form_title form_title__inner">Укажите контакты менеджера,<br> для связи поддержкой 1С:Бизнес-сеть:</p>
 
-    <div
-      class="form-group form-group-std"
-      [ngClass]="{'error': form.controls.contactFio.errors && (form.controls.contactFio.touched || form.controls.contactFio.dirty)}">
-        <label for="contactFio">Как к Вам обращаться? *</label>
-        <input
-          type="text"
-          id="contactFio"
-          autocomplete="false"
-          list="null"
-          maxlength="100"
-          formControlName="contactFio">
-        <ng-container *ngIf="form.controls.contactFio.errors && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">
-          <div class="input_attention" *ngIf="form.controls.contactFio.errors.required">Заполните это поле</div>
-        </ng-container>
+    <div class="form-group form-group-std"
+         [ngClass]="{'error': form.controls.contactFio.invalid && (form.controls.contactFio.touched || form.controls.contactFio.dirty)}">
+      <label for="contactFio">Как к Вам обращаться? *</label>
+      <input
+        type="text"
+        id="contactFio"
+        autocomplete="false"
+        list="null"
+        formControlName="contactFio">
+      <ng-container
+        *ngIf="form.controls.contactFio.invalid && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">
+        <div class="input_attention" *ngIf="form.controls.contactFio.errors.required">
+          Заполните это поле
+        </div>
+        <div class="input_attention" *ngIf="form.controls.contactFio.errors?.blank">
+          Введено недопустимое значение
+        </div>
+        <div class="input_attention" *ngIf="form.controls.contactFio.errors?.maxlength">
+          {{'Максимум ' + form.controls.contactFio.errors?.maxlength.requiredLength + ' символов'}}
+        </div>
+      </ng-container>
     </div>
 
-    <div
-      class="form-group form-group-std"
-      [ngClass]="{'error': form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}">
-        <label for="contactEmail">E-mail *</label>
-        <input
-          type="text"
-          id="contactEmail"
-          autocomplete="false"
-          list="null"
-          maxlength="100"
-          formControlName="contactEmail">
-        <ng-container *ngIf="form.controls.contactEmail.errors && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
-          <div class="input_attention" *ngIf="form.controls.contactEmail.errors.required">Заполните это поле</div>
-          <div class="input_attention" *ngIf="!form.controls.contactEmail.errors.required && form.controls.contactEmail.errors.email">Некорректно заполнено поле</div>
-        </ng-container>
+    <div class="form-group form-group-std"
+         [ngClass]="{'error': form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}">
+      <label for="contactEmail">E-mail *</label>
+      <input
+        type="text"
+        id="contactEmail"
+        autocomplete="false"
+        list="null"
+        formControlName="contactEmail">
+      <ng-container
+        *ngIf="form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
+        <div class="input_attention" *ngIf="form.controls.contactEmail.errors.required">
+          Заполните это поле
+        </div>
+        <div class="input_attention" *ngIf="form.controls.contactEmail.errors.email">
+          Некорректно заполнено поле
+        </div>
+        <div class="input_error"
+             *ngIf="!form.controls.contactEmail.errors.email && form.controls.contactEmail.errors?.maxlength">
+          {{'Максимум ' + form.controls.contactEmail.errors?.maxlength.requiredLength + ' символов'}}
+        </div>
+      </ng-container>
     </div>
 
-    <div class="form-group form-group-std">
+    <div class="form-group form-group-std"
+         [ngClass]="{'error': form.controls.contactPhone.invalid && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}">
       <label for="contactPhone">Телефон *</label>
       <input
         type="text"
         id="contactPhone"
         autocomplete="false"
         list="null"
-        [ngClass]="{'error': form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
         prefix="+7"
         mask="(000) 000 00 00"
         [showMaskTyped]="true"
         formControlName="contactPhone">
-      <ng-container *ngIf="form.controls.contactPhone.errors && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
-        <div class="input_attention" *ngIf="form.controls.contactPhone.errors.required">Заполните это поле</div>
-        <div class="input_attention" *ngIf="!form.controls.contactPhone.errors.required && form.controls.contactPhone.errors.mask">Некорректно заполнено поле</div>
+      <ng-container
+        *ngIf="form.controls.contactPhone.invalid && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)">
+        <div class="input_attention" *ngIf="form.controls.contactPhone.errors.required">
+          Заполните это поле
+        </div>
+        <div class="input_attention" *ngIf="form.controls.contactPhone.errors.mask">
+          Некорректно заполнено поле
+        </div>
       </ng-container>
     </div>
 
     <div class="form-group form-group-agree" *ngIf="operationType === 'register'">
       <label nz-checkbox formControlName="agree" style="display: flex; align-items: flex-start;">
         <span class="checkbox-agree-text">Я являюсь уполномоченным представителем регистрируемой<br/>организации и принимаю условия
-          <a class="attention-link" href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer" (click)="$event.stopPropagation()">пользовательского соглашения</a>
+          <a class="attention-link" href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer"
+             (click)="$event.stopPropagation()">пользовательского соглашения</a>
         </span>
       </label>
     </div>
 
     <div class="form-group" style="margin-top: 25px">
-      <button nz-button nzType="primary" [disabled]="!form.valid">{{ operationType === 'register' ? 'Продолжить' : 'Сохранить' }}</button>
+      <button nz-button nzType="primary"
+              [disabled]="form.invalid">{{ operationType === 'register' ? 'Продолжить' : 'Сохранить' }}</button>
     </div>
 
   </form>
