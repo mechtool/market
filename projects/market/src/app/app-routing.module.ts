@@ -63,6 +63,11 @@ const routes: Routes = [
         ],
       },
       {
+        path: 'about',
+        data: { preload: false },
+        loadChildren: () => import('./routes/root/children/about/about.module').then((m) => m.AboutModule),
+      },
+      {
         path: '**',
         redirectTo: '',
         pathMatch: 'full',

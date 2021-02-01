@@ -108,24 +108,11 @@ export class NavigationService implements OnDestroy {
           },
         },
         {
-          label: 'О проекте',
+          label: 'О сервисе',
           attributeId: 'info_menu_id',
           icon: 'info',
           styleClass: 'delimiter',
-          items: [
-            {
-              label: 'О сервисе',
-              attributeId: 'about_service_menu_id',
-              url: 'https://1cbn.ru/trading.html',
-              icon: 'point',
-            },
-            {
-              label: 'Условия использования',
-              attributeId: 'terms_of_use_menu_id',
-              url: 'https://1cbn.ru/agreement',
-              icon: 'point',
-            },
-          ],
+          routerLink: ['/about'],
         },
       ];
       const authedNavItems: NavItemModel[] = [
@@ -180,24 +167,11 @@ export class NavigationService implements OnDestroy {
           },
         },
         {
-          label: 'О проекте',
+          label: 'О сервисе',
           attributeId: 'info_menu_id',
           icon: 'info',
           styleClass: 'delimiter',
-          items: [
-            {
-              label: 'О сервисе',
-              attributeId: 'about_service_menu_id',
-              url: 'https://1cbn.ru/trading.html',
-              icon: 'point',
-            },
-            {
-              label: 'Условия использования',
-              attributeId: 'terms_of_use_menu_id',
-              url: 'https://1cbn.ru/agreement',
-              icon: 'point',
-            },
-          ],
+          routerLink: ['/about'],
         },
       ];
       this.navItems$.next((auth ? authedNavItems : notAuthedNavItems));
