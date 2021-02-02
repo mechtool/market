@@ -204,25 +204,8 @@
                 </div>
 
                 <div class="table_cell cell_more">
-                  <div class="table_cell__inner more_actions__dropdown dropdown">
-                    <button type="button" class="btn_more btn_bg" disabled *ngIf="isOrderLoading"><span></span>
-                    </button>
-                    <button type="button" class="btn_more btn_bg dropdown_control" nz-dropdown
-                            [nzDropdownMenu]="itemModal" *ngIf="!isOrderLoading"><span></span></button>
-                    <nz-dropdown-menu #itemModal="nzDropdownMenu">
-                      <div class="dropdown_block">
-
-                        <div class="dropdown_item dropdown_item__hover"
-                             (click)="removeItem(item.controls)">Удалить из заказа
-                        </div>
-
-                      </div>
-                    </nz-dropdown-menu>
-                  </div>
-                </div>
-
-                <div class="table_cell cell_more_mobile">
-                  <img src="assets/img/svg/trash-can.svg" alt="Удалить из заказа" title="Удалить из заказа"
+                  <img nz-tooltip
+                       nzTooltipTitle="Удалить из заказа" src="assets/img/svg/trash-can.svg" alt="" title=""
                        (click)="removeItem(item.controls)">
                 </div>
 
