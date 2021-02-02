@@ -25,8 +25,7 @@ export class SpinnerService {
   }
 
   hide() {
-    if (this._overlayRef.hasAttached()) {
-      this._overlayRef.detach();
-    }
+    // this._overlayRef?.detach();
+    this._overlayRef?.dispose();
   }
 }

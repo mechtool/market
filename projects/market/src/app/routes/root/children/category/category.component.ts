@@ -102,6 +102,7 @@ export class CategoryComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this._spinnerService.hide();
     unsubscribeList([this.urlSubscription]);
   }
 
@@ -231,6 +232,7 @@ export class CategoryComponent implements OnDestroy {
       })
     ).subscribe((productOffers) => {
 
+      this._spinnerService.hide();
       this.productOffersList = productOffers;
 
       if (this.productOffersList.page.number === 0) {
@@ -251,8 +253,6 @@ export class CategoryComponent implements OnDestroy {
       } else {
         this.scrollCommand = 'stand';
       }
-      this._spinnerService.hide();
-
     }, (err) => {
       this._spinnerService.hide();
       this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
