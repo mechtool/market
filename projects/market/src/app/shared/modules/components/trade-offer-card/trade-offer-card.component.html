@@ -13,16 +13,16 @@
       {{tradeOffer.description}}
     </span>
     <span class="catalog_item__info">
-      <span class="catalog_item__count tooltip"
+      <span *ngIf="tradeOffer.stock || tradeOffer.amount; else elseStockBlock"
+            class="catalog_item__count tooltip"
             nz-tooltip
-            nzTooltipTitle="Наличие товара"
-            *ngIf="tradeOffer.stock || tradeOffer.amount">
-        {{tradeOffer.amount | marketStock : tradeOffer.stock : false}}</span>
+            nzTooltipTitle="Наличие товара">{{tradeOffer.amount | marketStock : tradeOffer.stock : false}}</span>
 
-      <span class="catalog_item__price"
+      <span *ngIf="tradeOffer.price; else elsePriceBlock"
+            class="catalog_item__price"
             nz-tooltip
             nzTooltipTitle="Цена"
-            *ngIf="tradeOffer.price">{{tradeOffer.price | marketMultiplier:'.01' | currencyPrice: tradeOffer.currencyCode}}</span>
+            >{{tradeOffer.price | marketMultiplier:'.01' | currencyPrice: tradeOffer.currencyCode}}</span>
     </span>
   </span>
 
@@ -37,3 +37,15 @@
        nz-tooltip
        nzTooltipTitle="Поставщик установил скидку на торговое предложение">
 </a>
+
+<ng-template #elsePriceBlock>
+  <span class="catalog_item__price"
+        nz-tooltip
+        nzTooltipTitle="У торгового предложения не указана цена, вы можете отправить запрос цены поставщику">цена по запросу</span>
+</ng-template>
+
+<ng-template #elseStockBlock>
+  <span class="catalog_item__count tooltip"
+        nz-tooltip
+        nzTooltipTitle="У торгового предложения не указаны складские остатки, это не мешает отправить заказ поставщику">не указано</span>
+</ng-template>
