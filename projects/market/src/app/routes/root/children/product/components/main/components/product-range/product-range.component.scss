@@ -37,11 +37,11 @@
 
       a {
         color: inherit;
-        border-bottom: 1.5px solid #fedc8b;
+        border: none;
         text-decoration: none;
 
         &:hover {
-          border: none;
+          border-bottom: 2px solid #fedc8b;
         }
       }
     }
