@@ -15,7 +15,7 @@ export class CategoryService {
   categoryPromos: {
     [id: string]: BannerItemModel[];
   }[] = [];
-  categoryIdsPopularEnabled = ['616', '3321'];
+  categoryIdsPopularEnabled = ['1', '616', '651', '3321', '3349', '5681'];
 
   constructor(private _bnetService: BNetService, private _userService: UserService) {
     this._init();

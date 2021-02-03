@@ -4,6 +4,9 @@
     <div class="upper-slot">
       <ng-content select="upper-slot"></ng-content>
     </div>
+    <div class="middle-slot">
+      <ng-content select="middle-slot"></ng-content>
+    </div>
     <div class="container" [ngClass]="{'collapsed': filterCollapsed}">
       <div class="content">
         <ng-content select="main-slot"></ng-content>

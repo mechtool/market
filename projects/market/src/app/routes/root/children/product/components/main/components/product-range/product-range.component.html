@@ -1,0 +1,21 @@
+<div class="product-groups">
+  <div nz-row [nzGutter]="[14, 14]">
+    <div nz-col class="product-row" [nzSpan]="24 / count" *ngFor="let group of groups">
+      <div class="product-group">
+        <div class="description">
+          <h3><a [routerLink]="[group.url]">{{group.title}}</a></h3>
+
+          <div class="positions">
+            <ul>
+              <li *ngFor="let item of group.items">
+                <a [routerLink]="[item.url]" [queryParams]="item.queryParams">{{item.title}}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <img class="group-img" [src]="group.img" [alt]="group.title" [title]="group.title">
+      </div>
+    </div>
+  </div>
+</div>

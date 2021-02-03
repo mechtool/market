@@ -8,7 +8,6 @@ import { UserStateService } from '#shared/modules/common-services/user-state.ser
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
-import { take } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

@@ -10,27 +10,29 @@ import {
   MainComponent,
   MainPopularComponent,
   ProductComponent,
+  ProductRangeComponent,
   TradeOfferCardsListComponent,
 } from './components';
 import {
   CardModule,
   ErrorCodeAlertModule,
   NomenclatureCardModule,
-  PipesModule,
   ProductDescriptionModule,
   ProductGalleryModule,
-  SearchAreaModule,
   ProductOrderModule,
+  SearchAreaModule,
   SearchBarModule,
   SearchResultsModule,
   SorterModule,
   TradeOfferCardModule,
-} from '#shared/modules';
+} from '#shared/modules/components';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
 import { BannersModule } from '#shared/modules/components/banners/banner.module';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { PipesModule } from '#shared/modules/pipes';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @NgModule({
   imports: [
@@ -55,6 +57,7 @@ import { NzCarouselModule } from 'ng-zorro-antd/carousel';
     BannersModule,
     ProductOrderModule,
     SorterModule,
+    NzGridModule,
   ],
   declarations: [
     Code404Component,
@@ -64,9 +67,10 @@ import { NzCarouselModule } from 'ng-zorro-antd/carousel';
     MainPopularComponent,
     ProductComponent,
     TradeOfferCardsListComponent,
+    ProductRangeComponent,
   ],
   providers: [DeclensionPipe],
-  exports: [MainPopularComponent, MainBannersComponent],
+  exports: [MainPopularComponent, MainBannersComponent, ProductRangeComponent],
 })
 export class ProductModule {
 }
