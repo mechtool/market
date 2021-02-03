@@ -161,7 +161,7 @@ export class SupplierListComponent implements AfterViewInit {
       url = removeURLParameters(this._router.url, 'page', 'pos');
       this._router.navigateByUrl(url, { skipLocationChange: true });
     }
-    this._location.go(url);
+    this._location.replaceState(url);
   }
 
   private async _scrollToIndex(index: number, logout: number) {
