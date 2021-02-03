@@ -4,7 +4,7 @@ import { DefaultSearchAvailableModel } from '#shared/modules/common-services/mod
 import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { addURLParameters, removeURLParameters, unsubscribeList, updateUrlParameters } from '#shared/utils';
-import { combineLatest, defer, forkJoin, of, Subscription, zip } from 'rxjs';
+import { BehaviorSubject, combineLatest, defer, forkJoin, of, Subscription, zip } from 'rxjs';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { CategoryService } from '#shared/modules/common-services/category.service';
@@ -46,6 +46,9 @@ export class CategoryComponent implements OnDestroy {
   urlSubscription: Subscription;
   private _isPopularProductsShown = false;
   private unlocked = true;
+
+  deliveryAreaChange$: BehaviorSubject<any> = new BehaviorSubject(null);
+  isLocationInitiallyLoaded = false;
 
   get isNotSearchUsed(): boolean {
     const queryParamsToCheck = ['q', 'supplierId', 'tradeMark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId', 'isDelivery', 'isPickup', 'sort'];
@@ -107,6 +110,15 @@ export class CategoryComponent implements OnDestroy {
   }
 
   navigateInCategoryRoute(filterGroup: AllGroupQueryFiltersModel): void {
+    const deliveryArea = filterGroup.filters?.deliveryArea || null;
+    if (deliveryArea === null || deliveryArea !== this.deliveryAreaChange$.getValue()) {
+      if (!this.isLocationInitiallyLoaded) {
+        this.isLocationInitiallyLoaded = true;
+      } else {
+        this.deliveryAreaChange$.next(deliveryArea);
+      }
+    }
+
     const categoryId = filterGroup.filters?.categoryId || null;
     const page = this._activatedRoute.snapshot.queryParamMap.get('page');
     const pos = this._activatedRoute.snapshot.queryParamMap.get('pos');
@@ -169,8 +181,14 @@ export class CategoryComponent implements OnDestroy {
 
   private _init(): void {
     let categoryId = '';
-    this.urlSubscription = combineLatest([this._activatedRoute.paramMap, this._activatedRoute.queryParamMap]).pipe(
-      tap(([paramMap, queryParamMap]) => {
+    this.urlSubscription = combineLatest([
+      this.deliveryAreaChange$,
+      this._activatedRoute.paramMap,
+      this._activatedRoute.queryParamMap
+    ]).pipe(
+      tap(() => {
+        const paramMap = this._activatedRoute.snapshot.paramMap;
+        const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
         this._spinnerService.show();
         this._setFilters(paramMap, queryParamMap);
         this._setAdditionalFiltersVisibility(paramMap, queryParamMap);

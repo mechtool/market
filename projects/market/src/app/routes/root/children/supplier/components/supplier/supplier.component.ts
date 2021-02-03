@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, defer, forkJoin, from, of, Subscription, throwError, zip } from 'rxjs';
+import { BehaviorSubject, combineLatest, defer, forkJoin, from, of, Subscription, throwError, zip } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -45,6 +45,8 @@ export class SupplierSingleComponent implements OnDestroy {
   req: any = null;
 
   urlSubscription: Subscription;
+  deliveryAreaChange$: BehaviorSubject<any> = new BehaviorSubject(null);
+  isLocationInitiallyLoaded = false;
 
   constructor(
     private _router: Router,
@@ -88,6 +90,15 @@ export class SupplierSingleComponent implements OnDestroy {
   }
 
   navigateToSupplierRoute(filterGroup: AllGroupQueryFiltersModel) {
+    const deliveryArea = filterGroup.filters?.deliveryArea || null;
+    if (deliveryArea === null || deliveryArea !== this.deliveryAreaChange$.getValue()) {
+      if (!this.isLocationInitiallyLoaded) {
+        this.isLocationInitiallyLoaded = true;
+      } else {
+        this.deliveryAreaChange$.next(deliveryArea);
+      }
+    }
+
     const page = this._activatedRoute.snapshot.queryParamMap.get('page');
 
     const navigationExtras = {
@@ -123,7 +134,11 @@ export class SupplierSingleComponent implements OnDestroy {
   }
 
   private _init() {
-    this.urlSubscription = combineLatest([this._activatedRoute.paramMap, this._activatedRoute.queryParamMap]).pipe(
+    this.urlSubscription = combineLatest([
+      this.deliveryAreaChange$,
+      this._activatedRoute.paramMap,
+      this._activatedRoute.queryParamMap,
+    ]).pipe(
       tap(() => {
         this._spinnerService.show();
       }),
