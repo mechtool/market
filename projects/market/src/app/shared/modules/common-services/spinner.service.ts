@@ -14,17 +14,14 @@ export class SpinnerService {
   constructor(private _overlay: Overlay) {}
 
   show(message = '') {
-    if (!this._overlayRef) {
-      this._overlayRef = this._overlay.create(this._overlayConfig);
-    }
-
-    if (!this._overlayRef.hasAttached()) {
-      const spinnerOverlayPortal = new ComponentPortal(SpinnerOverlayComponent);
-      const component = this._overlayRef.attach(spinnerOverlayPortal);
-    }
+    this._overlayRef?.dispose();
+    this._overlayRef = null;
+    this._overlayRef = this._overlay.create(this._overlayConfig);
+    const spinnerOverlayPortal = new ComponentPortal(SpinnerOverlayComponent);
+    const component = this._overlayRef.attach(spinnerOverlayPortal);
   }
 
   hide() {
-    this._overlayRef?.detach();
+    this._overlayRef?.dispose();
   }
 }
