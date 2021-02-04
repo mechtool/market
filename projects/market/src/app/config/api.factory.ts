@@ -52,7 +52,7 @@ function init() {
       .pipe(
         tap(() => {
           if (!localStorageService.hasUserLocation()) {
-            localStorageService.putUserLocation(Megacity.ALL[0]);
+            localStorageService.putUserLocation(Megacity.RUSSIA);
           }
         }),
         tap(() => {

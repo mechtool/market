@@ -5,3 +5,5 @@ export function hexFrom(text: string): string {
   }
   return hex;
 }
+
+export const uniqueArray = (value, index, self) => value && self.indexOf(value) === index;

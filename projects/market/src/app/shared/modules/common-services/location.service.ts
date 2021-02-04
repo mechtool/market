@@ -1,12 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Level, LocationModel } from './models';
+import { CountryCode, Level, LocationModel } from './models';
 import { BNetService } from './bnet.service';
+import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 
 @Injectable()
 export class LocationService {
 
-  constructor(private _bnetService: BNetService) {
+  constructor(
+    private _bnetService: BNetService,
+    private _localStorageService: LocalStorageService,
+  ) {
+  }
+
+  getSelectedCustomLocation(): LocationModel {
+    if (this._localStorageService.hasUserLocation()) {
+      const userLocation = this._localStorageService.getUserLocation();
+      if (userLocation.fias !== CountryCode.RUSSIA) {
+        return userLocation;
+      }
+    }
+    return null;
   }
 
   searchLocations(textQuery: string, level: Level): Observable<LocationModel[]> {

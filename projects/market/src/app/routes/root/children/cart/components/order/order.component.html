@@ -1,6 +1,6 @@
 <div class="order" *ngIf="itemsControls?.length">
 
-  <form class="form__order" action="" [formGroup]="form" (submit)="checkForValidityAndCreateOrder()">
+  <form class="form__order" action="" [formGroup]="form">
 
     <div class="order_info">
       <div class="order_spec" *ngIf="abilityToPlaceOrder">
@@ -271,16 +271,15 @@
                          formControlName="deliveryCity"
                          autocomplete="false"
                          list="null"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToCityNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.selectedCityIsNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Город*"
                          (keyup.enter)="citySelected()"
                          [nzAutocomplete]="auto_city">
 
-                  <nz-autocomplete nzBackfill #auto_city>
+                  <nz-autocomplete #auto_city>
                     <nz-auto-option *ngFor="let city of foundCities"
-                                    (click)="citySelected()"
-                                    [nzValue]="city">{{ city }}</nz-auto-option>
+                                    [nzValue]="city" (click)="citySelected()">{{ city }}</nz-auto-option>
                   </nz-autocomplete>
 
                   <input nz-input
@@ -289,16 +288,15 @@
                          formControlName="deliveryStreet"
                          autocomplete="false"
                          list="null"
-                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
+                         [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
-                         placeholder="Улица*"
+                         placeholder="Улица"
                          (keyup.enter)="streetSelected()"
                          [nzAutocomplete]="auto_street">
 
-                  <nz-autocomplete nzBackfill #auto_street>
+                  <nz-autocomplete #auto_street>
                     <nz-auto-option *ngFor="let street of foundStreets"
-                                    (click)="streetSelected()"
-                                    [nzValue]="street">{{ street }}</nz-auto-option>
+                                    [nzValue]="street" (click)="streetSelected()">{{ street }}</nz-auto-option>
                   </nz-autocomplete>
 
                   <input nz-input
@@ -310,23 +308,17 @@
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Дом"
+                         (keyup.enter)="houseSelected()"
                          [nzAutocomplete]="auto_house">
 
-                  <nz-autocomplete nzBackfill #auto_house>
+                  <nz-autocomplete #auto_house>
                     <nz-auto-option *ngFor="let house of foundHouses"
-                                    [nzValue]="house">{{ house }}</nz-auto-option>
+                                    [nzValue]="house" (click)="houseSelected()">{{ house }}</nz-auto-option>
                   </nz-autocomplete>
                 </div>
 
                 <ng-container *ngIf="form.controls.deliveryArea.invalid">
-                  <div class="input_error_region" *ngIf="form.controls.deliveryArea.errors?.deliveryToCityNotAvailable">
-                    Указанный адрес не входит в зону доставки поставщика.
-                    Список доступных зон доставки смотрите выше.
-                    Укажите адрес внутри одной из зон доставки<span
-                    *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
-                  </div>
-
-                  <div class="input_error_region" *ngIf="form.controls.deliveryArea.errors?.deliveryToStreetNotAvailable">
+                  <div class="input_error_region" *ngIf="form.controls.deliveryArea.errors?.selectedCityIsNotAvailable">
                     Указанный адрес не входит в зону доставки поставщика.
                     Список доступных зон доставки смотрите выше.
                     Укажите адрес внутри одной из зон доставки<span
@@ -447,7 +439,8 @@
                   Некорректно заполнено поле
                 </div>
 
-                <div class="input_error" *ngIf="!form.controls.contactEmail.errors?.email && form.controls.contactEmail.errors?.maxlength">
+                <div class="input_error"
+                     *ngIf="!form.controls.contactEmail.errors?.email && form.controls.contactEmail.errors?.maxlength">
                   {{'Максимум ' + form.controls.contactEmail.errors?.maxlength.requiredLength + ' символов'}}
                 </div>
               </ng-container>
@@ -515,7 +508,7 @@
       </div>
 
       <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="submit" nzType="primary">
+        <button id="checkoutButton" nz-button type="button" nzType="primary" (click)="checkForValidityAndCreateOrder()">
           {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
         <button nz-button nzType="link" type="button" (click)="navigationBack()"

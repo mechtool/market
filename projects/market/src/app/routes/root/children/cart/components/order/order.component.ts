@@ -26,11 +26,11 @@ import {
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
-import { absoluteImagePath, currencyCode, innKppToLegalId, unsubscribeList } from '#shared/utils';
-import { of, Subscription } from 'rxjs';
+import { absoluteImagePath, currencyCode, innKppToLegalId, uniqueArray, unsubscribeList } from '#shared/utils';
+import { combineLatest, of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   BNetService,
@@ -84,7 +84,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   isOrderLoading = false;
   deliveryMethods: DeliveryMethodModel[] = null;
   selectedTabIndex = 0;
-  selectedAddress: LocationModel;
+  selectedCity: LocationModel;
+  selectedStreet: LocationModel;
+  selectedHouse: LocationModel;
   foundCities: string[];
   foundStreets: string[];
   foundHouses: string[];
@@ -155,7 +157,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   get noDeliveryAddressSelected(): boolean {
-    return !this.selectedAddress && this.selectedDelivery;
+    return !this.selectedCity && this.selectedDelivery;
   }
 
   get isAnonymous(): boolean {
@@ -272,8 +274,36 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       tap(() => {
         this._initValidDeliveryFiasCode();
       }),
+      switchMap(() => {
+
+        if (this.isAuthenticated) {
+          const userLocation = this._locationService.getSelectedCustomLocation();
+
+          if (userLocation) {
+
+            if (this._deliveryByRussia()) {
+              return combineLatest([of(true), of(userLocation)])
+            }
+
+            return combineLatest(
+              [this._locationService.isDeliveryAvailable(userLocation.fias, this.validDeliveryFiasCode), of(userLocation)]);
+          }
+        }
+        return combineLatest([of(false), of(null)]);
+      }),
+      tap(() => {
+        this._watchDeliveryAreaUserChanges();
+      }),
+      tap(([isAvailable, userLocation]) => {
+        if (isAvailable) {
+          this.form.get('deliveryArea.deliveryCity').setValue(userLocation.locality, {
+            onlySelf: true,
+            emitEvent: true
+          });
+          this.saveCityAndEnableStreetAndHouse(userLocation);
+        }
+      })
     ).subscribe(() => {
-      this._watchDeliveryAreaUserChanges();
       this._watchItemQuantityChanges();
     });
   }
@@ -442,29 +472,21 @@ export class CartOrderComponent implements OnInit, OnDestroy {
           };
           this._externalProvidersService.fireGTMEvent(tag);
         }),
-        catchError((err) => {
-          return this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().value).pipe(
-            tap((cartData) => {
-              this.cartDataChange.emit(cartData);
-            }),
-          );
-        }),
         tap(() => {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
         }),
-        switchMap((res) => {
-          return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().value);
+        switchMap(() => {
+          return this._cartService.setActualCartData();
         }),
-      )
-      .subscribe((carData) => {
-          this.cartDataChange.emit(carData);
-        },
-        (err) => {
-          this.isOrderLoading = false;
-          this._cdr.detectChanges();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
+      ).subscribe((carData) => {
+        this.cartDataChange.emit(carData);
+      },
+      (err) => {
+        this.isOrderLoading = false;
+        this._cdr.detectChanges();
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
   }
 
   changeSelectedTabIndex(tabIndex: number) {
@@ -528,182 +550,174 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   citySelected() {
-    const city = this.form.controls.deliveryArea.value.deliveryCity;
+    const city = this.form.value.deliveryArea.deliveryCity;
     const location = this.foundLocations.find((loc) => loc.locality === city);
+    this.selectedStreet = null;
+    this.selectedHouse = null;
 
     if (location) {
       if (this._deliveryByRussia()) {
-        this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
-        this.elementInputStreet?.nativeElement.focus();
+        this.saveCityAndEnableStreetAndHouse(location);
       } else {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
-            this.form.get('deliveryArea').get('deliveryStreet').enable({ onlySelf: true, emitEvent: false });
-            this.elementInputStreet?.nativeElement.focus();
+            this.saveCityAndEnableStreetAndHouse(location);
           } else {
-            this.form.controls.deliveryArea.setErrors({ deliveryToCityNotAvailable: true }, { emitEvent: true });
-            this.elementInputCity?.nativeElement.blur();
+            this.selectedCityIsNotAvailable();
           }
         });
       }
     } else {
-      this.form.controls.deliveryArea.setErrors({ deliveryToCityNotAvailable: true }, { emitEvent: true });
-      this.elementInputCity?.nativeElement.blur();
+      this.selectedCityIsNotAvailable();
     }
   }
 
   streetSelected() {
-    const street = this.form.controls.deliveryArea.value.deliveryStreet;
+    const street = this.form.value.deliveryArea.deliveryStreet;
     const location = this.foundLocations.find((loc) => loc.street === street);
+    this.selectedHouse = null;
 
     if (location) {
       if (this._deliveryByRussia()) {
-        this.selectedAddress = location;
-        this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
-        this.elementInputHouse?.nativeElement.focus();
-        const tag = {
-          event: 'login',
-          ecommerce: {
-            checkout_option: {
-              actionField: { step: 2, option: 'delivery' },
-            },
-          },
-        };
-        this._externalProvidersService.fireGTMEvent(tag);
+        this.saveStreet(location);
       } else {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
-            this.selectedAddress = location;
-            this.form.get('deliveryArea').get('deliveryHouse').enable({ onlySelf: true, emitEvent: false });
-            this.elementInputHouse?.nativeElement.focus();
-            const tag = {
-              event: 'login',
-              ecommerce: {
-                checkout_option: {
-                  actionField: { step: 2, option: 'delivery' },
-                },
-              },
-            };
-            this._externalProvidersService.fireGTMEvent(tag);
+            this.saveStreet(location);
           } else {
-            this.form.controls.deliveryArea.setErrors({ deliveryToStreetNotAvailable: true }, { emitEvent: true });
-            this.elementInputStreet?.nativeElement.blur();
+            this.elementInputHouse?.nativeElement.focus();
           }
         });
       }
     } else {
-      this.form.controls.deliveryArea.setErrors({ deliveryToStreetNotAvailable: true }, { emitEvent: true });
-      this.elementInputStreet?.nativeElement.blur();
+      this.elementInputHouse?.nativeElement.focus();
     }
   }
 
-  private houseSelected() {
-    const house = this.form.controls.deliveryArea.value.deliveryHouse;
+  houseSelected() {
+    const house = this.form.value.deliveryArea.deliveryHouse;
     const location = this.foundLocations.find((loc) => loc.house === house);
 
     if (location) {
       if (this._deliveryByRussia()) {
-        this.selectedAddress = location;
+        this.selectedHouse = location;
       } else {
         this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
-            this.selectedAddress = location;
+            this.selectedHouse = location;
           }
         });
       }
     }
+    this.elementInputHouse?.nativeElement.blur();
+  }
+
+  private saveCityAndEnableStreetAndHouse(location: LocationModel): void {
+    this.selectedCity = location;
+    this.form.get('deliveryArea.deliveryStreet').enable({ onlySelf: true, emitEvent: false });
+    this.form.get('deliveryArea.deliveryHouse').enable({ onlySelf: true, emitEvent: false });
+    this.elementInputStreet?.nativeElement.focus();
+  }
+
+  private selectedCityIsNotAvailable(): void {
+    this.form.controls.deliveryArea.setErrors({ selectedCityIsNotAvailable: true }, { emitEvent: true });
+    this.elementInputCity?.nativeElement.blur();
+  }
+
+  private saveStreet(location: LocationModel): void {
+    this.selectedStreet = location;
+    this.elementInputHouse?.nativeElement.focus();
+
+    // todo возможно это событие следует перенести, так как теперь улица опциональное для ввода поле
+    const tag = {
+      event: 'login',
+      ecommerce: {
+        checkout_option: {
+          actionField: { step: 2, option: 'delivery' },
+        },
+      },
+    };
+    this._externalProvidersService.fireGTMEvent(tag);
   }
 
   private _watchDeliveryAreaUserChanges() {
-    this.form.controls.deliveryArea
-      .get('deliveryCity')
-      .valueChanges.pipe(
-      switchMap((city) => {
-        if (city?.length > 1) {
-          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryStreet').disable({ onlySelf: true, emitEvent: false });
-          return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
-        }
-        return of([]);
-      }),
-    )
-      .subscribe(
-        (cities) => {
-          this.selectedAddress = null;
-          this.foundStreets = [];
-          this.foundHouses = [];
-          this.foundLocations = cities;
-          this.foundCities = cities.map((city) => city.locality).filter((value, index, self) => self.indexOf(value) === index);
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
-
-    this.form.controls.deliveryArea
-      .get('deliveryStreet')
-      .valueChanges.pipe(
-      switchMap((street) => {
-        if (street?.length && this.form.get('deliveryArea').get('deliveryStreet').enabled) {
-          this.form.get('deliveryArea').get('deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
-          this.form.get('deliveryArea').get('deliveryHouse').disable({ onlySelf: true, emitEvent: false });
-          const query = {
-            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-            deliveryStreet: street,
-          };
-          return this._locationService.searchAddresses(query, Level.STREET);
-        }
-        return of([]);
-      }),
-    )
-      .subscribe(
-        (cities) => {
-          this.foundHouses = [];
-          this.foundLocations = cities;
-          this.foundStreets = cities.map((city) => city.street).filter((street) => street);
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
-
-    this.form.controls.deliveryArea
-      .get('deliveryHouse')
-      .valueChanges.pipe(
-      switchMap((house: string) => {
-        if (house?.length && this.form.get('deliveryArea').get('deliveryHouse').enabled) {
-          if (house.includes('литер')) {
-            /* todo сервис https://api.orgaddress.1c.ru не может найти адрес если передать текст в формате 'text=Санкт-Петербург г, Ленина ул, 12/36, литер А'
-          при этом 'text=Санкт-Петербург г, Ленина ул, 12/36, литер' успешно находится, поэтому пришлось подоткнуть тут данный костыль*/
-            const count = house.indexOf('литер') + 5;
-            house = house.substr(0, count);
+    this.form.get('deliveryArea.deliveryCity').valueChanges
+      .pipe(
+        switchMap((city) => {
+          if (city?.length > 1) {
+            this.form.get('deliveryArea.deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea.deliveryHouse').disable({ onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea.deliveryStreet').setValue('', { onlySelf: true, emitEvent: false });
+            this.form.get('deliveryArea.deliveryStreet').disable({ onlySelf: true, emitEvent: false });
+            return this._locationService.searchAddresses({ deliveryCity: city }, Level.CITY);
           }
+          return of([]);
+        }),
+      ).subscribe((cities) => {
+        this.foundStreets = [];
+        this.foundHouses = [];
+        this.foundLocations = cities;
+        this.foundCities = cities.map((city) => city.locality).filter(uniqueArray);
+        this._cdr.detectChanges();
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
 
-          const query = {
-            deliveryCity: this.form.controls.deliveryArea.get('deliveryCity').value,
-            deliveryStreet: this.form.controls.deliveryArea.get('deliveryStreet').value,
-            deliveryHouse: house,
-          };
-          return this._locationService.searchAddresses(query, Level.HOUSE);
-        }
-        return of([]);
-      }),
-    )
-      .subscribe(
-        (cities) => {
-          this.foundHouses = cities.map((city) => city.house).filter((house) => house);
-          this.foundLocations = cities;
-          this.houseSelected();
-          this._cdr.detectChanges();
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
+    this.form.get('deliveryArea.deliveryStreet').valueChanges
+      .pipe(
+        switchMap((street) => {
+          if (street?.length) {
+            this.form.get('deliveryArea.deliveryHouse').setValue('', { onlySelf: true, emitEvent: false });
+            const query = {
+              deliveryCity: this.form.value.deliveryArea.deliveryCity,
+              deliveryStreet: street,
+            };
+            return this._locationService.searchAddresses(query, Level.STREET);
+          }
+          return of([]);
+        }),
+      ).subscribe((cities) => {
+        this.foundHouses = [];
+        this.foundLocations = cities;
+        this.foundStreets = cities.map((city) => city.street).filter(uniqueArray);
+        this._cdr.detectChanges();
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
+
+    this.form.get('deliveryArea.deliveryHouse').valueChanges
+      .pipe(
+        switchMap((house: string) => {
+          if (house?.length) {
+            if (house.includes('литер')) {
+              /* todo сервис https://api.orgaddress.1c.ru не может найти адрес если передать текст в формате 'text=Санкт-Петербург г, Ленина ул, 12/36, литер А'
+            при этом 'text=Санкт-Петербург г, Ленина ул, 12/36, литер' успешно находится, поэтому пришлось подоткнуть тут данный костыль*/
+              const count = house.indexOf('литер') + 5;
+              house = house.substr(0, count);
+            }
+
+            const query = {
+              deliveryCity: this.form.value.deliveryArea.deliveryCity,
+              deliveryStreet: this.form.value.deliveryArea.deliveryStreet,
+              deliveryHouse: house,
+            };
+            return this._locationService.searchAddresses(query, Level.HOUSE);
+          }
+          return of([]);
+        }),
+      ).subscribe((cities) => {
+        this.foundHouses = cities.map((city) => city.house).filter(uniqueArray);
+        this.foundLocations = cities;
+        this._cdr.detectChanges();
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
   }
 
   private _initValidDeliveryFiasCode(): void {
@@ -767,29 +781,18 @@ export class CartOrderComponent implements OnInit, OnDestroy {
               },
             );
           }),
-          catchError((_) => {
-            return this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().getValue())
-              .pipe(
-                tap((cartData) => {
-                  this.cartDataChange.emit(cartData);
-                }),
-              );
+          switchMap(() => {
+            return this._cartService.setActualCartData();
           }),
-          switchMap((res) => {
-            return res ? of(null) : this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().value);
-          }),
-        )
-        .subscribe((cartData) => {
-            if (cartData) {
-              this.cartDataChange.emit(cartData);
-            }
-          },
-          (err) => {
-            this.isOrderLoading = false;
-            this._cdr.detectChanges();
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-          },
-        );
+        ).subscribe((cartData) => {
+          this.cartDataChange.emit(cartData);
+        },
+        (err) => {
+          this.isOrderLoading = false;
+          this._cdr.detectChanges();
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
     });
   }
 
@@ -829,18 +832,14 @@ export class CartOrderComponent implements OnInit, OnDestroy {
             this.isOrderType ? MetrikaEventTypeModel.ORDER_CREATE : MetrikaEventTypeModel.PRICEREQUEST_CREATE,
           );
         }),
-        catchError((_) => {
-          return this._bnetService.getCartDataByCartLocation(this._cartService.getCartLocationLink$().getValue());
-        }),
-      )
-      .subscribe((cartData) => {
-          this._cartModalService.openOrderSentModal();
-          this.cartDataChange.emit(cartData);
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
+      ).subscribe((cartData) => {
+        this._cartModalService.openOrderSentModal();
+        this.cartDataChange.emit(cartData);
+      },
+      (err) => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
   }
 
   private _createOrderData() {
@@ -856,17 +855,46 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       deliveryOptions: {
         ...(this.selectedDelivery
           ? {
-            deliveryTo: {
-              fiasCode: this.selectedAddress.fias,
-              title: this.selectedAddress.fullName,
-              countryOksmCode: '643',
-            },
+            deliveryTo: this.deliveryTo(),
           }
           : {
             pickupFrom: this.pickupArea,
           }),
       },
     };
+  }
+
+  private deliveryTo(): any {
+    const delivery = { fiasCode: undefined, title: undefined, countryOksmCode: CountryCode.RUSSIA };
+
+    if (this.selectedHouse) {
+
+      delivery.fiasCode = this.selectedHouse.fias;
+      delivery.title = this.selectedHouse.fullName;
+
+    } else if (this.selectedStreet) {
+      if (this.form.value.deliveryArea.deliveryHouse) {
+        delivery.title = this.selectedStreet.fullName.replace(',', `, дом ${this.form.value.deliveryArea.deliveryHouse},`);
+      } else {
+        delivery.fiasCode = this.selectedStreet.fias;
+        delivery.title = this.selectedStreet.fullName;
+      }
+
+    } else {
+      if (this.form.value.deliveryArea.deliveryHouse) {
+        if (this.form.value.deliveryArea.deliveryStreet) {
+          delivery.title = `${this.form.value.deliveryArea.deliveryStreet}, дом ${this.form.value.deliveryArea.deliveryHouse}, ${this.selectedCity.fullName}`;
+        } else {
+          delivery.title = `дом ${this.form.value.deliveryArea.deliveryHouse}, ${this.selectedCity.fullName}`;
+        }
+      } else if (this.form.value.deliveryArea.deliveryStreet) {
+        delivery.title = `${this.form.value.deliveryArea.deliveryStreet}, ${this.selectedCity.fullName}`;
+      } else {
+        delivery.fiasCode = this.selectedCity.fias;
+        delivery.title = this.selectedCity.fullName;
+      }
+    }
+    return delivery;
   }
 
   private _orderComment() {
@@ -902,40 +930,32 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   private _initForm(): void {
     this.form = this._fb.group({
-      consumerName: new FormControl(''),
-      consumerINN: new FormControl(''),
-      consumerKPP: new FormControl(''),
-      consumerId: new FormControl(''),
-      total: new FormControl(this.order.orderTotal?.total),
-      totalVat: new FormControl(this.order.orderTotal?.totalVat),
-      deliveryMethod: new FormControl(this.deliveryMethods[0]?.value, [Validators.required]),
-      deliveryArea: this._createDeliveryAreaForm(),
-      pickupArea: new FormControl(this.order.deliveryOptions?.pickupPoints?.[0]),
-      contactName: new FormControl(this.userInfo?.fullName || '',
+      consumerName: this._fb.control(''),
+      consumerINN: this._fb.control(''),
+      consumerKPP: this._fb.control(''),
+      consumerId: this._fb.control(''),
+      total: this._fb.control(this.order.orderTotal?.total),
+      totalVat: this._fb.control(this.order.orderTotal?.totalVat),
+      deliveryMethod: this._fb.control(this.deliveryMethods[0]?.value, [Validators.required]),
+      deliveryArea: this._fb.group(
+        {
+          deliveryCity: this._fb.control(''),
+          deliveryStreet: this._fb.control({ value: '', disabled: true }),
+          deliveryHouse: this._fb.control({ value: '', disabled: true }),
+        }
+      ),
+      pickupArea: this._fb.control(this.order.deliveryOptions?.pickupPoints?.[0]),
+      contactName: this._fb.control(this.userInfo?.fullName || '',
         [Validators.required, notBlankValidator, Validators.maxLength(200)]),
-      contactPhone: new FormControl(this.userInfo?.phone || '',
+      contactPhone: this._fb.control(this.userInfo?.phone || '',
         [Validators.required, notBlankValidator, Validators.maxLength(16)]),
-      contactEmail: new FormControl(this.userInfo?.email || '',
+      contactEmail: this._fb.control(this.userInfo?.email || '',
         [Validators.required, Validators.email, Validators.maxLength(100)]),
-      commentForSupplier: new FormControl('',
+      commentForSupplier: this._fb.control('',
         [notBlankValidator, Validators.maxLength(900)]),
-      deliveryDesirableDate: new FormControl(''),
+      deliveryDesirableDate: this._fb.control(''),
       items: this._fb.array(this.order.items.map((product) => this._createItem(product))),
     });
-  }
-
-  private _createDeliveryAreaForm(): FormGroup {
-    return this._fb.group(
-      {
-        deliveryCity: new FormControl(''),
-        deliveryStreet: new FormControl({ value: '', disabled: true }),
-        deliveryHouse: new FormControl({ value: '', disabled: true }),
-      },
-      {
-        // todo Пока создаем и проверяем данные прямо тут в коде, постараться переделать
-        // validator:
-      },
-    );
   }
 
   private _createItem(product: any): FormGroup {
