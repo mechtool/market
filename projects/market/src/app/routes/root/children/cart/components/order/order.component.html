@@ -197,10 +197,13 @@
 
                   <p>
                     <span class="cell_nds"
-                          *ngIf="item.controls.priceIncludesVAT.value && item.controls.vat.value !== 0">НДС {{item.controls.vat.value / 100 | percent}}</span>
+                          *ngIf="item.controls.vat.value === 0">без НДС</span>
                     <span class="cell_nds"
-                          *ngIf="!item.controls.priceIncludesVAT.value || item.controls.vat.value === 0">без НДС</span>
+                          *ngIf="item.controls.vat.value !== 0 && item.controls.priceIncludesVAT.value">с учетом {{item.controls.vat.value / 100 | percent}}НДС</span>
+                    <span class="cell_nds"
+                          *ngIf="item.controls.vat.value !== 0 && !item.controls.priceIncludesVAT.value">без учета {{item.controls.vat.value / 100 | percent}}НДС</span>
                   </p>
+
                 </div>
 
                 <div class="table_cell cell_more">

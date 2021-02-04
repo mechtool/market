@@ -25,6 +25,7 @@ export class CartDataOrderResponseModel {
       priceBeforeDiscount?: number;
       priceIncludesVAT?: boolean;
       itemTotal: {
+        totalWithoutVat: number;
         total: number;
         totalVat: number;
         currencyCode: string;
@@ -56,6 +57,7 @@ export class CartDataOrderResponseModel {
     legalId: string;
   }[];
   orderTotal: {
+    totalWithoutVat: number;
     total: number;
     totalVat: number;
     currencyCode: string;

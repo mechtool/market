@@ -27,6 +27,7 @@ export class NavbarNavComponent implements OnInit {
   private _cartService: CartService;
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
+  currentYear: number = new Date().getFullYear();
 
   get userLogin(): string {
     return this._userStateService.currentUser$?.value?.userInfo?.login || null;
