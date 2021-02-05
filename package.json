@@ -46,6 +46,7 @@
     "angular-google-tag-manager": "^1.2.3",
     "classlist.js": "^1.1.20150312",
     "css-vars-ponyfill": "^2.4.1",
+    "ng-lazyload-image": "^9.1.0",
     "ng-recaptcha": "^6.0.2",
     "ng-zorro-antd": "^10.1.1",
     "ng-zorro-antd-mobile": "^3.0.3",

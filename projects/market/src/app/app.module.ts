@@ -12,7 +12,6 @@ import { ApiFactory, APP_CONFIG } from './config';
 import { CommonServicesModule } from '#shared/modules/common-services';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { NgxMaskModule } from 'ngx-mask';
 
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
@@ -29,13 +28,12 @@ import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { LOCAL_PROVIDER_TOKEN, NgZorroAntdMobileModule, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
-import { PipesModule } from '#shared/modules/pipes';
 import { CardModule, NomenclatureCardModule } from '#shared/modules/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
 import { LineClampModule } from '#shared/modules';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
 import { environment } from '#environments/environment';
-import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -58,18 +56,16 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     OverlayModule,
     RecaptchaV3Module,
     NzIconModule,
-    PipesModule,
     CardModule,
     LineClampModule,
     NgZorroAntdMobileModule,
     NomenclatureCardModule,
-    NgxMaskModule.forRoot(),
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
     BreadcrumbsModule,
     CookieAgreementModule,
     FeedbackModule,
-    NgIdleKeepaliveModule.forRoot(),
+    SharedDepsModule,
   ],
   providers: [
     { provide: 'googleTagManagerId', useValue: environment.gtmID },

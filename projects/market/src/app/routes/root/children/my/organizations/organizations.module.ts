@@ -20,25 +20,23 @@ import { RequestDecisionMakerComponent } from './components/request-decision-mak
 import { OrganizationAccessKeysComponent } from './components/organization-access-keys/organization-access-keys.component';
 import { AccessKeyRemovalVerifierComponent } from './components/access-key-removal-verifier/access-key-removal-verifier.component';
 import { OrganizationRequestsComponent } from './components/organization-requests/organization-requests.component';
-import { NgxMaskModule } from 'ngx-mask';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
-import { PipesModule } from '#shared/modules';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        NzModalModule,
-        NzButtonModule,
-        NzEmptyModule,
-        NzCheckboxModule,
-        NgxMaskModule,
-        ReactiveFormsModule,
-        OrganizationsRoutingModule,
-        PipesModule,
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzModalModule,
+    NzButtonModule,
+    NzEmptyModule,
+    NzCheckboxModule,
+    SharedDepsModule,
+    ReactiveFormsModule,
+    OrganizationsRoutingModule,
+  ],
   declarations: [
     OrganizationsComponent,
     ActiveOrganizationsComponent,

@@ -4,10 +4,10 @@ import { RouterModule } from '@angular/router';
 import { SupplierCardComponent } from './supplier-card.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { PipesModule } from '#shared/modules/pipes';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
-    imports: [CommonModule, RouterModule, NzButtonModule, NzToolTipModule, PipesModule],
+    imports: [CommonModule, RouterModule, NzButtonModule, NzToolTipModule, SharedDepsModule],
   exports: [SupplierCardComponent],
   declarations: [SupplierCardComponent],
 })

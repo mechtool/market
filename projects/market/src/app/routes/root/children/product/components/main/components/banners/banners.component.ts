@@ -19,7 +19,7 @@ export class MainBannersComponent {
       btnLink: '/supplier/df39ca07-ef02-4e3f-b7f1-eb66fbeb8f68',
       btnText: 'Подробнее',
       description: 'При заказе у официального дистрибьютора RS Components',
-      imgUrl: 'assets/img/tmp/banner_4.jpeg',
+      imgUrl: 'assets/img/tmp/banner_4.jpg',
     },
     {
       title: 'Скидка 10% на первый заказ!',

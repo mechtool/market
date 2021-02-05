@@ -3,11 +3,14 @@
     <span *ngIf="!imageUrl"
           class="empty__img"></span>
 
-    <img *ngIf="imageUrl"
-         src="{{imageUrl}}"
-         alt="{{productOffer.product.productName}}"
-         title="{{productOffer.product.productName}}"
-         onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
+      <img
+        alt="{{productOffer.product.productName}}"
+        title="{{productOffer.product.productName}}"
+        [defaultImage]="'./assets/img/svg/clean.svg'"
+        [lazyLoad]="imageUrl"
+        *ngIf="imageUrl"
+      />
+
   </span>
   <span class="body">
     <span class="title"

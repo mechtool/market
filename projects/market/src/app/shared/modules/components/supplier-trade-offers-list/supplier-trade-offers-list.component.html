@@ -66,9 +66,13 @@
         <div class="cell_right">
           <div class="cell_image">
             <span *ngIf="!tradeOffer.imageUrls" class="empty__img"></span>
-            <img *ngIf="tradeOffer.imageUrls?.length" src="{{imageUrl(tradeOffer.imageUrls)}}"
-                 alt="{{tradeOffer.productName}}" title="{{tradeOffer.productName}}"
-                 onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
+            <img
+              alt="{{tradeOffer.productName}}"
+              title="{{tradeOffer.productName}}"
+              [defaultImage]="'./assets/img/svg/clean.svg'"
+              [lazyLoad]="imageUrl(tradeOffer.imageUrls)"
+              *ngIf="tradeOffer.imageUrls?.length"
+            />
           </div>
           <div class="table_cell cell_price">
             <p>

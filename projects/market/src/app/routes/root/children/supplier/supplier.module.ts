@@ -6,7 +6,6 @@ import { SupplierListComponent, SupplierSingleComponent, TradeOfferComponent } f
 import {
   AboutSupplierModule,
   CardModule,
-  PipesModule,
   ProductDescriptionModule,
   ProductGalleryModule,
   ProductOrderModule,
@@ -20,6 +19,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { SupplierTradeOffersListModule } from '#shared/modules/components/supplier-trade-offers-list';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
   imports: [
@@ -30,7 +30,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
     SupplierCardModule,
     NzSpinModule,
     NzIconModule,
-    PipesModule,
+    SharedDepsModule,
     ProductGalleryModule,
     NzTabsModule,
     ProductDescriptionModule,

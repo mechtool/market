@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PaymentDocumentComponent } from './payment-document.component';
-import { PipesModule } from '#shared/modules/pipes';
 import { CounterPartLinePipe } from './pipes/counterpart-line.pipe';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, PipesModule],
+  imports: [CommonModule, RouterModule, SharedDepsModule],
   exports: [PaymentDocumentComponent],
   declarations: [PaymentDocumentComponent, CounterPartLinePipe],
 })

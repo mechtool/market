@@ -5,9 +5,10 @@ import { SupplierTradeOffersListComponent } from './supplier-trade-offers-list.c
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { SearchBarModule } from '#shared/modules/components/search-bar';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { PipesModule, ProductSideModule, SorterModule, SpinnerModule } from '#shared/modules';
+import { ProductSideModule, SorterModule, SpinnerModule } from '#shared/modules';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
   imports: [
@@ -19,9 +20,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzSpinModule,
     InfiniteScrollModule,
     ProductSideModule,
-    PipesModule,
     SorterModule,
     SpinnerModule,
+    SharedDepsModule,
   ],
   exports: [SupplierTradeOffersListComponent],
   declarations: [SupplierTradeOffersListComponent],

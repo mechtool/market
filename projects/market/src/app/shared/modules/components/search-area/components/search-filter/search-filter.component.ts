@@ -322,15 +322,26 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _handleServiceFormCategoryIdChanges(): void {
+    let catId = null;
     this._serviceFormCategoryIdChangeSubscription = this.serviceForm
       .get('base.categoryId')
-      .valueChanges.pipe(distinctUntilChanged())
+      .valueChanges.pipe(
+        distinctUntilChanged(),
+        tap((categoryId) => catId = categoryId),
+        switchMap((categoryId) => {
+          return this._searchAreaService.getSubCategories(categoryId)
+        })
+      )
       .subscribe((res) => {
+        this.filteredCategories = res;
+        this.availableCategories$.next([...res]);
         this.form.get('subCategoryId').patchValue('');
-        this.serviceForm.get('base.categoryId').patchValue(res, { emitEvent: false, onlySelf: true });
+        this.serviceForm.get('base.categoryId').patchValue(catId, { emitEvent: false, onlySelf: true });
         this._scrollToCategory();
         this._updateModifiedFiltersCounter();
         this._submit();
+      }, () => {
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       });
   }
 

@@ -1,10 +1,12 @@
 <a class="item">
 
   <div class="cover">
-    <img src="{{imageUrl(img)}}"
-         alt="{{imgAlt}}"
-         title="{{imgAlt}}"
-         onerror="src='./assets/img/svg/clean.svg'; onerror='';">
+    <img
+      alt="{{imgAlt}}"
+      title="{{imgAlt}}"
+      [defaultImage]="'./assets/img/svg/clean.svg'"
+      [lazyLoad]="imageUrl(img)"
+    />
   </div>
 
   <div class="title">

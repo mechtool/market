@@ -20,6 +20,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
     NzInputModule,
     NzSliderModule,
     NzAutocompleteModule,
+    SharedDepsModule
   ],
   declarations: [
     SearchBarComponent,

@@ -121,10 +121,14 @@
               <div class="cell_left">
                 <div class="cell_image"
                      (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
-                  <img src="{{item.controls.imageUrl.value}}"
-                       alt="{{item.controls.productName.value}}"
-                       title="{{item.controls.productName.value}}"
-                       onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
+
+                  <img
+                    alt="{{item.controls.productName.value}}"
+                    title="{{item.controls.productName.value}}"
+                    [defaultImage]="'./assets/img/svg/clean.svg'"
+                    [lazyLoad]="item.controls.imageUrl.value"
+                  />
+
                 </div>
               </div>
               <div class="cell_right">

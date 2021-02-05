@@ -2,10 +2,11 @@
 
   <div class="cover">
     <img
-      src="{{imageUrl(item.imageUrl)}}"
       alt="{{item.searchText}}"
       title="{{item.searchText}}"
-      onerror="this.src='./assets/img/svg/clean.svg'; this.onerror='';">
+      [defaultImage]="'./assets/img/svg/clean.svg'"
+      [lazyLoad]="imageUrl(item.imageUrl)"
+    />
   </div>
 
   <div class="title">

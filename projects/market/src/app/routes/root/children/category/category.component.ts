@@ -33,7 +33,7 @@ export class CategoryComponent implements OnDestroy {
 
   productOffersList: ProductOffersListResponseModel;
   productOffers: ProductOffersModel[] = [];
-  summaryFeaturesDate: any;
+  summaryFeaturesData: any;
   productsTotal: number;
 
   sort: SortModel | any;
@@ -260,7 +260,7 @@ export class CategoryComponent implements OnDestroy {
       }
 
       this.productsTotal = this.productOffersList.page.totalElements;
-      this.summaryFeaturesDate = {
+      this.summaryFeaturesData = {
         hasProducts: this.productsTotal > 0,
         featuresQueries: this.filters?.features,
         values: this.productOffersList._embedded.summary?.features

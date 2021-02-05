@@ -31,8 +31,8 @@ import { BannersModule } from '#shared/modules/components/banners/banner.module'
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
-import { PipesModule } from '#shared/modules/pipes';
 import { NzGridModule } from 'ng-zorro-antd/grid';
+import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 
 @NgModule({
   imports: [
@@ -49,7 +49,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
     ErrorCodeAlertModule,
     NzTabsModule,
     NzAlertModule,
-    PipesModule,
+    SharedDepsModule,
     ProductDescriptionModule,
     ProductGalleryModule,
     NzCarouselModule,
