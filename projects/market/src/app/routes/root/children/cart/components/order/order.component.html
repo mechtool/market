@@ -192,18 +192,17 @@
                 <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="isOrderType">
                   <p>
                     <span
-                      class="price">{{item.controls.total.value | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
+                      class="price">{{(item.controls.priceIncludesVAT.value ? item.controls.total.value : item.controls.totalWithoutVat.value) | marketMultiplier:'.01' | currencyPrice: order.orderTotal?.currencyCode}}&nbsp;&nbsp;</span>
                   </p>
 
                   <p>
                     <span class="cell_nds"
                           *ngIf="item.controls.vat.value === 0">без НДС</span>
                     <span class="cell_nds"
-                          *ngIf="item.controls.vat.value !== 0 && item.controls.priceIncludesVAT.value">с учетом {{item.controls.vat.value / 100 | percent}}НДС</span>
+                          *ngIf="item.controls.vat.value !== 0 && !item.controls.priceIncludesVAT.value">без НДС {{item.controls.vat.value / 100 | percent}}</span>
                     <span class="cell_nds"
-                          *ngIf="item.controls.vat.value !== 0 && !item.controls.priceIncludesVAT.value">без учета {{item.controls.vat.value / 100 | percent}}НДС</span>
+                          *ngIf="item.controls.vat.value !== 0 && item.controls.priceIncludesVAT.value">включая НДС {{item.controls.vat.value / 100 | percent}}</span>
                   </p>
-
                 </div>
 
                 <div class="table_cell cell_more">

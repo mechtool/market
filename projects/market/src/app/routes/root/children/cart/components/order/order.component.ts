@@ -961,6 +961,7 @@ export class CartOrderComponent implements OnInit, OnDestroy {
       availableToOrder: new FormControl(this._availableToOrder(product.tradeOfferId), [Validators.requiredTrue]),
       vat: VATS[product.vat] || 0,
       total: product.itemTotal?.total,
+      totalWithoutVat: product.itemTotal?.totalWithoutVat,
       _links: product._links,
     });
   }

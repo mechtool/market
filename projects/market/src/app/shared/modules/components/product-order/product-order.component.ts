@@ -74,7 +74,8 @@ export class ProductOrderComponent implements OnInit {
             return x.tradeOfferId === tradeOfferId;
           });
           if (foundTradeOffer) {
-            this.price = foundTradeOffer.itemTotal?.total;
+            // tslint:disable-next-line:max-line-length
+            this.price = this.tradeOffer.termsOfSale.price.includesVAT ? foundTradeOffer.itemTotal?.total : foundTradeOffer.itemTotal?.totalWithoutVat;
             this.orderStatus = OrderStatusModal.IN_CART;
           } else {
             this.price = null;
