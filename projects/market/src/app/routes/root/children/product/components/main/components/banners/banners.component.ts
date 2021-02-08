@@ -15,6 +15,13 @@ export class MainBannersComponent {
       imgUrl: 'assets/img/promo/podarok/banner2.png',
     },
     {
+      title: 'Скидка 7% на электронику и комплектующие для автоматизации!',
+      btnLink: '/supplier/df39ca07-ef02-4e3f-b7f1-eb66fbeb8f68',
+      btnText: 'Подробнее',
+      description: 'При заказе у официального дистрибьютора RS Components в России на 1С:Торговая площадка',
+      imgUrl: 'assets/img/tmp/banner_4.jpeg',
+    },
+    {
       title: 'Скидка 10% на первый заказ!',
       btnLink: '/promo/first-order',
       btnText: 'Подробнее',
