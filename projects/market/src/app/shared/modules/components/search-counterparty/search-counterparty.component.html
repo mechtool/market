@@ -1,0 +1,99 @@
+<div class="requisites-checker">
+
+  <div class="title">Заполните данные вашей организации</div>
+
+  <form [formGroup]="form">
+
+    <div class="description" *ngIf="!enterKpp">Укажите ИНН организации</div>
+
+    <div class="description" *ngIf="enterKpp">ИНН</div>
+
+    <div class="form-group form-group-std">
+      <input type="text"
+             (keypress)="onlyNumberKey($event)"
+             id="formINN"
+             autocomplete="false"
+             maxlength="12"
+             list="null"
+             [ngClass]="{'error': form.controls.inn.errors?.blank || form.controls.inn.errors?.pattern || form.controls.inn.errors?.innControlNumberCondition  || form.controls.inn.errors?.innLengthCondition}"
+             formControlName="inn">
+
+      <div class="input_error" *ngIf="form.controls.inn.errors?.blank || form.controls.inn.errors?.pattern">
+        Введено недопустимое значение
+      </div>
+
+      <div class="input_error" *ngIf="!form.controls.inn.errors?.blank && !form.controls.inn.errors?.pattern && form.controls.inn.errors?.innControlNumberCondition">
+        Введен недействительный ИНН
+      </div>
+
+      <div class="input_error" *ngIf="!form.controls.inn.errors?.blank && !form.controls.inn.errors?.pattern && form.controls.inn.errors?.innLengthCondition">
+        Длина должна быть 10 или 12 цифр
+      </div>
+    </div>
+
+    <div class="description" *ngIf="enterKpp && form.controls.inn.value.length === 10">Укажите КПП организации</div>
+
+    <div class="form-group form-group-std" *ngIf="enterKpp && form.controls.inn.value.length === 10">
+      <input type="text"
+             (keypress)="onlyNumberKey($event)"
+             id="formKPP"
+             maxlength="9"
+             autocomplete="false"
+             list="null"
+             [ngClass]="{'error': form.controls.kpp.invalid || form.errors?.innKppCondition}"
+             formControlName="kpp">
+
+      <div class="input_error" *ngIf="form.controls.kpp.valid && form.errors?.innKppCondition">
+        Заполните это поле
+      </div>
+
+      <div class="input_error" *ngIf="!form.controls.kpp.errors?.pattern && !form.controls.kpp.errors?.blank && form.controls.kpp.invalid">
+        Длина должна быть 9 цифр
+      </div>
+
+      <div class="input_error" *ngIf="form.controls.kpp.errors?.blank || form.controls.kpp.errors?.pattern">
+        Введено недопустимое значение
+      </div>
+    </div>
+
+    <div class="description" *ngIf="enterKpp">Укажите название организации</div>
+
+    <div class="form-group form-group-std" *ngIf="enterKpp">
+      <input type="text"
+             id="formName"
+             autocomplete="false"
+             list="null"
+             [ngClass]="{'error': form.controls.name.invalid}"
+             formControlName="name">
+
+      <div class="input_error" *ngIf="form.controls.name.errors?.required">
+        Заполните это поле
+      </div>
+
+      <div class="input_error" *ngIf="form.controls.name.errors?.blank">
+        Введено недопустимое значение
+      </div>
+
+      <div class="input_error" *ngIf="!form.controls.name.errors?.blank && form.controls.name.errors?.maxlength">
+        {{'Максимум ' + form.controls.name.errors?.maxlength.requiredLength + ' символов'}}
+      </div>
+
+      <div class="input_error" *ngIf="!form.controls.name.errors?.blank && form.controls.name.errors?.minlength">
+        {{'Минимум ' + form.controls.name.errors?.minlength.requiredLength + ' символа'}}
+      </div>
+
+    </div>
+
+    <div class="form-group form-group-btn">
+      <button *ngIf="!enterKpp" nz-button nzType="primary" type="button" (click)="nexStep()"
+              [disabled]="form.controls.inn.invalid">Продолжить
+      </button>
+
+      <button *ngIf="enterKpp" nz-button nzType="primary" [disabled]="form.invalid" type="button"
+              (click)="send()">Сохранить
+      </button>
+    </div>
+  </form>
+
+</div>
+

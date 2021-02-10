@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
   AccessKeyModel,
-  AccessKeyResponseModel,
+  AccessKeyResponseModel, CounterpartyResponseModel,
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
   OrganizationUserResponseModel,
@@ -14,7 +14,8 @@ import {
   UserOrganizationModel
 } from './models';
 import { BNetService } from './bnet.service';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class OrganizationsService {
@@ -57,7 +58,7 @@ export class OrganizationsService {
     return this._bnetService.getParticipationRequests(query)
       .pipe(
         map((res) => {
-          return res.filter(req => !req.requestStatus?.resolutionDate);
+          return res.filter((req) => !req.requestStatus?.resolutionDate);
         })
       );
   }
@@ -112,6 +113,10 @@ export class OrganizationsService {
 
   getOrganizationUsers(id: string): Observable<OrganizationUserResponseModel[]> {
     return this._bnetService.getOrganizationUsers(id);
+  }
+
+  findCounterpartyDataByInn(inn: string): Observable<CounterpartyResponseModel> {
+    return this._bnetService.findCounterpartyDataByInn(inn);
   }
 
 }

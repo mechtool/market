@@ -1,0 +1,15 @@
+@media all and (max-width: 400px) {
+  .auth-decision-maker {
+    width: 270px;
+  }
+
+  .description {
+    font-size: var(--font-size-14);
+  }
+
+  .ant-btn-primary {
+    padding: 0 30px;
+    font-size: var(--font-size-12);
+  }
+}
+

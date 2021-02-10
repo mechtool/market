@@ -9,6 +9,7 @@ import {
   CartOrderComponent,
   CartOrderQtyCounterComponent,
   OrderSentComponent,
+  RegisterOrderSentComponent,
   OrderUnavailableComponent
 } from './components';
 import { CartModalService } from './cart-modal.service';
@@ -54,6 +55,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     CartOrderQtyCounterComponent,
     OrderUnavailableComponent,
     OrderSentComponent,
+    RegisterOrderSentComponent,
   ],
   providers: [CartModalService],
 })

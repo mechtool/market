@@ -17,9 +17,7 @@ export class AuthOrganizationGuard implements CanActivate {
           return of(true);
         }
         return of(
-          this._authModalService.openEmptyOrganizationsInfoModal(
-            'Для продолжения работы необходимо иметь хотя бы одну зарегистрированную организацию.',
-          ),
+          this._authModalService.openEmptyOrganizationsInfoModal(),
         );
       }),
       catchError((err) => {

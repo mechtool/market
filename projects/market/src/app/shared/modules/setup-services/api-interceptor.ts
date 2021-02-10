@@ -7,20 +7,16 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { catchError, filter, mergeMap, switchMap, take, tap } from 'rxjs/operators';
-import {
-  AuthService,
-  BreadcrumbItemModel,
-  LocalStorageService,
-  UserService,
-  UserStateService
-} from '#shared/modules/common-services';
+import { AuthService, LocalStorageService, UserService, UserStateService } from '#shared/modules/common-services';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
   private _isTokenRefreshing$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  constructor(private _injector: Injector) {}
+
+  constructor(private _injector: Injector) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     const authService = this._injector.get(AuthService);

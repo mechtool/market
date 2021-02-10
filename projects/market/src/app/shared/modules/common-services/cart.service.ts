@@ -39,7 +39,7 @@ export class CartService {
   setActualCartData(): Observable<CartDataResponseModel> {
     return this.getCartLocationLink$().pipe(
       switchMap((cartLocationLink) => {
-        return this._bnetService.getCartDataByCartLocation(cartLocationLink)
+        return this._bnetService.getCart(cartLocationLink)
       }),
       catchError((err) => throwError(err)),
       tap((cartData) => this._setCartData(cartData)),
@@ -78,15 +78,14 @@ export class CartService {
       case RelationEnumModel.ITEM_ADD:
         return this._bnetService.addItemToCart(relationHref, data);
       case RelationEnumModel.MAKE_ORDER:
-        return this._bnetService.createOrder(relationHref, data);
       case RelationEnumModel.REQUEST_FOR_PRICE:
-        return this._bnetService.createPriceRequest(relationHref, data);
+      case RelationEnumModel.REGISTER_AND_MAKE_ORDER:
+      case RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE:
+        return this._bnetService.marketplaceOffer(relationHref, data);
       case RelationEnumModel.ITEM_UPDATE_QUANTITY:
         return this._bnetService.updateItemQuantityInCart(relationHref, data);
       case RelationEnumModel.ITEM_REMOVE:
         return this._bnetService.removeItemFromCart(relationHref);
-      case RelationEnumModel.TRADE_OFFER_VIEW:
-        return this._bnetService.getTradeOfferFromCart(relationHref);
     }
   }
 

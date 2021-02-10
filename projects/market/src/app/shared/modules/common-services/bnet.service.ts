@@ -11,6 +11,7 @@ import {
   CategoryRequestModel,
   CategoryResponseModel,
   CommerceMlDocumentResponseModel,
+  CounterpartyResponseModel,
   DocumentResponseModel,
   EdiRequestModel,
   FeedbackRequestModel,
@@ -35,7 +36,7 @@ import {
   UpdateOrganizationRequestModel,
   UserOrganizationModel,
 } from './models';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { ApiWorkerService } from './api-worker.service';
 
 const API_URL = environment.apiUrl;
@@ -68,7 +69,7 @@ export class BNetService {
   }
 
   getTradeOffer(id: string): Observable<TradeOfferResponseModel> {
-    return this._apiService.get(`${API_URL}/trade-offers/find/${id}`);
+    return this._apiService.get(`${API_URL}/trade-offers/${id}`);
   }
 
   searchTradeOffers(query: TradeOffersRequestModel): Observable<TradeOffersListResponseModel> {
@@ -195,32 +196,29 @@ export class BNetService {
     return this._http.post(`${API_URL}/shopping-carts`, null, { observe: 'response' });
   }
 
-  getCartDataByCartLocation(cartLocation: string): Observable<CartDataResponseModel> {
-    return this._apiService.get(cartLocation);
+  getCart(cartLocation: string): Observable<CartDataResponseModel> {
+    return this._apiService.get(`${API_URL}/shopping-carts`,
+      { headers: new HttpHeaders({ MarketplaceLink: cartLocation }) });
   }
 
   addItemToCart(relationHref: string, data: CartModel): Observable<any> {
-    return this._apiService.post(relationHref, data);
+    return this._http.post(`${API_URL}/shopping-carts/items`, data,
+      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
   }
 
   removeItemFromCart(relationHref: string): Observable<any> {
-    return this._apiService.delete(relationHref);
+    return this._http.delete(`${API_URL}/shopping-carts/items`,
+      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
   }
 
   updateItemQuantityInCart(relationHref: string, data: CartModel): Observable<any> {
-    return this._apiService.put(relationHref, data);
+    return this._http.put(`${API_URL}/shopping-carts/items`, data,
+      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
   }
 
-  createOrder(relationHref: string, data: CartModel): Observable<any> {
-    return this._apiService.post(relationHref, data);
-  }
-
-  createPriceRequest(relationHref: string, data: CartModel): Observable<any> {
-    return this._apiService.post(relationHref, data);
-  }
-
-  getTradeOfferFromCart(relationHref: string): Observable<any> {
-    return this._apiService.get(relationHref);
+  marketplaceOffer(relationHref: string, data: CartModel): Observable<any> {
+    return this._http.post(`${API_URL}/shopping-carts/marketplace-offer`, data,
+      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
   }
 
   getOrders(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
@@ -239,6 +237,10 @@ export class BNetService {
 
   getAccountDocument(id: number): Observable<CommerceMlDocumentResponseModel> {
     return this._apiService.get(`${API_URL}/edi/accounts/${id}`);
+  }
+
+  findCounterpartyDataByInn(inn: string): Observable<CounterpartyResponseModel> {
+    return this._apiService.get(`${API_URL}/counterparty/${inn}`);
   }
 
   private _params(searchQuery: any): HttpParams {

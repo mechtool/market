@@ -1,0 +1,15 @@
+@media all and (max-width: 400px) {
+  .empty-organizations-info {
+    width: 270px;
+  }
+
+  .description {
+    font-size: var(--font-size-14);
+  }
+
+  .ant-btn-primary {
+    padding: 0 5px;
+    font-size: var(--font-size-12);
+  }
+}
+

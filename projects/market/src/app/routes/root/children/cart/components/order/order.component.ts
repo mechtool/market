@@ -49,6 +49,8 @@ import { AuthModalService } from '#shared/modules/setup-services/auth-modal.serv
 import { CartModalService } from '../../cart-modal.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { notBlankValidator } from '#shared/utils/common-validators';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { SearchCounterpartyComponent } from '#shared/modules/components/search-counterparty';
 
 const VATS = {
   VAT_10: 10,
@@ -78,6 +80,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('elementInputContactEmail') elementInputContactEmail: ElementRef;
   @ViewChild('elementInputContactPhone') elementInputContactPhone: ElementRef;
   @ViewChild('elementInputContactName') elementInputContactName: ElementRef;
+  @ViewChild('elementDivConsumerName') elementDivConsumerName: ElementRef;
   @Input() order: CartDataOrderResponseModel;
   @Input() userInfo: UserInfoModel;
   @Output() cartDataChange: EventEmitter<CartDataResponseModel> = new EventEmitter();
@@ -92,9 +95,11 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   foundStreets: string[];
   foundHouses: string[];
   minDate = new Date();
-  private foundLocations: LocationModel[];
-  private validDeliveryFiasCode: string[];
-  private cartDataSubscription: Subscription;
+  enteredCustomerData: any;
+  private _foundLocations: LocationModel[];
+  private _validDeliveryFiasCode: string[];
+  private _cartDataSubscription: Subscription;
+  private _offerWithRegistration = true;
 
   get unavailableToOrder(): boolean {
     const unavailableToOrderStatuses = ['TemporarilyOutOfSales', 'NoOfferAvailable'];
@@ -161,6 +166,10 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     return !this.selectedCity && this.selectedDelivery;
   }
 
+  get isNotFilledCustomerData(): boolean {
+    return this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice && !this.enteredCustomerData;
+  }
+
   get isAnonymous(): boolean {
     return !this.userInfo;
   }
@@ -175,7 +184,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get unavailableItemsInOder(): boolean {
-    return this.isAuthenticated && !this.isMakeOrderOrRequestForPrice;
+    return this.isAuthenticated && !this.isMakeOrderOrRequestForPrice && !this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice;
   }
 
   get isMakeOrderOrRequestForPrice(): boolean {
@@ -186,17 +195,46 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.makeOrderLink || this.requestForPriceLink
   }
 
-  get abilityToPlaceOrder(): boolean {
+  get isRegisterAndMakeOrderOrRegisterAndRequestForPrice(): boolean {
+    return !!(this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink);
+  }
+
+  get registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink(): string {
+    return this.registerAndMakeOrderLink || this.registerAndRequestForPriceLink
+  }
+
+  get abilityMakeOrderOrRequestForPrice(): boolean {
     return this.isAuthenticated && this.hasAvailableOrganizations && !!(this.makeOrderLinkOrRequestForPriceLink);
   }
 
-  get needToRegisterAndPlaceOrder(): boolean {
-    return this.isAnonymous && !!(this.registerAndMakeOrderLink || this.registerAndRequestForPriceLink);
+  get abilityRegisterMakeOrderOrRegisterRequestForPrice(): boolean {
+    return this.subjAnonymousOrAuthenticatedWithoutOrganizations && this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice;
+  }
+
+  get subjAnonymousOrAuthenticatedWithoutOrganizations(): boolean {
+    return this.isAnonymous || (this.isAuthenticated && !this.hasAvailableOrganizations);
+  }
+
+  get subjAnonymousOrAuthenticatedWithoutOrgsAndOfferWithRegistration(): boolean {
+    return this.subjAnonymousOrAuthenticatedWithoutOrganizations && this._offerWithRegistration;
+  }
+
+  get subjAuthenticatedWithoutOrgsAndOfferWithRegistration(): boolean {
+    return (this.isAuthenticated && !this.hasAvailableOrganizations) && this._offerWithRegistration;
+  }
+
+  get subjAnonymousAndOfferWithRegistration(): boolean {
+    return this.isAnonymous && this._offerWithRegistration;
   }
 
   get hasAvailableOrganizations(): boolean {
     return !!this.availableOrganizations?.length
   }
+
+  get isNotValidOrderForm() {
+    return this.form.invalid || this.noDeliveryAddressSelected || this.isNotFilledCustomerData;
+  }
+
 
   get availableOrganizations(): UserOrganizationModel[] {
     if (this.order.customersAudience?.length) {
@@ -237,6 +275,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     private _bnetService: BNetService,
     private _cartService: CartService,
     private _userService: UserService,
+    private _modalService: NzModalService,
     private _locationService: LocationService,
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
@@ -262,13 +301,13 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     this._externalProvidersService.fireGTMEvent(tag);
 
-    this.cartDataSubscription = this._cartService.getCartData$().pipe(
+    this._cartDataSubscription = this._cartService.getCartData$().pipe(
       tap(() => {
         this._initDeliveryMethods();
         this._initForm();
       }),
       tap(() => {
-        if (this.abilityToPlaceOrder) {
+        if (this.abilityMakeOrderOrRequestForPrice) {
           this.setConsumer(this.availableOrganizations[0]);
         }
       }),
@@ -287,7 +326,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             }
 
             return combineLatest(
-              [this._locationService.isDeliveryAvailable(userLocation.fias, this.validDeliveryFiasCode), of(userLocation)]);
+              [this._locationService.isDeliveryAvailable(userLocation.fias, this._validDeliveryFiasCode), of(userLocation)]);
           }
         }
         return combineLatest([of(false), of(null)]);
@@ -301,7 +340,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             onlySelf: true,
             emitEvent: true
           });
-          this.saveCityAndEnableStreetAndHouse(userLocation);
+          this._saveCityAndEnableStreetAndHouse(userLocation);
         }
       })
     ).subscribe(() => {
@@ -310,14 +349,15 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    unsubscribeList([this.cartDataSubscription]);
+    unsubscribeList([this._cartDataSubscription]);
   }
 
   ngAfterViewInit() {
     dispatchEvent(new CustomEvent('scroll'));
   }
 
-  checkForValidityAndCreateOrder() {
+  validateAndSubmitOrder() {
+
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER);
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
       ...(this.isMakeOrderOrRequestForPrice && {
@@ -327,21 +367,25 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
           },
         },
       }),
+      ...(this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice && {
+        params: {
+          [MetrikaEventOrderTryParametrizedModel.title]: {
+            [MetrikaEventOrderTryParametrizedModel.orderLink]: this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink,
+          },
+        },
+      }),
     });
 
-    if (this.isAnonymous) {
-      this._authModalService.openAuthDecisionMakerModal(
-        `Для отправки заказа необходимо войти на сайт под учетной записью "Интернет-поддержки пользователей (1С:ИТС)",
-        указанной в вашем программном продукте "1С", или под вашей учетной записью облачного сервиса "1С:Предприятие через Интернет (1С:Фреш)".
-        В случае их отсутствия - зарегистрируйте новую учетную запись.
-        Данные в корзине сохранятся.`,
-      );
+    if (this.subjAnonymousAndOfferWithRegistration) {
+      const modal = this._authModalService.openAuthOrOrderDecisionMakerModal(this.isOrderType);
+      this._changeSelectedTabAndDestroyModal(modal);
+
       this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
         params: {
           [MetrikaEventOrderFailParametrizedModel.title]: {
             [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NOT_AUTHED,
-            ...(this.isMakeOrderOrRequestForPrice && {
-              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink
+            ...(this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice && {
+              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink
             }),
           },
         },
@@ -349,16 +393,16 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (!this.hasAvailableOrganizations) {
-      this._authModalService.openEmptyOrganizationsInfoModal(
-        'Чтобы оформить заказ необходимо иметь хотя бы одну зарегистрированную организацию.',
-      );
+    if (this.subjAuthenticatedWithoutOrgsAndOfferWithRegistration) {
+      const modal = this._authModalService.openAddOrgOrOrderDecisionMakerModal(this.isOrderType);
+      this._changeSelectedTabAndDestroyModal(modal);
+
       this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
         params: {
           [MetrikaEventOrderFailParametrizedModel.title]: {
             [MetrikaEventOrderFailParametrizedModel.reasonTitle]: MetrikaEventOrderFailParametrizedEnumModel.NO_ORGANIZATIONS,
-            ...(this.isMakeOrderOrRequestForPrice && {
-              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink
+            ...(this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice && {
+              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink
             }),
           },
         },
@@ -367,6 +411,8 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     if (this.unavailableItemsInOder) {
+      // todo Кажется что этот сценарий больше не может воспроизвестись, так как кнопка отправки заказа задизаблена при таком сценарии
+      // todo Перепроверить, в случае необходимости удалить
       this.changeSelectedTabIndex(0);
       this._cartModalService.openOrderUnavailableModal();
       this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
@@ -379,22 +425,17 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    if (this.form.invalid || this.noDeliveryAddressSelected) {
+    if (this.isNotValidOrderForm) {
       if (this.selectedTabIndex === 0) {
         this.changeSelectedTabIndex(1);
         return;
       }
       if (this.selectedTabIndex === 1) {
-        if (this.noDeliveryAddressSelected) {
-          this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
-          this.elementInputCity?.nativeElement.focus();
-        }
-
         Object.keys(this.form.controls).forEach((key) => {
           this.form.controls[key].markAsTouched();
         });
 
-        if (this.form.invalid && this.form.controls.deliveryArea.valid) {
+        if (this.form.invalid) {
           if (this.form.controls.contactEmail.invalid) {
             this.elementInputContactEmail?.nativeElement.focus();
           }
@@ -407,6 +448,15 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             this.elementInputContactName?.nativeElement.focus();
           }
         }
+
+        if (this.noDeliveryAddressSelected) {
+          this.form.controls.deliveryArea.setErrors({ deliveryAreaCondition: true }, { emitEvent: true });
+          this.elementInputCity?.nativeElement.focus();
+        }
+
+        if (this.isNotFilledCustomerData) {
+          this.elementDivConsumerName?.nativeElement.scrollIntoView({ block: 'center', inline: 'nearest' });
+        }
       }
 
       this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_FAIL_PARAMETRIZED, {
@@ -416,13 +466,22 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             ...(this.isMakeOrderOrRequestForPrice && {
               [MetrikaEventOrderFailParametrizedModel.orderLink]: this.makeOrderLinkOrRequestForPriceLink
             }),
+            ...(this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice && {
+              [MetrikaEventOrderFailParametrizedModel.orderLink]: this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink
+            }),
           },
         },
       });
       return;
     }
 
-    this._createOrder();
+    if (this.isMakeOrderOrRequestForPrice) {
+      this._executeMakeOrderOrRequestForPrice();
+    }
+
+    if (this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice) {
+      this._executeRegisterAndMakeOrderOrRegisterAndRequestForPrice();
+    }
   }
 
   navigationBack() {
@@ -556,39 +615,39 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   citySelected() {
     const city = this.form.value.deliveryArea.deliveryCity;
-    const location = this.foundLocations.find((loc) => loc.locality === city);
+    const location = this._foundLocations.find((loc) => loc.locality === city);
     this.selectedStreet = null;
     this.selectedHouse = null;
 
     if (location) {
       if (this._deliveryByRussia()) {
-        this.saveCityAndEnableStreetAndHouse(location);
+        this._saveCityAndEnableStreetAndHouse(location);
       } else {
-        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
+        this._locationService.isDeliveryAvailable(location.fias, this._validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
-            this.saveCityAndEnableStreetAndHouse(location);
+            this._saveCityAndEnableStreetAndHouse(location);
           } else {
-            this.selectedCityIsNotAvailable();
+            this._selectedCityIsNotAvailable();
           }
         });
       }
     } else {
-      this.selectedCityIsNotAvailable();
+      this._selectedCityIsNotAvailable();
     }
   }
 
   streetSelected() {
     const street = this.form.value.deliveryArea.deliveryStreet;
-    const location = this.foundLocations.find((loc) => loc.street === street);
+    const location = this._foundLocations.find((loc) => loc.street === street);
     this.selectedHouse = null;
 
     if (location) {
       if (this._deliveryByRussia()) {
-        this.saveStreet(location);
+        this._saveStreet(location);
       } else {
-        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
+        this._locationService.isDeliveryAvailable(location.fias, this._validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
-            this.saveStreet(location);
+            this._saveStreet(location);
           } else {
             this.elementInputHouse?.nativeElement.focus();
           }
@@ -601,13 +660,13 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   houseSelected() {
     const house = this.form.value.deliveryArea.deliveryHouse;
-    const location = this.foundLocations.find((loc) => loc.house === house);
+    const location = this._foundLocations.find((loc) => loc.house === house);
 
     if (location) {
       if (this._deliveryByRussia()) {
         this.selectedHouse = location;
       } else {
-        this._locationService.isDeliveryAvailable(location.fias, this.validDeliveryFiasCode).subscribe((isAvailable) => {
+        this._locationService.isDeliveryAvailable(location.fias, this._validDeliveryFiasCode).subscribe((isAvailable) => {
           if (isAvailable) {
             this.selectedHouse = location;
           }
@@ -617,19 +676,35 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     this.elementInputHouse?.nativeElement.blur();
   }
 
-  private saveCityAndEnableStreetAndHouse(location: LocationModel): void {
+  openSearchCounterpartyModal() {
+    const modal = this._modalService.create({
+      nzContent: SearchCounterpartyComponent,
+      nzFooter: null,
+      nzWidth: 480,
+      nzComponentParams: {},
+    });
+
+    modal.componentInstance.counterpartyRequisitesChange
+      .subscribe((res) => {
+        this.enteredCustomerData = res;
+        modal.destroy();
+        this._cdr.detectChanges();
+      });
+  }
+
+  private _saveCityAndEnableStreetAndHouse(location: LocationModel): void {
     this.selectedCity = location;
     this.form.get('deliveryArea.deliveryStreet').enable({ onlySelf: true, emitEvent: false });
     this.form.get('deliveryArea.deliveryHouse').enable({ onlySelf: true, emitEvent: false });
     this.elementInputStreet?.nativeElement.focus();
   }
 
-  private selectedCityIsNotAvailable(): void {
+  private _selectedCityIsNotAvailable(): void {
     this.form.controls.deliveryArea.setErrors({ selectedCityIsNotAvailable: true }, { emitEvent: true });
     this.elementInputCity?.nativeElement.blur();
   }
 
-  private saveStreet(location: LocationModel): void {
+  private _saveStreet(location: LocationModel): void {
     this.selectedStreet = location;
     this.elementInputHouse?.nativeElement.focus();
 
@@ -661,7 +736,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       ).subscribe((cities) => {
         this.foundStreets = [];
         this.foundHouses = [];
-        this.foundLocations = cities;
+        this._foundLocations = cities;
         this.foundCities = cities.map((city) => city.locality).filter(uniqueArray);
         this._cdr.detectChanges();
       },
@@ -685,7 +760,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
         }),
       ).subscribe((cities) => {
         this.foundHouses = [];
-        this.foundLocations = cities;
+        this._foundLocations = cities;
         this.foundStreets = cities.map((city) => city.street).filter(uniqueArray);
         this._cdr.detectChanges();
       },
@@ -716,7 +791,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
         }),
       ).subscribe((cities) => {
         this.foundHouses = cities.map((city) => city.house).filter(uniqueArray);
-        this.foundLocations = cities;
+        this._foundLocations = cities;
         this._cdr.detectChanges();
       },
       (err) => {
@@ -726,14 +801,14 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _initValidDeliveryFiasCode(): void {
-    this.validDeliveryFiasCode =
+    this._validDeliveryFiasCode =
       this.order.deliveryOptions?.deliveryZones?.filter((zone) => zone.fiasCode || zone.countryOksmCode === CountryCode.RUSSIA)
         .map((zone) => !zone.fiasCode ? zone.countryOksmCode : zone.fiasCode)
       || [];
   }
 
   private _deliveryByRussia(): boolean {
-    return !this.validDeliveryFiasCode?.length || this.validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
+    return !this._validDeliveryFiasCode?.length || this._validDeliveryFiasCode.some((code) => code === CountryCode.RUSSIA);
   }
 
   private _watchItemQuantityChanges() {
@@ -801,10 +876,19 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private _createOrder() {
+  private _executeMakeOrderOrRequestForPrice() {
     const relationType = this.isOrderType ? RelationEnumModel.MAKE_ORDER : RelationEnumModel.REQUEST_FOR_PRICE;
+    this._send(relationType, this.makeOrderLinkOrRequestForPriceLink, this._createOrderData());
+  }
+
+  private _executeRegisterAndMakeOrderOrRegisterAndRequestForPrice() {
+    const relationType = this.isOrderType ? RelationEnumModel.REGISTER_AND_MAKE_ORDER : RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE;
+    this._send(relationType, this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink, this._createRegisterOrderData());
+  }
+
+  private _send(relationType: RelationEnumModel, relationHref: string, orderData: any) {
     this._cartService
-      .handleRelation(relationType, this.makeOrderLinkOrRequestForPriceLink, this._createOrderData())
+      .handleRelation(relationType, relationHref, orderData)
       .pipe(
         switchMap((_) => this._cartService.setActualCartData()),
         tap(() => {
@@ -838,13 +922,45 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
           );
         }),
       ).subscribe((cartData) => {
-        this._cartModalService.openOrderSentModal();
+        if (this.isMakeOrderOrRequestForPrice) {
+          this._cartModalService.openOrderSentModal(this.isOrderType);
+        }
+        if (this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice) {
+          this._cartModalService.openRegisterAndOrderSentModal(this.isOrderType, this.isAnonymous);
+        }
         this.cartDataChange.emit(cartData);
       },
       (err) => {
         this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
       },
     );
+  }
+
+  private _createRegisterOrderData() {
+    const comment = this._orderComment();
+
+    return {
+      customerOrganization: {
+        name: this.enteredCustomerData.name,
+        inn: this.enteredCustomerData.inn,
+        ...(this.enteredCustomerData.kpp && { kpp: this.enteredCustomerData.kpp })
+      },
+      contacts: {
+        name: this.form.value.contactName,
+        phone: `+7${this.form.value.contactPhone}`,
+        email: this.form.value.contactEmail,
+      },
+      ...(comment && { comment }),
+      deliveryOptions: {
+        ...(this.selectedDelivery
+          ? {
+            deliveryTo: this._deliveryTo(),
+          }
+          : {
+            pickupFrom: this.pickupArea,
+          }),
+      },
+    };
   }
 
   private _createOrderData() {
@@ -860,7 +976,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       deliveryOptions: {
         ...(this.selectedDelivery
           ? {
-            deliveryTo: this.deliveryTo(),
+            deliveryTo: this._deliveryTo(),
           }
           : {
             pickupFrom: this.pickupArea,
@@ -869,7 +985,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  private deliveryTo(): any {
+  private _deliveryTo(): any {
     const delivery = { fiasCode: undefined, title: undefined, countryOksmCode: CountryCode.RUSSIA };
 
     if (this.selectedHouse) {
@@ -903,8 +1019,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _orderComment() {
-    return `${this.form.value.deliveryDesirableDate ? `Желаемая дата доставки: ${format(new Date(this.form.value.deliveryDesirableDate), 'dd-MM-yyyy HH:mm')}.` : ''}
-    ${this.form.value.commentForSupplier ? ` ${this.form.value.commentForSupplier}` : ''}`;
+    return `${this.form.value.deliveryDesirableDate ? `Желаемая дата доставки: ${format(new Date(this.form.value.deliveryDesirableDate), 'dd-MM-yyyy HH:mm')}.` : ''}${this.form.value.commentForSupplier ? ` ${this.form.value.commentForSupplier}` : ''}`;
   }
 
   private _initDeliveryMethods(): void {
@@ -1005,6 +1120,22 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.order.makeOrderViolations
       .filter((x) => ['TemporarilyOutOfSales', 'NoOfferAvailable'].includes(x.code))
       .every((x) => x.tradeOfferId !== tradeOfferId);
+  }
+
+  private _changeSelectedTabAndDestroyModal(modal: NzModalRef) {
+    modal.componentInstance.decisionMakerModalChange.subscribe((isOrderWithoutRegistration) => {
+      if (isOrderWithoutRegistration) {
+        if (this.selectedTabIndex === 0) {
+          this._offerWithRegistration = false;
+          this.changeSelectedTabIndex(1);
+          this._cdr.detectChanges();
+          setTimeout(() => {
+            this.elementDivConsumerName?.nativeElement.scrollIntoView({ block: 'center', inline: 'nearest' });
+          }, 100)
+        }
+      }
+      modal.destroy(true);
+    });
   }
 
   private _imageUrl(images: string[]): string {

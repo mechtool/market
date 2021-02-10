@@ -6,12 +6,12 @@ import { BreadcrumbsGuard } from './breadcrumbs.guard';
 import { DelayedPreloadingStrategy } from './preloading-strategy';
 import { ApiInterceptor } from './api-interceptor';
 import { AuthOrganizationGuard } from './auth-organization.guard';
-import { AuthDecisionMakerModule } from '#shared/modules/components/auth-decision-maker/auth-decision-maker.module';
+import { AuthOrRegDecisionMakerModule } from '#shared/modules/components/auth-or-reg-decision-maker/auth-or-reg-decision-maker.module';
 import { EmptyOrganizationsInfoModule } from '#shared/modules/components/empty-organizations-info/empty-organizations-info.module';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
-  imports: [NzModalModule, AuthDecisionMakerModule, EmptyOrganizationsInfoModule],
+  imports: [NzModalModule, AuthOrRegDecisionMakerModule, EmptyOrganizationsInfoModule],
 })
 export class SetupServicesModule {
   static forRoot(): ModuleWithProviders<SetupServicesModule> {

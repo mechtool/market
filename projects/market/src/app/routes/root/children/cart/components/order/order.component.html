@@ -2,77 +2,6 @@
 
   <form class="form__order" action="" [formGroup]="form">
 
-    <div class="order_info">
-      <div class="order_spec" *ngIf="abilityToPlaceOrder">
-        <div class="order_label">Доступный заказчик:</div>
-        <div class="order__customer dropdown dropdown_selectable">
-          <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click"
-               [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'"
-               [nzDisabled]="availableOrganizations?.length === 1">
-            <div class="supplier_title">
-              <div class="supplier_image">
-                <div class="supplier_image-color" style="{{consumerINN | organizationLogo : true}}"></div>
-              </div>
-              <div class="supplier_name">
-                {{consumerName | abbreviatedBusinessName}}
-              </div>
-            </div>
-          </div>
-        </div>
-        <nz-dropdown-menu #organizationsList="nzDropdownMenu">
-          <ul nz-menu style="width: 290px">
-            <li nz-menu-item *ngFor="let organization of availableOrganizations"
-                (click)="setConsumer(organization)">
-              <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
-                <div class="supplier_image">
-                  <div class="supplier_image-color"
-                       style="{{organization.legalRequisites.inn | organizationLogo : true}}"></div>
-                </div>
-                <div class="supplier_name">
-                  {{organization?.organizationName | abbreviatedBusinessName}}
-                </div>
-              </div>
-            </li>
-          </ul>
-        </nz-dropdown-menu>
-      </div>
-      <div class="order_spec" *ngIf="order?.supplier">
-        <div class="order_label">Поставщик:</div>
-        <div class="order_value supplier_title">
-          <span class="supplier_image">
-            <div class="supplier_image-color" style="{{supplierINN | organizationLogo : true}}"></div>
-          </span>
-          <span class="supplier_name">
-            {{supplierName | abbreviatedBusinessName}}
-          </span>
-        </div>
-      </div>
-      <div class="order_spec" *ngIf="pickupPoints?.length || deliveryZones?.length">
-        <div class="order_label">Доступные способы поставки:</div>
-        <div class="order_value supplier_title">
-          <span class="supplier_name">
-            {{deliveryMethods | marketArrayJoiner: 'label':'; '}}
-          </span>
-        </div>
-      </div>
-      <div class="order_spec" *ngIf="pickupPoints?.length">
-        <div class="order_label">Адреса самовывоза:</div>
-        <div class="order_value supplier_title">
-          <span class="supplier_name">
-            {{pickupPoints | marketPlaceJoiner: true}}
-          </span>
-        </div>
-      </div>
-      <div class="order_spec" *ngIf="deliveryZones?.length">
-        <div class="order_label">Зоны доставки:</div>
-        <div class="order_value supplier_title">
-          <span class="supplier_name">
-            {{deliveryZones | marketPlaceJoiner}}
-          </span>
-        </div>
-      </div>
-    </div>
-
     <nz-tabset class="" nzTabPosition="top" nzType="card" [nzSelectedIndex]="selectedTabIndex"
                (nzSelectedIndexChange)="changeSelectedTabIndex($event)">
 
@@ -82,8 +11,10 @@
         </div>
       </nz-tab>
 
-      <nz-tab nzTitle="{{isOrderType ? 'Данные для заказа' : 'Данные для запроса цен'}}" nzDisabled="{{isAnonymous}}">
+      <nz-tab nzTitle="{{isOrderType ? 'Данные для заказа' : 'Данные для запроса цен'}}"
+              [nzDisabled]="subjAnonymousOrAuthenticatedWithoutOrgsAndOfferWithRegistration">
         <div class="tab-content">
+          <ng-container *ngTemplateOutlet="orderInfo"></ng-container>
           <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
         </div>
       </nz-tab>
@@ -222,6 +153,111 @@
       </section>
     </ng-template>
 
+    <ng-template #orderInfo>
+      <div class="order_info">
+        <div class="order_spec"
+             *ngIf="abilityMakeOrderOrRequestForPrice || abilityRegisterMakeOrderOrRegisterRequestForPrice">
+          <div class="order_label">Заказчик:</div>
+
+          <div class="order__customer dropdown dropdown_selectable">
+
+            <div class="order__customer_current dropdown_control dropdown_control__arrow" nz-dropdown nzTrigger="click"
+                 *ngIf="abilityMakeOrderOrRequestForPrice && availableOrganizations?.length > 1"
+                 [nzDropdownMenu]="organizationsList" [nzOverlayClassName]="'upclose'">
+              <div class="supplier_title">
+                <div class="supplier_image">
+                  <div class="supplier_image-color" style="{{consumerINN | organizationLogo : true}}"></div>
+                </div>
+                <div class="supplier_name">
+                  {{consumerName | abbreviatedBusinessName}}
+                </div>
+              </div>
+              <nz-dropdown-menu #organizationsList="nzDropdownMenu">
+                <ul nz-menu style="width: 290px">
+                  <li nz-menu-item *ngFor="let organization of availableOrganizations"
+                      (click)="setConsumer(organization)">
+                    <div class="supplier_title" nz-dropdown nzTrigger="click" [nzDropdownMenu]="organizationsList">
+                      <div class="supplier_image">
+                        <div class="supplier_image-color"
+                             style="{{organization.legalRequisites.inn | organizationLogo : true}}"></div>
+                      </div>
+                      <div class="supplier_name">
+                        {{organization?.organizationName | abbreviatedBusinessName}}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </div>
+
+            <div class="order_value supplier_title"
+                 *ngIf="abilityMakeOrderOrRequestForPrice && availableOrganizations?.length === 1">
+              <div class="supplier_image">
+                <div class="supplier_image-color" style="{{consumerINN | organizationLogo : true}}"></div>
+              </div>
+              <div class="supplier_name">
+                {{consumerName | abbreviatedBusinessName}}
+              </div>
+            </div>
+
+            <div class="order_value supplier_title" *ngIf="abilityRegisterMakeOrderOrRegisterRequestForPrice">
+
+              <div class="supplier_image" *ngIf="enteredCustomerData">
+                <div class="supplier_image-color" style="{{enteredCustomerData.inn | organizationLogo : true}}"></div>
+              </div>
+              <div class="supplier_name" #elementDivConsumerName>
+                <button *ngIf="!enteredCustomerData"
+                        nz-button nzType="link"
+                        type="button" nzDanger
+                        (click)="openSearchCounterpartyModal()">Заполните данные заказчика
+                </button>
+
+                <button *ngIf="enteredCustomerData"
+                        nz-button nzType="text"
+                        type="button"
+                        (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order_spec" *ngIf="order?.supplier">
+          <div class="order_label">Поставщик:</div>
+          <div class="order_value supplier_title">
+            <div class="supplier_image">
+              <div class="supplier_image-color" style="{{supplierINN | organizationLogo : true}}"></div>
+            </div>
+            <div class="supplier_name">
+              {{supplierName | abbreviatedBusinessName}}
+            </div>
+          </div>
+        </div>
+        <div class="order_spec" *ngIf="pickupPoints?.length || deliveryZones?.length">
+          <div class="order_label">Доступные способы поставки:</div>
+          <div class="order_value supplier_title">
+          <span class="supplier_name">
+            {{deliveryMethods | marketArrayJoiner: 'label':'; '}}
+          </span>
+          </div>
+        </div>
+        <div class="order_spec" *ngIf="pickupPoints?.length">
+          <div class="order_label">Адреса самовывоза:</div>
+          <div class="order_value supplier_title">
+          <span class="supplier_name">
+            {{pickupPoints | marketPlaceJoiner: true}}
+          </span>
+          </div>
+        </div>
+        <div class="order_spec" *ngIf="deliveryZones?.length">
+          <div class="order_label">Зоны доставки:</div>
+          <div class="order_value supplier_title">
+          <span class="supplier_name">
+            {{deliveryZones | marketPlaceJoiner}}
+          </span>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
     <ng-template #orderDetails>
       <section id="section_tab__information" class="section_tab section_tab__limited">
         <div class="section_paragraph">
@@ -259,7 +295,6 @@
                   </ul>
                 </nz-dropdown-menu>
               </div>
-
             </div>
 
             <div class="order__shipping_type order__shipping_courier" [ngClass]="{'d-none': !selectedDelivery}">
@@ -268,7 +303,6 @@
                 <label>Укажите адрес доставки *</label>
 
                 <div class="wrapper_delivery_input" formGroupName="deliveryArea">
-
                   <input nz-input
                          #elementInputCity
                          id="city_delivery_address_input"
@@ -335,7 +369,6 @@
                 </ng-container>
               </div>
 
-
               <div class="form-group form-group-long desktop">
                 <label>Желаемая дата и время доставки</label>
 
@@ -367,7 +400,6 @@
                   </ListItem>
                 </List>
               </div>
-
             </div>
 
             <div class="order__shipping_form__title">Контактное лицо с вашей стороны</div>
@@ -450,7 +482,6 @@
               </ng-container>
             </div>
 
-
             <div class="form-group">
               <label for="commentForSupplier">Комментарий для поставщика</label>
               <div class="textarea-wrap">
@@ -512,7 +543,8 @@
       </div>
 
       <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="button" nzType="primary" (click)="checkForValidityAndCreateOrder()">
+        <button id="checkoutButton" nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()"
+                [disabled]="unavailableToOrder">
           {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
         <button nz-button nzType="link" type="button" (click)="navigationBack()"
@@ -523,7 +555,5 @@
         </button>
       </div>
     </div>
-
   </form>
-
 </div>

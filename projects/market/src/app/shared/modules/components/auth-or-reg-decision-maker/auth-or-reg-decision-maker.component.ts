@@ -8,15 +8,14 @@ import { MetrikaEventTypeModel } from '#shared/modules/common-services/models/me
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-auth-decision-maker',
-  templateUrl: './auth-decision-maker.component.html',
-  styleUrls: ['./auth-decision-maker.component.scss', './auth-decision-maker.component-400.scss'],
+  templateUrl: './auth-or-reg-decision-maker.component.html',
+  styleUrls: ['./auth-or-reg-decision-maker.component.scss', './auth-or-reg-decision-maker.component-400.scss'],
 })
-export class AuthDecisionMakerComponent {
+export class AuthOrRegDecisionMakerComponent {
   @Output() destroyModalChange: Subject<any> = new Subject();
-  @Input() description: string;
-  @Input() loginRedirectPath: string;
 
-  constructor(private _authService: AuthService, private _externalProvidersService: ExternalProvidersService) {}
+  constructor(private _authService: AuthService, private _externalProvidersService: ExternalProvidersService) {
+  }
 
   login(): void {
     const tag = {

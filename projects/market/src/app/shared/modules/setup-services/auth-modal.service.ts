@@ -3,17 +3,13 @@ import { AuthService } from '#shared/modules/common-services/auth.service';
 import { UserStateService } from '#shared/modules/common-services/user-state.service';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
-import { EmptyOrganizationsInfoComponent } from '../components/empty-organizations-info/empty-organizations-info.component';
-import { AuthDecisionMakerComponent } from '../components/auth-decision-maker/auth-decision-maker.component';
+import { AddOrgOrOrderDecisionMakerComponent } from '#shared/modules/components/add-org-or-order-decision-maker';
+import { AuthOrRegDecisionMakerComponent } from '#shared/modules/components/auth-or-reg-decision-maker';
+import { AuthOrOrderDecisionMakerComponent } from '#shared/modules/components/auth-or-order-decision-maker';
+import { EmptyOrganizationsInfoComponent } from '#shared/modules/components/empty-organizations-info';
 import { filter, switchMap, take, tap } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Location } from '@angular/common';
-import { fromEvent } from 'rxjs';
-
-/**
- * URL пути находящиеся под аутентификацией
- */
-const PATHS_WITH_AUTHORIZATION: RegExp[] = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/orders$/i];
 
 @Injectable()
 export class AuthModalService {
@@ -23,21 +19,31 @@ export class AuthModalService {
     private _userStateService: UserStateService,
     private _externalProvidersService: ExternalProvidersService,
     private _location: Location,
-  ) {}
+  ) {
+  }
 
-  openAuthDecisionMakerModal(description: string, loginRedirectPath: string = this._location.path()) {
-    const modal = this._modalService.create({
-      nzContent: AuthDecisionMakerComponent,
+  openAuthOrOrderDecisionMakerModal(isOrderType: boolean) {
+    return this._modalService.create({
+      nzContent: AuthOrOrderDecisionMakerComponent,
       nzFooter: null,
       nzWidth: 480,
       nzComponentParams: {
-        description,
-        loginRedirectPath,
+        isOrderType,
       },
     });
+  }
+
+  openAuthOrRegDecisionMakerModal(loginRedirectPath: string = this._location.path()) {
+    const modal = this._modalService.create({
+      nzContent: AuthOrRegDecisionMakerComponent,
+      nzFooter: null,
+      nzWidth: 480,
+    });
+
     modal.componentInstance.destroyModalChange.subscribe(() => {
       modal.destroy(true);
     });
+
     modal.afterClose
       .pipe(
         tap((res) => {
@@ -57,22 +63,28 @@ export class AuthModalService {
       });
   }
 
-  openEmptyOrganizationsInfoModal(description: string) {
-    const modal = this._modalService.create({
-      nzContent: EmptyOrganizationsInfoComponent,
+  openAddOrgOrOrderDecisionMakerModal(isOrderType: boolean) {
+    return this._modalService.create({
+      nzContent: AddOrgOrOrderDecisionMakerComponent,
       nzFooter: null,
-      nzComponentParams: {
-        description,
-      },
       nzWidth: 480,
-    });
-    modal.componentInstance.destroyModalChange.subscribe(() => {
-      modal.destroy();
+      nzComponentParams: {
+        isOrderType,
+      },
     });
   }
 
-  private _isPathWithAuth(pathsWithAuth: RegExp[], currentUrl: string): boolean {
-    const urlWithoutQueryParams = currentUrl.split('?')[0];
-    return pathsWithAuth.some((regEx) => regEx.test(urlWithoutQueryParams));
+
+  openEmptyOrganizationsInfoModal() {
+    const modal = this._modalService.create({
+      nzContent: EmptyOrganizationsInfoComponent,
+      nzFooter: null,
+      nzComponentParams: {},
+      nzWidth: 480,
+    });
+
+    modal.componentInstance.destroyModalChange.subscribe(() => {
+      modal.destroy();
+    });
   }
 }
