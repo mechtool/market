@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils/get-image';
 import { Highlightable } from '@angular/cdk/a11y';
 import { SearchAreaService } from '../../../../search-area.service';
@@ -8,13 +8,17 @@ import { SearchAreaService } from '../../../../search-area.service';
   templateUrl: './search-box-item.component.html',
   styleUrls: ['./search-box-item.component.scss'],
 })
-export class SearchBoxItemComponent implements Highlightable {
+export class SearchBoxItemComponent implements Highlightable, AfterViewInit {
   isActive = false;
   @Input() item: any;
   @Input() type: string;
   @Output() removeHistoricalSuggestionChanges: EventEmitter<string> = new EventEmitter();
 
   constructor(private _el: ElementRef, private _searchAreaService: SearchAreaService) {}
+
+  ngAfterViewInit() {
+    dispatchEvent(new CustomEvent('scroll'));
+  }
 
   setActiveStyles() {
     const text = (this.item.searchText || this.item.highlight).replace(/<[^>]+>/g, '');

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils/get-image';
 
 @Component({
@@ -7,7 +7,7 @@ import { absoluteImagePath, isAbsolutePathImg, isAssetsImg } from '#shared/utils
   styleUrls: ['./item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchBarItemComponent {
+export class SearchBarItemComponent implements AfterViewInit {
   @Input() routerLink: string[];
   @Input() img: string;
   @Input() imgAlt: string;
@@ -17,6 +17,10 @@ export class SearchBarItemComponent {
   @Output() cleanHistory: EventEmitter<string> = new EventEmitter();
 
   constructor() {
+  }
+
+  ngAfterViewInit() {
+    dispatchEvent(new CustomEvent('scroll'));
   }
 
   imageUrl(img): string {

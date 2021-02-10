@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -70,7 +71,7 @@ const VATS = {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CartOrderComponent implements OnInit, OnDestroy {
+export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('elementInputCity') elementInputCity: ElementRef;
   @ViewChild('elementInputStreet') elementInputStreet: ElementRef;
   @ViewChild('elementInputHouse') elementInputHouse: ElementRef;
@@ -310,6 +311,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     unsubscribeList([this.cartDataSubscription]);
+  }
+
+  ngAfterViewInit() {
+    dispatchEvent(new CustomEvent('scroll'));
   }
 
   checkForValidityAndCreateOrder() {

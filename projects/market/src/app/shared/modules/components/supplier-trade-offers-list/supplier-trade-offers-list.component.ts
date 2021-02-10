@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -26,7 +26,7 @@ import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
     './supplier-trade-offers-list.component-360.scss',
   ],
 })
-export class SupplierTradeOffersListComponent {
+export class SupplierTradeOffersListComponent implements AfterViewInit {
   @Input() supplier: SuppliersItemModel;
   @Input() tradeOffers: TradeOfferSummaryModel[];
   @Input() tradeOffersTotal: number;
@@ -43,6 +43,10 @@ export class SupplierTradeOffersListComponent {
 
   constructor(private _router: Router,
               private _localStorageService: LocalStorageService) {
+  }
+
+  ngAfterViewInit() {
+    dispatchEvent(new CustomEvent('scroll'));
   }
 
   minQuantity(matrix: TradeOfferPriceMatrixModel[], packageMultiplicity: number): number {
