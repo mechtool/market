@@ -179,26 +179,36 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "",
-            "baseUrl": "https://10.70.7.10:4200"
+            "baseUrl": "https://bnet-market-stage.1c.ru"
           },
           "configurations": {
             "dev": {
+              "protractorConfig": "e2e/protractor-dev.conf.js",
               "devServerTarget": "",
               "baseUrl": "http://market.legacy-api.dev.dept07"
             },
             "stage": {
+              "protractorConfig": "e2e/protractor-stage.conf.js",
               "devServerTarget": "",
               "baseUrl": "https://bnet-market-stage.1c.ru"
             },
             "production": {
+              "protractorConfig": "e2e/protractor-prod.conf.js",
               "devServerTarget": "",
               "baseUrl": "https://1c.market"
             },
             "denis": {
+              "protractorConfig": "e2e/protractor-stage.conf.js",
               "devServerTarget": "",
               "baseUrl": "https://10.70.2.97:4200"
             },
+            "ruslan": {
+              "protractorConfig": "e2e/protractor-stage.conf.js",
+              "devServerTarget": "",
+              "baseUrl": "https://10.70.7.10:4200"
+            },
             "remote": {
+              "protractorConfig": "e2e/protractor-prod.conf.js",
               "devServerTarget": "",
               "baseUrl": "https://market.1cbn.rus:4200"
             }

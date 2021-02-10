@@ -1,9 +1,8 @@
-import { by, element } from 'protractor';
+import { browser, by, element } from 'protractor';
+
+export const { userLogin, userPassword } = browser.params.credentials;
 
 export class LoginItsPage {
-
-  userLogin = 'testUser704';
-  userPassword = 'doNotChangePassword!';
 
   getLoginInput() {
     return element(by.css('.page .controls #username'));
@@ -15,12 +14,6 @@ export class LoginItsPage {
 
   getLoginButton() {
     return element(by.css('.page #loginButton'));
-  }
-
-  async authUser() {
-    await this.getLoginInput().sendKeys(this.userLogin);
-    await this.getPasswordInput().sendKeys(this.userPassword);
-    await this.getLoginButton().click();
   }
 
 }
