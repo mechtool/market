@@ -28,7 +28,7 @@ export class CartService {
   // Создание корзины
   createCart(): Observable<string> {
     return this._bnetService.createCart().pipe(
-      map((response) => response.headers.get('MarketplaceLink')),
+      map((response) => response.headers.get('marketplacelink')),
       tap((marketplaceLink) => {
         this.setCartLocationLink(marketplaceLink);
       }),

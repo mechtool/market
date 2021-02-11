@@ -2,7 +2,8 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService, ExternalProvidersService, MetrikaEventTypeModel } from '#shared/modules';
+import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
+import { ExternalProvidersService } from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
