@@ -28,9 +28,9 @@ export class CartService {
   // Создание корзины
   createCart(): Observable<string> {
     return this._bnetService.createCart().pipe(
-      map((response) => response.headers.get('Location')),
-      tap((cartLocationLink) => {
-        this.setCartLocationLink(cartLocationLink);
+      map((response) => response.headers.get('MarketplaceLink')),
+      tap((marketplaceLink) => {
+        this.setCartLocationLink(marketplaceLink);
       }),
     );
   }
@@ -57,9 +57,9 @@ export class CartService {
   }
 
   // Установка location корзины в сервисе
-  setCartLocationLink(cartLocationLink: string): void {
-    this._cartLocationLink$.next(cartLocationLink);
-    this._localStorageService.putCartLocationLink(cartLocationLink);
+  setCartLocationLink(marketplaceLink: string): void {
+    this._cartLocationLink$.next(marketplaceLink);
+    this._localStorageService.putCartLocationLink(marketplaceLink);
   }
 
   // Получение содержимого корзины из сервиса

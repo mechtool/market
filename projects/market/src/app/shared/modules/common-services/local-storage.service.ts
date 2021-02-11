@@ -143,8 +143,8 @@ export class LocalStorageService {
     return this._storage.get(CART_LOCATION_LINK_STORAGE_KEY);
   }
 
-  putCartLocationLink(catLocationLink: string): void {
-    this._storage.set(CART_LOCATION_LINK_STORAGE_KEY, catLocationLink);
+  putCartLocationLink(marketplaceLink: string): void {
+    this._storage.set(CART_LOCATION_LINK_STORAGE_KEY, marketplaceLink);
   }
 
   getUserAndCookiesAgreement(): boolean {
