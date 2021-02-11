@@ -4,4 +4,5 @@ export const environment = {
   itsUrl: 'https://login-dev.1c.ru',
   gtmID: 'GTM-TW5RXQF',
   production: false,
+  stage: true,
 };

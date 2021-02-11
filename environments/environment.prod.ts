@@ -5,4 +5,5 @@ export const environment = {
   gtmID: 'GTM-TW5RXQF',
   metrikaID: 67089850,
   production: true,
+  stage: false,
 };

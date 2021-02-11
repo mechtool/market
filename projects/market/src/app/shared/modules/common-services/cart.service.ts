@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
 import { CartDataResponseModel, CartModel, RelationEnumModel, } from './models';
+import { environment } from '#environments/environment';
 
 @Injectable()
 export class CartService {
@@ -96,6 +97,29 @@ export class CartService {
 
   // Заполнение location и содержимого корзины из сторейджа
   private _fillCartLocationAndDataFromStorage() {
-    this.setCartLocationLink(this._localStorageService.getCartLocationLink());
+    const cartLocationLink = this._localStorageService.getCartLocationLink();
+    // todo Данная логика нужна для того чтобы пользователь не потерял данные корзины из-за изменений в проекте
+    // todo УДАЛИТЬ ПОСЛЕ 15.03.2021 !!!!!!!!!!!!! Оставить только this.setCartLocationLink(this._localStorageService.getCartLocationLink());
+    if (cartLocationLink) {
+      if ((cartLocationLink.includes('docker1') || cartLocationLink.includes('docker2'))) {
+        this.setCartLocationLink(cartLocationLink);
+      } else {
+
+        const items = cartLocationLink.split('/');
+        const cartId = items[items.length - 1];
+
+        if (environment.production) {
+          this._localStorageService.putCartLocationLink(`http://bnet-docker1-datapro-msk.int.1s.ru:11010/shopping-carts/${cartId}`);
+        } else if (environment.stage) {
+          this._localStorageService.putCartLocationLink(`http://bnet-stage-docker1-datapro-msk.int.1s.ru:11010/shopping-carts/${cartId}`);
+        } else {
+          this._localStorageService.putCartLocationLink(null);
+        }
+
+        this.setCartLocationLink(this._localStorageService.getCartLocationLink());
+      }
+    } else {
+      this.setCartLocationLink(cartLocationLink);
+    }
   }
 }
