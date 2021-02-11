@@ -198,27 +198,27 @@ export class BNetService {
 
   getCart(cartLocation: string): Observable<CartDataResponseModel> {
     return this._apiService.get(`${API_URL}/shopping-carts`,
-      { headers: new HttpHeaders({ MarketplaceLink: cartLocation }) });
+      { headers: new HttpHeaders({ marketplacelink: cartLocation }) });
   }
 
   addItemToCart(relationHref: string, data: CartModel): Observable<any> {
     return this._http.post(`${API_URL}/shopping-carts/items`, data,
-      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
+      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
   }
 
   removeItemFromCart(relationHref: string): Observable<any> {
     return this._http.delete(`${API_URL}/shopping-carts/items`,
-      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
+      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
   }
 
   updateItemQuantityInCart(relationHref: string, data: CartModel): Observable<any> {
     return this._http.put(`${API_URL}/shopping-carts/items`, data,
-      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
+      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
   }
 
   marketplaceOffer(relationHref: string, data: CartModel): Observable<any> {
     return this._http.post(`${API_URL}/shopping-carts/marketplace-offer`, data,
-      { headers: new HttpHeaders({ MarketplaceLink: relationHref }) });
+      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
   }
 
   getOrders(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
