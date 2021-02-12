@@ -96,6 +96,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   foundHouses: string[];
   minDate = new Date();
   enteredCustomerData: any;
+  customerNotSelected: boolean;
   private _foundLocations: LocationModel[];
   private _validDeliveryFiasCode: string[];
   private _cartDataSubscription: Subscription;
@@ -455,6 +456,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.isNotFilledCustomerData) {
+          this.customerNotSelected = true;
           this.elementDivConsumerName?.nativeElement.scrollIntoView({ block: 'center', inline: 'nearest' });
         }
       }

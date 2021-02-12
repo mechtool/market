@@ -206,16 +206,17 @@
                 <div class="supplier_image-color" style="{{enteredCustomerData.inn | organizationLogo : true}}"></div>
               </div>
               <div class="supplier_name" #elementDivConsumerName>
-                <button *ngIf="!enteredCustomerData"
-                        nz-button nzType="link"
-                        type="button" nzDanger
+                <button class="customer_btn"
+                        [ngClass]="{'not-valid': customerNotSelected}"
+                        *ngIf="!enteredCustomerData" nz-button
                         (click)="openSearchCounterpartyModal()">Заполнить данные заказчика
                 </button>
 
                 <button *ngIf="enteredCustomerData"
                         nz-button nzType="text"
                         type="button"
-                        (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}</button>
+                        (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}
+                </button>
               </div>
             </div>
           </div>

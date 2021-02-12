@@ -1136,8 +1136,9 @@ nz-date-picker {
   left: 500px;
 }
 
-.ant-btn-text,
-.ant-btn-dangerous.ant-btn-link {
+.ant-btn-text {
+  padding-left: 0;
+  padding-right: 0;
   font-weight: 500;
   font-size: var(--font-size-14);
   height: auto;
@@ -1147,13 +1148,18 @@ nz-date-picker {
   }
 }
 
-.ant-btn-dangerous.ant-btn-link {
-  border: 1px solid #ff4d4f;
-  padding-left: 5px;
-  padding-right: 5px;
-}
+.customer_btn {
+  height: auto;
+  background-color: var(--color-accent-light);
+  padding: 4px 10px;
+  border-radius: 2px;
+  color: var(--color-primary);
+  font-size: var(--font-size-12);
+  font-style: normal;
+  border: 1px solid var(--color-accent-light);
 
-.ant-btn-text {
-  padding-left: 0;
-  padding-right: 0;
+  &.not-valid {
+    background-color: var(--color-accent-secondary);
+    border: 1px solid var(--color-accent-secondary);
+  }
 }
