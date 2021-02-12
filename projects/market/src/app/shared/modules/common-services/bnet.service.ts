@@ -36,7 +36,7 @@ import {
   UpdateOrganizationRequestModel,
   UserOrganizationModel,
 } from './models';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { ApiWorkerService } from './api-worker.service';
 
 const API_URL = environment.apiUrl;
@@ -196,29 +196,24 @@ export class BNetService {
     return this._http.post(`${API_URL}/shopping-carts`, null, { observe: 'response' });
   }
 
-  getCart(cartLocation: string): Observable<CartDataResponseModel> {
-    return this._apiService.get(`${API_URL}/shopping-carts`,
-      { headers: new HttpHeaders({ marketplacelink: cartLocation }) });
+  getCart(link: string): Observable<CartDataResponseModel> {
+    return this._apiService.get(link);
   }
 
-  addItemToCart(relationHref: string, data: CartModel): Observable<any> {
-    return this._http.post(`${API_URL}/shopping-carts/items`, data,
-      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
+  addItemToCart(link: string, data: CartModel): Observable<any> {
+    return this._apiService.post(link, data);
   }
 
-  removeItemFromCart(relationHref: string): Observable<any> {
-    return this._http.delete(`${API_URL}/shopping-carts/items`,
-      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
+  removeItemFromCart(link: string): Observable<any> {
+    return this._apiService.delete(link);
   }
 
-  updateItemQuantityInCart(relationHref: string, data: CartModel): Observable<any> {
-    return this._http.put(`${API_URL}/shopping-carts/items`, data,
-      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
+  updateItemQuantityInCart(link: string, data: CartModel): Observable<any> {
+    return this._apiService.put(link, data);
   }
 
-  marketplaceOffer(relationHref: string, data: CartModel): Observable<any> {
-    return this._http.post(`${API_URL}/shopping-carts/marketplace-offer`, data,
-      { headers: new HttpHeaders({ marketplacelink: relationHref }) });
+  marketplaceOffer(link: string, data: CartModel): Observable<any> {
+    return this._apiService.post(link, data);
   }
 
   getOrders(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
