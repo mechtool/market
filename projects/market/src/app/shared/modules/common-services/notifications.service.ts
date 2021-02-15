@@ -6,7 +6,7 @@ export class NotificationsService {
   constructor(private _messageService: NzMessageService) {}
 
   info(message: string) {
-    this._messageService.info(message);
+    this._messageService.info(message, { nzDuration: 5000 });
   }
 
   success(message: string) {
@@ -14,6 +14,6 @@ export class NotificationsService {
   }
 
   error(message: string) {
-    this._messageService.error(message);
+    this._messageService.error(message, { nzDuration: 5000 });
   }
 }

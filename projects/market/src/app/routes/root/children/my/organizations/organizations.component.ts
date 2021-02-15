@@ -2,7 +2,7 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { OrganizationsService } from '#shared/modules/common-services/organizations.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { UserService } from '#shared/modules/common-services/user.service';
@@ -18,13 +18,23 @@ import { LocalStorageService } from '#shared/modules';
 
 type TabType = 'a' | 'b' | 'c';
 
+class RegNotAllowError implements Error {
+  message: string;
+  name: string;
+
+  constructor(message: string, name?: string) {
+    this.message = message
+    this.name = name
+  }
+}
+
 @Component({
   templateUrl: './organizations.component.html',
   styleUrls: ['./organizations.component.scss', './organizations.component-768.scss', './organizations.component-576.scss'],
 })
 export class OrganizationsComponent implements OnInit {
   existingOrganization: OrganizationResponseModel = null;
-  checkedLegalRequisites = {};
+  checkedLegalRequisites = null;
   newSentRequests: number;
   private _activeTabType: TabType;
 
@@ -194,7 +204,7 @@ export class OrganizationsComponent implements OnInit {
   }
 
   private _createRequisitesCheckerModal() {
-    let localCheckedLegalRequisites = null;
+    let legalRequisites = null;
     const modal = this._modalService.create({
       nzContent: RequisitesCheckerComponent,
       nzViewContainerRef: this._viewContainerRef,
@@ -209,40 +219,55 @@ export class OrganizationsComponent implements OnInit {
     const subscription = modal.componentInstance.legalRequisitesChange
       .pipe(
         switchMap((res) => {
-          localCheckedLegalRequisites = {
+          legalRequisites = {
             inn: res?.inn,
             kpp: res?.kpp,
           };
           const legalId = innKppToLegalId(res?.inn, res?.kpp);
           return this._organizationsService.getOrganizationByLegalId(legalId);
         }),
+        switchMap((organization) => {
+          if (this._hasOrganizationAccess(organization)) {
+            this._setActiveTabType('a');
+            return throwError(new RegNotAllowError(`Вы уже имеете доступ к организации с ИНН: ${legalRequisites.inn}${legalRequisites.kpp ? ` КПП: ${legalRequisites.kpp}` : ''}.`));
+          }
+
+          if (this._hasAlreadyRequest(legalRequisites)) {
+            this._setActiveTabType('b');
+            return throwError(new RegNotAllowError(`Ранее вы уже сформировли запрос на прикрепление к организации с ИНН: ${legalRequisites.inn}${legalRequisites.kpp ? ` КПП: ${legalRequisites.kpp}` : ''}.`));
+          }
+          return of(organization);
+        })
       )
-      .subscribe(
-        (res) => {
-          if (res) {
-            const userOrganizationsIds = this._userService.organizations$.value.map((org) => org.organizationId) || [];
-            if (userOrganizationsIds.includes(res.id)) {
-              this._notificationsService.info('Вы уже имеете доступ к данной организации');
-            }
-            if (!userOrganizationsIds.includes(res.id)) {
-              modal.destroy(true);
-              subscription.unsubscribe();
-              this._setActiveTabType('c');
-              this.existingOrganization = res;
-            }
-          }
-          if (!res) {
-            modal.destroy(true);
-            subscription.unsubscribe();
-            this.existingOrganization = null;
-            this._setActiveTabType('c');
-            this.checkedLegalRequisites = localCheckedLegalRequisites;
-          }
+      .subscribe((organization) => {
+          modal.destroy(true);
+          subscription.unsubscribe();
+          this.existingOrganization = organization;
+          this.checkedLegalRequisites = legalRequisites;
+          this._setActiveTabType('c');
         },
         (err) => {
-          this._notificationsService.error('Произошла ошибка при получении информации об организации');
+          subscription.unsubscribe();
+          modal.destroy(true);
+
+          if (err instanceof RegNotAllowError) {
+            this._notificationsService.info(err.message);
+          } else {
+            this._notificationsService.error('Произошла ошибка при получении информации об организации');
+          }
         },
       );
+  }
+
+  private _hasOrganizationAccess(organization: OrganizationResponseModel) {
+    return organization && this._userService.organizations$.getValue().some((item) => item.organizationId === organization.id);
+  }
+
+  private _hasAlreadyRequest(legalRequisites) {
+    return this._userService.ownParticipationRequests$.getValue().some((part) =>
+      part.requestStatus.resolutionStatus === 'PENDING' &&
+      part.organization.legalRequisites.inn === legalRequisites.inn &&
+      (!legalRequisites.kpp || part.organization.legalRequisites.kpp === legalRequisites.kpp));
   }
 
   private _setActiveTabType(tabType: TabType) {
