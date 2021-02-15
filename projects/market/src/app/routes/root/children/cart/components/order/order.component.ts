@@ -94,6 +94,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   foundCities: string[];
   foundStreets: string[];
   foundHouses: string[];
+  currentDate = Date.now();
   minDate = new Date();
   enteredCustomerData: any;
   customerNotSelected: boolean;

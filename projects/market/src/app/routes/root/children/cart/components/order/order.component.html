@@ -207,15 +207,15 @@
               </div>
               <div class="supplier_name" #elementDivConsumerName>
                 <button class="customer_btn"
-                        [ngClass]="{'not-valid': customerNotSelected}"
-                        *ngIf="!enteredCustomerData" nz-button
-                        (click)="openSearchCounterpartyModal()">Заполнить данные заказчика
+                  [ngClass]="{'not-valid': customerNotSelected}"
+                  *ngIf="!enteredCustomerData" nz-button
+                  (click)="openSearchCounterpartyModal()">Заполнить данные заказчика
                 </button>
 
                 <button *ngIf="enteredCustomerData"
-                        nz-button nzType="text"
-                        type="button"
-                        (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}
+                  nz-button nzType="text"
+                  type="button"
+                  (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}
                 </button>
               </div>
             </div>
@@ -308,7 +308,8 @@
                          #elementInputCity
                          id="city_delivery_address_input"
                          formControlName="deliveryCity"
-                         autocomplete="false"
+                         name="{{currentDate}}_deliveryCity"
+                         autocomplete="chrome-off"
                          list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.selectedCityIsNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
@@ -325,7 +326,8 @@
                          #elementInputStreet
                          id="street_delivery_address_input"
                          formControlName="deliveryStreet"
-                         autocomplete="false"
+                         name="{{currentDate}}_deliveryStreet"
+                         autocomplete="chrome-off"
                          list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
@@ -342,7 +344,8 @@
                          #elementInputHouse
                          id="house_delivery_address_input"
                          formControlName="deliveryHouse"
-                         autocomplete="false"
+                         name="{{currentDate}}_deliveryHouse"
+                         autocomplete="chrome-off"
                          list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
@@ -411,7 +414,8 @@
                 #elementInputContactName
                 type="text"
                 id="contactName"
-                autocomplete="false"
+                name="{{currentDate}}_contactName"
+                autocomplete="chrome-off"
                 list="null"
                 [ngClass]="{'error': form.controls.contactName.invalid && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
                 formControlName="contactName">
@@ -437,7 +441,8 @@
                 #elementInputContactPhone
                 type="text"
                 id="contactPhone"
-                autocomplete="false"
+                name="{{currentDate}}_contactPhone"
+                autocomplete="chrome-off"
                 list="null"
                 [ngClass]="{'error': form.controls.contactPhone.invalid && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
                 prefix="+7"
@@ -462,7 +467,8 @@
                 #elementInputContactEmail
                 type="email"
                 id="contactEmail"
-                autocomplete="false"
+                name="{{currentDate}}_contactEmail"
+                autocomplete="chrome-off"
                 list="null"
                 [ngClass]="{'error': form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
                 formControlName="contactEmail">
