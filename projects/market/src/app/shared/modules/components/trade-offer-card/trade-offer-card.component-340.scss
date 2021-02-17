@@ -14,27 +14,21 @@
       margin-right: 10px;
     }
 
+    &__count,
     &__price {
-      border-left: 1px solid #e0e0e0;
-      border-top: none;
-      border-top-right-radius: 0;
-      border-bottom-left-radius: 3px;
+      width: 50%;
+      margin-right: -15px;
+    }
+
+    &__count,
+    &__link &__count.tooltip {
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 3px;
+      width: 50%;
     }
   }
 
   .catalog_suppliers .catalog_item__info {
     max-width: 110px;
-  }
-
-  .catalog_item__count,
-  .catalog_item__price {
-    width: 50%;
-    margin-right: -15px;
-  }
-
-  .catalog_item__count,
-  .catalog_item__link .catalog_item__count.tooltip {
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 3px;
   }
 }

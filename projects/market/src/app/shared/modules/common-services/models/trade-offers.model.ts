@@ -23,6 +23,7 @@ export class TradeOffersModel {
   orderPlacingReference: string;
   offerDescription: TradeOfferDescriptionModel;
   audience: AudienceModel[];
+  deliveryDescription: OfferDeliveryDescriptionModel;
 }
 
 export class TradeOffersSupplierModel {
@@ -31,4 +32,19 @@ export class TradeOffersSupplierModel {
   legalId: string;
   inn: string;
   kpp: string;
+}
+
+export class OfferDeliveryDescriptionModel {
+  deliveryRegions: OfferDeliveryRegionsModel[];
+  pickupFrom: OfferPickupFromModel[];
+}
+
+export class OfferDeliveryRegionsModel {
+  name: string;
+  countryOksmCode: string;
+}
+
+export class OfferPickupFromModel {
+  address: string;
+  countryOksmCode: string;
 }

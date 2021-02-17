@@ -11,7 +11,7 @@
       <span class="info_group__label">В упаковке</span>
       <span class="info_group__value">{{packaging}}</span>
     </div>
-    <div class="info_group" *ngIf="tradeOffer.termsOfSale.price?.matrix?.length">
+    <div class="info_group" *ngIf="minQuantity">
       <span class="info_group__label">Заказ возможен</span>
       <span class="info_group__value">{{minQuantity}}</span>
     </div>

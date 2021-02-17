@@ -52,6 +52,34 @@
       margin-bottom: 15px;
       margin-top: 10px;
     }
+
+    &__delivery {
+      display: none;
+
+      &_png {
+        display: block;
+        height: 22px;
+
+        margin-left: 55px;
+        bottom: 20px;
+        top: auto;
+        position: absolute;
+      }
+    }
+
+    &__pickup {
+      display: none;
+
+      &_png {
+        display: block;
+        height: 22px;
+
+        margin-left: 25px;
+        bottom: 20px;
+        top: auto;
+        position: absolute;
+      }
+    }
   }
 
   .catalog_suppliers .catalog_item__img {
@@ -73,7 +101,7 @@
   .catalog_item__link .tooltip_wrap {
     left: 20px;
     top: auto;
-    bottom: 70px;
+    bottom: 50px;
   }
 
   .catalog_item__link .discount {

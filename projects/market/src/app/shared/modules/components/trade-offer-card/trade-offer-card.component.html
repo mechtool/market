@@ -36,6 +36,19 @@
        src="./assets/img/svg/discount.svg" alt="Скидки"
        nz-tooltip
        nzTooltipTitle="Поставщик установил скидку на торговое предложение">
+
+  <span class="catalog_item__delivery" *ngIf="deliveryRegionsShortList; else elseDeliveryBlock"
+        nz-tooltip
+        [nzTooltipTitle]="deliveryRegionsShortList"><strong>Доставка:</strong> {{deliveryRegionsShortList}}</span>
+
+  <img class="catalog_item__delivery_png" *ngIf="deliveryRegionsShortList" src="./assets/img/delivery/delivery.png" alt="Доставка">
+
+  <span class="catalog_item__pickup" *ngIf="pickupFromShortList; else elsePickupBlock"
+        nz-tooltip
+        [nzTooltipTitle]="pickupFromShortList"><strong>Самовывоз:</strong> {{pickupFromShortList}}</span>
+
+  <img class="catalog_item__pickup_png" *ngIf="pickupFromShortList" src="./assets/img/delivery/pickup.png" alt="Самовывоз">
+
 </a>
 
 <ng-template #elsePriceBlock>
@@ -48,4 +61,12 @@
   <span class="catalog_item__count tooltip"
         nz-tooltip
         nzTooltipTitle="У торгового предложения не указаны складские остатки, это не мешает отправить заказ поставщику">не указано</span>
+</ng-template>
+
+<ng-template #elseDeliveryBlock>
+  <span class="catalog_item__delivery"><strong>Доставка:</strong> Отсутствует</span>
+</ng-template>
+
+<ng-template #elsePickupBlock>
+  <span class="catalog_item__pickup"><strong>Самовывоз:</strong> Отсутствует</span>
 </ng-template>

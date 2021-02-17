@@ -1,6 +1,7 @@
 import { AudienceModel } from './audience-model';
-import { TradeOffersModel } from './trade-offers.model';
-import { TradeOfferStockEnumModel } from '#shared/modules';
+import { OfferDeliveryDescriptionModel, TradeOffersModel } from './trade-offers.model';
+import { TradeOfferStockEnumModel } from './trade-offer-stock-enum.model';
+import { CountryCode } from './location.model';
 
 export class TradeOfferDto {
   id: string;
@@ -13,6 +14,8 @@ export class TradeOfferDto {
   supplierName?: string;
   supplierInn?: string;
   audience?: AudienceModel[];
+  deliveryRegions?: string[];
+  pickupFrom?: string[];
   hasDiscount?: boolean;
 
   static fromTradeOffer(offer: TradeOffersModel): TradeOfferDto {
@@ -27,7 +30,24 @@ export class TradeOfferDto {
       supplierName: offer.supplier?.name,
       supplierInn: offer.supplier?.inn,
       audience: offer.audience,
+      deliveryRegions: TradeOfferDto._mapDeliveryRegions(offer.deliveryDescription),
+      pickupFrom: TradeOfferDto._mapPickupFrom(offer.deliveryDescription),
       hasDiscount: offer.priceMatrix?.some((matrix) => matrix.priceBeforeDiscount),
     };
+  }
+
+
+  private static _mapDeliveryRegions(deliveryDescription: OfferDeliveryDescriptionModel): string[] {
+    if ((!deliveryDescription?.pickupFrom && !deliveryDescription?.deliveryRegions) ||
+      deliveryDescription?.deliveryRegions?.some((dr) => dr.countryOksmCode === CountryCode.RUSSIA && !dr.name)) {
+
+      return ['По всей России']
+    }
+
+    return deliveryDescription?.deliveryRegions?.map((dr) => dr.name);
+  }
+
+  private static _mapPickupFrom(deliveryDescription: OfferDeliveryDescriptionModel): string[] {
+    return deliveryDescription?.pickupFrom?.map((pf) => pf.address);
   }
 }

@@ -19,18 +19,14 @@ export class TermsOfSaleComponent {
 
   get packaging(): string | number {
     const units = this.tradeOffer.termsOfSale.packaging.unitsNumerator / this.tradeOffer.termsOfSale.packaging.unitsDenominator;
-    if (this.tradeOffer.termsOfSale.packaging.description) {
-      return `${units} ${this.tradeOffer.termsOfSale.packaging.description.toLowerCase()}`;
-    }
-    return `${units} шт.`;
+    const product = this.tradeOffer.product.ref1cNomenclature || this.tradeOffer.product.supplierNomenclature;
+    return `${units} ${product.baseUnitOkei?.nsymb}.`;
   }
 
   get packageMultiplicity(): string | number {
     const packageMultiplicity = this.tradeOffer.termsOfSale.packageMultiplicity;
-    if (this.tradeOffer.termsOfSale.packaging.description) {
-      return `${packageMultiplicity} ${this.tradeOffer.termsOfSale.packaging.description.toLowerCase()}`;
-    }
-    return `${packageMultiplicity} шт.`;
+    const product = this.tradeOffer.product.ref1cNomenclature || this.tradeOffer.product.supplierNomenclature;
+    return `${packageMultiplicity} ${product.baseUnitOkei?.nsymb}.`;
   }
 
   get minQuantity(): string {
@@ -39,10 +35,8 @@ export class TermsOfSaleComponent {
         .sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
 
       if (fromPackages > 1) {
-        if (this.tradeOffer.termsOfSale.packaging.description) {
-          return `от ${fromPackages} ${this.tradeOffer.termsOfSale.packaging.description.toLowerCase()}`;
-        }
-        return `от ${fromPackages} шт.`;
+        const product = this.tradeOffer.product.ref1cNomenclature || this.tradeOffer.product.supplierNomenclature;
+        return `от ${fromPackages} ${product.baseUnitOkei?.nsymb}.`;
       }
     }
     return null;

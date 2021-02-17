@@ -1,6 +1,27 @@
 @media all and (max-width: 400px) {
 
-  .catalog_item__img {
-    margin-right: 20px;
+  .catalog_item {
+    &__img {
+      margin-right: 20px;
+    }
+
+    &__count,
+    &__link &__count.tooltip {
+      width: 60%;
+    }
+
+    &__info {
+      width: 160px;
+      margin-left: auto;
+      margin-right: -30px;
+      flex-direction: column;
+    }
+
+    &__price {
+      border-left: 1px solid #e0e0e0;
+      border-top: none;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 3px;
+    }
   }
 }
