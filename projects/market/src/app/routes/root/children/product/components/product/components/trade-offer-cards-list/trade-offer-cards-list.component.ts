@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LocalStorageService, SortModel, TradeOfferDto } from '#shared/modules';
+import { LocalStorageService, Megacity, SortModel, TradeOfferDto } from '#shared/modules';
 
 @Component({
   selector: 'market-trade-offer-cards-list',
@@ -24,6 +24,9 @@ export class TradeOfferCardsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this._localStorageService.hasUserLocation()) {
+      this._localStorageService.putUserLocation(Megacity.RUSSIA);
+    }
     this.userRegion = this._localStorageService.getUserLocation().name;
   }
 

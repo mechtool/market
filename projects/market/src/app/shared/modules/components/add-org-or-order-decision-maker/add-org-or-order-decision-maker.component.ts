@@ -24,7 +24,7 @@ export class AddOrgOrOrderDecisionMakerComponent implements OnInit {
 
   ngOnInit(): void {
     this.description = `Для оформления ${this.isOrderType ? 'заказа' : 'запроса цен'} необходимо зарегистрировать в сервисе "1С:Торговая площадка" вашу организацию.
-    Также вы можете оформить ${this.isOrderType ? 'заказ' : 'запрос цен'} без регистрации.`;
+    Также вы можете оформить ${this.isOrderType ? 'заказ' : 'запрос цен'} без регистрации и зарегистрировать организацию позднее.`;
   }
 
   registerAndMakeOrder() {

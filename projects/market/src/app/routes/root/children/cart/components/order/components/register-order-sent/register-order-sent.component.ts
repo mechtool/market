@@ -26,7 +26,7 @@ export class RegisterOrderSentComponent implements OnInit {
 
   ngOnInit(): void {
     this.title = `${this.isOrderType ? 'Заказ' : 'Запрос цен'} отправлен поставщику`;
-    this.description = `Отследить статус ${this.isOrderType ? 'заказа' : 'запроса цен'} или получить выставленный поставщиком счет
+    this.description = `Отследить статус ${this.isOrderType ? 'заказа' : 'запроса цен'} и получить выставленный поставщиком счет
     вы можете в разделе «Мои заказы». Для этого зарегистрируйтесь.`;
   }
 
