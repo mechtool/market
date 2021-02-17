@@ -48,7 +48,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     ScrollingModule,
     SpinnerModule,
     ClickOutsideModule,
-    SharedDepsModule
+    SharedDepsModule,
   ],
   declarations: [
     SearchAreaComponent,

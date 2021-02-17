@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Inject,
@@ -17,7 +16,7 @@ import {
   priceRangeConditionValidator,
   supplierNameConditionValidator,
 } from './search-filter-conditions.validator';
-import { BehaviorSubject, of, Subscription } from 'rxjs';
+import { BehaviorSubject, merge, of, Subscription } from 'rxjs';
 import { getPropValueByPath, unsubscribeList } from '#shared/utils';
 import {
   catchError,
@@ -26,6 +25,7 @@ import {
   distinctUntilChanged,
   expand,
   filter,
+  map,
   pairwise,
   startWith,
   switchMap,
@@ -75,6 +75,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   form: FormGroup;
   availableCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   filteredCategories: CategoryModel[] = null;
+  isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
 
   get features(): FormArray {
     return this.form?.controls?.features as FormArray;
@@ -124,14 +125,13 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     @Inject(FILTER_FORM_CONFIG) private _filterFormConfig: FilterFormConfigModel,
     private _searchAreaService: SearchAreaService,
     private _fb: FormBuilder,
-    private _cdr: ChangeDetectorRef,
     private _notificationsService: NotificationsService,
-  ) {
-  }
+  ) {}
 
   resetControl(controlName: string) {
     this.form.get(controlName).patchValue(this._filterFormConfig[controlName]);
   }
+
 
   ngOnInit() {
     if (!this.serviceForm.get('filters')) {
@@ -370,8 +370,35 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _refreshForm(): void {
-    this._refreshFormSubscription = this.form.valueChanges
-      .pipe(debounceTime(this._searchAreaService.debounceTime), startWith(null), pairwise())
+    const controlsWithPlaceholderNames = ['supplier.name', 'location.name', 'tradeMark', 'categorySearchQuery'];
+    const controlsWithoutPlaceholderNames = [
+      'supplier.id', 'supplier.isSelected', 'location.fias', 'location.isSelected', 'isDelivery', 'isPickup', 'inStock',
+      'withImages', 'hasDiscount', 'features', 'featuresData', 'priceFrom', 'priceTo', 'subCategoryId',
+    ];
+    const controlsWithPlaceholder$ = controlsWithPlaceholderNames.map((ctrlName) => {
+      return this.form.get(ctrlName).valueChanges.pipe(
+        filter((val, ind) => {
+          return !this.isIE || (this.isIE && ind > 0);
+        })
+      );
+    });
+    const controlsWithoutPlaceholder$ = controlsWithoutPlaceholderNames.map((ctrlName) => {
+      return this.form.get(ctrlName).valueChanges;
+    });
+
+
+    const formChanges$ = merge(...[...controlsWithPlaceholder$, ...controlsWithoutPlaceholder$]).pipe(
+      map(() => this.form.value)
+    );
+
+
+    this._refreshFormSubscription = formChanges$
+      .pipe(
+        debounceTime(this._searchAreaService.debounceTime),
+        startWith(null),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+        pairwise()
+      )
       .subscribe((res) => {
         this.form.patchValue(this.form.value, { emitEvent: false, onlySelf: true });
         this._updateModifiedFiltersCounter();
@@ -415,8 +442,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           if (locationName === '') {
             this._searchAreaService.removeUserLocation();
           }
-          this.form.get('location.isSelected').patchValue(false, { emitEvent: false, onlySelf: true });
-          this.form.get('location.fias').patchValue('', { emitEvent: false, onlySelf: true });
         }),
         switchMap((locationName) => {
           const foundMegaCity = Megacity.ALL.find((x) => {
@@ -506,9 +531,9 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       const userLocation = this._searchAreaService.getUserLocation();
 
       if (userLocation) {
-        this.form.get('location.isSelected').patchValue(true, { emitEvent: false, onlySelf: false });
-        this.form.get('location.name').patchValue(userLocation?.name || '', { emitEvent: false, onlySelf: false });
-        this.form.get('location.fias').patchValue(userLocation?.fias || '', { emitEvent: false, onlySelf: false });
+        this.form.get('location.isSelected').patchValue(true, { emitEvent: false, onlySelf: true });
+        this.form.get('location.name').patchValue(userLocation?.name || '', { emitEvent: false, onlySelf: true });
+        this.form.get('location.fias').patchValue(userLocation?.fias || '', { emitEvent: false, onlySelf: true });
       }
     }
   }
@@ -525,8 +550,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       )
       .subscribe(
         (org) => {
-          this.form.get('supplier.isSelected').patchValue(true, { emitEvent: false, onlySelf: false });
-          this.form.get('supplier.name').patchValue(org?.name || '', { emitEvent: false, onlySelf: false });
+          this.form.get('supplier.isSelected').patchValue(true, { emitEvent: false, onlySelf: true });
+          this.form.get('supplier.name').patchValue(org?.name || '', { emitEvent: false, onlySelf: true });
         },
         () => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');

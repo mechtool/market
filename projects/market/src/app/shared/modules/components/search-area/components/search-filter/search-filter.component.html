@@ -1,4 +1,4 @@
-<div class="sf scrollbar" [ngClass]="{'sf_collapsed': filterCollapsed}" [formGroup]="form">
+<div class="sf scrollbar" [ngClass]="{'sf_collapsed': filterCollapsed}" [formGroup]="form" novalidate>
 
   <div class="header">
     <div class="title">Фильтр для поиска</div>
@@ -16,19 +16,22 @@
       formGroupName="location">
       <nz-form-control>
         <nz-form-label nzFor="{{componentId}}_location">Регион поставки</nz-form-label>
+
         <nz-input-group [nzSuffix]="regionClearTpl">
-          <input nz-input type="text"
-                 [ngClass]="{'error': false}"
-                 autocomplete="false"
-                 list="null"
-                 id="{{componentId}}_location"
-                 placeholder="Россия"
-                 formControlName="name"
-                 (keyup.enter)="selectLocationOnEnter()"
-                 (focus)="locationEl.dataset.focused = 'focused'"
-                 (blur)="locationEl.removeAttribute('data-focused')"
-                 [nzAutocomplete]="locationAutocompleteTpl"
-                 #locationEl>
+          <input
+            nz-input
+            type="text"
+            [ngClass]="{'error': false}"
+            autocomplete="false"
+            list="null"
+            id="{{componentId}}_location"
+            placeholder="Россия"
+            formControlName="name"
+            (keyup.enter)="selectLocationOnEnter()"
+            (focus)="locationEl.dataset.focused = 'focused'"
+            (blur)="locationEl.removeAttribute('data-focused')"
+            [nzAutocomplete]="locationAutocompleteTpl"
+            #locationEl>
         </nz-input-group>
 
         <nz-autocomplete nzBackfill #locationAutocompleteTpl>
@@ -171,12 +174,15 @@
         <div class="categories_header">
           <nz-form-control>
             <nz-form-label nzFor="{{componentId}}_category">Поиск подкатегории</nz-form-label>
-            <input nz-input type="text"
-                   autocomplete="false"
-                   list="null"
-                   id="{{componentId}}_category"
-                   placeholder="Искать подкатегорию"
-                   formControlName="categorySearchQuery">
+            <input
+              #categorySearchQueryEl
+              nz-input
+              type="text"
+              autocomplete="false"
+              list="null"
+              id="{{componentId}}_category"
+              placeholder="Искать подкатегорию"
+              formControlName="categorySearchQuery">
           </nz-form-control>
         </div>
 

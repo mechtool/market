@@ -102,9 +102,12 @@ cssVarsPonyfill({
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-(window as any).__Zone_enable_cross_context_check = true;
+if (document['documentMode'] || /Edge/.test(navigator.userAgent)) {
+  (window as any).__Zone_enable_cross_context_check = true;
+}
 import 'zone.js/dist/zone'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+

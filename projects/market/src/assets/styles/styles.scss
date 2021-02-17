@@ -33,6 +33,8 @@ body {
   font-weight: normal;
   margin: 0;
   padding: 0;
+  overflow-y: scroll;
+  overflow: auto;
 }
 
 a img {
@@ -108,6 +110,7 @@ button.btn {
   border-radius: 2px;
   background-color: #ffffff;
   color: var(--color-black);
+  height: 40px;
   min-height: 40px;
   line-height: 40px;
   border: 1px solid #e0e0e0;
@@ -138,6 +141,10 @@ button.btn {
 a.btn_bordered,
 button.btn_bordered {
   border-radius: 6px;
+}
+
+.cdk-global-custom-scrollblock {
+  overflow: hidden;
 }
 
 .overlay-backdrop-dark {
