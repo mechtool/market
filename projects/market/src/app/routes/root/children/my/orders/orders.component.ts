@@ -77,7 +77,7 @@ export class OrdersComponent implements OnDestroy {
         (documents) => {
           this._spinnerService.hide();
           if (documents?.length) {
-            this.accountDocuments.push(...documents.map((doc) => DocumentDto.forOrder(doc)));
+            this.accountDocuments.push(...documents.map((doc) => DocumentDto.forAccount(doc)));
           } else {
             this.isNotEmptyAccountDocumentsResponse = false;
           }
@@ -111,7 +111,7 @@ export class OrdersComponent implements OnDestroy {
     this._ediService.getAccounts(this.pageAccountDocuments, PAGE_SIZE).subscribe(
       (documents) => {
         this._spinnerService.hide();
-        this.accountDocuments = documents.map((doc) => DocumentDto.forOrder(doc));
+        this.accountDocuments = documents.map((doc) => DocumentDto.forAccount(doc));
       },
       (err) => {
         this._spinnerService.hide();
