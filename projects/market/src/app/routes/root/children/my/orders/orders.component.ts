@@ -14,7 +14,12 @@ const PAGE_SIZE = 100;
 
 @Component({
   templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.scss', './orders.component-1300.scss', './orders.component-992.scss'],
+  styleUrls: [
+    './orders.component.scss',
+    './orders.component-1300.scss',
+    './orders.component-992.scss',
+    './orders.component-576.scss'
+  ],
 })
 export class OrdersComponent implements OnDestroy {
   orderDocuments: DocumentDto[];

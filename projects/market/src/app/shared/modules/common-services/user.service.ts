@@ -14,6 +14,7 @@ import { CookieService } from './cookie.service';
 import { LocalStorageService } from './local-storage.service';
 import { OrganizationsService } from './organizations.service';
 import { UserStateService } from './user-state.service';
+import { ExternalProvidersService } from './external-providers.service';
 
 @Injectable()
 export class UserService {
@@ -25,14 +26,19 @@ export class UserService {
 
   constructor(
     private _bnetService: BNetService,
-    private _organizationsService: OrganizationsService,
     private _cookieService: CookieService,
-    private _localStorageService: LocalStorageService,
     private _userStateService: UserStateService,
-  ) {}
+    private _localStorageService: LocalStorageService,
+    private _organizationsService: OrganizationsService,
+    private _externalProvidersService: ExternalProvidersService,
+  ) {
+  }
 
   setUserData(data: any): void {
     this._userStateService.currentUser$.next(data);
+    if (data) {
+      this._externalProvidersService.fireGTMEvent({ userId: data.userInfo?.userId });
+    }
   }
 
   setUserOrganizations(data: any): Observable<any> {

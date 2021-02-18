@@ -31,5 +31,10 @@
 </ng-template>
 
 <ng-template #extraTemplate>
-  <button nz-button nzType="primary" (click)="refreshAll()">Обновить <em nz-icon nzType="sync" nzTheme="outline"></em></button>
+  <button class="desk_btn" nz-button nzType="primary" (click)="refreshAll()">
+    Обновить <em nz-icon nzType="sync" nzTheme="outline"></em>
+  </button>
+  <button class="mob_btn" nz-button nzType="primary" nzShape="circle" (click)="refreshAll()">
+    <em nz-icon nzType="sync" nzTheme="outline"></em>
+  </button>
 </ng-template>
