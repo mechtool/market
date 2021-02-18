@@ -3,25 +3,33 @@
     <h2>Мои заказы</h2>
   </div>
 
-  <nz-tabset nzTabPosition="top" nzType="card">
-    <nz-tab nzTitle="Заказы">
-      <market-order-list
-        [documents]="orderDocuments"
-        [page]="pageOrderDocuments"
-        (loadDocuments)="loadOrderDocuments($event)"
-      ></market-order-list>
+  <nz-tabset nzTabPosition="top" nzType="card" [nzTabBarExtraContent]="extraTemplate">
+    <nz-tab nzTitle="Заказы" (nzClick)="refreshOrderDocuments()">
+      <ng-template nz-tab>
+        <market-order-list
+          [documents]="orderDocuments"
+          [page]="pageOrderDocuments"
+          (loadDocuments)="loadOrderDocuments($event)"
+        ></market-order-list>
+      </ng-template>
     </nz-tab>
 
-    <ng-template #account>
-      <div class="account" [attr.new-accounts]="(newAccountDocumentsCounter$ | async) || null">Счета</div>
-    </ng-template>
-
-    <nz-tab [nzTitle]="account">
-      <market-account-list
-        [documents]="accountDocuments"
-        [page]="pageAccountDocuments"
-        (loadDocuments)="loadAccountDocuments($event)"
-      ></market-account-list>
+    <nz-tab [nzTitle]="account" (nzClick)="refreshAccountDocuments()">
+      <ng-template nz-tab>
+        <market-account-list
+          [documents]="accountDocuments"
+          [page]="pageAccountDocuments"
+          (loadDocuments)="loadAccountDocuments($event)"
+        ></market-account-list>
+      </ng-template>
     </nz-tab>
   </nz-tabset>
 </div>
+
+<ng-template #account>
+  <div class="account" [attr.new-accounts]="(newAccountDocumentsCounter$ | async) || null">Счета</div>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="primary" (click)="refreshAll()">Обновить <em nz-icon nzType="sync" nzTheme="outline"></em></button>
+</ng-template>

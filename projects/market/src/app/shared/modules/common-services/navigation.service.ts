@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { CategoryModel, MetrikaEventTypeModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';

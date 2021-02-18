@@ -6,17 +6,21 @@
                (nzSelectedIndexChange)="changeSelectedTabIndex($event)">
 
       <nz-tab nzTitle="Товары">
-        <div class="tab-content">
-          <ng-container *ngTemplateOutlet="tableProducts"></ng-container>
-        </div>
+        <ng-template nz-tab>
+          <div class="tab-content">
+            <ng-container *ngTemplateOutlet="tableProducts"></ng-container>
+          </div>
+        </ng-template>
       </nz-tab>
 
       <nz-tab nzTitle="{{isOrderType ? 'Данные для заказа' : 'Данные для запроса цен'}}"
               [nzDisabled]="subjAnonymousOrAuthenticatedWithoutOrgsAndOfferWithRegistration">
-        <div class="tab-content">
-          <ng-container *ngTemplateOutlet="orderInfo"></ng-container>
-          <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
-        </div>
+        <ng-template nz-tab>
+          <div class="tab-content">
+            <ng-container *ngTemplateOutlet="orderInfo"></ng-container>
+            <ng-container *ngTemplateOutlet="orderDetails"></ng-container>
+          </div>
+        </ng-template>
       </nz-tab>
 
     </nz-tabset>

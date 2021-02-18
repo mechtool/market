@@ -32,18 +32,22 @@
 <ng-template #product_tabs>
   <nz-tabset nzTabPosition="top" nzType="card">
     <nz-tab [nzTitle]="offerTotal">
-      <market-trade-offer-cards-list
-        [sort]="sort"
-        [offersFoundInUserRegion]="offersFoundInUserRegion"
-        [tradeOffers]="tradeOffers"
-        (sortChange)="sortChange($event)"
-      ></market-trade-offer-cards-list>
+      <ng-template nz-tab>
+        <market-trade-offer-cards-list
+          [sort]="sort"
+          [offersFoundInUserRegion]="offersFoundInUserRegion"
+          [tradeOffers]="tradeOffers"
+          (sortChange)="sortChange($event)"
+        ></market-trade-offer-cards-list>
+      </ng-template>
     </nz-tab>
 
     <nz-tab nzTitle="Описание товара" [nzDisabled]="hasProductDescription">
-      <market-product-description
-        [product]="product"
-      ></market-product-description>
+      <ng-template nz-tab>
+        <market-product-description
+          [product]="product"
+        ></market-product-description>
+      </ng-template>
     </nz-tab>
   </nz-tabset>
 </ng-template>

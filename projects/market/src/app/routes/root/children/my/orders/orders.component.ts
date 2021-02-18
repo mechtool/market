@@ -90,6 +90,42 @@ export class OrdersComponent implements OnDestroy {
     }
   }
 
+  refreshOrderDocuments() {
+    this._spinnerService.show();
+    this.pageOrderDocuments = 1;
+    this._ediService.getOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe(
+      (documents) => {
+        this._spinnerService.hide();
+        this.orderDocuments = documents.map((doc) => DocumentDto.forOrder(doc));
+      },
+      (err) => {
+        this._spinnerService.hide();
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
+  }
+
+  refreshAccountDocuments() {
+    this._spinnerService.show();
+    this.pageAccountDocuments = 1;
+    this._ediService.getAccounts(this.pageAccountDocuments, PAGE_SIZE).subscribe(
+      (documents) => {
+        this._spinnerService.hide();
+        this.accountDocuments = documents.map((doc) => DocumentDto.forOrder(doc));
+      },
+      (err) => {
+        this._spinnerService.hide();
+        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      },
+    );
+  }
+
+  refreshAll() {
+    this.pageOrderDocuments = 1;
+    this.pageAccountDocuments = 1;
+    this._init();
+  }
+
   private _init() {
     this._spinnerService.show();
     this._ediService.getOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe(

@@ -6,9 +6,7 @@
   </div>
 
   <nz-tabset nzTabPosition="top" nzType="card">
-
     <nz-tab nzTitle="Торговые предложения">
-
       <div class="area-container">
         <market-search-area
           [searchType]="'supplier'"
@@ -20,7 +18,6 @@
           (submitClick)="navigateToSupplierRoute($event)"
           *ngIf="supplier"
         >
-
           <ng-container ngProjectAs="main-slot">
             <market-supplier-trade-offers-list
               [supplier]="supplier"
@@ -33,18 +30,17 @@
               (loadTradeOffers)="loadTradeOffers($event)"
             ></market-supplier-trade-offers-list>
           </ng-container>
-
         </market-search-area>
       </div>
-
     </nz-tab>
 
     <nz-tab nzTitle="О поставщике">
-      <market-about-supplier
-        [supplier]="supplier"
-        [showStoreButton]="false"
-      ></market-about-supplier>
+      <ng-template nz-tab>
+        <market-about-supplier
+          [supplier]="supplier"
+          [showStoreButton]="false"
+        ></market-about-supplier>
+      </ng-template>
     </nz-tab>
   </nz-tabset>
-
 </div>
