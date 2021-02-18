@@ -10,3 +10,20 @@
     line-height: 23px;
   }
 }
+
+.empty {
+  margin-top: 50px;
+  text-align: center;
+  opacity: .8;
+
+  span {
+    font-size: var(--font-size-25);
+    font-weight: var(--font-weight-demi);
+  }
+
+  p {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: var(--font-size-18);
+  }
+}

@@ -1,6 +1,6 @@
 <div class="cart">
 
-  <div class="title">
+  <div class="title" *ngIf="cartData?.content?.length">
     <h2>Корзина</h2>
   </div>
 
@@ -15,14 +15,9 @@
 
   <ng-container *ngIf="!cartData?.content?.length">
     <div class="empty">
-      <nz-empty
-        nzNotFoundImage="./assets/img/svg/empty.svg"
-        [nzNotFoundContent]="contentTpl"
-      >
-        <ng-template #contentTpl>
-          <span>Корзина пуста</span>
-        </ng-template>
-      </nz-empty>
+      <span>Корзина пока пуста</span>
+      <p>Воспользуйтесь каталогом, чтобы найти интересующие вас товары</p>
+      <button nz-button nzType="primary" [routerLink]="['/category']">Каталог</button>
     </div>
   </ng-container>
 
