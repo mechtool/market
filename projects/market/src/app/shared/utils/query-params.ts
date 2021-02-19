@@ -53,8 +53,8 @@ export function queryParamsWithoutCategoryIdFrom(groupQuery: AllGroupQueryFilter
 export function queryParamsWithoutSupplierIdFrom(groupQuery: AllGroupQueryFiltersModel): Params {
   const hasRequiredParams = hasRequiredRequestParams(groupQuery);
   return {
-    q: groupQuery.query,
-    categoryId: groupQuery.filters?.categoryId,
+    q: groupQuery.query ? groupQuery.query : undefined,
+    subCategoryId: groupQuery.filters?.subCategoryId,
     tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: hasRequiredParams ? groupQuery.filters?.isDelivery : undefined,
     isPickup: hasRequiredParams ? groupQuery.filters?.isPickup : undefined,
