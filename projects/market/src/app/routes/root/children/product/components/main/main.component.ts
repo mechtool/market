@@ -50,5 +50,6 @@ export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Param
     features: !groupQuery.filters?.features?.length ? undefined : groupQuery.filters?.features,
     priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
     priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
+    subCategoryId: groupQuery.filters?.subCategoryId,
   };
 }

@@ -25,7 +25,7 @@
             autocomplete="false"
             list="null"
             id="{{componentId}}_location"
-            placeholder="Россия"
+            placeholder="{{!isIE ? 'Россия' : null}}"
             formControlName="name"
             (keyup.enter)="selectLocationOnEnter()"
             (focus)="locationEl.dataset.focused = 'focused'"
@@ -65,7 +65,7 @@
                  autocomplete="false"
                  list="null"
                  id="{{componentId}}_inn"
-                 placeholder="Искать поставщика"
+                 placeholder="{{!isIE ? 'Искать поставщика' : null}}"
                  formControlName="name"
                  (keyup.enter)="selectSupplierOnEnter()"
                  (focus)="supplierEl.dataset.focused = 'focused'"
@@ -103,7 +103,7 @@
                  autocomplete="false"
                  list="null"
                  id="{{componentId}}_brand"
-                 placeholder="Искать бренд"
+                 placeholder="{{!isIE ? 'Искать бренд' : null}}"
                  formControlName="tradeMark">
         </nz-input-group>
 
@@ -181,7 +181,7 @@
               autocomplete="false"
               list="null"
               id="{{componentId}}_category"
-              placeholder="Искать подкатегорию"
+              placeholder="{{!isIE ? 'Искать подкатегорию' : null}}"
               formControlName="categorySearchQuery">
           </nz-form-control>
         </div>
