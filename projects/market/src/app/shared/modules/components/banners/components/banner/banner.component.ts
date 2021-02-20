@@ -20,7 +20,7 @@ export class BannerComponent {
   }
 
   get isLinkExternal(): boolean {
-    return !this.item?.btnLink.includes(location.hostname) && !(this.item?.btnLink[0] === '/');
+    return !this.item?.btnLink.includes(location.hostname) && this.item?.btnLink[0] !== '/';
   }
 
   constructor(private _navigationService: NavigationService) {}

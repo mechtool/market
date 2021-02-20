@@ -36,7 +36,7 @@ import {
   UpdateOrganizationRequestModel,
   UserOrganizationModel,
 } from './models';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { ApiWorkerService } from './api-worker.service';
 
 const API_URL = environment.apiUrl;
@@ -212,7 +212,10 @@ export class BNetService {
     return this._apiService.put(link, data);
   }
 
-  marketplaceOffer(link: string, data: CartModel): Observable<any> {
+  marketplaceOffer(link: string, data: CartModel, recaptchaToken?: string): Observable<any> {
+    if (recaptchaToken) {
+      return this._http.post(link, data, { headers: new HttpHeaders({ 'recaptcha-token': recaptchaToken }) });
+    }
     return this._apiService.post(link, data);
   }
 

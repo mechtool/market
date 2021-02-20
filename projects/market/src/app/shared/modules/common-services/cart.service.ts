@@ -78,15 +78,20 @@ export class CartService {
     switch (relationType) {
       case RelationEnumModel.ITEM_ADD:
         return this._bnetService.addItemToCart(relationHref, data);
-      case RelationEnumModel.MAKE_ORDER:
-      case RelationEnumModel.REQUEST_FOR_PRICE:
-      case RelationEnumModel.REGISTER_AND_MAKE_ORDER:
-      case RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE:
-        return this._bnetService.marketplaceOffer(relationHref, data);
       case RelationEnumModel.ITEM_UPDATE_QUANTITY:
         return this._bnetService.updateItemQuantityInCart(relationHref, data);
       case RelationEnumModel.ITEM_REMOVE:
         return this._bnetService.removeItemFromCart(relationHref);
+    }
+  }
+
+  handleMarketplaceOffer(relationType: string, relationHref: string, data: CartModel, recaptchaToken?: string): Observable<any> {
+    switch (relationType) {
+      case RelationEnumModel.MAKE_ORDER:
+      case RelationEnumModel.REQUEST_FOR_PRICE:
+      case RelationEnumModel.REGISTER_AND_MAKE_ORDER:
+      case RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE:
+        return this._bnetService.marketplaceOffer(relationHref, data, recaptchaToken);
     }
   }
 

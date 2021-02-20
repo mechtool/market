@@ -44,6 +44,9 @@ export class PromoFirstOrderComponent {
     {
       title: 'ЛЕММА',
       btnLink: '/supplier/c25601e4-d0b7-4b82-b555-6477fdfe90ad',
+      btnQueryParams: {
+        inStock: true
+      },
       btnText: 'Подобрать товары',
       description: '- 10% на "Изделия из металла", заказ от 30000 р.',
       imgUrl: 'assets/img/promo/first-order/lemma.png',

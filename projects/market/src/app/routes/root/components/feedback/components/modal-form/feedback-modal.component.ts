@@ -1,9 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { FeedbackService, NotificationsService } from '#shared/modules/common-services';
 import { switchMap } from 'rxjs/operators';
+import { unsubscribeList } from '#shared/utils';
+import { Subscription } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -11,23 +13,30 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './feedback-modal.component.html',
   styleUrls: ['./feedback-modal.component.scss'],
 })
-export class FeedbackModalComponent implements OnInit {
+export class FeedbackModalComponent implements OnInit, OnDestroy {
   form: FormGroup;
   @Output() feedbackEvent: EventEmitter<boolean> = new EventEmitter();
+  private _recaptchaSubscription: Subscription;
+
 
   constructor(
     private _fb: FormBuilder,
     private _feedbackService: FeedbackService,
     private _notificationsService: NotificationsService,
     private _recaptchaV3Service: ReCaptchaV3Service,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this._initForm();
   }
 
+  ngOnDestroy(): void {
+    unsubscribeList([this._recaptchaSubscription]);
+  }
+
   send() {
-    this._recaptchaV3Service
+    this._recaptchaSubscription = this._recaptchaV3Service
       .execute('action')
       .pipe(
         switchMap((token) => {
@@ -41,13 +50,8 @@ export class FeedbackModalComponent implements OnInit {
             token,
           );
         }),
-      )
-      .subscribe(
-        (res) => {
+      ).subscribe((res) => {
           this.feedbackEvent.emit(true);
-          if (!res.success) {
-            this._notificationsService.error('Сообщение не удалось отправить');
-          }
         },
         (error) => {
           this.feedbackEvent.emit(true);

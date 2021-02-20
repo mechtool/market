@@ -51,6 +51,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { notBlankValidator } from '#shared/utils/common-validators';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { SearchCounterpartyComponent } from '#shared/modules/components/search-counterparty';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 const VATS = {
   VAT_10: 10,
@@ -101,6 +102,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   private _foundLocations: LocationModel[];
   private _validDeliveryFiasCode: string[];
   private _cartDataSubscription: Subscription;
+  private _recaptchaSubscription: Subscription;
   private _offerWithRegistration = true;
 
   get unavailableToOrder(): boolean {
@@ -282,6 +284,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     private _authModalService: AuthModalService,
     private _cartModalService: CartModalService,
     private _navigationService: NavigationService,
+    private _recaptchaV3Service: ReCaptchaV3Service,
     private _tradeOffersService: TradeOffersService,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
@@ -351,7 +354,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    unsubscribeList([this._cartDataSubscription]);
+    unsubscribeList([this._cartDataSubscription, this._recaptchaSubscription]);
   }
 
   ngAfterViewInit() {
@@ -885,13 +888,22 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _executeRegisterAndMakeOrderOrRegisterAndRequestForPrice() {
-    const relationType = this.isOrderType ? RelationEnumModel.REGISTER_AND_MAKE_ORDER : RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE;
-    this._send(relationType, this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink, this._createRegisterOrderData());
+    this._recaptchaSubscription = this._recaptchaV3Service
+      .execute('action')
+      .subscribe((token) => {
+        const relationType =
+          this.isOrderType ? RelationEnumModel.REGISTER_AND_MAKE_ORDER : RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE;
+
+        this._send(relationType, this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink, this._createRegisterOrderData(), token);
+
+        }, (err) => {
+        this._notificationsService.error('Невозможно отправить заказ. Попробуйте позже.');
+      });
   }
 
-  private _send(relationType: RelationEnumModel, relationHref: string, orderData: any) {
+  private _send(relationType: RelationEnumModel, relationHref: string, orderData: any, recaptchaToken?: string) {
     this._cartService
-      .handleRelation(relationType, relationHref, orderData)
+      .handleMarketplaceOffer(relationType, relationHref, orderData, recaptchaToken)
       .pipe(
         switchMap((_) => this._cartService.setActualCartData()),
         tap(() => {
@@ -934,7 +946,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cartDataChange.emit(cartData);
       },
       (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error('Невозможно отправить заказ. Попробуйте позже.');
       },
     );
   }

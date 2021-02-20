@@ -27,3 +27,20 @@
     font-size: var(--font-size-18);
   }
 }
+
+.cart {
+  min-height: 70vh;
+}
+
+.recaptcha {
+  font-size: 10px;
+  color: #efefef;
+  text-align: center;
+
+  a:hover {
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
+  }
+}
+
