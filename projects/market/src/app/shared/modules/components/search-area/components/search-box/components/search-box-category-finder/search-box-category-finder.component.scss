@@ -10,6 +10,12 @@
   line-height: normal;
 }
 
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .base {
   display: flex;
   justify-content: space-between;

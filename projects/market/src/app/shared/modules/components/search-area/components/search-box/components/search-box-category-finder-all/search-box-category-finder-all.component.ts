@@ -5,6 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CategoryModel } from '#shared/modules/common-services/models/category.model';
 import { CategoryItemModel } from '../../../../models/category-item.model';
 import { debounceTime, distinctUntilChanged, filter, take } from 'rxjs/operators';
+import { unsubscribeList } from '#shared/utils';
 
 const SCREEN_WIDTH_BREAKPOINT = 768;
 
@@ -39,14 +40,13 @@ export class SearchBoxCategoryFinderAllComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._categoriesSubscription.unsubscribe();
-    this._mouseEnterCategoryChangesSubscription.unsubscribe();
+    unsubscribeList([this._categoriesSubscription, this._mouseEnterCategoryChangesSubscription]);
   }
 
   private _setCategories(): void {
-    this._categoriesSubscription = this._searchAreaService.categories$.pipe(take(1)).subscribe((res) => {
+    this._categoriesSubscription = this._searchAreaService.categories$.subscribe((res) => {
       this.categories = res;
-      this.activeCategory = this.categories[0];
+      this.activeCategory = this.categories?.[0];
     });
   }
 

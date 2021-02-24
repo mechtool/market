@@ -43,26 +43,19 @@ export function ApiFactory(injector: Injector): () => Promise<any> {
 }
 
 function init() {
-  handleLoginPopup();
-  handleAuthFromStorage();
-  setCart();
-
   return new Promise((resolve, reject) => {
-    return zip(updateUserCategoriesRetriable$())
-      .pipe(
-        tap(() => {
-          if (!localStorageService.hasUserLocation()) {
-            localStorageService.putUserLocation(Megacity.RUSSIA);
-          }
-        }),
-        tap(() => {
-          userService.watchUserDataChangesForUserStatusCookie();
-        }),
-        catchError((e) => {
-          externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.APP_INIT_PROBLEMS, { params: e });
-          return throwError(null);
-        }),
-      ).subscribe(resolve, reject);
+    try {
+      handleLoginPopup();
+      handleAuthFromStorage();
+      setUserLocation();
+      setCategories();
+      setCart();
+      userService.watchUserDataChangesForUserStatusCookie();
+      resolve();
+    }
+    catch (e) {
+      reject();
+    }
   });
 }
 
@@ -79,6 +72,16 @@ function handleAuthFromStorage(): void {
     const userData = localStorageService.getUserData();
     authService.setUserDependableData$(userData).subscribe();
   }
+}
+
+function setUserLocation(): void {
+  if (!localStorageService.hasUserLocation()) {
+    localStorageService.putUserLocation(Megacity.RUSSIA);
+  }
+}
+
+function setCategories(): void {
+  updateUserCategoriesRetriable$().subscribe();
 }
 
 function setCart(): void {

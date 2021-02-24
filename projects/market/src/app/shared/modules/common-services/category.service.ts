@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { UserService } from './user.service';
 import { CategoryModel, CategoryRequestModel } from './models';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { deepTreeParentsSearch, deepTreeSearch, getFlatPropertyArray } from '#shared/utils';
 import { BNetService } from './bnet.service';
 import { BannerItemModel } from '#shared/modules/components/banners/models/banner-item.model';
@@ -72,7 +72,7 @@ export class CategoryService {
   }
 
   getCategories(): Observable<CategoryModel[]> {
-    return this._userService.categories$.asObservable();
+    return this._userService.categories$.pipe(filter((res) => !!res));
   }
 
   private _setPromo() {

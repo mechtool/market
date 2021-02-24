@@ -1,20 +1,28 @@
 <div class="sbcf">
 
-  <ul class="base">
-    <li class="item">
-      <span class="hoverable" (click)="setSelectedCategoryItem(null)">Везде</span>
-    </li>
-  </ul>
+  <ng-container *ngIf="!categories; else categoriesTpl">
+    <div class="loading-wrapper">
+      <market-spinner></market-spinner>
+    </div>
+  </ng-container>
 
-  <ul class="list">
-    <li class="item" *ngFor="let category of categories">
-      <span class="hoverable" (click)="setSelectedCategoryItem(category)">{{category.name}}</span>
-    </li>
-  </ul>
+  <ng-template #categoriesTpl>
+    <ul class="base">
+      <li class="item">
+        <span class="hoverable" (click)="setSelectedCategoryItem(null)">Везде</span>
+      </li>
+    </ul>
 
-  <div class="meta">
-    <span class="hoverable" (click)="showAllCategories()">Показать больше категорий</span>
-  </div>
+    <ul class="list">
+      <li class="item" *ngFor="let category of categories">
+        <span class="hoverable" (click)="setSelectedCategoryItem(category)">{{category.name}}</span>
+      </li>
+    </ul>
+
+    <div class="meta">
+      <span class="hoverable" (click)="showAllCategories()">Показать больше категорий</span>
+    </div>
+  </ng-template>
 
   <div class="closer">
     <button (click)="close()"></button>

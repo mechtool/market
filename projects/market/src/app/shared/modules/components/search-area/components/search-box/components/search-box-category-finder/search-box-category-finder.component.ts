@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Injector, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Injector, OnDestroy, OnInit } from '@angular/core';
 import { SearchAreaService } from '../../../../search-area.service';
 import { CategoryItemModel } from '../../../../models/category-item.model';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { SearchBoxCategoryFinderAllComponent } from '../search-box-category-finder-all/search-box-category-finder-all.component';
 import { Subscription } from 'rxjs';
 import { Overlay, OverlayConfig } from '@angular/cdk/overlay';
+import { unsubscribeList } from '#shared/utils';
 
 @Component({
   selector: 'market-search-box-category-finder',
@@ -14,7 +15,6 @@ import { Overlay, OverlayConfig } from '@angular/cdk/overlay';
     './search-box-category-finder.component-768.scss',
     './search-box-category-finder.component-576.scss',
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBoxCategoryFinderComponent implements OnInit, OnDestroy {
   categories: CategoryItemModel[];
@@ -33,14 +33,14 @@ export class SearchBoxCategoryFinderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._categoriesSubscription.unsubscribe();
+    unsubscribeList([this._categoriesSubscription]);
   }
 
   private _initCategories() {
     this._categoriesSubscription = this._searchAreaService.categories$
       .pipe(
         map((categories) => {
-          return categories.map((cat) => {
+          return categories?.map((cat) => {
             const children = !cat.children?.length
               ? []
               : cat.children.map((childCat) => {
@@ -56,7 +56,6 @@ export class SearchBoxCategoryFinderComponent implements OnInit, OnDestroy {
             };
           });
         }),
-        take(1),
       )
       .subscribe((categories) => {
         this.categories = categories;

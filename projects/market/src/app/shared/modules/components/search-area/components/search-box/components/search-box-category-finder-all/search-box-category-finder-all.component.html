@@ -1,52 +1,61 @@
 <div class="sbcfa" [ngClass]="isNavBarMinified ? 'wide' : 'narrow' ">
 
-  <div class="base">
-    <div class="primary_block" [ngClass]="{'d-mobile-none': isMobileRootCategorySelected}">
-      <div class="root_categories">
-        <div class="title">Каталог</div>
-        <ul class="list scrollbar">
-          <li class="item" [ngClass]="{'active': category.id === activeCategory?.id}" *ngFor="let category of categories">
+  <ng-container *ngIf="!categories; else categoriesTpl">
+    <div class="loading-wrapper">
+      <market-spinner></market-spinner>
+    </div>
+  </ng-container>
+
+  <ng-template #categoriesTpl>
+    <div class="base">
+      <div class="primary_block" [ngClass]="{'d-mobile-none': isMobileRootCategorySelected}">
+        <div class="root_categories">
+          <div class="title">Каталог</div>
+          <ul class="list scrollbar">
+            <li class="item" [ngClass]="{'active': category.id === activeCategory?.id}" *ngFor="let category of categories">
             <span
               (click)="handleRootCategoryClick(category)"
               (mouseenter)="mouseEnterCategoryChanges$.next(category)">
                 {{category.name}}
             </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="secondary_block">
-      <div class="children_categories">
-        <div class="mobile_back">
-          <span (click)="isMobileRootCategorySelected = false">Каталог</span>
+            </li>
+          </ul>
         </div>
-        <div class="title" (click)="setSelectedCategoryItem(activeCategory)">{{activeCategory?.name}}</div>
-        <ul class="list scrollbar">
+      </div>
 
-          <div class="child_category" *ngFor="let childCategory of activeCategory?.children">
-            <div class="child_category_name">
+      <div class="secondary_block">
+        <div class="children_categories">
+          <div class="mobile_back">
+            <span (click)="isMobileRootCategorySelected = false">Каталог</span>
+          </div>
+          <div class="title" (click)="setSelectedCategoryItem(activeCategory)">{{activeCategory?.name}}</div>
+          <ul class="list scrollbar">
+
+            <div class="child_category" *ngFor="let childCategory of activeCategory?.children">
+              <div class="child_category_name">
               <span (click)="setSelectedCategoryItem(childCategory)">
                   {{childCategory.name}}
               </span>
-            </div>
-            <ul class="child_category_list">
-              <li class="child_category_list_item" *ngFor="let childSubCategory of childCategory.children">
+              </div>
+              <ul class="child_category_list">
+                <li class="child_category_list_item" *ngFor="let childSubCategory of childCategory.children">
                 <span (click)="setSelectedCategoryItem(childSubCategory)">
                     {{childSubCategory.name}}
                 </span>
-              </li>
-            </ul>
-          </div>
+                </li>
+              </ul>
+            </div>
 
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
 
-  </div>
+    </div>
+  </ng-template>
 
   <div class="closer">
     <button (click)="close()"></button>
   </div>
 
 </div>
+

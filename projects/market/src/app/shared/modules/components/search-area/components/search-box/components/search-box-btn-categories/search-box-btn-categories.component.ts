@@ -5,7 +5,7 @@ import { SearchBoxCategoryFinderComponent } from '../search-box-category-finder/
 import { SearchAreaService } from '../../../../search-area.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { CategoryItemModel } from '../../../../models/category-item.model';
-import { deepTreeSearch } from '#shared/utils';
+import { deepTreeSearch, unsubscribeList } from '#shared/utils';
 
 const positionsPair: ConnectionPositionPair[] = [
   {
@@ -41,8 +41,9 @@ const positionsPair: ConnectionPositionPair[] = [
   ],
 })
 export class SearchBoxBtnCategoriesComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  private _categorySelected: CategoryItemModel;
+  private _categorySelected: CategoryItemModel = null;
   private _categorySelectedItemSubscription: Subscription;
+  private _categoriesSubscription: Subscription;
 
   get categorySelected(): CategoryItemModel {
     return this._categorySelected;
@@ -65,7 +66,7 @@ export class SearchBoxBtnCategoriesComponent implements OnInit, OnDestroy, Contr
   }
 
   ngOnDestroy() {
-    this._categorySelectedItemSubscription.unsubscribe();
+    unsubscribeList([this._categorySelectedItemSubscription, this._categoriesSubscription]);
   }
 
   openPanel(origin: HTMLElement): void {
@@ -104,8 +105,11 @@ export class SearchBoxBtnCategoriesComponent implements OnInit, OnDestroy, Contr
   onChange(_: any) {}
 
   writeValue(val: string) {
-    const categories = this._searchAreaService.categories$.getValue();
-    this.categorySelected = deepTreeSearch(categories, 'id', (k, v) => v === val);
+    this._categoriesSubscription = this._searchAreaService.categories$.subscribe((categories) => {
+      if (val) {
+        this.categorySelected = categories ? deepTreeSearch(categories, 'id', (k, v) => v === val) : null;
+      }
+    });
   }
 
   registerOnChange(fn) {

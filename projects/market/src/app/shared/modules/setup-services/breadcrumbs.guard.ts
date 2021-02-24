@@ -7,6 +7,7 @@ import {
   CategoryService,
   OrganizationsService,
   ProductService,
+  SpinnerService,
   TradeOffersService,
   UserService,
   UserStateService,
@@ -69,6 +70,7 @@ export class BreadcrumbsGuard implements CanActivate {
     private _tradeOffersService: TradeOffersService,
     private _userService: UserService,
     private _userStateService: UserStateService,
+    private _spinnerService: SpinnerService,
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
@@ -100,9 +102,11 @@ export class BreadcrumbsGuard implements CanActivate {
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
       case '/category/:id':
+        this._spinnerService.show();
         const categoryId = urlSplitted[2];
         return this._categoryService.getCategoryTree(categoryId).pipe(
           map((categories) => {
+            this._spinnerService.hide();
             breadcrumbsItems = [
               {
                 label: 'Товары',
@@ -114,23 +118,27 @@ export class BreadcrumbsGuard implements CanActivate {
             return true;
           }),
           catchError((err) => {
+            this._spinnerService.hide();
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
           }),
         );
       case '/product/:id':
+        this._spinnerService.show();
         const productId = urlSplitted[2];
         return this._productService.getProductOffer(productId).pipe(
           switchMap((productOffer) => {
             return this._categoryService.getCategoryTree(productOffer.product.categoryId);
           }),
           map((categories) => {
+            this._spinnerService.hide();
             breadcrumbsItems = this.breadcrumbsCategoryAncestors(categories);
             this._breadcrumbsService.setItems(breadcrumbsItems);
             return true;
           }),
           catchError((err) => {
+            this._spinnerService.hide();
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
@@ -158,6 +166,7 @@ export class BreadcrumbsGuard implements CanActivate {
           }),
         );
       case '/supplier/:supplierId/offer/:tradeOfferId':
+        this._spinnerService.show();
         const tradeOfferId = urlSplitted[4];
         return this._tradeOffersService.get(tradeOfferId).pipe(
           switchMap((tradeOffer) => {
@@ -166,11 +175,13 @@ export class BreadcrumbsGuard implements CanActivate {
             return this._categoryService.getCategoryTree(categoryId);
           }),
           map((categories) => {
+            this._spinnerService.hide();
             breadcrumbsItems = this.breadcrumbsCategoryAncestors(categories);
             this._breadcrumbsService.setItems(breadcrumbsItems);
             return true;
           }),
           catchError((err) => {
+            this._spinnerService.hide();
             this._breadcrumbsService.setVisible(false);
             this._breadcrumbsService.setItems([]);
             return of(true);
