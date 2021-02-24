@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { Router } from '@angular/router';
+import { CounterpartyResponseModel, OrganizationResponseModel } from '#shared/modules/common-services/models';
 
 @Component({
   selector: 'market-organization-view',
@@ -12,11 +12,11 @@ import { Router } from '@angular/router';
 })
 export class OrganizationViewComponent implements OnInit {
   @Input() organizationData: OrganizationResponseModel;
+  @Input() counterparty: CounterpartyResponseModel;
   @Input() isAdmin: boolean;
   @Output() editOrganizationChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(
-    private _router: Router) {
+  constructor(private _router: Router) {
   }
 
   ngOnInit() {

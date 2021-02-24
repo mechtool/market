@@ -1,73 +1,155 @@
 <div class="organization-view">
   <div class="section_paragraph">
-    <h3>Организация</h3>
+    <h3>{{organizationData?.legalRequisites?.kpp ? 'Организация' : 'Индивидуальный предприниматель'}}</h3>
     <div class="info_group__profile">
-        <div class="info_group info_group__supplier_group">
-            <span class="info_group__label">Наименование</span>
-            <span class="info_group__value">
-                <span class="supplier_title">
-                    <span *ngIf="organizationData" class="supplier_image" style="{{organizationData.legalRequisites.inn | organizationLogo : true}}"></span>
-                    <span class="supplier_name">
-                      {{organizationData?.name | abbreviatedBusinessName}}
-                    </span>
-                </span>
+      <div class="info_group info_group__supplier_group">
+        <span class="info_group__label">Наименование</span>
+        <span class="info_group__value">
+          <span class="supplier_title">
+            <span *ngIf="organizationData" class="supplier_image"
+                  style="{{organizationData.legalRequisites.inn | organizationLogo : true}}"></span>
+            <span class="supplier_name">
+              {{organizationData?.name | abbreviatedBusinessName}}
             </span>
-        </div>
-        <div class="info_group">
-            <span class="info_group__label">ИНН</span>
-            <span class="info_group__value">{{organizationData?.legalRequisites?.inn}}</span>
-        </div>
-        <div class="info_group" *ngIf="organizationData?.legalRequisites?.kpp">
-            <span class="info_group__label">КПП</span>
-            <span class="info_group__value">{{organizationData?.legalRequisites?.kpp}}</span>
-        </div>
+          </span>
+        </span>
+      </div>
+      <div class="info_group">
+        <span class="info_group__label">ИНН</span>
+        <span class="info_group__value">{{organizationData?.legalRequisites?.inn}}</span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.legalRequisites?.kpp">
+        <span class="info_group__label">КПП</span>
+        <span class="info_group__value">{{organizationData?.legalRequisites?.kpp}}</span>
+      </div>
     </div>
-    <h3 *ngIf="organizationData?.contacts?.website || organizationData?.contacts?.email || organizationData?.contacts?.phone || organizationData?.contacts?.address">Общие контакты</h3>
-    <div class="info_group__profile"
+    <h3
       *ngIf="organizationData?.contacts?.website || organizationData?.contacts?.email || organizationData?.contacts?.phone || organizationData?.contacts?.address">
-        <div class="info_group" *ngIf="organizationData?.contacts?.website">
-            <span class="info_group__label">Сайт</span>
-            <span class="info_group__value"><a [attr.href]="organizationData?.contacts?.website" target="_blank" rel="noopener noreferrer">{{organizationData?.contacts?.website}}</a></span>
-        </div>
-        <div class="info_group" *ngIf="organizationData?.contacts?.email">
-            <span class="info_group__label">E-mail</span>
-            <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contacts?.email" target="_blank" rel="noopener noreferrer">{{organizationData?.contacts?.email}}</a></span>
-        </div>
-        <div class="info_group" *ngIf="organizationData?.contacts?.phone">
-            <span class="info_group__label">Телефон</span>
-            <span class="info_group__value">{{organizationData?.contacts?.phone | marketPhoneFormatter}}</span>
-        </div>
-        <div class="info_group" *ngIf="organizationData?.contacts?.address">
-            <span class="info_group__label">Адрес</span>
-            <span class="info_group__value">{{organizationData?.contacts?.address}}</span>
-        </div>
+      Общие контакты
+    </h3>
+    <div class="info_group__profile"
+         *ngIf="organizationData?.contacts?.website || organizationData?.contacts?.email || organizationData?.contacts?.phone || organizationData?.contacts?.address">
+      <div class="info_group" *ngIf="organizationData?.contacts?.website">
+        <span class="info_group__label">Сайт</span>
+        <span class="info_group__value"><a [attr.href]="organizationData?.contacts?.website" target="_blank"
+                                           rel="noopener noreferrer">{{organizationData?.contacts?.website}}</a></span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.contacts?.email">
+        <span class="info_group__label">E-mail</span>
+        <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contacts?.email" target="_blank"
+                                           rel="noopener noreferrer">{{organizationData?.contacts?.email}}</a></span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.contacts?.phone">
+        <span class="info_group__label">Телефон</span>
+        <span class="info_group__value">{{organizationData?.contacts?.phone | marketPhoneFormatter}}</span>
+      </div>
+      <div class="info_group" *ngIf="organizationData?.contacts?.address">
+        <span class="info_group__label">Адрес</span>
+        <span class="info_group__value">{{organizationData?.contacts?.address}}</span>
+      </div>
     </div>
-    <h3 *ngIf="organizationData?.contactPerson?.fullName || organizationData?.contactPerson?.phone || organizationData?.contactPerson?.email">Контакты ответственного сотрудника</h3>
+    <h3
+      *ngIf="organizationData?.contactPerson?.fullName || organizationData?.contactPerson?.phone || organizationData?.contactPerson?.email">
+      Контакты ответственного сотрудника
+    </h3>
     <div class="info_group__profile">
       <div class="info_group" *ngIf="organizationData?.contactPerson?.fullName">
-          <span class="info_group__label">Имя</span>
-          <span class="info_group__value">{{organizationData?.contactPerson?.fullName}}</span>
+        <span class="info_group__label">Имя</span>
+        <span class="info_group__value">{{organizationData?.contactPerson?.fullName}}</span>
       </div>
       <div class="info_group" *ngIf="organizationData?.contactPerson?.phone">
-          <span class="info_group__label">Телефон</span>
-          <span class="info_group__value">{{organizationData?.contactPerson?.phone | marketPhoneFormatter}}</span>
+        <span class="info_group__label">Телефон</span>
+        <span class="info_group__value">{{organizationData?.contactPerson?.phone | marketPhoneFormatter}}</span>
       </div>
       <div class="info_group" *ngIf="organizationData?.contactPerson?.email">
-          <span class="info_group__label">E-mail</span>
-          <span class="info_group__value"><a [attr.href]="'mailto:' + organizationData?.contactPerson?.email" target="_blank" rel="noopener noreferrer">{{organizationData?.contactPerson?.email}}</a></span>
+        <span class="info_group__label">E-mail</span>
+        <span class="info_group__value">
+          <a [attr.href]="'mailto:' + organizationData?.contactPerson?.email" target="_blank" rel="noopener noreferrer">
+            {{organizationData?.contactPerson?.email}}
+          </a>
+        </span>
       </div>
     </div>
   </div>
-  <div class="section_paragraph"  *ngIf="organizationData?.description">
-    <h3>Описание организации</h3>
-    <p>{{organizationData?.description}}</p>
+  <div class="section_paragraph" *ngIf="organizationData?.description">
+    <h3>Описание</h3>
+    <div class="info_group__profile">
+      <span>{{organizationData?.description}}</span>
+    </div>
   </div>
+
+  <div class="section_paragraph" *ngIf="counterparty">
+    <h3>Публичная информация {{counterparty.typePerson === 'LEGAL_PERSON' ? 'об организации' : 'об индивидуальном предпринимателе'}}</h3>
+    <div class="info_group__profile">
+      <div class="info_group">
+        <span class="info_group__label">Наименование</span>
+        <span class="info_group__value">{{counterparty.name}}</span>
+      </div>
+
+      <div class="info_group">
+        <span class="info_group__label">Статус</span>
+        <span class="info_group__value">{{counterparty.status.reason}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.registrationDate">
+        <span class="info_group__label">Дата регистрации в ФНС</span>
+        <span class="info_group__value">{{counterparty.registrationDate}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.legalPerson?.address">
+        <span class="info_group__label">Юридический адрес</span>
+        <span class="info_group__value">
+          {{counterparty.legalPerson.address.name}} (с {{counterparty.legalPerson.address.date | date:'dd MMMM yyyy г.'}})
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.legalPerson?.headPersonInfo">
+        <span class="info_group__label">{{counterparty.legalPerson.headPersonInfo.position}}</span>
+        <span class="info_group__value">
+          {{counterparty.legalPerson.headPersonInfo.name}} (с {{counterparty.legalPerson.headPersonInfo.date | date:'dd MMMM yyyy г.'}})
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.naturalPerson">
+        <span class="info_group__label">Гражданство</span>
+        <span class="info_group__value">{{counterparty.naturalPerson.citizenship}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.mainActivity">
+        <span class="info_group__label">Основной ОКВЭД</span>
+        <span class="info_group__value">
+          {{counterparty.mainActivity.name}} ({{counterparty.mainActivity.code}})
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.legalPerson?.employees?.length">
+        <span class="info_group__label">Численность сотрудников</span>
+        <span class="info_group__value">
+           <ul>
+            <li *ngFor="let employee of counterparty.legalPerson.employees">
+              {{employee.year}} г. - {{employee.count}} чел.
+            </li>
+          </ul>
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="counterparty.legalPerson?.paidTaxes?.length">
+        <span class="info_group__label">Налоги</span>
+        <span class="info_group__value">
+          <nz-collapse nzGhost>
+            <nz-collapse-panel *ngFor="let tax of counterparty.legalPerson.paidTaxes" [nzHeader]="tax.year + ' г.'">
+              <p *ngFor="let t of tax.taxes">{{t.name}} - {{+t.paid | currencyPrice: '643'}}</p>
+            </nz-collapse-panel>
+          </nz-collapse>
+        </span>
+      </div>
+    </div>
+  </div>
+
   <div class="section_paragraph section_paragraph_btns">
     <div class="section_paragraph__btns">
-
-        <button nz-button nzType="primary" (click)="goToSupplierStore()">В магазин</button>
-        <button nz-button nzType="link" (click)="editProfile()" *ngIf="isAdmin">Редактировать профиль</button>
-
+      <button nz-button nzType="primary" (click)="goToSupplierStore()">В магазин</button>
+      <button nz-button nzType="link" (click)="editProfile()" *ngIf="isAdmin">Редактировать профиль</button>
     </div>
   </div>
 </div>

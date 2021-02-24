@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest, defer, forkJoin, from, of, Subscription, throwError, zip } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
+import { BehaviorSubject, combineLatest, of, Subscription } from 'rxjs';
 import {
   AllGroupQueryFiltersModel,
+  CounterpartyResponseModel,
   DefaultSearchAvailableModel,
-  OrganizationResponseModel, ProductOffersListResponseModel,
+  OrganizationResponseModel,
   SortModel,
   SuppliersItemModel,
   TradeOffersListResponseModel,
@@ -11,7 +12,7 @@ import {
   TradeOfferSummaryModel,
 } from '#shared/modules/common-services/models';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 
 import {
   LocalStorageService,
@@ -23,6 +24,7 @@ import {
   TradeOffersService,
 } from '#shared/modules/common-services';
 import { unsubscribeList } from '#shared/utils';
+import { VerificationStatusEnum } from '#shared/modules/common-services/models/verification-status.model';
 
 const PAGE_SIZE = 30;
 
@@ -147,8 +149,12 @@ export class SupplierSingleComponent implements OnDestroy {
         const supplierId = paramMap.get('supplierId');
         return this._organizationsService.getOrganization(supplierId);
       }),
-      tap((organization) => {
-        this.supplier = this._mapSupplier(organization);
+      switchMap((organization) => {
+        const inn = organization.legalRequisites?.inn;
+        return combineLatest([of(organization), this._organizationsService.findCounterpartyDataByInn(inn)])
+      }),
+      tap(([organization, counterparty]) => {
+        this.supplier = this._mapSupplier(organization, counterparty);
         const paramMap = this._activatedRoute.snapshot.paramMap;
         const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
 
@@ -158,12 +164,10 @@ export class SupplierSingleComponent implements OnDestroy {
         this.req = this._createReq(queryParamMap, this.supplier.inn)
 
       }),
-      switchMap((res) => {
+      switchMap(( ) => {
         return this._tradeOffersService.search({ ...this.req, page: this.page });
       })
-    )
-
-    .subscribe((tradeOffers) => {
+    ).subscribe((tradeOffers) => {
       this._spinnerService.hide();
       this.tradeOffersList = tradeOffers;
       this.tradeOffers = this.tradeOffersList._embedded.items;
@@ -196,7 +200,7 @@ export class SupplierSingleComponent implements OnDestroy {
     this.sort = queryParamMap.get('sort');
   }
 
-  private _mapSupplier(organization: OrganizationResponseModel): SuppliersItemModel {
+  private _mapSupplier(organization: OrganizationResponseModel, counterparty: CounterpartyResponseModel): SuppliersItemModel {
     return {
       id: organization.id,
       name: organization.name,
@@ -207,6 +211,7 @@ export class SupplierSingleComponent implements OnDestroy {
       phone: organization.contacts?.phone,
       website: organization.contacts?.website,
       address: organization.contacts?.address,
+      publicInfo: counterparty,
     };
   }
 

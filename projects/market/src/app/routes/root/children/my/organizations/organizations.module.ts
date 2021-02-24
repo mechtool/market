@@ -11,7 +11,7 @@ import { RequisitesCheckerComponent } from './components/requisites-checker/requ
 import { OrganizationOperateComponent } from './components/organization-operate/organization-operate.component';
 import { OrganizationExistsComponent } from './components/organization-exists/organization-exists.component';
 import { AccessKeyComponent } from './components/access-key/access-key.component';
-import { OrganizationRequestStatusPipe, AccessKeyStatusPipe, PhoneFormattersPipe } from './pipes';
+import { AccessKeyStatusPipe, OrganizationRequestStatusPipe, PhoneFormattersPipe } from './pipes';
 import { SingleOrganizationGuard } from './guards';
 import { OrganizationViewComponent } from './components/organization-view/organization-view.component';
 import { OrganizationUsersComponent } from './components/organization-users/organization-users.component';
@@ -24,6 +24,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     SharedDepsModule,
     ReactiveFormsModule,
     OrganizationsRoutingModule,
+    NzCollapseModule,
   ],
   declarations: [
     OrganizationsComponent,
@@ -59,4 +61,5 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
   ],
   providers: [SingleOrganizationGuard],
 })
-export class OrganizationsModule {}
+export class OrganizationsModule {
+}

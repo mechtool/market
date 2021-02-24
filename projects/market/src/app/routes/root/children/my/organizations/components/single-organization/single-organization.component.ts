@@ -5,6 +5,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NotificationsService, OrganizationsService, UserService } from '#shared/modules/common-services';
 import {
   AccessKeyResponseModel,
+  CounterpartyResponseModel,
   OrganizationResponseModel,
   OrganizationUserResponseModel,
   ParticipationRequestResponseModel,
@@ -44,6 +45,7 @@ export class SingleOrganizationComponent implements OnInit {
   private _modal: NzModalRef;
   activeTabType: TabType;
   organizationData: OrganizationResponseModel;
+  counterparty: CounterpartyResponseModel;
   users: OrganizationUserResponseModel[];
   participationRequests: ParticipationRequestResponseModel[];
   accessKeys: AccessKeyResponseModel[];
@@ -75,7 +77,7 @@ export class SingleOrganizationComponent implements OnInit {
   init(organizationId: string) {
     this._resetActiveTab();
     this._resetIsAdmin(organizationId);
-    this._resetOrganizationData(organizationId);
+    this._resetOrganizationAndCounterpartyData(organizationId);
     if (this.isAdmin) {
       this._resetUsers(organizationId);
       this._resetParticipationRequests(organizationId);
@@ -224,7 +226,7 @@ export class SingleOrganizationComponent implements OnInit {
       .subscribe(
         (_) => {
           this.isEditable = false;
-          this._resetOrganizationData(this.orgId);
+          this._resetOrganizationAndCounterpartyData(this.orgId);
         },
         (err) => {
           this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
@@ -316,20 +318,26 @@ export class SingleOrganizationComponent implements OnInit {
     this.isAdmin = orgIndex !== -1;
   }
 
-  private _resetOrganizationData(organizationId: string): void {
+  private _resetOrganizationAndCounterpartyData(organizationId: string): void {
     iif(
       () => {
         return this.isAdmin;
       },
       this._organizationsService.getOrganizationProfile(organizationId),
       this._organizationsService.getOrganization(organizationId),
-    ).subscribe(
-      (res) => {
-        this.organizationData = res;
+    ).pipe(
+      switchMap((organization) => {
+        this.organizationData = organization;
         this.legalRequisites = {
-          inn: res.legalRequisites?.inn,
-          kpp: res.legalRequisites?.kpp || null,
+          inn: organization.legalRequisites?.inn,
+          kpp: organization.legalRequisites?.kpp || null,
         };
+        return this._organizationsService.findCounterpartyDataByInn(organization.legalRequisites.inn);
+      }),
+      tap((counterparty) => {
+        this.counterparty = counterparty;
+      })
+    ).subscribe(() => {
       },
       (err) => {
         this._notificationsService.error(ERROR_GET_ORG_INFO);

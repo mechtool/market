@@ -24,20 +24,101 @@
       </div>
       <div class="info_group" *ngIf="supplier.phone">
         <span class="info_group__label">Телефон</span>
-        <span *ngIf="!showPhone" class="info_group__link" (click)="showPhoneTrue()">Показать телефон {{supplier.phone|marketHiddenSymbols}}</span>
-        <span *ngIf="showPhone" class="info_group__value"><a [attr.href]="'tel:' + supplier.phone">{{supplier.phone}}</a></span>
+        <span *ngIf="!showPhone" class="info_group__link"
+              (click)="showPhoneTrue()">Показать телефон {{supplier.phone|marketHiddenSymbols}}</span>
+        <span *ngIf="showPhone" class="info_group__value"><a
+          [attr.href]="'tel:' + supplier.phone">{{supplier.phone}}</a></span>
       </div>
       <div class="info_group" *ngIf="supplier.email">
         <span class="info_group__label">E-mail</span>
-        <span *ngIf="!showEmail" class="info_group__link" (click)="showEmailTrue()">Показать email {{supplier.email|marketHiddenSymbols}}</span>
-        <span *ngIf="showEmail" class="info_group__value"><a [attr.href]="'mailto:' + supplier.email">{{supplier.email}}</a></span>
+        <span *ngIf="!showEmail" class="info_group__link"
+              (click)="showEmailTrue()">Показать email {{supplier.email|marketHiddenSymbols}}</span>
+        <span *ngIf="showEmail" class="info_group__value"><a
+          [attr.href]="'mailto:' + supplier.email">{{supplier.email}}</a></span>
       </div>
     </div>
   </div>
 
   <div *ngIf="supplier.description">
     <h3>Описание поставщика</h3>
-    <p>{{supplier.description}}</p>
+    <div class="info_group__supplier">
+      <span>{{supplier.description}}</span>
+    </div>
+  </div>
+
+  <div *ngIf="supplier.publicInfo">
+    <h3>Публичная информация о поставщике</h3>
+    <div class="info_group__supplier">
+
+      <div class="info_group" *ngIf="supplier.publicInfo.name">
+        <span class="info_group__label">Наименование</span>
+        <span class="info_group__value">{{supplier.publicInfo.name}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.status">
+        <span class="info_group__label">Статус</span>
+        <span class="info_group__value">{{supplier.publicInfo.status.reason}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.registrationDate">
+        <span class="info_group__label">Дата регистрации в ФНС</span>
+        <span class="info_group__value">{{supplier.publicInfo.registrationDate | date:'dd MMMM yyyy г.'}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.legalPerson?.address">
+        <span class="info_group__label">Юридический адрес</span>
+        <span class="info_group__value">
+          {{supplier.publicInfo.legalPerson.address.name}}
+          (с {{supplier.publicInfo.legalPerson.address.date | date:'dd MMMM yyyy г.'}})
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.legalPerson?.headPersonInfo">
+        <span class="info_group__label">{{supplier.publicInfo.legalPerson.headPersonInfo.position}}</span>
+        <span class="info_group__value">
+          {{supplier.publicInfo.legalPerson.headPersonInfo.name}}
+          (с {{supplier.publicInfo.legalPerson.headPersonInfo.date | date:'dd MMMM yyyy г.'}})
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.naturalPerson">
+        <span class="info_group__label">Гражданство</span>
+        <span class="info_group__value">{{supplier.publicInfo.naturalPerson.citizenship}}</span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.mainActivity">
+        <span class="info_group__label">Основной ОКВЭД</span>
+        <span class="info_group__value">
+          {{supplier.publicInfo.mainActivity.name}} ({{supplier.publicInfo.mainActivity.code}})
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.legalPerson?.employees?.length">
+        <span class="info_group__label">Численность сотрудников</span>
+        <span class="info_group__value">
+          <ul>
+            <li *ngFor="let employee of supplier.publicInfo.legalPerson.employees">
+              {{employee.year}} г. - {{employee.count}} чел.
+            </li>
+          </ul>
+        </span>
+      </div>
+
+      <div class="info_group" *ngIf="supplier.publicInfo.legalPerson?.paidTaxes?.length">
+        <span class="info_group__label">Налоги</span>
+        <span class="info_group__value">
+          <nz-collapse nzGhost>
+            <nz-collapse-panel *ngFor="let tax of supplier.publicInfo.legalPerson.paidTaxes" [nzHeader]="tax.year + ' г.'">
+              <p *ngFor="let t of tax.taxes">{{t.name}} - {{+t.paid | currencyPrice: '643'}}</p>
+            </nz-collapse-panel>
+          </nz-collapse>
+        </span>
+      </div>
+
+      <span class="info_1c_contr">
+        Сведения предоставлены сервисом&emsp;<a href="https://portal.1c.ru/applications/3" target="_blank" rel="noopener noreferrer">"1С:Контрагент"</a>
+      </span>
+    </div>
   </div>
 </div>
 

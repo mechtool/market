@@ -10,4 +10,5 @@ export class SuppliersItemModel {
   personName?: string;
   website?: string;
   address?: string;
+  publicInfo?: any;
 }

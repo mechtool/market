@@ -56,6 +56,7 @@
     <market-organization-view *ngIf="!isEditable"
       [isAdmin]="isAdmin"
       [organizationData]="organizationData"
+      [counterparty]="counterparty"
       (editOrganizationChange)="isEditable = true">
     </market-organization-view>
 

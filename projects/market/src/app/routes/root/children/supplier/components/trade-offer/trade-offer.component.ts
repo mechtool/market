@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
-import { throwError } from 'rxjs';
+import { combineLatest, of, throwError } from 'rxjs';
 import {
+  CounterpartyResponseModel,
   ProductDto,
   SuppliersItemModel,
   TradeOfferResponseModel,
@@ -89,15 +90,17 @@ export class TradeOfferComponent implements OnDestroy {
           };
           this._externalProvidersService.fireGTMEvent(tag);
         }),
+        switchMap((tradeOffer) => {
+          const inn = tradeOffer.supplier.inn;
+          return combineLatest([of(tradeOffer), this._organizationsService.findCounterpartyDataByInn(inn)])
+        }),
         catchError((err) => {
           return throwError(err);
         }),
-      )
-      .subscribe(
-        (tradeOffer) => {
+      ).subscribe(([tradeOffer, counterparty]) => {
           this.tradeOffer = tradeOffer;
           this.product = ProductDto.fromTradeOffer(tradeOffer);
-          this.supplier = this._mapSupplier(tradeOffer.supplier);
+          this.supplier = this._mapSupplier(tradeOffer.supplier, counterparty);
         },
         (err) => {
           if (err.status === 404) {
@@ -109,16 +112,17 @@ export class TradeOfferComponent implements OnDestroy {
       );
   }
 
-  private _mapSupplier(supplier: TradeOfferSupplierModel): SuppliersItemModel {
+  private _mapSupplier(supplier: TradeOfferSupplierModel, counterparty: CounterpartyResponseModel): SuppliersItemModel {
     return {
       id: supplier.bnetInternalId,
       name: supplier.name,
       inn: supplier.inn,
       kpp: supplier.kpp,
-      description: supplier.description, // todo пока не приходит
+      description: supplier.description,
       email: supplier.contactPerson?.email,
       phone: supplier.contactPerson?.phone,
       personName: supplier.contactPerson?.name,
+      publicInfo: counterparty,
     };
   }
 }
