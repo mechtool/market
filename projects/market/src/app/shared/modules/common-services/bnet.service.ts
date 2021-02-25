@@ -56,8 +56,8 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }
 
-  getPopularProducts(categoryId?: string): Observable<ProductOffersListResponseModel> {
-    const params = categoryId ? new HttpParams().set('categoryId', categoryId) : undefined;
+  getPopularProducts(category?: string, pageSize?: number): Observable<ProductOffersListResponseModel> {
+    const params = this._params({ categoryId : category, size: pageSize })
     return this._apiService.get(`${API_URL}/product-offers/popular`, { params });
   }
 

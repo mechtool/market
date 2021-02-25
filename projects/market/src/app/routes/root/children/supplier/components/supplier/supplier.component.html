@@ -2,7 +2,13 @@
 
   <div class="page_header" *ngIf="supplier">
     <span class="supplier_image" style="{{supplier.inn | organizationLogo}}"></span>
-    <h2>{{supplier?.name | abbreviatedBusinessName}}</h2>
+    <h2>
+      {{supplier.name | abbreviatedBusinessName}}
+      <img class="verified_org" *ngIf="supplier.isVerifiedOrg"
+           nz-tooltip
+           nzTooltipTitle="Проверенная организация. Предоставлено подтверждение принадлежности учетной записи в сервисе к организации."
+           src="./assets/img/svg/verified.svg" alt="" title="">
+    </h2>
   </div>
 
   <nz-tabset nzTabPosition="top" nzType="card">

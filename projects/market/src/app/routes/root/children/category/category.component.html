@@ -18,7 +18,8 @@
   <ng-container ngProjectAs="main-slot">
     <market-main-popular
       *ngIf="isNotSearchUsed && isPopularProductsShown"
-      [categoryId]="category?.id">
+      [categoryId]="category?.id"
+      [size]="20">
     </market-main-popular>
 
     <market-search-results

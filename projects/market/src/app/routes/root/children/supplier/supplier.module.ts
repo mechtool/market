@@ -20,6 +20,7 @@ import { SupplierTradeOffersListModule } from '#shared/modules/components/suppli
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     SupplierTradeOffersListModule,
     SearchAreaModule,
     VirtualScrollerModule,
+    NzToolTipModule,
   ],
   declarations: [SupplierListComponent, SupplierSingleComponent, TradeOfferComponent],
 })

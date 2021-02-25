@@ -1,10 +1,16 @@
 <a class="catalog_item__inner" *ngIf="supplier" [routerLink]="'/supplier/' + supplier.id">
   <span class="catalog_item__img" style="{{legalIdToInn(supplier.legalId) | organizationLogo}}"></span>
+
+  <img class="verified_org" *ngIf="supplier.isVerifiedOrg"
+       nz-tooltip
+       nzTooltipTitle="Проверенная организация. Предоставлено подтверждение принадлежности учетной записи в сервисе к организации."
+       src="./assets/img/svg/verified.svg" alt="" title="">
+
   <span class="catalog_item__descr">
     <span class="catalog_item__title"
           nz-tooltip
           nzTooltipTitle="{{supplier.name | abbreviatedBusinessName}}">
-        {{supplier.name | abbreviatedBusinessName}}
+      {{supplier.name | abbreviatedBusinessName}}
     </span>
     <span class="catalog_item__about"
           nz-tooltip

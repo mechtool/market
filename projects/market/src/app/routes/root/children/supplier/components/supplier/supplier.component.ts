@@ -212,6 +212,7 @@ export class SupplierSingleComponent implements OnDestroy {
       website: organization.contacts?.website,
       address: organization.contacts?.address,
       publicInfo: counterparty,
+      isVerifiedOrg: organization.verificationStatus === VerificationStatusEnum.Verified,
     };
   }
 

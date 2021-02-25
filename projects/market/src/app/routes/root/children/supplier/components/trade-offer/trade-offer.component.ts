@@ -123,6 +123,7 @@ export class TradeOfferComponent implements OnDestroy {
       phone: supplier.contactPerson?.phone,
       personName: supplier.contactPerson?.name,
       publicInfo: counterparty,
+      isVerifiedOrg: supplier.isVerifiedOrg,
     };
   }
 }

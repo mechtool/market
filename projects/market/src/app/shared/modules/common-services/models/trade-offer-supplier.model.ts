@@ -9,4 +9,5 @@ export class TradeOfferSupplierModel {
     phone: string;
     email: string;
   };
+  isVerifiedOrg?: boolean;
 }

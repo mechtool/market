@@ -21,6 +21,10 @@
         <span class="product_specs__item__value" id="supplierNameRouterLink">
             <a [routerLink]="['/supplier/' + supplier.id]">
               <strong>{{supplier.name | abbreviatedBusinessName}}</strong>
+              <img class="verified_org" *ngIf="supplier.isVerifiedOrg"
+                   nz-tooltip
+                   nzTooltipTitle="Проверенная организация. Предоставлено подтверждение принадлежности учетной записи в сервисе к организации."
+                   src="./assets/img/svg/verified.svg" alt="" title="">
             </a>
         </span>
       </div>

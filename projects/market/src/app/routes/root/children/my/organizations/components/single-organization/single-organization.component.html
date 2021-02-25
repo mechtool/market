@@ -1,7 +1,13 @@
 <div class="content-wrapper page_inner">
 
   <div class="page_header">
-    <h2>{{organizationData?.name | abbreviatedBusinessName}}</h2>
+    <h2>
+      {{organizationData?.name | abbreviatedBusinessName}}
+      <img class="verified_org" *ngIf="organizationData.verificationStatus === 'Verified'"
+           nz-tooltip
+           nzTooltipTitle="Проверенная организация. Предоставлено подтверждение принадлежности учетной записи в сервисе к организации."
+           src="./assets/img/svg/verified.svg" alt="" title="">
+    </h2>
   </div>
 
   <div class="tabs_wrap tabs_wrap__moving">

@@ -59,8 +59,7 @@
       &_png {
         display: block;
         height: 22px;
-
-        margin-left: 55px;
+        margin-left: 75px;
         bottom: 20px;
         top: auto;
         position: absolute;
@@ -73,8 +72,7 @@
       &_png {
         display: block;
         height: 22px;
-
-        margin-left: 25px;
+        margin-left: 50px;
         bottom: 20px;
         top: auto;
         position: absolute;
@@ -105,8 +103,14 @@
   }
 
   .catalog_item__link .discount {
-    left: 20px;
+    left: 45px;
     bottom: 20px;
+    top: auto;
+  }
+
+  .catalog_item__link .verified_org {
+    left: 20px;
+    bottom: 18px;
     top: auto;
   }
 

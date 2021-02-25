@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { addURLParameters, removeURLParameters, updateUrlParameters } from '#shared/utils';
 
-const PAGE_SIZE = 60;
+const PAGE_SIZE = 50;
 
 @Component({
   templateUrl: './suppliers.component.html',

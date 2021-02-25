@@ -25,6 +25,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse';
     ReactiveFormsModule,
     OrganizationsRoutingModule,
     NzCollapseModule,
+    NzToolTipModule,
   ],
   declarations: [
     OrganizationsComponent,

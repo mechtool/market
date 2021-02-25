@@ -23,9 +23,7 @@ import { currencyCode } from '#shared/utils';
 export class ProductComponent implements OnDestroy {
   productId: string;
   product: ProductDto;
-
   tradeOffer: TradeOfferResponseModel;
-
   tradeOffers: TradeOfferDto[];
   sort: SortModel;
   offersFoundInUserRegion: boolean;

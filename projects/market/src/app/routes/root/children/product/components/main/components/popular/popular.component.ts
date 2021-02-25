@@ -19,6 +19,7 @@ import { NotificationsService } from '#shared/modules';
 export class MainPopularComponent implements OnInit {
   productOffers: ProductOffersModel[];
   @Input() categoryId: string;
+  @Input() size: number;
 
   constructor(
     private _productService: ProductService,

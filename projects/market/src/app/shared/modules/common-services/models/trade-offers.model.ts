@@ -32,6 +32,7 @@ export class TradeOffersSupplierModel {
   legalId: string;
   inn: string;
   kpp: string;
+  isVerifiedOrg?: boolean;
 }
 
 export class OfferDeliveryDescriptionModel {

@@ -13,6 +13,7 @@ export class TradeOfferDto {
   supplierId?: string;
   supplierName?: string;
   supplierInn?: string;
+  isVerifiedOrg?: boolean;
   audience?: AudienceModel[];
   deliveryRegions?: string[];
   pickupFrom?: string[];
@@ -29,6 +30,7 @@ export class TradeOfferDto {
       supplierId: offer.supplier?.id,
       supplierName: offer.supplier?.name,
       supplierInn: offer.supplier?.inn,
+      isVerifiedOrg: offer.supplier?.isVerifiedOrg,
       audience: offer.audience,
       deliveryRegions: TradeOfferDto._mapDeliveryRegions(offer.deliveryDescription),
       pickupFrom: TradeOfferDto._mapPickupFrom(offer.deliveryDescription),

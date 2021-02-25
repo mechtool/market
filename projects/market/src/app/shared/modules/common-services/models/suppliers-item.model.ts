@@ -11,4 +11,5 @@ export class SuppliersItemModel {
   website?: string;
   address?: string;
   publicInfo?: any;
+  isVerifiedOrg?: boolean;
 }

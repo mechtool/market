@@ -5,7 +5,7 @@
     <span class="catalog_item__title"
           nz-tooltip
           nzTooltipTitle="{{tradeOffer.supplierName | abbreviatedBusinessName}}">
-          {{tradeOffer.supplierName | abbreviatedBusinessName}}
+      {{tradeOffer.supplierName | abbreviatedBusinessName}}
     </span>
     <span class="catalog_item__about"
           nz-tooltip
@@ -31,6 +31,11 @@
           nz-tooltip
           nzTooltipTitle="Поставщик установил специальную выгодную цену для вас">Специальная цена</span>
   </div>
+
+  <img class="verified_org" *ngIf="tradeOffer.isVerifiedOrg"
+       nz-tooltip
+       nzTooltipTitle="Проверенная организация. Предоставлено подтверждение принадлежности учетной записи в сервисе к организации."
+       src="./assets/img/svg/verified.svg" alt="" title="">
 
   <img class="discount" *ngIf="tradeOffer.hasDiscount"
        src="./assets/img/svg/discount.svg" alt="Скидки"
