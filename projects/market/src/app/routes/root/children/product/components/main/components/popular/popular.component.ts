@@ -32,7 +32,7 @@ export class MainPopularComponent implements OnInit {
   }
 
   private _getPopularNomenclatures(): void {
-    this._productService.getPopularProductOffers(this.categoryId)
+    this._productService.getPopularProductOffers(this.categoryId, this.size)
       .subscribe((products) => {
         this.productOffers = products._embedded.productOffers;
       }, (err) => {
