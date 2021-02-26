@@ -11,7 +11,7 @@
             <span class="supplier_name">
               {{organizationData?.name | abbreviatedBusinessName}}
             </span>
-            <img class="verified_org" *ngIf="organizationData.verificationStatus === 'Verified'"
+            <img class="verified_org" *ngIf="organizationData?.verificationStatus === 'Verified'"
                  nz-tooltip
                  nzTooltipTitle="Проверенная организация. Предоставлено подтверждение принадлежности учетной записи в сервисе к организации."
                  src="./assets/img/svg/verified.svg" alt="" title="">
