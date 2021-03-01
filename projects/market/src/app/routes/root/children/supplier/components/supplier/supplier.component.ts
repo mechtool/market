@@ -33,7 +33,6 @@ const PAGE_SIZE = 30;
   styleUrls: ['./supplier.component.scss', './supplier.component-992.scss', './supplier.component-768.scss'],
 })
 export class SupplierSingleComponent implements OnDestroy {
-  id = Math.random();
   supplier: SuppliersItemModel;
   request: TradeOffersRequestModel;
   tradeOffersList: TradeOffersListResponseModel;

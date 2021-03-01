@@ -49,6 +49,10 @@ export class SupplierTradeOffersListComponent implements AfterViewInit {
     dispatchEvent(new CustomEvent('scroll'));
   }
 
+  ngAfterViewChecked() {
+    dispatchEvent(new CustomEvent('scroll'));
+  }
+
   minQuantity(matrix: TradeOfferPriceMatrixModel[], packageMultiplicity: number): number {
     if (matrix?.length) {
       return [...matrix].sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
