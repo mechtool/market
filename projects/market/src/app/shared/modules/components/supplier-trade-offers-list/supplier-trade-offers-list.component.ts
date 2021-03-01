@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewChecked, Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   AllGroupQueryFiltersModel,
   DefaultSearchAvailableModel,
@@ -26,7 +26,7 @@ import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
     './supplier-trade-offers-list.component-360.scss',
   ],
 })
-export class SupplierTradeOffersListComponent implements AfterViewInit {
+export class SupplierTradeOffersListComponent implements AfterViewChecked {
   @Input() supplier: SuppliersItemModel;
   @Input() tradeOffers: TradeOfferSummaryModel[];
   @Input() tradeOffersTotal: number;
