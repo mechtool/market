@@ -42,20 +42,13 @@ export class AuthService implements OnDestroy{
   }
 
   logout(path: string = '/'): Observable<any> {
-    return of(null).pipe(
+    return this.revoke().pipe(
+      delay(3e2),
       tap(() => {
         const routePath = path === '' || this.isPathWithAuth(path) ? '/' : path;
         this._userService.setUserData(null);
         redirectTo(`${ITS_URL}/logout?service=${this.origin}&relativeBackUrl=${routePath}`);
       }),
-      switchMap(() =>
-        this.revoke().pipe(
-          catchError(() => {
-            return of(null);
-          }),
-        ),
-      ),
-      delay(3e2),
     );
   }
 

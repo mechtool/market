@@ -23,7 +23,8 @@ export class ApiInterceptor implements HttpInterceptor {
     const userService = this._injector.get(UserService);
     const userStateService = this._injector.get(UserStateService);
     const localStorageService = this._injector.get(LocalStorageService);
-    const { accessToken = null, refreshToken = null } = userStateService.currentUser$.getValue() || {};
+    let { accessToken = null, refreshToken = null } = userStateService.currentUser$.getValue() || {};
+
     const modifiedReq = this._modifyReq(req, accessToken);
 
     return of(null).pipe(
@@ -34,7 +35,7 @@ export class ApiInterceptor implements HttpInterceptor {
           catchError((err: HttpErrorResponse) => {
             if (err.url.includes('auth/refresh')) {
               localStorageService.removeUserData();
-              return err.status === 403 ? authService.logout() : authService.logout('/');
+              return authService.logout();
             }
             if (accessToken && err.status === 401) {
               if (this._isTokenRefreshing$.getValue()) {
@@ -53,6 +54,7 @@ export class ApiInterceptor implements HttpInterceptor {
                 this._isTokenRefreshing$.next(true);
                 return authService.refresh({ refreshToken }).pipe(
                   tap((res) => {
+                    refreshToken = res.refreshToken;
                     userService.setUserData(res);
                   }),
                   switchMap((res) => {
