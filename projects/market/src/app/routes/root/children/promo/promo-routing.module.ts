@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
-  PromoListComponent,
   PromoFirstOrderComponent,
-  PromoSchoolOfficeComponent,
+  PromoListComponent,
+  PromoPodarokComponent,
+  PromoPodarokParticipantsListComponent,
   PromoPodarokPolozhenieComponent,
-  PromoPodarokComponent
+  PromoSchoolOfficeComponent
 } from './components';
 
 const routes: Routes = [
@@ -33,6 +34,10 @@ const routes: Routes = [
         component: PromoPodarokPolozhenieComponent,
       },
       {
+        path: 'participants-list',
+        component: PromoPodarokParticipantsListComponent,
+      },
+      {
         path: '**',
         redirectTo: '',
         pathMatch: 'full',
@@ -50,4 +55,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PromoRoutingModule {}
+export class PromoRoutingModule {
+}

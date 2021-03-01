@@ -1,0 +1,26 @@
+<div class="participants-list">
+  <h3>Список участников акции "Программный продукт в подарок!"</h3>
+
+  <div class="list">
+    <ul>
+      <li *ngFor="let item of participantsList">{{item}}</li>
+    </ul>
+  </div>
+
+  <p>
+    Ознакомиться с Положением о проведении акции можно по адресу
+    <a [routerLink]="['/promo/podarok/polozhenie']">https://1c.market/promo/podarok/polozhenie</a>.
+  </p>
+
+  <p>
+    По всем вопросам применения промокода обращайтесь, пожалуйста, по электронной почте
+    <a [attr.href]="'mailto:info@1c-interes.ru'">info@1c-interes.ru</a> или по бесплатному телефону
+    <a [attr.href]="'tel:8-800-333-42-63'">8-800-333-42-63</a>.
+  </p>
+
+  <p>
+    Результаты акции будут опубликованы на странице
+    <a [routerLink]="['/promo/podarok']">https://1c.market/promo/podarok</a> 3 марта 2021 года.
+  </p>
+
+</div>

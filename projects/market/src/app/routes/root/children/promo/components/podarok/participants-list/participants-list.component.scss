@@ -1,0 +1,29 @@
+.participants-list {
+
+  line-height: 1.5;
+
+  h3 {
+    margin-bottom: 15px;
+    margin-top: 35px;
+  }
+
+  .list {
+    margin-bottom: 20px;
+    font-style: italic;
+
+    ul, li {
+      list-style-type: decimal;
+      margin-left: 20px;
+    }
+  }
+
+  a {
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
+
+    &:hover {
+      border: none;
+    }
+  }
+}
