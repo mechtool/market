@@ -45,10 +45,6 @@ export class SupplierTradeOffersListComponent implements AfterViewInit {
               private _localStorageService: LocalStorageService) {
   }
 
-  ngAfterViewInit() {
-    dispatchEvent(new CustomEvent('scroll'));
-  }
-
   ngAfterViewChecked() {
     dispatchEvent(new CustomEvent('scroll'));
   }
