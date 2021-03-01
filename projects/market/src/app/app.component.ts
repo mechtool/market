@@ -25,11 +25,6 @@ export class AppComponent implements OnDestroy {
     });
 
     this._authedUserWindowCloseChanges$()
-      .pipe(
-        tap(() => {
-          this._authService.revoke().pipe(take(1)).subscribe();
-        }),
-      )
       .subscribe((uin) => {
         this._userService.setUserLastLoginTimestamp(uin, Date.now());
       });
