@@ -63,16 +63,10 @@ export class ProductOrderComponent implements OnInit {
       .pipe(
         debounceTime(400)
       )
-      .subscribe(
-        (res) => {
+      .subscribe((cart) => {
           this.vat = this._getVat();
-          const tradeOfferId = this.tradeOffer?.id;
-          const cartTradeOffers = res.content?.reduce((accum, curr) => {
-            return [...curr.items, ...accum];
-          }, []);
-          const foundTradeOffer = cartTradeOffers.find((x) => {
-            return x.tradeOfferId === tradeOfferId;
-          });
+          const cartTradeOffers = cart?.content?.reduce((accum, curr) => [...curr.items, ...accum], []);
+          const foundTradeOffer = cartTradeOffers?.find((order) => order.tradeOfferId === this.tradeOffer?.id);
           if (foundTradeOffer) {
             // tslint:disable-next-line:max-line-length
             this.price = this.tradeOffer.termsOfSale.price.includesVAT ? foundTradeOffer.itemTotal?.total : foundTradeOffer.itemTotal?.totalWithoutVat;

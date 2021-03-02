@@ -28,7 +28,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this._spinnerService.show();
     this._userDataSubscription = this._userStateService.currentUser$.subscribe((subject) => {
       this.userInfo = subject?.userInfo;
-      this._cartService.setActualCartData()
+      this._cartService.refreshAndGetActualCartDataRetry()
         .subscribe((cartData) => {
             this._spinnerService.hide();
             this.setCartData(cartData);

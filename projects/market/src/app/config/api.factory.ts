@@ -105,7 +105,7 @@ function createCartRetriable$(): Observable<any> {
 }
 
 function setActualCartDataRetriable$(): Observable<any> {
-  return delayedRetryWith(cartService.setActualCartData()).pipe(
+  return delayedRetryWith(cartService.refreshAndGetActualCartData()).pipe(
     catchError((e) => {
       return createCartRetriable$();
     }),

@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 import { BNetService } from './bnet.service';
 import { LocalStorageService } from './local-storage.service';
 import { CartDataResponseModel, CartModel, RelationEnumModel, } from './models';
-import { environment } from '#environments/environment';
+import { HttpErrorResponse } from '@angular/common/http';
+import { delayedRetry } from '#shared/utils';
 
 @Injectable()
 export class CartService {
@@ -36,13 +37,19 @@ export class CartService {
     );
   }
 
-  // todo возможно стоит отказаться от этого метода, ВЕРНУТЬСЯ СЮДА
-  setActualCartData(): Observable<CartDataResponseModel> {
+  refreshAndGetActualCartData(): Observable<CartDataResponseModel> {
     return this.getCartLocationLink$().pipe(
-      switchMap((cartLocationLink) => {
-        return this._bnetService.getCart(cartLocationLink)
-      }),
-      catchError((err) => throwError(err)),
+      switchMap((cartLocationLink) => this._bnetService.getCart(cartLocationLink)),
+      catchError((err: HttpErrorResponse) => throwError(err)),
+      tap((cartData) => this._setCartData(cartData)),
+    )
+  }
+
+  refreshAndGetActualCartDataRetry(): Observable<CartDataResponseModel> {
+    return this.getCartLocationLink$().pipe(
+      switchMap((cartLocationLink) => this._bnetService.getCart(cartLocationLink)),
+      catchError((err: HttpErrorResponse) => throwError(err)),
+      delayedRetry(2000, 5),
       tap((cartData) => this._setCartData(cartData)),
     )
   }
@@ -97,7 +104,7 @@ export class CartService {
 
   // Для внешних компонентов
   handleRelationAndUpdateData(relationType: string, relationHref: string, data?: CartModel): Observable<any> {
-    return this.handleRelation(relationType, relationHref, data).pipe(switchMap((_) => this.setActualCartData()));
+    return this.handleRelation(relationType, relationHref, data).pipe(switchMap(() => this.refreshAndGetActualCartDataRetry()));
   }
 
   // Заполнение location и содержимого корзины из сторейджа

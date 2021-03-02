@@ -1,5 +1,15 @@
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   MetrikaEventTypeModel,
@@ -69,34 +79,30 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
       return !elementQuery
         ? of(false)
         : merge(elementQueryFocusChanges$, elementQueryBlurChanges$).pipe(
-            map((event: FocusEvent) => {
-              return event.type === 'focus';
-            }),
-          );
+          map((event: FocusEvent) => {
+            return event.type === 'focus';
+          }),
+        );
     });
   }
 
   ngOnInit(): void {
-    this._cartService.getCartData$().subscribe(
-      (cartData) => {
-        const cartTradeOffers = cartData.content?.reduce((accum, curr) => {
-          return [...curr.items, ...accum];
-        }, []);
-        const foundTradeOffer = cartTradeOffers.find((order) => {
-          return order.tradeOfferId === this.tradeOfferId;
-        });
-        if (foundTradeOffer) {
-          this.orderStatus = OrderStatusModal.IN_CART;
-          this.form.controls.totalPositions.setValue(foundTradeOffer.quantity, { onlySelf: true, emitEvent: false });
-        } else {
-          this.orderStatus = OrderStatusModal.TO_CART;
-          this.form.controls.totalPositions.setValue(null, { onlySelf: true, emitEvent: false });
-        }
-      },
-      (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      },
-    );
+    this._cartService.getCartData$()
+      .subscribe((cart) => {
+          const cartTradeOffers = cart?.content?.reduce((accum, curr) => [...curr.items, ...accum], []);
+          const foundTradeOffer = cartTradeOffers?.find((order) => order.tradeOfferId === this.tradeOfferId);
+          if (foundTradeOffer) {
+            this.orderStatus = OrderStatusModal.IN_CART;
+            this.form.controls.totalPositions.setValue(foundTradeOffer.quantity, { onlySelf: true, emitEvent: false });
+          } else {
+            this.orderStatus = OrderStatusModal.TO_CART;
+            this.form.controls.totalPositions.setValue(null, { onlySelf: true, emitEvent: false });
+          }
+        },
+        (err) => {
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        },
+      );
   }
 
   decrease() {
@@ -155,8 +161,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
         }),
       )
-      .subscribe(
-        () => {
+      .subscribe(() => {
           this.spinnerOf();
           this.isMadeOrder.emit(true);
           this._cdr.detectChanges();
@@ -177,7 +182,6 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
 
         if (value >= this.minQuantity && value !== this.prevCount) {
           if (value % this.orderStep !== 0) {
-            /* todo Возможно данный блок нужно будет переделать, решить после закрытия задачи BNET-3597 */
             value = value - (value % this.orderStep);
             this.form.controls.totalPositions.setValue(value, { onlySelf: true, emitEvent: false });
           }

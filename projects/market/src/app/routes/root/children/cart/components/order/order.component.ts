@@ -546,7 +546,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
           this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
         }),
         switchMap(() => {
-          return this._cartService.setActualCartData();
+          return this._cartService.refreshAndGetActualCartDataRetry();
         }),
       ).subscribe((carData) => {
         this.cartDataChange.emit(carData);
@@ -868,7 +868,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             );
           }),
           switchMap(() => {
-            return this._cartService.setActualCartData();
+            return this._cartService.refreshAndGetActualCartDataRetry();
           }),
         ).subscribe((cartData) => {
           this.cartDataChange.emit(cartData);
@@ -905,7 +905,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     this._cartService
       .handleMarketplaceOffer(relationType, relationHref, orderData, recaptchaToken)
       .pipe(
-        switchMap((_) => this._cartService.setActualCartData()),
+        switchMap((_) => this._cartService.refreshAndGetActualCartDataRetry()),
         tap(() => {
           const tag = {
             event: 'transactionDL',
