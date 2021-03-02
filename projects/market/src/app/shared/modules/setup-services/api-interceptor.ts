@@ -6,10 +6,12 @@ import {
   HttpRequest,
   HttpResponse
 } from '@angular/common/http';
+import { Location } from '@angular/common';
 import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, of, throwError } from 'rxjs';
 import { catchError, filter, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { AuthService, LocalStorageService, UserService, UserStateService } from '#shared/modules/common-services';
+
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
@@ -23,6 +25,7 @@ export class ApiInterceptor implements HttpInterceptor {
     const userService = this._injector.get(UserService);
     const userStateService = this._injector.get(UserStateService);
     const localStorageService = this._injector.get(LocalStorageService);
+    const location = this._injector.get(Location);
     let { accessToken = null, refreshToken = null } = userStateService.currentUser$.getValue() || {};
 
     const modifiedReq = this._modifyReq(req, accessToken);
@@ -35,7 +38,7 @@ export class ApiInterceptor implements HttpInterceptor {
           catchError((err: HttpErrorResponse) => {
             if (err.url.includes('auth/refresh')) {
               localStorageService.removeUserData();
-              return authService.logout();
+              return authService.logout(location.path());
             }
             if (accessToken && err.status === 401) {
               if (this._isTokenRefreshing$.getValue()) {
