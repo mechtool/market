@@ -187,6 +187,15 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.order.tags?.includes('Order');
   }
 
+  get relationEnumType(): RelationEnumModel {
+    if (this.isMakeOrderOrRequestForPrice) {
+      return this.isOrderType ? RelationEnumModel.MAKE_ORDER : RelationEnumModel.REQUEST_FOR_PRICE;
+    }
+    if (this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice) {
+      return this.isOrderType ? RelationEnumModel.REGISTER_AND_MAKE_ORDER : RelationEnumModel.REGISTER_AND_REQUEST_FOR_PRICE;
+    }
+  }
+
   get unavailableItemsInOder(): boolean {
     return this.isAuthenticated && !this.isMakeOrderOrRequestForPrice && !this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice;
   }
@@ -250,7 +259,6 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return this._userService.organizations$.getValue();
   }
-
 
   get makeOrderLink(): string {
     return this.order._links?.[RelationEnumModel.MAKE_ORDER]?.href
@@ -359,6 +367,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     dispatchEvent(new CustomEvent('scroll'));
+    this._cartDataSubscription.unsubscribe();
   }
 
   validateAndSubmitOrder() {
@@ -822,37 +831,19 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       const quantityControl = item.controls.quantity;
       quantityControl.valueChanges
         .pipe(
-          tap((_) => (this.isOrderLoading = true)),
           tap((_) => {
             this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_PUT);
           }),
           switchMap((orderQuantity) => {
-            if (orderQuantity < item.value.orderQtyMin) {
-              return this._cartService
-                .handleRelation(RelationEnumModel.ITEM_REMOVE, item.value['_links'][RelationEnumModel.ITEM_REMOVE].href)
-                .pipe(
-                  tap(() => {
-                    const tag = {
-                      event: 'removeFromCart',
-                      ecommerce: {
-                        remove: {
-                          products: [
-                            {
-                              name: item.value.productName || '',
-                              id: item.value.tradeOfferId || '',
-                              price: item.value.price ? item.value.price / 100 : '',
-                              brand: '',
-                              category: '',
-                              variant: this.order?.supplier?.name || '',
-                              quantity: item.value?.quantity || '',
-                            },
-                          ],
-                        },
-                      },
-                    };
-                    this._externalProvidersService.fireGTMEvent(tag);
-                  }),
-                );
+            if (!orderQuantity || orderQuantity < item.value.orderQtyMin) {
+              if (quantityControl.touched) {
+                orderQuantity = item.value.orderQtyMin;
+                quantityControl.patchValue(orderQuantity);
+                quantityControl.markAsUntouched();
+              } else {
+                quantityControl.markAsTouched();
+                return of(null);
+              }
             }
 
             if (orderQuantity % item.value.orderQtyStep !== 0) {
@@ -871,15 +862,65 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             return this._cartService.refreshAndGetActualCartDataRetry();
           }),
         ).subscribe((cartData) => {
-          this.cartDataChange.emit(cartData);
+
+          this._changeOrderData(cartData);
         },
         (err) => {
-          this.isOrderLoading = false;
           this._cdr.detectChanges();
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
     });
+  }
+
+  private _changeOrderData(cartData: CartDataResponseModel) {
+    const key = this.relationEnumType;
+    const link = this.isMakeOrderOrRequestForPrice
+      ? this.makeOrderLinkOrRequestForPriceLink : this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink;
+
+    this.order = cartData.content.find((item) => item._links?.[key]?.href === link);
+
+    this.itemsControls.forEach((control, index) => {
+      const product = this.order.items[index];
+      control.controls.tradeOfferId.patchValue(product.tradeOfferId, { onlySelf: true, emitEvent: true });
+      control.controls.productName.patchValue(product.productName, { onlySelf: true, emitEvent: true });
+      control.controls.partNumber.patchValue(product.partNumber, { onlySelf: true, emitEvent: true });
+      control.controls.packaging.patchValue(product.packaging, { onlySelf: true, emitEvent: true });
+      control.controls.imageUrl.patchValue(this._imageUrl(product.imageUrls), { onlySelf: true, emitEvent: true });
+      control.controls.price.patchValue(product.price, { onlySelf: true, emitEvent: true });
+      control.controls.priceBeforeDiscount.patchValue(product.priceBeforeDiscount, { onlySelf: true, emitEvent: true });
+      control.controls.maxDaysForShipment.patchValue(product.maxDaysForShipment, { onlySelf: true, emitEvent: true });
+      control.controls.priceIncludesVAT.patchValue(product.priceIncludesVAT || false, {
+        onlySelf: true,
+        emitEvent: true
+      });
+      control.controls.orderQtyMin.patchValue(product.orderQtyMin, { onlySelf: true, emitEvent: true });
+      control.controls.orderQtyStep.patchValue(product.orderQtyStep, { onlySelf: true, emitEvent: true });
+      control.controls.stockAmount.patchValue(product.stockAmount, { onlySelf: true, emitEvent: true });
+      control.controls.stockLevel.patchValue(product.stockLevel, { onlySelf: true, emitEvent: true });
+      control.controls.nsymb.patchValue(product.unitOkei?.nsymb, { onlySelf: true, emitEvent: true });
+      (control.controls.warning as FormArray).clear();
+      this._warnings(product.tradeOfferId).forEach(((fc) => (control.controls.warning as FormArray).push(fc)));
+      control.controls.availableToOrder.patchValue(this._availableToOrder(product.tradeOfferId), {
+        onlySelf: true,
+        emitEvent: true
+      });
+      control.controls.vat.patchValue(VATS[product.vat] || 0, { onlySelf: true, emitEvent: true });
+      control.controls.total.patchValue(product.itemTotal?.total, { onlySelf: true, emitEvent: true });
+      control.controls.totalWithoutVat.patchValue(product.itemTotal?.totalWithoutVat, {
+        onlySelf: true,
+        emitEvent: true
+      });
+      control.controls._links.patchValue(product._links, { onlySelf: true, emitEvent: true });
+    });
+
+
+    this.form.patchValue({
+      total: this.order.orderTotal?.total,
+      totalVat: this.order.orderTotal?.totalVat,
+    }, { onlySelf: true, emitEvent: true });
+
+    this._cdr.detectChanges();
   }
 
   private _executeMakeOrderOrRequestForPrice() {
@@ -896,7 +937,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this._send(relationType, this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink, this._createRegisterOrderData(), token);
 
-        }, (err) => {
+      }, (err) => {
         this._notificationsService.error('Невозможно отправить заказ. Попробуйте позже.');
       });
   }
@@ -1112,7 +1153,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       stockAmount: product.stockAmount,
       stockLevel: product.stockLevel,
       nsymb: product.unitOkei?.nsymb,
-      warning: this._warnings(product.tradeOfferId),
+      warning: this._fb.array(this._warnings(product.tradeOfferId)),
       availableToOrder: new FormControl(this._availableToOrder(product.tradeOfferId), [Validators.requiredTrue]),
       vat: VATS[product.vat] || 0,
       total: product.itemTotal?.total,
@@ -1121,10 +1162,8 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  private _warnings(tradeOfferId: string): FormArray {
-    const violations =
-      this.order.makeOrderViolations?.filter((x) => tradeOfferId === x.tradeOfferId).map((x) => new FormControl(x.message)) || null;
-    return violations ? new FormArray(violations) : null;
+  private _warnings(tradeOfferId: string): FormControl[] {
+    return this.order.makeOrderViolations?.filter((x) => tradeOfferId === x.tradeOfferId).map((x) => this._fb.control(x.message)) || [];
   }
 
   private _availableToOrder(tradeOfferId: string): boolean {

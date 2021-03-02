@@ -554,15 +554,14 @@
       </div>
 
       <div class="order__total_btn">
-        <button id="checkoutButton" nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()"
-                [disabled]="unavailableToOrder">
+        <button nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()" [disabled]="unavailableToOrder">
           {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
-        <button nz-button nzType="link" type="button" (click)="navigationBack()"
-                *ngIf="selectedTabIndex === 0 && isHistoryAvailable">Продолжить подбор
+        <button *ngIf="selectedTabIndex === 0 && isHistoryAvailable" nz-button nzType="link" type="button" (click)="navigationBack()">
+          Продолжить подбор
         </button>
-        <button nz-button nzType="link" type="button" (click)="changeSelectedTabIndex(0)"
-                *ngIf="selectedTabIndex === 1">Вернуться к товарам
+        <button *ngIf="selectedTabIndex === 1" nz-button nzType="link" type="button" (click)="changeSelectedTabIndex(0)">
+          Вернуться к товарам
         </button>
       </div>
     </div>
