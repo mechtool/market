@@ -51,35 +51,39 @@ export class ExternalProvidersService {
   }
 
   hitYandexMetrika(): void {
-    waitFor(() => this._isProduction && this.ym, () => {
-      const newPath = this._location.path();
-      this.ym?.(this._metrikaID, 'hit', newPath, {
-        referer: this._yandexMetrikaPrevPath,
+    if (this._isProduction) {
+      waitFor(() => this.ym, () => {
+        const newPath = this._location.path();
+        this.ym?.(this._metrikaID, 'hit', newPath, {
+          referer: this._yandexMetrikaPrevPath,
+        });
+        this._yandexMetrikaPrevPath = newPath;
       });
-      this._yandexMetrikaPrevPath = newPath;
-    });
+    }
   }
 
   fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): void {
-    waitFor(() => this._isProduction && this.ym, () => {
-      const login = this._userStateService.currentUser$.getValue()?.userInfo.login;
-      let opts = options;
-      if (opts?.params && login) {
-        opts.params['логин'] = login;
-      }
-      if (!opts?.params && login) {
-        opts = {
-          params: {
-            логин: login,
-          },
-        };
-      }
-      if (!opts) {
-        this.ym?.(this._metrikaID, 'reachGoal', eventType);
-      }
-      if (opts) {
-        this.ym?.(this._metrikaID, 'reachGoal', eventType, opts);
-      }
-    })
+    if (this._isProduction) {
+      waitFor(() => this.ym, () => {
+        const login = this._userStateService.currentUser$.getValue()?.userInfo.login;
+        let opts = options;
+        if (opts?.params && login) {
+          opts.params['логин'] = login;
+        }
+        if (!opts?.params && login) {
+          opts = {
+            params: {
+              логин: login,
+            },
+          };
+        }
+        if (!opts) {
+          this.ym?.(this._metrikaID, 'reachGoal', eventType);
+        }
+        if (opts) {
+          this.ym?.(this._metrikaID, 'reachGoal', eventType, opts);
+        }
+      })
+    }
   }
 }
