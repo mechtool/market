@@ -4,6 +4,7 @@ import { MetrikaEventOptionsModel, MetrikaEventTypeModel } from './models';
 import { UserStateService } from './user-state.service';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { environment } from '#environments/environment';
+import { waitFor } from '#shared/utils';
 
 declare global {
   interface Window {
@@ -17,8 +18,11 @@ export class ExternalProvidersService {
   private _renderer: Renderer2;
   private _yandexTranslatePopupEl: HTMLElement = null;
   private _yandexMetrikaPrevPath = this._location.path();
-  private readonly _ym: any = null;
-  private readonly _isMetrikaAvailable: boolean = null;
+  private _isProduction = environment['production'] || false;
+
+  get ym(): any {
+    return isPlatformBrowser(this._platformId) ? window.ym || null : null;
+  }
 
   constructor(
     private _rendererFactory: RendererFactory2,
@@ -28,8 +32,6 @@ export class ExternalProvidersService {
     @Inject(PLATFORM_ID) private _platformId: Object,
   ) {
     this._renderer = _rendererFactory.createRenderer(null, null);
-    this._ym = isPlatformBrowser(this._platformId) ? window.ym || null : null;
-    this._isMetrikaAvailable = !!(this._ym && this._metrikaID);
   }
 
   resetYandexTranslatePopupPosition(): void {
@@ -43,23 +45,23 @@ export class ExternalProvidersService {
   }
 
   fireGTMEvent(tag: any): void {
-    if (this._isMetrikaAvailable) {
+    if (this._isProduction) {
       this._gtmService.pushTag(tag);
     }
   }
 
   hitYandexMetrika(): void {
-    if (this._isMetrikaAvailable) {
+    waitFor(() => this._isProduction && this.ym, () => {
       const newPath = this._location.path();
-      this._ym(this._metrikaID, 'hit', newPath, {
+      this.ym?.(this._metrikaID, 'hit', newPath, {
         referer: this._yandexMetrikaPrevPath,
       });
       this._yandexMetrikaPrevPath = newPath;
-    }
+    });
   }
 
   fireYandexMetrikaEvent(eventType: MetrikaEventTypeModel, options?: MetrikaEventOptionsModel): void {
-    if (this._isMetrikaAvailable) {
+    waitFor(() => this._isProduction && this.ym, () => {
       const login = this._userStateService.currentUser$.getValue()?.userInfo.login;
       let opts = options;
       if (opts?.params && login) {
@@ -73,11 +75,11 @@ export class ExternalProvidersService {
         };
       }
       if (!opts) {
-        this._ym(this._metrikaID, 'reachGoal', eventType);
+        this.ym?.(this._metrikaID, 'reachGoal', eventType);
       }
       if (opts) {
-        this._ym(this._metrikaID, 'reachGoal', eventType, opts);
+        this.ym?.(this._metrikaID, 'reachGoal', eventType, opts);
       }
-    }
+    })
   }
 }
