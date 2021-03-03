@@ -11,7 +11,7 @@ import { StockPipe } from './stock.pipe';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { CurrencyPricePipe } from './currency.pipe';
 import { AbbreviatedBusinessNamePipe } from './abbreviated-business-name.pipe';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { OrganizationLogoPipe } from './organization-logo.pipe';
 import { FeatureValuePipe } from './feature-value.pipe';
 import { LocalityJoinerPipe } from './locality-joiner.pipe';
@@ -20,12 +20,16 @@ import { DeliveryMethodPipe } from './delivery-method.pipe';
 import { HiddenSymbolsPipe } from './hidden-symbols.pipe';
 import { MinPricePipe } from './min-price.pipe';
 import { CastControlPipe } from './cast-control.pipe';
+import { DocumentStatusPipe } from './document-status.pipe';
+import { DocumentStatusMessagePipe } from './document-status-message.pipe';
 
 @NgModule({
   declarations: [
     MultiplierPipe,
     MinPricePipe,
     DeclensionPipe,
+    DocumentStatusPipe,
+    DocumentStatusMessagePipe,
     PlaceJoinerPipe,
     ArrayJoinerPipe,
     AvailabilityPipe,
@@ -48,6 +52,8 @@ import { CastControlPipe } from './cast-control.pipe';
     MultiplierPipe,
     MinPricePipe,
     DeclensionPipe,
+    DocumentStatusPipe,
+    DocumentStatusMessagePipe,
     PlaceJoinerPipe,
     ArrayJoinerPipe,
     AvailabilityPipe,
@@ -67,7 +73,8 @@ import { CastControlPipe } from './cast-control.pipe';
     CastControlPipe,
   ],
   providers: [
-    CurrencyPipe
+    CurrencyPipe,
+    DatePipe,
   ],
 })
 export class PipesModule {

@@ -237,6 +237,10 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/edi/accounts/${id}`);
   }
 
+  documentStatusDelivered(id: number): Promise<any> {
+    return this._apiService.put(`${API_URL}/edi/status-delivered/${id}`).toPromise();
+  }
+
   findCounterpartyDataByInn(inn: string): Observable<CounterpartyResponseModel> {
     return this._apiService.get(`${API_URL}/counterparty/${inn}`);
   }

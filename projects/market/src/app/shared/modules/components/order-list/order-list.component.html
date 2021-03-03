@@ -14,6 +14,9 @@
       <div class="table_cell cell_sum">
         <span>Сумма</span>
       </div>
+      <div class="table_cell cell_status">
+        <span>Статус</span>
+      </div>
     </div>
 
     <div class="table_row table_data" *ngFor="let document of documents" (click)="openDocument(payment_document)">
@@ -31,6 +34,13 @@
       </div>
       <div class="table_cell cell_sum" data-title="Сумма:">
         <span class="price">{{document.price | marketMultiplier:'.01' | currencyPrice: document.currency}}</span>
+      </div>
+      <div class="table_cell cell_status" data-title="Статус:">
+        <span class="status"
+              nz-tooltip
+              nzTooltipTitle="{{document.status | documentStatusMessage}}">
+          {{document.status | documentStatus : document.sentDate : document.receivedDate}}
+        </span>
       </div>
       <div class="table_cell cell_action">
         <button type="button" class="btn btn-gray btn_long">Посмотреть заказ</button>

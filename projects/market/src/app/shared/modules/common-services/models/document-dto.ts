@@ -8,6 +8,9 @@ export class DocumentDto {
   orderDate: number;
   price: number;
   currency: string;
+  status?: string;
+  sentDate?: number;
+  receivedDate?: number
 
   static forOrder(model: DocumentResponseModel): DocumentDto {
     return {
@@ -18,6 +21,9 @@ export class DocumentDto {
       orderDate: model.sentDate,
       price: model.moneyAmount,
       currency: model.currency?.toString(),
+      status: model.deliveryStatus,
+      sentDate: model.sentDate,
+      receivedDate: model.receivedDate,
     };
   }
 
@@ -30,6 +36,7 @@ export class DocumentDto {
       orderDate: model.sentDate,
       price: model.moneyAmount,
       currency: model.currency?.toString(),
+      status: model.deliveryStatus,
     };
   }
 }

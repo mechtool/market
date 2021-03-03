@@ -46,6 +46,10 @@ export class EdiService {
     return this._bnetService.getAccountDocument(id);
   }
 
+  documentStatusDelivered(documentId: number): Promise<any> {
+    return this._bnetService.documentStatusDelivered(documentId);
+  }
+
   private _legalIds() {
     const limit = 100;
     const userOrganizations = this._userService.organizations$.getValue()?.slice(0, limit);
@@ -56,6 +60,5 @@ export class EdiService {
     }
     return null;
   }
-
 }
 

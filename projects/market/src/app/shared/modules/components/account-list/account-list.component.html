@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="table_row table_data" *ngFor="let document of documents" (click)="openDocument(payment_document)">
+    <div class="table_row table_data" [ngClass]="{'not_read': document.status === 'SENT'}" *ngFor="let document of documents" (click)="openDocument(document.id, document.status, payment_document)">
       <div class="table_cell cell_title" data-title="Отправитель:">
         <div class="supplier_title">
           <span class="supplier_image" style="{{document.partyInn | organizationLogo}}"></span>

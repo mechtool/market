@@ -2,7 +2,8 @@
   .table_list__orders .cell_number[data-title]:before,
   .table_list__orders .cell_title[data-title]:before,
   .table_list__orders .cell_date[data-title]:before,
-  .table_list__orders .cell_sum[data-title]:before {
+  .table_list__orders .cell_sum[data-title]:before,
+  .table_list__orders .cell_status[data-title]:before {
     width: 70px;
   }
 }

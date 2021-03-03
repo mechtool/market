@@ -8,6 +8,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   imports: [
@@ -19,8 +20,10 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     InfiniteScrollModule,
     SharedDepsModule,
     PaymentDocumentModule,
+    NzToolTipModule,
   ],
   exports: [OrderListComponent],
   declarations: [OrderListComponent],
 })
-export class OrderListModule {}
+export class OrderListModule {
+}
