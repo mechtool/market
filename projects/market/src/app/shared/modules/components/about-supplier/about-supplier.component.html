@@ -126,10 +126,8 @@
       </span>
     </div>
   </div>
-</div>
 
-<div class="section_paragraph" *ngIf="showStoreButton && supplier">
-  <div class="section__btns">
+  <div class="section__btns" *ngIf="showStoreButton">
     <a [routerLink]="['/supplier/' + supplier.id]" class="btn btn-gray">В магазин поставщика</a>
   </div>
 </div>

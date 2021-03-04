@@ -14,7 +14,7 @@ export * from './product-description';
 export * from './product-gallery';
 export * from './product-order';
 export * from './product-side';
-export * from './search-bar';
+export * from './supplier-search-bar';
 export * from './search-area';
 export * from './search-results';
 export * from './search-counterparty';

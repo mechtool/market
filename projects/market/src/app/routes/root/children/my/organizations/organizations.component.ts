@@ -210,6 +210,10 @@ export class OrganizationsComponent implements OnInit {
       nzViewContainerRef: this._viewContainerRef,
       nzFooter: null,
       nzWidth: 480,
+      nzComponentParams: {
+        inn: this._activatedRoute.snapshot.queryParamMap.get('inn'),
+        kpp: this._activatedRoute.snapshot.queryParamMap.get('kpp'),
+      },
     });
 
     modal.afterClose.pipe(filter((res) => !res && this.activeTabType !== 'c')).subscribe(() => {

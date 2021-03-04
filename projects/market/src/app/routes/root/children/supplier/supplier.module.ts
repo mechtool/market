@@ -10,7 +10,7 @@ import {
   ProductGalleryModule,
   ProductOrderModule,
   SearchAreaModule,
-  SearchBarModule,
+  SupplierSearchBarModule,
   SupplierCardModule,
   TermsOfSaleModule,
 } from '#shared/modules';
@@ -27,7 +27,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     CommonModule,
     FormsModule,
     SupplierRoutingModule,
-    SearchBarModule,
+    SupplierSearchBarModule,
     SupplierCardModule,
     NzSpinModule,
     NzIconModule,

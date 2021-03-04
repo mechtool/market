@@ -946,7 +946,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     this._cartService
       .handleMarketplaceOffer(relationType, relationHref, orderData, recaptchaToken)
       .pipe(
-        switchMap((_) => this._cartService.refreshAndGetActualCartDataRetry()),
+        switchMap(() => this._cartService.refreshAndGetActualCartDataRetry()),
         tap(() => {
           const tag = {
             event: 'transactionDL',
@@ -982,7 +982,8 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
           this._cartModalService.openOrderSentModal(this.isOrderType);
         }
         if (this.isRegisterAndMakeOrderOrRegisterAndRequestForPrice) {
-          this._cartModalService.openRegisterAndOrderSentModal(this.isOrderType, this.isAnonymous);
+          this._cartModalService
+            .openRegisterAndOrderSentModal(this.isOrderType, this.isAnonymous, this.enteredCustomerData.inn, this.enteredCustomerData.kpp);
         }
         this.cartDataChange.emit(cartData);
       },

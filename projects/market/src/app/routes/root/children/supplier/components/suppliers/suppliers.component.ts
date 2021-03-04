@@ -34,11 +34,11 @@ export class SupplierListComponent implements AfterViewInit {
 
   constructor(
     private _router: Router,
+    private _location: Location,
+    private _spinnerService: SpinnerService,
     private _activatedRoute: ActivatedRoute,
     private _supplierService: SupplierService,
     private _notificationsService: NotificationsService,
-    private _spinnerService: SpinnerService,
-    private _location: Location,
   ) {
     this._initForm();
   }

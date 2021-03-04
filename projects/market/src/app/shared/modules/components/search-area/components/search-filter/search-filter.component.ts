@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild, } from '@angular/core';
 import { SearchAreaService } from '#shared/modules/components/search-area/search-area.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -16,7 +7,7 @@ import {
   priceRangeConditionValidator,
   supplierNameConditionValidator,
 } from './search-filter-conditions.validator';
-import { BehaviorSubject, merge, of, Subscription } from 'rxjs';
+import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { getPropValueByPath, unsubscribeList } from '#shared/utils';
 import {
   catchError,
@@ -25,7 +16,6 @@ import {
   distinctUntilChanged,
   expand,
   filter,
-  map,
   pairwise,
   startWith,
   switchMap,
@@ -126,7 +116,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     private _searchAreaService: SearchAreaService,
     private _fb: FormBuilder,
     private _notificationsService: NotificationsService,
-  ) {}
+  ) {
+  }
 
   resetControl(controlName: string) {
     this.form.get(controlName).patchValue(this._filterFormConfig[controlName]);

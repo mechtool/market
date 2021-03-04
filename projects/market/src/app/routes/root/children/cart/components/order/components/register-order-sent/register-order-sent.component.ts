@@ -14,6 +14,8 @@ import { ExternalProvidersService, MetrikaEventTypeModel } from '#shared/modules
 export class RegisterOrderSentComponent implements OnInit {
   @Input() isOrderType: boolean;
   @Input() isAnonymous: boolean;
+  @Input() inn: string;
+  @Input() kpp: string;
   @Output() destroyModalChange: Subject<any> = new Subject();
   title: string;
   description: string;
@@ -45,7 +47,7 @@ export class RegisterOrderSentComponent implements OnInit {
       this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_AUTH_REGISTER);
       this._authService.register();
     } else {
-      this._router.navigateByUrl('/my/organizations?tab=c');
+      this._router.navigateByUrl(`/my/organizations?tab=c${this.inn ? `&inn=${this.inn}` : ''}${this.kpp ? `&kpp=${this.kpp}` : ''}`);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -15,11 +15,15 @@ import { ExternalProvidersService } from '#shared/modules';
   styleUrls: ['./requisites-checker.component.scss'],
 })
 export class RequisitesCheckerComponent implements OnInit {
-  enterKpp = false;
   form: FormGroup;
+  enterKpp = false;
+  @Input() inn: string;
+  @Input() kpp: string;
   @Output() legalRequisitesChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(private _fb: FormBuilder, private _externalProvidersService: ExternalProvidersService) {
+  constructor(
+    private _fb: FormBuilder,
+    private _externalProvidersService: ExternalProvidersService) {
   }
 
   ngOnInit() {
@@ -27,13 +31,22 @@ export class RequisitesCheckerComponent implements OnInit {
   }
 
   private _initForm(): void {
-    this.form = this._fb.group(
-      {
-        inn: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$'), innConditionValidator]),
-        kpp: new FormControl('', [Validators.pattern('^[0-9]*$'), kppConditionValidator]),
+    if (this.kpp) {
+      this.enterKpp = true;
+    }
+    this.form = this._fb.group({
+        inn: new FormControl(this.inn, [Validators.required, Validators.pattern('^[0-9]*$'), innConditionValidator]),
+        kpp: new FormControl(this.kpp, [Validators.pattern('^[0-9]*$'), kppConditionValidator]),
       },
-      { validator: innKppConditionValidator },
-    );
+      { validator: innKppConditionValidator });
+
+    this.form.controls.inn.valueChanges
+      .subscribe((inn) => {
+        if (inn.length === 12) {
+          this.enterKpp = false;
+          this.form.controls.kpp.patchValue('', { onlySelf: true, emitEvent: true })
+        }
+      })
   }
 
   onlyNumberKey(event) {

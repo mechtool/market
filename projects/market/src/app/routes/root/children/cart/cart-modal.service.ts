@@ -30,7 +30,7 @@ export class CartModalService {
     });
   }
 
-  openRegisterAndOrderSentModal(isOrderType: boolean, isAnonymous: boolean): void {
+  openRegisterAndOrderSentModal(isOrderType: boolean, isAnonymous: boolean, inn: string, kpp: string): void {
     const modal = this._modalService.create({
       nzContent: RegisterOrderSentComponent,
       nzFooter: null,
@@ -38,6 +38,8 @@ export class CartModalService {
       nzComponentParams: {
         isOrderType,
         isAnonymous,
+        inn,
+        kpp
       }
     });
     modal.componentInstance.destroyModalChange.subscribe(() => {

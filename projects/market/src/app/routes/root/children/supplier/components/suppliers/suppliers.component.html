@@ -1,14 +1,9 @@
 <div *ngIf="supplierData">
 
-  <market-search-bar
+  <market-supplier-search-bar
     [query]="query"
-    placeholder="Поиск поставщиков"
     (submitClick)="changeQueryParameters($event)"
-    [suggestionsOff]="true"
-    [filterVisible]="false"
-    minQueryLength="3"
-    maxQueryLength="100"
-  ></market-search-bar>
+  ></market-supplier-search-bar>
 
   <div class="catalog_header">
     <div class="catalog_header__count">

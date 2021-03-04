@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SupplierTradeOffersListComponent } from './supplier-trade-offers-list.component';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { SearchBarModule } from '#shared/modules/components/search-bar';
+import { SupplierSearchBarModule } from '#shared/modules/components/supplier-search-bar';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ProductSideModule, SorterModule, SpinnerModule } from '#shared/modules';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -15,7 +15,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     CommonModule,
     RouterModule,
     NzToolTipModule,
-    SearchBarModule,
+    SupplierSearchBarModule,
     NzIconModule,
     NzSpinModule,
     InfiniteScrollModule,

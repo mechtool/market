@@ -1,0 +1,30 @@
+<div class="search" [ngClass]="{'focused': isInputFocused}">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <nz-input-group [nzSuffix]="inputClearTpl">
+      <input
+        nz-input
+        id="search_bar_input"
+        placeholder="Поиск поставщиков"
+        autocomplete="false"
+        list="null"
+        name="query"
+        formControlName="query"
+        (focus)="isInputFocused = true;"
+        (blur)="isInputFocused = false"/>
+    </nz-input-group>
+
+    <ng-template #inputClearTpl>
+      <div class="input_clear">
+        <img *ngIf="form.value.query?.length" src="assets/img/svg/icon__close.svg" alt="" (click)="cleanQuery()">
+      </div>
+    </ng-template>
+
+    <div class="buttons">
+      <div class="buttons__item">
+        <button id="search_bar_button" class="btn btn_square btn_search"
+                [ngClass]="{'disabled': form.invalid}"></button>
+      </div>
+    </div>
+  </form>
+</div>

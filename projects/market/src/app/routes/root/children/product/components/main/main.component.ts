@@ -2,13 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { AllGroupQueryFiltersModel } from '#shared/modules/common-services/models';
 import { Params, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ExternalProvidersService, LocalStorageService, NotificationsService, SuggestionService } from '#shared/modules/common-services';
+import {
+  ExternalProvidersService,
+  LocalStorageService,
+  NotificationsService,
+  SuggestionService
+} from '#shared/modules/common-services';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss', './main.component-768.scss'],
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
   constructor(
@@ -17,7 +22,8 @@ export class MainComponent implements OnInit {
     private _localStorageService: LocalStorageService,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     const tag = {
