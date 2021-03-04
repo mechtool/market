@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { UserService } from './user.service';
-import { CategoryModel, CategoryRequestModel } from './models';
-import { filter, map } from 'rxjs/operators';
-import { deepTreeParentsSearch, deepTreeSearch, getFlatPropertyArray } from '#shared/utils';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { CategoryModel, CategoryRequestModel, CategoryResponseModel } from './models';
+import { catchError, map, tap } from 'rxjs/operators';
+import {
+  convertListToTree,
+  deepTreeParentsSearch,
+  deepTreeSearch,
+  getFlatObjectArray,
+  getFlatPropertyArray
+} from '#shared/utils';
 import { BNetService } from './bnet.service';
 import { BannerItemModel } from '#shared/modules/components/banners/models/banner-item.model';
 import { categoryPromotion } from '#environments/promotions';
@@ -12,54 +17,87 @@ const CATEGORY_OTHER = '6341';
 
 @Injectable()
 export class CategoryService {
-  categoryPromos: {
+  private categoryTree$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
+  private categoryList$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
+  private categoryIdsForPopularProducts = ['1', '616', '651', '3321', '3349', '5681'];
+  private categoryPromos: {
     [id: string]: BannerItemModel[];
   }[] = [];
-  categoryIdsPopularEnabled = ['1', '616', '651', '3321', '3349', '5681'];
 
-  constructor(private _bnetService: BNetService, private _userService: UserService) {
-    this._init();
+  constructor(private _bnetService: BNetService) {
+    this._setCategoryPromotion();
   }
 
-  private _init() {
-    this._setPromo();
+  updateCategories(): Observable<any> {
+    return this._bnetService.getCategories().pipe(
+      catchError(() => {
+        this.categoryTree$.next(null);
+        this.categoryList$.next(null);
+        return throwError(null);
+      }),
+      tap((res: CategoryResponseModel) => {
+        this.categoryList$.next(res.categories);
+        const tree = convertListToTree(res.categories).filter((category) => !!category);
+        this.categoryTree$.next(tree);
+      }),
+    );
+  }
+
+  getCategoriesList(): Observable<CategoryModel[]> {
+    return this.categoryList$;
+  }
+
+  getCategoriesTree(): Observable<CategoryModel[]> {
+    return this.categoryTree$;
+  }
+
+  getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
+    if (categoryId !== CATEGORY_OTHER) {
+      return this.getCategoriesTree().pipe(
+        map((res) => {
+          return deepTreeParentsSearch(res, 'id', categoryId);
+        }),
+      );
+    }
+    return of([]);
   }
 
   getCategory(categoryId: string): Observable<CategoryModel> {
-    if (categoryId !== CATEGORY_OTHER) {
-      return this.getCategories().pipe(
-        map((res) => {
-          return deepTreeSearch(res, 'id', (k, v) => v === categoryId);
+    if (categoryId && categoryId !== CATEGORY_OTHER) {
+      return this.getCategoriesTree().pipe(
+        map((categories) => {
+          return deepTreeSearch(categories, 'id', (k, v) => v === categoryId);
         }),
       );
     }
     return of(null);
   }
 
-  getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
+  getChildrenTreeOfCategory(categoryId: string): Observable<CategoryModel[]> {
     if (categoryId !== CATEGORY_OTHER) {
-      return this.getCategories().pipe(
-        map((res) => {
-          return deepTreeParentsSearch(res, 'id', categoryId);
-        }),
-      );
+      return this.getCategoriesTree()
+        .pipe(
+          map((categories) => {
+            if (categories) {
+              const foundCategory = deepTreeSearch(categories, 'id', (k, v) => v === categoryId);
+              return foundCategory?.children;
+            }
+            return []
+          }),
+        );
     }
-    return this.emptyCategory();
+    return of([]);
   }
 
-  getCategoriesChildren(categoryId: string): Observable<CategoryModel[]> {
-    if (categoryId !== CATEGORY_OTHER) {
-      return this.getCategories().pipe(
-        map((res) => {
-          const foundCategory = deepTreeSearch(res, 'id', (k, v) => v === categoryId);
-          return foundCategory?.children;
-        }),
-      );
-    }
-    return this.emptyCategory();
+  getChildrenListOfCategory(categoryId: string): Observable<CategoryModel[]> {
+    return this.getChildrenTreeOfCategory(categoryId).pipe(
+      map((childrenCategory) => {
+        return getFlatObjectArray(childrenCategory);
+      }),
+    );
   }
 
-  getAllSupplierCategories(query?: CategoryRequestModel): Observable<CategoryModel[]> {
+  getSupplierCategoriesList(query: CategoryRequestModel): Observable<CategoryModel[]> {
     return this._bnetService.getCategories(query).pipe(
       map((res) => {
         return res.categories;
@@ -71,15 +109,15 @@ export class CategoryService {
     return of(this.categoryPromos[categoryId] || null);
   }
 
-  getCategories(): Observable<CategoryModel[]> {
-    return this._userService.categories$.pipe(filter((res) => !!res));
+  isCategoryPopularProducts(categoryId): Observable<boolean> {
+    return of(this.categoryIdsForPopularProducts.includes(categoryId));
   }
 
-  private _setPromo() {
+  private _setCategoryPromotion() {
     Object.keys(categoryPromotion).forEach((categoryId) => {
       this.categoryPromos[categoryId] = categoryPromotion[categoryId];
       if (categoryId) {
-        this.getCategoriesChildren(categoryId).subscribe((cat) => {
+        this.getChildrenTreeOfCategory(categoryId).subscribe((cat) => {
           const childCategoriesIds = getFlatPropertyArray(cat);
           childCategoriesIds.forEach((childCategoryId) => {
             this.categoryPromos[childCategoryId] = categoryPromotion[categoryId];
@@ -87,9 +125,5 @@ export class CategoryService {
         });
       }
     });
-  }
-
-  private emptyCategory(): Observable<CategoryModel[]> {
-    return of([]);
   }
 }

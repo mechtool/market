@@ -1,10 +1,10 @@
 <div>
-  <h2>{{category?.name || 'Товары'}}</h2>
+  <h2>{{rootCategoryName || 'Товары'}}</h2>
   <div class="sub_category__content">
     <ul class="sub_category__list">
-      <li class="sub_category__item" *ngFor="let item of categories">
-        <a [routerLink]="'/category/' + item.id" (click)="goToCategory(item.id, $event)">
-          {{item.name}}
+      <li class="sub_category__item" *ngFor="let category of categories">
+        <a [routerLink]="'/category/' + category.id" (click)="goToCategory(category.id, $event)">
+          {{category.name}}
         </a>
       </li>
     </ul>

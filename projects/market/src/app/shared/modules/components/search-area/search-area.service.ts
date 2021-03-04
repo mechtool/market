@@ -1,31 +1,34 @@
 import { Inject, Injectable, Injector, ViewContainerRef } from '@angular/core';
-import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
-import { BNetService } from '#shared/modules/common-services/bnet.service';
-import { UserService } from '#shared/modules/common-services/user.service';
-import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import {
-  CategoryModel, CategoryRequestModel,
+  CategoryService,
+  LocalStorageService,
+  LocationService,
+  NavigationService,
+  OrganizationsService,
+  OverlayService,
+  SuggestionService,
+  SupplierService,
+  UserService,
+} from '#shared/modules/common-services';
+import {
+  CategoryModel,
   Level,
   LocationModel,
   OrganizationResponseModel,
+  ProductOffersSummaryFeatureModel,
   SuggestionCategoryItemModel,
   SuggestionProductItemModel,
   SuppliersItemModel,
 } from '#shared/modules/common-services/models';
 import { SearchItemHistoryModel } from './models/search-item-history.model';
-import { BehaviorSubject, defer, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CategoryItemModel, SearchResultsTitleEnumModel } from './models';
-import { map, pluck, switchMap, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { OverlayService } from '#shared/modules/common-services/overlay.service';
 import { APP_CONFIG, AppConfigModel } from '../../../../config';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CategoryService } from '#shared/modules/common-services/category.service';
-import { deepTreeSearch, getFlatObjectArray } from '#shared/utils';
-import { ProductOffersSummaryFeatureModel } from '#shared/modules/common-services/models/product-offers-summary.model';
 
-const CATEGORY_OTHER = '6341';
 
 @Injectable()
 export class SearchAreaService {
@@ -56,7 +59,8 @@ export class SearchAreaService {
   summaryFeaturesData$: BehaviorSubject<{
     hasProducts: boolean,
     featuresQueries: string[],
-    values: ProductOffersSummaryFeatureModel[] }> = new BehaviorSubject(null);
+    values: ProductOffersSummaryFeatureModel[]
+  }> = new BehaviorSubject(null);
 
   activeResultsItemChange$: Subject<{ text: string; type: string }> = new Subject();
   upDownKeyboardInputCtrlEvent$: Subject<any> = new Subject();
@@ -78,19 +82,26 @@ export class SearchAreaService {
     return this._appConfig.retryDelay;
   }
 
-  get categories$(): BehaviorSubject<CategoryModel[]> {
-    return this._userService.categories$;
+  get categoriesTree(): Observable<CategoryModel[]> {
+    return this._categoryService.getCategoriesTree();
+  }
+
+  getCategory(categoryId: string): Observable<CategoryModel> {
+    return this._categoryService.getCategory(categoryId);
   }
 
   constructor(
-    private _localStorageService: LocalStorageService,
-    private _bnetService: BNetService,
-    private _categoryService: CategoryService,
-    private _userService: UserService,
-    private _overlay: Overlay,
-    private _overlayService: OverlayService,
-    private _navService: NavigationService,
     private _fb: FormBuilder,
+    private _overlay: Overlay,
+    private _userService: UserService,
+    private _navService: NavigationService,
+    private _overlayService: OverlayService,
+    private _categoryService: CategoryService,
+    private _locationService: LocationService,
+    private _supplierService: SupplierService,
+    private _suggestionService: SuggestionService,
+    private _localStorageService: LocalStorageService,
+    private _organizationsService: OrganizationsService,
     @Inject(APP_CONFIG) private _appConfig: AppConfigModel,
   ) {
     this._initForm();
@@ -124,7 +135,7 @@ export class SearchAreaService {
   }
 
   updateQueries(query: string): Observable<any> {
-    return this._bnetService.searchSuggestions(query).pipe(
+    return this._suggestionService.searchSuggestions(query).pipe(
       tap(({ products, categories }) => {
         this.productQueries$.next(products);
         this.categoryQueries$.next(categories);
@@ -187,20 +198,17 @@ export class SearchAreaService {
     this._localStorageService.putSearchCategory(category);
   }
 
-  searchSuppliers(query: string, _page: number, _size: number): Observable<SuppliersItemModel[]> {
-    return this._bnetService.searchSuppliers({
-      q: query,
-      page: _page,
-      size: _size
-    }).pipe(map((res) => res._embedded.suppliers));
+  searchSuppliers(query: string, page: number, size: number): Observable<SuppliersItemModel[]> {
+    return this._supplierService.findSuppliers(query, page, size)
+      .pipe(map((res) => res._embedded.suppliers));
   }
 
   getOrganizationById(id: string): Observable<OrganizationResponseModel> {
-    return this._bnetService.getOrganization(id);
+    return this._organizationsService.getOrganization(id);
   }
 
   searchLocations(query: string): Observable<LocationModel[]> {
-    return this._bnetService.searchLocations(query, Level.CITY);
+    return this._locationService.searchLocations(query, Level.CITY);
   }
 
   hasUserLocation(): boolean {
@@ -219,36 +227,18 @@ export class SearchAreaService {
     return this._localStorageService.removeUserLocation();
   }
 
-  getSubCategories(categoryId: string = null): Observable<CategoryModel[]> {
-    return this._bnetService.getCategories().pipe(
-      switchMap((res) => {
-        return defer(() => {
-          return !categoryId ? of(res.categories) : this._getFlatChildrenCategories(categoryId);
-        });
-      }),
-    );
+  getSubCategoriesList(categoryId: string = null): Observable<CategoryModel[]> {
+    if (categoryId) {
+      return this._categoryService.getChildrenListOfCategory(categoryId);
+    }
+    return this._categoryService.getCategoriesList();
   }
 
-  getSupplierCategories(supplierId: string): Observable<CategoryModel[]> {
-    return this._bnetService.getCategories({ suppliers: [supplierId] }).pipe(
-      pluck('categories')
-    );
+  getSupplierCategoriesList(supplierId: string): Observable<CategoryModel[]> {
+    return this._categoryService.getSupplierCategoriesList({ suppliers: [supplierId] });
   }
 
   private _hasSearchHistoryInBrowser(): boolean {
     return this._localStorageService.hasSearchQueriesHistory();
-  }
-
-  private _getFlatChildrenCategories(categoryId: string): Observable<CategoryModel[]> {
-    return this.categories$.pipe(
-      map((res) => {
-        let childrenCategories = [];
-        if (categoryId !== CATEGORY_OTHER) {
-          const foundCategory = deepTreeSearch(res, 'id', (k, v) => v === categoryId);
-          childrenCategories = foundCategory?.children;
-        }
-        return getFlatObjectArray(childrenCategories);
-      }),
-    );
   }
 }

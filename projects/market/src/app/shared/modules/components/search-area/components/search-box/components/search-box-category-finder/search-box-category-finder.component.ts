@@ -37,7 +37,7 @@ export class SearchBoxCategoryFinderComponent implements OnInit, OnDestroy {
   }
 
   private _initCategories() {
-    this._categoriesSubscription = this._searchAreaService.categories$
+    this._categoriesSubscription = this._searchAreaService.categoriesTree
       .pipe(
         map((categories) => {
           return categories?.map((cat) => {

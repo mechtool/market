@@ -1,41 +1,43 @@
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, switchMap, take } from 'rxjs/operators';
 import {
   AuthService,
   CartService,
+  CategoryService,
   ExternalProvidersService,
   LocalStorageService,
   Megacity,
   MetrikaEventAppInitProblemsEnumModel,
-  MetrikaEventTypeModel,
   UserService,
 } from '#shared/modules/common-services';
-import { defer, Observable, of, throwError, zip } from 'rxjs';
+import { defer, Observable, of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { Injector } from '@angular/core';
 import { Location } from '@angular/common';
 import { delayedRetry, getQueryParam } from '#shared/utils';
 import { APP_CONFIG } from './app.config.token';
 
-let cartService = null;
 let authService = null;
-let userService = null;
+let cartService = null;
+let categoryService = null;
 let externalProvidersService = null;
+let localStorageService = null;
 let location = null;
 let router = null;
 let retryNum = null;
 let retryDelay = null;
-let localStorageService = null;
+let userService = null;
 
 export function ApiFactory(injector: Injector): () => Promise<any> {
-  cartService = injector.get(CartService);
   authService = injector.get(AuthService);
-  userService = injector.get(UserService);
+  cartService = injector.get(CartService);
+  categoryService = injector.get(CategoryService);
   externalProvidersService = injector.get(ExternalProvidersService);
   localStorageService = injector.get(LocalStorageService);
   location = injector.get(Location);
   router = injector.get(Router);
   retryNum = injector.get(APP_CONFIG).retryNum;
   retryDelay = injector.get(APP_CONFIG).retryDelay;
+  userService = injector.get(UserService);
 
   return (): Promise<any> => {
     return init();
@@ -52,8 +54,7 @@ function init() {
       setCart();
       userService.watchUserDataChangesForUserStatusCookie();
       resolve(true);
-    }
-    catch (e) {
+    } catch (e) {
       reject();
     }
   });
@@ -115,7 +116,7 @@ function setActualCartDataRetriable$(): Observable<any> {
 }
 
 function updateUserCategoriesRetriable$(): Observable<any> {
-  return delayedRetryWith(userService.updateUserCategories()).pipe(
+  return delayedRetryWith(categoryService.updateCategories()).pipe(
     catchError((e) => {
       return throwError({
         data: MetrikaEventAppInitProblemsEnumModel.CATEGORY_LIST,

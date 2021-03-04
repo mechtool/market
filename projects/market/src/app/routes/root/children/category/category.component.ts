@@ -212,7 +212,7 @@ export class CategoryComponent implements OnDestroy {
             ? zip(
               this._categoryService.getCategory(categoryId),
               this._categoryService.getCategoryBannerItems(categoryId),
-              of(this._categoryService.categoryIdsPopularEnabled.includes(categoryId)),
+              this._categoryService.isCategoryPopularProducts(categoryId),
             )
             : zip(of(null), this._categoryService.getCategoryBannerItems(''), of(true));
         }).pipe(

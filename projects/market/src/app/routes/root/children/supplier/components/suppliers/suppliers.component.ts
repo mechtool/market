@@ -132,7 +132,7 @@ export class SupplierListComponent implements AfterViewInit {
 
   private _getSuppliers(page: number) {
     if (this.query?.length) {
-      return this._supplierService.findSuppliersBy(this.query, page, PAGE_SIZE);
+      return this._supplierService.findSuppliers(this.query, page, PAGE_SIZE);
     }
     return this._supplierService.getAllSuppliers(page, PAGE_SIZE);
   }

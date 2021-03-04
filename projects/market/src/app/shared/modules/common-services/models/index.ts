@@ -53,6 +53,7 @@ export * from './product-offer-response.model';
 export * from './product-offers.model';
 export * from './product-offers-list-response.model';
 export * from './product-offers-request.model';
+export * from './product-offers-summary.model';
 export * from './suppliers-item.model';
 export * from './value-type.enum';
 export * from './cart-data-response.model';

@@ -58,14 +58,15 @@ const PROPS_AUTO_SUBMIT = [
 })
 export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   componentId = Math.random();
-  @ViewChild(CdkVirtualScrollViewport) private _viewPort: CdkVirtualScrollViewport;
+  form: FormGroup;
+  filteredCategories: CategoryModel[] = null;
   locationsToChoose: LocationModel[] = Megacity.ALL;
   suppliersToChoose: SuppliersItemModel[] = null;
-  @Output() formInitialized: EventEmitter<[FormGroup, string]> = new EventEmitter<any>();
-  form: FormGroup;
-  availableCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
-  filteredCategories: CategoryModel[] = null;
   isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+  availableCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
+
+  @ViewChild(CdkVirtualScrollViewport) private _viewPort: CdkVirtualScrollViewport;
+  @Output() formInitialized: EventEmitter<[FormGroup, string]> = new EventEmitter<any>();
 
   get features(): FormArray {
     return this.form?.controls?.features as FormArray;
@@ -122,7 +123,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   resetControl(controlName: string) {
     this.form.get(controlName).patchValue(this._filterFormConfig[controlName]);
   }
-
 
   ngOnInit() {
     if (!this.serviceForm.get('filters')) {
@@ -320,7 +320,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         distinctUntilChanged(),
         tap((categoryId) => catId = categoryId),
         switchMap((categoryId) => {
-          return this._searchAreaService.getSubCategories(categoryId)
+          return this._searchAreaService.getSubCategoriesList(categoryId)
         })
       )
       .subscribe((res) => {
@@ -512,8 +512,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           return this._searchAreaService.getOrganizationById(id);
         }),
       )
-      .subscribe(
-        (org) => {
+      .subscribe((org) => {
           this.form.get('supplier.isSelected').patchValue(true, { emitEvent: false, onlySelf: false });
           this.form.get('supplier.name').patchValue(org?.name || '', { emitEvent: false, onlySelf: false });
         },
@@ -550,22 +549,25 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private _setAvailableCategories() {
-    if (this.searchType !== 'supplier') {
+    if (this.searchType === 'category') {
       const categoryId = this.serviceForm.get('base.categoryId')?.value || null;
-      this._searchAreaService.getSubCategories(categoryId).subscribe(
-        (res) => {
-          this.filteredCategories = res;
-          this.availableCategories$.next([...res]);
+      this._searchAreaService.getSubCategoriesList(categoryId).subscribe(
+        (categories) => {
+          this.filteredCategories = categories;
+          if (categories) {
+            this.availableCategories$.next([...categories]);
+          }
         },
-        () => {
+        (e) => {
           this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
     }
+
     if (this.searchType === 'supplier') {
       const supplierId = this.serviceForm.get('filters.supplier.id')?.value || null;
       if (supplierId) {
-        this._searchAreaService.getSupplierCategories(supplierId).subscribe(
+        this._searchAreaService.getSupplierCategoriesList(supplierId).subscribe(
           (res) => {
             this.filteredCategories = res;
             this.availableCategories$.next([...res]);

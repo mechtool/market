@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import {
-  CategoryModel,
-  CategoryResponseModel,
-  DocumentResponseModel,
-  ParticipationRequestResponseModel,
-  UserOrganizationModel,
-} from './models';
-import { convertListToTree, innKppToLegalId } from '#shared/utils';
+import { DocumentResponseModel, ParticipationRequestResponseModel, UserOrganizationModel, } from './models';
+import { innKppToLegalId } from '#shared/utils';
 import { BNetService } from './bnet.service';
 import { CookieService } from './cookie.service';
 import { LocalStorageService } from './local-storage.service';
@@ -20,7 +14,6 @@ import { ExternalProvidersService } from './external-providers.service';
 export class UserService {
   organizations$: BehaviorSubject<UserOrganizationModel[]> = new BehaviorSubject(null);
   ownParticipationRequests$: BehaviorSubject<any[]> = new BehaviorSubject(null);
-  categories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   participationRequests$: BehaviorSubject<ParticipationRequestResponseModel[]> = new BehaviorSubject(null);
   newAccountDocumentsCounter$: BehaviorSubject<number> = new BehaviorSubject(0);
 
@@ -56,19 +49,6 @@ export class UserService {
 
   setUserLastLoginTimestamp(uin: string, timestamp: number) {
     this._cookieService.setUserLastLoginTimestamp(uin, timestamp);
-  }
-
-  updateUserCategories(): Observable<any> {
-    return this._bnetService.getCategories().pipe(
-      catchError((err) => {
-        this.categories$.next(null);
-        return throwError(null);
-      }),
-      tap((res: CategoryResponseModel) => {
-        const tree = convertListToTree(res.categories);
-        this.categories$.next(tree);
-      }),
-    );
   }
 
   updateParticipationRequests(): Observable<any> {

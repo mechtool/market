@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CategoryModel } from '#shared/modules/common-services/models';
-import { CategoryService, NavigationService, NotificationsService, UserService } from '#shared/modules/common-services';
-import { take } from 'rxjs/operators';
+import { CategoryService, NavigationService } from '#shared/modules/common-services';
 import { defer } from 'rxjs';
 
 @Component({
@@ -9,36 +8,28 @@ import { defer } from 'rxjs';
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss', './category-list.component-768.scss'],
 })
-export class CategoryListComponent {
+export class CategoryListComponent implements OnChanges {
   categories: CategoryModel[];
-  private _category: CategoryModel;
-
-  @Input() set category(val: CategoryModel) {
-    this._category = val;
-    defer(() => {
-      return this._category?.id ? this._categoryService.getCategoriesChildren(this._category.id) : this._userService.categories$;
-    })
-      .pipe(take(1))
-      .subscribe(
-        (categories) => {
-          this.categories = categories;
-        },
-        (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-        },
-      );
-  }
-
-  get category() {
-    return this._category;
-  }
+  @Input() rootCategoryId: string;
+  @Input() rootCategoryName: string;
 
   constructor(
     private _categoryService: CategoryService,
-    private _notificationsService: NotificationsService,
     private _navigationService: NavigationService,
-    private _userService: UserService,
-  ) {}
+  ) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    defer(() => {
+      return this.rootCategoryId
+        ? this._categoryService.getChildrenTreeOfCategory(this.rootCategoryId)
+        : this._categoryService.getCategoriesTree();
+
+    }).subscribe((categories) => {
+        this.categories = categories;
+      }
+    );
+  }
 
   goToCategory(id: string, event: MouseEvent) {
     event.stopPropagation();

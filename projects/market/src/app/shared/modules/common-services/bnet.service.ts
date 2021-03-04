@@ -44,10 +44,10 @@ const API_URL = environment.apiUrl;
 @Injectable()
 export class BNetService {
   constructor(
+    private _http: HttpClient,
     private _apiService: ApiService,
     private _cacheService: CacheService,
     private _apiWorkerService: ApiWorkerService,
-    private _http: HttpClient,
   ) {
   }
 
@@ -57,7 +57,7 @@ export class BNetService {
   }
 
   getPopularProducts(category?: string, pageSize?: number): Observable<ProductOffersListResponseModel> {
-    const params = this._params({ categoryId : category, size: pageSize })
+    const params = this._params({ categoryId: category, size: pageSize })
     return this._apiService.get(`${API_URL}/product-offers/popular`, { params });
   }
 
@@ -178,14 +178,9 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/suppliers`, { params });
   }
 
-  getCategories(query?: CategoryRequestModel, withWebWorker = false): Observable<CategoryResponseModel> {
+  getCategories(query?: CategoryRequestModel): Observable<CategoryResponseModel> {
     const params = this._params(query);
-    if (!withWebWorker) {
-      return this._apiService.get(`${API_URL}/categories`, { params });
-    }
-    if (withWebWorker) {
-      return this._apiWorkerService.get(`${API_URL}/categories`, { params });
-    }
+    return this._apiService.get(`${API_URL}/categories`, { params });
   }
 
   sendFeedback(feedback: FeedbackRequestModel, token: string): Observable<any> {

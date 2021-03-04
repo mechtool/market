@@ -9,6 +9,7 @@ import { ApiService } from './api.service';
 import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel } from './models';
 import { UserService } from './user.service';
 import { OrganizationsService } from './organizations.service';
+import { CategoryService } from './category.service';
 
 const API_URL = environment.apiUrl;
 const ITS_URL = environment.itsUrl;
@@ -18,7 +19,7 @@ const ITS_URL = environment.itsUrl;
 const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organizations\/(?:([^\/]+?))\/?$/i, /^\/my\/orders$/i];
 
 @Injectable()
-export class AuthService implements OnDestroy{
+export class AuthService implements OnDestroy {
   messageSubscription: Subscription;
   popupRef: WindowProxy = null;
   popupRefName: string = null;
@@ -29,11 +30,12 @@ export class AuthService implements OnDestroy{
 
   constructor(
     @Inject(DOCUMENT) private _document: Document,
+    private _router: Router,
     private _location: Location,
     private _apiService: ApiService,
     private _userService: UserService,
+    private _categoryService: CategoryService,
     private _organizationsService: OrganizationsService,
-    private _router: Router,
   ) {
   }
 
@@ -62,14 +64,14 @@ export class AuthService implements OnDestroy{
     );
   }
 
-  setUserDependableData$(userData): Observable<any> {
+  setUserDependableData$(userData, isInternalCall = false): Observable<any> {
     return of(null).pipe(
       tap(() => this._userService.setUserData(userData)),
       switchMap((_) => this._organizationsService.getUserOrganizations()),
       switchMap((res) => this._userService.setUserOrganizations(res)),
       switchMap((res) => this._userService.updateParticipationRequests()),
       switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
-      switchMap((res) => this._userService.updateUserCategories()),
+      switchMap((res) => isInternalCall ? this._categoryService.updateCategories() : of(null)),
       tap(() => {
         this._userService.setUserInformationSetted();
       }),
@@ -134,7 +136,7 @@ export class AuthService implements OnDestroy{
     const height = 500;
     const pos = {
       x: (screen.width / 2) - (width / 2),
-      y: (screen.height/2) - (height / 2)
+      y: (screen.height / 2) - (height / 2)
     };
     const params = `width=${width}, height=${height}, left=${pos.x}, top=${pos.y}, toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no`;
     this.popupRef = window.open(url, name, params);
@@ -149,7 +151,7 @@ export class AuthService implements OnDestroy{
           switchMap((event: MessageEvent) => {
             return this.auth({ serviceName: this.origin, ticket: event.data })
           }),
-          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse)),
+          switchMap((authResponse: AuthResponseModel) => this.setUserDependableData$(authResponse, true)),
         )
         .subscribe(() => {
           if (!this._userService.organizations$?.value.length) {

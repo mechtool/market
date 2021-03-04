@@ -44,8 +44,8 @@ export class SearchBoxCategoryFinderAllComponent implements OnInit, OnDestroy {
   }
 
   private _setCategories(): void {
-    this._categoriesSubscription = this._searchAreaService.categories$.subscribe((res) => {
-      this.categories = res;
+    this._categoriesSubscription = this._searchAreaService.categoriesTree.subscribe((categories) => {
+      this.categories = categories;
       this.activeCategory = this.categories?.[0];
     });
   }

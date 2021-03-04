@@ -13,7 +13,7 @@ export class SupplierService {
     return this._bnetService.searchSuppliers({ page: _page, size: _size });
   }
 
-  findSuppliersBy(query: string, _page: number, _size: number): Observable<SuppliersResponseModel> {
+  findSuppliers(query: string, _page: number, _size: number): Observable<SuppliersResponseModel> {
     return this._bnetService.searchSuppliers({ q: query, page: _page, size: _size });
   }
 }

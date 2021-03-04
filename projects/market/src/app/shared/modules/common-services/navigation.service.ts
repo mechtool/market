@@ -4,9 +4,8 @@ import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { CategoryModel, MetrikaEventTypeModel, NavItemModel } from './models';
+import { MetrikaEventTypeModel, NavItemModel } from './models';
 import { AuthService } from './auth.service';
-import { UserService } from './user.service';
 import { ExternalProvidersService } from './external-providers.service';
 import { NavbarNavComponent } from '../../../routes/root/components/navbar/components/navbar-nav/navbar-nav.component';
 import { ActivatedRoute, NavigationEnd, NavigationExtras, Router } from '@angular/router';
@@ -17,18 +16,17 @@ import { CustomBlockScrollStrategy } from '../../../config/custom-block-scroll-s
 @UntilDestroy({ checkProperties: true })
 @Injectable()
 export class NavigationService implements OnDestroy {
-  private _isNavBarMinified = false;
   isNavBarMinified$: BehaviorSubject<boolean> = new BehaviorSubject(false);
   navItems$: BehaviorSubject<NavItemModel[]> = new BehaviorSubject(null);
-  private _isMenuOpened = false;
-  private _userCategories: CategoryModel[];
-  private readonly _componentPortal: ComponentPortal<NavbarNavComponent>;
   selectedPortal: Portal<any> | null;
   overlayRef: OverlayRef;
   componentRef: ComponentRef<any>;
   history: string[] = [];
   historySubscription: Subscription;
 
+  private _isNavBarMinified = false;
+  private _isMenuOpened = false;
+  private readonly _componentPortal: ComponentPortal<NavbarNavComponent>;
   private _viewContainerRef: ViewContainerRef;
 
   set viewContainerRef(vcr: ViewContainerRef) {
@@ -44,18 +42,16 @@ export class NavigationService implements OnDestroy {
   }
 
   constructor(
-    private _userService: UserService,
-    private _userStateService: UserStateService,
-    private _authService: AuthService,
-    private _externalProvidersService: ExternalProvidersService,
-    private _overlay: Overlay,
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
+    private _overlay: Overlay,
     private _location: Location,
+    private _authService: AuthService,
+    private _activatedRoute: ActivatedRoute,
+    private _userStateService: UserStateService,
+    private _externalProvidersService: ExternalProvidersService,
   ) {
     this.setHistory();
     this._componentPortal = new ComponentPortal(NavbarNavComponent);
-    this._setUserCategories();
     this._updateLayoutOnResolutionChanges();
     this._renderInitialNavBar();
     this._setInitialNavBarType();
@@ -248,12 +244,6 @@ export class NavigationService implements OnDestroy {
 
   navigateReloadable(commands: any[], extras?: NavigationExtras) {
     this._router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => this._router.navigate(commands, extras));
-  }
-
-  private _setUserCategories(): void {
-    this._userService.categories$.subscribe((res) => {
-      this._userCategories = res;
-    });
   }
 
   private _updateLayoutOnResolutionChanges(): void {
