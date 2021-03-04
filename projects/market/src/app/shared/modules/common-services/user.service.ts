@@ -41,6 +41,10 @@ export class UserService {
     }
   }
 
+  setUserInformationSetted(): void {
+    this._userStateService.isUserInformationSetted$.next(true);
+  }
+
   setUserOrganizations(data: any): Observable<any> {
     this.organizations$.next(data);
     return of(data);

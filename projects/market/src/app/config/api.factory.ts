@@ -51,7 +51,7 @@ function init() {
       setCategories();
       setCart();
       userService.watchUserDataChangesForUserStatusCookie();
-      resolve();
+      resolve(true);
     }
     catch (e) {
       reject();
@@ -71,6 +71,8 @@ function handleAuthFromStorage(): void {
   if (localStorageService.hasUserData()) {
     const userData = localStorageService.getUserData();
     authService.setUserDependableData$(userData).subscribe();
+  } else {
+    userService.setUserInformationSetted();
   }
 }
 

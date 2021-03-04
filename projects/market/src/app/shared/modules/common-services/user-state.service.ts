@@ -5,6 +5,7 @@ import { AuthResponseModel } from './models';
 @Injectable()
 export class UserStateService {
   currentUser$: BehaviorSubject<AuthResponseModel> = new BehaviorSubject(null);
+  isUserInformationSetted$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor() {}
 }

@@ -70,6 +70,9 @@ export class AuthService implements OnDestroy{
       switchMap((res) => this._userService.updateParticipationRequests()),
       switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
       switchMap((res) => this._userService.updateUserCategories()),
+      tap(() => {
+        this._userService.setUserInformationSetted();
+      }),
       catchError((_) => throwError(null)),
     )
   }
