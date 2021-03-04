@@ -16,7 +16,7 @@ export class ProductRangeComponent implements OnDestroy {
     {
       title: 'Против вируса',
       url: '/category/3349',
-      img: './assets/img/product-range/mask.jpeg',
+      img: './assets/img/product-range/mask.png',
       items: [
         {
           title: 'Маски',
@@ -55,7 +55,7 @@ export class ProductRangeComponent implements OnDestroy {
     {
       title: 'Товары для офиса',
       url: '/category/616',
-      img: './assets/img/product-range/paper.jpeg',
+      img: './assets/img/product-range/paper.png',
       items: [
         {
           title: 'Бумага',
@@ -99,7 +99,7 @@ export class ProductRangeComponent implements OnDestroy {
     {
       title: 'Компьютеры и оргтехника',
       url: '/category/1',
-      img: './assets/img/product-range/printer.jpeg',
+      img: './assets/img/product-range/printer.png',
       items: [
         {
           title: 'Принтеры и МФУ',
@@ -134,7 +134,7 @@ export class ProductRangeComponent implements OnDestroy {
     {
       title: 'Продукты питания',
       url: '/category/3321',
-      img: './assets/img/product-range/cookie.jpeg',
+      img: './assets/img/product-range/cookie.png',
       items: [
         {
           title: 'Вода',
@@ -163,7 +163,7 @@ export class ProductRangeComponent implements OnDestroy {
     {
       title: 'Электрооборудование и электроника',
       url: '/category/651',
-      img: './assets/img/product-range/light_bulb.jpeg',
+      img: './assets/img/product-range/light_bulb.png',
       items: [
         {
           title: 'Розетки и выключатели',
@@ -193,7 +193,7 @@ export class ProductRangeComponent implements OnDestroy {
     {
       title: 'Автозапчасти',
       url: '/category/5681',
-      img: './assets/img/product-range/oil.jpg',
+      img: './assets/img/product-range/oil.png',
       items: [
         {
           title: 'Моторные масла',
