@@ -15,13 +15,6 @@ export class MainBannersComponent {
       imgUrl: 'assets/img/tmp/banner_4.png',
     },
     {
-      title: 'Скидка 10% на первый заказ!',
-      btnLink: '/promo/first-order',
-      btnText: 'Подробнее',
-      description: 'до 28 февраля скидки от Поставщиков',
-      imgUrl: 'assets/img/tmp/banner_1.png',
-    },
-    {
       title: 'Все для офиса!',
       btnLink: '/category/616',
       btnText: 'Подробнее',

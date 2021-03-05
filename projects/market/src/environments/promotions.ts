@@ -6,13 +6,6 @@
 export const categoryPromotion = {
   '': [
     {
-      title: 'Скидка 10% на первый заказ!',
-      btnLink: '/promo/first-order',
-      btnText: 'Подробнее',
-      description: 'до 31 декабря скидки от Поставщиков',
-      imgUrl: 'assets/img/tmp/banner_1.png',
-    },
-    {
       title: 'Все для офиса!',
       btnLink: '/category/616',
       btnText: 'Подробнее',
