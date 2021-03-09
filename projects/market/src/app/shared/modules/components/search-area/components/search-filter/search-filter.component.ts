@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Inject, OnDestroy, OnInit, Outp
 import { SearchAreaService } from '#shared/modules/components/search-area/search-area.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
+  dateFeatureRangeConditionValidator,
   locationNameConditionValidator,
   numFeatureRangeConditionValidator,
   priceRangeConditionValidator,
@@ -33,6 +34,7 @@ import {
   ProductOffersSummaryFeatureEnumValuesModel,
   ProductOffersSummaryFeatureModel
 } from '#shared/modules/common-services/models/product-offers-summary.model';
+import format from 'date-fns/format';
 
 const PAGE_SIZE = 20;
 const SCREEN_WIDTH_BREAKPOINT = 992;
@@ -50,6 +52,8 @@ const PROPS_AUTO_SUBMIT = [
   'location.fias',
   'subCategoryId',
 ];
+
+const DATE_PATTERN = /^([0-9]{4}[-/]?((0[13-9]|1[012])[-/]?(0[1-9]|[12][0-9]|30)|(0[13578]|1[02])[-/]?31|02[-/]?(0[1-9]|1[0-9]|2[0-8]))|([0-9]{2}(([2468][048]|[02468][48])|[13579][26])|([13579][26]|[02468][048]|0[0-9]|1[0-6])00)[-/]?02[-/]?29)$/
 
 @Component({
   selector: 'market-search-filter',
@@ -472,12 +476,17 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
             }
           }
 
-          if (val.type === FeatureType.DATE) {
-            // todo дописать логику когда появится
-          }
+          if (val.type === FeatureType.DATE && (val.dateValueFrom || val.dateValueTo)) {
+            if (val.dateValueFrom && val.dateValueTo) {
 
-          if (val.type === FeatureType.STRING) {
-            // todo дописать логику когда появится
+              this.features.push(this._fb.control(`${val.featureId}:${format(new Date(val.dateValueFrom), 'yyyy-MM-dd')}~${format(new Date(val.dateValueTo), 'yyyy-MM-dd')}`));
+            } else if (!val.dateValueFrom) {
+
+              this.features.push(this._fb.control(`${val.featureId}:~${format(new Date(val.dateValueTo), 'yyyy-MM-dd')}`));
+            } else {
+
+              this.features.push(this._fb.control(`${val.featureId}:${format(new Date(val.dateValueFrom), 'yyyy-MM-dd')}~`));
+            }
           }
         });
       });
@@ -599,11 +608,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private initFeaturesData(values: ProductOffersSummaryFeatureModel[], featuresQueries: string[]) {
-
     this.featuresData.clear();
 
     values?.sort(this.compareByFeatureType())
-      .filter((val) => val.booleanValues || val.enumValues || val.numberValues)
+      .filter((val) => val.booleanValues || val.enumValues || val.numberValues || val.dateValues)
       .forEach((val) => {
 
         if (val.booleanValues) {
@@ -640,6 +648,20 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
             validator: [numFeatureRangeConditionValidator],
           }));
         }
+
+        if (val.dateValues) {
+          this.featuresData?.push(this._fb.group({
+            featureId: val.featureId,
+            featureName: val.featureName,
+            type: FeatureType.DATE,
+            min: val.dateValues?.min,
+            max: val.dateValues?.max,
+            dateValueFrom: this._fb.control(this.dateValueIfHas(val, featuresQueries, true)),
+            dateValueTo: this._fb.control(this.dateValueIfHas(val, featuresQueries, false)),
+          }, {
+            validator: [dateFeatureRangeConditionValidator],
+          }))
+        }
       });
   }
 
@@ -671,12 +693,21 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     return value?.length && Number.isInteger(+value) ? +value : null;
   }
 
+  private dateValueIfHas(feature: ProductOffersSummaryFeatureModel, queries: string[], isFrom: boolean) {
+    const find = queries?.find((x) => x.includes(feature.featureId));
+    const value = find?.substr(isFrom ? find.indexOf(':') + 1 : find.indexOf('~') + 1,
+      isFrom ? (find.indexOf('~') - find.indexOf(':') - 1) : undefined);
+    return value?.length && DATE_PATTERN.test(value) ? value : null;
+  }
+
   private compareByFeatureType() {
     return (one, two) => {
-      if (one.booleanValues && two.booleanValues || one.enumValues && two.enumValues || one.numberValues && two.numberValues) {
+      if (one.booleanValues && two.booleanValues || one.enumValues && two.enumValues
+        || one.numberValues && two.numberValues || one.dateValues && two.dateValues) {
         return 0;
       }
-      if ((one.booleanValues && (two.enumValues || two.numberValues)) || (one.enumValues && two.numberValues)) {
+      if ((one.booleanValues && (two.enumValues || two.numberValues || two.dateValues)) ||
+        (one.enumValues && (two.numberValues || two.dateValues)) || (one.numberValues && two.dateValues)) {
         return -1;
       }
       return 1;

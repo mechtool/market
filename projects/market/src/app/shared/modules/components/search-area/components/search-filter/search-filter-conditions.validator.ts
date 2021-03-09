@@ -23,3 +23,9 @@ export const numFeatureRangeConditionValidator: ValidatorFn = (formGroup: FormGr
   const numValueTo = formGroup.get('numValueTo').value;
   return numValueFrom && numValueTo && numValueFrom >= numValueTo ? { numFeatureRangeCondition: true } : null;
 };
+
+export const dateFeatureRangeConditionValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors => {
+  const dateValueFrom = formGroup.get('dateValueFrom').value;
+  const dateValueTo = formGroup.get('dateValueTo').value;
+  return dateValueFrom && dateValueTo && dateValueFrom >= dateValueTo ? { dateFeatureRangeCondition: true } : null;
+};

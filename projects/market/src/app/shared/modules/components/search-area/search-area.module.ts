@@ -29,6 +29,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FILTER_FORM_CONFIG, filterFormDefaultConfig } from './config';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     SpinnerModule,
     ClickOutsideModule,
     SharedDepsModule,
+    NzDatePickerModule,
   ],
   declarations: [
     SearchAreaComponent,
@@ -67,4 +69,5 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
   providers: [SearchAreaService, { provide: FILTER_FORM_CONFIG, useValue: filterFormDefaultConfig }],
   exports: [SearchAreaComponent, SearchBoxComponent],
 })
-export class SearchAreaModule {}
+export class SearchAreaModule {
+}

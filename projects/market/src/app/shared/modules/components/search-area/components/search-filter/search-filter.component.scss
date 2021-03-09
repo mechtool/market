@@ -56,6 +56,10 @@ nz-input-group {
       border-color: #f6837b;
       outline-color: #f6837b;
     }
+    nz-date-picker {
+      border-color: #f6837b;
+    }
+
   }
 }
 
@@ -172,4 +176,9 @@ nz-input-group {
       }
     }
   }
+}
+
+nz-date-picker {
+  height: 38.8px;
+  width: 100%;
 }

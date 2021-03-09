@@ -205,14 +205,16 @@
     <div *ngIf="(form|marketCastControl: 'featuresData').length && categorySelected" formArrayName="featuresData">
       <div class="form-group_title">Фильтры характеристик товара</div>
 
-      <div class="form-group_checkbox" *ngFor="let feature of form|marketCastControl: 'featuresData'">
+      <div *ngFor="let feature of form|marketCastControl: 'featuresData'">
 
         <ng-container [formGroup]="feature" [ngSwitch]="feature.value.type">
 
           <ng-container *ngSwitchCase="'BOOLEAN'">
-            <label class="feature_wrap"
-                   [ngClass]="{'d-none': feature.value.values.length < 2 && feature.value.boolValue === null}"
-                   nz-checkbox formControlName="boolValue">{{feature.value.featureName}}</label>
+            <div class="form-group_checkbox">
+              <label class="feature_wrap"
+                     [ngClass]="{'d-none': feature.value.values.length < 2 && feature.value.boolValue === null}"
+                     nz-checkbox formControlName="boolValue">{{feature.value.featureName}}</label>
+            </div>
           </ng-container>
 
           <ng-container *ngSwitchCase="'ENUMERATION'">
@@ -231,30 +233,68 @@
 
               <div class="form-group_title">{{feature.value.featureName}}</div>
 
+              <div class="range_wrap range_price">
+                <div class="range_inputs">
+                  <nz-form-item>
+                    <nz-form-control>
+                      <input nz-input type="number"
+                             [ngClass]="{'error': feature.controls.numValueFrom.invalid || feature.errors?.numFeatureRangeCondition}"
+                             name="num_value_from"
+                             class="range_input range_from price_from"
+                             placeholder="от {{feature.value.min}}"
+                             autocomplete="false"
+                             list="null"
+                             formControlName="numValueFrom"/>
+                    </nz-form-control>
+                  </nz-form-item>
+
+                  <nz-form-item>
+                    <nz-form-control>
+                      <input nz-input type="number"
+                             [ngClass]="{'error': feature.controls.numValueTo.invalid || feature.errors?.numFeatureRangeCondition}"
+                             name="num_value_to"
+                             class="range_input range_to price_to"
+                             placeholder="до {{feature.value.max}}"
+                             autocomplete="false"
+                             list="null"
+                             formControlName="numValueTo"/>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'DATE'">
+            <div class="feature_wrap"
+                 [ngClass]="{'d-none': feature.value.min === feature.value.max && feature.value.dateValueFrom === null && feature.value.dateValueTo === null}">
+
+              <div class="form-group_title">{{feature.value.featureName}}</div>
+
               <div class="range_inputs">
                 <nz-form-item>
                   <nz-form-control>
-                    <input nz-input type="number"
-                           [ngClass]="{'error': feature.controls.numValueFrom.invalid || feature.errors?.numFeatureRangeCondition}"
-                           name="num_value_from"
-                           class="range_input range_from price_from"
-                           placeholder="от {{feature.value.min}}"
-                           autocomplete="false"
-                           list="null"
-                           formControlName="numValueFrom"/>
+                    <div class="form-group"
+                         [ngClass]="{'error': feature.controls.dateValueFrom.invalid || feature.errors?.dateFeatureRangeCondition}">
+                      <nz-date-picker
+                        nzFormat="yyyy-MM-dd"
+                        nzPlaceHolder="от {{feature.value.min}}"
+                        formControlName="dateValueFrom">
+                      </nz-date-picker>
+                    </div>
                   </nz-form-control>
                 </nz-form-item>
 
                 <nz-form-item>
                   <nz-form-control>
-                    <input nz-input type="number"
-                           [ngClass]="{'error': feature.controls.numValueTo.invalid || feature.errors?.numFeatureRangeCondition}"
-                           name="num_value_to"
-                           class="range_input range_to price_to"
-                           placeholder="до {{feature.value.max}}"
-                           autocomplete="false"
-                           list="null"
-                           formControlName="numValueTo"/>
+                    <div class="form-group"
+                         [ngClass]="{'error': feature.controls.dateValueTo.invalid || feature.errors?.dateFeatureRangeCondition}">
+                      <nz-date-picker
+                        nzFormat="yyyy-MM-dd"
+                        nzPlaceHolder="до {{feature.value.max}}"
+                        formControlName="dateValueTo">
+                      </nz-date-picker>
+                    </div>
                   </nz-form-control>
                 </nz-form-item>
               </div>

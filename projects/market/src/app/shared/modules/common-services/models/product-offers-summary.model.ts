@@ -19,11 +19,17 @@ export class ProductOffersSummaryFeatureModel {
   numberValues: ProductOffersSummaryFeatureNumberValuesModel;
   booleanValues: boolean[];
   enumValues: ProductOffersSummaryFeatureEnumValuesModel[];
+  dateValues: ProductOffersSummaryFeatureDateValuesModel;
 }
 
 export class ProductOffersSummaryFeatureNumberValuesModel {
   min: number;
   max: number;
+}
+
+export class ProductOffersSummaryFeatureDateValuesModel {
+  min: string;
+  max: string;
 }
 
 export class ProductOffersSummaryFeatureEnumValuesModel {
