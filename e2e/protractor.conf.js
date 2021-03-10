@@ -11,7 +11,6 @@ const puppeteer = require('puppeteer');
 exports.config = {
   allScriptsTimeout: 11000,
   specs: ['./src/**/*.e2e-spec.ts'],
-  exclude: ['./src/load-test/*.ts'],
   useAllAngular2AppRoots: true,
   SELENIUM_PROMISE_MANAGER: false,
   multiCapabilities: [
@@ -23,12 +22,13 @@ exports.config = {
           '--headless',
           '--disable-gpu',
           '--disable-dev-shm-usage',
+          '--disable-web-security',
           '--no-sandbox',
           '--log-level=2',
           '--ignore-certificate-errors',
           '--allow-insecure-localhost',
           '--start-maximized',
-          '--window-size=1350,800'
+          '--window-size=1850,800'
         ],
         binary: puppeteer.executablePath(),
       },
@@ -45,11 +45,20 @@ exports.config = {
   params: {
     production: false,
     credentials: {
-      userLogin: 'testUser704',
-      userPassword: 'doNotChangePassword!'
+      userLoginWithoutAvailableOrganizations: '1cmarket-e2e-user1',
+      userLoginWithAvailableOrganizations: '1cmarket-e2e-user2',
+      userPassword: 'aA123321'
     },
     defaultTimeout: 1e4,
-    defaultSupplierNamePart: 'Седов',
+    defaultSupplierNamePart: 'метро',
+    defaultOrganizationINN: '7604246289',
+    defaultOrganizationKPP: '760401001',
+    defaultOrganizationName: 'ООО Тесто №1',
+    defaultContactName: 'Федор Тестович',
+    defaultContactPhone: '9512223344',
+    defaultContactEmail: 'testovich.fedor@ftestovich.ru',
+    defaultDeliveryCity: 'Москва г',
+    defaultDeliveryStreet: 'Лермонтовская ул',
   },
   onPrepare() {
     require('ts-node').register({

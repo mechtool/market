@@ -27,11 +27,11 @@ import {
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
-import { switchMap, tap } from 'rxjs/operators';
+import { delay, filter, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, currencyCode, innKppToLegalId, uniqueArray, unsubscribeList } from '#shared/utils';
-import { combineLatest, of, Subscription } from 'rxjs';
+import { combineLatest, forkJoin, of, Subscription, zip } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   BNetService,
@@ -315,34 +315,25 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
     this._externalProvidersService.fireGTMEvent(tag);
 
     this._cartDataSubscription = this._cartService.getCartData$().pipe(
+      filter((res) => !!res),
       tap(() => {
         this._initDeliveryMethods();
         this._initForm();
-      }),
-      tap(() => {
-        if (this.abilityMakeOrderOrRequestForPrice) {
-          this.setConsumer(this.availableOrganizations[0]);
-        }
-      }),
-      tap(() => {
+        this._initConsumer();
         this._initValidDeliveryFiasCode();
       }),
       switchMap(() => {
-
-        if (this.isAuthenticated) {
-          const userLocation = this._locationService.getSelectedCustomLocation();
-
-          if (userLocation) {
-
-            if (this._deliveryByRussia()) {
-              return combineLatest([of(true), of(userLocation)])
-            }
-
-            return combineLatest(
-              [this._locationService.isDeliveryAvailable(userLocation.fias, this._validDeliveryFiasCode), of(userLocation)]);
+        const userLocation = this._locationService.getSelectedCustomLocation();
+        if (userLocation) {
+          if (this._deliveryByRussia()) {
+            return forkJoin([of(true), of(userLocation)])
           }
+          return forkJoin([
+            this._locationService.isDeliveryAvailable(userLocation.fias, this._validDeliveryFiasCode),
+            of(userLocation)
+          ]);
         }
-        return combineLatest([of(false), of(null)]);
+        return forkJoin([of(false), of(null)]);
       }),
       tap(() => {
         this._watchDeliveryAreaUserChanges();
@@ -355,10 +346,13 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
           });
           this._saveCityAndEnableStreetAndHouse(userLocation);
         }
-      })
-    ).subscribe(() => {
+      }),
+      take(1),
+    ).subscribe((res) => {
       this._watchItemQuantityChanges();
-    });
+    })
+
+
   }
 
   ngOnDestroy() {
@@ -367,7 +361,6 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     dispatchEvent(new CustomEvent('scroll'));
-    this._cartDataSubscription.unsubscribe();
   }
 
   validateAndSubmitOrder() {
@@ -1161,6 +1154,12 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       totalWithoutVat: product.itemTotal?.totalWithoutVat,
       _links: product._links,
     });
+  }
+
+  private _initConsumer() {
+    if (this.abilityMakeOrderOrRequestForPrice) {
+      this.setConsumer(this.availableOrganizations[0]);
+    }
   }
 
   private _warnings(tradeOfferId: string): FormControl[] {

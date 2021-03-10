@@ -1,6 +1,6 @@
 import { browser, by, element, protractor } from 'protractor';
 import { AppPage } from './scen-2__auth-order.po';
-import { LoginItsPage, userLogin, userPassword } from './login-its/login-its.po';
+import { LoginItsPage, userLoginWithAvailableOrganizations, userLoginWithoutAvailableOrganizations, userPassword } from './login-its/login-its.po';
 import {
   until,
   navigateTo,
@@ -14,14 +14,15 @@ import {
   defaultContactEmail,
   defaultDeliveryStreet,
   defaultDeliveryCity,
-  restart, defaultSupplierNamePart
+  restart, defaultSupplierNamePart, elementTextContentChanged, browserClick
 } from './utils/utils';
 
 let tradeOfferTitle = null;
+let currentProductResultsText = null;
 let windowHandles = null;
 let isOrderButtonEnabled = null;
 
-describe('Сценарий: Создание заказа от авторизованного пользователя', async() => {
+describe('Сценарий: Создание заказа от авторизованного пользователя (у которого присутствуют организации)', async() => {
   const page = new AppPage();
   const loginPage = new LoginItsPage();
 
@@ -85,7 +86,7 @@ export function authorizedUserAuths(page: any, loginPage: any) {
   });
 
   it('Шаг 4: Пользователь авторизуется', async() => {
-    await loginPage.getLoginInput().sendKeys(userLogin);
+    await loginPage.getLoginInput().sendKeys(userLoginWithAvailableOrganizations);
     await loginPage.getPasswordInput().sendKeys(userPassword);
     await loginPage.getLoginButton().click();
   });
@@ -121,11 +122,8 @@ export function authorizedUserSearches(page: any) {
   });
 
   it('Шаг 5: Пользователь видит результаты поиска', async() => {
-    await browser.wait(until.stalenessOf(page.getGlobalSpinnerSpinning()), defaultTimeout);
-    await browser.wait(until.presenceOf(page.getSearchResults()), defaultTimeout);
     await browser.wait(presenceOfAll(page.getAllProductCards()), defaultTimeout);
   });
-
 }
 
 export function authorizedUserSearchesWithRegion(page: any) {
@@ -136,29 +134,19 @@ export function authorizedUserSearchesWithRegion(page: any) {
     await browser.wait(until.presenceOf(page.getSearchFilterPanelControlSupplierInput()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь выбирает второй регион из предложенного списка', async() => {
+  it('Шаг 2: Пользователь выбирает второй регион и поставщика из предложенного списка', async() => {
+    await browser.sleep(3e3);
     await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.DOWN);
     await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.ENTER);
-  });
-
-  it('Шаг 3: Пользователь видит результаты поиска', async() => {
-    await browser.wait(until.stalenessOf(page.getGlobalSpinnerSpinning()), defaultTimeout);
-    await browser.wait(until.presenceOf(page.getSearchResults()), defaultTimeout);
-    await browser.wait(presenceOfAll(page.getAllProductCards()), defaultTimeout);
-  });
-
-  it('Шаг 4: Пользователь набирает "Седов" в контроле поставщика', async() => {
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(defaultSupplierNamePart);
     await browser.sleep(3e3);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.DOWN);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.ENTER);
   });
 
-  it('Шаг 5: Пользователь видит результаты поиска', async() => {
+  it('Шаг 3: Пользователь видит результаты поиска', async() => {
     await browser.wait(until.textToBePresentInElement(page.getSearchResultsTitle(), 'найдено '), defaultTimeout);
-    await browser.wait(until.presenceOf(page.getSearchResults()), defaultTimeout);
-    await browser.wait(presenceOfAll(page.getAllProductCards()), defaultTimeout);
-    await browser.wait(until.stalenessOf(page.getGlobalSpinnerSpinning()), defaultTimeout);
+    await elementTextContentChanged(page.getSearchResults(), currentProductResultsText);
   });
 }
 
@@ -167,24 +155,19 @@ export function authorizedUserFindsTradeOffer(page: any) {
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
     const productCards = await page.getAllProductCards();
     const index = productCards.length ? randomItem(productCards.length / 2) : 0;
-    const newVar = await page.getAllProductCards().get(index);
-    await browser.actions().mouseMove(newVar).perform();
-    await browser.actions().click().perform();
+    await browserClick(productCards[index]);
   });
 
   it('Шаг 2: Пользователь видит список торговых предложений', async() => {
     await browser.wait(until.textToBePresentInElement(page.getTradeOfferCounterTitle(), 'найдено '), defaultTimeout);
     await browser.wait(until.presenceOf(page.getTradeOfferCardList()), defaultTimeout);
     await browser.wait(presenceOfAll(page.getAllTradeOfferCards()), defaultTimeout);
-    await browser.wait(until.stalenessOf(page.getGlobalSpinnerSpinning()), defaultTimeout);
   });
 
   it('Шаг 3: Пользователь переходит в произвольно выбранное торговое предложение', async() => {
     const tradeOfferCards = await page.getAllTradeOfferCards();
     const index = tradeOfferCards.length ? randomItem(tradeOfferCards.length / 2) : 0;
-    const tradeOffer = await page.getAllTradeOfferCards().get(index);
-    await browser.actions().mouseMove(await tradeOffer).perform();
-    await tradeOffer.click();
+    await browserClick(tradeOfferCards[index].$('.catalog_item__pickup'));
   });
 
   it('Шаг 4: Пользователь видит описание торгового предложения', async() => {
@@ -228,29 +211,11 @@ export function authorizedUserAddsTradeOfferToCart(page: any) {
   it('Шаг 5: Пользователь видит изменения в кол-ве и общей цене товара', async() => {
     await browser.wait(until.presenceOf(page.getCartBlockPrice()), defaultTimeout);
     const currentCounter = await page.getCartBlockSwitcherInput().getAttribute('value');
-    const cartBlockPrice = await page.getCartBlockPrice();
-    let currentPrice = null;
-
-    let isReady = false;
-    const timer = setInterval(async() => {
-      try {
-        if (await cartBlockPrice.getText() !== cartPrice) {
-          clearInterval(timer);
-          currentPrice = await cartBlockPrice.getText();
-          isReady = true;
-        }
-      } catch(e) {
-        currentPrice = await cartBlockPrice.getText();
-        isReady= true;
-      }
-    }, 50);
-    await browser.wait( () => isReady, defaultTimeout);
+    await elementTextContentChanged(page.getCartBlockPrice(), cartPrice);
+    cartPrice = await page.getCartBlockPrice().getText();
     expect(cartCounter).not.toBe(currentCounter);
-    expect(cartPrice).not.toBe(currentPrice);
     cartCounter = currentCounter;
-    cartPrice = currentPrice;
   });
-
 
   it('Шаг 6: Пользователь уменьшает кол-во товара в корзине управляющей кнопкой "-"', async() => {
     await page.getCartBlockSwitcherDecreaser().click();
@@ -259,27 +224,10 @@ export function authorizedUserAddsTradeOfferToCart(page: any) {
   it('Шаг 7: Пользователь видит изменения в кол-ве и общей цене товара', async() => {
     await browser.wait(until.presenceOf(page.getCartBlockPrice()), defaultTimeout);
     const currentCounter = await page.getCartBlockSwitcherInput().getAttribute('value');
-    const cartBlockPrice = await page.getCartBlockPrice();
-    let currentPrice = null;
-
-    let isReady = false;
-    const timer = setInterval(async() => {
-      try {
-        if (await cartBlockPrice.getText() !== cartPrice) {
-          clearInterval(timer);
-          currentPrice = await cartBlockPrice.getText();
-          isReady = true;
-        }
-      } catch(e) {
-        currentPrice = await cartBlockPrice.getText();
-        isReady= true;
-      }
-    }, 50);
-    await browser.wait( () => isReady, defaultTimeout);
+    await elementTextContentChanged(page.getCartBlockPrice(), cartPrice);
+    cartPrice = await page.getCartBlockPrice().getText();
     expect(cartCounter).not.toBe(currentCounter);
-    expect(cartPrice).not.toBe(currentPrice);
     cartCounter = currentCounter;
-    cartPrice = currentPrice;
   });
 
   it('Шаг 8: Пользователь изменяет кол-во товара на 1000 шт вводом в поле', async() => {
@@ -290,27 +238,10 @@ export function authorizedUserAddsTradeOfferToCart(page: any) {
   it('Шаг 9: Пользователь видит изменения в кол-ве и общей цене товара', async() => {
     await browser.wait(until.presenceOf(page.getCartBlockPrice()), defaultTimeout);
     const currentCounter = await page.getCartBlockSwitcherInput().getAttribute('value');
-    const cartBlockPrice = await page.getCartBlockPrice();
-    let currentPrice = null;
-
-    let isReady = false;
-    const timer = setInterval(async() => {
-      try {
-        if (await cartBlockPrice.getText() !== cartPrice) {
-          clearInterval(timer);
-          currentPrice = await cartBlockPrice.getText();
-          isReady = true;
-        }
-      } catch(e) {
-        currentPrice = await cartBlockPrice.getText();
-        isReady= true;
-      }
-    }, 50);
-    await browser.wait( () => isReady, defaultTimeout);
+    await elementTextContentChanged(page.getCartBlockPrice(), cartPrice);
+    cartPrice = await page.getCartBlockPrice().getText();
     expect(cartCounter).not.toBe(currentCounter);
-    expect(cartPrice).not.toBe(currentPrice);
     cartCounter = currentCounter;
-    cartPrice = currentPrice;
   });
 
 }
@@ -327,7 +258,7 @@ export async function authorizedUserMakesOrder(page: any) {
     const productsWithSameTitle = await page.getCartProductsTitles().filter(async(title) => {
       return await title.getText() === tradeOfferTitle;
     })
-    await expect(productsWithSameTitle.length).toBeGreaterThan(0)
+    await expect(productsWithSameTitle.length).toBeGreaterThan(0);
   });
 
   it('Шаг 3: Кнопка оформления заказа активна?', async() => {
@@ -355,12 +286,14 @@ export async function authorizedUserMakesOrder(page: any) {
     }
   });
 
-  it('Шаг 6: Пользователь вводит город доставки [если товар доступен к заказу]', async() => {
+  it('Шаг 6: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
+
     if (isOrderButtonEnabled) {
       const deliveryMethod = await page.getDeliveryMethod().getText();
       if (deliveryMethod.toLowerCase() === 'доставка') {
         await browser.wait(until.presenceOf(page.getDeliveryCity()), defaultTimeout);
         await browser.wait(until.presenceOf(page.getDeliveryStreet()), defaultTimeout);
+        await page.getDeliveryCity().clear();
         await page.getDeliveryCity().sendKeys(defaultDeliveryCity);
         await browser.sleep(3e3);
         await page.getDeliveryCity().sendKeys(protractor.Key.ENTER);
@@ -368,14 +301,15 @@ export async function authorizedUserMakesOrder(page: any) {
         await page.getDeliveryStreet().sendKeys(defaultDeliveryStreet);
         await browser.sleep(3e3);
         await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
+        await browser.sleep(3e3);
       }
     }
   });
 
   it('Шаг 7: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
-      await browser.actions().mouseMove(await page.getCartMakeOrderButton()).perform();
-      await browser.actions().click().perform();
+      await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
+      await browserClick(await page.getCartMakeOrderButton());
     }
   });
 

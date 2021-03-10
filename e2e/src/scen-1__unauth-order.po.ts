@@ -42,6 +42,10 @@ export class AppPage {
     return element(by.css('market-search-results'));
   }
 
+  getSearchResultsTitle(): ElementFinder {
+    return element(by.css('market-search-results .title span'));
+  }
+
   getAllProductCards(): ElementArrayFinder {
     return element.all(by.css('market-card'));
   }
@@ -105,6 +109,11 @@ export class AppPage {
   getCartMakeOrderButton(): ElementFinder {
     return element(by.cssContainingText('button', 'Оформить заказ'));
   }
+
+  getTradeOfferCounterTitle(): ElementFinder {
+    return element(by.css('.catalog_header__count'));
+  }
+
 
   getCartMakeOrderWithoutRegistrationButton(): ElementFinder {
     return element(by.cssContainingText('button', 'Заказать без регистрации'));

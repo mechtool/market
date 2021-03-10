@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-export const { userLogin, userPassword } = browser.params.credentials;
+export const { userLoginWithoutAvailableOrganizations, userLoginWithAvailableOrganizations, userPassword } = browser.params.credentials;
 
 export class LoginItsPage {
 
