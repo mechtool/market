@@ -19,7 +19,6 @@
     "src/**/*.spec.ts",
     "src/environments/*.ts",
     "src/**/index.ts",
-    "src/app/workers/*.worker.ts"
   ],
   "angularCompilerOptions": {
     "enableIvy": true

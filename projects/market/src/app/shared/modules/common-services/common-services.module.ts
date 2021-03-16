@@ -1,7 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from './api.service';
-import { ApiWorkerService } from './api-worker.service';
 import { BNetService } from './bnet.service';
 import { AuthService } from './auth.service';
 import { CacheService } from './cache.service';
@@ -40,7 +39,6 @@ export class CommonServicesModule {
       ngModule: CommonServicesModule,
       providers: [
         ApiService,
-        ApiWorkerService,
         BNetService,
         AuthService,
         CacheService,

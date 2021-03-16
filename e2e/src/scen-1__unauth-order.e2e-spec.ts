@@ -310,12 +310,4 @@ export function unauthorizedUserMakesOrder(page: any) {
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 
-  it('Шаг 16: Пользователь нажимает на кнопку оформления заказа', async() => {
-    await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
-    await browserClick(await page.getCartMakeOrderButton());
-  });
-
-  it('Шаг 17: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
-    await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
-  });
 }

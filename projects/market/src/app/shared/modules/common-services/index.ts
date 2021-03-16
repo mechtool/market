@@ -1,6 +1,5 @@
 export * from './common-services.module';
 export * from './api.service';
-export * from './api-worker.service';
 export * from './bnet.service';
 export * from './auth.service';
 export * from './cache.service';

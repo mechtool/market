@@ -55,7 +55,6 @@
     "ngx-virtual-scroller": "^4.0.3",
     "ngx-webstorage-service": "^4.1.0",
     "normalize.css": "^8.0.1",
-    "observable-webworker": "^3.2.6",
     "puppeteer": "^8.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

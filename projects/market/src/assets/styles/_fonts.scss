@@ -8,6 +8,7 @@
 		url('/assets/fonts/FuturaPT/book/FuturaPT-Book.eot?#iefix') format('embedded-opentype');
 	font-weight: normal;
 	font-style: normal;
+  font-display: swap;
 }
 
 @font-face{
@@ -20,6 +21,7 @@
 		url('/assets/fonts/FuturaPT/bold/FuturaPT-Bold.eot?#iefix') format('embedded-opentype');
 	font-weight: bold;
 	font-style: normal;
+  font-display: swap;
 }
 
 @font-face{
@@ -32,6 +34,7 @@
 		url('/assets/fonts/FuturaPT/medium/FuturaPT-Medium.eot?#iefix') format('embedded-opentype');
 	font-weight: 500;
 	font-style: normal;
+  font-display: swap;
 }
 
 @font-face{
@@ -44,6 +47,7 @@
 		url('/assets/fonts/FuturaPT/demi/FuturaPT-Demi.eot?#iefix') format('embedded-opentype');
 	font-weight: 600;
 	font-style: normal;
+  font-display: swap;
 }
 
 @font-face{
@@ -56,4 +60,5 @@
     url('/assets/fonts/FuturaPT/light/FuturaPT-Light.eot?#iefix') format('embedded-opentype');
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }

@@ -37,7 +37,6 @@ import {
   UserOrganizationModel,
 } from './models';
 import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { ApiWorkerService } from './api-worker.service';
 
 const API_URL = environment.apiUrl;
 
@@ -47,7 +46,6 @@ export class BNetService {
     private _http: HttpClient,
     private _apiService: ApiService,
     private _cacheService: CacheService,
-    private _apiWorkerService: ApiWorkerService,
   ) {
   }
 
