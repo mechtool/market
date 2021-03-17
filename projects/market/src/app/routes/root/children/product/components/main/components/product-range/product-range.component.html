@@ -3,7 +3,7 @@
     <div nz-col class="product-row" [nzSpan]="24 / count" *ngFor="let group of groups">
       <div class="product-group">
         <div class="description">
-          <h3><a [routerLink]="[group.url]">{{group.title}}</a></h3>
+          <h3><a [routerLink]="[group.url]" [queryParams]="group.queryParams">{{group.title}}</a></h3>
 
           <div class="positions">
             <ul>

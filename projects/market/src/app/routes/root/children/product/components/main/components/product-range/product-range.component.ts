@@ -59,9 +59,8 @@ export class ProductRangeComponent implements OnDestroy {
       items: [
         {
           title: 'Бумага',
-          url: '/category/616',
+          url: '/category/759',
           queryParams: {
-            q: 'Бумага А3 А4',
             withImages: true
           },
         },
@@ -69,7 +68,7 @@ export class ProductRangeComponent implements OnDestroy {
           title: 'Расходные материалы',
           url: '/category',
           queryParams: {
-            q: 'тонер картридж фотобарабан',
+            q: 'тонер',
             withImages: true
           },
         },
@@ -100,6 +99,10 @@ export class ProductRangeComponent implements OnDestroy {
       title: 'Компьютеры и оргтехника',
       url: '/category/1',
       img: './assets/img/product-range/printer.png',
+      queryParams: {
+        withImages: true,
+        sort: 'minPriceDesc'
+      },
       items: [
         {
           title: 'Принтеры и МФУ',
@@ -135,6 +138,10 @@ export class ProductRangeComponent implements OnDestroy {
       title: 'Продукты питания',
       url: '/category/3321',
       img: './assets/img/product-range/cookie.png',
+      queryParams: {
+        withImages: true,
+        sort: 'minPriceDesc'
+      },
       items: [
         {
           title: 'Вода',
@@ -155,7 +162,8 @@ export class ProductRangeComponent implements OnDestroy {
           title: 'Кондитерские изделия',
           url: '/category/2743',
           queryParams: {
-            withImages: true
+            withImages: true,
+            sort: 'minPriceDesc'
           },
         },
       ]
@@ -164,13 +172,18 @@ export class ProductRangeComponent implements OnDestroy {
       title: 'Электрооборудование и электроника',
       url: '/category/651',
       img: './assets/img/product-range/light_bulb.png',
+      queryParams: {
+        withImages: true,
+        sort: 'minPriceDesc'
+      },
       items: [
         {
           title: 'Розетки и выключатели',
           url: '/category',
           queryParams: {
             q: 'розетка',
-            withImages: true
+            withImages: true,
+            sort: 'minPriceDesc'
           },
         },
         {
@@ -194,11 +207,15 @@ export class ProductRangeComponent implements OnDestroy {
       title: 'Автозапчасти',
       url: '/category/5681',
       img: './assets/img/product-range/oil.png',
+      queryParams: {
+        withImages: true
+      },
       items: [
         {
-          title: 'Моторные масла',
+          title: 'Моторные масло',
           url: '/category/5681',
           queryParams: {
+            q: 'масло моторное',
             withImages: true
           },
         },
