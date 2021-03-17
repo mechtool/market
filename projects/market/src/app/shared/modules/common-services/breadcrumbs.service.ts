@@ -1,31 +1,28 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BreadcrumbItemModel } from './models';
 
 @Injectable()
 export class BreadcrumbsService {
-  private items$: BehaviorSubject<BreadcrumbItemModel[]> = new BehaviorSubject(null);
-  private visibleBreadcrumbs$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private _items$: BehaviorSubject<BreadcrumbItemModel[]> = new BehaviorSubject(null);
+  private _visibleBreadcrumbs$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  constructor() {
+  get isVisible$(): Observable<boolean> {
+    return this._visibleBreadcrumbs$.asObservable();
   }
 
-  getItems() {
-    return this.items$.asObservable();
+  get items$(): Observable<BreadcrumbItemModel[]> {
+    return this._items$.asObservable()
   }
 
   setItems(items: BreadcrumbItemModel[]): void {
     setTimeout(() => {
-      this.items$.next(items);
+      this._items$.next(items);
     }, 0);
   }
 
-  istVisible() {
-    return this.visibleBreadcrumbs$.asObservable();
-  }
-
   setVisible(val: boolean): void {
-    this.visibleBreadcrumbs$.next(val);
+    this._visibleBreadcrumbs$.next(val);
   }
 }
 

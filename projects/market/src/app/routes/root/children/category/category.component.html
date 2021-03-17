@@ -17,11 +17,8 @@
   </ng-container>
 
   <ng-container ngProjectAs="main-slot">
-    <market-main-popular
-      *ngIf="isNotSearchUsed && isPopularProductsShown"
-      [categoryId]="category?.id"
-      [size]="20">
-    </market-main-popular>
+
+    <market-main-popular *ngIf="isNotSearchUsed && !category"></market-main-popular>
 
     <market-search-results
       [productOffers]="productOffers"
@@ -34,7 +31,8 @@
       [visibleSort]="productOffers?.length > 1"
       (sortingChanged)="changeSortingAndRefresh($event)"
       (positionChanged)="loadProducts($event)"
-      (scrollChanged)="scrollCommand = $event">
+      (scrollChanged)="scrollCommand = $event"
+      *ngIf="!isNotSearchUsed || category">
 
       <ng-container ngProjectAs="tags-slot" *ngIf="showTags">
         <market-tag (click)="resetUrlFilters()">

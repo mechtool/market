@@ -1,15 +1,15 @@
-import { Component, HostBinding, Injector, OnInit } from '@angular/core';
+import { Component, HostBinding, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { Subscription } from 'rxjs';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { UserService } from '#shared/modules/common-services/user.service';
 import { UserStateService } from '#shared/modules/common-services/user-state.service';
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
+import { unsubscribeList } from '#shared/utils';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-navbar-nav',
   templateUrl: './navbar-nav.component.html',
@@ -20,7 +20,7 @@ import { NotificationsService } from '#shared/modules/common-services/notificati
     './navbar-nav.component-576.scss',
   ],
 })
-export class NavbarNavComponent implements OnInit {
+export class NavbarNavComponent implements OnInit, OnDestroy {
   private _navService: NavigationService;
   private _userService: UserService;
   private _userStateService: UserStateService;
@@ -70,6 +70,11 @@ export class NavbarNavComponent implements OnInit {
     return this._navService.isNavBarMinified && !this._navService.isMenuOpened;
   }
 
+  private _navItemsSubscription: Subscription;
+  private _cartCounterSubscription: Subscription;
+  private _participationRequestsSubscription: Subscription;
+  private _newAccountDocumentsCounterSubscription: Subscription;
+
   constructor(
     private injector: Injector,
     private _location: Location,
@@ -87,6 +92,13 @@ export class NavbarNavComponent implements OnInit {
     this._watchSetCartDataCounter();
     this._watchSetParticipationRequestsCounter();
     this._watchSetNewAccountDocumentsCounter();
+  }
+
+  ngOnDestroy() {
+    unsubscribeList([
+      this._navItemsSubscription, this._cartCounterSubscription,
+      this._participationRequestsSubscription, this._newAccountDocumentsCounterSubscription
+    ]);
   }
 
   navigateNavItem(navItem: NavItemModel): void {
@@ -136,7 +148,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _setNavigation() {
-    this._navService.navItems$.subscribe(
+    this._navItemsSubscription = this._navService.navItems$.subscribe(
       (res) => {
         this.navItems = res;
         this._setNavItemActive(this._getActiveItem(this.navItems));
@@ -169,13 +181,13 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _watchSetCartDataCounter(): void {
-    this._cartService.cartCounter$.subscribe((cartDataLength) => {
+    this._cartCounterSubscription = this._cartService.cartCounter$.subscribe((cartDataLength) => {
       this.cartNavItem.counter = cartDataLength;
     });
   }
 
   private _watchSetParticipationRequestsCounter(): void {
-    this._userService.participationRequests$.subscribe((participationRequests) => {
+    this._participationRequestsSubscription = this._userService.participationRequests$.subscribe((participationRequests) => {
       if (this.myOrganizationsItem) {
         this.myOrganizationsItem.counter = participationRequests?.length || 0;
       }
@@ -183,7 +195,7 @@ export class NavbarNavComponent implements OnInit {
   }
 
   private _watchSetNewAccountDocumentsCounter(): void {
-    this._userService.newAccountDocumentsCounter$.subscribe((counter) => {
+    this._newAccountDocumentsCounterSubscription = this._userService.newAccountDocumentsCounter$.subscribe((counter) => {
       if (this.myOrdersItem) {
         this.myOrdersItem.counter = counter || 0;
       }

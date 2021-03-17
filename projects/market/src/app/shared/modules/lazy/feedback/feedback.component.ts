@@ -1,31 +1,42 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReCaptchaV3Service } from 'ng-recaptcha';
-import { FeedbackService, NotificationsService } from '#shared/modules/common-services';
-import { switchMap } from 'rxjs/operators';
-import { unsubscribeList } from '#shared/utils';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { Subscription } from 'rxjs';
+import { FeedbackService } from '#shared/modules/common-services/feedback.service';
+import { NotificationsService } from '#shared/modules/common-services/notifications.service';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { unsubscribeList } from '#shared/utils';
+import { switchMap } from 'rxjs/operators';
 
-@UntilDestroy({ checkProperties: true })
+
 @Component({
-  selector: 'market-requisites-checker',
-  templateUrl: './feedback-modal.component.html',
-  styleUrls: ['./feedback-modal.component.scss'],
+  selector: 'market-feedback',
+  templateUrl: './feedback.component.html',
+  styleUrls: ['./feedback.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeedbackModalComponent implements OnInit, OnDestroy {
+export class FeedbackComponent implements OnInit, OnDestroy {
   form: FormGroup;
   @Output() feedbackEvent: EventEmitter<boolean> = new EventEmitter();
   private _recaptchaSubscription: Subscription;
-
 
   constructor(
     private _fb: FormBuilder,
     private _feedbackService: FeedbackService,
     private _notificationsService: NotificationsService,
     private _recaptchaV3Service: ReCaptchaV3Service,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this._initForm();
@@ -67,4 +78,12 @@ export class FeedbackModalComponent implements OnInit, OnDestroy {
       message: new FormControl('', [Validators.required]),
     });
   }
+
 }
+
+@NgModule({
+  imports: [CommonModule, RouterModule, NzModalModule, FormsModule, ReactiveFormsModule, NzButtonModule],
+  exports: [FeedbackComponent],
+  declarations: [FeedbackComponent],
+})
+export class FeedbackModule {}

@@ -22,10 +22,12 @@
               "@tweenjs/tween.js"
             ],
             "buildOptimizer": true,
+            "statsJson": true,
             "customWebpackConfig": {
               "path": "projects/market/src/extra-webpack.config.ts"
             },
             "vendorChunk": true,
+            "commonChunk": true,
             "extractLicenses": true,
             "namedChunks": true,
             "extractCss": true,

@@ -1,4 +1,3 @@
-import { LineClampModule } from '#shared/modules/directives/line-clamp';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -44,7 +43,6 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     NzDatePickerModule,
     SharedDepsModule,
     CartRoutingModule,
-    LineClampModule,
     NzInputModule,
     NgZorroAntdMobileModule,
     SharedDepsModule

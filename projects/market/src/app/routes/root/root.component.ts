@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { NavigationService, ResponsiveService, BreadcrumbsService } from '#shared/modules';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss', './root.component-1300.scss', './root.component-992.scss', './root.component-576.scss'],
@@ -13,7 +11,7 @@ export class RootComponent {
   }
 
   get breadcrumbsItems$() {
-    return this._breadcrumbsService.getItems();
+    return this._breadcrumbsService.items$;
   }
 
   constructor(

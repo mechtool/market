@@ -36,13 +36,6 @@ import 'core-js/es/array';
 import 'classlist.js'; // Run `npm install --save classlist.js`.
 
 /**
- * Web Animations `@angular/platform-browser/animations`
- * Only required if AnimationBuilder is used within the application and using IE/Edge or Safari.
- * Standard animation support in Angular DOES NOT require any polyfills (as of Angular 6.0).
- */
-import 'web-animations-js'; // Run `npm install --save web-animations-js`.
-
-/**
  * Полифилл для поиска ближайшего элемента (вверх по родит. дереву) по выбранному селектору
  * https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
  */
@@ -67,11 +60,11 @@ if (!Element.prototype.closest) {
 }
 
 /**
- * Понифилл для функционирования CSS Variables / Custom Properties в IE11.
+ * Понифилл для функционирования CSS Variables в IE11.
  */
 import cssVarsPonyfill from 'css-vars-ponyfill';
 cssVarsPonyfill({
-  onlyLegacy: false,
+  onlyLegacy: true,
   watch: true,
   silent: true,
 });
@@ -105,6 +98,10 @@ cssVarsPonyfill({
 if (document['documentMode'] || /Edge/.test(navigator.userAgent)) {
   (window as any).__Zone_enable_cross_context_check = true;
 }
+
+/**
+ * Библиотека zone.js перенесена в index.html в целях оптимизации производительности
+ */
 import 'zone.js/dist/zone'; // Included with Angular CLI.
 
 /***************************************************************************************************

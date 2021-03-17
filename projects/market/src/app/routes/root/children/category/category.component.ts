@@ -44,7 +44,6 @@ export class CategoryComponent implements OnDestroy {
   areAdditionalFiltersEnabled = false;
   request: any = null;
   urlSubscription: Subscription;
-  private _isPopularProductsShown = false;
   private unlocked = true;
 
   deliveryAreaChange$: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -71,10 +70,6 @@ export class CategoryComponent implements OnDestroy {
       return false;
     }
     return true;
-  }
-
-  get isPopularProductsShown(): boolean {
-    return !this._activatedRoute.snapshot.paramMap.get('id') || this._isPopularProductsShown;
   }
 
   get showTags(): boolean {
@@ -212,19 +207,17 @@ export class CategoryComponent implements OnDestroy {
             ? zip(
               this._categoryService.getCategory(categoryId),
               this._categoryService.getCategoryBannerItems(categoryId),
-              this._categoryService.isCategoryPopularProducts(categoryId),
             )
             : zip(of(null), this._categoryService.getCategoryBannerItems(''), of(true));
         }).pipe(
-          tap(([category, bannerItems, isPopularProductsShown]: [CategoryModel, BannerItemModel[], boolean]) => {
+          tap(([category, bannerItems]: [CategoryModel, BannerItemModel[]]) => {
             this.category = category;
             this.bannerItems = bannerItems;
-            this._isPopularProductsShown = isPopularProductsShown;
           })
         )
       }),
       filter(() => {
-        const pass = !!categoryId || !this.isNotSearchUsed;
+        const pass = !!categoryId;
         if (!pass) {
           this._spinnerService.hide();
         }

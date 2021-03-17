@@ -3,30 +3,21 @@
   "version": "0.0.1-SNAPSHOT",
   "scripts": {
     "ng": "ng",
-    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --project=market -c=es5",
-    "start:remote": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng serve --project=market -c=remote",
-    "build:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng build --project=market -c=dev && copy robots.txt dist/market/dev",
-    "build:stage": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng build --project=market -c=stage && copy robots.txt dist/market/stage",
-    "build:prod": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng build --project=market -c=production",
+    "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=es5",
+    "start:remote": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=remote",
+    "build:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=dev && copy robots.txt dist/market/dev",
+    "build:stage": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=stage && copy robots.txt dist/market/stage",
+    "build:prod": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production",
     "build": "npm run build:dev && npm run build:stage && npm run build:prod",
-    "test": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng test",
-    "lint": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng lint",
-    "e2e": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e2e --project=market",
-    "e2e:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e2e --project=market -c=dev",
-    "e2e:stage": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e2e --project=market -c=stage",
-    "e2e:denis": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e2e --project=market -c=denis",
-    "e2e:ruslan": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e2e --project=market -c=ruslan",
-    "docker:build:dev": "npm run docker:image:build && npm run docker:container:build:dev && npm run docker:container:copy-to-dist && npm run docker:container:remove",
-    "docker:build:stage": "npm run docker:image:build && npm run docker:container:build:stage && npm run docker:container:copy-to-dist && npm run docker:container:remove",
-    "docker:build:prod": "npm run docker:image:build && npm run docker:container:build:prod && npm run docker:container:copy-to-dist && npm run docker:container:remove",
-    "docker:build": "npm run docker:image:build && npm run docker:container:build && npm run docker:container:copy-to-dist && npm run docker:container:remove",
-    "docker:image:build": "docker-compose build --no-cache app",
-    "docker:container:build:dev": "docker run --name market_app_container market_app npm run build:dev",
-    "docker:container:build:stage": "docker run --name market_app_container market_app npm run build:stage",
-    "docker:container:build:prod": "docker run --name market_app_container market_app npm run build:prod",
-    "docker:container:build": "docker run --name market_app_container market_app npm run build",
-    "docker:container:copy-to-dist": "docker cp market_app_container:/usr/src/app/dist/. ./dist",
-    "docker:container:remove": "docker container rm market_app_container --force"
+    "test": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng t",
+    "lint": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng l",
+    "e2e": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e market",
+    "e2e:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e market -c=dev",
+    "e2e:stage": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e market -c=stage",
+    "e2e:denis": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e market -c=denis",
+    "e2e:ruslan": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng e market -c=ruslan",
+    "analyze:stage": "webpack-bundle-analyzer dist/market/stage/stats.json",
+    "analyze:prod": "webpack-bundle-analyzer dist/market/prod/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -58,7 +49,6 @@
     "puppeteer": "^8.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "web-animations-js": "^2.3.2",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
@@ -89,6 +79,7 @@
     "tslint": "~6.1.0",
     "tslint-config-airbnb": "^5.11.2",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.2",
+    "webpack-bundle-analyzer": "^4.4.0"
   }
 }

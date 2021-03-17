@@ -14,7 +14,7 @@ export class BreadcrumbsComponent {
   @Input() items: BreadcrumbItemModel[];
 
   get visibleBreadcrumbs$() {
-    return this._breadcrumbsService.istVisible();
+    return this._breadcrumbsService.isVisible$;
   }
 
   constructor(private _breadcrumbsService: BreadcrumbsService, private _navigationService: NavigationService) {}

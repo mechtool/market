@@ -1,9 +1,7 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { NavigationService } from '#shared/modules';
 import { Portal } from '@angular/cdk/portal';
-import { UntilDestroy } from '@ngneat/until-destroy';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-navbar',
   templateUrl: './navbar.component.html',
@@ -25,7 +23,4 @@ export class NavbarComponent {
     this._navService.viewContainerRef = this._viewContainerRef;
   }
 
-  openMenu() {
-    this._navService.openMenu();
-  }
 }

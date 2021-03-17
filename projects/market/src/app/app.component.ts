@@ -1,8 +1,18 @@
-import { Component, OnDestroy } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  Injector,
+  OnDestroy,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
 import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, map, take, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { fromEvent, Observable, Subscription } from 'rxjs';
+import { unsubscribeList } from '#shared/utils';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'market-app',
@@ -10,7 +20,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnDestroy {
-  routeChangeSubscription: Subscription;
+  private readonly _routeChangeSubscription: Subscription;
 
   constructor(
     private _userService: UserService,
@@ -18,8 +28,13 @@ export class AppComponent implements OnDestroy {
     private _router: Router,
     private _externalProvidersService: ExternalProvidersService,
     private _authService: AuthService,
+    private _cfr: ComponentFactoryResolver,
+    private _viewContainerRef: ViewContainerRef,
+    private _modalService: NzModalService,
+    private _injector: Injector,
+    private _compiler: Compiler,
   ) {
-    this.routeChangeSubscription = this._routeChanges$().subscribe((res) => {
+    this._routeChangeSubscription = this._routeChanges$().subscribe((res) => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();
       this._externalProvidersService.hitYandexMetrika();
     });
@@ -31,7 +46,25 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.routeChangeSubscription.unsubscribe();
+    unsubscribeList([this._routeChangeSubscription]);
+  }
+
+  async loadFeedbackComponent() {
+
+    const feedbackComponent = (await import(`./shared/modules/lazy/feedback/feedback.component`)).FeedbackComponent;
+    const modal = this._modalService.create({
+      nzContent: feedbackComponent,
+      nzViewContainerRef: this._viewContainerRef,
+      nzFooter: null,
+      nzWidth: 450,
+    });
+
+    const subscription = modal.componentInstance.feedbackEvent.subscribe((success) => {
+      if (success) {
+        modal.destroy(true);
+        subscription.unsubscribe();
+      }
+    });
   }
 
   private _routeChanges$(): Observable<NavigationEnd> {
