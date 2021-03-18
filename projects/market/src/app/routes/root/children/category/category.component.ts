@@ -217,7 +217,7 @@ export class CategoryComponent implements OnDestroy {
         )
       }),
       filter(() => {
-        const pass = !!categoryId;
+        const pass = !!categoryId || !this.isNotSearchUsed;
         if (!pass) {
           this._spinnerService.hide();
         }
