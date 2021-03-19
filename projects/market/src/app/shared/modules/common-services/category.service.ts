@@ -17,8 +17,8 @@ const CATEGORY_OTHER = '6341';
 
 @Injectable()
 export class CategoryService {
-  private categoryTree$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
-  private categoryList$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
+  private _categoryTree$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
+  private _categoryList$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   private categoryIdsForPopularProducts = ['1', '616', '651', '3321', '3349', '5681'];
   private categoryPromos: {
     [id: string]: BannerItemModel[];
@@ -31,24 +31,24 @@ export class CategoryService {
   updateCategories(): Observable<any> {
     return this._bnetService.getCategories().pipe(
       catchError(() => {
-        this.categoryTree$.next(null);
-        this.categoryList$.next(null);
+        this._categoryTree$.next(null);
+        this._categoryList$.next(null);
         return throwError(null);
       }),
       tap((res: CategoryResponseModel) => {
-        this.categoryList$.next(res.categories);
+        this._categoryList$.next(res.categories);
         const tree = convertListToTree(res.categories).filter((category) => !!category);
-        this.categoryTree$.next(tree);
+        this._categoryTree$.next(tree);
       }),
     );
   }
 
   getCategoriesList(): Observable<CategoryModel[]> {
-    return this.categoryList$;
+    return this._categoryList$.asObservable();
   }
 
   getCategoriesTree(): Observable<CategoryModel[]> {
-    return this.categoryTree$;
+    return this._categoryTree$.asObservable();
   }
 
   getCategoryTree(categoryId: string): Observable<CategoryModel[]> {

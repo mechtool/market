@@ -202,6 +202,11 @@ export class CategoryComponent implements OnDestroy {
         };
       }),
       switchMap(() => {
+        return this._categoryService.getCategoriesTree().pipe(
+          filter((res) => !!res)
+        );
+      }),
+      switchMap(() => {
         return defer(() => {
           return categoryId
             ? zip(
