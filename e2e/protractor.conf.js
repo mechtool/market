@@ -50,7 +50,7 @@ exports.config = {
       userPassword: 'aA123321'
     },
     defaultTimeout: 1e4,
-    defaultSupplierNamePart: 'метро',
+    defaultSupplierNameINN: '1828011980',
     defaultOrganizationINN: '7604246289',
     defaultOrganizationKPP: '760401001',
     defaultOrganizationName: 'ООО Тесто №1',
@@ -59,6 +59,7 @@ exports.config = {
     defaultContactEmail: 'testovich.fedor@ftestovich.ru',
     defaultDeliveryCity: 'Москва г',
     defaultDeliveryStreet: 'Лермонтовская ул',
+    defaultOrganizationIPNamePattern: 'ИП Тесто-',
   },
   onPrepare() {
     require('ts-node').register({

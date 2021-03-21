@@ -8,7 +8,7 @@ let devConfig = {
       userPassword: 'aA123321'
     },
     defaultTimeout: 1e4,
-    defaultSupplierNamePart: 'метро',
+    defaultSupplierNameINN: '1828011980',
     defaultOrganizationINN: '7604246289',
     defaultOrganizationKPP: '760401001',
     defaultOrganizationName: 'ООО Тесто №1',

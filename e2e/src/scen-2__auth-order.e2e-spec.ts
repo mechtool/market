@@ -14,7 +14,7 @@ import {
   defaultContactEmail,
   defaultDeliveryStreet,
   defaultDeliveryCity,
-  restart, defaultSupplierNamePart, elementTextContentChanged, browserClick
+  restart, defaultSupplierNameINN, elementTextContentChanged, browserClick
 } from './utils/utils';
 
 let tradeOfferTitle = null;
@@ -138,7 +138,7 @@ export function authorizedUserSearchesWithRegion(page: any) {
     await browser.sleep(3e3);
     await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.DOWN);
     await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.ENTER);
-    await page.getSearchFilterPanelControlSupplierInput().sendKeys(defaultSupplierNamePart);
+    await page.getSearchFilterPanelControlSupplierInput().sendKeys(defaultSupplierNameINN);
     await browser.sleep(3e3);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.DOWN);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.ENTER);
