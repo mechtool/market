@@ -1,6 +1,52 @@
 @import 'spinner';
 @import 'maintenance';
 
+html {
+  line-height: 1.15; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+main {
+  display: block;
+}
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+img {
+  border-style: none;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+
 .grecaptcha-badge {
   visibility: hidden;
 }
@@ -40,6 +86,7 @@ a img {
 }
 
 a {
+  background-color: transparent;
   cursor: pointer;
   color: inherit;
   text-decoration: none;
@@ -69,6 +116,7 @@ h1 {
   line-height: 32px;
   letter-spacing: 0.025em;
   white-space: nowrap;
+  margin: 0.67em 0;
 }
 
 ul,
@@ -103,7 +151,7 @@ textarea {
 a.btn,
 button.btn {
   font-size: var(--font-size-base);
-  font-family: 'Futura', serif;
+  font-family: 'Futura', Arial, Helvetica, sans-serif;
   font-weight: var(--font-weight-medium);
   border-radius: 2px;
   background-color: #ffffff;
@@ -239,3 +287,5 @@ input[type='number'] {
     display: block;
   }
 }
+
+

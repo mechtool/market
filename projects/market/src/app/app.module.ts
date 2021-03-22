@@ -10,8 +10,6 @@ import { NZ_ICONS, NzIconModule } from 'ng-zorro-antd/icon';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { NZ_I18N, ru_RU } from 'ng-zorro-antd/i18n';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { LOCAL_PROVIDER_TOKEN, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
 import { AppRoutingModule } from './app-routing.module';
 import { ApiFactory, APP_CONFIG } from './config';
 import { CommonServicesModule } from '#shared/modules/common-services';
@@ -41,7 +39,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     AppRoutingModule,
     HttpClientModule,
     NoopAnimationsModule,
-    NzModalModule,
     ReactiveFormsModule,
     PortalModule,
     OverlayModule,
@@ -60,7 +57,6 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     { provide: LOCALE_ID, useValue: 'ru' },
     { provide: NZ_I18N, useValue: ru_RU },
     { provide: NZ_ICONS, useValue: icons },
-    { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
     { provide: APP_CONFIG, useValue: { retryNum: 3, retryDelay: 300, debounceTime: 300 } },
     {
       provide: APP_INITIALIZER,

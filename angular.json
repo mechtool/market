@@ -26,7 +26,7 @@
             "customWebpackConfig": {
               "path": "projects/market/src/extra-webpack.config.ts"
             },
-            "vendorChunk": true,
+            "vendorChunk": false,
             "commonChunk": true,
             "extractLicenses": true,
             "namedChunks": true,
@@ -62,7 +62,6 @@
               }
             ],
             "styles": [
-              "node_modules/normalize.css/normalize.css",
               "projects/market/src/assets/styles/styles.less",
               "projects/market/src/assets/styles/_fonts.scss",
               "projects/market/src/assets/styles/styles.scss"
@@ -70,7 +69,7 @@
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
             },
-            "scripts": [],
+            "scripts": []
           },
           "configurations": {
             "dev": {

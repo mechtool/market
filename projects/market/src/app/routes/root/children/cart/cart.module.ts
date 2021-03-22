@@ -12,7 +12,7 @@ import {
   OrderUnavailableComponent
 } from './components';
 import { CartModalService } from './cart-modal.service';
-import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
+import { LOCAL_PROVIDER_TOKEN, NgZorroAntdMobileModule, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -55,7 +55,10 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     OrderSentComponent,
     RegisterOrderSentComponent,
   ],
-  providers: [CartModalService],
+  providers: [
+    CartModalService,
+    { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
+  ]
 })
 export class CartModule {
 }
