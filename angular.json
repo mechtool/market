@@ -30,7 +30,6 @@
             "commonChunk": true,
             "extractLicenses": true,
             "namedChunks": true,
-            "extractCss": true,
             "sourceMap": true,
             "optimization": true,
             "outputHashing": "all",

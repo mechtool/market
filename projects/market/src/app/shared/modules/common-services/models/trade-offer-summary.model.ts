@@ -7,6 +7,7 @@ import { AudienceModel } from './audience-model';
 
 export class TradeOfferSummaryModel {
   id: string;
+  sid: string;
   productName: string;
   offerTitle: string;
   ref1cNomenclatureCategoryId: string;

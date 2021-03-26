@@ -6,6 +6,7 @@ import { TradeOfferPriceMatrixModel } from './trade-offer-price-matrix.model';
 
 export class TradeOffersModel {
   id: string;
+  sid: string;
   price: number;
   currency: {
     numericCode: string;

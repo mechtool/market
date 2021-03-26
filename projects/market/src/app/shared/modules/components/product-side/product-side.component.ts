@@ -49,6 +49,10 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
     return this.tradeOffer?.id;
   }
 
+  get tradeOfferSid(): string {
+    return this.tradeOffer?.sid;
+  }
+
   constructor(
     private _fb: FormBuilder,
     private _cartService: CartService,
@@ -138,7 +142,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
                       this.tradeOffer.product?.ref1cNomenclature?.productName ||
                       this.tradeOffer.product?.supplierNomenclature?.productName ||
                       '',
-                    id: this.tradeOfferId || '',
+                    id: this.tradeOfferSid || '',
                     price: this.tradeOffer.termsOfSale?.price?.matrix?.[0]?.price
                       ? this.tradeOffer.termsOfSale.price.matrix[0].price / 100
                       : '',

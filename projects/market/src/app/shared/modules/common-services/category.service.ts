@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { CategoryModel, CategoryRequestModel, CategoryResponseModel } from './models';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, filter, map, tap } from 'rxjs/operators';
 import {
   convertListToTree,
   deepTreeParentsSearch,
@@ -54,6 +54,7 @@ export class CategoryService {
   getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
     if (categoryId !== CATEGORY_OTHER) {
       return this.getCategoriesTree().pipe(
+        filter((res) => !!res),
         map((res) => {
           return deepTreeParentsSearch(res, 'id', categoryId);
         }),

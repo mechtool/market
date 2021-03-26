@@ -9,6 +9,7 @@ import { TradeOfferDescriptionModel } from './trade-offer-description.model';
 
 export class TradeOfferResponseModel {
   id: string;
+  sid: string;
   externalCode: string;
   publicationDate: string;
   offerDescription: TradeOfferDescriptionModel;

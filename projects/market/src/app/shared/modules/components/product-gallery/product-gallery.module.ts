@@ -5,9 +5,10 @@ import { ProductGalleryComponent } from './product-gallery.component';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzImageModule } from 'ng-zorro-antd/image';
 
 @NgModule({
-  imports: [CommonModule, RouterModule, NzCarouselModule, SharedDepsModule, NzToolTipModule],
+  imports: [CommonModule, RouterModule, NzCarouselModule, SharedDepsModule, NzToolTipModule, NzImageModule],
   exports: [ProductGalleryComponent],
   declarations: [ProductGalleryComponent],
 })

@@ -47,14 +47,26 @@
     </div>
 
     <div class="pic" *ngIf="product.images?.length === 1">
-      <img src="{{firstImageUrl(product.images)}}"
-           alt="{{product.productName}}"
-           onerror="src='./assets/img/svg/clean_xl.svg'; onerror='';">
+      <img
+        nz-image
+        nzSrc="{{firstImageUrl(product.images)}}"
+        nzFallback="./assets/img/svg/clean_xl.svg"
+        alt="{{product.productName}}"
+        title="{{product.productName}}"
+      />
     </div>
 
     <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
       <div nz-carousel-content *ngFor="let item of images">
-        <div class="carousel-item" [ngStyle]="{'background-image': 'url(' + imageUrl(item.href) + ')'}"></div>
+        <div class="carousel-item">
+          <img
+            nz-image
+            nzSrc="{{imageUrl(item.href)}}"
+            nzFallback="./assets/img/svg/clean_xl.svg"
+            alt="{{product.productName}}"
+            title="{{product.productName}}"
+          />
+        </div>
       </div>
     </nz-carousel>
 

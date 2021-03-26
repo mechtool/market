@@ -101,7 +101,7 @@ export class ProductComponent implements OnDestroy {
                 model?.offers?.map((offer, index) => {
                   return {
                     name: model.product?.productName || '',
-                    id: offer.id || '',
+                    id: offer.sid || '',
                     price: offer.price ? offer.price / 100 : '',
                     brand: model.product?.manufacturer?.tradeMark || '',
                     category: model.product?.categoryName || '',

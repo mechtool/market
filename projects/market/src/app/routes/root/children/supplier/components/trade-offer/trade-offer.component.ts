@@ -18,6 +18,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { Meta } from "@angular/platform-browser";
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -36,6 +37,7 @@ export class TradeOfferComponent implements OnDestroy {
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
+    private _meta: Meta,
     private _productService: ProductService,
     private _tradeOffersService: TradeOffersService,
     private _cartPromoterService: CartPromoterService,
@@ -48,6 +50,7 @@ export class TradeOfferComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this._cartPromoterService.stop();
+    this._meta.removeTag('itemprop="identifier"');
   }
 
   madeOrder(isMadeOrder: boolean) {
@@ -72,7 +75,7 @@ export class TradeOfferComponent implements OnDestroy {
                 products: [
                   {
                     name: tradeOffer.product?.ref1cNomenclature?.productName || tradeOffer.product?.supplierNomenclature?.productName || '',
-                    id: tradeOffer.id || '',
+                    id: tradeOffer.sid || '',
                     price: tradeOffer.termsOfSale?.price?.matrix?.[0]?.price ? tradeOffer.termsOfSale.price.matrix[0].price / 100 : '',
                     brand:
                       tradeOffer.product?.ref1cNomenclature?.manufacturer?.tradeMark ||
@@ -89,6 +92,9 @@ export class TradeOfferComponent implements OnDestroy {
             },
           };
           this._externalProvidersService.fireGTMEvent(tag);
+        }),
+        tap((tradeOffer) => {
+          this._meta.updateTag({ itemprop: 'identifier', content: tradeOffer.sid});
         }),
         switchMap((tradeOffer) => {
           const inn = tradeOffer.supplier.inn;
