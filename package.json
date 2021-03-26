@@ -10,7 +10,7 @@
     "build:prod": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production",
     "build": "npm run build:dev && npm run build:stage && npm run build:prod",
     "postbuild:dev": "shx cp -R robots.txt dist/market/dev && node optimize-css.js dist/market/dev",
-    "postbuild:stage": "shx cp -R robots.txt dist/market/tage && node optimize-css.js dist/market/stage",
+    "postbuild:stage": "shx cp -R robots.txt dist/market/stage && node optimize-css.js dist/market/stage",
     "postbuild:prod": "node optimize-css.js dist/market/prod",
     "test": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng t",
     "lint": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng l",

@@ -2,7 +2,7 @@
   .sf {
     width: 100vw;
     height: 100vh;
-    padding: 30px 35px;
+    padding: 30px 35px 120px 35px;
     background: #ffffff;
     overflow-y: scroll;
 
@@ -21,11 +21,21 @@
     }
 
     .content {
+      position: relative;
       display: block;
     }
 
     &_collapsed {
       display: block;
     }
+  }
+
+  .filter_btns {
+    position: fixed;
+    padding: 20px 0;
+    margin: 0;
+    bottom: 0;
+    background: #fff;
+    width: 100%;
   }
 }
