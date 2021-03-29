@@ -56,19 +56,21 @@
       />
     </div>
 
-    <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
-      <div nz-carousel-content *ngFor="let item of images">
-        <div class="carousel-item">
-          <img
-            nz-image
-            nzSrc="{{imageUrl(item.href)}}"
-            nzFallback="./assets/img/svg/clean_xl.svg"
-            alt="{{product.productName}}"
-            title="{{product.productName}}"
-          />
-        </div>
-      </div>
-    </nz-carousel>
+    <nz-image-group>
+      <nz-carousel *ngIf="product.images?.length > 1" [nzAutoPlay]="true">
+          <div nz-carousel-content *ngFor="let item of images">
+            <div class="carousel-item">
+              <img
+                nz-image
+                nzSrc="{{imageUrl(item.href)}}"
+                nzFallback="./assets/img/svg/clean_xl.svg"
+                alt="{{product.productName}}"
+                title="{{product.productName}}"
+              />
+            </div>
+          </div>
+      </nz-carousel>
+    </nz-image-group>
 
   </div>
 
