@@ -1,6 +1,6 @@
 <div class="product-groups">
   <div nz-row [nzGutter]="[14, 14]">
-    <div nz-col class="product-row" [nzSpan]="24 / count" *ngFor="let group of groups">
+    <div nz-col class="product-row" [nzSpan]="24 / count" *ngFor="let group of productsHighlight">
       <div class="product-group">
         <div class="description">
           <h3><a [routerLink]="[group.url]" [queryParams]="group.queryParams">{{group.title}}</a></h3>
@@ -14,7 +14,7 @@
           </div>
         </div>
 
-        <img class="group-img" [src]="group.img" [alt]="group.title" [title]="group.title">
+        <img class="group-img" src="{{imageUrl(group.img)}}" [alt]="group.title" [title]="group.title">
       </div>
     </div>
   </div>

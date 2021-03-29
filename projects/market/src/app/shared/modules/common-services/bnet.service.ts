@@ -25,6 +25,7 @@ import {
   ProductOfferResponseModel,
   ProductOffersListResponseModel,
   ProductOffersRequestModel,
+  ProductsHighlightListResponseModel,
   RegisterOrganizationRequestModel,
   SuggestionResponseModel,
   SuppliersRequestModel,
@@ -64,6 +65,10 @@ export class BNetService {
     return cacheable
       ? this._cacheService.get(`${API_URL}/product-offers`, params)
       : this._apiService.get(`${API_URL}/product-offers`, { params });
+  }
+
+  getProductsHighlight(): Observable<ProductsHighlightListResponseModel> {
+    return this._apiService.get(`${API_URL}/products-highlight`);
   }
 
   getTradeOffer(id: string): Observable<TradeOfferResponseModel> {
