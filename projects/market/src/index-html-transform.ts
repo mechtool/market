@@ -6,6 +6,7 @@ export default (targetOptions: TargetOptions, indexHtml: string) => {
   const $ = cheerio.load(indexHtml);
   const apiUrl = setApiUrl(targetOptions);
   appendLinks($, apiUrl);
+  appendGoogleVerification($, targetOptions);
   const result = minifyHtml($, targetOptions);
   return result;
 };
@@ -32,6 +33,13 @@ function appendLinks(loadedCheerio: any, apiUrl: string): void {
     const linkPreconnect = `<link rel="preconnect" href="${apiUrl}"/>`;
     loadedCheerio('head').append(linkDNSPrefetch);
     loadedCheerio('head').append(linkPreconnect);
+  }
+}
+
+function appendGoogleVerification(loadedCheerio: any, targetOptions: TargetOptions): void {
+  if (targetOptions.configuration === 'production') {
+    const googleVerification = `<meta name="google-site-verification" content="W_gnVHzfDQY2F9LFHeSRq-rJ0mbTHuEpazKtgr8rOCo"/>`;
+    loadedCheerio('head').append(googleVerification);
   }
 }
 
