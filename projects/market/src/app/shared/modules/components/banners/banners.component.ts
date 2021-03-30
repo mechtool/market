@@ -1,40 +1,42 @@
-import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { BannerItemModel } from './models';
 import { combineLatest, interval, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, take, takeWhile } from 'rxjs/operators';
-import { ResponsiveService } from '#shared/modules/common-services/responsive.service';
-import { NavigationService } from '#shared/modules/common-services/navigation.service';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
 import { unsubscribeList } from '#shared/utils';
+import { BannerService, NavigationService, ResponsiveService } from '#shared/modules/common-services';
 
 @Component({
   selector: 'market-banners',
   templateUrl: './banners.component.html',
   styleUrls: ['./banners.component.scss', './banners.component-768.scss'],
 })
-export class BannersComponent implements OnInit, OnDestroy {
-  @Input() bannerItems: BannerItemModel[];
-  @Input() autoPlay = true;
+export class BannersComponent implements OnDestroy {
+  bannerItems: BannerItemModel[];
   bannerItemsGroups: BannerItemModel[][];
   carouselEnabled = false;
   groupDivider: number = null;
   @ViewChild(NzCarouselComponent) private _carouselRef: NzCarouselComponent;
+  private _carouselVisibilitySubscription: Subscription;
+
   private get _body(): HTMLElement {
     return this._document.body;
   }
-  private _carouselVisibilitySubscription: Subscription;
 
   constructor(
-    @Inject(DOCUMENT) private _document: Document,
     private _cdr: ChangeDetectorRef,
+    private _bannerService: BannerService,
+    private _navService: NavigationService,
     private _responsiveService: ResponsiveService,
-    private _navService: NavigationService
-  ) {}
-
-  ngOnInit() {
-    this._handleCarouselVisibility();
-    this._detectScrollAppearanceAndReinitCarousel();
+    @Inject(DOCUMENT) private _document: Document,
+  ) {
+    this._bannerService.getBanners()
+      .subscribe((banners) => {
+        this.bannerItems = banners._embedded.items;
+        this._handleCarouselVisibility();
+        this._detectScrollAppearanceAndReinitCarousel();
+      });
   }
 
   ngOnDestroy() {
@@ -120,7 +122,7 @@ export class BannersComponent implements OnInit, OnDestroy {
           this.groupDivider = groupDivider;
           this._resetBannerItemsGroupsBy(groupDivider);
         }
-    });
+      });
   }
 
   private _isNavBarMinifiedChange$(): Observable<boolean> {

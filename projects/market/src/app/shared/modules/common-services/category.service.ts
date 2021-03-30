@@ -2,16 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { CategoryModel, CategoryRequestModel, CategoryResponseModel } from './models';
 import { catchError, filter, map, tap } from 'rxjs/operators';
-import {
-  convertListToTree,
-  deepTreeParentsSearch,
-  deepTreeSearch,
-  getFlatObjectArray,
-  getFlatPropertyArray
-} from '#shared/utils';
+import { convertListToTree, deepTreeParentsSearch, deepTreeSearch, getFlatObjectArray } from '#shared/utils';
 import { BNetService } from './bnet.service';
-import { BannerItemModel } from '#shared/modules/components/banners/models/banner-item.model';
-import { categoryPromotion } from '#environments/promotions';
 
 const CATEGORY_OTHER = '6341';
 
@@ -19,13 +11,8 @@ const CATEGORY_OTHER = '6341';
 export class CategoryService {
   private _categoryTree$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   private _categoryList$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
-  private categoryIdsForPopularProducts = ['1', '616', '651', '3321', '3349', '5681'];
-  private categoryPromos: {
-    [id: string]: BannerItemModel[];
-  }[] = [];
 
   constructor(private _bnetService: BNetService) {
-    this._setCategoryPromotion();
   }
 
   updateCategories(): Observable<any> {
@@ -104,27 +91,5 @@ export class CategoryService {
         return res.categories;
       }),
     );
-  }
-
-  getCategoryBannerItems(categoryId: string): Observable<BannerItemModel[]> {
-    return of(this.categoryPromos[categoryId] || null);
-  }
-
-  isCategoryPopularProducts(categoryId): Observable<boolean> {
-    return of(this.categoryIdsForPopularProducts.includes(categoryId));
-  }
-
-  private _setCategoryPromotion() {
-    Object.keys(categoryPromotion).forEach((categoryId) => {
-      this.categoryPromos[categoryId] = categoryPromotion[categoryId];
-      if (categoryId) {
-        this.getChildrenTreeOfCategory(categoryId).subscribe((cat) => {
-          const childCategoriesIds = getFlatPropertyArray(cat);
-          childCategoriesIds.forEach((childCategoryId) => {
-            this.categoryPromos[childCategoryId] = categoryPromotion[categoryId];
-          });
-        });
-      }
-    });
   }
 }

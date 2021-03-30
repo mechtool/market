@@ -6,7 +6,6 @@ import { ProductRoutingModule } from './product-routing.module';
 import {
   Code404Component,
   Code500Component,
-  MainBannersComponent,
   MainComponent,
   MainPopularComponent,
   ProductComponent,
@@ -21,9 +20,9 @@ import {
   ProductGalleryModule,
   ProductOrderModule,
   SearchAreaModule,
-  SupplierSearchBarModule,
   SearchResultsModule,
   SorterModule,
+  SupplierSearchBarModule,
   TradeOfferCardModule,
 } from '#shared/modules/components';
 import { DeclensionPipe } from '#shared/modules/pipes/declension.pipe';
@@ -62,7 +61,6 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
   declarations: [
     Code404Component,
     Code500Component,
-    MainBannersComponent,
     MainComponent,
     MainPopularComponent,
     ProductComponent,
@@ -70,7 +68,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     ProductRangeComponent,
   ],
   providers: [DeclensionPipe],
-  exports: [MainPopularComponent, MainBannersComponent, ProductRangeComponent],
+  exports: [MainPopularComponent, ProductRangeComponent],
 })
 export class ProductModule {
 }

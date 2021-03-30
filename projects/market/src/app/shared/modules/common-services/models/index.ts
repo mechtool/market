@@ -3,6 +3,7 @@ export * from './auth-refresh-request.model';
 export * from './auth-request.model';
 export * from './auth-response.model';
 export * from './breadcrumb-item.model';
+export * from './banners-list-response.model';
 export * from './cart.model';
 export * from './category.model';
 export * from './category-response.model';

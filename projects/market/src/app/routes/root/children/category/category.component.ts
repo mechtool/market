@@ -4,7 +4,7 @@ import { DefaultSearchAvailableModel } from '#shared/modules/common-services/mod
 import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { addURLParameters, removeURLParameters, unsubscribeList, updateUrlParameters } from '#shared/utils';
-import { BehaviorSubject, combineLatest, defer, forkJoin, of, Subscription, zip } from 'rxjs';
+import { BehaviorSubject, combineLatest, defer, forkJoin, of, Subscription } from 'rxjs';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { CategoryService } from '#shared/modules/common-services/category.service';
@@ -15,7 +15,6 @@ import {
   ProductOffersModel,
   SortModel,
 } from '#shared/modules/common-services/models';
-import { BannerItemModel } from '#shared/modules/components/banners/models';
 import { ProductService } from '#shared/modules/common-services/product.service';
 import { SpinnerService } from '#shared/modules';
 import { filter, switchMap, tap } from 'rxjs/operators';
@@ -29,7 +28,6 @@ export class CategoryComponent implements OnDestroy {
   category: CategoryModel = null;
   filters: DefaultSearchAvailableModel;
   query: string;
-  bannerItems: BannerItemModel[];
 
   productOffersList: ProductOffersListResponseModel;
   productOffers: ProductOffersModel[] = [];
@@ -208,16 +206,10 @@ export class CategoryComponent implements OnDestroy {
       }),
       switchMap(() => {
         return defer(() => {
-          return categoryId
-            ? zip(
-              this._categoryService.getCategory(categoryId),
-              this._categoryService.getCategoryBannerItems(categoryId),
-            )
-            : zip(of(null), this._categoryService.getCategoryBannerItems(''), of(true));
+          return categoryId ? this._categoryService.getCategory(categoryId) : of(null)
         }).pipe(
-          tap(([category, bannerItems]: [CategoryModel, BannerItemModel[]]) => {
+          tap((category) => {
             this.category = category;
-            this.bannerItems = bannerItems;
           })
         )
       }),

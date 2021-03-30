@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { BannerItemModel } from '../../models';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
+import { absoluteImagePath } from '#shared/utils';
 
 @Component({
   selector: 'market-banner',
@@ -29,5 +30,9 @@ export class BannerComponent {
     event.stopPropagation();
     event.preventDefault();
     this._navigationService.navigateReloadable([item.btnLink], { ...(item.btnQueryParams && { queryParams: item.btnQueryParams }) });
+  }
+
+  imageUrl(img: string): string {
+    return absoluteImagePath(img);
   }
 }

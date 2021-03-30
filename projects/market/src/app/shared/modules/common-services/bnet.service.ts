@@ -243,6 +243,12 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/counterparty/${inn}`);
   }
 
+  getBanners(pageId: string) {
+    return this._apiService.get(`${API_URL}/banners`, {
+      params: new HttpParams().append('pageId', pageId)
+    });
+  }
+
   private _params(searchQuery: any): HttpParams {
     let params = new HttpParams();
     if (searchQuery) {

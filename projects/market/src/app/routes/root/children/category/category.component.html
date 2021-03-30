@@ -12,8 +12,8 @@
   [summaryFeaturesData]="summaryFeaturesData"
   (submitClick)="navigateInCategoryRoute($event)">
 
-  <ng-container ngProjectAs="upper-slot" *ngIf="bannerItems?.length">
-    <market-banners [bannerItems]="bannerItems"></market-banners>
+  <ng-container ngProjectAs="upper-slot">
+    <market-banners></market-banners>
   </ng-container>
 
   <ng-container ngProjectAs="main-slot">

@@ -29,6 +29,7 @@ import { OverlayService } from './overlay.service';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartPromoterService } from './cart-promoter.service';
+import { BannerService } from './banner.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -40,6 +41,7 @@ export class CommonServicesModule {
       providers: [
         ApiService,
         BNetService,
+        BannerService,
         AuthService,
         CacheService,
         CategoryService,
