@@ -306,7 +306,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
       value: this.order?.orderTotal?.total ? this.order.orderTotal.total / 100 : '',
       products_info: this.order.items?.map((item) => {
         return {
-          id: item.tradeOfferId || '',
+          id: item.sid || '',
           price: item.price ? item.price / 100 : '',
           quantity: item.quantity || '',
         };
@@ -531,7 +531,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
                 products: [
                   {
                     name: orderItem?.productName?.value || '',
-                    id: orderItem?.tradeOfferId?.value || '',
+                    id: orderItem?.sid?.value || '',
                     price: orderItem?.price?.value ? orderItem.price.value / 100 : '',
                     brand: '',
                     category: '',
@@ -575,7 +575,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
             products: this.order.items?.map((item) => {
               return {
                 name: item.productName || '',
-                id: item.tradeOfferId || '',
+                id: item.sid || '',
                 price: item.price ? item.price / 100 : '',
                 brand: '',
                 category: '',
@@ -953,7 +953,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
                 products: this.order.items?.map((item) => {
                   return {
                     name: item.productName || '',
-                    id: item.tradeOfferId || '',
+                    id: item.sid || '',
                     price: item.price ? item.price / 100 : '',
                     brand: '',
                     category: '',
@@ -1131,6 +1131,7 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
   private _createItem(product: any): FormGroup {
     return this._fb.group({
       tradeOfferId: product.tradeOfferId,
+      sid: product.sid,
       productName: product.productName,
       productDescription: product.productDescription,
       barCodes: this._fb.array(product?.barCodes || []),

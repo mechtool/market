@@ -13,6 +13,7 @@ export class CartDataOrderResponseModel {
   items: [
     {
       tradeOfferId: string;
+      sid: string;
       productName: string;
       productDescription: string;
       barCodes: string[];
