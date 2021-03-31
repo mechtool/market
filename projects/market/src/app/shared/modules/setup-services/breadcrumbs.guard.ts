@@ -42,7 +42,7 @@ const pathsObjectWithBreadcrumbs = {
   '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
   '/cart': /^\/cart$/i,
   '/promo': /^\/promo$/i,
-  '/about': /^\/about$/i,
+  '/about': /^\/about.*\/?$/i,
   '/promo/:id': /^\/promo\/(?:([^\/]+?))$/i,
   '/promo/:id/:subId': /^\/promo\/(?:([^\/]+?))\/(?:([^\/]+?))\/?$/i,
   '/my/orders': /^\/my\/orders$/i,

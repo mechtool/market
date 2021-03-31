@@ -8,7 +8,7 @@
   }
 
   strong {
-    font-weight: 550;
+    font-weight: 600;
   }
 
   h2 {
@@ -47,14 +47,24 @@
     }
   }
 
-  ol li {
-    list-style-type: decimal;
-    margin-left: 30px;
+  ol {
+    li {
+      list-style-type: decimal;
+      margin-left: 30px;
+    }
   }
 
-  ul li {
-    list-style-type: disc;
-    margin-left: 30px;
+  ul:not(.toc) {
+    li {
+      list-style-type: disc;
+      margin-left: 30px;
+    }
+  }
+
+  ul.toc {
+    li {
+      margin: 6px 0;
+    }
   }
 
 }

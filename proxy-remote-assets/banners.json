@@ -1,0 +1,36 @@
+{
+  "_embedded":{
+    "items":[
+      {
+        "title":"Скидка 7% на электронику и комплектующие!",
+        "btnLink":"/supplier/15f87795-bc6f-4f37-a5cb-ebaa7d6b5d1b",
+        "btnQueryParams":{
+
+        },
+        "btnText":"Подробнее",
+        "description":"При заказе у официального дистрибьютора RS Components",
+        "imgUrl":"https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
+      },
+      {
+        "title":"Все для магазина и ресторана!",
+        "btnLink":"/category/3321",
+        "btnQueryParams":{
+
+        },
+        "btnText":"Подробнее",
+        "description":"> 7000 товаров в категории «Продукты, напитки, табак»",
+        "imgUrl":"https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
+      },
+      {
+        "title":"Все для офиса!",
+        "btnLink":"/category/616",
+        "btnQueryParams":{
+
+        },
+        "btnText":"Подробнее",
+        "description":"до 10% на заказы в категории «Товары для школы и офиса»'",
+        "imgUrl":"https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg"
+      }
+    ]
+  }
+}

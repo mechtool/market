@@ -28,6 +28,8 @@ const accountsId = fs.readFileSync('./proxy-remote-assets/accounts__ID.json').to
 const ordersId = fs.readFileSync('./proxy-remote-assets/orders__ID.json').toString();
 const accessKey = fs.readFileSync('./proxy-remote-assets/access-keys__obtain.json').toString();
 const accessKeys = fs.readFileSync('./proxy-remote-assets/organizations__access-keys.json').toString();
+const banners = fs.readFileSync('./proxy-remote-assets/banners.json').toString();
+const productsHighlight = fs.readFileSync('./proxy-remote-assets/products-highlight.json').toString();
 
 const PROXY_CONFIG = [
   {
@@ -79,6 +81,8 @@ const PROXY_CONFIG = [
         '/proxifier/edi/accounts': /^\/proxifier\/edi\/accounts\/?$/i,
         '/proxifier/edi/orders/:id': /^\/proxifier\/edi\/orders\/(?:([^\/]+?))\/?$/i,
         '/proxifier/edi/accounts/:id': /^\/proxifier\/edi\/accounts\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/banners?': /^\/proxifier\/banners\?.*\/?$/i,
+        '/proxifier/products-highlight': /^\/proxifier\/products-highlight\/?$/i,
       };
 
       if (req.method === 'POST' && pathsObject['/proxifier/auth'].test(req.originalUrl.split('?')[0])) {
@@ -374,6 +378,19 @@ const PROXY_CONFIG = [
         res.end(accountsId);
         return true;
       }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/banners?'].test(req.originalUrl)) {
+        res.status(200);
+        res.end(banners);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/products-highlight'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(productsHighlight);
+        return true;
+      }
+
     },
   },
 ];
