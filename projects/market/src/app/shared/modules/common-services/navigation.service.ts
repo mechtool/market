@@ -159,13 +159,20 @@ export class NavigationService implements OnDestroy {
           icon: 'order',
           counter: 0,
         },
-        /*{
+        {
+          label: 'Мои запросы',
+          attributeId: 'rfps_menu_id',
+          routerLink: ['/my/rfps'],
+          icon: 'rfps',
+          counter: 0,
+        },
+        {
           label: 'Мои продажи',
           attributeId: 'sales_menu_id',
           routerLink: ['/my/sales'],
           icon: 'sale',
           counter: 0,
-        },*/
+        },
         {
           label: 'Мои организации',
           attributeId: 'organization_menu_id',

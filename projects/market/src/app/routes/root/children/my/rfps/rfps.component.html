@@ -1,0 +1,71 @@
+<div class="container">
+
+  <h2 class="header">{{selectedTabIndex === 0 ? 'Мои запросы' : 'Мои предложения'}}</h2>
+
+  <nz-tabset
+    nzTabPosition="top"
+    nzType="card"
+    [nzSelectedIndex]="selectedTabIndex"
+    (nzSelectedIndexChange)="changeSelectedTabIndex($event)"
+    [nzTabBarExtraContent]="extraTpl">
+
+    <nz-tab [nzTitle]="rfpsTabTitleTpl">
+      <ng-template nz-tab>
+        <div class="tab__content">
+          <market-rfp-list
+            [rfps]="rfps"
+            (viewRfpChange)="goToOpenModalViewRfp($event)"
+            (editRfpChange)="goToEditRfpRoute($event)"
+            (cancelRfpChange)="cancelRfp($event)"
+          ></market-rfp-list>
+        </div>
+      </ng-template>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="offersTabTitleTpl">
+      <ng-template nz-tab>
+        <div class="tab__content">
+          <market-offer-list
+            [offers]="offers"
+            (viewOfferChange)="goToOpenModalViewOffer($event)"
+            (viewRfpByOfferIdChange)="goToOpenModalViewRfpByOfferId($event)"
+          ></market-offer-list>
+        </div>
+      </ng-template>
+    </nz-tab>
+
+  </nz-tabset>
+</div>
+
+<ng-template #rfpsTabTitleTpl>
+  <div class="tab__title">Запросы коммерческих предложений</div>
+</ng-template>
+
+<ng-template #offersTabTitleTpl>
+  <div class="tab__title">Коммерческие предложения</div>
+</ng-template>
+
+<ng-template #extraTpl>
+  <ng-container *ngIf="selectedTabIndex === 0">
+
+    <button
+      nz-button
+      nzType="primary"
+      (click)="goToCreateRfpRoute()"
+      *ngIf="!['xs', 'sm'].includes(mediaBreakPoint)">
+      Создать
+    </button>
+
+    <button
+      nz-button
+      nzType="primary"
+      nzShape="circle"
+      (click)="goToCreateRfpRoute()"
+      *ngIf="['xs', 'sm'].includes(mediaBreakPoint)">
+      <i nz-icon nzType="plus-circle" nzTheme="outline"></i>
+    </button>
+
+  </ng-container>
+</ng-template>
+
+

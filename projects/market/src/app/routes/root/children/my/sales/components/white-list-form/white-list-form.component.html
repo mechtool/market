@@ -12,9 +12,8 @@
                name="{{currentDate}}_inn"
                type="text"
                id="inn"
-               autocomplete="chrome-off"
-               formControlName="inn"
-               (keypress)="onlyNumberKey($event)">
+               marketOnlyNumber
+               formControlName="inn">
       </nz-form-control>
     </nz-form-item>
 

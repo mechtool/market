@@ -30,7 +30,7 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { OrderListModule } from '#shared/modules';
+import { OrderListModule, OnlyNumberModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -55,6 +55,7 @@ import { OrderListModule } from '#shared/modules';
     NzTreeSelectModule,
     NzNotificationModule,
     OrderListModule,
+    OnlyNumberModule,
   ],
   declarations: [
     SalesComponent,

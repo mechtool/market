@@ -1,0 +1,463 @@
+<div class="container">
+  <h2>{{type === 'RFP_CREATE' ? 'Новый Запрос Коммерческих Предложений' : 'Редактирование Запроса Коммерческих Предложений'}}</h2>
+
+  <form nz-form [formGroup]="form" *ngIf="form">
+
+    <div nz-row nzGutter="16">
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzRequired nzFor="selectedOrganization">Закупщик</nz-form-label>
+            <nz-select
+              nzSize="large"
+              id="selectedOrganization"
+              formControlName="selectedOrganization"
+              nzPlaceHolder="Выберите из списка доступных">
+              <nz-option *ngFor="let org of userOrganizations"
+                         [nzValue]="org"
+                         [nzLabel]="org.organizationName | abbreviatedBusinessName">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row nzGutter="16">
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzFor="contactName">
+              Контактное лицо
+            </nz-form-label>
+            <input nz-input
+                   name="contactName_{{currentDate}}"
+                   type="text"
+                   id="contactName"
+                   placeholder="Контактное лицо"
+                   formControlName="contactName">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row nzGutter="16">
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzRequired nzFor="contactEmail">
+              E-mail
+            </nz-form-label>
+            <input nz-input
+                   name="contactEmail_{{currentDate}}"
+                   type="text"
+                   id="contactEmail"
+                   placeholder="E-mail"
+                   formControlName="contactEmail">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzFor="contactPhone">
+              Телефон
+            </nz-form-label>
+            <input nz-input
+                   name="contactPhone_{{currentDate}}"
+                   type="text"
+                   id="contactPhone"
+                   placeholder="Телефон"
+                   prefix="+7"
+                   mask="(000) 000 00 00"
+                   [showMaskTyped]="true"
+                   formControlName="contactPhone">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+    <div nz-row nzGutter="16">
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzRequired nzFor="documentOrderNumber">
+              Номер ЗКП
+            </nz-form-label>
+            <input nz-input
+                   name="documentOrderNumber_{{currentDate}}"
+                   type="text"
+                   id="documentOrderNumber"
+                   placeholder="Номер ЗКП"
+                   formControlName="documentOrderNumber">
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzFor="audienceRestrictionType">
+              Доступно
+            </nz-form-label>
+
+            <nz-radio-group formControlName="audienceRestrictionType">
+              <label nz-radio [nzValue]="opt.value" *ngFor="let opt of restrictionTypeOptions">{{ opt.label }}</label>
+            </nz-radio-group>
+
+            <ng-container formArrayName="audienceParties" *ngIf="form.get('audienceRestrictionType').value">
+              <nz-tag nzMode="closeable" (nzOnClose)="removeAudiencePartyByIndex(i)" *ngFor="let item of audiencePartiesControls; let i = index" [formGroupName]="i">
+                <span class="tag__value">{{item.value.name || item.value.inn}}</span>
+              </nz-tag>
+
+              <nz-tag nzColor="processing" (click)="openModalAddAudienceParty()">
+                <i class="tag__icon" nz-icon nzType="plus"></i>
+                <span class="tag__value">Добавить</span>
+              </nz-tag>
+            </ng-container>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+
+    <div nz-row nzGutter="16">
+      <div nz-col nzFlex="auto" class="w_33_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzRequired nzFor="dateCollectingFrom">
+              Дата начала сбора предложений
+            </nz-form-label>
+            <nz-date-picker
+              nzFormat="yyyy-MM-dd"
+              nzPlaceHolder="Введите дату"
+              nzShowToday="false"
+              [nzDisabledDate]="disabledDateCollectingFrom.bind(this)"
+              formControlName="dateCollectingFrom">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzFlex="auto" class="w_33_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzRequired nzFor="dateCollectingTo">
+              Дата окончания сбора КП
+            </nz-form-label>
+            <nz-date-picker
+              nzFormat="yyyy-MM-dd"
+              nzPlaceHolder="Введите дату"
+              nzShowToday="false"
+              [nzDisabledDate]="disabledDateCollectingTo.bind(this)"
+              formControlName="dateCollectingTo">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzFlex="auto" class="w_33_100">
+        <nz-form-item>
+          <nz-form-control [nzErrorTip]="errorTpl">
+            <nz-form-label nzRequired nzFor="dateConsideringTo">
+              Дата окончания рассмотрения КП
+            </nz-form-label>
+            <nz-date-picker
+              nzFormat="yyyy-MM-dd"
+              nzPlaceHolder="Введите дату"
+              nzShowToday="false"
+              [nzDisabledDate]="disabledDateConsideringTo.bind(this)"
+              formControlName="dateConsideringTo">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div nz-row nzGutter="16">
+      <div nz-col nzFlex="auto" class="w_50_100">
+        <nz-form-item>
+          <nz-form-control>
+            <nz-form-label nzFor="deliveryRegion">
+              Регион доставки товара
+            </nz-form-label><br/>
+
+            <nz-input-group [nzSuffix]="deliveryRegionClearTpl">
+              <input nz-input
+                     id="deliveryRegion"
+                     formControlName="deliveryRegion"
+                     name="deliveryRegion_{{currentDate}}"
+                     type="text"
+                     placeholder="Регион доставки товара"
+                     [nzAutocomplete]="autoCity">
+            </nz-input-group>
+
+            <nz-autocomplete #autoCity [compareWith]="compareFun">
+              <nz-auto-option *ngFor="let city of foundCities"
+                              [nzValue]="city"
+                              [nzLabel]="city.locality">{{ city.locality }}</nz-auto-option>
+            </nz-autocomplete>
+
+            <ng-template #deliveryRegionClearTpl>
+              <div class="input_clear">
+                <img src="assets/img/svg/icon__close.svg"
+                     alt=""
+                     (click)="form.get('deliveryRegion').reset()"
+                     *ngIf="form.get('deliveryRegion').value">
+              </div>
+            </ng-template>
+
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+
+    <nz-form-item>
+      <nz-form-control [nzErrorTip]="errorTpl">
+        <nz-form-label>
+          Вложения (макс. 5 шт., всего 5Мб)
+        </nz-form-label>
+        <br/>
+
+        <ng-container formArrayName="attachments">
+          <nz-tag
+            nzMode="closeable"
+            (nzOnClose)="removeAttachmentByIndex(i)"
+            (click)="downloadFile(attachment.value.content, attachment.value.title)"
+            *ngFor="let attachment of attachmentsControls; let i = index"
+            [formGroupName]="i">
+              <i class="tag__icon" nz-icon nzType="download" nzTheme="outline"></i>
+              <span class="tag__value">{{attachment.get('title').value || "вложение"}}</span>
+          </nz-tag>
+
+          <label for="attachments">
+            <nz-tag nzColor="processing" *ngIf="attachments.length < maxFilesNumber">
+              <i class="tag__icon" nz-icon nzType="plus"></i>
+              <span class="tag__value">Добавить</span>
+            </nz-tag>
+          </label>
+          <input nz-input
+                 name="attachments"
+                 type="file"
+                 id="attachments"
+                 accept="{{acceptedMimeTypesToUpload}}"
+                 (change)="handleInputChange($event)"
+                 multiple>
+        </ng-container>
+
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="position__control__title">
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired>Позиции</nz-form-label>
+        <p *ngIf="form.get('positions').errors && (form.get('positions').touched || form.get('positions').dirty)">
+          Необходимо заполнить хотя бы одну товарную позицию
+        </p>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-container formArrayName="positions">
+      <div class="position__item" *ngFor="let item of positionsItemsControls; let i = index" [formGroupName]="i">
+        <div class="position__item__remover" (click)="removePositionByIndex(i)">
+          <i nz-icon nzType="close" nzTheme="outline"></i>
+        </div>
+
+        <div nz-row nzGutter="16">
+          <div nz-col nzFlex="auto" class="w_50_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label nzRequired
+                               nzFor="productCustomerSpecificationProductName_{{i}}">
+                  Наименование товара
+                </nz-form-label>
+                <input nz-input
+                       name="productCustomerSpecificationProductName_{{i}}_{{currentDate}}"
+                       type="text"
+                       id="productCustomerSpecificationProductName_{{i}}"
+                       placeholder="Наименование товара"
+                       formControlName="productCustomerSpecificationProductName">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div nz-row nzGutter="16">
+          <div nz-col nzFlex="auto" class="w_50_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label nzFor="productCustomerSpecificationProductDescription_{{i}}">
+                  Описание товара
+                </nz-form-label>
+                <textarea
+                  nz-input
+                  rows="4"
+                  name="productCustomerSpecificationProductDescription_{{i}}_{{currentDate}}"
+                  id="productCustomerSpecificationProductDescription_{{i}}"
+                  placeholder="Описание товара"
+                  formControlName="productCustomerSpecificationProductDescription"
+                ></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div nz-row nzGutter="16">
+          <div nz-col nzFlex="auto" class="w_50_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label nzFor="productCustomerSpecificationPartNumber_{{i}}">
+                  Артикул поставщика
+                </nz-form-label>
+                <input nz-input
+                       name="productCustomerSpecificationPartNumber_{{i}}_{{currentDate}}"
+                       type="text"
+                       id="productCustomerSpecificationPartNumber_{{i}}"
+                       placeholder="Артикул поставщика"
+                       formControlName="productCustomerSpecificationPartNumber">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzFlex="auto" class="w_50_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label>
+                  Штрих-коды товара
+                </nz-form-label>
+                <br/>
+
+                <ng-container formArrayName="productCustomerSpecificationBarCodes">
+                  <nz-tag nzMode="closeable" (nzOnClose)="removeBarcodeByIndex(i, j)" *ngFor="let barCode of getProductBarcodes(i).controls; let j = index" [formGroupName]="j">
+                    <span class="tag__value">{{barCode.value.value}}</span>
+                  </nz-tag>
+
+                  <nz-tag nzColor="processing" (click)="openModalAddBarcode(getProductBarcodes(i).value, i)">
+                    <i class="tag__icon" nz-icon nzType="plus"></i>
+                    <span class="tag__value">Добавить</span>
+                  </nz-tag>
+                </ng-container>
+
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div nz-row nzGutter="16">
+          <div nz-col nzFlex="auto" class="w_33_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label nzRequired
+                               nzFor="purchaseConditionsNumberOfPackages_{{i}}">
+                  Количество (шт.)
+                </nz-form-label>
+                <input nz-input
+                       name="purchaseConditionsNumberOfPackages_{{i}}_{{currentDate}}"
+                       type="text"
+                       id="purchaseConditionsNumberOfPackages_{{i}}"
+                       placeholder="Количество (шт.)"
+                       marketOnlyNumber
+                       formControlName="purchaseConditionsNumberOfPackages">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzFlex="auto" class="w_33_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label nzFor="purchaseConditionsMaxPrice_{{i}}">
+                  Максимальная цена за шт. (руб.)
+                </nz-form-label>
+                <input nz-input
+                       name="purchaseConditionsMaxPricen_{{i}}_{{currentDate}}"
+                       type="text"
+                       id="purchaseConditionsMaxPrice_{{i}}"
+                       placeholder="Максимальная цена за шт. (руб.)"
+                       marketOnlyNumber
+                       formControlName="purchaseConditionsMaxPrice">
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzFlex="auto" class="w_33_100">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="errorTpl">
+                <nz-form-label nzFor="purchaseConditionsDateDesiredDeliveryTo_{{i}}">
+                  Желаемая дата доставки
+                </nz-form-label>
+                <nz-date-picker
+                  nzFormat="yyyy-MM-dd"
+                  nzPlaceHolder="Введите дату"
+                  nzShowToday="false"
+                  [nzDisabledDate]="disabledPurchaseConditionsDateDesiredDeliveryTo.bind(this)"
+                  formControlName="purchaseConditionsDateDesiredDeliveryTo">
+                </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+      </div>
+    </ng-container>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-tag nzColor="processing" (click)="addPosition()">
+          <i nz-icon nzType="plus"></i>
+          <span>Добавить позицию</span>
+        </nz-tag>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="register-area">
+      <nz-form-control>
+        <button nz-button nzType="primary" (click)="save()">Сохранить</button>
+        <button nz-button nzType="link" [routerLink]="['/my/rfps']">Отмена</button>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</div>
+
+<ng-template #errorTpl let-control>
+
+  <ng-container *ngIf="control.hasError('required'); else secondTpl">
+    <p>Поле обязательно для заполнения</p>
+  </ng-container>
+
+  <ng-template #secondTpl>
+    <ng-container *ngIf="control.hasError('maxlength'); else thirdTpl">
+      <p>Превышен максимальный размер строки ({{control.errors.maxlength.requiredLength}} символов)</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #thirdTpl>
+    <ng-container *ngIf="control.hasError('min'); else fourthTpl">
+      <p>Введено значение меньше минимального возможного ({{control.errors.min.min}})</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #fourthTpl>
+    <ng-container *ngIf="control.hasError('max'); else fifthTpl">
+      <p>Введено значение больше максимально возможного ({{control.errors.max.max}})</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #fifthTpl>
+    <ng-container *ngIf="control.hasError('email'); else sixthTpl">
+      <p>Введен недопустимый email</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #sixthTpl>
+    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateCollectingFrom_dateCollectingTo'); else seventhTpl">
+      <p>Дата окончания сбора КП должна быть больше даты начала сбора КП</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #seventhTpl>
+    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateCollectingTo_dateConsideringTo'); else eighthTpl">
+      <p>Дата окончания рассмотрения КП должна быть больше даты начала окончания КП</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #eighthTpl>
+    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateConsideringTo_purchaseConditionsDateDesiredDeliveryTo')">
+      <p>Желаемая дата доставки быть больше даты окончания рассмотрения КП</p>
+    </ng-container>
+  </ng-template>
+
+</ng-template>
+

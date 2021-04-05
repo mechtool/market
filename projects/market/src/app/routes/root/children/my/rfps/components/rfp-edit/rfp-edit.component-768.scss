@@ -1,0 +1,13 @@
+@media all and (max-width: 768px) {
+  [nz-row] {
+    flex-direction: column;
+  }
+
+  [nz-col] {
+    max-width: 100%;
+
+    &.w_50_100, &.w_33_100 {
+      max-width: 100%;
+    }
+  }
+}

@@ -1,0 +1,96 @@
+<div class="address-search-form">
+  <form nz-form [formGroup]="form">
+
+    <nz-form-item *ngIf="isDeliveryRegionType">
+      <nz-form-control>
+        <label nz-checkbox formControlName="allRussia">Выбрать доставку по всей России</label>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="isDeliveryRegionType && !form.controls.allRussia.value">
+      <nz-form-control>
+        <input nz-input
+               name="region_{{currentDate}}"
+               type="text"
+               id="region"
+               placeholder="Введите название субъекта РФ"
+               formControlName="regionFiasCode"
+               [nzAutocomplete]="auto_region">
+
+        <nz-autocomplete #auto_region>
+          <nz-auto-option *ngFor="let location of foundRegions"
+                          [nzValue]="location.fias"
+                          [nzLabel]="location.region">{{ location.region }}</nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="!form.controls.allRussia.value && !isFederalCity">
+      <nz-form-control>
+        <input #elementInputCity
+               nz-input
+               name="city_{{currentDate}}"
+               type="text"
+               id="city"
+               placeholder="Введите название города"
+               formControlName="cityFiasCode"
+               [nzAutocomplete]="auto_city">
+
+        <nz-autocomplete #auto_city>
+          <nz-auto-option *ngFor="let location of foundCities"
+                          [nzValue]="location.fias"
+                          [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="!form.controls.allRussia.value">
+      <nz-form-control>
+        <input #elementInputStreet
+               nz-input
+               name="street_{{currentDate}}"
+               type="text"
+               id="street"
+               placeholder="Введите название улицы"
+               formControlName="streetFiasCode"
+               [nzAutocomplete]="auto_street">
+
+        <nz-autocomplete #auto_street>
+          <nz-auto-option *ngFor="let location of foundStreets"
+                          [nzValue]="location.fias"
+                          [nzLabel]="location.street">{{ location.street }}</nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="isPickupFromType">
+      <nz-form-control>
+        <input #elementInputHouse
+               nz-input
+               name="house_{{currentDate}}"
+               type="text"
+               id="house"
+               placeholder="Введите номер дома"
+               formControlName="houseFiasCode"
+               [nzAutocomplete]="auto_house">
+
+        <nz-autocomplete #auto_house>
+          <nz-auto-option *ngFor="let location of foundHouses"
+                          [nzValue]="location.fias"
+                          [nzLabel]="location.house">{{ location.house }}</nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="register-area">
+      <nz-form-control nzOffset="6">
+        <button nz-button nzType="primary" (click)="save()"
+                [disabled]="!form.controls.allRussia.value && !this.form.controls.fiasCode.value">
+          Сохранить
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</div>
+

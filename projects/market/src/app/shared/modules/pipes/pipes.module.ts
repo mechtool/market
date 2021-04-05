@@ -21,6 +21,7 @@ import { DeliveryMethodPipe } from './delivery-method.pipe';
 import { HiddenSymbolsPipe } from './hidden-symbols.pipe';
 import { MinPricePipe } from './min-price.pipe';
 import { CastControlPipe } from './cast-control.pipe';
+import { YesNoPipe } from './yes-no.pipe';
 import { DocumentStatusPipe } from './document-status.pipe';
 import { DocumentStatusMessagePipe } from './document-status-message.pipe';
 import { PriceListStatusPipe } from './price-list-status.pipe';
@@ -52,6 +53,7 @@ import { MinQuantityPipe } from './min-quantity.pipe';
     DeliveryMethodPipe,
     HiddenSymbolsPipe,
     CastControlPipe,
+    YesNoPipe,
     PriceListStatusPipe,
     LogPipe,
     MinQuantityPipe,
@@ -80,6 +82,7 @@ import { MinQuantityPipe } from './min-quantity.pipe';
     DeliveryMethodPipe,
     HiddenSymbolsPipe,
     CastControlPipe,
+    YesNoPipe,
     PriceListStatusPipe,
     LogPipe,
     MinQuantityPipe,

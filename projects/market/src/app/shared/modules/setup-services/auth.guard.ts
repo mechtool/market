@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
   constructor(private _userStateService: UserStateService, private _authModalService: AuthModalService) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-
+    
     return this._userStateService.isUserInformationSetted$.pipe(
       filter((res) => res),
       switchMap(() => this._userStateService.currentUser$),

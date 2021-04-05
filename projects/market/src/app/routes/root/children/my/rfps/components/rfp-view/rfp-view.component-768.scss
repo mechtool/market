@@ -1,0 +1,14 @@
+@media all and (max-width: 768px) {
+  .page_header {
+    margin-top: 10px;
+    justify-content: center;
+
+    h2 {
+      font-size: var(--font-size-18);
+      font-weight: var(--font-weight-bold);
+      line-height: 23px;
+      text-align: center;
+    }
+  }
+
+}

@@ -18,4 +18,7 @@ export * from './get-prop-value-by-path';
 export * from './legal-id';
 export * from './url-utils';
 export * from './get-query-param';
+export * from './get-key-by-value';
+export * from './get-base64-mime-type';
+export * from './data-url-to-blob-size';
 export * from './utils';

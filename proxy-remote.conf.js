@@ -30,6 +30,12 @@ const accessKey = fs.readFileSync('./proxy-remote-assets/access-keys__obtain.jso
 const accessKeys = fs.readFileSync('./proxy-remote-assets/organizations__access-keys.json').toString();
 const banners = fs.readFileSync('./proxy-remote-assets/banners.json').toString();
 const productsHighlight = fs.readFileSync('./proxy-remote-assets/products-highlight.json').toString();
+const rfps = fs.readFileSync('./proxy-remote-assets/rfps.json').toString();
+const rfpsId = fs.readFileSync('./proxy-remote-assets/rfps__ID.json').toString();
+const counterpartyId = fs.readFileSync('./proxy-remote-assets/counterparty__ID.json').toString();
+const findAll = fs.readFileSync('./proxy-remote-assets/find-all.json').toString();
+const offers = fs.readFileSync('./proxy-remote-assets/offers.json').toString();
+const offersId = fs.readFileSync('./proxy-remote-assets/offers__ID.json').toString();
 
 const PROXY_CONFIG = [
   {
@@ -50,6 +56,7 @@ const PROXY_CONFIG = [
         '/proxifier/locations/search': /^\/proxifier\/locations\/search\/?$/i,
         '/proxifier/locations/search-address': /^\/proxifier\/locations\/search-address\/?$/i,
         '/proxifier/locations/main-regions': /^\/proxifier\/locations\/main-regions\/?$/i,
+        '/proxifier/locations/find-all': /^\/proxifier\/locations\/find-all\/?/i,
         '/proxifier/organizations': /^\/proxifier\/organizations\/?$/i,
         '/proxifier/organizations/:id': /^\/proxifier\/organizations\/(?:([^\/]+?))\/?$/i,
         '/proxifier/organizations/:id/contact': /^\/proxifier\/organizations\/(?:([^\/]+?))\/contact\/?$/i,
@@ -83,6 +90,11 @@ const PROXY_CONFIG = [
         '/proxifier/edi/accounts/:id': /^\/proxifier\/edi\/accounts\/(?:([^\/]+?))\/?$/i,
         '/proxifier/banners?': /^\/proxifier\/banners\?.*\/?$/i,
         '/proxifier/products-highlight': /^\/proxifier\/products-highlight\/?$/i,
+        '/proxifier/rfps': /^\/proxifier\/rfps\/?$/i,
+        '/proxifier/rfps/:id': /^\/proxifier\/rfps\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/counterparty/:id': /^\/proxifier\/counterparty\/(?:([^\/]+?))\/?$/i,
+        '/proxifier/edi/offers': /^\/proxifier\/edi\/offers\/?$/i,
+        '/proxifier/edi/offers/:id': /^\/proxifier\/edi\/offers\/(?:([^\/]+?))\/?$/i,
       };
 
       if (req.method === 'POST' && pathsObject['/proxifier/auth'].test(req.originalUrl.split('?')[0])) {
@@ -207,7 +219,8 @@ const PROXY_CONFIG = [
 
       if (req.method === 'GET' && pathsObject['/proxifier/organizations/by-legal-id/:id'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
-        res.end(Math.random() < 0.5 ? organizationByLegalId : '');
+        // res.end(Math.random() < 0.5 ? organizationByLegalId : '');
+        res.end(organizationByLegalId);
         return true;
       }
 
@@ -250,7 +263,8 @@ const PROXY_CONFIG = [
       if (req.method === 'GET' && pathsObject['/proxifier/organizations/user-organizations'].test(req.originalUrl.split('?')[0])) {
         const randomNum = Math.floor(Math.random() * 2) + 1;
         res.status(200);
-        res.end(randomNum < 2 ? userOrganizations1 : userOrganizations2);
+        // res.end(randomNum < 2 ? userOrganizations1 : userOrganizations2);
+        res.end(userOrganizations1);
         return true;
       }
 
@@ -367,6 +381,12 @@ const PROXY_CONFIG = [
         return true;
       }
 
+      if (req.method === 'GET' && pathsObject['/proxifier/edi/offers'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(offers);
+        return true;
+      }
+
       if (req.method === 'GET' && pathsObject['/proxifier/edi/orders/:id'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
         res.end(ordersId);
@@ -379,6 +399,12 @@ const PROXY_CONFIG = [
         return true;
       }
 
+      if (req.method === 'GET' && pathsObject['/proxifier/edi/offers/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(offersId);
+        return true;
+      }
+
       if (req.method === 'GET' && pathsObject['/proxifier/banners?'].test(req.originalUrl)) {
         res.status(200);
         res.end(banners);
@@ -388,6 +414,36 @@ const PROXY_CONFIG = [
       if (req.method === 'GET' && pathsObject['/proxifier/products-highlight'].test(req.originalUrl.split('?')[0])) {
         res.status(200);
         res.end(productsHighlight);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/rfps'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(rfps);
+        return true;
+      }
+
+      if (req.method === 'PATCH' && pathsObject['/proxifier/rfps/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(201);
+        res.end('');
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/rfps/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(rfpsId);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/counterparty/:id'].test(req.originalUrl.split('?')[0])) {
+        res.status(200);
+        res.end(counterpartyId);
+        return true;
+      }
+
+      if (req.method === 'GET' && pathsObject['/proxifier/locations/find-all'].test(req.originalUrl)) {
+        res.status(200);
+        res.end(findAll);
         return true;
       }
 

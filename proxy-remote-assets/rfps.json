@@ -1,0 +1,337 @@
+{
+  "page": {
+    "size": 2,
+    "totalElements": 2,
+    "totalPages": 1,
+    "number": 0
+  },
+  "_embedded": {
+    "items": [
+      {
+        "documentOrderNumber": "NAZVANIE_ZKP",
+        "audience": {
+          "parties": [
+            {
+              "inn": "7704218694",
+              "kpp": "774301001"
+            }
+          ],
+          "restrictionType": "WHITE_LIST"
+        },
+        "proposalRequirements": {
+          "positions": [
+            {
+              "positionCorrelationId": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "ПродуктСвежий",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "112",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            }
+          ],
+          "termsAndConditions": {
+            "isPartialPurchaseAcceptable": true,
+            "isCommissionTransaction": null,
+            "deliveryRegion": null,
+            "vatDeductible": null,
+            "currencyCode": "643",
+            "dateCollectingFrom": "2021-04-05",
+            "dateCollectingTo": "2021-04-10",
+            "dateConsideringTo": "2021-05-01",
+            "paymentDescription": null,
+            "deliveryDescription": null,
+            "description": null
+          },
+          "contacts": {
+            "contactName": "Denis Test",
+            "phone": "9031003201",
+            "email": "denis@testdenis.su"
+          },
+          "customerPartyId": "8acabd7d-b230-4df7-bfd4-edb17f19b389"
+        },
+        "id": "ac539010-9f4d-4a79-8742-8395ad1fe88c",
+        "datePlaced": "2021-04-06T17:48:54",
+        "dateLastUpdated": "2021-04-08T17:48:54",
+        "dateCancelled": null
+      },
+      {
+        "documentOrderNumber": null,
+        "audience": null,
+        "proposalRequirements": {
+          "positions": [
+            {
+              "positionCorrelationId": "1c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "Продукт Супер Свежий №1",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "111",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            },
+            {
+              "positionCorrelationId": "2c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "Продукт Супер Свежий №2",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "111",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            },
+            {
+              "positionCorrelationId": "3c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "Продукт Супер Свежий №3",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "111",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            }
+          ],
+          "termsAndConditions": {
+            "isPartialPurchaseAcceptable": true,
+            "isCommissionTransaction": null,
+            "deliveryRegion": null,
+            "vatDeductible": null,
+            "currencyCode": "643",
+            "dateCollectingFrom": "2021-04-15",
+            "dateCollectingTo": "2021-04-20",
+            "dateConsideringTo": "2021-05-01",
+            "paymentDescription": null,
+            "deliveryDescription": null,
+            "description": null
+          },
+          "contacts": {
+            "contactName": "Denis Test",
+            "phone": "9031003201",
+            "email": "denis@testdenis.su"
+          },
+          "customerPartyId": "8acabd7d-b230-4df7-bfd4-edb17f19b389"
+        },
+        "id": "9e6e6d61-17a0-4c64-aa55-d4ff508d0368",
+        "datePlaced": "2021-04-06T17:51:28",
+        "dateLastUpdated": null,
+        "dateCancelled": "2021-04-03"
+      },
+      {
+        "documentOrderNumber": null,
+        "audience": null,
+        "proposalRequirements": {
+          "positions": [
+            {
+              "positionCorrelationId": "1c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "Продукт Супер Свежий №1",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "111",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            },
+            {
+              "positionCorrelationId": "2c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "Продукт Супер Свежий №2",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "111",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            },
+            {
+              "positionCorrelationId": "3c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+              "product": {
+                "customerSpecification": {
+                  "ref1CnCategory": {
+                    "categoryId": "6341",
+                    "manufacturerId": null,
+                    "tradeMarkId": null,
+                    "requisiteValues": null
+                  },
+                  "productName": "Продукт Супер Свежий №3",
+                  "productDescription": null,
+                  "manufacturer": null,
+                  "partNumber": null,
+                  "baseUnitOkeiCode": "111",
+                  "barCodes": null,
+                  "requisiteValues": null
+                }
+              },
+              "additionalProductDescription": null,
+              "purchaseConditions": {
+                "packaging": {
+                  "description": null,
+                  "unitsNumerator": 1,
+                  "unitsDenominator": 1
+                },
+                "maxPrice": null,
+                "numberOfPackages": 10,
+                "maxDaysForDelivery": null,
+                "dateDesiredDeliveryTo": null
+              }
+            }
+          ],
+          "termsAndConditions": {
+            "isPartialPurchaseAcceptable": true,
+            "isCommissionTransaction": null,
+            "deliveryRegion": null,
+            "vatDeductible": null,
+            "currencyCode": "643",
+            "dateCollectingFrom": "2021-06-01",
+            "dateCollectingTo": "2021-07-01",
+            "dateConsideringTo": "2021-08-01",
+            "paymentDescription": null,
+            "deliveryDescription": null,
+            "description": null
+          },
+          "contacts": {
+            "contactName": "Denis Test",
+            "phone": "9031003201",
+            "email": "denis@testdenis.su"
+          },
+          "customerPartyId": "8acabd7d-b230-4df7-bfd4-edb17f19b389"
+        },
+        "id": "3d6e6e51-17a0-4c64-aa55-d4ff508d0343",
+        "datePlaced": "2021-04-06T17:51:28",
+        "dateLastUpdated": null,
+        "dateCancelled": null
+      }
+    ]
+  }
+}

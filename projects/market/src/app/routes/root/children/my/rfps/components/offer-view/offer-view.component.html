@@ -1,0 +1,81 @@
+<div class="ov" *ngIf="offerData">
+
+  <div class="info_group info_group__common">
+
+    <div class="info_group__item" *ngIf="offerData.supplier">
+      <span class="info_group__item__label">Поставщик</span>
+      <span class="info_group__item__value">
+        <span class="organization_image" style="{{offerData.supplier.inn | organizationLogo : true}}"></span>
+        {{offerData.supplier?.name | abbreviatedBusinessName}}
+      </span>
+    </div>
+
+    <div class="info_group__item" *ngIf="offerData.date">
+      <span class="info_group__item__label">Дата</span>
+      <span class="info_group__item__value">{{offerData.date | date:'dd MMMM yyyy г.'}}</span>
+    </div>
+
+  </div>
+
+  <h3>Условия</h3>
+
+  <div class="info_group info_group__terms">
+
+    <div class="info_group__item" *ngIf="offerData.dateActualTo">
+      <span class="info_group__item__label">Дата действия</span>
+      <span class="info_group__item__value">{{offerData.dateActualTo | date:'dd MMMM yyyy г.'}}</span>
+    </div>
+
+  </div>
+
+  <h3>Контактная информация</h3>
+
+  <div class="info_group info_group__contacts">
+
+    <div class="info_group__item">
+      <span class="info_group__item__label">Контактное лицо</span>
+      <span class="info_group__item__value">{{offerData.contact.name}}</span>
+    </div>
+
+    <div class="info_group__item">
+      <span class="info_group__item__label">E-mail</span>
+      <span class="info_group__item__value">{{offerData.contact.email}}</span>
+    </div>
+
+  </div>
+
+  <h3>Позиции</h3>
+
+  <div class="info_group info_group__positions">
+
+    <ng-container *ngFor="let item of offerData.products; let i = index">
+
+      <div class="item__line__delimiter">#{{i + 1}}</div>
+
+      <div class="info_group__multi-item">
+
+        <div class="info_group__multi-item_item" *ngIf="item.price">
+          <span class="info_group__multi-item_item__label">Общая цена (руб.)</span>
+          <span class="info_group__multi-item_item__value">{{item.price | marketMultiplier:'1.00' | currencyPrice}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.amount">
+          <span class="info_group__multi-item_item__label">Количество (шт)</span>
+          <span class="info_group__multi-item_item__value">{{item.amount}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.productName">
+          <span class="info_group__multi-item_item__label">Наименование</span>
+          <span class="info_group__multi-item_item__value">{{item.productName}}</span>
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+
+
+</div>
+

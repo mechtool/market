@@ -12,11 +12,11 @@ import {
   CategoriesMappingModel,
   CategoryRequestModel,
   CategoryResponseModel,
-  CommerceMlDocumentResponseModel,
+  CommerceMlDocumentResponseModel, CommerceOfferMlModel,
   CounterpartyResponseModel,
   DocumentResponseModel,
   EdiRequestModel,
-  FeedbackRequestModel,
+  FeedbackRequestModel, IDocumentOfferDTO,
   LocationModel,
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
@@ -31,6 +31,8 @@ import {
   ProductOffersRequestModel,
   ProductsHighlightListResponseModel,
   RegisterOrganizationRequestModel,
+  RfpItemResponseModel,
+  RfpListResponseModel,
   SuggestionResponseModel,
   SuppliersRequestModel,
   SuppliersResponseModel,
@@ -319,6 +321,35 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/pages-static`, {
       params: new HttpParams().append('pageId', pageId)
     });
+  }
+
+  getUserRfps(): Observable<RfpListResponseModel> {
+    return this._apiService.get(`${API_URL}/rfps`);
+  }
+
+  getUserRfpById(id: string): Observable<RfpItemResponseModel> {
+    return this._apiService.get(`${API_URL}/rfps/${id}`);
+  }
+
+  modifyUserRfpById(id: string, data: any): Observable<any> {
+    return this._apiService.patch(`${API_URL}/rfps/${id}`, data);
+  }
+
+  updateUserRfpById(id: string, data: any, idempotencyKey: string): Observable<any> {
+    return this._apiService.put(`${API_URL}/rfps/${id}`, data, { headers: new HttpHeaders({ 'idempotency-key': idempotencyKey }) });
+  }
+
+  createUserRfp(data: RfpItemResponseModel, idempotencyKey: string): Observable<any> {
+    return this._apiService.post(`${API_URL}/rfps`, data, { headers: new HttpHeaders({ 'idempotency-key': idempotencyKey }) });
+  }
+
+  getUserOffers(query: EdiRequestModel): Observable<DocumentResponseModel[]> {
+    const params = this._params(query);
+    return this._apiService.get(`${API_URL}/edi/offers`, { params });
+  }
+
+  getUserOfferById(id: number): Observable<CommerceOfferMlModel> {
+    return this._apiService.get(`${API_URL}/edi/offers/${id}`);
   }
 
   private _params(searchQuery: any): HttpParams {

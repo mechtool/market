@@ -1,0 +1,89 @@
+<ng-container *ngIf="rfps?.length; else emptyRfpsTpl">
+  <div class="table_list">
+
+    <div class="table_row table_header">
+      <div class="table_cell cell_title">
+        <span>Закупщик</span>
+      </div>
+      <div class="table_cell cell_documentOrderNumber">
+        <span>Номер ЗКП</span>
+      </div>
+      <div class="table_cell cell_products">
+        <span>Товары</span>
+      </div>
+      <div class="table_cell cell_date-publication">
+        <span>Дата публикации (обновления)</span>
+      </div>
+      <div class="table_cell cell_status">
+        <span>Статус</span>
+      </div>
+      <div class="table_cell cell_action">
+      </div>
+    </div>
+
+    <div class="table_row" *ngFor="let rfp of rfps">
+      <div class="table_cell cell_title" data-title="Закупщик:" (click)="viewRfp(rfp.id)">
+        <span class="supplier_title">
+          <span class="supplier_image" style="{{rfp.customerInn | organizationLogo : true}}"></span>
+          <span class="supplier_name">
+            {{rfp.customerName | abbreviatedBusinessName}}
+          </span>
+        </span>
+      </div>
+      <div class="table_cell cell_documentOrderNumber" data-title="Номер ЗКП:" (click)="viewRfp(rfp.id)">
+        <span *ngIf="rfp.documentOrderNumber">
+          {{rfp.documentOrderNumber}}
+        </span>
+        <span class="no-data" *ngIf="!rfp.documentOrderNumber">
+          Номер отсутствует
+        </span>
+      </div>
+      <div class="table_cell cell_products" data-title="Товары:" (click)="viewRfp(rfp.id)">
+        <p *ngFor="let productName of rfp.productNames | slice:0:3; let i = index">
+          {{productName}}{{rfp.productNames.length > 3 && i === 2 ? "..." : ""}}
+        </p>
+      </div>
+      <div class="table_cell cell_date-publication" data-title="Дата публикации (обновления):" (click)="viewRfp(rfp.id)">
+        {{(rfp.dateLastUpdated ? rfp.dateLastUpdated : rfp.datePlaced) | date:'dd.MM.yyyy'}}
+      </div>
+      <div class="table_cell cell_status" data-title="Статус:" (click)="viewRfp(rfp.id)">
+        {{rfp.status | marketRfpStatus: rfp.statusDate}}
+      </div>
+      <div class="table_cell cell_action">
+        <button
+          nz-button
+          nzType="dashed"
+          nzShape="circle"
+          nzSize="small"
+          (click)="editRfp(rfp.id)"
+          [disabled]="rfp.status === 'CANCELLED' || rfp.status === 'COMPLETED'"
+          nz-tooltip
+          nzTooltipTitle="Редактировать">
+            <i nz-icon nzType="edit" nzTheme="outline"></i>
+        </button>
+
+        <button
+          nz-button
+          nzType="dashed"
+          nzShape="circle"
+          nzSize="small"
+          nz-popconfirm
+          nzPopconfirmTitle="Вы действительно хотите удалить?"
+          [nzIcon]="withoutIconTpl"
+          (nzOnConfirm)="cancelRfp(rfp.id)"
+          [disabled]="rfp.status === 'CANCELLED' || rfp.status === 'COMPLETED'"
+          nz-tooltip
+          nzTooltipTitle="Отменить">
+            <i nz-icon nzType="delete" nzTheme="outline"></i>
+        </button>
+
+        <ng-template #withoutIconTpl></ng-template>
+      </div>
+
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #emptyRfpsTpl>
+  <market-list-empty emptyText="Список запросов коммерческих предложений пуст"></market-list-empty>
+</ng-template>

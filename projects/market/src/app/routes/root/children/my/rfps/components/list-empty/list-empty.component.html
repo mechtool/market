@@ -1,0 +1,11 @@
+<div class="container">
+  <nz-empty
+    nzNotFoundImage="./assets/img/svg/empty.svg"
+    [nzNotFoundContent]="contentTpl"
+  >
+  </nz-empty>
+</div>
+
+<ng-template #contentTpl>
+  {{emptyText}}
+</ng-template>

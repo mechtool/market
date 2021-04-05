@@ -75,7 +75,7 @@ export const kppConditionValidator: ValidatorFn = (formControl: FormControl): Va
 export const innKppConditionValidator: ValidatorFn = (fg: FormGroup): ValidationErrors => {
   const inn = fg.get('inn').value;
   const kpp = fg.get('kpp').value;
-  if (inn.length === 10 && !kpp) {
+  if (inn?.length === 10 && !kpp) {
     return { innKppCondition: true };
   }
 

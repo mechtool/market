@@ -15,6 +15,7 @@ import { ExternalProvidersService } from '#shared/modules';
   styleUrls: ['./requisites-checker.component.scss'],
 })
 export class RequisitesCheckerComponent implements OnInit {
+  currentDate = Date.now();
   form: FormGroup;
   enterKpp = false;
   @Input() inn: string;
@@ -47,11 +48,6 @@ export class RequisitesCheckerComponent implements OnInit {
           this.form.controls.kpp.patchValue('', { onlySelf: true, emitEvent: true })
         }
       })
-  }
-
-  onlyNumberKey(event) {
-    const charCode = event.query ? event.query : event.keyCode;
-    return !(charCode > 31 && (charCode < 48 || charCode > 57));
   }
 
   nexStep() {

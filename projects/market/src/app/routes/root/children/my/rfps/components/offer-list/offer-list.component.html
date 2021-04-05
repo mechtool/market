@@ -1,0 +1,61 @@
+<ng-container *ngIf="offers?.length; else emptyRfpsTpl">
+  <div class="table_list">
+
+    <div class="table_row table_header">
+      <div class="table_cell cell_title">
+        <span>Поставщик</span>
+      </div>
+      <div class="table_cell cell_orderNumber">
+        <span>Номер предложения</span>
+      </div>
+      <div class="table_cell cell_rfp-id">
+        <span>Связанный запрос</span>
+      </div>
+      <div class="table_cell cell_date-publication">
+        <span>Дата</span>
+      </div>
+      <div class="table_cell cell_total-price">
+        <span>Сумма</span>
+      </div>
+      <div class="table_cell cell_status">
+        <span>Статус</span>
+      </div>
+    </div>
+
+    <div class="table_row" *ngFor="let offer of offers">
+      <div class="table_cell cell_title" data-title="Поставщик:" (click)="viewOffer(offer.id)">
+        <span class="supplier_title">
+          <span class="supplier_image" style="{{offer.supplierInn | organizationLogo : true}}"></span>
+          <span class="supplier_name">
+            {{offer.supplierName | abbreviatedBusinessName}}
+          </span>
+        </span>
+      </div>
+      <div class="table_cell cell_orderNumber" data-title="Номер ЗКП:" (click)="viewOffer(offer.id)">
+        <span *ngIf="offer.orderNumber">
+          {{offer.orderNumber}}
+        </span>
+        <span class="no-data" *ngIf="!offer.orderNumber">
+          Номер отсутствует
+        </span>
+      </div>
+      <div class="table_cell cell_rfp-id" data-title="Связанный запрос:" (click)="viewRfpByOfferId(offer.id)">
+        <i nz-icon nzType="file-text" nzTheme="outline"></i>
+      </div>
+      <div class="table_cell cell_date-publication" data-title="Дата публикации (обновления):" (click)="viewOffer(offer.id)">
+        {{offer.sentDate | date:'dd.MM.yyyy'}}
+      </div>
+      <div class="table_cell cell_total-price" data-title="Сумма:" (click)="viewOffer(offer.id)">
+        <span>{{offer.totalPrice | marketMultiplier:'.01' | currencyPrice}}</span>
+      </div>
+      <div class="table_cell cell_status" data-title="Статус:" (click)="viewOffer(offer.id)">
+        {{offer.status | marketOfferStatus : offer.sentDate : offer.receivedDate}}
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #emptyRfpsTpl>
+  <market-list-empty emptyText="Список коммерческих предложений пуст"></market-list-empty>
+</ng-template>
+

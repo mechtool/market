@@ -16,6 +16,7 @@ import { notBlankValidator } from '#shared/utils/common-validators';
   styleUrls: ['./search-counterparty.component.scss'],
 })
 export class SearchCounterpartyComponent implements OnInit {
+  currentDate = Date.now();
   enterKpp = false;
   form: FormGroup;
   @Output() counterpartyRequisitesChange: EventEmitter<any> = new EventEmitter();
@@ -40,11 +41,6 @@ export class SearchCounterpartyComponent implements OnInit {
       },
       { validator: innKppConditionValidator },
     );
-  }
-
-  onlyNumberKey(event) {
-    const charCode = event.query ? event.query : event.keyCode;
-    return !(charCode > 31 && (charCode < 48 || charCode > 57));
   }
 
   nexStep() {

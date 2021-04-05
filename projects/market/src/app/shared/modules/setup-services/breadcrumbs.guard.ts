@@ -53,6 +53,9 @@ const pathsObjectWithBreadcrumbs = {
   '/my/sales/edit/:priceListExternalId': /^\/my\/sales\/edit\/(?:([^\/]+?))$/i,
   '/my/organizations': /^\/my\/organizations$/i,
   '/my/organizations/:id': /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
+  '/my/rfps': /^\/my\/rfps$/i,
+  '/my/rfps/create': /^\/my\/rfps\/create$/i,
+  '/my/rfps/edit/:id': /^\/my\/rfps\/edit\/(?:([^\/]+?))$/i,
 };
 
 /**
@@ -333,6 +336,51 @@ export class BreadcrumbsGuard implements CanActivate {
           {
             label: 'Блог',
           },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/rfps':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Мои запросы',
+            routerLink: '/my/rfps',
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/rfps/create':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Мои запросы',
+            routerLink: '/my/rfps',
+          },
+          {
+            label: 'Новый запрос',
+          }
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/rfps/edit/:id':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Мои запросы',
+            routerLink: '/my/rfps',
+          },
+          {
+            label: 'Редактирование запроса',
+          }
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;

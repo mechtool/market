@@ -1,0 +1,40 @@
+<div class="barcodes-form">
+  <form nz-form [formGroup]="form">
+
+    <nz-form-item>
+      <nz-form-control [nzErrorTip]="errorTpl">
+        <input nz-input
+               name="barCode_{{currentDate}}"
+               type="text"
+               id="barCode"
+               placeholder="Штрих-код"
+               marketOnlyNumber
+               formControlName="barCode">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="register-area">
+      <nz-form-control>
+        <button nz-button nzType="primary" (click)="save()" [disabled]="form.invalid">Сохранить</button>
+      </nz-form-control>
+    </nz-form-item>
+
+  </form>
+</div>
+
+
+<ng-template #errorTpl let-control>
+
+  <ng-container *ngIf="control.hasError('required'); else secondTpl">
+    <p>Поле обязательно для заполнения</p>
+  </ng-container>
+
+  <ng-template #secondTpl>
+    <ng-container *ngIf="control.hasError('maxlength')">
+      <p>Превышен максимальный размер строки ({{control.errors.maxlength.requiredLength}} символов)</p>
+    </ng-container>
+  </ng-template>
+
+</ng-template>
+
+

@@ -1,0 +1,44 @@
+import { Directive, HostListener } from '@angular/core';
+
+const RE = /^[0-9]*$/;
+
+@Directive({
+  selector: '[marketOnlyNumber]'
+})
+export class OnlyNumberDirective {
+  constructor() {}
+
+  @HostListener('keydown', ['$event']) onKeyDown(e: KeyboardEvent) {
+    const keysToSkipValidation = [
+      'Backspace',
+      'Tab',
+      'Enter',
+      'Escape',
+      'Delete',
+      'Home',
+      'End'
+    ];
+    const keysWithMetaKeyToSkipValidation = ['a', 'c', 'v', 'x'];
+    if (
+      keysToSkipValidation.includes(e.key) ||
+      (keysWithMetaKeyToSkipValidation.includes(e.key) &&
+        (e.ctrlKey || e.metaKey)) ||
+      RE.test(e.key)
+    ) {
+      return;
+    }
+    e.preventDefault();
+  }
+
+  @HostListener('paste', ['$event']) onPaste(e) {
+    const pastedText = (e.originalEvent || e).clipboardData.getData(
+      'text/plain'
+    );
+
+    if (pastedText) {
+      if (!RE.test(pastedText)) {
+        e.preventDefault();
+      }
+    }
+  }
+}

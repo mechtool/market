@@ -10,11 +10,10 @@
 
     <div class="form-group form-group-std">
       <input type="text"
-             (keypress)="onlyNumberKey($event)"
+             name="{{currentDate}}_formINN"
              id="formINN"
-             autocomplete="false"
-             list="null"
              [ngClass]="{'error': form.controls.inn.errors?.innControlNumberCondition || form.controls.inn.errors?.innLengthCondition}"
+             marketOnlyNumber
              formControlName="inn">
 
       <div class="input_error"
@@ -31,11 +30,10 @@
 
     <div class="form-group form-group-std" *ngIf="enterKpp">
       <input type="text"
-             (keypress)="onlyNumberKey($event)"
+             name="{{currentDate}}_formKPP"
              id="formKPP"
-             autocomplete="false"
-             list="null"
              [ngClass]="{'error': form.controls.kpp.invalid}"
+             marketOnlyNumber
              formControlName="kpp">
       <div class="input_error"
            *ngIf="form.controls.kpp.invalid">

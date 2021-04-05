@@ -32,7 +32,7 @@ export class LocationService {
 
   searchAddresses(query: { deliveryRegion?: string, deliveryCity?: string, deliveryStreet?: string, deliveryHouse?: string },
                   level: Level): Observable<LocationModel[]> {
-    const textQuery = Object.values(query).filter(res => res?.length).join(', ');
+    const textQuery = Object.values(query).filter((res) => res?.length).join(', ');
     return this._bnetService.searchLocations(textQuery, level);
   }
 

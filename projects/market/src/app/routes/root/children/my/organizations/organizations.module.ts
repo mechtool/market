@@ -26,6 +26,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { OnlyNumberModule } from '#shared/modules/directives/input-only-number/input-only-number.module';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     OrganizationsRoutingModule,
     NzCollapseModule,
     NzToolTipModule,
+    OnlyNumberModule,
   ],
   declarations: [
     OrganizationsComponent,

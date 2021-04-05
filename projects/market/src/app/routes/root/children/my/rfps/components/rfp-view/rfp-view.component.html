@@ -1,0 +1,171 @@
+<div class="rv">
+
+  <div class="info_group info_group__common">
+
+    <div class="info_group__item" *ngIf="documentOrderNumber">
+      <span class="info_group__item__label">Номер ЗКП</span>
+      <span class="info_group__item__value">{{documentOrderNumber}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="selectedOrganization?.organizationName">
+      <span class="info_group__item__label">Закупщик</span>
+      <span class="info_group__item__value">
+        <span class="organization_image" style="{{selectedOrganization?.legalRequisites?.inn | organizationLogo : true}}"></span>
+        {{selectedOrganization?.organizationName | abbreviatedBusinessName}}
+      </span>
+    </div>
+
+    <div class="info_group__item" *ngIf="dateLastUpdated || datePlaced">
+      <ng-container *ngIf="dateLastUpdated; else dataPlacedTpl">
+        <span class="info_group__item__label">Дата обновления</span>
+        <span class="info_group__item__value">{{dateLastUpdated | date:'dd MMMM yyyy г.'}}</span>
+      </ng-container>
+      <ng-template #dataPlacedTpl>
+        <span class="info_group__item__label">Дата публикации</span>
+        <span class="info_group__item__value">{{datePlaced | date:'dd MMMM yyyy г.'}}</span>
+      </ng-template>
+    </div>
+
+    <div class="info_group__item" *ngIf="dateCancelled">
+      <span class="info_group__item__label">Дата закрытия</span>
+      <span class="info_group__item__value">{{dateCancelled | date:'dd MMMM yyyy г.'}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="audienceRestrictionType">
+      <span class="info_group__item__label">Доступно {{audienceRestrictionType === 'WHITE_LIST' ? 'только' : 'всем кроме'}}</span>
+      <span class="info_group__item__value info_group__item__value_column">
+        <span *ngFor="let party of audienceParties">
+          {{party.name}} ({{party.legalRequisites?.inn}}
+          <ng-container *ngIf="party.legalRequisites?.kpp">
+            / {{party.legalRequisites.kpp}}
+          </ng-container>)
+        </span>
+        </span>
+    </div>
+
+    <div class="info_group__item" *ngIf="attachments">
+      <span class="info_group__item__label">Вложения</span>
+      <span class="info_group__item__value info_group__item__value_line">
+          <ng-container *ngFor="let attachment of attachments">
+            <ng-container *ngIf="attachment.content">
+              <nz-tag (click)="downloadFile(attachment.content, attachment?.title)">
+                <i class="tag__icon" style="margin-right: 6px" nz-icon nzType="download" nzTheme="outline"></i>
+                <span class="tag__value">{{attachment.title || "вложение"}}</span>
+              </nz-tag>
+            </ng-container>
+          </ng-container>
+        </span>
+    </div>
+
+  </div>
+
+  <h3>Условия</h3>
+
+  <div class="info_group info_group__terms">
+
+    <div class="info_group__item" *ngIf="dateCollectingFrom">
+      <span class="info_group__item__label">Дата начала сбора предложений</span>
+      <span class="info_group__item__value">{{dateCollectingFrom | date:'dd MMMM yyyy г.'}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="dateCollectingTo">
+      <span class="info_group__item__label">Дата окончания сбора КП</span>
+      <span class="info_group__item__value">{{dateCollectingTo | date:'dd MMMM yyyy г.'}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="dateConsideringTo">
+      <span class="info_group__item__label">Дата окончания рассмотрения КП</span>
+      <span class="info_group__item__value">{{dateConsideringTo | date:'dd MMMM yyyy г.'}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="deliveryRegionName">
+      <span class="info_group__item__label">Регион доставки ЗКП</span>
+      <span class="info_group__item__value">{{deliveryRegionName}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="vatDeductible !== null">
+      <span class="info_group__item__label">Облагается НДС</span>
+      <span class="info_group__item__value">{{vatDeductible | marketYesNo}}</span>
+    </div>
+
+  </div>
+
+  <h3>Контактная информация</h3>
+
+  <div class="info_group info_group__contacts">
+
+    <div class="info_group__item" *ngIf="contactName">
+      <span class="info_group__item__label">Контактное лицо</span>
+      <span class="info_group__item__value">{{contactName}}</span>
+    </div>
+
+    <div class="info_group__item" *ngIf="contactPhone">
+      <span class="info_group__item__label">Телефон</span>
+      <span class="info_group__item__value">{{contactPhone}}</span>
+    </div>
+
+  </div>
+
+  <div class="info_group__item" *ngIf="contactEmail">
+    <span class="info_group__item__label">E-mail</span>
+    <span class="info_group__item__value">{{contactEmail}}</span>
+  </div>
+
+  <h3>Позиции</h3>
+
+  <div class="info_group info_group__positions">
+
+    <ng-container *ngFor="let item of positions; let i = index">
+
+      <div class="item__line__delimiter">#{{i + 1}}</div>
+
+      <div class="info_group__multi-item">
+
+        <div class="info_group__multi-item_item" *ngIf="item.purchaseConditions?.maxPrice">
+          <span class="info_group__multi-item_item__label">Максимальная цена (руб.)</span>
+          <span class="info_group__multi-item_item__value">{{item.purchaseConditions.maxPrice}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.purchaseConditions?.numberOfPackages">
+          <span class="info_group__multi-item_item__label">Количество (шт)</span>
+          <span class="info_group__multi-item_item__value">{{item.purchaseConditions.numberOfPackages}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.purchaseConditions?.dateDesiredDeliveryTo">
+          <span class="info_group__multi-item_item__label">Желаемая дата доставки</span>
+          <span class="info_group__multi-item_item__value">{{item.purchaseConditions.dateDesiredDeliveryTo | date:'dd MMMM yyyy г.'}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.product?.customerSpecification?.productName">
+          <span class="info_group__multi-item_item__label">Наименование товара</span>
+          <span class="info_group__multi-item_item__value">{{item.product.customerSpecification.productName}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.product?.customerSpecification?.productDescription">
+          <span class="info_group__multi-item_item__label">Описание товара</span>
+          <span class="info_group__multi-item_item__value">{{item.product.customerSpecification.productDescription}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.product?.customerSpecification?.partNumber">
+          <span class="info_group__multi-item_item__label">Артикул поставщика</span>
+          <span class="info_group__multi-item_item__value">{{item.product.customerSpecification.partNumber}}</span>
+        </div>
+
+        <div class="info_group__multi-item_item" *ngIf="item.product?.customerSpecification?.barCodes?.length">
+          <span class="info_group__multi-item_item__label">Штрих-коды товара</span>
+          <span class="info_group__multi-item_item__value">
+            <ng-container *ngFor="let barCode of item.product.customerSpecification.barCodes; let j = index">
+              <span>{{barCode | json}}</span>
+            </ng-container>
+          </span>
+        </div>
+
+      </div>
+
+    </ng-container>
+
+  </div>
+
+
+</div>
+

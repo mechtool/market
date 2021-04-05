@@ -17,7 +17,7 @@ const ITS_URL = environment.itsUrl;
 /**
  * URL пути находящиеся под аутентификацией
  */
-const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organizations\/(?:([^\/]+?))\/?$/i, /^\/my\/orders$/i];
+const pathsWithAuth = [/^\/supplier$/i, /^\/my\/organizations$/i, /^\/my\/organizations\/(?:([^\/]+?))\/?$/i, /^\/my\/orders$/i, /^\/my\/rfps/i, /^\/my\/sales/i];
 
 @Injectable()
 export class AuthService implements OnDestroy {

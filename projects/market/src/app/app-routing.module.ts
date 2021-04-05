@@ -66,6 +66,11 @@ const routes: Routes = [
             loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then((m) => m.OrganizationsModule),
           },
           {
+            path: 'rfps',
+            data: { preload: false },
+            loadChildren: () => import('./routes/root/children/my/rfps/rfps.module').then((m) => m.RfpsModule),
+          },
+          {
             path: '**',
             redirectTo: 'orders',
             pathMatch: 'full',

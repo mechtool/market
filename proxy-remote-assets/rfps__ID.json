@@ -1,0 +1,122 @@
+{
+  "documentOrderNumber": "NAZVANIE_ZKP",
+  "audience": {
+    "parties": [
+      {
+        "inn": "7704218694",
+        "kpp": "774301001"
+      },
+      {
+        "inn": "7704218693",
+        "kpp": "774301002"
+      }
+    ],
+    "restrictionType": "WHITE_LIST"
+  },
+  "proposalRequirements": {
+    "positions": [
+      {
+        "positionCorrelationId": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+        "product": {
+          "customerSpecification": {
+            "ref1CnCategory": {
+              "categoryId": "6341",
+              "manufacturerId": null,
+              "tradeMarkId": null,
+              "requisiteValues": null
+            },
+            "productName": "ПродуктСвежий",
+            "productDescription": null,
+            "manufacturer": null,
+            "partNumber": null,
+            "baseUnitOkeiCode": "112",
+            "barCodes": ["4444", "5555"],
+            "requisiteValues": null
+          }
+        },
+        "additionalProductDescription": null,
+        "purchaseConditions": {
+          "packaging": {
+            "description": null,
+            "unitsNumerator": 1,
+            "unitsDenominator": 1
+          },
+          "maxPrice": 3000,
+          "numberOfPackages": 10,
+          "maxDaysForDelivery": 100,
+          "dateDesiredDeliveryTo": "2021-10-10"
+        }
+      },
+      {
+        "positionCorrelationId": "1c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+        "product": {
+          "customerSpecification": {
+            "ref1CnCategory": {
+              "categoryId": "6341",
+              "manufacturerId": null,
+              "tradeMarkId": null,
+              "requisiteValues": null
+            },
+            "productName": "ПродуктСвежий#2",
+            "productDescription": null,
+            "manufacturer": null,
+            "partNumber": null,
+            "baseUnitOkeiCode": "112",
+            "barCodes": ["4444", "5555"],
+            "requisiteValues": [{
+              "name": "REQ1",
+              "value": "VAL1"
+            }]
+          }
+        },
+        "additionalProductDescription": null,
+        "purchaseConditions": {
+          "packaging": {
+            "description": null,
+            "unitsNumerator": 1,
+            "unitsDenominator": 1
+          },
+          "maxPrice": null,
+          "numberOfPackages": 10,
+          "maxDaysForDelivery": null,
+          "dateDesiredDeliveryTo": null
+        }
+      }
+    ],
+    "termsAndConditions": {
+      "isPartialPurchaseAcceptable": true,
+      "isCommissionTransaction": null,
+      "deliveryRegion": {
+        "countryCode": "643",
+        "fiasRegionCode": "639efe9d-3fc8-4438-8e70-ec4f2321f2a7"
+      },
+      "vatDeductible": false,
+      "currencyCode": "643",
+      "dateCollectingFrom": "2021-07-01",
+      "dateCollectingTo": "2021-06-01",
+      "dateConsideringTo": "2021-05-01",
+      "paymentDescription": null,
+      "deliveryDescription": null,
+      "description": null
+    },
+    "contacts": {
+      "contactName": "Denis Test",
+      "phone": "9031003201",
+      "email": "denis@testdenis.su"
+    },
+    "customerPartyId": "8acabd7d-b230-4df7-bfd4-edb17f19b389"
+  },
+  "id": "ac539010-9f4d-4a79-8742-8395ad1fe88c",
+  "datePlaced": "2021-04-06T17:48:54",
+  "dateLastUpdated": "2021-04-06T17:48:54",
+  "dateCancelled": null,
+  "attachments": [{
+    "name": null,
+    "title": null,
+    "content": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+  }, {
+    "name": "attachmentName2 attachmentName2 attachmentName2 ddd",
+    "title": "attachmentTitle2 attachmentTitle2 attachmentTitle ddddd",
+    "content": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+  }]
+}

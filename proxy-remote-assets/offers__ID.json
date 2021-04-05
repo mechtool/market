@@ -1,0 +1,43 @@
+{
+  "id": "ba537bcc-9096-11eb-a025-b06ebfcc65e2",
+  "number": "1",
+  "date": "2021-03-29T17:04:44",
+  "requestId": "75466088-38eb-44c3-9b1b-8db14d938355",
+  "supplier": {
+    "name": "Седов Сергей Владимирович",
+    "inn": "771504762050",
+    "address": "Москва г"
+  },
+  "customer": {
+    "name": "Евтеев Михаил Валерьевич",
+    "inn": "771576198308",
+    "address": "Москва г"
+  },
+  "dateActualTo": "2021-03-31T00:00:00",
+  "contact": {
+    "name": "Администратор",
+    "email": "test@test.ru"
+  },
+  "products": [
+    {
+      "amount": "10",
+      "productName": "Новый Старт. Лампа накаливания. 100 Вт.",
+      "maxDeliveryDaysAfterOrder": "1",
+      "price": "333",
+      "vat": "VAT_WITHOUT",
+      "amountWithVAT": "3330",
+      "amountWithoutVAT": "3330",
+      "amountVAT": "0"
+    },
+    {
+      "amount": "20",
+      "productName": "Светильник LED с концентрированной оптикой и установкой на лиру FREGAT FLOOD LED 110 (30) 5000K /E/",
+      "maxDeliveryDaysAfterOrder": "4",
+      "price": "444",
+      "vat": "VAT_WITHOUT",
+      "amountWithVAT": "8880",
+      "amountWithoutVAT": "8880",
+      "amountVAT": "0"
+    }
+  ]
+}
