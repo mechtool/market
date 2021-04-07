@@ -32,6 +32,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     ProductOrderModule,
     SorterModule,
     NzGridModule,
+    NzButtonModule,
   ],
   declarations: [
     Code404Component,

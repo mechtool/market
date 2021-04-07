@@ -81,7 +81,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes, {
       useHash: false,
       preloadingStrategy: DelayedPreloadingStrategy,
-      relativeLinkResolution: 'legacy'
+      relativeLinkResolution: 'legacy',
+      scrollPositionRestoration: 'enabled'
     })
   ],
   exports: [RouterModule],
