@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import {
   AccessKeyModel,
   AccessKeyResponseModel,
+  BannersListResponseModel,
   CartDataResponseModel,
   CartModel,
   CategoryRequestModel,
@@ -19,6 +20,7 @@ import {
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
   OrganizationUserResponseModel,
+  PagesStaticListResponseModel,
   ParticipationRequestRequestModel,
   ParticipationRequestResponseModel,
   ProductOfferRequestModel,
@@ -243,8 +245,14 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/counterparty/${inn}`);
   }
 
-  getBanners(pageId: string) {
+  getBanners(pageId: string): Observable<BannersListResponseModel> {
     return this._apiService.get(`${API_URL}/banners`, {
+      params: new HttpParams().append('pageId', pageId)
+    });
+  }
+
+  getPageStatic(pageId: string): Observable<PagesStaticListResponseModel> {
+    return this._apiService.get(`${API_URL}/pages-static`, {
       params: new HttpParams().append('pageId', pageId)
     });
   }

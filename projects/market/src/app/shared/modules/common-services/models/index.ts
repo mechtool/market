@@ -46,6 +46,7 @@ export * from './trade-offer-price-matrix.model';
 export * from './trade-offer-summary.model';
 export * from './order-status.modal';
 export * from './page.model';
+export * from './pages-static-list-response.model';
 export * from './product-feature.model';
 export * from './product-offer-request.model';
 export * from './product.model';

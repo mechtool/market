@@ -30,6 +30,7 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartPromoterService } from './cart-promoter.service';
 import { BannerService } from './banner.service';
+import { PagesStaticService } from './pages-static.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -63,6 +64,7 @@ export class CommonServicesModule {
         EdiService,
         FeedbackService,
         NotificationsService,
+        PagesStaticService,
         PaymentDocumentModalService,
         SpinnerService,
         ExternalProvidersService,

@@ -12,6 +12,7 @@ import {
 } from './components';
 import { ProductModule } from '../product';
 import { BannersModule } from '#shared/modules/components/banners/banner.module';
+import { PipesModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { BannersModule } from '#shared/modules/components/banners/banner.module'
     FormsModule,
     PromoRoutingModule,
     ProductModule,
-    BannersModule
+    BannersModule,
+    PipesModule
   ],
   declarations: [
     PromoListComponent,

@@ -22,6 +22,7 @@ export * from './category.service';
 export * from './models';
 export * from './trade-offers.service';
 export * from './product.service';
+export * from './pages-static.service';
 export * from './supplier.service';
 export * from './cart.service';
 export * from './notifications.service';
