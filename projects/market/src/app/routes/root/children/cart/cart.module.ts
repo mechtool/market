@@ -8,8 +8,8 @@ import {
   CartOrderComponent,
   CartOrderQtyCounterComponent,
   OrderSentComponent,
-  RegisterOrderSentComponent,
-  OrderUnavailableComponent
+  OrderUnavailableComponent,
+  RegisterOrderSentComponent
 } from './components';
 import { CartModalService } from './cart-modal.service';
 import { LOCAL_PROVIDER_TOKEN, NgZorroAntdMobileModule, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
@@ -24,6 +24,7 @@ import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
     CartRoutingModule,
     NzInputModule,
     NgZorroAntdMobileModule,
-    SharedDepsModule
+    SharedDepsModule,
+    NzCheckboxModule
   ],
   declarations: [
     CartComponent,

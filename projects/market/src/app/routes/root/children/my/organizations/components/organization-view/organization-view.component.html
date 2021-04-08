@@ -142,7 +142,7 @@
         <span class="info_group__value">
           <nz-collapse nzGhost>
             <nz-collapse-panel *ngFor="let tax of counterparty.legalPerson.paidTaxes" [nzHeader]="tax.year + ' г.'">
-              <p *ngFor="let t of tax.taxes">{{t.name}} - {{+t.paid | currencyPrice: '643'}}</p>
+              <p *ngFor="let t of tax.taxes">{{t.name}} - {{+t.paid | currencyPrice}}</p>
             </nz-collapse-panel>
           </nz-collapse>
         </span>

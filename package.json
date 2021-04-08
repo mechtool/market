@@ -41,7 +41,7 @@
     "css-vars-ponyfill": "^2.4.3",
     "ng-lazyload-image": "^9.1.0",
     "ng-recaptcha": "^7.0.1",
-    "ng-zorro-antd": "^11.3.0",
+    "ng-zorro-antd": "^11.4.0",
     "ng-zorro-antd-mobile": "^4.0.0",
     "ngx-cookie-service": "^11.0.2",
     "ngx-infinite-scroll": "^10.0.1",

@@ -211,15 +211,15 @@
               </div>
               <div class="supplier_name" #elementDivConsumerName>
                 <button class="customer_btn"
-                  [ngClass]="{'not-valid': customerNotSelected}"
-                  *ngIf="!enteredCustomerData" nz-button
-                  (click)="openSearchCounterpartyModal()">Заполнить данные заказчика
+                        [ngClass]="{'not-valid': customerNotSelected}"
+                        *ngIf="!enteredCustomerData" nz-button
+                        (click)="openSearchCounterpartyModal()">Заполнить данные заказчика
                 </button>
 
                 <button *ngIf="enteredCustomerData"
-                  nz-button nzType="text"
-                  type="button"
-                  (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}
+                        nz-button nzType="text"
+                        type="button"
+                        (click)="openSearchCounterpartyModal()">{{enteredCustomerData.name | abbreviatedBusinessName}}
                 </button>
               </div>
             </div>
@@ -513,6 +513,24 @@
                 </ng-container>
               </div>
             </div>
+
+            <div class="form-group form-group-long" *ngIf="abilityRegisterMakeOrderOrRegisterRequestForPrice">
+              <label class="form-group-checkbox"
+                [ngClass]="{'error': form.controls.isOrganizationAgent.invalid && (form.controls.isOrganizationAgent.touched || form.controls.isOrganizationAgent.dirty)}"
+                style="display: flex;"
+                nz-checkbox
+                formControlName="isOrganizationAgent">
+                Я являюсь уполномоченным представителем регистрируемой организации и принимаю условия
+                <a href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer"
+                   (click)="$event.stopPropagation()">пользовательского соглашения</a>
+              </label>
+
+              <ng-container *ngIf="form.controls.isOrganizationAgent.invalid && (form.controls.isOrganizationAgent.touched || form.controls.isOrganizationAgent.dirty)">
+                <div class="input_error" *ngIf="form.controls.isOrganizationAgent.errors?.required">
+                  Заполните это поле
+                </div>
+              </ng-container>
+            </div>
           </div>
         </div>
       </section>
@@ -554,13 +572,16 @@
       </div>
 
       <div class="order__total_btn">
-        <button nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()" [disabled]="unavailableToOrder">
+        <button nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()"
+                [disabled]="unavailableToOrder">
           {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
         </button>
-        <button *ngIf="selectedTabIndex === 0 && isHistoryAvailable" nz-button nzType="link" type="button" (click)="navigationBack()">
+        <button *ngIf="selectedTabIndex === 0 && isHistoryAvailable" nz-button nzType="link" type="button"
+                (click)="navigationBack()">
           Продолжить подбор
         </button>
-        <button *ngIf="selectedTabIndex === 1" nz-button nzType="link" type="button" (click)="changeSelectedTabIndex(0)">
+        <button *ngIf="selectedTabIndex === 1" nz-button nzType="link" type="button"
+                (click)="changeSelectedTabIndex(0)">
           Вернуться к товарам
         </button>
       </div>

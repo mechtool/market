@@ -1,20 +1,20 @@
-import { browser, by, element, protractor } from 'protractor';
+import { browser, protractor } from 'protractor';
 import { AppPage } from './scen-2__auth-order.po';
-import { LoginItsPage, userLoginWithAvailableOrganizations, userLoginWithoutAvailableOrganizations, userPassword } from './login-its/login-its.po';
+import { LoginItsPage, userLoginWithAvailableOrganizations, userPassword } from './login-its/login-its.po';
 import {
-  until,
-  navigateTo,
-  randomItem,
-  randomQuery,
-  presenceOfAll,
-  defaultTimeout,
-  defaultOrganizationINN,
+  browserClick,
   defaultContactName,
   defaultContactPhone,
-  defaultContactEmail,
-  defaultDeliveryStreet,
   defaultDeliveryCity,
-  restart, defaultSupplierNameINN, elementTextContentChanged, browserClick
+  defaultDeliveryStreet,
+  defaultSupplierNameINN,
+  defaultTimeout,
+  elementTextContentChanged,
+  navigateTo,
+  presenceOfAll,
+  randomItem,
+  restart,
+  until
 } from './utils/utils';
 
 let tradeOfferTitle = null;

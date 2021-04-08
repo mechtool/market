@@ -429,6 +429,13 @@
   margin-bottom: 10px;
 }
 
+.form-group-checkbox {
+  &.error {
+    border: 1px solid #f6837b;
+    padding: 2px;
+  }
+}
+
 input[type='text'],
 input[type='email'],
 textarea {
@@ -528,5 +535,15 @@ nz-date-picker {
   &.not-valid {
     background-color: var(--color-accent-secondary);
     border: 1px solid var(--color-accent-secondary);
+  }
+}
+
+a {
+  color: inherit;
+  border-bottom: 1px solid #fedc8b;
+  text-decoration: none;
+
+  &:hover {
+    border: none;
   }
 }

@@ -27,11 +27,11 @@ import {
   RelationEnumModel,
   UserOrganizationModel,
 } from '#shared/modules/common-services/models';
-import { delay, filter, switchMap, take, tap } from 'rxjs/operators';
+import { filter, switchMap, take, tap } from 'rxjs/operators';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import format from 'date-fns/format';
 import { absoluteImagePath, currencyCode, innKppToLegalId, uniqueArray, unsubscribeList } from '#shared/utils';
-import { combineLatest, forkJoin, of, Subscription, zip } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import {
   BNetService,
@@ -1123,6 +1123,8 @@ export class CartOrderComponent implements OnInit, OnDestroy, AfterViewInit {
         [Validators.required, Validators.email, Validators.maxLength(100)]),
       commentForSupplier: this._fb.control('',
         [notBlankValidator, Validators.maxLength(900)]),
+      isOrganizationAgent: this._fb.control(!this.abilityRegisterMakeOrderOrRegisterRequestForPrice,
+        [Validators.requiredTrue]),
       deliveryDesirableDate: this._fb.control(''),
       items: this._fb.array(this.order.items.map((product) => this._createItem(product))),
     });

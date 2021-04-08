@@ -7,7 +7,7 @@ export class AppPage {
   }
 
   getCloseCookie(): ElementFinder {
-    return element(by.css('market-cookie-agreement .anticon-close'));
+    return element(by.css('market-cookie-agreement .after_close'));
   }
 
   getSearchBox(): ElementFinder {
@@ -104,6 +104,10 @@ export class AppPage {
 
   getCartProductsTitles(): ElementArrayFinder {
     return element.all(by.css('.table_cell.cell_title'));
+  }
+
+  getIsOrganizationAgent(): ElementArrayFinder {
+    return element.all(by.css('.form-group-checkbox .ant-checkbox'));
   }
 
   getCartMakeOrderButton(): ElementFinder {

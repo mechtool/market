@@ -256,36 +256,30 @@ export function unauthorizedUserMakesOrder(page: any) {
     await page.getRequisitesCheckerInnInput().sendKeys(defaultOrganizationINN);
     await page.getRequisitesCheckerButton().click();
     await browser.sleep(1e3);
-    await page.getRequisitesCheckerKppInput().sendKeys(defaultOrganizationKPP);
-    await page.getRequisitesCheckerKppInput().click();
-    await browser.sleep(1e3);
-    await page.getRequisitesCheckerNameInput().sendKeys(defaultOrganizationName);
-    await page.getRequisitesCheckerNameInput().click();
-    await browser.sleep(1e3);
   });
 
-  it('Шаг 9: Пользователь видит модальное окно с заполненным наименованием организации', async() => {
+  it('Шаг 10: Пользователь видит модальное окно с заполненным наименованием организации', async() => {
     await browser.wait(until.presenceOf(page.getRequisitesCheckerNameInput()), defaultTimeout);
   });
 
-  it('Шаг 10: Пользователь нажимает на кнопку сохранения данных о заказчике', async() => {
+  it('Шаг 11: Пользователь нажимает на кнопку сохранения данных о заказчике', async() => {
     await page.getRequisitesCheckerButton().click();
   });
 
-  it('Шаг 11: Пользователь видит необходимые для дальнейшего заполнения контролы', async() => {
+  it('Шаг 12: Пользователь видит необходимые для дальнейшего заполнения контролы', async() => {
     await browser.wait(until.presenceOf(page.getDeliveryMethod()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getCartMakeOrderContactName()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getCartMakeOrderContactPhone()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getCartMakeOrderContactEmail()), defaultTimeout);
   });
 
-  it('Шаг 12: Пользователь вводит свои ФИО, телефон и email', async() => {
+  it('Шаг 13: Пользователь вводит свои ФИО, телефон и email', async() => {
     await page.getCartMakeOrderContactName().sendKeys(defaultContactName);
     await page.getCartMakeOrderContactPhone().sendKeys(defaultContactPhone);
     await page.getCartMakeOrderContactEmail().sendKeys(defaultContactEmail);
   });
 
-  it('Шаг 13: Пользователь вводит адрес доставки (если необходимо)', async() => {
+  it('Шаг 14: Пользователь вводит адрес доставки (если необходимо)', async() => {
     const deliveryMethod = await page.getDeliveryMethod().getText();
     if (deliveryMethod.toLowerCase() === 'доставка') {
       await browser.wait(until.presenceOf(page.getDeliveryCity()), defaultTimeout);
@@ -302,11 +296,16 @@ export function unauthorizedUserMakesOrder(page: any) {
     }
   });
 
-  it('Шаг 14: Пользователь нажимает на кнопку оформления заказа', async() => {
+  it('Шаг 15: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
+    await page.getIsOrganizationAgent().click();
+    await browser.sleep(1e3);
+  });
+
+  it('Шаг 16: Пользователь нажимает на кнопку оформления заказа', async() => {
     await page.getCartMakeOrderButton().click();
   });
 
-  it('Шаг 15: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
+  it('Шаг 17: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 

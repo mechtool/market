@@ -1,23 +1,24 @@
-import { browser, by, element, ElementFinder, protractor } from 'protractor';
+import { browser, protractor } from 'protractor';
 import { AppPage } from './scen-3__unauth-without-orgs-login.po';
-import { LoginItsPage, userLoginWithAvailableOrganizations, userLoginWithoutAvailableOrganizations, userPassword } from './login-its/login-its.po';
+import {
+  LoginItsPage,
+  userLoginWithAvailableOrganizations,
+  userLoginWithoutAvailableOrganizations,
+  userPassword
+} from './login-its/login-its.po';
 import { PromoPage } from './promo/promo.po';
 import { RegisterOrganizationIPPage } from './register-organization-ip/register-organization-ip.po';
 import {
-  until,
-  navigateTo,
-  randomItem,
-  randomQuery,
-  presenceOfAll,
-  defaultTimeout,
-  restart,
-  elementTextContentChanged,
   browserClick,
-  generateINNforIP,
-  defaultOrganizationIPNamePattern,
-  defaultContactName,
   defaultContactEmail,
+  defaultContactName,
   defaultContactPhone,
+  defaultOrganizationIPNamePattern,
+  defaultTimeout,
+  generateINNforIP,
+  navigateTo,
+  restart,
+  until,
 } from './utils/utils';
 
 let urlToRedirect = null;
@@ -136,7 +137,7 @@ export function userWithoutOrganizationsAuths(page: any, loginPage: any) {
 export function userWithoutOrganizationsDeAuths(page: any, loginPage: any) {
 
   it('Шаг 1: Пользователь нажимает на кнопку ESC', async() => {
-    browser .actions().sendKeys(protractor.Key.ESCAPE).perform();
+    browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
   });
 
   it('Шаг 2: Пользователь видит кнопку "Выход"', async() => {
@@ -187,7 +188,7 @@ export function userWithOrganizationsAuths(page: any, loginPage: any) {
     await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
     // TODO: remove ESCAPE
     await browser.sleep(1e3);
-    browser .actions().sendKeys(protractor.Key.ESCAPE).perform();
+    browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
     await browser.sleep(1e3);
   });
 

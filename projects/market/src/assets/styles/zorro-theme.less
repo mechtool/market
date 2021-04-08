@@ -76,6 +76,10 @@ span.ant-radio + * {
     border-color: #d9d9d9;
   }
 
+  &-checked:after {
+    border: none;
+  }
+
   &.ant-checkbox-checked {
     .ant-checkbox-input:focus + .ant-checkbox-inner {
       border-color: @accent-color;
@@ -379,8 +383,16 @@ nz-spin {
 // Collapse
 .ant-collapse>.ant-collapse-item>.ant-collapse-header {
   padding: 11px 1px 11px 40px;
-  width: fit-content;
   margin-left: auto;
+
+  .ant-collapse-arrow {
+    position: initial;
+    margin-right: 10px;
+  }
+}
+
+.ant-collapse-ghost>.ant-collapse-item>.ant-collapse-content>.ant-collapse-content-box {
+  line-height: 20px;
 }
 
 

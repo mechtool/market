@@ -10,7 +10,7 @@ export class CurrencyPricePipe implements PipeTransform {
   constructor(private currencyPipe: CurrencyPipe) {
   }
 
-  transform(value: number, currencyNumber: string, display: string = 'symbol', digitsInfo: string = '1.0-4'): string | null {
+  transform(value: number, currencyNumber: string = '643', display: string = 'symbol', digitsInfo: string = '1.0-4'): string | null {
     return this.currencyPipe.transform(value, currencyCode(currencyNumber), display, digitsInfo);
   }
 }
