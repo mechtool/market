@@ -265,13 +265,13 @@ export async function authorizedUserMakesOrder(page: any) {
     isOrderButtonEnabled = await page.getCartMakeOrderButton().isEnabled();
   });
 
-  it('Шаг 3: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 4: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await page.getCartMakeOrderButton().click();
     }
   });
 
-  it('Шаг 4: Пользователь видит необходимые для дальнейшего заполнения контролы [если товар доступен к заказу]', async() => {
+  it('Шаг 5: Пользователь видит необходимые для дальнейшего заполнения контролы [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.wait(until.presenceOf(page.getDeliveryMethod()), defaultTimeout);
       await browser.wait(until.presenceOf(page.getCartMakeOrderContactName()), defaultTimeout);
@@ -279,14 +279,14 @@ export async function authorizedUserMakesOrder(page: any) {
     }
   });
 
-  it('Шаг 5: Пользователь вводит свои ФИО, телефон и email [если товар доступен к заказу]', async() => {
+  it('Шаг 6: Пользователь вводит свои ФИО, телефон и email [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await page.getCartMakeOrderContactName().sendKeys(defaultContactName);
       await page.getCartMakeOrderContactPhone().sendKeys(defaultContactPhone);
     }
   });
 
-  it('Шаг 6: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
+  it('Шаг 7: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
 
     if (isOrderButtonEnabled) {
       const deliveryMethod = await page.getDeliveryMethod().getText();
@@ -306,14 +306,14 @@ export async function authorizedUserMakesOrder(page: any) {
     }
   });
 
-  it('Шаг 7: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 8: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
       await browserClick(await page.getCartMakeOrderButton());
     }
   });
 
-  it('Шаг 8: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 9: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
     }

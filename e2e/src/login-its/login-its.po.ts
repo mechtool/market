@@ -5,15 +5,15 @@ export const { userLoginWithoutAvailableOrganizations, userLoginWithAvailableOrg
 export class LoginItsPage {
 
   getLoginInput() {
-    return element(by.css('.page .controls #username'));
+    return element(by.name('username'));
   }
 
   getPasswordInput() {
-    return element(by.css('.page .controls #password'));
+    return element(by.name('password'));
   }
 
   getLoginButton() {
-    return element(by.css('.page #loginButton'));
+    return element(by.buttonText('Войти'));
   }
 
 }

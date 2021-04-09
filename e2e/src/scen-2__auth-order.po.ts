@@ -7,7 +7,7 @@ export class AppPage {
   }
 
   getCloseCookie(): ElementFinder {
-    return element(by.css('market-cookie-agreement .anticon-close'));
+    return element(by.css('market-cookie-agreement .after_close'));
   }
 
   getSearchBox(): ElementFinder {
