@@ -19,7 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "@ant-design/colors",
-              "@tweenjs/tween.js"
+              "@tweenjs/tween.js",
+              "date-fns"
             ],
             "buildOptimizer": true,
             "statsJson": true,

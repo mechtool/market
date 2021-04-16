@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { LocalStorageService } from '#shared/modules/common-services/local-storage.service';
 import { DefaultSearchAvailableModel } from '#shared/modules/common-services/models/default-search-available.model';
-import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { addURLParameters, removeURLParameters, unsubscribeList, updateUrlParameters } from '#shared/utils';
 import { BehaviorSubject, combineLatest, defer, forkJoin, of, Subscription } from 'rxjs';
@@ -46,6 +46,8 @@ export class CategoryComponent implements OnDestroy {
 
   deliveryAreaChange$: BehaviorSubject<any> = new BehaviorSubject(null);
   isLocationInitiallyLoaded = false;
+  utmTags = ['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'yclid'];
+  isUrlInitiallyLoaded = false;
 
   get isNotSearchUsed(): boolean {
     const queryParamsToCheck = ['q', 'supplierId', 'tradeMark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId', 'isDelivery', 'isPickup', 'sort'];
@@ -117,14 +119,17 @@ export class CategoryComponent implements OnDestroy {
     const pos = this._activatedRoute.snapshot.queryParamMap.get('pos');
     const sort = this._activatedRoute.snapshot.queryParamMap.get('sort');
 
-    const navigationExtras = {
+    const navigationExtras: NavigationExtras = {
       queryParams: {
         ...queryParamsFromNew(filterGroup),
         ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page }),
         ...(this._activatedRoute.snapshot.queryParamMap.has('pos') && { pos }),
         ...(this._activatedRoute.snapshot.queryParamMap.has('sort') && { sort }),
       },
+      queryParamsHandling: !this.isUrlInitiallyLoaded ? 'merge' : null,
     };
+
+    this.isUrlInitiallyLoaded = true;
     this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], navigationExtras);
   }
 
@@ -163,13 +168,18 @@ export class CategoryComponent implements OnDestroy {
     });
   }
 
-  changeSortingAndRefresh(sort: SortModel) {
+  changeSortingAndRefresh(sort: SortModel) : void {
     const categoryId = this._activatedRoute.snapshot.paramMap.get('id');
-    const navigationExtras = Object.assign({}, this._activatedRoute.snapshot.queryParams);
-    navigationExtras.sort = sort
-    navigationExtras.page = null
-    navigationExtras.pos = null
-    this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], { queryParams: navigationExtras });
+    const queryParamsListToRemove = [...this.utmTags, 'page', 'pos'];
+    const queryParamsNext = JSON.parse(JSON.stringify(this._activatedRoute.snapshot.queryParams));
+    queryParamsNext.sort = sort;
+    queryParamsListToRemove.forEach((queryParam) => {
+      queryParamsNext[queryParam] = null;
+    });
+    const navigationExtras: NavigationExtras = {
+      queryParams: queryParamsNext
+    }
+    this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], navigationExtras);
   }
 
   private _init(): void {
