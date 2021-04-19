@@ -20,6 +20,26 @@ export class CookieService {
     }
   }
 
+  getUserLastVisitTabAccountTimestamp(uin: string): number {
+    return +this._ngxCookieService.get(`last_visit_tab_account_timestamp_${uin}`);
+  }
+
+  setUserLastVisitTabAccountTimestamp(uin: string, timestamp: number): void {
+    if (this._routeDomain) {
+      this._ngxCookieService.set(`last_visit_tab_account_timestamp_${uin}`, timestamp.toString(), null, '/', this._routeDomain, true);
+    }
+  }
+
+  getUserLastVisitTabInboundOrdersTimestamp(uin: string): number {
+    return +this._ngxCookieService.get(`last_visit_tab_inbound_orders_timestamp_${uin}`);
+  }
+
+  setUserLastVisitTabInboundOrdersTimestamp(uin: string, timestamp: number): void {
+    if (this._routeDomain) {
+      this._ngxCookieService.set(`last_visit_tab_inbound_orders_timestamp_${uin}`, timestamp.toString(), null, '/', this._routeDomain, true);
+    }
+  }
+
   private _setRouteDomain(): void {
     const hostNameSplitted = this._location.hostname.split('.');
     const isDomainIPAddress = Number.isInteger(+hostNameSplitted[hostNameSplitted.length - 1]);

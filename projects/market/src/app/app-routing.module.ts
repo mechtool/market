@@ -56,6 +56,11 @@ const routes: Routes = [
             loadChildren: () => import('./routes/root/children/my/orders/orders.module').then((m) => m.OrdersModule),
           },
           {
+            path: 'sales',
+            data: { preload: false },
+            loadChildren: () => import('./routes/root/children/my/sales/sales.module').then((m) => m.SalesModule),
+          },
+          {
             path: 'organizations',
             data: { preload: false },
             loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then((m) => m.OrganizationsModule),

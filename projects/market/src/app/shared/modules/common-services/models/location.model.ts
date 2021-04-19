@@ -5,6 +5,7 @@ export class LocationModel {
   public locality?: string;
   public street?: string;
   public house?: string;
+  public region?: string;
 
   constructor(params) {
     Object.assign(this, params);
@@ -12,6 +13,7 @@ export class LocationModel {
 }
 
 export enum Level {
+  REGION = 'region',
   CITY = 'city',
   STREET = 'street',
   HOUSE = 'house',

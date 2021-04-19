@@ -1,8 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { CategoryModel, CategoryRequestModel, CategoryResponseModel } from './models';
+import {
+  CategoriesMappingModel,
+  Category1cnModel,
+  CategoryModel,
+  CategoryRequestModel,
+  CategoryResponseModel,
+  CategoryTreeNodeOptionsModel
+} from './models';
 import { catchError, filter, map, tap } from 'rxjs/operators';
-import { convertListToTree, deepTreeParentsSearch, deepTreeSearch, getFlatObjectArray } from '#shared/utils';
+import {
+  convertCategoryListToTree,
+  convertListToTree,
+  deepTreeParentsSearch,
+  deepTreeSearch,
+  getFlatObjectArray,
+  newTreeData,
+} from '#shared/utils';
 import { BNetService } from './bnet.service';
 
 const CATEGORY_OTHER = '6341';
@@ -11,6 +25,8 @@ const CATEGORY_OTHER = '6341';
 export class CategoryService {
   private _categoryTree$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
   private _categoryList$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
+  private _1CnCategoriesTree$: BehaviorSubject<CategoryTreeNodeOptionsModel[]> = new BehaviorSubject([]);
+  private _1CnCategoriesHashMap$: BehaviorSubject<Map<string, Category1cnModel>> = new BehaviorSubject(null);
 
   constructor(private _bnetService: BNetService) {
   }
@@ -30,12 +46,33 @@ export class CategoryService {
     );
   }
 
+  upload1CnCategoriesTree(): Observable<any> {
+    return this._bnetService.get1CnCategories()
+      .pipe(
+        catchError(() => {
+          this._1CnCategoriesTree$.next([]);
+          this._1CnCategoriesHashMap$.next(new Map());
+          return throwError(null);
+        }),
+        tap((res) => {
+          if (!this._1CnCategoriesTree$.getValue().length) {
+            this._1CnCategoriesTree$.next(convertCategoryListToTree(res.content));
+            this._1CnCategoriesHashMap$.next(new Map<string, Category1cnModel>(res.content.map(cat => [cat.id, cat])));
+          }
+        })
+      );
+  }
+
   getCategoriesList(): Observable<CategoryModel[]> {
     return this._categoryList$.asObservable();
   }
 
   getCategoriesTree(): Observable<CategoryModel[]> {
     return this._categoryTree$.asObservable();
+  }
+
+  get1CnCategoriesTree(): CategoryTreeNodeOptionsModel[] {
+    return newTreeData(this._1CnCategoriesTree$.getValue());
   }
 
   getCategoryTree(categoryId: string): Observable<CategoryModel[]> {
@@ -48,6 +85,10 @@ export class CategoryService {
       );
     }
     return of([]);
+  }
+
+  get1CnCategory(categoryId: string): Category1cnModel {
+    return this._1CnCategoriesHashMap$.getValue().get(categoryId);
   }
 
   getCategory(categoryId: string): Observable<CategoryModel> {
@@ -91,5 +132,13 @@ export class CategoryService {
         return res.categories;
       }),
     );
+  }
+
+  getCategoriesMapping(organizationId: string): Observable<CategoriesMappingModel> {
+    return this._bnetService.getCategoriesMapping(organizationId);
+  }
+
+  saveCategoriesMapping(organizationId: string, mapping: CategoriesMappingModel): Observable<any> {
+    return this._bnetService.saveCategoriesMapping(organizationId, mapping);
   }
 }

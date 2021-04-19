@@ -36,7 +36,12 @@ export class LocationService {
     return this._bnetService.searchLocations(textQuery, level);
   }
 
+  getLocations(fiasIds: string[]): Observable<LocationModel[]> {
+    return this._bnetService.getLocations(fiasIds);
+  }
+
   isDeliveryAvailable(searchFiasElement: string, fiasElements: string[]): Observable<boolean> {
     return this._bnetService.containsFiasAddress({ fiasId: searchFiasElement, fiasIds: fiasElements });
   }
+
 }

@@ -48,6 +48,9 @@ const pathsObjectWithBreadcrumbs = {
   '/promo/:id': /^\/promo\/(?:([^\/]+?))$/i,
   '/promo/:id/:subId': /^\/promo\/(?:([^\/]+?))\/(?:([^\/]+?))\/?$/i,
   '/my/orders': /^\/my\/orders$/i,
+  '/my/sales': /^\/my\/sales$/i,
+  '/my/sales/create': /^\/my\/sales\/create$/i,
+  '/my/sales/edit/:priceListExternalId': /^\/my\/sales\/edit\/(?:([^\/]+?))$/i,
   '/my/organizations': /^\/my\/organizations$/i,
   '/my/organizations/:id': /^\/my\/organizations\/(?:([^\/]+?))\/?$/i,
 };
@@ -60,7 +63,15 @@ const pathsWithAuthentication = [/^\/supplier$/i];
 /**
  * URL пути находящиеся под авторизацией
  */
-const pathsWithAuthorization = [/^\/my\/orders$/i];
+const pathsWithAuthorization = [
+  /^\/my\/orders$/i,
+  /^\/my\/sales$/i,
+  /^\/my\/sales\/create$/i,
+  /^\/my\/sales\/edit\/(?:([^\/]+?))$/i,
+  /^\/my\/rfps$/i,
+  /^\/my\/rfps\/create$/i,
+  /^\/my\/rfps\/edit\/(?:([^\/]+?))$/i
+];
 
 @Injectable()
 export class BreadcrumbsGuard implements CanActivate {
@@ -228,6 +239,50 @@ export class BreadcrumbsGuard implements CanActivate {
           {
             label: 'Мои заказы',
           },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/sales':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Мои продажи',
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/sales/create':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Мои продажи',
+            routerLink: '/my/sales',
+          },
+          {
+            label: 'Новый прайс-лист',
+          }
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/my/sales/edit/:priceListExternalId':
+        breadcrumbsItems = [
+          {
+            label: 'Личный кабинет',
+            routerLink: '/',
+          },
+          {
+            label: 'Мои продажи',
+            routerLink: '/my/sales',
+          },
+          {
+            label: 'Редактирование прайс-листа',
+          }
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;

@@ -1,0 +1,8 @@
+@media all and (max-width: 400px) {
+  .organization-categories-setting {
+    .table_list__orders .cell_supplier_category_title[data-title]:before,
+    .table_list__orders .cell_ref_1cn_category_title[data-title]:before {
+      width: 70px;
+    }
+  }
+}

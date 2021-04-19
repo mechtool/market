@@ -1,0 +1,64 @@
+.organization-categories-setting {
+  .table_list {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #ededed;
+    margin-top: 15px;
+
+    .table_row.table_data {
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--color-accent-lighter);
+      }
+    }
+
+    &__orders {
+      .cell_supplier_category_title {
+        width: 200px;
+      }
+
+      .cell_ref_1cn_category_title {
+        width: 200px;
+      }
+    }
+  }
+
+  .table {
+    &_row {
+      display: table-row;
+      position: relative;
+
+      .click-open {
+        display: contents;
+      }
+    }
+
+    &_header {
+      opacity: 0.6;
+
+      &_cell {
+        vertical-align: top;
+        font-weight: var(--font-weight-medium);
+        font-size: var(--font-size-12);
+        line-height: 15px;
+        border-top: none;
+        height: 45px;
+      }
+    }
+
+    &_cell {
+      display: table-cell;
+      vertical-align: middle;
+      padding: 6px 10px 6px 5px;
+      height: 55px;
+      font-size: var(--font-size-13);
+      line-height: 17px;
+      border-top: 1px solid #ededed;
+    }
+  }
+
+  .change_btn {
+    margin-left: 10px;
+  }
+}

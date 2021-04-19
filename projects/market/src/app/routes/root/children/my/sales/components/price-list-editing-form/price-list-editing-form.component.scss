@@ -1,0 +1,51 @@
+.price-list-editing-form {
+  h2 {
+    margin-left: 10px;
+    margin-bottom: 20px;
+  }
+
+  .warning-message {
+    font-size: var(--font-size-14);
+    color: #ff4d4f;
+  }
+
+  [nz-form] ::ng-deep .ant-form-item-explain.ant-form-item-explain-error {
+    display: contents;
+  }
+
+  nz-date-picker {
+    width: 100%;
+    height: 38.8px;
+  }
+
+  .ant-tag {
+    margin-bottom: 8px;
+    cursor: pointer;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+::ng-deep .ant-notification {
+  position: relative;
+}
+
+.successful-message {
+  margin-top: 15px;
+  text-align: center;
+
+  p {
+    margin-top: 10px;
+
+    span {
+      font-weight: var(--font-weight-medium)
+    }
+  }
+
+  button {
+    margin-top: 10px;
+    height: 30px
+  }
+}

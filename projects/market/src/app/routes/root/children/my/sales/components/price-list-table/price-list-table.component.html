@@ -1,0 +1,112 @@
+<div class="price-list-table">
+  <div class="table_list table_list__orders">
+
+    <div class="table_row table_header">
+      <div class="table_cell cell_title">
+        <span>Наименование</span>
+      </div>
+      <div class="table_cell cell_org">
+        <span>Организация</span>
+      </div>
+      <div class="table_cell cell_date">
+        <span>Срок действия</span>
+      </div>
+      <div class="table_cell cell_status">
+        <span>Состояние</span>
+      </div>
+      <div class="table_cell cell_action">
+        <span>Действие</span>
+      </div>
+    </div>
+
+    <div class="table_row table_data" *ngFor="let priceList of priceLists">
+      <div class="click-open" (click)="openPriceList(priceList)">
+
+        <div class="table_cell cell_title" data-title="Наименование:">
+          {{priceList.name}}
+        </div>
+
+        <div class="table_cell cell_org" data-title="Организация:">
+          <div class="supplier_title">
+            <span class="supplier_image" style="{{priceList.supplierParty.inn | organizationLogo}}"></span>
+            <span class="supplier_name">{{priceList.supplierParty.name | abbreviatedBusinessName}}</span>
+          </div>
+        </div>
+
+        <div class="table_cell cell_date" data-title="Срок действия:">
+          до {{ priceList.dateActualTo | date:'dd MMMM yyyy г.' }}
+        </div>
+
+        <div class="table_cell cell_status" data-title="Состояние:" *ngIf="priceList.feedInfo.status">
+          <span class="status"
+                nz-tooltip
+                [nzTooltipTitle]="priceList.feedInfo.status === 'IN_PROGRESS'
+                ? 'Запущен процесс обновления торговых предложений. Операции с прайс-листом станут доступны после завершения процесса.' : ''">
+            <i *ngIf="priceList.feedInfo.status === 'IN_PROGRESS'" nz-icon nzType="sync" nzSpin></i>
+            <span>
+              {{priceList.feedInfo.status | priceListStatus : priceList.feedInfo.lastCompletionTime}}
+            </span>
+          </span>
+        </div>
+      </div>
+
+      <div class="table_cell cell_status" data-title="Состояние:" *ngIf="!priceList.feedInfo.status">
+          <span class="status"
+                nz-tooltip
+                [nzTooltipTitle]="'Запустите процесс обновления, после его окончания торговые предложения станут доступны для поиска и заказа в сервисе «1С:Бизнес-сеть. Торговая площадка».'">
+            <i nz-icon nzType="exclamation-circle"></i>
+            <span>
+              Требуется <a (click)="startFeed(priceList)">запустить обновление</a>
+            </span>
+          </span>
+      </div>
+
+      <div class="table_cell cell_action" data-title="Действие:"
+           nz-tooltip
+           [nzTooltipTitle]="priceList.feedInfo.status === 'IN_PROGRESS'
+                ? 'Запущен процесс обновления торговых предложений. Операции с прайс-листом станут доступны после завершения процесса.'
+                : ''">
+        <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
+                (click)="startFeed(priceList)"
+                [disabled]="priceList.feedInfo.status === 'IN_PROGRESS'"
+                nz-tooltip
+                nzTooltipTitle="Запустить процесс обновления прайс-листа">
+          <i nz-icon nzType="file-sync" nzTheme="outline"></i>
+        </button>
+
+
+        <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
+                [routerLink]="['/my/sales/edit/' + priceList.externalCode]"
+                [disabled]="priceList.feedInfo.status === 'IN_PROGRESS'"
+                style="margin-left: 5px"
+                nz-tooltip
+                nzTooltipTitle="Редактировать прайс-лист">
+          <i nz-icon nzType="form" nzTheme="outline"></i>
+        </button>
+
+        <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
+                nz-popconfirm
+                nzPopconfirmTitle="Вы действительно хотите удалить?"
+                [nzIcon]="withoutIconTpl"
+                (nzOnConfirm)="delete(priceList)"
+                [disabled]="priceList.feedInfo.status === 'IN_PROGRESS'"
+                style="margin-left: 5px;"
+                nz-tooltip
+                nzTooltipTitle="Удалить прайс-лист">
+          <i nz-icon nzType="delete" nzTheme="outline"></i>
+        </button>
+
+        <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
+                [routerLink]="['/supplier/' + priceList.supplierParty.id]"
+                style="margin-left: 5px"
+                nz-tooltip
+                nzTooltipTitle="Перейти в магазин поставщика">
+          <i nz-icon nzType="shop" nzTheme="outline"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #withoutIconTpl></ng-template>
+

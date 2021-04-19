@@ -23,22 +23,21 @@
       ngClass="{{item.styleClass}}"
       *ngFor="let item of navItems">
       <a [ngClass]="{'active': item.label === navItemActive?.label}" (click)="navigateNavItem(item)">
-          <span
-            class="icon"
-            [attr.title]="item.counter || null"
-            [attr.data-counter]="item.counter | marketNaviCounter">
+          <span class="icon"
+                [attr.title]="item.counter || null"
+                [attr.data-counter]="item.counter | marketNaviCounter">
               <img
                 src="assets/img/svg/icon__{{item.icon}}.svg"
                 alt="{{item.label}}"
                 title="{{item.label}}">
           </span>
-
-        <span id="{{item.attributeId}}" class="label" [attr.data-counter]="item.counter | marketNaviCounter">
+        <span class="label"
+              id="{{item.attributeId}}"
+              [attr.data-counter]="item.counter | marketNaviCounter">
             {{item.label}}
           </span>
 
-        <span
-          [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
+        <span [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
       </a>
       <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
         <li class="item sub_item" *ngFor="let subItem of item.items">
@@ -52,9 +51,11 @@
                 alt="{{subItem.label}}"
                 title="{{subItem.label}}">
             </span>
-            <span id="{{subItem.attributeId}}" class="label" [attr.data-counter]="subItem.counter | marketNaviCounter">
+            <span class="label"
+                  id="{{subItem.attributeId}}"
+                  [attr.data-counter]="subItem.counter | marketNaviCounter">
                 {{subItem.label}}
-              </span>
+            </span>
           </a>
         </li>
       </ul>
@@ -72,4 +73,3 @@
     </li>
   </ul>
 </div>
-

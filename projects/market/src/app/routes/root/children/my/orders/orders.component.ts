@@ -1,13 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { DocumentDto } from '#shared/modules/common-services/models';
-import {
-  EdiService,
-  LocalStorageService,
-  NotificationsService,
-  SpinnerService,
-  UserService,
-  UserStateService,
-} from '#shared/modules/common-services';
+import { EdiService, NotificationsService, SpinnerService, UserStateService, } from '#shared/modules/common-services';
 import { Observable } from 'rxjs';
 
 const PAGE_SIZE = 100;
@@ -18,7 +11,7 @@ const PAGE_SIZE = 100;
     './orders.component.scss',
     './orders.component-1300.scss',
     './orders.component-992.scss',
-    './orders.component-576.scss'
+    './orders.component-768.scss'
   ],
 })
 export class OrdersComponent implements OnDestroy {
@@ -31,16 +24,14 @@ export class OrdersComponent implements OnDestroy {
   private isNotEmptyAccountDocumentsResponse = true;
 
   get newAccountDocumentsCounter$(): Observable<number> {
-    return this._userService.newAccountDocumentsCounter$;
+    return this._ediService.newAccountDocumentsCounter$;
   }
 
   constructor(
     private _ediService: EdiService,
-    private _userService: UserService,
-    private _userStateService: UserStateService,
-    private _localStorageService: LocalStorageService,
-    private _notificationsService: NotificationsService,
     private _spinnerService: SpinnerService,
+    private _userStateService: UserStateService,
+    private _notificationsService: NotificationsService,
   ) {
     this._init();
   }
@@ -48,8 +39,8 @@ export class OrdersComponent implements OnDestroy {
   ngOnDestroy(): void {
     const uin = this._userStateService.currentUser$.value?.userInfo.userId;
     if (uin) {
-      this._userService.setUserLastLoginTimestamp(uin, Date.now());
-      this._userService.updateNewAccountDocumentsCounter().subscribe();
+      this._ediService.setUserLastVisitTabAccountTimestamp(uin, Date.now());
+      this._ediService.updateNewAccountDocumentsCounter().subscribe();
     }
   }
 
@@ -57,11 +48,11 @@ export class OrdersComponent implements OnDestroy {
     if (nextPage === this.pageOrderDocuments + 1 && this.isNotEmptyOrderDocumentsResponse) {
       this._spinnerService.show();
       this.pageOrderDocuments = nextPage;
-      this._ediService.getOrders(nextPage, PAGE_SIZE).subscribe(
+      this._ediService.outboundOrders(nextPage, PAGE_SIZE).subscribe(
         (documents) => {
           this._spinnerService.hide();
           if (documents?.length) {
-            this.orderDocuments.push(...documents.map((doc) => DocumentDto.forOrder(doc)));
+            this.orderDocuments.push(...documents.map((doc) => DocumentDto.forOutboundOrder(doc)));
           } else {
             this.isNotEmptyOrderDocumentsResponse = false;
           }
@@ -98,10 +89,10 @@ export class OrdersComponent implements OnDestroy {
   refreshOrderDocuments() {
     this._spinnerService.show();
     this.pageOrderDocuments = 1;
-    this._ediService.getOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe(
+    this._ediService.outboundOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe(
       (documents) => {
         this._spinnerService.hide();
-        this.orderDocuments = documents.map((doc) => DocumentDto.forOrder(doc));
+        this.orderDocuments = documents.map((doc) => DocumentDto.forOutboundOrder(doc));
       },
       (err) => {
         this._spinnerService.hide();
@@ -133,11 +124,11 @@ export class OrdersComponent implements OnDestroy {
 
   private _init() {
     this._spinnerService.show();
-    this._ediService.getOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe(
+    this._ediService.outboundOrders(this.pageOrderDocuments, PAGE_SIZE).subscribe(
       (documents) => {
         this._spinnerService.hide();
         if (documents?.length) {
-          this.orderDocuments = documents.map((doc) => DocumentDto.forOrder(doc));
+          this.orderDocuments = documents.map((doc) => DocumentDto.forOutboundOrder(doc));
         } else {
           this.isNotEmptyOrderDocumentsResponse = false;
         }

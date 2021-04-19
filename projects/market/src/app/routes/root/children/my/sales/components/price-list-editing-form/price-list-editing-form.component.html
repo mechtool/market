@@ -1,0 +1,234 @@
+<div class="price-list-editing-form">
+
+  <h2>Форма редактирования прайс-листа</h2>
+
+  <form nz-form [formGroup]="form" *ngIf="form">
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired
+                       nzFor="priceListExternalUrl"
+                       nzTooltipTitle="URL ссылка веб-ресурса с которого будет скачен excel-файл с прайс-листом"
+                       nzTooltipIcon="info-circle">URL ссылка на excel-файл
+        </nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_priceListExternalUrl"
+               type="text"
+               id="priceListExternalUrl"
+               placeholder="https://disk.yandex.ru..."
+               autocomplete="chrome-off"
+               formControlName="priceListExternalUrl">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="name">Название прайс-листа</nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_name"
+               type="text"
+               id="name"
+               autocomplete="chrome-off"
+               formControlName="name">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="supplierPartyId">Поставщик</nz-form-label>
+        <nz-select
+          nzSize="large"
+          id="supplierPartyId"
+          formControlName="supplierPartyId"
+          nzPlaceHolder="Выберите из списка доступных">
+          <nz-option *ngFor="let org of availableOrganizations$ | async"
+                     [nzValue]="org.organizationId"
+                     [nzLabel]="org.organizationName | abbreviatedBusinessName">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired
+                       nzFor="dateActualTo"
+                       nzTooltipTitle="Дата окончания периода актуальности торговых предложений в данном прайс-листе"
+                       nzTooltipIcon="info-circle">Срок действия прайс-листа
+        </nz-form-label>
+        <nz-date-picker
+          id="dateActualTo"
+          nzSize="large"
+          formControlName="dateActualTo"
+          [nzDisabledDate]="disabledDate"
+          nzFormat="до dd MMMM yyyy"
+          nzPlaceHolder="Нажмите для ввода даты">
+        </nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="minSum">Минимальная сумма заказа</nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_minSum"
+               type="number"
+               id="minSum"
+               autocomplete="chrome-off"
+               formControlName="minSum">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired
+                       nzFor="deliveryRegions"
+                       nzTooltipTitle="Регионы в которые будет осуществляться доставка товара. Возможные территориальные единицы: Россия, субъект РФ, город (село, деревня) РФ, улица. Обязательно заполните регионы доставки или адреса складов самовывоза."
+                       nzTooltipIcon="info-circle">Регионы доставки товара
+        </nz-form-label>
+        <br/>
+        <nz-tag nzMode="closeable" (nzOnClose)="deleteDeliveryRegion(item)"
+                *ngFor="let item of form.controls.deliveryRegions.value">{{item.name}}</nz-tag>
+        <nz-tag nzColor="processing" (click)="addDeliveryRegion()">
+          <i nz-icon nzType="plus"></i>
+          <span>Добавить</span>
+        </nz-tag>
+        <p class="warning-message" *ngIf="form.hasError('emptyDeliveryAndPickup') && form.touched">
+          Укажите регион доставки или адрес склада самовывоза товара
+        </p>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired
+                       nzFor="pickupFrom"
+                       nzTooltipTitle="Адреса складов самовывоза товара. Обязательно заполните регионы доставки или адреса складов самовывоза."
+                       nzTooltipIcon="info-circle">Адреса складов самовывоза товара
+        </nz-form-label>
+        <br/>
+        <nz-tag nzMode="closeable" (nzOnClose)="deletePickupFrom(item)"
+                *ngFor="let item of form.controls.pickupFrom.value">{{item.name}}</nz-tag>
+        <nz-tag nzColor="processing" (click)="addPickupFrom()">
+          <i nz-icon nzType="plus"></i>
+          <span>Добавить</span>
+        </nz-tag>
+        <p class="warning-message" *ngIf="form.hasError('emptyDeliveryAndPickup') && form.touched">
+          Укажите регион доставки или адрес склада самовывоза товара
+        </p>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label [nzSpan]="24" nzFor="audience"
+                       nzTooltipTitle="Список потенциальных контрагентов, только которым будут доступны для поиска и просмотра торговые предложения этого прайс-листа"
+                       nzTooltipIcon="info-circle">Доступно только
+        </nz-form-label>
+        <br/>
+        <nz-tag nzMode="closeable" (nzOnClose)="deleteOrg(item)"
+                *ngFor="let item of form.controls.audience.value">{{item.name ? item.name : item.inn}}</nz-tag>
+        <nz-tag nzColor="processing" (click)="addOrg()">
+          <i nz-icon nzType="plus"></i>
+          <span>Добавить</span>
+        </nz-tag>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="personName">ФИО представителя поставщика</nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_personName"
+               type="text"
+               id="personName"
+               autocomplete="chrome-off"
+               formControlName="personName">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="phone">Телефон представителя поставщика</nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_phone"
+               type="text"
+               id="phone"
+               autocomplete="chrome-off"
+               formControlName="phone"
+               prefix="+7"
+               mask="(000) 000 00 00"
+               showMaskTyped="true">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="email"
+                       nzTooltipTitle="На данный Email будет приходить информация о заказах"
+                       nzTooltipIcon="info-circle">Email представителя поставщика
+        </nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_email"
+               type="email"
+               id="email"
+               autocomplete="chrome-off"
+               formControlName="email">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="20" nzMd="18" nzLg="14" nzXl="12" nzXXl="8" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="emailForErrors"
+                       nzTooltipTitle="На данный Email будет приходить отчёт об ошибках загрузки прайс-листа. Если не указан, то отправляется на Email представителя поставщика"
+                       nzTooltipIcon="info-circle">Email для отчета об ошибках загрузки
+        </nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_emailForErrors"
+               type="email"
+               id="emailForErrors"
+               autocomplete="chrome-off"
+               formControlName="emailForErrors">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="register-area">
+      <nz-form-control>
+        <button nz-button nzType="primary" [disabled]="form.invalid" (click)="save()">Сохранить</button>
+        <button style="margin-left: 10px" nz-button nzType="link" [routerLink]="['/my/sales']">Отмена</button>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #errorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">
+        <p>Поле обязательно для заполнения</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('pattern')">
+        <p>Введенная строка не соответствует формату url</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('maxlength')">
+        <p>Превышен максимальный размер строки</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('blank') || control.hasError('max') || control.hasError('min')">
+        <p>Введено недопустимое значение</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('minDate')">
+        <p>Дата должна быть больше или равна {{control.getError('minDate')}}</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('email')">
+        <p>Введен недопустимый email</p>
+      </ng-container>
+    </ng-template>
+  </form>
+</div>
+
+<ng-template #successfulMessage let-notification>
+  <div class="successful-message">
+    <i nz-icon nzType="info-circle" nzTheme="twotone"></i>
+    Прайс-лист отредактирован. После обработки excel-файла обновленные торговые предложения станут доступны для поиска в
+    сервисе «1С:Бизнес-сеть. Торговая площадка».
+    <p><span>Совет: Товары с сопоставленными категориями имеют более высокий рейтинг в поиске, их легче найти и чаще покупают.</span>
+    </p>
+    <button nz-button nzType="primary" [routerLink]="['/my/sales']" [queryParams]="{ tab: 2 }" (click)="notification.close()">Сопоставить категории</button>
+  </div>
+</ng-template>
+

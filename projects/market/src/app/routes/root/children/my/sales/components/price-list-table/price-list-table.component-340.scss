@@ -1,0 +1,9 @@
+@media all and (max-width: 340px) {
+  .table_list__orders .cell_org[data-title]:before,
+  .table_list__orders .cell_title[data-title]:before,
+  .table_list__orders .cell_date[data-title]:before,
+  .table_list__orders .cell_action[data-title]:before,
+  .table_list__orders .cell_status[data-title]:before {
+    width: 70px;
+  }
+}

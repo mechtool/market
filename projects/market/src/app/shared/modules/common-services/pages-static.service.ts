@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { PagesStaticListResponseModel } from '#shared/modules/common-services/models';
 import { Observable } from 'rxjs';
 import { BNetService } from './bnet.service';
+import { removeLastSlash } from '#shared/utils';
 
 @Injectable()
-  export class PagesStaticService {
+export class PagesStaticService {
 
   constructor(
     private _bnetService: BNetService,
@@ -12,15 +13,7 @@ import { BNetService } from './bnet.service';
   }
 
   getPageStatic(): Observable<PagesStaticListResponseModel> {
-    const pageId = this.removeLastSlash(location.pathname);
+    const pageId = removeLastSlash(location.pathname);
     return this._bnetService.getPageStatic(pageId);
-  }
-
-
-  private removeLastSlash(url: string) {
-    if (url.lastIndexOf('/') === (url.length - 1)) {
-      return url.slice(0, -1);
-    }
-    return url;
   }
 }

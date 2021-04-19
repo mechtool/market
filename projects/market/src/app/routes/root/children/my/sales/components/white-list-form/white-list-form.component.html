@@ -1,0 +1,38 @@
+<div class="white-list-form">
+
+  <form nz-form [formGroup]="form">
+
+    <nz-form-item>
+      <nz-form-control nzSpan="20" nzOffset="2" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="inn"
+                       nzTooltipTitle="ИНН организации (10 цифр для юр.лица и 12 цифр для индивидуального предпринимателя)"
+                       nzTooltipIcon="info-circle">ИНН
+        </nz-form-label>
+        <input nz-input
+               name="{{currentDate}}_inn"
+               type="text"
+               id="inn"
+               autocomplete="chrome-off"
+               formControlName="inn"
+               (keypress)="onlyNumberKey($event)">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="register-area">
+      <nz-form-control nzOffset="6">
+        <button nz-button nzType="primary" (click)="save()" [disabled]="form.invalid">Сохранить</button>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #errorTpl let-control>
+      <ng-container *ngIf="control.hasError('innControlNumberCondition') || control.hasError('blank')">
+        <p>Введен недействительный ИНН</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('innLengthCondition')">
+        <p>Длина должна быть 10 или 12 цифр</p>
+      </ng-container>
+    </ng-template>
+
+  </form>
+</div>
+

@@ -16,5 +16,6 @@ export * from './delayed-retry';
 export * from './unsubscribe-list';
 export * from './get-prop-value-by-path';
 export * from './legal-id';
+export * from './url-utils';
 export * from './get-query-param';
 export * from './utils';

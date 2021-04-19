@@ -1,0 +1,32 @@
+<div class="organization-categories-setting">
+
+  <div class="table_list table_list__orders">
+
+    <div class="table_row table_header">
+      <div class="table_cell cell_supplier_category_title">
+        <span>Категория поставщика</span>
+      </div>
+      <div class="table_cell cell_ref_1cn_category_title">
+        <span>Категория 1СН</span>
+      </div>
+    </div>
+
+    <div class="table_row table_data" *ngFor="let item of categoriesMapping">
+
+      <div class="table_cell cell_supplier_category_title" data-title="Категория поставщика:">
+        {{item.externalCategoryName}}
+      </div>
+
+      <div class="table_cell cell_ref_1cn_category_title" data-title="Категория 1СН:">
+        {{item.ref1CnCategoryName}}
+        <button class="change_btn" nz-button nzType="dashed" nzShape="circle" nzSize="small"
+                (click)="changeCategory(item)"
+                nz-tooltip
+                nzTooltipTitle="Изменить категорию 1СН">
+          <i nz-icon nzType="form" nzTheme="outline"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

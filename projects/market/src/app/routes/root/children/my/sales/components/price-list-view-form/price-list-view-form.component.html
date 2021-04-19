@@ -1,0 +1,79 @@
+<div class="price-list-view-form">
+
+  <div class="info_group" *ngIf="priceList.name">
+    <span class="info_group__label">Название</span>
+    <span class="info_group__value">{{priceList.name}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.supplierParty">
+    <span class="info_group__label">Поставщик</span>
+    <span class="info_group__value">
+      <span class="supplier_name">
+        <span class="supplier_logo" style="{{priceList.supplierParty.inn | organizationLogo}}"></span>
+        <span>{{priceList.supplierParty.name | abbreviatedBusinessName}}</span>
+      </span>
+    </span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.dateActualTo">
+    <span class="info_group__label">Срок действия</span>
+    <span class="info_group__value">до {{priceList.dateActualTo | date : 'dd MMMM yyyy г.'}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.orderRestrictions?.sum">
+    <span class="info_group__label">Минимальная сумма заказа</span>
+    <span
+      class="info_group__value">{{priceList.orderRestrictions.sum.minimum | marketMultiplier:'.01' | currencyPrice: priceList.currencyCode}} </span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.deliveryDescription?.deliveryRegions?.length">
+    <span class="info_group__label">Регионы доставки товара</span>
+    <span class="info_group__value">{{priceList.deliveryDescription.deliveryRegions | marketArrayJoiner : 'name': '; '}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.deliveryDescription?.pickupFrom?.length">
+    <span class="info_group__label">Адреса складов самовывоза товара</span>
+    <span class="info_group__value">{{priceList.deliveryDescription.pickupFrom | marketArrayJoiner : 'name': '; '}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.audience?.whiteList?.length">
+    <span class="info_group__label">Доступно только</span>
+    <span class="info_group__value">{{priceList.audience.whiteList | marketArrayJoiner : 'name': '; '}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.contacts?.personName">
+    <span class="info_group__label">ФИО представителя поставщика</span>
+    <span class="info_group__value">{{priceList.contacts.personName}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.contacts?.phone">
+    <span class="info_group__label">Телефон представителя поставщика</span>
+    <span class="info_group__value">{{priceList.contacts.phone}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.contacts?.email">
+    <span class="info_group__label">Email представителя поставщика</span>
+    <span class="info_group__value text-hidden-ellipsis">{{priceList.contacts.email}}</span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.feedInfo?.priceListExternalUrl">
+    <span class="info_group__label">URL ссылка на excel-файл</span>
+    <span class="info_group__value text-hidden-ellipsis">
+      <a [href]="priceList.feedInfo.priceListExternalUrl" target="_blank" rel="noopener noreferrer">
+        {{priceList.feedInfo.priceListExternalUrl}}
+      </a>
+    </span>
+  </div>
+
+  <div class="info_group" *ngIf="priceList.feedInfo?.contactsEmail">
+    <span class="info_group__label">Email для отчета об ошибках загрузки</span>
+    <span class="info_group__value text-hidden-ellipsis">{{priceList.feedInfo.contactsEmail}}</span>
+  </div>
+
+  <div class="info_group">
+    <span class="info_group__label">Состояние загрузки прайс-листа</span>
+    <span
+      class="info_group__value">{{priceList.feedInfo.status | priceListStatus : priceList.feedInfo.lastCompletionTime}}</span>
+  </div>
+</div>
+

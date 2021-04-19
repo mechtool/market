@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Injectable()
@@ -15,5 +15,9 @@ export class NotificationsService {
 
   error(message: string) {
     this._messageService.error(message, { nzDuration: 5000 });
+  }
+
+  custom(message: string | TemplateRef<void>, ms: number) {
+    this._messageService.info(message, { nzDuration: ms, nzPauseOnHover: true });
   }
 }

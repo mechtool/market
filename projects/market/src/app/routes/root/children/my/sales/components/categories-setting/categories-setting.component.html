@@ -1,0 +1,22 @@
+<div class="categories-setting">
+  <div class="singleton" *ngIf="organizations?.length === 1">
+    <market-organization-categories-setting
+      [organizationId]="organizations[0].organizationId"
+    ></market-organization-categories-setting>
+  </div>
+
+  <div class="multiple" *ngIf="organizations?.length > 1">
+    <nz-tabset>
+      <nz-tab *ngFor="let org of organizations"
+              [nzTitle]="org.organizationName | abbreviatedBusinessName">
+
+        <ng-template nz-tab>
+          <market-organization-categories-setting
+            [organizationId]="org.organizationId"
+          ></market-organization-categories-setting>
+        </ng-template>
+      </nz-tab>
+    </nz-tabset>
+  </div>
+</div>
+

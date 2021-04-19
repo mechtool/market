@@ -1,0 +1,40 @@
+<div class="category-search-form">
+  <form nz-form [formGroup]="form">
+    <nz-form-item>
+      <nz-form-control nzSpan="20" nzOffset="2" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="name"
+                       nzTooltipTitle="Выберите наиболее соответствующую категорию 1СН."
+                       nzTooltipIcon="info-circle">Категория 1СН
+        </nz-form-label>
+
+        <nz-tree-select
+          id="name"
+          [nzNodes]="categoriesTree"
+          [nzDropdownStyle]="{ 'max-height': '320px' }"
+          nzPlaceHolder="Выберите подходящую категорию"
+          formControlName="categoryId">
+          <ng-template #nzTreeTemplate let-node>
+            <span class="ant-tree-node-content-wrapper" [class.ant-tree-node-selected]="node.isSelected">
+              <span>
+                <i nz-icon [nzType]="!node.isSelectable && !node.isExpanded ? 'folder' : !node.isSelectable && node.isExpanded ? 'folder-open' : 'file'"></i> {{ node.title }}
+              </span>
+            </span>
+          </ng-template>
+        </nz-tree-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="register-area">
+      <nz-form-control nzOffset="8">
+        <button style="margin-top: 15px" nz-button nzType="primary" (click)="save()" [disabled]="form.invalid">Сохранить</button>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #errorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">
+        <p>Поле обязательно для заполнения</p>
+      </ng-container>
+    </ng-template>
+  </form>
+</div>
+

@@ -1,0 +1,55 @@
+.price-list-view-form {
+  .info_group {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    line-height: 22px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #f5f5f5;
+
+    &__label {
+      padding-right: 10px;
+      flex-shrink: 0;
+      font-size: var(--font-size-15);
+    }
+
+    &__value {
+      padding-right: 2px;
+      flex-grow: 1;
+      text-align: left;
+      font-size: var(--font-size-15);
+      max-width: 400px;
+      margin-left: auto;
+
+      .supplier_name {
+        display: inline-flex;
+
+        .supplier_logo {
+          display: flex;
+          align-items: center;
+          margin-right: 7px;
+          width: 20px;
+          height: 20px;
+          border-radius: 3px;
+        }
+      }
+
+      &.text-hidden-ellipsis {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      a {
+        color: inherit;
+        border-bottom: 1px solid #fedc8b;
+        text-decoration: none;
+
+        &:hover {
+          border: none;
+        }
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ import { NavItemModel } from '#shared/modules/common-services/models/nav-item.mo
 import { CartService } from '#shared/modules/common-services/cart.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { unsubscribeList } from '#shared/utils';
+import { EdiService } from '#shared/modules/common-services/edi.service';
 
 @Component({
   selector: 'market-navbar-nav',
@@ -21,10 +22,12 @@ import { unsubscribeList } from '#shared/utils';
   ],
 })
 export class NavbarNavComponent implements OnInit, OnDestroy {
-  private _navService: NavigationService;
+  private _ediService: EdiService;
   private _userService: UserService;
-  private _userStateService: UserStateService;
   private _cartService: CartService;
+  private _navService: NavigationService;
+  private _userStateService: UserStateService;
+
   navItems: NavItemModel[] = null;
   navItemActive: NavItemModel;
   currentYear: number = new Date().getFullYear();
@@ -38,31 +41,15 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   }
 
   get myOrganizationsItem(): NavItemModel {
-    return this.navItems.reduce((accum, curr) => {
-      if (accum) {
-        return accum;
-      }
-      if (curr.items?.length) {
-        accum = curr.items.find((it) => {
-          return it.label === 'Мои организации';
-        });
-      }
-      return accum;
-    }, null);
+    return this.navItems?.find((item) => item.label === 'Мои организации') || null;
   }
 
   get myOrdersItem(): NavItemModel {
-    return this.navItems.reduce((accum, curr) => {
-      if (accum) {
-        return accum;
-      }
-      if (curr.items?.length) {
-        accum = curr.items.find((it) => {
-          return it.label === 'Мои заказы';
-        });
-      }
-      return accum;
-    }, null);
+    return this.navItems?.find((item) => item.label === 'Мои заказы') || null;
+  }
+
+  get mySalesItem(): NavItemModel {
+    return this.navItems?.find((item) => item.label === 'Мои продажи') || null;
   }
 
   @HostBinding('class.minified')
@@ -74,6 +61,7 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   private _cartCounterSubscription: Subscription;
   private _participationRequestsSubscription: Subscription;
   private _newAccountDocumentsCounterSubscription: Subscription;
+  private _newInboundOrderDocumentsCounterSubscription: Subscription;
 
   constructor(
     private injector: Injector,
@@ -81,10 +69,11 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _notificationsService: NotificationsService,
   ) {
-    this._navService = this.injector.get(NavigationService);
-    this._userService = this.injector.get(UserService);
-    this._userStateService = this.injector.get(UserStateService);
+    this._ediService = this.injector.get(EdiService);
     this._cartService = this.injector.get(CartService);
+    this._userService = this.injector.get(UserService);
+    this._navService = this.injector.get(NavigationService);
+    this._userStateService = this.injector.get(UserStateService);
   }
 
   ngOnInit() {
@@ -92,12 +81,16 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
     this._watchSetCartDataCounter();
     this._watchSetParticipationRequestsCounter();
     this._watchSetNewAccountDocumentsCounter();
+    this._watchSetNewInboundOrderDocumentsCounter();
   }
 
   ngOnDestroy() {
     unsubscribeList([
-      this._navItemsSubscription, this._cartCounterSubscription,
-      this._participationRequestsSubscription, this._newAccountDocumentsCounterSubscription
+      this._navItemsSubscription,
+      this._cartCounterSubscription,
+      this._participationRequestsSubscription,
+      this._newAccountDocumentsCounterSubscription,
+      this._newInboundOrderDocumentsCounterSubscription
     ]);
   }
 
@@ -195,9 +188,17 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   }
 
   private _watchSetNewAccountDocumentsCounter(): void {
-    this._newAccountDocumentsCounterSubscription = this._userService.newAccountDocumentsCounter$.subscribe((counter) => {
+    this._newAccountDocumentsCounterSubscription = this._ediService.newAccountDocumentsCounter$.subscribe((counter) => {
       if (this.myOrdersItem) {
         this.myOrdersItem.counter = counter || 0;
+      }
+    });
+  }
+
+  private _watchSetNewInboundOrderDocumentsCounter(): void {
+    this._newInboundOrderDocumentsCounterSubscription = this._ediService.newInboundOrderDocumentsCounter$.subscribe((counter) => {
+      if (this.mySalesItem) {
+        this.mySalesItem.counter = counter || 0;
       }
     });
   }

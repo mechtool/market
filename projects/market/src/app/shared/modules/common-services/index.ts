@@ -15,6 +15,7 @@ export * from './organizations.service';
 export * from './responsive.service';
 export * from './user.service';
 export * from './user-state.service';
+export * from './price-lists.service';
 export * from './local-storage.service';
 export * from './cookie.service';
 export * from './location.service';

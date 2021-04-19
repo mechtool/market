@@ -1,0 +1,62 @@
+<div class="page-sales">
+  <div class="page-header">
+    <h2>Мои продажи</h2>
+  </div>
+
+  <nz-tabset nzTabPosition="top" nzType="card" [(nzSelectedIndex)]="selectedTab" (nzSelectedIndexChange)="changeTab($event)"
+             [nzTabBarExtraContent]="selectedTab === 0 ? createNewPriceListTemplate : selectedTab === 1 ? refreshOrderDocumentsTemplate : emptyTemplate">
+    <nz-tab nzTitle="Мои прайс-листы" (nzSelect)="initPriceLists()">
+      <ng-template nz-tab>
+        <market-price-list-table
+          [priceLists]="priceLists"
+          (startFeedChange)="listenPriceListFeeds()"
+        ></market-price-list-table>
+      </ng-template>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="inboundOrders" (nzSelect)="initInboundOrders()">
+      <ng-template nz-tab>
+        <market-order-list
+          type="inbound"
+          [documents]="orderDocuments"
+          [page]="pageOrderDocuments"
+          (loadDocuments)="loadOrderDocuments($event)"
+        ></market-order-list>
+      </ng-template>
+    </nz-tab>
+
+    <nz-tab nzTitle="Настройка рубрикации">
+      <ng-template nz-tab>
+        <market-categories-setting></market-categories-setting>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+</div>
+
+<ng-template #inboundOrders>
+  <div class="customer-order" [attr.new-customer-order]="(newCustomerOrderDocumentsCounter$ | async) || null">Заказы
+    покупателей
+  </div>
+</ng-template>
+
+<ng-template #createNewPriceListTemplate>
+  <button class="desk_btn" nz-button nzType="primary" [routerLink]="['/my/sales/create']">
+    Загрузить прайс-лист <em nz-icon nzType="cloud-upload" nzTheme="outline"></em>
+  </button>
+  <button class="mob_btn" nz-button nzType="primary" nzShape="circle" [routerLink]="['/my/sales/create']">
+    <em nz-icon nzType="cloud-upload" nzTheme="outline"></em>
+  </button>
+</ng-template>
+
+<ng-template #refreshOrderDocumentsTemplate>
+  <button class="desk_btn" nz-button nzType="primary" (click)="initInboundOrders()">
+    Обновить страницу <em nz-icon nzType="sync" nzTheme="outline"></em>
+  </button>
+  <button class="mob_btn" nz-button nzType="primary" nzShape="circle" (click)="initInboundOrders()">
+    <em nz-icon nzType="sync" nzTheme="outline"></em>
+  </button>
+</ng-template>
+
+<ng-template #emptyTemplate></ng-template>
+
+

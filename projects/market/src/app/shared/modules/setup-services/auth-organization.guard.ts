@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Location } from '@angular/common';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
-import { UserService } from '#shared/modules/common-services';
+import { catchError, debounceTime, switchMap } from 'rxjs/operators';
+import { UserService, UserStateService } from '#shared/modules/common-services';
 import { AuthModalService } from './auth-modal.service';
 
 @Injectable()
 export class AuthOrganizationGuard implements CanActivate {
-  constructor(private _userService: UserService, private _authModalService: AuthModalService, private location: Location) {}
+  constructor(
+    private _userService: UserService,
+    private _userStateService: UserStateService,
+    private _authModalService: AuthModalService) {
+  }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
     return this._userService.organizations$.pipe(
+      debounceTime(500),
       switchMap((organizations) => {
         if (organizations?.length) {
           return of(true);
         }
         return of(
-          this._authModalService.openEmptyOrganizationsInfoModal(),
+          this._authModalService.openEmptyOrganizationsInfoModal()
         );
       }),
       catchError((err) => {

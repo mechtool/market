@@ -7,6 +7,7 @@
     <nz-tab nzTitle="Заказы" (nzClick)="refreshOrderDocuments()">
       <ng-template nz-tab>
         <market-order-list
+          type="outbound"
           [documents]="orderDocuments"
           [page]="pageOrderDocuments"
           (loadDocuments)="loadOrderDocuments($event)"
@@ -32,7 +33,7 @@
 
 <ng-template #extraTemplate>
   <button class="desk_btn" nz-button nzType="primary" (click)="refreshAll()">
-    Обновить <em nz-icon nzType="sync" nzTheme="outline"></em>
+    Обновить страницу <em nz-icon nzType="sync" nzTheme="outline"></em>
   </button>
   <button class="mob_btn" nz-button nzType="primary" nzShape="circle" (click)="refreshAll()">
     <em nz-icon nzType="sync" nzTheme="outline"></em>

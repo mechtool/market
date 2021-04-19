@@ -11,6 +11,19 @@ import { filter, switchMap, take, tap } from 'rxjs/operators';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Location } from '@angular/common';
 
+/**
+ * URL пути находящиеся под авторизацией
+ */
+const pathsWithAuthorization = [
+  /^\/my\/orders$/i,
+  /^\/my\/sales$/i,
+  /^\/my\/sales\/create$/i,
+  /^\/my\/sales\/edit\/(?:([^\/]+?))$/i,
+  /^\/my\/rfps$/i,
+  /^\/my\/rfps\/create$/i,
+  /^\/my\/rfps\/edit\/(?:([^\/]+?))$/i
+];
+
 @Injectable()
 export class AuthModalService {
   constructor(
@@ -76,6 +89,8 @@ export class AuthModalService {
 
 
   openEmptyOrganizationsInfoModal() {
+    let isClosedModal = true;
+
     const modal = this._modalService.create({
       nzContent: EmptyOrganizationsInfoComponent,
       nzFooter: null,
@@ -84,7 +99,14 @@ export class AuthModalService {
     });
 
     modal.componentInstance.destroyModalChange.subscribe(() => {
+      isClosedModal = false;
       modal.destroy();
+    });
+
+    modal.afterClose.subscribe((res) => {
+      if (isClosedModal && pathsWithAuthorization.some((regEx) => regEx.test(this._location.path()))) {
+        this._authService.goTo('/');
+      }
     });
   }
 }

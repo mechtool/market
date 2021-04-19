@@ -10,6 +10,7 @@ import { AuthRefreshRequestModel, AuthRequestModel, AuthResponseModel } from './
 import { UserService } from './user.service';
 import { OrganizationsService } from './organizations.service';
 import { CategoryService } from './category.service';
+import { EdiService } from './edi.service';
 
 const API_URL = environment.apiUrl;
 const ITS_URL = environment.itsUrl;
@@ -33,6 +34,7 @@ export class AuthService implements OnDestroy {
     private _router: Router,
     private _location: Location,
     private _apiService: ApiService,
+    private _ediService: EdiService,
     private _userService: UserService,
     private _categoryService: CategoryService,
     private _organizationsService: OrganizationsService,
@@ -70,7 +72,8 @@ export class AuthService implements OnDestroy {
       switchMap((_) => this._organizationsService.getUserOrganizations()),
       switchMap((res) => this._userService.setUserOrganizations(res)),
       switchMap((res) => this._userService.updateParticipationRequests()),
-      switchMap((res) => this._userService.updateNewAccountDocumentsCounter()),
+      switchMap((res) => this._ediService.updateNewAccountDocumentsCounter()),
+      switchMap((res) => this._ediService.updateNewInboundOrdersDocumentsCounter()),
       switchMap((res) => isInternalCall ? this._categoryService.updateCategories() : of(null)),
       tap(() => {
         this._userService.setUserInformationSetted();

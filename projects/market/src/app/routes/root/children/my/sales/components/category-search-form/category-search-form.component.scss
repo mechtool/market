@@ -1,0 +1,17 @@
+::ng-deep .ant-select-tree.ant-select-tree-block-node .ant-select-tree-list-holder-inner .ant-select-tree-node-content-wrapper {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.category-search-form {
+  [nz-form] ::ng-deep .ant-form-item-explain.ant-form-item-explain-error {
+    display: contents;
+  }
+
+  ::ng-deep .ant-select-tree.ant-select-tree-block-node .ant-select-tree-list-holder-inner .ant-select-tree-node-content-wrapper {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

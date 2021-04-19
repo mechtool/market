@@ -9,6 +9,7 @@ import {
   BannersListResponseModel,
   CartDataResponseModel,
   CartModel,
+  CategoriesMappingModel,
   CategoryRequestModel,
   CategoryResponseModel,
   CommerceMlDocumentResponseModel,
@@ -23,6 +24,7 @@ import {
   PagesStaticListResponseModel,
   ParticipationRequestRequestModel,
   ParticipationRequestResponseModel,
+  PriceListResponseModel,
   ProductOfferRequestModel,
   ProductOfferResponseModel,
   ProductOffersListResponseModel,
@@ -71,6 +73,46 @@ export class BNetService {
 
   getProductsHighlight(): Observable<ProductsHighlightListResponseModel> {
     return this._apiService.get(`${API_URL}/products-highlight`);
+  }
+
+  placePriceList(priceList: any): Observable<any> {
+    return this._apiService.post(`${API_URL}/price-lists`, priceList);
+  }
+
+  updatePriceList(priceListId: string, priceList: any): Observable<any> {
+    return this._apiService.put(`${API_URL}/price-lists/${priceListId}`, priceList);
+  }
+
+  getPriceLists(): Observable<PriceListResponseModel[]> {
+    return this._apiService.get(`${API_URL}/price-lists`);
+  }
+
+  getPriceList(priceListExternalId: string): Observable<PriceListResponseModel> {
+    return this._apiService.get(`${API_URL}/price-lists/${priceListExternalId}`);
+  }
+
+  deletePriceList(id: string): Observable<any> {
+    return this._apiService.delete(`${API_URL}/price-lists/${id}`);
+  }
+
+  getPriceListTemplateFile(): Observable<any> {
+    return this._apiService.get(`${API_URL}/price-lists/feed/price-list-template-file`);
+  }
+
+  placePriceListFeed(priceListExternalId: string, feed: any): Observable<any> {
+    return this._apiService.put(`${API_URL}/price-lists/feed/${priceListExternalId}`, feed);
+  }
+
+  getPriceListFeed(priceListExternalId: string): Observable<any> {
+    return this._apiService.get(`${API_URL}/price-lists/feed/${priceListExternalId}`);
+  }
+
+  deletePriceListFeed(priceListExternalId: string): Observable<any> {
+    return this._apiService.delete(`${API_URL}/price-lists/feed/${priceListExternalId}`);
+  }
+
+  startFeed(priceListExternalId: string): Observable<any> {
+    return this._apiService.get(`${API_URL}/price-lists/feed/${priceListExternalId}/start`);
   }
 
   getTradeOffer(id: string): Observable<TradeOfferResponseModel> {
@@ -173,6 +215,11 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/locations/search`, { params });
   }
 
+  getLocations(fiasIds: string[]): Observable<LocationModel[]> {
+    const params = this._params({ fiasId: fiasIds });
+    return this._apiService.get(`${API_URL}/locations/find-all`, { params });
+  }
+
   containsFiasAddress(query: { fiasId: string; fiasIds: string[] }): Observable<boolean> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/locations/contains`, { params });
@@ -186,6 +233,18 @@ export class BNetService {
   getCategories(query?: CategoryRequestModel): Observable<CategoryResponseModel> {
     const params = this._params(query);
     return this._apiService.get(`${API_URL}/categories`, { params });
+  }
+
+  saveCategoriesMapping(organizationId: string, body: CategoriesMappingModel): Observable<any> {
+    return this._apiService.put(`${API_URL}/categories/mapping/${organizationId}`, body);
+  }
+
+  getCategoriesMapping(organizationId: string): Observable<CategoriesMappingModel> {
+    return this._apiService.get(`${API_URL}/categories/mapping/${organizationId}`);
+  }
+
+  get1CnCategories(): Observable<any[]> {
+    return this._apiService.get(`${API_URL}/categories/1cn`);
   }
 
   sendFeedback(feedback: FeedbackRequestModel, token: string): Observable<any> {
@@ -243,6 +302,11 @@ export class BNetService {
 
   findCounterpartyDataByInn(inn: string): Observable<CounterpartyResponseModel> {
     return this._apiService.get(`${API_URL}/counterparty/${inn}`);
+  }
+
+  findCounterpartiesDataByInns(inns: string[]): Observable<CounterpartyResponseModel[]> {
+    const params = this._params({ inn: inns });
+    return this._apiService.get(`${API_URL}/counterparty/find-all`, { params });
   }
 
   getBanners(pageId: string): Observable<BannersListResponseModel> {

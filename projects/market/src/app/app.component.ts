@@ -1,12 +1,4 @@
-import {
-  Compiler,
-  Component,
-  ComponentFactoryResolver,
-  Injector,
-  OnDestroy,
-  ViewChild,
-  ViewContainerRef
-} from '@angular/core';
+import { Compiler, Component, ComponentFactoryResolver, Injector, OnDestroy, ViewContainerRef } from '@angular/core';
 import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs/operators';
@@ -23,16 +15,16 @@ export class AppComponent implements OnDestroy {
   private readonly _routeChangeSubscription: Subscription;
 
   constructor(
-    private _userService: UserService,
-    private _userStateService: UserStateService,
     private _router: Router,
-    private _externalProvidersService: ExternalProvidersService,
-    private _authService: AuthService,
-    private _cfr: ComponentFactoryResolver,
-    private _viewContainerRef: ViewContainerRef,
-    private _modalService: NzModalService,
     private _injector: Injector,
     private _compiler: Compiler,
+    private _authService: AuthService,
+    private _userService: UserService,
+    private _modalService: NzModalService,
+    private _cfr: ComponentFactoryResolver,
+    private _userStateService: UserStateService,
+    private _viewContainerRef: ViewContainerRef,
+    private _externalProvidersService: ExternalProvidersService,
   ) {
     this._routeChangeSubscription = this._routeChanges$().subscribe((res) => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();

@@ -7,12 +7,21 @@ import { PaymentDocumentModalService } from '#shared/modules/common-services';
 @Component({
   selector: 'market-order-list',
   templateUrl: './order-list.component.html',
-  styleUrls: ['./order-list.component.scss', './order-list.component-768.scss', './order-list.component-340.scss'],
+  styleUrls: [
+    './order-list.component.scss',
+    './order-list.component-768.scss',
+    './order-list.component-340.scss'
+  ],
 })
 export class OrderListComponent {
+  @Input() type: 'inbound' | 'outbound'
   @Input() documents: DocumentDto[];
   @Input() page: number;
   @Output() loadDocuments: EventEmitter<number> = new EventEmitter();
+
+  get isInbound(): boolean {
+    return this.type === 'inbound';
+  }
 
   constructor(private _paymentDocumentService: PaymentDocumentModalService) {
   }

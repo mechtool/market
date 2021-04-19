@@ -46,7 +46,6 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     CartRoutingModule,
     NzInputModule,
     NgZorroAntdMobileModule,
-    SharedDepsModule,
     NzCheckboxModule
   ],
   declarations: [

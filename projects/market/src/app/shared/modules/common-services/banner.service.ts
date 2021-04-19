@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BannersListResponseModel } from '#shared/modules/common-services/models';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BNetService } from './bnet.service';
+import { removeLastSlash } from '#shared/utils';
 
 @Injectable()
 export class BannerService {
@@ -12,16 +13,7 @@ export class BannerService {
   }
 
   getBanners(): Observable<BannersListResponseModel> {
-    const pageId = this.removeLastSlash(location.pathname);
+    const pageId = removeLastSlash(location.pathname);
     return this._bnetService.getBanners(pageId);
   }
-
-
-  private removeLastSlash(url: string) {
-    if (url.lastIndexOf('/') === (url.length - 1)) {
-      return url.slice(0, -1);
-    }
-    return url;
-  }
-
 }

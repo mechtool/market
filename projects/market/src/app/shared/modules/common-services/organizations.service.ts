@@ -1,8 +1,9 @@
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
   AccessKeyModel,
-  AccessKeyResponseModel, CounterpartyResponseModel,
+  AccessKeyResponseModel,
+  CounterpartyResponseModel,
   OrganizationAdminResponseModel,
   OrganizationResponseModel,
   OrganizationUserResponseModel,
@@ -14,8 +15,7 @@ import {
   UserOrganizationModel
 } from './models';
 import { BNetService } from './bnet.service';
-import { catchError, map } from 'rxjs/operators';
-import { HttpErrorResponse } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class OrganizationsService {
@@ -117,6 +117,10 @@ export class OrganizationsService {
 
   findCounterpartyDataByInn(inn: string): Observable<CounterpartyResponseModel> {
     return this._bnetService.findCounterpartyDataByInn(inn);
+  }
+
+  findCounterpartiesDataByInns(inns: string[]): Observable<CounterpartyResponseModel[]> {
+    return this._bnetService.findCounterpartiesDataByInns(inns);
   }
 
 }

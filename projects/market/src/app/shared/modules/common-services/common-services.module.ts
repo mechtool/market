@@ -31,6 +31,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartPromoterService } from './cart-promoter.service';
 import { BannerService } from './banner.service';
 import { PagesStaticService } from './pages-static.service';
+import { PriceListsService } from './price-lists.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -69,6 +70,7 @@ export class CommonServicesModule {
         SpinnerService,
         ExternalProvidersService,
         OverlayService,
+        PriceListsService,
       ],
     };
   }
