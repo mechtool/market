@@ -27,6 +27,11 @@ const routes: Routes = [
         loadChildren: () => import('./routes/root/children/promo/promo.module').then((m) => m.PromoModule),
       },
       {
+        path: 'p',
+        data: { preload: false },
+        loadChildren: () => import('./shared/modules/components/pages/pages.module').then((m) => m.PagesModule),
+      },
+      {
         path: 'supplier',
         data: { preload: false },
         loadChildren: () => import('./routes/root/children/supplier/supplier.module').then((m) => m.SupplierModule),
@@ -87,4 +92,5 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

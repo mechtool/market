@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { PromoRoutingModule } from './promo-routing.module';
 import {
   PromoFirstOrderComponent,
-  PromoListComponent,
   PromoPodarokComponent,
   PromoPodarokParticipantsListComponent,
   PromoPodarokPolozhenieComponent,
@@ -24,7 +23,6 @@ import { PipesModule } from '#shared/modules';
     PipesModule
   ],
   declarations: [
-    PromoListComponent,
     PromoFirstOrderComponent,
     PromoSchoolOfficeComponent,
     PromoPodarokPolozhenieComponent,

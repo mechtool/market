@@ -27,6 +27,7 @@ const pathsObjectWithoutBreadcrumbs = {
   '/500': /^\/500$/i,
   '/search': /^\/search$/i,
   '/supplier': /^\/supplier$/i,
+  '/p/:path': /^\/p\/(?!promo|blog|about)([a-zA-Z0-9-_/]+)$/i,
 };
 
 /**
@@ -36,13 +37,14 @@ const pathsObjectWithoutBreadcrumbs = {
 const pathsObjectWithBreadcrumbs = {
   '/category': /^\/category$/i,
   '/category/:id': /^\/category\/(?:([^\/]+?))\/?$/i,
-  '/category/:categoryId': /^\/category\/(?:([^\/]+?))$/i,
   '/product/:id': /^\/product\/(?:([^\/]+?))$/i,
   '/supplier/:supplierId': /^\/supplier\/(?:([^\/]+?))$/i,
   '/supplier/:supplierId/offer/:tradeOfferId': /^\/supplier\/(?:([^\/]+?))\/offer\/(?:([^\/]+?))\/?$/i,
   '/cart': /^\/cart$/i,
-  '/promo': /^\/promo$/i,
   '/about': /^\/about.*\/?$/i,
+  '/p/about': /^\/p\/about$/i,
+  '/p/blog': /^\/p\/blog$/i,
+  '/p/promo': /^\/p\/promo$/i,
   '/promo/:id': /^\/promo\/(?:([^\/]+?))$/i,
   '/promo/:id/:subId': /^\/promo\/(?:([^\/]+?))\/(?:([^\/]+?))\/?$/i,
   '/my/orders': /^\/my\/orders$/i,
@@ -92,7 +94,7 @@ export class BreadcrumbsGuard implements CanActivate {
 
     this._breadcrumbsService.setVisible(true);
     const foundEntry = Object.entries(pathsObjectWithBreadcrumbs).find((entry) => entry[1].test(urlWithoutQueryParams));
-    switch (foundEntry[0]) {
+    switch (foundEntry?.[0]) {
       case '/category':
         breadcrumbsItems = [
           {
@@ -199,7 +201,7 @@ export class BreadcrumbsGuard implements CanActivate {
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
         return true;
-      case '/promo':
+      case '/p/promo':
         breadcrumbsItems = [
           {
             label: 'Акции',
@@ -212,7 +214,7 @@ export class BreadcrumbsGuard implements CanActivate {
         breadcrumbsItems = [
           {
             label: 'Акции',
-            routerLink: '/promo',
+            routerLink: '/p/promo',
           },
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);
@@ -262,11 +264,19 @@ export class BreadcrumbsGuard implements CanActivate {
             return of(true);
           }),
         );
-      case '/about':
+      case '/p/about':
+      case '/about': // todo Удалить когда переделаем на статическую страницу
         breadcrumbsItems = [
           {
             label: 'О сервисе',
-            routerLink: '/about',
+          },
+        ];
+        this._breadcrumbsService.setItems(breadcrumbsItems);
+        return true;
+      case '/p/blog':
+        breadcrumbsItems = [
+          {
+            label: 'Блог',
           },
         ];
         this._breadcrumbsService.setItems(breadcrumbsItems);

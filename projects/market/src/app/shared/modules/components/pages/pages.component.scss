@@ -1,13 +1,20 @@
-.promo {
+.pages {
   line-height: 25px;
   font-size: var(--font-size-14);
 
-  h2 {
+  h2, h3 {
     font-weight: 600;
-    font-size: var(--font-size-20);
     line-height: 23px;
     margin-bottom: 15px;
     margin-top: 35px;
+  }
+
+  h2 {
+    font-size: var(--font-size-20);
+  }
+
+  h3 {
+    font-size: var(--font-size-16);
   }
 
   ol, ul {
@@ -16,16 +23,16 @@
 
   li {
     padding: 5px;
-  }
 
-  p::before{
-    content: "";
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    border-radius: 2.5px;
-    background-color: var(--color-primary);
-    margin-right: 10px;
+    p::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 2.5px;
+      background-color: var(--color-primary);
+      margin-right: 10px;
+    }
   }
 
   a:hover {

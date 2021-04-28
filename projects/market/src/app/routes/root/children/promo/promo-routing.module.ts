@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {
   PromoFirstOrderComponent,
-  PromoListComponent,
   PromoPodarokComponent,
   PromoPodarokParticipantsListComponent,
   PromoPodarokPolozhenieComponent,
@@ -10,10 +9,6 @@ import {
 } from './components';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: PromoListComponent,
-  },
   {
     path: 'first-order',
     component: PromoFirstOrderComponent,
