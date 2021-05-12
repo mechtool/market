@@ -78,6 +78,12 @@ export class NavigationService implements OnDestroy {
           routerLink: ['/p/promo'],
         },
         {
+          label: 'Блог',
+          attributeId: 'blog_menu_id',
+          icon: 'blog',
+          routerLink: ['/p/blog'],
+        },
+        {
           label: 'Корзина',
           attributeId: 'basket_menu_id',
           icon: 'basket',
@@ -131,6 +137,12 @@ export class NavigationService implements OnDestroy {
           attributeId: 'promo_menu_id',
           icon: 'favorite',
           routerLink: ['/p/promo'],
+        },
+        {
+          label: 'Блог',
+          attributeId: 'blog_menu_id',
+          icon: 'blog',
+          routerLink: ['/p/blog'],
         },
         {
           label: 'Корзина',
