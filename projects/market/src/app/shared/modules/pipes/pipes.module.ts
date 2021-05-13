@@ -9,7 +9,8 @@ import { FoundPipe } from './found.pipe';
 import { PlaceJoinerPipe } from './place-joiner.pipe';
 import { StockPipe } from './stock.pipe';
 import { SafeHtmlPipe } from './safe-html.pipe';
-import { CurrencyPricePipe } from './currency.pipe';
+import { CurrencyPricePipe } from './currency-price.pipe';
+import { CurrencyCodePipe } from './currency-code.pipe';
 import { AbbreviatedBusinessNamePipe } from './abbreviated-business-name.pipe';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { OrganizationLogoPipe } from './organization-logo.pipe';
@@ -39,6 +40,7 @@ import { DocumentStatusMessagePipe } from './document-status-message.pipe';
     StockPipe,
     SafeHtmlPipe,
     CurrencyPricePipe,
+    CurrencyCodePipe,
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
     FeatureValuePipe,
@@ -63,6 +65,7 @@ import { DocumentStatusMessagePipe } from './document-status-message.pipe';
     StockPipe,
     SafeHtmlPipe,
     CurrencyPricePipe,
+    CurrencyCodePipe,
     AbbreviatedBusinessNamePipe,
     OrganizationLogoPipe,
     FeatureValuePipe,

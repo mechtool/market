@@ -1,4 +1,4 @@
-<a class="catalog_item__link" *ngIf="tradeOffer"
+<a class="catalog_item__link" *ngIf="tradeOffer" itemscope itemtype="http://schema.org/Product"
    [routerLink]="'/supplier/' + tradeOffer.supplierId + '/offer/' + tradeOffer.id">
   <span class="catalog_item__img" style="{{tradeOffer.supplierInn | organizationLogo}}"></span>
   <span class="catalog_item__descr">
@@ -8,11 +8,18 @@
       {{tradeOffer.supplierName | abbreviatedBusinessName}}
     </span>
     <span class="catalog_item__about"
+          itemprop="name"
           nz-tooltip
           nzTooltipTitle="{{tradeOffer.description}}">
       {{tradeOffer.description}}
     </span>
-    <span class="catalog_item__info">
+    <meta itemprop="description" content="{{tradeOffer.description}}">
+
+    <span class="catalog_item__info" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+      <meta itemprop="price" content="{{tradeOffer.price | marketMultiplier:'.01'}}">
+      <meta itemprop="priceCurrency" content="{{tradeOffer.currencyCode | currencyCode}}">
+      <meta itemprop="seller" content="{{tradeOffer.supplierName}}">
+
       <span *ngIf="tradeOffer.stock || tradeOffer.amount; else elseStockBlock"
             class="catalog_item__count tooltip"
             nz-tooltip

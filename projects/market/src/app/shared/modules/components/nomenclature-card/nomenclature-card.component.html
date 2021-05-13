@@ -1,31 +1,38 @@
-<a class="nomenclature-card" *ngIf="productOffer" [routerLink]="'/product/' + productOffer.product.id">
+<a class="nomenclature-card" *ngIf="productOffer" [routerLink]="'/product/' + productOffer.product.id" itemscope itemtype="http://schema.org/Product">
   <span class="cover">
     <span *ngIf="!imageUrl"
-          class="empty__img"></span>
+          class="empty__img">
+    </span>
 
-      <img
-        alt="{{productOffer.product.productName}}"
-        title="{{productOffer.product.productName}}"
-        [defaultImage]="'./assets/img/svg/clean.svg'"
-        [lazyLoad]="imageUrl"
-        *ngIf="imageUrl"
-      />
-
+    <img itemprop="image"
+      alt="{{productOffer.product.productName}}"
+      title="{{productOffer.product.productName}}"
+      [defaultImage]="'./assets/img/svg/clean.svg'"
+      [lazyLoad]="imageUrl"
+      *ngIf="imageUrl"
+    />
   </span>
+
   <span class="body">
     <span class="title"
           nz-tooltip
-          nzTooltipTitle="{{productOffer.product.productName}}">
+          nzTooltipTitle="{{productOffer.product.productName}}"
+          itemprop="name">
       {{productOffer.product.productName}}
     </span>
-    <span class="meta">
+    <meta itemprop="description" content="{{productOffer.product.productDescription}}">
+
+    <span class="meta" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+      <meta itemprop="price" content="{{productOffer.offersMinPrice | marketMultiplier:'.01'}}">
+      <meta itemprop="priceCurrency" content="{{'643' | currencyCode}}">
       <span class="count"
             nz-tooltip
             nzTooltipTitle="Количество предложений от поставщиков">{{productOffer.offersTotal | number:'1.0'}}</span>
       <span
         class="price"
         nz-tooltip
-        nzTooltipTitle="Минимальная цена"><span>{{productOffer.offersMinPrice | marketMultiplier:'.01' | currencyPrice}}</span></span>
+        nzTooltipTitle="Минимальная цена"><span>{{productOffer.offersMinPrice | marketMultiplier:'.01' | currencyPrice}}</span>
+      </span>
     </span>
   </span>
 </a>

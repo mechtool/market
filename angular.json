@@ -42,6 +42,7 @@
             "tsConfig": "projects/market/tsconfig.app.json",
             "aot": true,
             "assets": [
+              "projects/market/src/sitemap.xml",
               "projects/market/src/assets",
               {
                 "glob": "**/*",
