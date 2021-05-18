@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule, Injector } from '@angular/core';
+import { APP_INITIALIZER, DEFAULT_CURRENCY_CODE, Injector, LOCALE_ID, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
@@ -17,9 +17,14 @@ import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { AppComponent } from './app.component';
 import { RootComponent } from './routes/root/root.component';
-import { NavbarComponent, NavbarMobileNavComponent, NavbarNavComponent } from './routes/root/components';
-import { BreadcrumbsModule } from './routes/root/components/breadcrumbs';
-import { CookieAgreementModule } from './routes/root/components/cookie-agreement';
+import {
+  BreadcrumbsModule,
+  CookieAgreementModule,
+  NavbarComponent,
+  NavbarMobileNavComponent,
+  NavbarNavComponent,
+  RegionQuestionModule
+} from './routes/root/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { environment } from '#environments/environment';
@@ -45,6 +50,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     RecaptchaV3Module,
     NzIconModule,
     BreadcrumbsModule,
+    RegionQuestionModule,
     CookieAgreementModule,
     SharedDepsModule,
     SetupServicesModule.forRoot(),
@@ -68,4 +74,5 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

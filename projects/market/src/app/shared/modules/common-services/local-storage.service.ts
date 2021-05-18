@@ -16,6 +16,7 @@ const CART_LOCATION_LINK_STORAGE_KEY = 'cart_location';
 const USER_DATA_STORAGE_KEY = 'user_data';
 const COOKIES_AGREEMENT_STORAGE_KEY = 'cookies_agreement';
 const LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY = 'later_visit_my_organizations';
+const HOME_REGION_SELECTED_STORAGE_KEY = 'home_region_selected';
 
 @Injectable()
 export class LocalStorageService {
@@ -161,5 +162,13 @@ export class LocalStorageService {
 
   getDateOfLaterVisitMyOrganizations(): string {
     return this._storage.get(LATER_VISIT_MY_ORGANIZATIONS_STORAGE_KEY);
+  }
+
+  approveRegion() {
+    this._storage.set(HOME_REGION_SELECTED_STORAGE_KEY, true);
+  }
+
+  isApproveRegion() {
+    return this._storage.get(HOME_REGION_SELECTED_STORAGE_KEY);
   }
 }

@@ -1,0 +1,42 @@
+<div class="region-question" *ngIf="!isApprovedRegion">
+  <ng-template #regionQuestionTemplateRef let-notification>
+    <div>
+      <div class="question">
+        <img src="./assets/img/svg/placeholder.svg" alt="">
+        Ваш регион "{{city}}"?
+      </div>
+      <span class="question-btn">
+            <button nz-button nzType="link" nzSize="small" (click)="approveRegion(notification)">
+              <span>Да, все верно</span>
+            </button>
+           <button style="margin-left: 5px" nz-button nzType="link" nzSize="small" (click)="newRegion(addressSearchFormTemplateRef, notification)">
+              <span>Выбрать другой</span>
+            </button>
+          </span>
+    </div>
+  </ng-template>
+
+  <ng-template #addressSearchFormTemplateRef>
+    <form nz-form [formGroup]="form">
+      <nz-form-item>
+        <nz-form-control>
+          <input nz-input
+                 name="{{currentDate}}_city"
+                 type="text"
+                 id="city"
+                 placeholder="Введите название населенного пункта"
+                 autocomplete="chrome-off"
+                 list="null"
+                 formControlName="cityFiasCode"
+                 [nzAutocomplete]="auto_city">
+
+          <nz-autocomplete #auto_city>
+            <nz-auto-option *ngFor="let location of foundCities"
+                            [nzValue]="location.fias"
+                            [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-template>
+</div>

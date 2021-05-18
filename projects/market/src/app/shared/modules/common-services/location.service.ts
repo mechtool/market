@@ -30,26 +30,13 @@ export class LocationService {
     return of(null);
   }
 
-  searchAddresses(query: {
-                    deliveryCity: string,
-                    deliveryStreet?: string,
-                    deliveryHouse?: string
-                  },
+  searchAddresses(query: { deliveryRegion?: string, deliveryCity?: string, deliveryStreet?: string, deliveryHouse?: string },
                   level: Level): Observable<LocationModel[]> {
-    let textQuery = query.deliveryCity;
-
-    if (query.deliveryStreet?.length) {
-      textQuery = `${textQuery}, ${query.deliveryStreet}`;
-    }
-
-    if (query.deliveryHouse?.length) {
-      textQuery = `${textQuery}, ${query.deliveryHouse}`;
-    }
-
+    const textQuery = Object.values(query).filter(res => res?.length).join(', ');
     return this._bnetService.searchLocations(textQuery, level);
   }
 
   isDeliveryAvailable(searchFiasElement: string, fiasElements: string[]): Observable<boolean> {
-    return this._bnetService.containsFiasAddress({ fiasId: searchFiasElement, fiasIds: fiasElements});
+    return this._bnetService.containsFiasAddress({ fiasId: searchFiasElement, fiasIds: fiasElements });
   }
 }
