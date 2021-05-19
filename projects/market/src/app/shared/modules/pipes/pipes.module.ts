@@ -23,6 +23,7 @@ import { MinPricePipe } from './min-price.pipe';
 import { CastControlPipe } from './cast-control.pipe';
 import { DocumentStatusPipe } from './document-status.pipe';
 import { DocumentStatusMessagePipe } from './document-status-message.pipe';
+import { MinQuantityPipe } from './min-quantity.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DocumentStatusMessagePipe } from './document-status-message.pipe';
     DeliveryMethodPipe,
     HiddenSymbolsPipe,
     CastControlPipe,
+    MinQuantityPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -74,6 +76,7 @@ import { DocumentStatusMessagePipe } from './document-status-message.pipe';
     DeliveryMethodPipe,
     HiddenSymbolsPipe,
     CastControlPipe,
+    MinQuantityPipe,
   ],
   providers: [
     CurrencyPipe,

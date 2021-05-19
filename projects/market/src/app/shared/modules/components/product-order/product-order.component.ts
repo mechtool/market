@@ -29,10 +29,6 @@ export class ProductOrderComponent implements OnInit {
   isVisible = false;
   price: number;
 
-  get minQuantity(): number {
-    return this.matrix?.length ? this.matrix[0].fromPackages : this.tradeOffer.termsOfSale?.packageMultiplicity;
-  }
-
   get vatInfo() {
     const includesVAT = this.tradeOffer?.termsOfSale.price?.includesVAT;
     switch (this.tradeOffer?.termsOfSale.price?.vat) {

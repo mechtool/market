@@ -113,7 +113,7 @@
     <div class="side">
       <market-product-side
         [tradeOffer]="tradeOffer"
-        [minQuantity]="minQuantity"
+        [minQuantity]="matrix | marketMinQuantity : tradeOffer.termsOfSale?.packageMultiplicity"
         [orderStep]="tradeOffer.termsOfSale.packageMultiplicity"
         (isMadeOrder)="isMadeOrder.emit($event)"
       ></market-product-side>

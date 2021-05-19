@@ -49,13 +49,6 @@ export class SupplierTradeOffersListComponent implements AfterViewChecked {
     dispatchEvent(new CustomEvent('scroll'));
   }
 
-  minQuantity(matrix: TradeOfferPriceMatrixModel[], packageMultiplicity: number): number {
-    if (matrix?.length) {
-      return [...matrix].sort((one, two) => one.fromPackages - two.fromPackages)[0].fromPackages;
-    }
-    return packageMultiplicity;
-  }
-
   changeQueryParamsAndRefresh(groupQuery: AllGroupQueryFiltersModel) {
     this._localStorageService.putSearchText(groupQuery.query);
     this.addOrRemoveSorting(groupQuery);
@@ -63,12 +56,6 @@ export class SupplierTradeOffersListComponent implements AfterViewChecked {
     this._router.navigate([`/supplier/${this.supplier.id}`], {
       queryParams: params,
     });
-  }
-
-  changeCityAndRefresh(isChanged: boolean) {
-    if (isChanged) {
-      this.cityChange.emit(true);
-    }
   }
 
   sortChange(sort: SortModel) {
