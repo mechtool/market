@@ -2,6 +2,10 @@
   line-height: 1.5;
   font-size: var(--font-size-15);
 
+  p:empty {
+    margin-top: 20px;
+  }
+
   strong {
     font-weight: var(--font-weight-demi);
   }
