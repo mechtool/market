@@ -20,7 +20,9 @@
             "allowedCommonJsDependencies": [
               "@ant-design/colors",
               "@tweenjs/tween.js",
-              "date-fns"
+              "date-fns",
+              "uuid",
+              "file-saver"
             ],
             "buildOptimizer": true,
             "statsJson": true,
@@ -32,14 +34,15 @@
             "extractLicenses": true,
             "namedChunks": true,
             "sourceMap": true,
-            "optimization": true,
+            "optimization": false,
             "outputHashing": "all",
-            "outputPath": "dist/market/dev",
+            "outputPath": "dist/market/stage",
             "index": "projects/market/src/index.html",
             "indexTransform": "projects/market/src/index-html-transform.ts",
             "main": "projects/market/src/main.ts",
             "polyfills": "projects/market/src/polyfills.ts",
             "tsConfig": "projects/market/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "aot": true,
             "assets": [
               "projects/market/src/sitemap.xml",
@@ -53,8 +56,8 @@
             "budgets": [
               {
                 "type": "initial",
-                "maximumWarning": "4mb",
-                "maximumError": "10mb"
+                "maximumWarning": "6mb",
+                "maximumError": "20mb"
               },
               {
                 "type": "anyComponentStyle",
@@ -98,6 +101,14 @@
                   "with": "projects/market/src/environments/environment.prod.ts"
                 }
               ],
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "outputPath": "dist/market/prod"
             },
             "remote": {
@@ -157,6 +168,7 @@
             "main": "projects/market/src/test.ts",
             "polyfills": "projects/market/src/polyfills.ts",
             "tsConfig": "projects/market/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "karmaConfig": "karma.conf.js",
             "assets": ["projects/market/src/favicon.ico", "projects/market/src/assets"],
             "styles": ["projects/market/src/assets/styles/styles.scss"],

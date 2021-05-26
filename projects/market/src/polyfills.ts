@@ -102,7 +102,7 @@ if (document['documentMode'] || /Edge/.test(navigator.userAgent)) {
 /**
  * Библиотека zone.js перенесена в index.html в целях оптимизации производительности
  */
-import 'zone.js/dist/zone'; // Included with Angular CLI.
+import 'zone.js'; // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
