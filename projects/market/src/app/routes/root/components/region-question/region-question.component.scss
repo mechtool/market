@@ -1,7 +1,12 @@
+.message {
+  font-size: var(--font-size-14);
+  padding: 20px;
+}
+
 .question {
   font-size: var(--font-size-16);
   font-weight: var(--font-weight-medium);
-  padding: 20px;
+  padding: 0 5px 10px 20px;
 }
 
 .question-btn {

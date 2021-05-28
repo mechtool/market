@@ -12,6 +12,7 @@ import { hexFrom } from '#shared/utils';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
+const USER_GEOLOCATION_STORAGE_KEY = 'user_geolocation';
 const CART_LOCATION_LINK_STORAGE_KEY = 'cart_location';
 const USER_DATA_STORAGE_KEY = 'user_data';
 const COOKIES_AGREEMENT_STORAGE_KEY = 'cookies_agreement';
@@ -138,6 +139,18 @@ export class LocalStorageService {
 
   removeUserLocation(): void {
     this._storage.remove(USER_LOCATION_STORAGE_KEY);
+  }
+
+  getUserGeolocation(): any {
+    return this._storage.get(USER_GEOLOCATION_STORAGE_KEY);
+  }
+
+  hasUserGeolocation(): boolean {
+    return this._storage.get(USER_GEOLOCATION_STORAGE_KEY) !== undefined;
+  }
+
+  putUserGeolocation(geolocation: any) {
+    this._storage.set(USER_GEOLOCATION_STORAGE_KEY, geolocation);
   }
 
   getCartLocationLink(): string {

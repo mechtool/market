@@ -16,6 +16,15 @@ import { Location } from '@angular/common';
 import { delayedRetry, getQueryParam } from '#shared/utils';
 import { APP_CONFIG } from './app.config.token';
 
+declare const ymaps: {
+  geolocation: {
+    country: string;
+    region: string;
+    city: string;
+  }
+  ready(fnc: () => any);
+};
+
 let authService = null;
 let cartService = null;
 let categoryService = null;
@@ -80,6 +89,15 @@ function handleAuthFromStorage(): void {
 function setUserLocation(): void {
   if (!localStorageService.hasUserLocation()) {
     localStorageService.putUserLocation(Megacity.RUSSIA);
+  }
+
+  if (!localStorageService.isApproveRegion()) {
+    try {
+      ymaps.ready(() => {
+        localStorageService.putUserGeolocation(ymaps.geolocation);
+      });
+    } catch (err) {
+    }
   }
 }
 

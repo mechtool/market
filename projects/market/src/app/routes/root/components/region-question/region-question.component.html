@@ -1,6 +1,10 @@
 <div class="region-question" *ngIf="!isApprovedRegion">
   <ng-template #regionQuestionTemplateRef let-notification>
     <div>
+      <div class="message">
+        Некоторые поставщики имеют ограниченную зону доставки.
+        Выберите ваш населенный пункт и мы покажем товары тех поставщиков, которые могут быть доставлены в ваш регион.
+      </div>
       <div class="question">
         <img src="./assets/img/svg/placeholder.svg" alt="">
         Ваш регион "{{city}}"?

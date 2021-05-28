@@ -31,6 +31,27 @@ export class Megacity {
     fullName: 'Россия',
   }
 
+  public static FEDERAL_CITIES: LocationModel[] = [
+    {
+      fias: '0c5b2444-70a0-4932-980c-b4dc0d3f02b5',
+      name: 'Москва',
+      locality: 'Москва г',
+      fullName: 'Москва г',
+    },
+    {
+      fias: 'c2deb16a-0330-4f05-821f-1d09c93331e6',
+      name: 'Санкт-Петербург',
+      locality: 'Санкт-Петербург г',
+      fullName: 'Санкт-Петербург г',
+    },
+    {
+      fias: '6fdecb78-893a-4e3f-a5ba-aa062459463b',
+      name: 'Севастополь',
+      locality: 'Севастополь г',
+      fullName: 'Севастополь г',
+    }
+  ];
+
   public static ALL: LocationModel[] = [
     Megacity.RUSSIA,
     {
