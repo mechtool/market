@@ -55,9 +55,9 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
 
   constructor(
     private _fb: FormBuilder,
+    private _cdr: ChangeDetectorRef,
     private _cartService: CartService,
     private _notificationsService: NotificationsService,
-    private _cdr: ChangeDetectorRef,
     private _externalProvidersService: ExternalProvidersService,
   ) {
     this.form = this._fb.group({
@@ -67,27 +67,6 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this._changeTotalPositions();
-  }
-
-  private _inputIsFocused$(): Observable<boolean> {
-    let elementQuery = null;
-    let elementQueryFocusChanges$ = null;
-    let elementQueryBlurChanges$ = null;
-    if (this.inputEl?.nativeElement) {
-      elementQuery = this.inputEl.nativeElement;
-      elementQueryFocusChanges$ = fromEvent(elementQuery, 'focus');
-      elementQueryBlurChanges$ = fromEvent(elementQuery, 'blur');
-    }
-
-    return defer(() => {
-      return !elementQuery
-        ? of(false)
-        : merge(elementQueryFocusChanges$, elementQueryBlurChanges$).pipe(
-          map((event: FocusEvent) => {
-            return event.type === 'focus';
-          }),
-        );
-    });
   }
 
   ngOnInit(): void {
@@ -176,6 +155,27 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
           this.rollBackTotalPositions(Operation.ADD);
         },
       );
+  }
+
+  private _inputIsFocused$(): Observable<boolean> {
+    let elementQuery = null;
+    let elementQueryFocusChanges$ = null;
+    let elementQueryBlurChanges$ = null;
+    if (this.inputEl?.nativeElement) {
+      elementQuery = this.inputEl.nativeElement;
+      elementQueryFocusChanges$ = fromEvent(elementQuery, 'focus');
+      elementQueryBlurChanges$ = fromEvent(elementQuery, 'blur');
+    }
+
+    return defer(() => {
+      return !elementQuery
+        ? of(false)
+        : merge(elementQueryFocusChanges$, elementQueryBlurChanges$).pipe(
+          map((event: FocusEvent) => {
+            return event.type === 'focus';
+          }),
+        );
+    });
   }
 
   private _changeTotalPositions() {
