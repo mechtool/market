@@ -13,7 +13,6 @@
 
   .user-login {
     font-size: var(--font-size-13);
-    opacity: 0.5;
 
     img {
       height: var(--font-size-16);
@@ -40,6 +39,7 @@
 
       h1 {
         line-height: 1;
+        margin: 0;
       }
 
       span {

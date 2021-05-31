@@ -452,7 +452,7 @@ export class RfpEditComponent implements OnInit {
   }
 
   disabledDateCollectingFrom(current: Date): boolean {
-    return differenceInCalendarDays(current, new Date()) < 1;
+    return differenceInCalendarDays(current, new Date()) < 0;
   }
 
   disabledDateCollectingTo(current: Date): boolean {

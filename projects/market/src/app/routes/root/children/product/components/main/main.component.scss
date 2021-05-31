@@ -2,6 +2,23 @@
   display: flex;
   flex-direction: column;
 
+  .what-is {
+    margin: 0 0 12px;
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    a {
+      border-bottom: 1px solid #fedc8b;
+
+      &:hover {
+        border: none;
+      }
+    }
+  }
+
   .catalog {
     margin-top: 20px;
     text-align: center;

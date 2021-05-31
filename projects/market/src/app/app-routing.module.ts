@@ -97,7 +97,8 @@ const routes: Routes = [
       useHash: false,
       preloadingStrategy: DelayedPreloadingStrategy,
       relativeLinkResolution: 'legacy',
-      scrollPositionRestoration: 'enabled'
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled'
     })
   ],
   exports: [RouterModule],
