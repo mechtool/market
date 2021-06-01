@@ -16,7 +16,9 @@ export class OnlyNumberDirective {
       'Escape',
       'Delete',
       'Home',
-      'End'
+      'End',
+      'ArrowLeft',
+      'ArrowRight'
     ];
     const keysWithMetaKeyToSkipValidation = ['a', 'c', 'v', 'x'];
     if (

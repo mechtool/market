@@ -20,24 +20,24 @@
     </div>
 
     <div class="table_row table_data" *ngFor="let priceList of priceLists">
-      <div class="click-open" (click)="openPriceList(priceList)">
 
-        <div class="table_cell cell_title" data-title="Наименование:">
-          {{priceList.name}}
+      <div class="table_cell cell_title" data-title="Наименование:" (click)="openPriceList(priceList)">
+        {{priceList.name}}
+      </div>
+
+      <div class="table_cell cell_org" data-title="Организация:" (click)="openPriceList(priceList)">
+        <div class="supplier_title">
+          <span class="supplier_image" style="{{priceList.supplierParty.inn | organizationLogo}}"></span>
+          <span class="supplier_name">{{priceList.supplierParty.name | abbreviatedBusinessName}}</span>
         </div>
+      </div>
 
-        <div class="table_cell cell_org" data-title="Организация:">
-          <div class="supplier_title">
-            <span class="supplier_image" style="{{priceList.supplierParty.inn | organizationLogo}}"></span>
-            <span class="supplier_name">{{priceList.supplierParty.name | abbreviatedBusinessName}}</span>
-          </div>
-        </div>
+      <div class="table_cell cell_date" data-title="Срок действия:" (click)="openPriceList(priceList)">
+        до {{ priceList.dateActualTo | date:'dd MMMM yyyy г.' }}
+      </div>
 
-        <div class="table_cell cell_date" data-title="Срок действия:">
-          до {{ priceList.dateActualTo | date:'dd MMMM yyyy г.' }}
-        </div>
-
-        <div class="table_cell cell_status" data-title="Состояние:" *ngIf="priceList.feedInfo.status">
+      <div class="table_cell cell_status" data-title="Состояние:" *ngIf="priceList.feedInfo.status"
+           (click)="openPriceList(priceList)">
           <span class="status"
                 nz-tooltip
                 [nzTooltipTitle]="priceList.feedInfo.status === 'IN_PROGRESS'
@@ -47,7 +47,6 @@
               {{priceList.feedInfo.status | priceListStatus : priceList.feedInfo.lastCompletionTime}}
             </span>
           </span>
-        </div>
       </div>
 
       <div class="table_cell cell_status" data-title="Состояние:" *ngIf="!priceList.feedInfo.status">
