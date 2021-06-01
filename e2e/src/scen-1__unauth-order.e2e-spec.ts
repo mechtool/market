@@ -130,36 +130,37 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
 
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
     const productCards = await page.getAllProductCards();
-    const index = productCards.length ? randomItem(productCards.length / 2) : 0;
+    // const index = productCards.length ? randomItem(productCards.length / 2) : 0;
+    const index = randomItem(4);
     console.log('\t------------------------------->');
     console.log(`\tВсего найдено ${productCards.length} шт.`);
     console.log(`\tВыбран ${index} товар`)
     console.log('\t------------------------------->');
+
+    await browser.sleep(5e3);
     await browserClick(productCards[index].$('.cover'));
   });
 
   it('Шаг 2: Пользователь видит список торговых предложений', async() => {
-    const tradeOfferCounterTitle = await page.getTradeOfferCounterTitle();
-    const tradeOfferCardList = await page.getTradeOfferCardList();
-    const allTradeOfferCards = await page.getAllTradeOfferCards();
-
-    console.log('\tТорговые предложения загрузились');
-
     await browser.wait(until.presenceOf(page.getTradeOfferCounterTitle()), defaultTimeout);
     await browser.wait(until.textToBePresentInElement(page.getTradeOfferCounterTitle(), 'найдено'), defaultTimeout);
     await browser.wait(until.presenceOf(page.getTradeOfferCardList()), defaultTimeout);
     await browser.wait(presenceOfAll(page.getAllTradeOfferCards()), defaultTimeout);
+
+    console.log('\tТорговые предложения загрузились');
   });
 
   it('Шаг 3: Пользователь переходит в произвольно выбранное торговое предложение', async() => {
     const tradeOfferCards = await page.getAllTradeOfferCards();
-    const index = tradeOfferCards.length ? randomItem(tradeOfferCards.length / 2) : 0;
+    // const index = tradeOfferCards.length ? randomItem(tradeOfferCards.length / 2) : 0;
+    const index = 0;
 
     console.log('\t------------------------------->');
     console.log(`\tВсего торговых предложений найдено ${tradeOfferCards.length} шт.`);
     console.log(`\tВыбран ${index} товар`)
     console.log('\t------------------------------->');
 
+    await browser.sleep(5e3);
     await browserClick(tradeOfferCards[index].$('.catalog_item__pickup'));
   });
 
