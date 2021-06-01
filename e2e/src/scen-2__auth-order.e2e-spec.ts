@@ -332,7 +332,7 @@ export async function authorizedUserMakesOrder(page: any) {
     if (isOrderButtonEnabled) {
       const deliveryMethod = await page.getDeliveryMethod().getText();
 
-      if (deliveryMethod.toLowerCase() === 'самовывоз') {
+      /*if (deliveryMethod.toLowerCase() === 'самовывоз') {
         await page.getDelivery().click();
         await browser.sleep(2e3);
       }
@@ -355,7 +355,7 @@ export async function authorizedUserMakesOrder(page: any) {
       await page.getDeliveryHouse().sendKeys(defaultDeliveryHouse);
       await browser.sleep(2e3);
       await page.getDeliveryHouse().sendKeys(protractor.Key.ENTER);
-      await browser.sleep(1e3);
+      await browser.sleep(1e3);*/
     }
   });
 
@@ -368,7 +368,7 @@ export async function authorizedUserMakesOrder(page: any) {
 
   it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
-      await browser.sleep(5e3);
+      await browser.sleep(1e4);
       await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
     }
   });

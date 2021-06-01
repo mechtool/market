@@ -252,6 +252,7 @@ export function userRegistersOrganizations(page: any, registerOrganizationIPPage
   });
 
   it('Шаг 9: Видит страницу со списком текущих акций', async() => {
+    await browser.sleep(5e3);
     await browser.wait(until.presenceOf(promoPage.getTitleElement()), defaultTimeout);
   });
 
