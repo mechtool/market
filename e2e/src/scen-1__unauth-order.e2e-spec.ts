@@ -132,13 +132,19 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
     const productCards = await page.getAllProductCards();
     const index = productCards.length ? randomItem(productCards.length / 2) : 0;
     console.log('\t------------------------------->');
-    console.log(`\tНайденно всего ${productCards.length} товаров`);
+    console.log(`\tВсего найдено ${productCards.length} шт.`);
     console.log(`\tВыбран ${index} товар`)
     console.log('\t------------------------------->');
     await browserClick(productCards[index].$('.cover'));
   });
 
   it('Шаг 2: Пользователь видит список торговых предложений', async() => {
+    const tradeOfferCounterTitle = await page.getTradeOfferCounterTitle();
+    const tradeOfferCardList = await page.getTradeOfferCardList();
+    const allTradeOfferCards = await page.getAllTradeOfferCards();
+
+    console.log('\tТорговые предложения загрузились');
+
     await browser.wait(until.presenceOf(page.getTradeOfferCounterTitle()), defaultTimeout);
     await browser.wait(until.textToBePresentInElement(page.getTradeOfferCounterTitle(), 'найдено'), defaultTimeout);
     await browser.wait(until.presenceOf(page.getTradeOfferCardList()), defaultTimeout);
@@ -148,6 +154,12 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
   it('Шаг 3: Пользователь переходит в произвольно выбранное торговое предложение', async() => {
     const tradeOfferCards = await page.getAllTradeOfferCards();
     const index = tradeOfferCards.length ? randomItem(tradeOfferCards.length / 2) : 0;
+
+    console.log('\t------------------------------->');
+    console.log(`\tВсего торговых предложений найдено ${tradeOfferCards.length} шт.`);
+    console.log(`\tВыбран ${index} товар`)
+    console.log('\t------------------------------->');
+
     await browserClick(tradeOfferCards[index].$('.catalog_item__pickup'));
   });
 
