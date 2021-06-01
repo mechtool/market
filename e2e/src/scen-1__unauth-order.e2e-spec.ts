@@ -131,6 +131,10 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
     const productCards = await page.getAllProductCards();
     const index = productCards.length ? randomItem(productCards.length / 2) : 0;
+    console.log('\t------------------------------->');
+    console.log(`\tНайденно всего ${productCards.length} товаров`);
+    console.log(`\tВыбран ${index} товар`)
+    console.log('\t------------------------------->');
     await browserClick(productCards[index].$('.cover'));
   });
 
