@@ -38,6 +38,10 @@ export class OrderDetailsWithoutAuthComponent implements OnDestroy {
     return this._orderV2Service.foundCities$;
   }
 
+  get isAnonymous(): boolean {
+    return this._orderV2Service.isAnonymous;
+  }
+
   get availableOrganizations() {
     return this._orderV2Service.availableOrganizations;
   }

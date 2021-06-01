@@ -146,7 +146,13 @@ export function authorizedUserSearchesWithRegion(page: any) {
     await browser.wait(until.presenceOf(page.getSearchFilterPanelControlSupplierInput()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь вводит ИНН поставщика и выбирает из предложенного списка', async() => {
+  it('Шаг 2: Пользователь вводит регион и ИНН поставщика и выбирает варианты из предложенного списка', async() => {
+    await browser.sleep(3e3);
+    await page.getSearchFilterPanelControlLocationInput().clear();
+    await page.getSearchFilterPanelControlLocationInput().sendKeys(defaultDeliveryCity);
+    await browser.sleep(3e3);
+    await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.ENTER);
+
     await browser.sleep(3e3);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(defaultSupplierNameINN);
     await browser.sleep(3e3);
@@ -163,7 +169,7 @@ export function authorizedUserSearchesWithRegion(page: any) {
 export function authorizedUserFindsTradeOffer(page: any) {
 
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
-    await browser.sleep(3e3);
+    await browser.sleep(2e3);
     await browser.executeScript('window.scrollTo(0,0);')
     const productCards = await page.getAllProductCards();
     const index = productCards.length ? randomItem(productCards.length / 2) : 0;

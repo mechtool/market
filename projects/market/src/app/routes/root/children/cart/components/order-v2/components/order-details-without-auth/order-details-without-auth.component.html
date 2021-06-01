@@ -114,11 +114,11 @@
           </nz-form-item>
         </div>
 
-        <div nz-col nzXs="24" nzSm="2" *ngIf="form.controls.consumerInn.invalid">
+        <div nz-col nzXs="24" nzSm="2" *ngIf="form.controls.consumerInn.invalid && isAnonymous">
           <div class="or">ИЛИ</div>
         </div>
 
-        <div nz-col nzXs="24" nzSm="10" *ngIf="form.controls.consumerInn.invalid">
+        <div nz-col nzXs="24" nzSm="10" *ngIf="form.controls.consumerInn.invalid && isAnonymous">
           <button class="auth-btn" nz-button nzType="text" (click)="auth()">Войти через «1С:ИТС»</button>
         </div>
       </div>
