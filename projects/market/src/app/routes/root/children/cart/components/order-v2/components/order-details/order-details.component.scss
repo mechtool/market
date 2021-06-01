@@ -1,0 +1,93 @@
+.order-details {
+
+  margin-top: 15px;
+
+  nz-select {
+    width: 100%;
+  }
+
+  nz-date-picker {
+    width: 100%;
+    height: 39px;
+  }
+
+  .organization-title {
+    display: flex;
+    align-items: center;
+  }
+
+  .organization-image {
+    display: flex;
+    align-items: center;
+    margin-right: 7px;
+
+    .organization-image-color {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  .order_info {
+    margin-bottom: 20px;
+  }
+
+  .order_spec {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    min-height: 20px;
+  }
+
+  .order_label {
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-medium);
+    opacity: 0.6;
+    width: 190px;
+    min-width: 190px;
+  }
+
+  .order_value {
+    font-size: var(--font-size-12);
+    font-weight: var(--font-weight-medium);
+    padding-left: 9px;
+  }
+
+  .order__customer {
+    width: 100%;
+    max-width: 290px;
+  }
+
+  a {
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
+
+    &:hover {
+      border: none;
+    }
+  }
+
+  .without-label {
+    margin-top: 32px;
+  }
+
+  .desktop {
+    display: block;
+  }
+
+  .mobile {
+    display: none;
+  }
+
+  p {
+    &.error {
+      color: #ff4d4f;
+    }
+  }
+
+  input {
+    &.error {
+      border-color: #ff4d4f;
+    }
+  }
+}

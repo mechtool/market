@@ -313,8 +313,6 @@
                          id="city_delivery_address_input"
                          formControlName="deliveryCity"
                          name="{{currentDate}}_deliveryCity"
-                         autocomplete="chrome-off"
-                         list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.selectedCityIsNotAvailable || form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Город*"
@@ -331,8 +329,6 @@
                          id="street_delivery_address_input"
                          formControlName="deliveryStreet"
                          name="{{currentDate}}_deliveryStreet"
-                         autocomplete="chrome-off"
-                         list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Улица"
@@ -349,8 +345,6 @@
                          id="house_delivery_address_input"
                          formControlName="deliveryHouse"
                          name="{{currentDate}}_deliveryHouse"
-                         autocomplete="chrome-off"
-                         list="null"
                          [ngClass]="{'error': form.controls.deliveryArea.errors?.deliveryAreaCondition}"
                          type="text"
                          placeholder="Дом"
@@ -419,8 +413,6 @@
                 type="text"
                 id="contactName"
                 name="{{currentDate}}_contactName"
-                autocomplete="chrome-off"
-                list="null"
                 [ngClass]="{'error': form.controls.contactName.invalid && (form.controls.contactName.touched || form.controls.contactName.dirty)}"
                 formControlName="contactName">
               <ng-container
@@ -446,8 +438,6 @@
                 type="text"
                 id="contactPhone"
                 name="{{currentDate}}_contactPhone"
-                autocomplete="chrome-off"
-                list="null"
                 [ngClass]="{'error': form.controls.contactPhone.invalid && (form.controls.contactPhone.touched || form.controls.contactPhone.dirty)}"
                 prefix="+7"
                 mask="(000) 000 00 00"
@@ -472,8 +462,6 @@
                 type="email"
                 id="contactEmail"
                 name="{{currentDate}}_contactEmail"
-                autocomplete="chrome-off"
-                list="null"
                 [ngClass]="{'error': form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)}"
                 formControlName="contactEmail">
               <ng-container

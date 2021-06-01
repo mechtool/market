@@ -73,6 +73,15 @@ export function userAgrees(page: any) {
     await browser.wait(until.presenceOf(page.getCloseCookie()), defaultTimeout);
     await page.getCloseCookie().click();
   });
+
+  it('Шаг 3: Пользователь видит уведомление с запросом о его регионе', async() => {
+    await browser.wait(until.presenceOf(page.getRegionNotification()), defaultTimeout);
+  });
+
+  it('Шаг 4: Пользователь соглашается с определенным регионом и нажимает кнопку "Да, все верно"', async() => {
+    await browser.wait(until.presenceOf(page.getAcceptRegionNotification()), defaultTimeout);
+    await page.getAcceptRegionNotification().click();
+  });
 }
 
 export function userGoesToPromoRoute(page: any, promoPage: any) {

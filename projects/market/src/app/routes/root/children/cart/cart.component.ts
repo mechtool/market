@@ -18,9 +18,9 @@ export class CartComponent implements OnInit, OnDestroy {
 
   constructor(
     private _cartService: CartService,
+    private _spinnerService: SpinnerService,
     private _userStateService: UserStateService,
     private _notificationsService: NotificationsService,
-    private _spinnerService: SpinnerService,
   ) {
   }
 

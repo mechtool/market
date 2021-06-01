@@ -1,0 +1,33 @@
+@media all and (max-width: 576px) {
+  .ordered-products-table {
+    .table_list__products .cell_right {
+      width: 100px;
+    }
+
+    .order__total_price {
+      justify-content: center;
+    }
+
+    .order__total_label {
+      font-weight: var(--font-weight-normal);
+    }
+
+    .order__total_nds {
+      text-align: center;
+      opacity: 0.5;
+      font-size: var(--font-size-12);
+    }
+
+    .form_error {
+      text-align: center;
+    }
+
+    .form_warning {
+      text-align: center;
+    }
+
+    .table_list__basket .cell_left {
+      width: 80px;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+@media all and (max-width: 360px) {
+  .ordered-products-table {
+    .table_list__products .table_row {
+      padding: 15px 15px 20px 15px;
+    }
+
+    .table_list__products .cell_right {
+      margin-right: 10px;
+    }
+  }
+}

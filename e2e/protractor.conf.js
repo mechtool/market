@@ -53,12 +53,14 @@ exports.config = {
     defaultSupplierNameINN: '1828011980',
     defaultOrganizationINN: '7604246289',
     defaultOrganizationKPP: '760401001',
-    defaultOrganizationName: 'ООО Тесто №1',
+    defaultOrganizationName: 'ООО "КДЛ ЯРОСЛАВЛЬ-ТЕСТ"',
     defaultContactName: 'Федор Тестович',
     defaultContactPhone: '9512223344',
     defaultContactEmail: 'testovich.fedor@ftestovich.ru',
     defaultDeliveryCity: 'Москва г',
     defaultDeliveryStreet: 'Лермонтовская ул',
+    defaultDeliveryHouse: '17',
+    defaultCommentForSupplier: 'Прошу привезти заказ как можно быстрее. Адрес - Дмитровское шоссе, дом 9, 412 каб., г. Москва',
     defaultOrganizationIPNamePattern: 'ИП Тесто-',
   },
   onPrepare() {
@@ -66,16 +68,16 @@ exports.config = {
       project: require('path').join(__dirname, './tsconfig.json'),
     });
     jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
-    // Если нужно показать время выполнения, раскомментировать нижеуказанный addReporter
-    // jasmine.getEnv().addReporter({
-    //   specStarted: result => {
-    //     jasmine.currentTest = result;
-    //   },
-    //   specDone: (result) => {
-    //     // console.log(`Время выполнения: ${jasmine.currentTest.duration}\n`);
-    //     delete jasmine.currentTest;
-    //   },
-    // });
+    // Если нужно показать время выполнения, раскомментировать addReporter
+    /*jasmine.getEnv().addReporter({
+      specStarted: result => {
+        jasmine.currentTest = result;
+      },
+      specDone: (result) => {
+        console.log(`Время выполнения: ${jasmine.currentTest.duration}\n`);
+        delete jasmine.currentTest;
+      },
+    });*/
   },
 };
 

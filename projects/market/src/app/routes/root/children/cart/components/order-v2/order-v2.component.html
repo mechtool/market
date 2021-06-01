@@ -1,0 +1,37 @@
+<div #elementOrder class="order" *ngIf="order">
+  <nz-tabset nzTabPosition="top" nzType="card" [(nzSelectedIndex)]="selectedTab" (nzSelectedIndexChange)="changeTab($event)">
+    <nz-tab nzTitle="Товары">
+      <ng-template nz-tab>
+        <market-ordered-products-table></market-ordered-products-table>
+      </ng-template>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="isOrderType | marketOrderOrRequest" [nzDisabled]="unavailableToOrder">
+      <ng-template nz-tab>
+        <ng-container
+          *ngIf="isAuthenticated && hasRegisteredOrganizations; then orderDetailsBlock else orderDetailsWithoutAuthBlock"
+        ></ng-container>
+      </ng-template>
+    </nz-tab>
+  </nz-tabset>
+
+  <div class="order__total_btn">
+    <button nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()" [disabled]="unavailableToOrder">
+      {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
+    </button>
+    <button *ngIf="selectedTab === 0 && isHistoryAvailable" nz-button nzType="link" type="button" [routerLink]="['/category']">
+      Продолжить подбор
+    </button>
+    <button *ngIf="selectedTab === 1" nz-button nzType="link" type="button" (click)="selectedTab = 0">
+      Вернуться к товарам
+    </button>
+  </div>
+
+  <ng-template #orderDetailsBlock>
+    <market-order-details></market-order-details>
+  </ng-template>
+
+  <ng-template #orderDetailsWithoutAuthBlock>
+    <market-order-details-without-auth></market-order-details-without-auth>
+  </ng-template>
+</div>

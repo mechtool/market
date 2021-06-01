@@ -1,0 +1,332 @@
+<div class="order-details" *ngIf="form" [formGroup]="form">
+  <div class="order_info">
+    <div class="order_spec">
+
+      <div class="order_label">Заказчик:</div>
+
+      <div class="order__customer">
+        <div *ngIf="availableOrganizations?.length === 1" class="order_value organization-title">
+          <div class="organization-image">
+            <div class="organization-image-color"
+                 style="{{form.controls.consumerInn.value | organizationLogo : true}}"></div>
+          </div>
+
+          <div class="value">
+            {{form.controls.consumerName.value | abbreviatedBusinessName}}
+          </div>
+        </div>
+
+        <div *ngIf="availableOrganizations?.length > 1">
+          <nz-select nzPlaceHolder="Выберите из списка доступных"
+                     [nzCustomTemplate]="consumerNameTemplate"
+                     formControlName="consumerId">
+
+            <nz-option *ngFor="let org of availableOrganizations"
+                       [nzValue]="org.organizationId"
+                       [nzLabel]="org.organizationName | abbreviatedBusinessName">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <ng-template #consumerNameTemplate>
+          <div class="organization-title">
+            <div class="organization-image">
+              <div class="organization-image-color"
+                   style="{{form.controls.consumerInn.value | organizationLogo : true}}"></div>
+            </div>
+
+            <div class="value">
+              {{form.controls.consumerName.value | abbreviatedBusinessName}}
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="order_spec" *ngIf="form.controls.supplierInn.value">
+      <div class="order_label">Поставщик:</div>
+      <div class="order_value organization-title">
+        <div class="organization-image">
+          <div class="organization-image-color"
+               style="{{form.controls.supplierInn.value | organizationLogo : true}}"></div>
+        </div>
+        <div class="value">
+          {{form.controls.supplierName.value | abbreviatedBusinessName}}
+        </div>
+      </div>
+    </div>
+
+    <div class="order_spec" *ngIf="pickupPoints?.length || deliveryZones?.length">
+      <div class="order_label">Доступные способы поставки:</div>
+      <div class="order_value organization-title">
+          <span class="value">
+            {{deliveryMethods | marketArrayJoiner: 'label':'; '}}
+          </span>
+      </div>
+    </div>
+
+    <div class="order_spec" *ngIf="pickupPoints?.length">
+      <div class="order_label">Адреса самовывоза:</div>
+      <div class="order_value organization-title">
+          <span class="value">
+            {{pickupPoints | marketPlaceJoiner: true}}
+          </span>
+      </div>
+    </div>
+
+    <div class="order_spec" *ngIf="deliveryZones?.length">
+      <div class="order_label">Зоны доставки:</div>
+      <div class="order_value organization-title">
+          <span class="value">
+            {{deliveryZones | marketPlaceJoiner}}
+          </span>
+      </div>
+    </div>
+  </div>
+
+  <form nz-form [formGroup]="form">
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="deliveryMethod"
+                       nzTooltipTitle="Выберите предпочтительный способ поставки из предлагаемых поставщиком."
+                       nzTooltipIcon="info-circle">Выберите предпочтительный способ поставки из предлагаемых
+        </nz-form-label>
+        <nz-radio-group style="margin-top: 10px; width: 100%;" formControlName="deliveryMethod">
+          <label nz-radio *ngFor="let opt of deliveryMethods"
+                 [nzValue]="opt.value"
+                 [nzDisabled]="opt.disabled">{{ opt.label }}</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item formGroupName="pickupArea" *ngIf="!selectedDelivery">
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="pickup"
+                       nzTooltipTitle="Выберите склад самовывоза из предлагаемых поставщиком."
+                       nzTooltipIcon="info-circle">Выберите склад самовывоза
+        </nz-form-label>
+        <nz-select nzSize="large"
+                   formControlName="fiasCode"
+                   nzPlaceHolder="Выберите из списка доступных">
+          <nz-option *ngFor="let pickup of pickupPoints"
+                     [nzValue]="pickup.fiasCode"
+                     [nzLabel]="pickup.title">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item formGroupName="deliveryTo" *ngIf="selectedDelivery">
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <div nz-row>
+
+          <div nz-col nzXs="24" nzSm="8">
+            <nz-form-label nzRequired nzFor="deliveryCity"
+                           nzTooltipTitle="Укажите Ваш адрес доставки. При вводе названия города (села, деревни и т.д.), улицы и дома будут всплывать допустимые варианты, выберите из предложенных.
+                           Если Ваш населенный пункт отсутствует в списке - выберите ближайший и укажите точный адрес в комментарии к заказу."
+                           nzTooltipIcon="info-circle">Укажите адрес доставки
+            </nz-form-label>
+            <input nz-input
+                   #elementInputCity
+                   id="deliveryCity"
+                   name="{{currentDate}}_deliveryCity"
+                   type="text"
+                   placeholder="Город*"
+                   formControlName="cityFiasCode"
+                   [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable') || (form.controls.deliveryTo.invalid && form.controls.deliveryTo.touched)}"
+                   [nzAutocomplete]="auto_city">
+
+            <nz-autocomplete #auto_city>
+              <nz-auto-option *ngFor="let location of foundCities$ | async"
+                              [nzValue]="location.fias"
+                              [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
+            </nz-autocomplete>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="8">
+            <input nz-input
+                   #elementInputStreet
+                   id="deliveryStreet"
+                   name="{{currentDate}}_deliveryStreet"
+                   type="text"
+                   class="without-label"
+                   placeholder="Улица"
+                   formControlName="streetFiasCode"
+                   [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable')}"
+                   [nzAutocomplete]="auto_street">
+
+            <nz-autocomplete #auto_street>
+              <nz-auto-option *ngFor="let location of foundStreets$ | async"
+                              [nzValue]="location.fias"
+                              [nzLabel]="location.street">{{ location.street }}</nz-auto-option>
+            </nz-autocomplete>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="8">
+            <input nz-input
+                   #elementInputHouse
+                   id="deliveryHouse"
+                   name="{{currentDate}}_deliveryHouse"
+                   type="text"
+                   class="without-label"
+                   placeholder="Дом"
+                   formControlName="houseFiasCode"
+                   [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable')}"
+                   [nzAutocomplete]="auto_house">
+
+            <nz-autocomplete #auto_house>
+              <nz-auto-option *ngFor="let location of foundHouses$ | async"
+                              [nzValue]="location.fias"
+                              [nzLabel]="location.house">{{ location.house }}</nz-auto-option>
+            </nz-autocomplete>
+          </div>
+
+          <p class="error" *ngIf="form.controls.deliveryTo.hasError('locationUnavailable')">
+            Указанный адрес не входит в зону доставки поставщика. Список доступных зон доставки смотрите выше.
+            Укажите адрес внутри одной из зон доставки<span *ngIf="pickupPoints?.length"> или оформите самовывоз</span>.
+          </p>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="selectedDelivery">
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="deliveryDesirableDate"
+                       nzTooltipTitle="Укажите желаемую дату и время доставки заказа."
+                       nzTooltipIcon="info-circle">Желаемая дата и время доставки
+        </nz-form-label>
+
+        <div class="desktop">
+          <nz-date-picker [nzShowTime]="{
+                  nzFormat: 'HH:mm',
+                  nzHourStep: 4,
+                  nzMinuteStep: 30
+                }"
+                          nzFormat="доставка dd MMMM yyyy в HH:mm"
+                          nzPlaceHolder="Нажмите для выбора даты и времени"
+                          [nzDisabledDate]="disabledDate"
+                          formControlName="deliveryDesirableDate"
+          ></nz-date-picker>
+        </div>
+
+        <div class="mobile">
+          <List>
+            <ListItem
+              DatePicker
+              [extra]="currentDateFormat"
+              [minDate]="minDate"
+              arrow="horizontal"
+              mode="datetime"
+              formControlName="deliveryDesirableDate">
+              <Brief>Нажмите для выбора даты</Brief>
+            </ListItem>
+          </List>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="contactName"
+                       nzTooltipTitle="ФИО представителя с которым сможет связаться поставщик."
+                       nzTooltipIcon="info-circle">Контактное лицо
+        </nz-form-label>
+        <input nz-input
+               #elementInputContactName
+               id="contactName"
+               name="{{currentDate}}_contactName"
+               type="text"
+               [ngClass]="{'error': form.controls.contactName.invalid && form.controls.contactName.touched}"
+               formControlName="contactName">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10">
+      <div nz-row nzGutter="8">
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzRequired nzFor="contactPhone"
+                             nzTooltipTitle="Телефон представителя на который может позвонить поставщик."
+                             nzTooltipIcon="info-circle">Телефон
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactPhone
+                     id="contactPhone"
+                     name="{{currentDate}}_contactPhone"
+                     type="text"
+                     [ngClass]="{'error': form.controls.contactPhone.invalid && form.controls.contactPhone.touched}"
+                     formControlName="contactPhone"
+                     prefix="+7"
+                     mask="(000) 000 00 00"
+                     showMaskTyped="true">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzRequired nzFor="contactEmail"
+                             nzTooltipTitle="E-mail представителя на который сможет написать поставщик."
+                             nzTooltipIcon="info-circle">E-mail
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactEmail
+                     id="contactEmail"
+                     name="{{currentDate}}_contactEmail"
+                     type="email"
+                     [ngClass]="{'error': form.controls.contactEmail.invalid && form.controls.contactEmail.touched}"
+                     formControlName="contactEmail">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-form-control>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="commentForSupplier"
+                       nzTooltipTitle="Здесь Вы можете дополнительно сообщить поставщику точный адрес доставки, желаемую дату и время доставки и любую другую дополнительную информацию."
+                       nzTooltipIcon="info-circle">Комментарий для поставщика
+        </nz-form-label>
+        <textarea nz-input
+                  id="commentForSupplier"
+                  name="{{currentDate}}_commentForSupplier"
+                  rows="6"
+                  formControlName="commentForSupplier"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+
+    <ng-template #errorTpl let-control>
+      <ng-container *ngIf="control.hasError('required')">
+        <p>Поле обязательно для заполнения</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('maxlength')">
+        <p>Превышен максимальный размер строки</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('minlength')">
+        <p>Длина строки должна быть больше {{control.getError('minlength').requiredLength}} символов</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('blank') || control.hasError('max') || control.hasError('min')">
+        <p>Введено недопустимое значение</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('email')">
+        <p>Введен недопустимый email</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('mask')">
+        <p>Введен недопустимый телефон</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('innControlNumberCondition')">
+        <p>Введен недействительный ИНН</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('innLengthCondition')">
+        <p>Длина ИНН должна быть 10 или 12 цифр</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('kppLengthCondition')">
+        <p>Длина КПП должна быть 9 цифр</p>
+      </ng-container>
+    </ng-template>
+  </form>
+</div>

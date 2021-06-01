@@ -3,7 +3,7 @@ import { browser, ElementFinder, protractor, ProtractorExpectedConditions } from
 export const {
   defaultTimeout, defaultSupplierNameINN, defaultOrganizationINN, defaultOrganizationKPP,
   defaultOrganizationName, defaultContactName, defaultContactPhone, defaultContactEmail,
-  defaultDeliveryCity, defaultDeliveryStreet, defaultOrganizationIPNamePattern,
+  defaultDeliveryCity, defaultDeliveryStreet, defaultDeliveryHouse, defaultCommentForSupplier, defaultOrganizationIPNamePattern,
 } = browser.params;
 
 export function randomItem(index: number): number {

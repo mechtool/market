@@ -3,9 +3,12 @@ import { AppPage } from './scen-2__auth-order.po';
 import { LoginItsPage, userLoginWithAvailableOrganizations, userPassword } from './login-its/login-its.po';
 import {
   browserClick,
+  defaultCommentForSupplier,
+  defaultContactEmail,
   defaultContactName,
   defaultContactPhone,
   defaultDeliveryCity,
+  defaultDeliveryHouse,
   defaultDeliveryStreet,
   defaultSupplierNameINN,
   defaultTimeout,
@@ -110,18 +113,27 @@ export function authorizedUserSearches(page: any) {
     await page.getCloseCookie().click();
   });
 
-  it('Шаг 3: Пользователь видит поисковой бар с кнопками управления им', async() => {
+  it('Шаг 3: Пользователь видит уведомление с запросом о его регионе', async() => {
+    await browser.wait(until.presenceOf(page.getRegionNotification()), defaultTimeout);
+  });
+
+  it('Шаг 4: Пользователь соглашается с определенным регионом и нажимает кнопку "Да, все верно"', async() => {
+    await browser.wait(until.presenceOf(page.getAcceptRegionNotification()), defaultTimeout);
+    await page.getAcceptRegionNotification().click();
+  });
+
+  it('Шаг 5: Пользователь видит поисковой бар с кнопками управления им', async() => {
     await browser.wait(until.presenceOf(page.getSearchBox()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getSearchBoxInput()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getSearchBoxButton()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getSearchBoxFiltersButton()), defaultTimeout);
   });
 
-  it('Шаг 4: Пользователь нажимает на кнопку поиска', async() => {
+  it('Шаг 6: Пользователь нажимает на кнопку поиска', async() => {
     await page.getSearchBoxButton().click();
   });
 
-  it('Шаг 5: Пользователь видит результаты поиска', async() => {
+  it('Шаг 7: Пользователь видит результаты поиска', async() => {
     await browser.wait(presenceOfAll(page.getAllProductCards()), defaultTimeout);
   });
 }
@@ -134,10 +146,8 @@ export function authorizedUserSearchesWithRegion(page: any) {
     await browser.wait(until.presenceOf(page.getSearchFilterPanelControlSupplierInput()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь выбирает второй регион и поставщика из предложенного списка', async() => {
+  it('Шаг 2: Пользователь вводит ИНН поставщика и выбирает из предложенного списка', async() => {
     await browser.sleep(3e3);
-    await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.DOWN);
-    await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.ENTER);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(defaultSupplierNameINN);
     await browser.sleep(3e3);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.DOWN);
@@ -153,6 +163,8 @@ export function authorizedUserSearchesWithRegion(page: any) {
 export function authorizedUserFindsTradeOffer(page: any) {
 
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
+    await browser.sleep(3e3);
+    await browser.executeScript('window.scrollTo(0,0);')
     const productCards = await page.getAllProductCards();
     const index = productCards.length ? randomItem(productCards.length / 2) : 0;
     await browserClick(productCards[index]);
@@ -276,44 +288,67 @@ export async function authorizedUserMakesOrder(page: any) {
       await browser.wait(until.presenceOf(page.getDeliveryMethod()), defaultTimeout);
       await browser.wait(until.presenceOf(page.getCartMakeOrderContactName()), defaultTimeout);
       await browser.wait(until.presenceOf(page.getCartMakeOrderContactPhone()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getCartMakeOrderContactEmail()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getCartMakeOrderCommentForSupplier()), defaultTimeout);
     }
   });
 
   it('Шаг 6: Пользователь вводит свои ФИО, телефон и email [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
+      await page.getCartMakeOrderContactName().clear();
       await page.getCartMakeOrderContactName().sendKeys(defaultContactName);
+      await page.getCartMakeOrderContactPhone().clear();
       await page.getCartMakeOrderContactPhone().sendKeys(defaultContactPhone);
+      await page.getCartMakeOrderContactEmail().clear();
+      await page.getCartMakeOrderContactEmail().sendKeys(defaultContactEmail);
     }
   });
 
-  it('Шаг 7: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
+  it('Шаг 7: Пользователь вводит комментарий для поставщика [если товар доступен к заказу]', async() => {
+    if (isOrderButtonEnabled) {
+      await page.getCartMakeOrderCommentForSupplier().sendKeys(defaultCommentForSupplier);
+    }
+  });
 
+  it('Шаг 8: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       const deliveryMethod = await page.getDeliveryMethod().getText();
-      if (deliveryMethod.toLowerCase() === 'доставка') {
-        await browser.wait(until.presenceOf(page.getDeliveryCity()), defaultTimeout);
-        await browser.wait(until.presenceOf(page.getDeliveryStreet()), defaultTimeout);
-        await page.getDeliveryCity().clear();
-        await page.getDeliveryCity().sendKeys(defaultDeliveryCity);
-        await browser.sleep(3e3);
-        await page.getDeliveryCity().sendKeys(protractor.Key.ENTER);
-        await browser.sleep(1e3);
-        await page.getDeliveryStreet().sendKeys(defaultDeliveryStreet);
-        await browser.sleep(3e3);
-        await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
-        await browser.sleep(3e3);
+
+      if (deliveryMethod.toLowerCase() === 'самовывоз') {
+        await page.getDelivery().click();
+        await browser.sleep(2e3);
       }
+
+      await browser.wait(until.presenceOf(page.getDeliveryCity()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getDeliveryStreet()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getDeliveryHouse()), defaultTimeout);
+
+      await page.getDeliveryCity().clear();
+      await page.getDeliveryCity().sendKeys(defaultDeliveryCity);
+      await browser.sleep(2e3);
+      await page.getDeliveryCity().sendKeys(protractor.Key.ENTER);
+      await browser.sleep(1e3);
+
+      await page.getDeliveryStreet().sendKeys(defaultDeliveryStreet);
+      await browser.sleep(2e3);
+      await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
+      await browser.sleep(1e3);
+
+      await page.getDeliveryHouse().sendKeys(defaultDeliveryHouse);
+      await browser.sleep(2e3);
+      await page.getDeliveryHouse().sendKeys(protractor.Key.ENTER);
+      await browser.sleep(1e3);
     }
   });
 
-  it('Шаг 8: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 9: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
       await browserClick(await page.getCartMakeOrderButton());
     }
   });
 
-  it('Шаг 9: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
     }

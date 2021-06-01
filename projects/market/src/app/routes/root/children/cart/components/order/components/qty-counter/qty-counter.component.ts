@@ -41,11 +41,6 @@ export class CartOrderQtyCounterComponent implements OnInit, ControlValueAccesso
   ) {
   }
 
-  onlyNumberKey(event) {
-    const charCode = (event.query) ? event.query : event.keyCode;
-    return !(charCode > 31 && (charCode < 48 || charCode > 57));
-  }
-
   ngOnInit() {
     this._initForm();
     this.value = this.value || this.minQuantity;

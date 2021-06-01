@@ -1,18 +1,23 @@
 import { browser, protractor } from 'protractor';
 import { AppPage } from './scen-1__unauth-order.po';
 import {
-  until,
-  navigateTo,
-  randomItem,
-  randomQuery,
-  presenceOfAll,
-  defaultTimeout,
-  defaultOrganizationINN,
+  browserClick,
+  defaultCommentForSupplier,
+  defaultContactEmail,
   defaultContactName,
   defaultContactPhone,
-  defaultContactEmail,
-  defaultDeliveryStreet,
-  defaultDeliveryCity, restart, elementTextContentChanged, browserClick, defaultOrganizationKPP, defaultOrganizationName
+  defaultDeliveryCity,
+  defaultOrganizationINN,
+  defaultOrganizationKPP,
+  defaultOrganizationName,
+  defaultTimeout,
+  elementTextContentChanged,
+  navigateTo,
+  presenceOfAll,
+  randomItem,
+  randomQuery,
+  restart,
+  until,
 } from './utils/utils';
 
 let tradeOfferTitle = null;
@@ -60,19 +65,28 @@ export function unauthorizedUserSearches(page: any) {
     await page.getCloseCookie().click();
   });
 
-  it('Шаг 3: Пользователь видит поисковой бар с кнопками управления им', async() => {
+  it('Шаг 3: Пользователь видит уведомление с запросом о его регионе', async() => {
+    await browser.wait(until.presenceOf(page.getRegionNotification()), defaultTimeout);
+  });
+
+  it('Шаг 4: Пользователь закрывает уведомление с запросом о его регионе', async() => {
+    await browser.wait(until.presenceOf(page.getCloseRegionNotification()), defaultTimeout);
+    await page.getCloseRegionNotification().click();
+  });
+
+  it('Шаг 5: Пользователь видит поисковой бар с кнопками управления им', async() => {
     await browser.wait(until.presenceOf(page.getSearchBox()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getSearchBoxInput()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getSearchBoxButton()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getSearchBoxFiltersButton()), defaultTimeout);
   });
 
-  it('Шаг 4: Пользователь вводит поисковой запрос и нажимает на кнопку поиска', async() => {
+  it('Шаг 6: Пользователь вводит поисковой запрос и нажимает на кнопку поиска', async() => {
     await page.getSearchBoxInput().sendKeys(randomQuery());
     await page.getSearchBoxButton().click();
   });
 
-  it('Шаг 5: Пользователь видит результаты поиска', async() => {
+  it('Шаг 7: Пользователь видит результаты поиска', async() => {
     await browser.wait(until.presenceOf(page.getSearchResults()), defaultTimeout);
     await browser.wait(presenceOfAll(page.getAllProductCards()), defaultTimeout);
     currentProductResultsText = (await page.getSearchResults().getText());
@@ -230,82 +244,67 @@ export function unauthorizedUserMakesOrder(page: any) {
     await page.getCartMakeOrderButton().click();
   });
 
-  it('Шаг 4: Пользователь видит модальное окно с выбором типа заказа', async() => {
-    await browser.wait(until.presenceOf(page.getCartMakeOrderWithoutRegistrationButton()), defaultTimeout);
+  it('Шаг 4: Пользователь видит форму для заполнения при заказе без регистрации', async() => {
+    await browser.wait(until.presenceOf(page.getOrderingWithoutRegistrationForm()), defaultTimeout);
   });
 
-  it('Шаг 5: Пользователь нажимает на кнопку заказа без регистрации', async() => {
-    await page.getCartMakeOrderWithoutRegistrationButton().click();
-  });
-
-  it('Шаг 6: Пользователь видит форму для заполнения при заказе без регистрации', async() => {
-    await browser.wait(until.presenceOf(page.getCartMakeOrderFillCustomerDataButton()), defaultTimeout);
-  });
-
-  it('Шаг 7: Пользователь нажимает на кнопку заполнения данных заказчика', async() => {
-    await page.getCartMakeOrderFillCustomerDataButton().click();
-  });
-
-  it('Шаг 8: Пользователь видит модальное окно с возможностью ввода ИНН заказчика', async() => {
-    await browser.wait(until.presenceOf(page.getRequisitesChecker()), defaultTimeout);
+  it('Шаг 5: Пользователь видит поле с возможностью ввода ИНН заказчика и кнопку "Войти через "1С:ИТС""', async() => {
     await browser.wait(until.presenceOf(page.getRequisitesCheckerInnInput()), defaultTimeout);
-    await browser.wait(until.presenceOf(page.getRequisitesCheckerButton()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAuth1CITSButton()), defaultTimeout);
   });
 
-  it('Шаг 9: Пользователь вводит данные по организации', async() => {
+  it('Шаг 6: Пользователь вводит данные ИНН организации', async() => {
     await page.getRequisitesCheckerInnInput().sendKeys(defaultOrganizationINN);
-    await page.getRequisitesCheckerButton().click();
     await browser.sleep(1e3);
   });
 
-  it('Шаг 10: Пользователь видит модальное окно с заполненным наименованием организации', async() => {
+  it('Шаг 7: Пользователь видит появившиеся, заполненые поля КПП и наименования организации', async() => {
+    await browser.wait(until.presenceOf(page.getRequisitesCheckerKppInput()), defaultTimeout);
+    expect(page.getRequisitesCheckerKppInput().getAttribute('value')).toEqual(defaultOrganizationKPP);
     await browser.wait(until.presenceOf(page.getRequisitesCheckerNameInput()), defaultTimeout);
+    expect(page.getRequisitesCheckerNameInput().getAttribute('value')).toEqual(defaultOrganizationName);
   });
 
-  it('Шаг 11: Пользователь нажимает на кнопку сохранения данных о заказчике', async() => {
-    await page.getRequisitesCheckerButton().click();
-  });
-
-  it('Шаг 12: Пользователь видит необходимые для дальнейшего заполнения контролы', async() => {
-    await browser.wait(until.presenceOf(page.getDeliveryMethod()), defaultTimeout);
+  it('Шаг 8: Пользователь видит необходимые для дальнейшего заполнения контролы', async() => {
     await browser.wait(until.presenceOf(page.getCartMakeOrderContactName()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getCartMakeOrderContactPhone()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getCartMakeOrderContactEmail()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getDeliveryMethod()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getCartMakeOrderCommentForSupplier()), defaultTimeout);
   });
 
-  it('Шаг 13: Пользователь вводит свои ФИО, телефон и email', async() => {
+  it('Шаг 9: Пользователь вводит свои ФИО, телефон и email', async() => {
     await page.getCartMakeOrderContactName().sendKeys(defaultContactName);
     await page.getCartMakeOrderContactPhone().sendKeys(defaultContactPhone);
     await page.getCartMakeOrderContactEmail().sendKeys(defaultContactEmail);
   });
 
-  it('Шаг 14: Пользователь вводит адрес доставки (если необходимо)', async() => {
+  it('Шаг 10: Пользователь вводит адрес доставки (если необходимо)', async() => {
     const deliveryMethod = await page.getDeliveryMethod().getText();
     if (deliveryMethod.toLowerCase() === 'доставка') {
       await browser.wait(until.presenceOf(page.getDeliveryCity()), defaultTimeout);
-      await browser.wait(until.presenceOf(page.getDeliveryStreet()), defaultTimeout);
       await page.getDeliveryCity().clear();
       await page.getDeliveryCity().sendKeys(defaultDeliveryCity);
       await browser.sleep(3e3);
       await page.getDeliveryCity().sendKeys(protractor.Key.ENTER);
       await browser.sleep(1e3);
-      await page.getDeliveryStreet().sendKeys(defaultDeliveryStreet);
-      await browser.sleep(3e3);
-      await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
-      await browser.sleep(3e3);
     }
   });
 
-  it('Шаг 15: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
+  it('Шаг 11: Пользователь вводит комментарий для поставщика', async() => {
+    await page.getCartMakeOrderCommentForSupplier().sendKeys(defaultCommentForSupplier);
+  });
+
+  it('Шаг 12: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
     await page.getIsOrganizationAgent().click();
     await browser.sleep(1e3);
   });
 
-  it('Шаг 16: Пользователь нажимает на кнопку оформления заказа', async() => {
+  it('Шаг 13: Пользователь нажимает на кнопку оформления заказа', async() => {
     await page.getCartMakeOrderButton().click();
   });
 
-  it('Шаг 17: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
+  it('Шаг 14: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 

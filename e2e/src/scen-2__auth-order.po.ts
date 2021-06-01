@@ -10,6 +10,14 @@ export class AppPage {
     return element(by.css('market-cookie-agreement .after_close'));
   }
 
+  getRegionNotification(): ElementFinder {
+    return element(by.css('nz-notification .question'));
+  }
+
+  getAcceptRegionNotification(): ElementFinder {
+    return element(by.cssContainingText('button', 'Да, все верно'));
+  }
+
   getSearchBox(): ElementFinder {
     return element(by.css('market-search-box'));
   }
@@ -36,10 +44,6 @@ export class AppPage {
 
   getSearchFilterPanelControlSupplierInput(): ElementFinder {
     return element(by.css('div[formgroupname="supplier"] input'));
-  }
-
-  getGlobalSpinnerSpinning(): ElementFinder {
-    return element(by.css('cdk-overlay-container .spinner'));
   }
 
   getSearchResults(): ElementFinder {
@@ -118,56 +122,40 @@ export class AppPage {
     return element(by.css('.catalog_header__count'));
   }
 
-  getCartMakeOrderWithoutRegistrationButton(): ElementFinder {
-    return element(by.cssContainingText('button', 'Заказать без регистрации'));
-  }
-
-  getCartMakeOrderFillCustomerDataButton(): ElementFinder {
-    return element(by.cssContainingText('market-cart-order button', 'Заполнить данные заказчика '));
-  }
-
   getCartMakeOrderContactName(): ElementFinder {
-    return element(by.css('market-cart-order #contactName'));
+    return element(by.id('contactName'));
   }
 
   getCartMakeOrderContactPhone(): ElementFinder {
-    return element(by.css('market-cart-order #contactPhone'));
+    return element(by.id('contactPhone'));
   }
 
   getCartMakeOrderContactEmail(): ElementFinder {
-    return element(by.css('market-cart-order #contactEmail'));
+    return element(by.id('contactEmail'));
   }
 
-  getRequisitesChecker(): ElementFinder {
-    return element(by.css('market-requisites-checker'));
-  }
-
-  getRequisitesCheckerInnInput(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('#formINN'));
-  }
-
-  getRequisitesCheckerKppInput(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('#formKPP'));
-  }
-
-  getRequisitesCheckerNameInput(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('#formName'));
-  }
-
-  getRequisitesCheckerButton(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('button'));
+  getCartMakeOrderCommentForSupplier(): ElementFinder {
+    return element(by.id('commentForSupplier'));
   }
 
   getDeliveryMethod(): ElementFinder {
-    return element(by.css('market-cart-order nz-radio-group[formcontrolname="deliveryMethod"] .ant-radio-wrapper-checked'));
+    return element(by.css('market-order-details nz-radio-group[formcontrolname="deliveryMethod"] .ant-radio-wrapper-checked'));
+  }
+
+  getDelivery(): ElementFinder {
+    return element(by.cssContainingText('label', 'Доставка'));
   }
 
   getDeliveryCity(): ElementFinder {
-    return element(by.css('market-cart-order #city_delivery_address_input'));
+    return element(by.id('deliveryCity'));
   }
 
   getDeliveryStreet(): ElementFinder {
-    return element(by.css('market-cart-order #street_delivery_address_input'));
+    return element(by.id('deliveryStreet'));
+  }
+
+  getDeliveryHouse(): ElementFinder {
+    return element(by.id('deliveryHouse'));
   }
 
   getModalOrderSent(): ElementFinder {

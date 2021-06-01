@@ -10,6 +10,18 @@ export class AppPage {
     return element(by.css('market-cookie-agreement .after_close'));
   }
 
+  getRegionNotification(): ElementFinder {
+    return element(by.css('nz-notification .question'));
+  }
+
+  getCloseRegionNotification(): ElementFinder {
+    return element(by.css('nz-notification .ant-notification-notice-close'));
+  }
+
+  getOrderingWithoutRegistrationForm(): ElementFinder {
+    return element(by.css('market-order-details-without-auth'));
+  }
+
   getSearchBox(): ElementFinder {
     return element(by.css('market-search-box'));
   }
@@ -34,16 +46,8 @@ export class AppPage {
     return element(by.css('div[formgroupname="location"] input'));
   }
 
-  getGlobalSpinnerSpinning(): ElementFinder {
-    return element(by.css('cdk-overlay-container .spinner'));
-  }
-
   getSearchResults(): ElementFinder {
     return element(by.css('market-search-results'));
-  }
-
-  getSearchResultsTitle(): ElementFinder {
-    return element(by.css('market-search-results .title span'));
   }
 
   getAllProductCards(): ElementArrayFinder {
@@ -107,7 +111,7 @@ export class AppPage {
   }
 
   getIsOrganizationAgent(): ElementArrayFinder {
-    return element.all(by.css('.form-group-checkbox .ant-checkbox'));
+    return element.all(by.css('.ant-form-item-control-input-content .ant-checkbox'));
   }
 
   getCartMakeOrderButton(): ElementFinder {
@@ -118,25 +122,20 @@ export class AppPage {
     return element(by.css('.catalog_header__count'));
   }
 
-
-  getCartMakeOrderWithoutRegistrationButton(): ElementFinder {
-    return element(by.cssContainingText('button', 'Заказать без регистрации'));
-  }
-
-  getCartMakeOrderFillCustomerDataButton(): ElementFinder {
-    return element(by.cssContainingText('market-cart-order button', 'Заполнить данные заказчика '));
-  }
-
   getCartMakeOrderContactName(): ElementFinder {
-    return element(by.css('market-cart-order #contactName'));
+    return element(by.id('contactName'));
   }
 
   getCartMakeOrderContactPhone(): ElementFinder {
-    return element(by.css('market-cart-order #contactPhone'));
+    return element(by.id('contactPhone'));
   }
 
   getCartMakeOrderContactEmail(): ElementFinder {
-    return element(by.css('market-cart-order #contactEmail'));
+    return element(by.id('contactEmail'));
+  }
+
+  getCartMakeOrderCommentForSupplier(): ElementFinder {
+    return element(by.id('commentForSupplier'));
   }
 
   getRequisitesChecker(): ElementFinder {
@@ -144,31 +143,27 @@ export class AppPage {
   }
 
   getRequisitesCheckerInnInput(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('#formINN'));
+    return element(by.id('consumerInn'));
   }
 
   getRequisitesCheckerKppInput(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('#formKPP'));
+    return element(by.id('consumerKpp'));
   }
 
   getRequisitesCheckerNameInput(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('#formName'));
+    return element(by.id('consumerName'));
   }
 
-  getRequisitesCheckerButton(): ElementFinder {
-    return element(by.css('market-requisites-checker')).element(by.css('button'));
+  getAuth1CITSButton(): ElementFinder {
+    return element(by.cssContainingText('button', 'Войти через «1С:ИТС»'));
   }
 
   getDeliveryMethod(): ElementFinder {
-    return element(by.css('market-cart-order nz-radio-group[formcontrolname="deliveryMethod"] .ant-radio-wrapper-checked'));
+    return element(by.css('market-order-details-without-auth nz-radio-group[formcontrolname="deliveryMethod"] .ant-radio-wrapper-checked'));
   }
 
   getDeliveryCity(): ElementFinder {
-    return element(by.css('market-cart-order #city_delivery_address_input'));
-  }
-
-  getDeliveryStreet(): ElementFinder {
-    return element(by.css('market-cart-order #street_delivery_address_input'));
+    return element(by.id('deliveryCity'));
   }
 
   getModalOrderSent(): ElementFinder {

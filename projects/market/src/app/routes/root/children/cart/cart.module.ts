@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, PercentPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
@@ -7,9 +7,16 @@ import { CartComponent } from './cart.component';
 import {
   CartOrderComponent,
   CartOrderQtyCounterComponent,
+  CartOrderV2Component,
+  ImageUrlPipe,
+  OrderDetailsComponent,
+  OrderedProductsTableComponent,
+  OrderOrRequestPipe,
   OrderSentComponent,
   OrderUnavailableComponent,
-  RegisterOrderSentComponent
+  OrderV2Service,
+  RegisterOrderSentComponent,
+  VatConverterPipe
 } from './components';
 import { CartModalService } from './cart-modal.service';
 import { LOCAL_PROVIDER_TOKEN, NgZorroAntdMobileModule, ru_RU as ru_RU_Mobile } from 'ng-zorro-antd-mobile';
@@ -25,6 +32,10 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { OrderDetailsWithoutAuthComponent } from './components/order-v2/components/order-details-without-auth';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { OnlyNumberModule } from '#shared/modules';
 
 @NgModule({
   imports: [
@@ -46,19 +57,31 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
     CartRoutingModule,
     NzInputModule,
     NgZorroAntdMobileModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzSelectModule,
+    NzIconModule,
+    OnlyNumberModule
   ],
   declarations: [
     CartComponent,
     CartOrderComponent,
+    CartOrderV2Component,
     CartOrderQtyCounterComponent,
     OrderUnavailableComponent,
     OrderSentComponent,
     RegisterOrderSentComponent,
+    ImageUrlPipe,
+    OrderOrRequestPipe,
+    VatConverterPipe,
+    OrderedProductsTableComponent,
+    OrderDetailsComponent,
+    OrderDetailsWithoutAuthComponent,
   ],
   providers: [
     CartModalService,
+    OrderV2Service,
     { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
+    PercentPipe,
   ]
 })
 export class CartModule {

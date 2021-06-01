@@ -11,12 +11,14 @@ let devConfig = {
     defaultSupplierNameINN: '1828011980',
     defaultOrganizationINN: '7604246289',
     defaultOrganizationKPP: '760401001',
-    defaultOrganizationName: 'ООО Тесто №1',
+    defaultOrganizationName: 'ООО "КДЛ ЯРОСЛАВЛЬ-ТЕСТ"',
     defaultContactName: 'Федор Тестович',
     defaultContactPhone: '9512223344',
     defaultContactEmail: 'testovich.fedor@ftestovich.ru',
     defaultDeliveryCity: 'Москва г',
     defaultDeliveryStreet: 'Лермонтовская ул',
+    defaultDeliveryHouse: '17',
+    defaultCommentForSupplier: 'Прошу привезти заказ как можно быстрее. Адрес - Дмитровское шоссе, дом 9, 412 каб., г. Москва',
   },
 };
 exports.config = Object.assign(defaultConfig.config, devConfig);

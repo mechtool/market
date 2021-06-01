@@ -10,6 +10,14 @@ export class AppPage {
     return element(by.css('market-cookie-agreement .after_close'));
   }
 
+  getRegionNotification(): ElementFinder {
+    return element(by.css('nz-notification .question'));
+  }
+
+  getAcceptRegionNotification(): ElementFinder {
+    return element(by.cssContainingText('button', 'Да, все верно'));
+  }
+
   getSearchBox(): ElementFinder {
     return element(by.css('market-search-box'));
   }

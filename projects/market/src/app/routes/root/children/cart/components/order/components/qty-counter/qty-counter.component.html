@@ -6,9 +6,9 @@
           [disabled]="value <= minQuantity || isDisabled"></button>
 
   <input *ngIf="!isDisabled"
+         marketOnlyNumber
          type="number"
          class="switch_count__value"
-         (keypress)="onlyNumberKey($event)"
          (blur)="resetToZeroIfNull()"
          formControlName="val">
 

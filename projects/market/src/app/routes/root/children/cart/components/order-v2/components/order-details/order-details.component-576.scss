@@ -1,0 +1,16 @@
+@media all and (max-width: 576px) {
+  .order-details {
+    .order__customer {
+      max-width: calc(100% - 65px);
+    }
+
+    .order_label {
+      width: auto;
+      min-width: 65px;
+    }
+
+    .without-label {
+      margin-top: 5px;
+    }
+  }
+}

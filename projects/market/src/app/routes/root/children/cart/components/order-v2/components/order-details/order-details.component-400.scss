@@ -1,0 +1,11 @@
+@media all and (max-width: 400px) {
+  .order-details {
+    .desktop {
+      display: none;
+    }
+
+    .mobile {
+      display: block;
+    }
+  }
+}

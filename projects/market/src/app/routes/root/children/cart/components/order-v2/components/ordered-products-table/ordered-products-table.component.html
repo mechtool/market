@@ -1,0 +1,158 @@
+<div class="ordered-products-table" *ngIf="form" [formGroup]="form">
+  <div class="table_list table_list__products table_list__basket" formArrayName="items">
+    <div class="table_row table_header">
+      <div class="cell_right">
+        <div class="table_cell cell_title">
+          Наименование товара
+        </div>
+        <div class="table_cell cell_article">
+          Артикул
+        </div>
+        <div class="table_cell cell_available">
+          Доступность
+        </div>
+        <div class="table_cell cell_count" data-title="Количество:">
+          Количество
+        </div>
+        <div class="table_cell cell_price_one" *ngIf="isOrderType">
+          Цена
+        </div>
+        <div class="table_cell cell_sum" data-title="Сумма:" *ngIf="isOrderType">
+          Сумма
+        </div>
+      </div>
+    </div>
+
+    <div class="table_row" *ngFor="let item of itemsControls; let i = index">
+      <ng-container [formGroupName]="i">
+        <div class="cell_left">
+          <div class="cell_image" (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+
+            <img alt="{{item.controls.productName.value}}"
+                 title="{{item.controls.productName.value}}"
+                 [defaultImage]="'./assets/img/svg/clean.svg'"
+                 [lazyLoad]="item.controls.imageUrl.value | marketImageUrl"/>
+
+          </div>
+        </div>
+        <div class="cell_right">
+
+          <div class="table_cell cell_title" (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+            {{item.controls.productName.value}}
+          </div>
+
+          <div [ngClass]="{'d-none': !item.controls.partNumber.value}"
+               class="table_cell cell_article"
+               data-title="Артикул:"
+               (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+            {{item.controls.partNumber.value}}
+          </div>
+
+          <div
+            class="table_cell cell_available"
+            data-title="Доступность:"
+            [ngClass]="{'not-available': item.controls.availableToOrder.invalid, 'd-none': (item.controls.availableToOrder.valid && !item.controls.stockAmount.value && !item.controls.stockLevel.value)}"
+            (click)="goToTradeOffer(item.controls.tradeOfferId.value)">
+
+            <p nz-tooltip
+               nzTooltipTitle="{{item.controls.warning.value}}">
+
+              <img *ngIf="item.controls.availableToOrder.valid && item.controls.warning.value?.length"
+                   class="img_warning"
+                   src="./assets/img/svg/warning.svg"
+                   alt="">
+
+              <img *ngIf="item.controls.availableToOrder.invalid"
+                   class="img_warning"
+                   src="./assets/img/svg/error.svg"
+                   alt="">
+
+              {{item.controls.availableToOrder.invalid ? 'Недоступно' : item.controls.stockAmount.value | marketStock : item.controls.stockLevel.value}}
+            </p>
+
+          </div>
+
+          <div class="table_cell cell_count" data-title="Количество:"
+               [ngClass]="{'not_clickable': item.controls.availableToOrder.invalid}">
+            <market-cart-order-qty-counter
+              formControlName="quantity"
+              [isDisabled]="isOrderLoading"
+              [minQuantity]="item.controls.orderQtyMin.value"
+              [orderStep]="item.controls.orderQtyStep.value"
+            ></market-cart-order-qty-counter>
+          </div>
+
+          <div class="table_cell cell_price_one" *ngIf="isOrderType">
+            <p *ngIf="item.controls.priceBeforeDiscount.value">
+              <span nz-tooltip
+                    nzTooltipTitle="Цена без скидки"
+                    class="price_before_discount">{{item.controls.priceBeforeDiscount.value | marketMultiplier:'.01' | currencyPrice: form.controls.currencyCode.value}}
+              </span>
+            </p>
+
+            <p>
+              <span
+                class="price_one">{{item.controls.price.value | marketMultiplier:'.01' | currencyPrice: form.controls.currencyCode.value}}</span>
+            </p>
+          </div>
+
+          <div class="table_cell cell_sum" data-title="Стоимость:" *ngIf="isOrderType">
+            <p>
+              <span
+                class="price">{{(item.controls.priceIncludesVAT.value ? item.controls.total.value : item.controls.totalWithoutVat.value) | marketMultiplier:'.01' | currencyPrice: form.controls.currencyCode.value}}</span>
+            </p>
+
+            <p>
+              <span
+                class="cell_nds">{{item.controls.vat.value | marketVatConverter : item.controls.priceIncludesVAT.value}}</span>
+            </p>
+          </div>
+
+          <div class="table_cell cell_more">
+            <img nz-tooltip
+                 nzTooltipTitle="Удалить из заказа" src="assets/img/svg/trash-can.svg" alt="" title=""
+                 (click)="removeItem(item.controls)">
+          </div>
+
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="order__total">
+      <div class="order__total_price" *ngIf="isOrderType">
+
+        <div class="order__total_label">
+          Итого:
+        </div>
+
+        <div class="order__total_value">
+          {{form.controls.total.value | marketMultiplier:'.01' | currencyPrice: form.controls.currencyCode.value}}
+        </div>
+
+      </div>
+
+      <div class="order__total_nds" *ngIf="isOrderType">
+        Включая
+        НДС: {{form.controls.totalVat.value | marketMultiplier:'.01' | currencyPrice: form.controls.currencyCode.value}}
+      </div>
+
+      <div class="form_error" *ngIf="form.invalid && unavailableToOrder">
+        <p>
+          <img class="img_warning"
+               src="./assets/img/svg/error.svg"
+               alt="">
+          Удалите недоступные позиции из заказа
+        </p>
+      </div>
+
+      <div class="form_warning" *ngIf="!unavailableToOrder && minOrderAmountViolations">
+        <p>
+          <img class="img_warning"
+               src="./assets/img/svg/warning.svg"
+               alt="">
+          {{minOrderAmountViolations.message}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
