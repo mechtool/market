@@ -130,8 +130,8 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
 
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
     const productCards = await page.getAllProductCards();
-    // const index = productCards.length ? randomItem(productCards.length / 2) : 0;
-    const index = randomItem(4);
+    const index = productCards.length ? randomItem(productCards.length / 2) : 0;
+
     console.log('\t------------------------------->');
     console.log(`\tВсего найдено ${productCards.length} шт.`);
     console.log(`\tВыбран ${index} товар`)
@@ -146,22 +146,17 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
     await browser.wait(until.textToBePresentInElement(page.getTradeOfferCounterTitle(), 'найдено'), defaultTimeout);
     await browser.wait(until.presenceOf(page.getTradeOfferCardList()), defaultTimeout);
     await browser.wait(presenceOfAll(page.getAllTradeOfferCards()), defaultTimeout);
-
-    console.log('\tТорговые предложения загрузились');
   });
 
   it('Шаг 3: Пользователь переходит в произвольно выбранное торговое предложение', async() => {
     const tradeOfferCards = await page.getAllTradeOfferCards();
-    // const index = tradeOfferCards.length ? randomItem(tradeOfferCards.length / 2) : 0;
-    const index = 0;
 
     console.log('\t------------------------------->');
     console.log(`\tВсего торговых предложений найдено ${tradeOfferCards.length} шт.`);
-    console.log(`\tВыбран ${index} товар`)
     console.log('\t------------------------------->');
 
     await browser.sleep(5e3);
-    await browserClick(tradeOfferCards[index].$('.catalog_item__pickup'));
+    await browserClick(tradeOfferCards[0].$('.catalog_item__pickup'));
   });
 
   it('Шаг 4: Пользователь видит описание торгового предложения', async() => {
@@ -322,6 +317,7 @@ export function unauthorizedUserMakesOrder(page: any) {
   });
 
   it('Шаг 14: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
+    await browser.sleep(5e3);
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 

@@ -111,7 +111,7 @@ export class AppPage {
   }
 
   getIsOrganizationAgent(): ElementArrayFinder {
-    return element.all(by.css('.ant-form-item-control-input-content .ant-checkbox'));
+    return element.all(by.css('.ant-checkbox-wrapper .ant-checkbox'));
   }
 
   getCartMakeOrderButton(): ElementFinder {
