@@ -9,7 +9,7 @@ import {
   defaultContactPhone,
   defaultDeliveryCity,
   defaultDeliveryHouse,
-  defaultDeliveryStreet,
+  defaultDeliveryStreet, defaultOrganizationKPP,
   defaultSupplierNameINN,
   defaultTimeout,
   elementTextContentChanged,
@@ -311,28 +311,11 @@ export async function authorizedUserMakesOrder(page: any) {
     }
   });
 
-  it('Шаг 6: Пользователь вводит свои ФИО, телефон и email [если товар доступен к заказу]', async() => {
-    if (isOrderButtonEnabled) {
-      await page.getCartMakeOrderContactName().clear();
-      await page.getCartMakeOrderContactName().sendKeys(defaultContactName);
-      await page.getCartMakeOrderContactPhone().clear();
-      await page.getCartMakeOrderContactPhone().sendKeys(defaultContactPhone);
-      await page.getCartMakeOrderContactEmail().clear();
-      await page.getCartMakeOrderContactEmail().sendKeys(defaultContactEmail);
-    }
-  });
-
-  it('Шаг 7: Пользователь вводит комментарий для поставщика [если товар доступен к заказу]', async() => {
-    if (isOrderButtonEnabled) {
-      await page.getCartMakeOrderCommentForSupplier().sendKeys(defaultCommentForSupplier);
-    }
-  });
-
-  it('Шаг 8: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
+  it('Шаг 6: Пользователь вводит адрес доставки [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       const deliveryMethod = await page.getDeliveryMethod().getText();
 
-      /*if (deliveryMethod.toLowerCase() === 'самовывоз') {
+      if (deliveryMethod.toLowerCase() === 'самовывоз') {
         await page.getDelivery().click();
         await browser.sleep(2e3);
       }
@@ -341,26 +324,58 @@ export async function authorizedUserMakesOrder(page: any) {
       await browser.wait(until.presenceOf(page.getDeliveryStreet()), defaultTimeout);
       await browser.wait(until.presenceOf(page.getDeliveryHouse()), defaultTimeout);
 
+      await browser.sleep(5e3);
+
       await page.getDeliveryCity().clear();
+      await browser.sleep(1e3);
       await page.getDeliveryCity().sendKeys(defaultDeliveryCity);
       await browser.sleep(2e3);
+      await page.getDeliveryCity().sendKeys(protractor.Key.DOWN);
       await page.getDeliveryCity().sendKeys(protractor.Key.ENTER);
-      await browser.sleep(1e3);
+      await browser.sleep(2e3);
 
       await page.getDeliveryStreet().sendKeys(defaultDeliveryStreet);
-      await browser.sleep(2e3);
-      await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
       await browser.sleep(1e3);
+      await page.getDeliveryStreet().sendKeys(protractor.Key.DOWN);
+      await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
+      await browser.sleep(2e3);
 
       await page.getDeliveryHouse().sendKeys(defaultDeliveryHouse);
-      await browser.sleep(2e3);
+      await browser.sleep(1e3);
+      await page.getDeliveryHouse().sendKeys(protractor.Key.DOWN);
       await page.getDeliveryHouse().sendKeys(protractor.Key.ENTER);
-      await browser.sleep(1e3);*/
+      await browser.sleep(2e3);
+
+      expect(page.getDeliveryCity().getAttribute('value')).toEqual(defaultDeliveryCity);
+    }
+  });
+
+  it('Шаг 7: Пользователь вводит свои ФИО, телефон и email [если товар доступен к заказу]', async() => {
+    if (isOrderButtonEnabled) {
+      await page.getCartMakeOrderContactName().clear();
+      await browser.sleep(1e3);
+      await page.getCartMakeOrderContactName().sendKeys(defaultContactName);
+      await browser.sleep(1e3);
+      await page.getCartMakeOrderContactPhone().clear();
+      await browser.sleep(1e3);
+      await page.getCartMakeOrderContactPhone().sendKeys(defaultContactPhone);
+      await browser.sleep(1e3);
+      await page.getCartMakeOrderContactEmail().clear();
+      await browser.sleep(1e3);
+      await page.getCartMakeOrderContactEmail().sendKeys(defaultContactEmail);
+    }
+  });
+
+  it('Шаг 8: Пользователь вводит комментарий для поставщика [если товар доступен к заказу]', async() => {
+    if (isOrderButtonEnabled) {
+      await browser.sleep(1e3);
+      await page.getCartMakeOrderCommentForSupplier().sendKeys(defaultCommentForSupplier);
     }
   });
 
   it('Шаг 9: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
+      await browser.sleep(3e3);
       await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
       await browserClick(await page.getCartMakeOrderButton());
     }
@@ -368,7 +383,7 @@ export async function authorizedUserMakesOrder(page: any) {
 
   it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
-      await browser.sleep(1e4);
+      await browser.sleep(5e3);
       await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
     }
   });
