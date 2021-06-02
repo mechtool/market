@@ -1,9 +1,13 @@
-import { by, element, ElementArrayFinder, ElementFinder } from 'protractor';
+import { by, element, ElementFinder } from 'protractor';
 
 export class RegisterOrganizationIPPage {
 
   getRegisterOrganizationIP(): ElementFinder {
     return element(by.css('market-organization-operate'));
+  }
+
+  getOrganizationInnElement(): ElementFinder {
+    return this.getRegisterOrganizationIP().element(by.css('#inn'));
   }
 
   getOrganizationNameElement(): ElementFinder {

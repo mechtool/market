@@ -19,6 +19,7 @@ let devConfig = {
     defaultDeliveryStreet: 'Лермонтовская ул',
     defaultDeliveryHouse: '17',
     defaultCommentForSupplier: 'Прошу привезти заказ как можно быстрее. Адрес - Дмитровское шоссе, дом 9, 412 каб., г. Москва',
+    defaultOrganizationIPNamePattern: 'ИП Тесто-',
   },
 };
 exports.config = Object.assign(defaultConfig.config, devConfig);

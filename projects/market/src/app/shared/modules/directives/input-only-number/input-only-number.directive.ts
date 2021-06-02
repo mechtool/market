@@ -21,11 +21,9 @@ export class OnlyNumberDirective {
       'ArrowRight'
     ];
     const keysWithMetaKeyToSkipValidation = ['a', 'c', 'v', 'x'];
-    if (
-      keysToSkipValidation.includes(e.key) ||
-      (keysWithMetaKeyToSkipValidation.includes(e.key) &&
-        (e.ctrlKey || e.metaKey)) ||
-      RE.test(e.key)
+
+    if ((keysWithMetaKeyToSkipValidation.includes(e.key) && (e.ctrlKey || e.metaKey)) ||
+      keysToSkipValidation.includes(e.key) || RE.test(e.key)
     ) {
       return;
     }

@@ -247,12 +247,18 @@ export function userRegistersOrganizations(page: any, registerOrganizationIPPage
 
   it('Шаг 8: Пользователь нажимает на кнопку регистрации организации', async() => {
     if (isRegisterOrganizationButtonEnabled) {
+      browser.getCurrentUrl().then((res) => {
+        console.log('\tURL страницы регистрации организации:', res)
+      })
       await browserClick(await registerOrganizationIPPage.getBtnElement());
     }
   });
 
   it('Шаг 9: Видит страницу со списком текущих акций', async() => {
-    await browser.sleep(5e3);
+    await browser.sleep(2e3);
+    browser.getCurrentUrl().then((res) => {
+      console.log('\tURL страницы акций:', res)
+    })
     await browser.wait(until.presenceOf(promoPage.getTitleElement()), defaultTimeout);
   });
 
