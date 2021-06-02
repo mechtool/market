@@ -3,5 +3,5 @@ export function legalIdToInn(legalId: string): string {
 }
 
 export function innKppToLegalId(inn: string, kpp?: string) {
-  return `${inn}${kpp ? `:${kpp}` : ''}`;
+  return `${inn}${!!+kpp ? `:${kpp}` : ''}`;
 }

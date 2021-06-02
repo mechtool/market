@@ -551,7 +551,7 @@ export class RfpEditComponent implements OnInit {
             this._notificationsService.info(`Запрос отредактирован`);
             this._router.navigateByUrl(`/my/rfps`);
           }, (err) => {
-            if (err.status === 422 && err?.validationError?.length) {
+            if (err.error?.status === 422 && err.error?.validationError?.length) {
               const validationErrorMessage =  err.validationError[0].message;
               this._notificationsService.error(`Произошла ошибка при редактировании запроса. ${validationErrorMessage}`);
             } else {
@@ -566,8 +566,8 @@ export class RfpEditComponent implements OnInit {
           this._notificationsService.info(`Запрос создан`);
           this._router.navigateByUrl(`/my/rfps`);
         }, (err: any) => {
-          if (err.status === 422 && err?.validationError?.length) {
-            const validationErrorMessage =  err.validationError[0].message;
+          if (err.error?.status === 422 && err.error?.validationError?.length) {
+            const validationErrorMessage =  err.error.validationError[0].message;
             this._notificationsService.error(`Произошла ошибка при создании запроса. ${validationErrorMessage}`);
           } else {
             this._notificationsService.error(`Произошла ошибка при создании запроса. Попробуйте еще раз.`);
@@ -591,7 +591,7 @@ export class RfpEditComponent implements OnInit {
       audience.restrictionType = form.get('audienceRestrictionType').value;
       audience.parties = [];
       form.get('audienceParties').value.forEach((party) => {
-        audience.parties.push({ inn: party.inn, kpp: party.kpp});
+        audience.parties.push({ inn: party.inn, kpp: party.kpp || 0});
       })
     }
     if (form.get('attachments').value?.length) {
