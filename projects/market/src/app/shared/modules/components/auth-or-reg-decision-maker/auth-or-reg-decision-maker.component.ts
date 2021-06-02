@@ -1,11 +1,9 @@
 import { Component, Input, Output } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { Subject } from 'rxjs';
 import { AuthService } from '#shared/modules/common-services/auth.service';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models/metrika-event-type.model';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'market-auth-decision-maker',
   templateUrl: './auth-or-reg-decision-maker.component.html',

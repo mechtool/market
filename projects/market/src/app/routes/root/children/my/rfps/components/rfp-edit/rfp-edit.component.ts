@@ -14,7 +14,7 @@ import {
   UserService
 } from '#shared/modules';
 import { defer, forkJoin, fromEvent, Observable, of } from 'rxjs';
-import { catchError, debounceTime, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import {catchError, debounceTime, filter, map, pairwise, startWith, switchMap, take, tap} from 'rxjs/operators';
 import { dataURLtoBlobSize, innKppToLegalId, uniqueArray } from '#shared/utils';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
@@ -240,12 +240,16 @@ export class RfpEditComponent implements OnInit {
   }
 
   private _handleSelectedOrganizationChanges() {
-    this.form.get('selectedOrganization').valueChanges
+
+    this.form.get('selectedOrganization')
+      .valueChanges
       .pipe(
-        filter(() => {
-          return this.form.get('documentOrderNumber').pristine
+        startWith(null as string),
+        pairwise(),
+        filter(([prev, next]) => {
+          return prev !== null && JSON.stringify(prev) !== JSON.stringify(next) && this.form.get('documentOrderNumber').pristine;
         })
-      ).subscribe((selectedOrganization) => {
+      ).subscribe(([,selectedOrganization]) => {
         this.form.get('documentOrderNumber').patchValue(`Запрос ${(new AbbreviatedBusinessNamePipe).transform(selectedOrganization.organizationName)} от ${format(new Date(), 'dd-MM-yyyy HH-mm')}`);
       },
       (err) => {

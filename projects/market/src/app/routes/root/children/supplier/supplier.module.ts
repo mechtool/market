@@ -21,6 +21,8 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { TradeOfferUnavailabilityComponent } from './components/trade-offer-unavailability/trade-offer-unavailability.component';
+import {NzButtonModule} from 'ng-zorro-antd/button';
 
 @NgModule({
   imports: [
@@ -31,6 +33,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     SupplierCardModule,
     NzSpinModule,
     NzIconModule,
+    NzButtonModule,
     SharedDepsModule,
     ProductGalleryModule,
     NzTabsModule,
@@ -44,7 +47,12 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
     VirtualScrollerModule,
     NzToolTipModule,
   ],
-  declarations: [SupplierListComponent, SupplierSingleComponent, TradeOfferComponent],
+  declarations: [
+    SupplierListComponent,
+    SupplierSingleComponent,
+    TradeOfferComponent,
+    TradeOfferUnavailabilityComponent
+  ],
 })
 export class SupplierModule {
 }

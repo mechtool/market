@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { combineLatest, of, throwError } from 'rxjs';
+import {combineLatest, of, race, Subscription, throwError} from 'rxjs';
 import {
   CounterpartyResponseModel,
   ProductDto,
@@ -9,26 +9,34 @@ import {
 } from '#shared/modules/common-services/models';
 import {
   CartPromoterService,
-  ExternalProvidersService,
+  ExternalProvidersService, LocalStorageService,
   NotificationsService,
   OrganizationsService,
   ProductService,
   TradeOffersService,
 } from '#shared/modules/common-services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { Meta } from "@angular/platform-browser";
+import {catchError, filter, switchMap, take, tap} from 'rxjs/operators';
+import { Meta } from '@angular/platform-browser';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { TradeOfferUnavailabilityComponent } from '../trade-offer-unavailability/trade-offer-unavailability.component';
+import { NzModalRef } from 'ng-zorro-antd/modal/modal-ref';
+import { unsubscribeList } from '#shared/utils';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   templateUrl: './trade-offer.component.html',
-  styleUrls: ['./trade-offer.component.scss', './trade-offer.component-992.scss'],
+  styleUrls: [
+    './trade-offer.component.scss',
+    './trade-offer.component-992.scss',
+  ],
 })
 export class TradeOfferComponent implements OnDestroy {
   product: ProductDto;
   supplier: SuppliersItemModel;
   tradeOffer: TradeOfferResponseModel;
+  modal: NzModalRef;
+
+  private _isRegionSelectedSubscription: Subscription;
 
   get hasProductDescription(): boolean {
     return !(this.product.productDescription || this.product.features?.length);
@@ -44,13 +52,17 @@ export class TradeOfferComponent implements OnDestroy {
     private _organizationsService: OrganizationsService,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
+    private _modalService: NzModalService,
+    private _localStorageService: LocalStorageService,
   ) {
     this._initTradeOffer();
   }
 
   ngOnDestroy(): void {
+    this.modal?.destroy();
     this._cartPromoterService.stop();
     this._meta.removeTag('itemprop="identifier"');
+    unsubscribeList([this._isRegionSelectedSubscription]);
   }
 
   madeOrder(isMadeOrder: boolean) {
@@ -107,6 +119,19 @@ export class TradeOfferComponent implements OnDestroy {
           this.tradeOffer = tradeOffer;
           this.product = ProductDto.fromTradeOffer(tradeOffer);
           this.supplier = this._mapSupplier(tradeOffer.supplier, counterparty);
+          const deliveryFiasCodes = this.tradeOffer.deliveryDescription?.deliveryRegions?.reduce((accum, curr) => {
+              if (curr.fiasCodes.length) {
+                accum.push(...curr.fiasCodes);
+              }
+              return accum;
+            }, []) || [];
+          const pickupFromFiasCodes = this.tradeOffer.deliveryDescription?.pickupFrom?.reduce((accum, curr) => {
+              if (curr.fiasCodes.length) {
+                accum.push(...curr.fiasCodes);
+              }
+              return accum;
+            }, []) || [];
+          this._openModalTradeOfferUnavailability(deliveryFiasCodes, pickupFromFiasCodes);
         },
         (err) => {
           if (err.status === 404) {
@@ -131,5 +156,31 @@ export class TradeOfferComponent implements OnDestroy {
       publicInfo: counterparty,
       isVerifiedOrg: supplier.isVerifiedOrg,
     };
+  }
+
+  private _openModalTradeOfferUnavailability(deliveryFiasCodes, pickupFromFiasCodes) {
+    const supplyFiasCodes = [...deliveryFiasCodes, ...pickupFromFiasCodes];
+    const { fias, locality } = this._localStorageService.getUserLocation();
+
+    this._isRegionSelectedSubscription = this._localStorageService.isRegionSelected$
+      .asObservable()
+      .pipe(
+        filter(r => r && !supplyFiasCodes.includes(fias)),
+        take(1)
+      )
+      .subscribe(() => {
+        const modalConfig = {
+          nzTitle: 'Поставка невозможна',
+          nzContent: TradeOfferUnavailabilityComponent,
+          nzFooter: null,
+          nzWidth: 480,
+          nzComponentParams: {
+            fias,
+            locality
+          },
+        };
+        this.modal = this._modalService.create(modalConfig);
+      });
+
   }
 }

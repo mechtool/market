@@ -66,7 +66,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     SearchBoxCategoryFinderAllComponent,
     SearchFilterComponent,
   ],
-  providers: [SearchAreaService, { provide: FILTER_FORM_CONFIG, useValue: filterFormDefaultConfig }],
+  providers: [SearchAreaService],
   exports: [SearchAreaComponent, SearchBoxComponent],
 })
 export class SearchAreaModule {

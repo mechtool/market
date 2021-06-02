@@ -29,6 +29,7 @@ import { SetupServicesModule } from '#shared/modules/setup-services';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { environment } from '#environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
+import {FILTER_FORM_CONFIG, filterFormDefaultConfig} from "#shared/modules/components/search-area/config";
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -64,6 +65,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     { provide: NZ_I18N, useValue: ru_RU },
     { provide: NZ_ICONS, useValue: icons },
     { provide: APP_CONFIG, useValue: { retryNum: 3, retryDelay: 300, debounceTime: 300 } },
+    { provide: FILTER_FORM_CONFIG, useValue: filterFormDefaultConfig },
     {
       provide: APP_INITIALIZER,
       useFactory: ApiFactory,

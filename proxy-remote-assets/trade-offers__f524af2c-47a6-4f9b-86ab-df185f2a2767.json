@@ -1,143 +1,79 @@
 {
-  "id": "f524af2c-47a6-4f9b-86ab-df185f2a2767",
-  "externalCode": "7b93fb96-3db8-11ea-a3f7-4cedfb3d3014#5380f802-9403-11e9-a3e0-4cedfb3d3014##299b0afa-04ca-11e8-babb-08606e6a3e19",
+  "id": "282b01cd-8206-4b17-822f-d91c6aa4b7da",
+  "sid": "aa04d8d1e8a2fccd",
+  "externalCode": "metro-trade-offers-gateway-price-list:215784",
+  "publicationDate": "2020-12-21",
   "offerDescription": {
-    "title": "Ввод кабельный взрывозащищенный М63(П)/G1 1/2(М) LT-EBM67M56GXS",
-    "description": null
+    "title": null,
+    "description": "Доставка осуществляется по Москве и Московской области. Желаемую дату доставки заказа укажите в комментарии к заказу. Для доставки на следующий день, заказ необходимо разместить до 15:30 текущего дня. Сб-Вс выходной (доставка не работает). Минимальная сумма заказа 8000 руб. с НДС. В контактах, пожалуйста, указывайте прямой, по возможности, мобильный телефон контактного лица."
   },
   "product": {
-    "ref1cNomenclature": {
-      "categoryId": "6406",
-      "categoryName": "Кабельные вводы, муфты, фитинги",
-      "parentCategories": [
+    "ref1cNomenclature": null,
+    "supplierNomenclature": {
+      "productSpecificationId": "19db8715-4991-4a89-87d3-646ea4799606",
+      "productName": "Минеральная вода ACQUA PANNA без газа, 6*0.25 л",
+      "productDescription": "Минеральная вода ACQUA PANNA, 0,25 л - экологически чистый продукт из источника, расположенного в предгорьях Апеннин, недалеко от Флоренции, в Италии. Вода элит класса ACQUA PANNA отличается слабой минерализацией. Благотворное влияние на организм объясняется наличием в составе таких веществ, как кальций и бикарбонаты. Можно использовать продукт для приготовления чая или кофе. Напиток разливается в маленькие стеклянные бутылочки, имеющие привлекательный внешний вид. Продукт пользуется большим спросом в заведениях общественного питания, а также в элитных продуктовых магазинах. Минеральная вода ACQUA PANNA, 0,25л всегда в наличии в торговом центре METRO по привлекательной цене. Производитель: Sanpellegrino S.p.A. (Сан Пеллегрино Терме), Италия. Вид воды: минеральная. Степень газации: негазированная. Объем: 0.25 л. Тип упаковки: стекло. Состав короба: 24шт.",
+      "manufacturer": null,
+      "productPartNumber": "215784",
+      "productBarCodes": [],
+      "baseUnitOkeiCode": "796",
+      "baseUnitOkei": {
+        "code": "796",
+        "nsymb": "шт",
+        "name": "Штука"
+      },
+      "requisites": [
         {
-          "categoryId": "6406",
-          "categoryName": "Кабельные вводы, муфты, фитинги"
-        },
-        {
-          "categoryId": "6405",
-          "categoryName": "Взрывозащищенное оборудование"
-        },
-        {
-          "categoryId": "4374",
-          "categoryName": "Освещение"
-        },
-        {
-          "categoryId": "3672",
-          "categoryName": "Строительство и ремонт"
+          "name": "Вес",
+          "value": "250"
         }
       ],
-      "productSpecificationId": "1387349",
-      "productName": "Ввод кабельный взрывозащищенный М63(П)/G1 1/2(М) LT-EBM67M56GXS",
-      "productDescription": "Вводы кабельные серии LT-EBM предназначены для уплотнения и фиксации небронированных кабелей с резиновой и пластмассовой изоляцией трубной прокладки при вводе их в стационарное, передвижное или переносное электрооборудование.\n\n\nЭлектромагнитная совместимость (ТР ТС 020/2011): Нет\nLED: Нет\nПеременный/постоянный ток (AC/DC): Нет\nДатчик: Нет\nСертификат соответствия: TC RU C-RU.ГБ08.В.01472\nВзрывозащищенность: 1 Ex d IIC Gb X / 1Ex e IIC Gb X / Ex tb IIIC Db X",
-      "productCharacteristicId": null,
-      "productCharacteristicName": null,
-      "manufacturer": {
-        "id": "44906",
-        "name": "ООО \"МЕЖДУНАРОДНАЯ ГРУППА КОМПАНИЙ \"СВЕТОВЫЕ ТЕХНОЛОГИИ\"",
-        "tradeMarkId": null,
-        "tradeMark": null
-      },
-      "productBarCodes": ["4600783162856"],
-      "productPartNumber": "2327004210",
       "imageUrls": [
         "https://catalog-pic.1c.ru/api/v1/0/d/4/a/0d4aff5536b0b3f04904cdab302a04b93.jpg",
         "https://catalog-pic.1c.ru/api/v1/0/2/7/8/0278f4b9f9d703f508eda88778644c355.jpg"
       ],
-      "baseUnitOkeiCode": "796",
-      "requisites": [
-        {
-          "id": "16671",
-          "value": "85.0",
-          "name": "Высота (мм)",
-          "valueName": null,
-          "valueType": "number"
-        },
-        {
-          "id": "16696",
-          "value": "44.0",
-          "name": "Длина (мм)",
-          "valueName": null,
-          "valueType": "number"
-        },
-        {
-          "id": "16672",
-          "value": "18.0",
-          "name": "Гарантия (мес.)",
-          "valueName": null,
-          "valueType": "number"
-        },
-        {
-          "id": "16684",
-          "value": "0.2",
-          "name": "Вес, кг",
-          "valueName": null,
-          "valueType": "number"
-        },
-        {
-          "id": "16691",
-          "value": "false",
-          "name": "Аварийное энергоснабжение",
-          "valueName": null,
-          "valueType": "boolean"
-        },
-        {
-          "id": "16693",
-          "value": "36894",
-          "name": "Степень защиты (IP)",
-          "valueName": "IP66/IP68",
-          "valueType": "enumeration"
-        },
-        {
-          "id": "16673",
-          "value": "36717",
-          "name": "Материал",
-          "valueName": "Латунь",
-          "valueType": "enumeration"
-        },
-        {
-          "id": "16665",
-          "value": "36697",
-          "name": "Цвет корпуса",
-          "valueName": "неокрашенный",
-          "valueType": "enumeration"
-        },
-        {
-          "id": "16678",
-          "value": "36675",
-          "name": "Температурный режим (°С)",
-          "valueName": "от -60 до +80",
-          "valueType": "enumeration"
-        },
-        {
-          "id": "16676",
-          "value": "36858",
-          "name": "Страна происхождения",
-          "valueName": "РОССИЯ",
-          "valueType": "enumeration"
-        },
-        {
-          "id": "16681",
-          "value": "36678",
-          "name": "Вид изделия",
-          "valueName": "кабельный ввод",
-          "valueType": "enumeration"
-        }
-      ]
-    },
-    "supplierNomenclature": null
+      "ref1Cn": {
+        "categoryId": "5974",
+        "categoryName": "Вода - другое",
+        "parentCategories": [
+          {
+            "categoryId": "5974",
+            "categoryName": "Вода - другое"
+          },
+          {
+            "categoryId": "985",
+            "categoryName": "Вода"
+          },
+          {
+            "categoryId": "874",
+            "categoryName": "Напитки безалкогольные"
+          },
+          {
+            "categoryId": "3321",
+            "categoryName": "Продукты, напитки, табак"
+          }
+        ],
+        "requisites": null
+      }
+    }
   },
   "supplier": {
-    "bnetInternalId": "4e95958d-32ab-480c-a263-3107a617dc9f",
-    "inn": "7717107991",
-    "kpp": "771901001",
-    "name": "Общество с ограниченной ответственностью \"«КРИПТО-ПРО»\"",
-    "contactPerson": null
+    "description": "METRO Cash&Carry – крупнейшая управляющая компания международного бизнес-формата cash&carry (мелкооптовая торговля) в составе компании METRO AG. METRO AG – один из крупнейших международных операторов розничной и мелкооптовой торговли.",
+    "bnetInternalId": "01f85410-45dc-4f20-902b-f6aba5be3497",
+    "inn": "7704218694",
+    "kpp": "774301001",
+    "name": "ООО \"МЕТРО Кэш энд Керри Россия\"",
+    "contactPerson": {
+      "name": "Телефон call-центра",
+      "phone": "8-800-700-10-77",
+      "email": "sede@1c.ru"
+    },
+    "isVerifiedOrg": false
   },
   "termsOfSale": {
     "packaging": {
-      "description": "шт",
-      "unitsNumerator": 1,
+      "description": "Упаковка",
+      "unitsNumerator": 6,
       "unitsDenominator": 1
     },
     "maxDaysForShipment": null,
@@ -145,21 +81,47 @@
       "currencyCode": "643",
       "vat": "VAT_20",
       "includesVAT": true,
+      "hasDiscount": false,
       "matrix": [
         {
           "fromPackages": 1,
-          "price": 100000,
+          "price": 35994,
           "description": null
         }
       ]
     },
+    "orderRestrictions": {
+      "sum": {
+        "minimum": 800000,
+        "includesVAT": true
+      }
+    },
     "packageMultiplicity": 1,
-    "temporarilyOutOfSales": null,
-    "orderRestrictions": null
+    "temporarilyOutOfSales": null
   },
-  "stock": null,
+  "stock": {
+    "stockBalanceSummary": {
+      "level": "HIGH",
+      "amount": null
+    }
+  },
   "deliveryDescription": {
-    "deliveryRegions": null,
+    "deliveryRegions": [
+      {
+        "fiasCodes": [
+          "0c5b2444-70a0-4932-980c-b4dc0d3f02b5"
+        ],
+        "name": "Москва г",
+        "countryOksmCode": "643"
+      },
+      {
+        "fiasCodes": [
+          "29251dcf-00a1-4e34-98d4-5c47484a36d4"
+        ],
+        "name": "Московская обл",
+        "countryOksmCode": "643"
+      }
+    ],
     "pickupFrom": null
   },
   "requestedPriceProjection": {
@@ -167,8 +129,7 @@
     "matrix": [
       {
         "fromPackages": 1,
-        "price": 100000,
-        "description": null
+        "price": 35994
       }
     ]
   }
