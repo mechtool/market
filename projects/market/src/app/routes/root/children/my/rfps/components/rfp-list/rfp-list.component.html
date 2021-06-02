@@ -39,7 +39,7 @@
         </span>
       </div>
       <div class="table_cell cell_products" data-title="Товары:" (click)="viewRfp(rfp.id)">
-        <p *ngFor="let productName of rfp.productNames | slice:0:3; let i = index">
+        <p *ngFor="let productName of rfp.productNames | marketSlicer:0:3; let i = index">
           {{productName}}{{rfp.productNames.length > 3 && i === 2 ? "..." : ""}}
         </p>
       </div>

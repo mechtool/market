@@ -27,6 +27,7 @@ import { DocumentStatusMessagePipe } from './document-status-message.pipe';
 import { PriceListStatusPipe } from './price-list-status.pipe';
 import { LogPipe } from './log.pipe';
 import { MinQuantityPipe } from './min-quantity.pipe';
+import { SlicerPipe } from './slicer.pipe';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { MinQuantityPipe } from './min-quantity.pipe';
     PriceListStatusPipe,
     LogPipe,
     MinQuantityPipe,
+    SlicerPipe,
   ],
   exports: [
     MultiplierPipe,
@@ -86,6 +88,7 @@ import { MinQuantityPipe } from './min-quantity.pipe';
     PriceListStatusPipe,
     LogPipe,
     MinQuantityPipe,
+    SlicerPipe,
   ],
   providers: [
     CurrencyPipe,
