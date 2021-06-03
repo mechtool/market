@@ -102,16 +102,16 @@ export class AppPage {
     return element(by.cssContainingText('.item', 'Корзина'));
   }
 
-  getCartTitle(): ElementArrayFinder {
-    return element.all(by.css('.cart .title'));
+  getCartTitle(): ElementFinder {
+    return element(by.css('.cart .title'));
   }
 
   getCartProductsTitles(): ElementArrayFinder {
     return element.all(by.css('.table_cell.cell_title'));
   }
 
-  getIsOrganizationAgent(): ElementArrayFinder {
-    return element.all(by.css('.ant-checkbox-wrapper .ant-checkbox'));
+  getIsOrganizationAgent(): ElementFinder {
+    return element(by.css('.ant-checkbox-wrapper .ant-checkbox'));
   }
 
   getCartMakeOrderButton(): ElementFinder {

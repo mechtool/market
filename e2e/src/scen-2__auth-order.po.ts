@@ -106,8 +106,8 @@ export class AppPage {
     return element(by.cssContainingText('.item', 'Корзина'));
   }
 
-  getCartTitle(): ElementArrayFinder {
-    return element.all(by.css('.cart .title'));
+  getCartTitle(): ElementFinder {
+    return element(by.css('.cart .title'));
   }
 
   getCartProductsTitles(): ElementArrayFinder {

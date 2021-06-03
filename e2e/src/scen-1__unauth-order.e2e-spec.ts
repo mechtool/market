@@ -8,8 +8,6 @@ import {
   defaultContactPhone,
   defaultDeliveryCity,
   defaultOrganizationINN,
-  defaultOrganizationKPP,
-  defaultOrganizationName,
   defaultTimeout,
   elementTextContentChanged,
   navigateTo,
@@ -54,7 +52,7 @@ describe('Сценарий: Создание заказа от неавтори�
 });
 
 
-export function unauthorizedUserSearches(page: any) {
+export function unauthorizedUserSearches(page: AppPage) {
 
   it('Шаг 1: Пользователь заходит на главную страницу и видит пользовательское соглашение', async() => {
     await browser.wait(until.presenceOf(page.getCookieAgreement()), defaultTimeout);
@@ -94,7 +92,7 @@ export function unauthorizedUserSearches(page: any) {
 
 }
 
-export function unauthorizedUserSearchesWithRegion(page: any) {
+export function unauthorizedUserSearchesWithRegion(page: AppPage) {
 
   it('Шаг 1: Пользователь видит панель фильтров и контрол "Выбор региона"', async() => {
     await browser.wait(until.presenceOf(page.getSearchFilterPanel()), defaultTimeout);
@@ -121,16 +119,15 @@ export function unauthorizedUserSearchesWithRegion(page: any) {
   it('Шаг 5: Пользователь видит изменившиеся результаты поиска', async() => {
     await elementTextContentChanged(page.getSearchResults(), currentProductResultsText);
     currentProductResultsText = await page.getSearchResults().getText();
-    await browser.wait(until.presenceOf(page.getAllProductCards()), defaultTimeout);
+    await browser.wait(presenceOfAll(page.getAllProductCards()), defaultTimeout);
   });
 }
 
 
-export function unauthorizedUserFindsTradeOffer(page: any) {
+export function unauthorizedUserFindsTradeOffer(page: AppPage) {
 
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
     const productCards = await page.getAllProductCards();
-    // const index = productCards.length ? randomItem(productCards.length / 2) : 0;
     const index = randomItem(4);
 
     console.log('\t------------------------------->');
@@ -167,7 +164,7 @@ export function unauthorizedUserFindsTradeOffer(page: any) {
   });
 }
 
-export function unauthorizedUserAddsTradeOfferToCart(page: any) {
+export function unauthorizedUserAddsTradeOfferToCart(page: AppPage) {
   let cartCounter = null;
   let cartPrice = null;
 
@@ -238,7 +235,7 @@ export function unauthorizedUserAddsTradeOfferToCart(page: any) {
 
 }
 
-export function unauthorizedUserMakesOrder(page: any) {
+export function unauthorizedUserMakesOrder(page: AppPage) {
 
   it('Шаг 1: Пользователь переходит в Корзину', async() => {
     await page.getCartElement().click();
@@ -273,9 +270,9 @@ export function unauthorizedUserMakesOrder(page: any) {
 
   it('Шаг 7: Пользователь видит появившиеся, заполненые поля КПП и наименования организации', async() => {
     await browser.wait(until.presenceOf(page.getRequisitesCheckerKppInput()), defaultTimeout);
-    // expect(page.getRequisitesCheckerKppInput().getAttribute('value')).toEqual(defaultOrganizationKPP);
+    await expect(page.getRequisitesCheckerKppInput().isPresent()).toBe(true);
     await browser.wait(until.presenceOf(page.getRequisitesCheckerNameInput()), defaultTimeout);
-    // expect(page.getRequisitesCheckerNameInput().getAttribute('value')).toEqual(defaultOrganizationName);
+    await expect(page.getRequisitesCheckerNameInput().isPresent()).toEqual(true);
   });
 
   it('Шаг 8: Пользователь видит необходимые для дальнейшего заполнения контролы', async() => {
@@ -309,16 +306,17 @@ export function unauthorizedUserMakesOrder(page: any) {
   });
 
   it('Шаг 12: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
-    await page.getIsOrganizationAgent().click();
+    await browser.wait(until.presenceOf(page.getIsOrganizationAgent()), defaultTimeout);
+    await browserClick(page.getIsOrganizationAgent());
     await browser.sleep(1e3);
   });
 
   it('Шаг 13: Пользователь нажимает на кнопку оформления заказа', async() => {
-    await page.getCartMakeOrderButton().click();
+    await browserClick(page.getCartMakeOrderButton());
   });
 
   it('Шаг 14: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
-    await browser.sleep(5e3);
+    await browser.sleep(3e3);
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 

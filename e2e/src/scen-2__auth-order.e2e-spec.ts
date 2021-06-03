@@ -9,7 +9,7 @@ import {
   defaultContactPhone,
   defaultDeliveryCity,
   defaultDeliveryHouse,
-  defaultDeliveryStreet, defaultOrganizationKPP,
+  defaultDeliveryStreet,
   defaultSupplierNameINN,
   defaultTimeout,
   elementTextContentChanged,
@@ -62,7 +62,7 @@ describe('Сценарий: Создание заказа от авторизо�
 });
 
 
-export function authorizedUserAuths(page: any, loginPage: any) {
+export function authorizedUserAuths(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит кнопку "Войти"', async() => {
     await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
@@ -102,7 +102,7 @@ export function authorizedUserAuths(page: any, loginPage: any) {
 
 }
 
-export function authorizedUserSearches(page: any) {
+export function authorizedUserSearches(page: AppPage) {
 
   it('Шаг 1: Пользователь заходит на главную страницу и видит пользовательское соглашение', async() => {
     await browser.wait(until.presenceOf(page.getCookieAgreement()), defaultTimeout);
@@ -138,7 +138,7 @@ export function authorizedUserSearches(page: any) {
   });
 }
 
-export function authorizedUserSearchesWithRegion(page: any) {
+export function authorizedUserSearchesWithRegion(page: AppPage) {
 
   it('Шаг 1: Пользователь видит панель фильтров и контролы "Выбор региона" и "Выбор поставщика"', async() => {
     await browser.wait(until.presenceOf(page.getSearchFilterPanel()), defaultTimeout);
@@ -167,11 +167,10 @@ export function authorizedUserSearchesWithRegion(page: any) {
   });
 }
 
-export function authorizedUserFindsTradeOffer(page: any) {
+export function authorizedUserFindsTradeOffer(page: AppPage) {
 
   it('Шаг 1: Пользователь переходит в произвольно выбранный продукт', async() => {
     const productCards = await page.getAllProductCards();
-    // const index = productCards.length ? randomItem(productCards.length / 2) : 0;
     const index = randomItem(4);
 
     console.log('\t------------------------------->');
@@ -208,7 +207,7 @@ export function authorizedUserFindsTradeOffer(page: any) {
   });
 }
 
-export function authorizedUserAddsTradeOfferToCart(page: any) {
+export function authorizedUserAddsTradeOfferToCart(page: AppPage) {
   let cartCounter = null;
   let cartPrice = null;
 
@@ -277,7 +276,7 @@ export function authorizedUserAddsTradeOfferToCart(page: any) {
 
 }
 
-export async function authorizedUserMakesOrder(page: any) {
+export async function authorizedUserMakesOrder(page: AppPage) {
 
   it('Шаг 1: Пользователь переходит в Корзину', async() => {
     await page.getCartElement().click();
@@ -374,54 +373,13 @@ export async function authorizedUserMakesOrder(page: any) {
     }
   });
 
-  // todo Избавиться от шага
-  it('Шаг 10: Пользователь проверяет заполненость полей [если товар доступен к заказу]', async() => {
-    if (isOrderButtonEnabled) {
-
-      await page.getCartMakeOrderContactName().getAttribute('value')
-        .then((val) => {
-          console.log('\tКонтактное лицо:', val);
-        });
-
-      await page.getCartMakeOrderContactPhone().getAttribute('value')
-        .then((val) => {
-          console.log('\tТелефон:', val);
-        });
-
-      await page.getCartMakeOrderContactEmail().getAttribute('value')
-        .then((val) => {
-          console.log('\tE-mail:', val);
-        });
-
-      await page.getCartMakeOrderCommentForSupplier().getAttribute('value')
-        .then((val) => {
-          console.log('\tКомментарий для поставщика:', val);
-        });
-
-      await page.getDeliveryCity().getAttribute('value')
-        .then((val) => {
-          console.log('\tГород:', val);
-        });
-
-      await page.getDeliveryStreet().getAttribute('value')
-        .then((val) => {
-          console.log('\tУлица:', val);
-        });
-
-      await page.getDeliveryHouse().getAttribute('value')
-        .then((val) => {
-          console.log('\tДом:', val);
-        });
-    }
-  });
-
-  it('Шаг 11: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 9: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     await browser.sleep(3e3);
     await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
-    await browserClick(await page.getCartMakeOrderButton());
+    await browserClick(page.getCartMakeOrderButton());
   });
 
-  it('Шаг 12: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.sleep(5e3);
       await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);

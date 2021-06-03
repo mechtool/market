@@ -23,7 +23,6 @@ import {
 
 let urlToRedirect = null;
 let windowHandles = null;
-let isRegisterOrganizationButtonEnabled = null;
 const organizationName = `${defaultOrganizationIPNamePattern}${Math.random()}`;
 
 describe('Сценарий: Авторизация пользователя без организаций', async() => {
@@ -51,7 +50,7 @@ describe('Сценарий: Авторизация пользователя бе
   });
 
   describe('Пользователь без организаций деавторизуется в приложении', async() => {
-    userWithoutOrganizationsDeAuths(page, loginPage);
+    userWithoutOrganizationsDeAuths(page);
   });
 
   describe('Пользователь с организациями авторизуется в приложении', async() => {
@@ -64,7 +63,7 @@ describe('Сценарий: Авторизация пользователя бе
 
 });
 
-export function userAgrees(page: any) {
+export function userAgrees(page: AppPage) {
   it('Шаг 1: Пользователь заходит на главную страницу и видит пользовательское соглашение', async() => {
     await browser.wait(until.presenceOf(page.getCookieAgreement()), defaultTimeout);
   });
@@ -84,7 +83,7 @@ export function userAgrees(page: any) {
   });
 }
 
-export function userGoesToPromoRoute(page: any, promoPage: any) {
+export function userGoesToPromoRoute(page: AppPage, promoPage: PromoPage) {
   it('Шаг 1: Пользователь видит кнопку "Акции"', async() => {
     await browser.wait(until.presenceOf(page.getPromoElement()), defaultTimeout);
   });
@@ -98,7 +97,7 @@ export function userGoesToPromoRoute(page: any, promoPage: any) {
   });
 }
 
-export function userWithoutOrganizationsAuths(page: any, loginPage: any) {
+export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит кнопку "Войти"', async() => {
     await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
@@ -143,7 +142,7 @@ export function userWithoutOrganizationsAuths(page: any, loginPage: any) {
 
 }
 
-export function userWithoutOrganizationsDeAuths(page: any, loginPage: any) {
+export function userWithoutOrganizationsDeAuths(page: AppPage) {
 
   it('Шаг 1: Пользователь нажимает на кнопку ESC', async() => {
     browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
@@ -159,7 +158,7 @@ export function userWithoutOrganizationsDeAuths(page: any, loginPage: any) {
 
 }
 
-export function userWithOrganizationsAuths(page: any, loginPage: any) {
+export function userWithOrganizationsAuths(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит кнопку "Войти"', async() => {
     await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
@@ -203,7 +202,7 @@ export function userWithOrganizationsAuths(page: any, loginPage: any) {
 
 }
 
-export function userRegistersOrganizations(page: any, registerOrganizationIPPage: any, promoPage: any) {
+export function userRegistersOrganizations(page: AppPage, registerOrganizationIPPage: RegisterOrganizationIPPage, promoPage: PromoPage) {
 
   it('Шаг 1: Пользователь переходит по сохраненной ссылке', async() => {
     await navigateTo(urlToRedirect);
@@ -221,7 +220,7 @@ export function userRegistersOrganizations(page: any, registerOrganizationIPPage
 
   it('Шаг 4: Пользователь нажимает на кнопку "Продолжить"', async() => {
     await browser.wait(until.presenceOf(page.getModalRegisterOrganizationBtn()), defaultTimeout);
-    await browserClick(await page.getModalRegisterOrganizationBtn());
+    await browserClick(page.getModalRegisterOrganizationBtn());
   });
 
   it('Шаг 5: Пользователь видит форму для регистрации новой организации', async() => {
@@ -238,26 +237,24 @@ export function userRegistersOrganizations(page: any, registerOrganizationIPPage
     await registerOrganizationIPPage.getOrganizationContactFioElement().sendKeys(defaultContactName);
     await registerOrganizationIPPage.getOrganizationContactEmailElement().sendKeys(defaultContactEmail);
     await registerOrganizationIPPage.getOrganizationContactPhoneElement().sendKeys(defaultContactPhone);
-    await browserClick(await registerOrganizationIPPage.getOrganizationAgreeElement());
+    await browserClick(registerOrganizationIPPage.getOrganizationAgreeElement());
   });
 
   it('Шаг 7: Кнопка регистрации активна?', async() => {
-    isRegisterOrganizationButtonEnabled = await registerOrganizationIPPage.getBtnElement().isEnabled();
+    await expect(registerOrganizationIPPage.getBtnElement().isEnabled()).toEqual(true);
   });
 
   it('Шаг 8: Пользователь нажимает на кнопку регистрации организации', async() => {
-    if (isRegisterOrganizationButtonEnabled) {
-      browser.getCurrentUrl().then((res) => {
-        console.log('\tURL страницы регистрации организации:', res)
-      })
-      await browserClick(await registerOrganizationIPPage.getBtnElement());
-    }
+    browser.getCurrentUrl().then((url) => {
+      console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
+    })
+    await browserClick(registerOrganizationIPPage.getBtnElement());
   });
 
   it('Шаг 9: Видит страницу со списком текущих акций', async() => {
     await browser.sleep(2e3);
-    browser.getCurrentUrl().then((res) => {
-      console.log('\tURL страницы акций:', res)
+    browser.getCurrentUrl().then((url) => {
+      console.log('\tURL страницы акций:', decodeURIComponent(url));
     })
     await browser.wait(until.presenceOf(promoPage.getTitleElement()), defaultTimeout);
   });
