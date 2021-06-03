@@ -27,7 +27,6 @@ import { RfpListComponent } from './components/rfp-list/rfp-list.component';
 import { RfpViewComponent } from './components/rfp-view/rfp-view.component';
 import { RfpEditComponent } from './components/rfp-edit/rfp-edit.component';
 import { WhiteListFormComponent } from './components/white-list-form/white-list-form.component';
-import { AddressSearchFormComponent } from './components/address-search-form/address-search-form.component';
 import { BarcodeFormComponent } from './components/barcodes-form/barcode-form.component';
 import { OfferListComponent } from './components/offer-list/offer-list.component';
 import { OfferViewComponent } from './components/offer-view/offer-view.component';
@@ -68,7 +67,6 @@ import { ListEmptyComponent } from './components/list-empty/list-empty.component
     RfpViewComponent,
     RfpEditComponent,
     WhiteListFormComponent,
-    AddressSearchFormComponent,
     BarcodeFormComponent,
     RestrictionTypePipe,
     RfpStatusPipe,

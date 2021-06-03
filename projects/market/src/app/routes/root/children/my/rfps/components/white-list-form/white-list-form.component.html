@@ -19,7 +19,14 @@
 
     <nz-form-item class="register-area">
       <nz-form-control nzOffset="6">
-        <button nz-button nzType="primary" (click)="save()" [disabled]="form.invalid">Сохранить</button>
+        <button
+          type="button"
+          nz-button
+          nzType="primary"
+          [disabled]="form.invalid"
+          (click)="save()">
+          Сохранить
+        </button>
       </nz-form-control>
     </nz-form-item>
 

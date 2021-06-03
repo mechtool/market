@@ -84,8 +84,12 @@
 
     <nz-form-item class="register-area">
       <nz-form-control nzOffset="6">
-        <button nz-button nzType="primary" (click)="save()"
-                [disabled]="!form.controls.allRussia.value && !this.form.controls.fiasCode.value">
+        <button
+          type="button"
+          nz-button
+          nzType="primary"
+          [disabled]="!form.controls.allRussia.value && !this.form.controls.fiasCode.value"
+          (click)="save()">
           Сохранить
         </button>
       </nz-form-control>
