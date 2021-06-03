@@ -15,12 +15,11 @@ export function randomCategory(): number {
   return categories[randomItem(categories.length)];
 }
 
-export function randomQuery(except?: string): string {
-  let queries = ['вода', 'хлеб', 'молоко'];
-  if (except) {
-    queries = queries.filter(x => x !==except)
+export function randomQuery(repeated?: boolean): string {
+  if (repeated) {
+    return ['бумага', 'стул', 'перчатки'][randomItem(3)];
   }
-  return queries[randomItem(queries.length)];
+  return ['вода', 'хлеб', 'молоко'][randomItem(3)];
 }
 
 export const until: ProtractorExpectedConditions = protractor.ExpectedConditions;

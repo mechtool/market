@@ -110,9 +110,8 @@ export function unauthorizedUserSearchesWithRegion(page: AppPage) {
   });
 
   it('Шаг 4: Пользователь вводит новый поисковой запрос и нажимает на кнопку поиска', async() => {
-    const currentQuery = await page.getSearchBoxInput().getAttribute('value');
     await page.getSearchBoxInput().clear();
-    await page.getSearchBoxInput().sendKeys(randomQuery(currentQuery));
+    await page.getSearchBoxInput().sendKeys(randomQuery(true));
     await page.getSearchBoxButton().click();
   });
 
