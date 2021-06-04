@@ -1,4 +1,4 @@
-import { browser, by, protractor } from 'protractor';
+import { browser, by, element, protractor } from 'protractor';
 import { AppPage } from './scen-2__auth-order.po';
 import { LoginItsPage, userLoginWithAvailableOrganizations, userPassword } from './login-its/login-its.po';
 import {
@@ -423,9 +423,9 @@ export async function authorizedUserMakesOrder(page: AppPage) {
 
     await page.getErrors().isPresent()
       .then((isPresent) => {
-        console.log('\tОшибки при заполнении:', `${isPresent ? 'ДА' : 'НЕТ'}`);
-
         if (isPresent) {
+          console.log('\tНеправильно заполнены поля:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+
           page.getErrors().getText()
             .then((err) => {
               console.log('\tОшибки:', err);
@@ -433,14 +433,71 @@ export async function authorizedUserMakesOrder(page: AppPage) {
         }
       });
 
-    await page.getInputErrors().isPresent()
-      .then((isPresent) => {
-        console.log('\tВсе поля заполнены:', `${isPresent ? 'НЕТ' : 'ДА'}`);
-      });
-
     await page.getFormErrors().isPresent()
       .then((isPresent) => {
-        console.log('\tФорма заполнена с ошибками:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+        console.log('\tФорма имеет ошибки:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+
+        if (isPresent) {
+          element(by.css('.consumer-inn-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле ИНН ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.consumer-kpp-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле КПП ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.consumer-name-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Название организации ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.delivery-method-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Предпочтительном способе поставки ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.contact-name-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Контактное лицо ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.contact-phone-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Телефон ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.contact-email-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле E-mail ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.consumer-inn-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле ИНН ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.comment-for-supplier-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Комментарий для поставщика ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.is-organization-agent-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Условия пользовательского соглашения ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.delivery-to-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Укажите населенный пункт доставки ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.items-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ Позициях ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+        }
       });
 
     console.log('\t------------------------------->');

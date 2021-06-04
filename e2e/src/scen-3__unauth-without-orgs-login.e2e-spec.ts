@@ -292,56 +292,34 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
 
     await element(by.css('.form-with-errors')).isPresent()
       .then((isPresent) => {
-        console.log('\tЗаполнены все обязательные поля правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+        console.log('\tФорма имеет ошибки:', `${isPresent ? 'ДА' : 'НЕТ'}`);
 
         if (isPresent) {
           element(by.css('.organization-name-error')).isPresent()
-            .then((isPresent) => {
-              console.log('\tНаименование заполнено правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            .then((has) => {
+              console.log('\tВ поле Наименование ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
             });
 
           element(by.css('.contact-fio-error')).isPresent()
-            .then((isPresent) => {
-              console.log('\tФИО заполнены правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            .then((has) => {
+              console.log('\tВ поле ФИО ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
             });
 
           element(by.css('.contact-email-error')).isPresent()
-            .then((isPresent) => {
-              console.log('\tE-mail заполнен правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            .then((has) => {
+              console.log('\tВ поле E-mail ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
             });
 
           element(by.css('.contact-phone-error')).isPresent()
-            .then((isPresent) => {
-              console.log('\tТелефон заполнен правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            .then((has) => {
+              console.log('\tВ поле Телефон ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
             });
 
           element(by.css('.agree-error')).isPresent()
-            .then((isPresent) => {
-              console.log('\tПользовательские условия приняты:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            .then((has) => {
+              console.log('\tВ поле Условия пользовательского соглашения ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
             });
         }
-      });
-
-    await element.all(by.css('.input_attention')).isPresent()
-      .then((isPresent) => {
-        console.log('\tВ полях для ввода ошибка:', `${isPresent ? 'ДА' : 'НЕТ'}`);
-
-        if (isPresent) {
-          element.all(by.css('.input_attention')).getText()
-            .then((err) => {
-              console.log('\tОшибки:', err);
-            });
-        }
-      });
-
-    await element.all(by.css('.textarea_attention')).isPresent()
-      .then((isPresent) => {
-        console.log('\tВ описание деятельности ошибка:', `${isPresent ? 'ДА' : 'НЕТ'}`);
-      });
-
-    await element.all(by.css('.input_error')).isPresent()
-      .then((isPresent) => {
-        console.log('\tВ E-mail ошибка:', `${isPresent ? 'ДА' : 'НЕТ'}`);
       });
 
     console.log('\t------------------------------->');

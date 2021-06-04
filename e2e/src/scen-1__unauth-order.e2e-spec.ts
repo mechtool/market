@@ -255,7 +255,7 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
     await browser.wait(until.presenceOf(page.getOrderingWithoutRegistrationForm()), defaultTimeout);
   });
 
-  it('Шаг 5: Пользователь видит поле с возможностью ввода ИНН заказчика и кнопку "Войти через "1С:ИТС""', async() => {
+  it('Шаг 5: Пользователь видит поле с возможностью ввода ИНН заказчика и кнопку "Войти через "1С:ИТС"', async() => {
     await browser.wait(until.presenceOf(page.getRequisitesCheckerInnInput()), defaultTimeout);
     await browser.wait(until.presenceOf(page.getAuth1CITSButton()), defaultTimeout);
   });
@@ -374,9 +374,9 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
 
     await page.getErrors().isPresent()
       .then((isPresent) => {
-        console.log('\tОшибки при заполнении:', `${isPresent ? 'ДА' : 'НЕТ'}`);
-
         if (isPresent) {
+          console.log('\tНеправильно заполнены поля:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+
           page.getErrors().getText()
             .then((err) => {
               console.log('\tОшибки:', err);
@@ -384,19 +384,9 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
         }
       });
 
-    await page.getInputErrors().isPresent()
-      .then((isPresent) => {
-        console.log('\tВсе поля заполнены:', `${isPresent ? 'НЕТ' : 'ДА'}`);
-      });
-
-    await page.getTermsOfUseError().isPresent()
-      .then((isPresent) => {
-        console.log('\tПринял пользовательское соглашение:', `${isPresent ? 'НЕТ' : 'ДА'}`);
-      });
-
     await page.getFormErrors().isPresent()
       .then((isPresent) => {
-        console.log('\tФорма заполнена с ошибками:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+        console.log('\tФорма имеет ошибки:', `${isPresent ? 'ДА' : 'НЕТ'}`);
 
         if (isPresent) {
           element(by.css('.consumer-inn-error')).isPresent()

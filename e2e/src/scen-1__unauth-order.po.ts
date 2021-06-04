@@ -174,14 +174,6 @@ export class AppPage {
     return element.all(by.css('.ant-form-item-explain-error'));
   }
 
-  getInputErrors(): ElementArrayFinder {
-    return element.all(by.css('.ant-input .error'));
-  }
-
-  getTermsOfUseError(): ElementFinder {
-    return element(by.css('.terms-of-use .error'))
-  }
-
   getFormErrors(): ElementFinder {
     return element(by.css('.form-with-errors'));
   }
