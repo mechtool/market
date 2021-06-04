@@ -414,11 +414,11 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
         console.log('\tНа кнопке написано:', text);
       });
 
-    await browserClick(page.getCartMakeOrderButton());
+    await browser.findElement(by.buttonText('Оформить заказ')).click()
   });
 
   it('Шаг 15: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
-    await browser.sleep(3e3);
+    await browser.sleep(5e3);
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 

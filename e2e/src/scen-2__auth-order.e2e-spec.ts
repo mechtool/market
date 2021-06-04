@@ -1,4 +1,4 @@
-import { browser, protractor } from 'protractor';
+import { browser, by, protractor } from 'protractor';
 import { AppPage } from './scen-2__auth-order.po';
 import { LoginItsPage, userLoginWithAvailableOrganizations, userPassword } from './login-its/login-its.po';
 import {
@@ -459,7 +459,7 @@ export async function authorizedUserMakesOrder(page: AppPage) {
         console.log('\tНа кнопке написано:', text);
       });
 
-    await browserClick(page.getCartMakeOrderButton());
+    await browser.findElement(by.buttonText('Оформить заказ')).click()
   });
 
   it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {

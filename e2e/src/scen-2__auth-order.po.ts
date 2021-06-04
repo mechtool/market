@@ -167,7 +167,7 @@ export class AppPage {
   }
 
   getModalOrderSent(): ElementFinder {
-    return element(by.cssContainingText('market-order-sent .title', 'Заказ отправлен поставщику'));
+    return element(by.cssContainingText('market-order-sent', 'Заказ отправлен поставщику'));
   }
 
   getLoginElement(): ElementFinder {

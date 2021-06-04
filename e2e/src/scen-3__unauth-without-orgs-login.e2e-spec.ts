@@ -241,7 +241,7 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
 
   it('Шаг 7: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationAgreeElement()), defaultTimeout);
-    await registerOrganizationIPPage.getOrganizationAgreeElement().click();
+    await browser.findElement(by.css('.ant-checkbox-wrapper .ant-checkbox')).click()
     await browser.sleep(3e3);
   });
 
@@ -350,7 +350,8 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
     })
-    await browserClick(registerOrganizationIPPage.getBtnElement());
+
+    await browser.findElement(by.buttonText('Продолжить')).click()
   });
 
   it('Шаг 11: Видит страницу со списком текущих акций', async() => {
