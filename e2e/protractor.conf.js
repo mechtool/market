@@ -28,7 +28,7 @@ exports.config = {
           '--ignore-certificate-errors',
           '--allow-insecure-localhost',
           '--start-maximized',
-          '--window-size=1600,900'
+          '--window-size=1850,800'
         ],
         binary: puppeteer.executablePath(),
       },
