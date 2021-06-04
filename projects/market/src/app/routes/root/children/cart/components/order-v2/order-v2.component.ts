@@ -6,6 +6,7 @@ import { NavigationService } from '#shared/modules';
 import { Subscription } from 'rxjs';
 import { unsubscribeList } from '#shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'market-cart-order-v2',
@@ -29,6 +30,10 @@ export class CartOrderV2Component implements OnInit, OnDestroy {
 
   private readonly _cartDataChangeSubscription: Subscription;
   private readonly _selectedTabChangeSubscription: Subscription;
+
+  get form(): FormGroup {
+    return this._orderV2Service.form;
+  }
 
   get isOrderType(): boolean {
     return this._orderV2Service.isOrderType;

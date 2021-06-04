@@ -186,4 +186,8 @@ export class AppPage {
     return element(by.cssContainingText('market-order-sent .title', 'Заказ отправлен поставщику'));
   }
 
+  getFormErrors(): ElementFinder {
+    return element(by.css('.form-errors'));
+  }
+
 }

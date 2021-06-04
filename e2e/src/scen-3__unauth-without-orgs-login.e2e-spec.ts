@@ -232,19 +232,24 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getBtnElement()), defaultTimeout);
   });
 
-  it('Шаг 6: Пользователь заполняет поля в форме и принимает условия соглашения', async() => {
+  it('Шаг 6: Пользователь заполняет поля в форме (Название организации, ФИО, email, телефон)', async() => {
     await registerOrganizationIPPage.getOrganizationNameElement().sendKeys(organizationName);
     await registerOrganizationIPPage.getOrganizationContactFioElement().sendKeys(defaultContactName);
     await registerOrganizationIPPage.getOrganizationContactEmailElement().sendKeys(defaultContactEmail);
     await registerOrganizationIPPage.getOrganizationContactPhoneElement().sendKeys(defaultContactPhone);
-    await browserClick(registerOrganizationIPPage.getOrganizationAgreeElement());
   });
 
-  it('Шаг 7: Кнопка регистрации активна?', async() => {
+  it('Шаг 7: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
+    await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationAgreeElement()), defaultTimeout);
+    await browserClick(registerOrganizationIPPage.getOrganizationAgreeElement());
+    await browser.sleep(1e3);
+  });
+
+  it('Шаг 8: Кнопка регистрации активна?', async() => {
     await expect(registerOrganizationIPPage.getBtnElement().isEnabled()).toEqual(true);
   });
 
-  it('Шаг 8: Пользователь перепроверяет какие значения указал', async() => {
+  it('Шаг 9: Пользователь перепроверяет какие значения указал', async() => {
 
     console.log('\t------------------------------->');
 
@@ -330,14 +335,14 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     console.log('\t------------------------------->');
   });
 
-  it('Шаг 9: Пользователь нажимает на кнопку регистрации организации', async() => {
+  it('Шаг 10: Пользователь нажимает на кнопку регистрации организации', async() => {
     browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
     })
     await browserClick(registerOrganizationIPPage.getBtnElement());
   });
 
-  it('Шаг 10: Видит страницу со списком текущих акций', async() => {
+  it('Шаг 11: Видит страницу со списком текущих акций', async() => {
     await browser.sleep(2e3);
     browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы акций:', decodeURIComponent(url));

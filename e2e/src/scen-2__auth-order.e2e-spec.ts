@@ -453,6 +453,11 @@ export async function authorizedUserMakesOrder(page: AppPage) {
         console.log('\tВсе поля заполнены:', `${isPresent ? 'НЕТ' : 'ДА'}`);
       });
 
+    await page.getFormErrors().isPresent()
+      .then((isPresent) => {
+        console.log('\tФорма заполнена с ошибками:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+      });
+
     console.log('\t------------------------------->');
   });
 

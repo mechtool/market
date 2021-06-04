@@ -27,7 +27,7 @@ export class RegisterOrganizationIPPage {
   }
 
   getOrganizationAgreeElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('label[formcontrolname="agree"] input[type="checkbox"]'));
+    return this.getRegisterOrganizationIP().element(by.css('.ant-checkbox-wrapper .ant-checkbox'));
   }
 
   getBtnElement(): ElementFinder {
