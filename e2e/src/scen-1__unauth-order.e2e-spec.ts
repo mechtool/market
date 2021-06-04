@@ -414,10 +414,12 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
         console.log('\tНа кнопке написано:', text);
       });
 
-    // await browser.findElement(by.buttonText('Оформить заказ')).click();
-
     await browser.executeScript("arguments[0].scrollIntoView(true);", page.getCartMakeOrderButton());
-    await page.getCartMakeOrderButton().click();
+    await browser.executeScript("arguments[0].click();", page.getCartMakeOrderButton());
+
+    // await page.getCartMakeOrderButton().click();
+    // await browser.findElement(by.buttonText('Оформить заказ')).click(); // NOT WORKS
+    // await browserClick(page.getCartMakeOrderButton()); // WORKS
   });
 
   it('Шаг 15: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
