@@ -1,4 +1,4 @@
-import { browser, protractor } from 'protractor';
+import { browser, by, element, protractor } from 'protractor';
 import { AppPage } from './scen-3__unauth-without-orgs-login.po';
 import {
   LoginItsPage,
@@ -244,14 +244,100 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await expect(registerOrganizationIPPage.getBtnElement().isEnabled()).toEqual(true);
   });
 
-  it('Шаг 8: Пользователь нажимает на кнопку регистрации организации', async() => {
+  it('Шаг 8: Пользователь перепроверяет какие значения указал', async() => {
+
+    console.log('\t------------------------------->');
+
+    await browser.executeScript('return arguments[0].value', registerOrganizationIPPage.getOrganizationInnElement())
+      .then((res) => {
+        console.log('\tИНН:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', registerOrganizationIPPage.getOrganizationNameElement())
+      .then((res) => {
+        console.log('\tНаименование:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', registerOrganizationIPPage.getOrganizationContactFioElement())
+      .then((res) => {
+        console.log('\tКак к Вам обращаться:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', registerOrganizationIPPage.getOrganizationContactEmailElement())
+      .then((res) => {
+        console.log('\tE-mail:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', registerOrganizationIPPage.getOrganizationContactPhoneElement())
+      .then((res) => {
+        console.log('\tТелефон:', res);
+      });
+
+    await element(by.css('.required-fields-errors')).isPresent()
+      .then((isPresent) => {
+        console.log('\tЗаполнены все обязательные поля правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+
+        if (isPresent) {
+          element(by.css('.organization-name-error')).isPresent()
+            .then((isPresent) => {
+              console.log('\tНаименование заполнено правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            });
+
+          element(by.css('.contact-fio-error')).isPresent()
+            .then((isPresent) => {
+              console.log('\tФИО заполнены правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            });
+
+          element(by.css('.contact-email-error')).isPresent()
+            .then((isPresent) => {
+              console.log('\tE-mail заполнен правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            });
+
+          element(by.css('.contact-phone-error')).isPresent()
+            .then((isPresent) => {
+              console.log('\tТелефон заполнен правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            });
+
+          element(by.css('.agree-error')).isPresent()
+            .then((isPresent) => {
+              console.log('\tПользовательские условия приняты:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+            });
+        }
+      });
+
+    await element.all(by.css('.input_attention')).isPresent()
+      .then((isPresent) => {
+        console.log('\tВ полях для ввода ошибка:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+
+        if (isPresent) {
+          element.all(by.css('.input_attention')).getText()
+            .then((err) => {
+              console.log('\tОшибки:', err);
+            });
+        }
+      });
+
+    await element.all(by.css('.textarea_attention')).isPresent()
+      .then((isPresent) => {
+        console.log('\tВ описание деятельности ошибка:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+      });
+
+    await element.all(by.css('.input_error')).isPresent()
+      .then((isPresent) => {
+        console.log('\tВ E-mail ошибка:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+      });
+
+    console.log('\t------------------------------->');
+  });
+
+  it('Шаг 9: Пользователь нажимает на кнопку регистрации организации', async() => {
     browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
     })
     await browserClick(registerOrganizationIPPage.getBtnElement());
   });
 
-  it('Шаг 9: Видит страницу со списком текущих акций', async() => {
+  it('Шаг 10: Видит страницу со списком текущих акций', async() => {
     await browser.sleep(2e3);
     browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы акций:', decodeURIComponent(url));

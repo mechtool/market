@@ -240,11 +240,11 @@ export function authorizedUserAddsTradeOfferToCart(page: AppPage) {
 
   it('Шаг 5: Пользователь видит изменения в кол-ве и общей цене товара', async() => {
     await browser.wait(until.presenceOf(page.getCartBlockPrice()), defaultTimeout);
-    // const currentCounter = await page.getCartBlockSwitcherInput().getAttribute('value');
+    const currentCounter = await browser.executeScript('return arguments[0].value', page.getCartBlockSwitcherInput())
     await elementTextContentChanged(page.getCartBlockPrice(), cartPrice);
-    // cartPrice = await page.getCartBlockPrice().getText();
-    // expect(cartCounter).not.toBe(currentCounter);
-    // cartCounter = currentCounter;
+    cartPrice = await page.getCartBlockPrice().getText();
+    expect(cartCounter).not.toBe(currentCounter);
+    cartCounter = currentCounter;
   });
 
   it('Шаг 6: Пользователь уменьшает кол-во товара в корзине управляющей кнопкой "-"', async() => {
@@ -253,11 +253,11 @@ export function authorizedUserAddsTradeOfferToCart(page: AppPage) {
 
   it('Шаг 7: Пользователь видит изменения в кол-ве и общей цене товара', async() => {
     await browser.wait(until.presenceOf(page.getCartBlockPrice()), defaultTimeout);
-    // const currentCounter = await page.getCartBlockSwitcherInput().getAttribute('value');
+    const currentCounter = await browser.executeScript('return arguments[0].value', page.getCartBlockSwitcherInput())
     await elementTextContentChanged(page.getCartBlockPrice(), cartPrice);
-    // cartPrice = await page.getCartBlockPrice().getText();
-    // expect(cartCounter).not.toBe(currentCounter);
-    // cartCounter = currentCounter;
+    cartPrice = await page.getCartBlockPrice().getText();
+    expect(cartCounter).not.toBe(currentCounter);
+    cartCounter = currentCounter;
   });
 
   it('Шаг 8: Пользователь изменяет кол-во товара на 1000 шт вводом в поле', async() => {
@@ -267,11 +267,11 @@ export function authorizedUserAddsTradeOfferToCart(page: AppPage) {
 
   it('Шаг 9: Пользователь видит изменения в кол-ве и общей цене товара', async() => {
     await browser.wait(until.presenceOf(page.getCartBlockPrice()), defaultTimeout);
-    // const currentCounter = await page.getCartBlockSwitcherInput().getAttribute('value');
+    const currentCounter = await browser.executeScript('return arguments[0].value', page.getCartBlockSwitcherInput())
     await elementTextContentChanged(page.getCartBlockPrice(), cartPrice);
-    // cartPrice = await page.getCartBlockPrice().getText();
-    // expect(cartCounter).not.toBe(currentCounter);
-    // cartCounter = currentCounter;
+    cartPrice = await page.getCartBlockPrice().getText();
+    expect(cartCounter).not.toBe(currentCounter);
+    cartCounter = currentCounter;
   });
 
 }
@@ -320,33 +320,33 @@ export async function authorizedUserMakesOrder(page: AppPage) {
         await browser.sleep(2e3);
       }
 
-      await browser.wait(until.presenceOf(page.getDeliveryCity()), defaultTimeout);
-      await browser.wait(until.presenceOf(page.getDeliveryStreet()), defaultTimeout);
-      await browser.wait(until.presenceOf(page.getDeliveryHouse()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getDeliveryCityInput()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getDeliveryStreetInput()), defaultTimeout);
+      await browser.wait(until.presenceOf(page.getDeliveryHouseInput()), defaultTimeout);
 
       await browser.sleep(1e3);
 
-      await page.getDeliveryCity().clear();
+      await page.getDeliveryCityInput().clear();
       await browser.sleep(1e3);
-      await page.getDeliveryCity().sendKeys(defaultDeliveryCity);
+      await page.getDeliveryCityInput().sendKeys(defaultDeliveryCity);
       await browser.sleep(2e3);
-      await page.getDeliveryCity().sendKeys(protractor.Key.DOWN);
-      await page.getDeliveryCity().sendKeys(protractor.Key.ENTER);
+      await page.getDeliveryCityInput().sendKeys(protractor.Key.DOWN);
+      await page.getDeliveryCityInput().sendKeys(protractor.Key.ENTER);
       await browser.sleep(2e3);
 
-      await page.getDeliveryStreet().sendKeys(defaultDeliveryStreet);
+      await page.getDeliveryStreetInput().sendKeys(defaultDeliveryStreet);
       await browser.sleep(1e3);
-      await page.getDeliveryStreet().sendKeys(protractor.Key.DOWN);
-      await page.getDeliveryStreet().sendKeys(protractor.Key.ENTER);
+      await page.getDeliveryStreetInput().sendKeys(protractor.Key.DOWN);
+      await page.getDeliveryStreetInput().sendKeys(protractor.Key.ENTER);
       await browser.sleep(2e3);
 
-      await page.getDeliveryHouse().sendKeys(defaultDeliveryHouse);
+      await page.getDeliveryHouseInput().sendKeys(defaultDeliveryHouse);
       await browser.sleep(1e3);
-      await page.getDeliveryHouse().sendKeys(protractor.Key.DOWN);
-      await page.getDeliveryHouse().sendKeys(protractor.Key.ENTER);
+      await page.getDeliveryHouseInput().sendKeys(protractor.Key.DOWN);
+      await page.getDeliveryHouseInput().sendKeys(protractor.Key.ENTER);
       await browser.sleep(2e3);
 
-      expect(page.getDeliveryCity().getAttribute('value')).toEqual(defaultDeliveryCity);
+      expect(page.getDeliveryCityInput().getAttribute('value')).toEqual(defaultDeliveryCity);
     }
   });
 
@@ -373,13 +373,96 @@ export async function authorizedUserMakesOrder(page: AppPage) {
     }
   });
 
-  it('Шаг 9: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 9: Пользователь перепроверяет какие значения указал', async() => {
+    console.log('\t------------------------------->');
+
+    await page.getCustomerSelect().getText()
+      .then((res) => {
+        console.log('\tЗаказчик:', res);
+      });
+
+    await page.getDeliveryMethod().getText()
+      .then((res) => {
+        console.log('\tВыберите предпочтительный способ поставки из предлагаемых:', res);
+      });
+
+    await page.getDeliveryCitySelect().isPresent()
+      .then((isPresent) => {
+        if (isPresent) {
+          page.getDeliveryCitySelect().getText()
+            .then((res) => {
+              console.log('\tВыберите склад самовывоза:', res);
+            });
+        }
+      });
+
+    await page.getDeliveryCityInput().isPresent()
+      .then((isPresent) => {
+        if (isPresent) {
+          browser.executeScript('return arguments[0].value', page.getDeliveryCityInput())
+            .then((res) => {
+              console.log('\tГород:', res);
+            });
+
+          browser.executeScript('return arguments[0].value', page.getDeliveryStreetInput())
+            .then((res) => {
+              console.log('\tУлица:', res);
+            });
+
+          browser.executeScript('return arguments[0].value', page.getDeliveryHouseInput())
+            .then((res) => {
+              console.log('\tДом:', res);
+            });
+        }
+      });
+
+    await browser.executeScript('return arguments[0].value', page.getCartMakeOrderContactName())
+      .then((res) => {
+        console.log('\tКонтактное лицо:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', page.getCartMakeOrderContactPhone())
+      .then((res) => {
+        console.log('\tТелефон:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', page.getCartMakeOrderContactEmail())
+      .then((res) => {
+        console.log('\tE-mail:', res);
+      });
+
+    await browser.executeScript('return arguments[0].value', page.getCartMakeOrderCommentForSupplier())
+      .then((res) => {
+        console.log('\tКомментарий для поставщика:', res);
+      });
+
+    await page.getErrors().isPresent()
+      .then((isPresent) => {
+        console.log('\tОшибки при заполнении:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+
+        if (isPresent) {
+          page.getErrors().getText()
+            .then((err) => {
+              console.log('\tОшибки:', err);
+            });
+        }
+      });
+
+    await page.getInputErrors().isPresent()
+      .then((isPresent) => {
+        console.log('\tВсе поля заполнены:', `${isPresent ? 'НЕТ' : 'ДА'}`);
+      });
+
+    console.log('\t------------------------------->');
+  });
+
+  it('Шаг 10: Пользователь нажимает на кнопку оформления заказа [если товар доступен к заказу]', async() => {
     await browser.sleep(3e3);
     await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
     await browserClick(page.getCartMakeOrderButton());
   });
 
-  it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
+  it('Шаг 11: Пользователь видит модальное окно с сообщением об отправке заказа [если товар доступен к заказу]', async() => {
     if (isOrderButtonEnabled) {
       await browser.sleep(5e3);
       await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);

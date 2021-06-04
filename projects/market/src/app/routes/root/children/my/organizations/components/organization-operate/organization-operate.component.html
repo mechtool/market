@@ -10,12 +10,12 @@
 
     <div class="form-group form-group-std">
       <label for="inn">ИНН</label>
-      <input type="text" id="inn" autocomplete="false" list="null" formControlName="inn">
+      <input type="text" id="inn" name="{{currentDate}}_inn" formControlName="inn">
     </div>
 
     <div class="form-group form-group-std" *ngIf="form.get('kpp').value">
       <label for="kpp">КПП</label>
-      <input type="text" id="kpp" autocomplete="false" list="null" formControlName="kpp">
+      <input type="text" id="kpp" name="{{currentDate}}_kpp" formControlName="kpp">
     </div>
 
     <div class="form-group form-group-std"
@@ -24,8 +24,7 @@
       <input
         type="text"
         id="organizationName"
-        autocomplete="false"
-        list="null"
+        name="{{currentDate}}_organizationName"
         formControlName="organizationName">
       <ng-container
         *ngIf="form.controls.organizationName.invalid && (form.controls.organizationName.touched || form.controls.organizationName.dirty)">
@@ -70,8 +69,7 @@
       <input
         type="text"
         id="organizationEmail"
-        autocomplete="false"
-        list="null"
+        name="{{currentDate}}_organizationEmail"
         maxlength="100"
         formControlName="organizationEmail">
       <ng-container
@@ -92,8 +90,7 @@
       <input
         type="text"
         id="organizationPhone"
-        autocomplete="false"
-        list="null"
+        name="{{currentDate}}_organizationPhone"
         prefix="+7"
         mask="(000) 000 00 00"
         [showMaskTyped]="true"
@@ -111,8 +108,7 @@
       <label for="organizationWebsite">Сайт компании</label>
       <input type="text"
              id="organizationWebsite"
-             autocomplete="false"
-             list="null"
+             name="{{currentDate}}_organizationWebsite"
              formControlName="organizationWebsite">
       <ng-container
         *ngIf="form.controls.organizationWebsite.invalid && (form.controls.organizationWebsite.touched || form.controls.organizationWebsite.dirty)">
@@ -129,8 +125,7 @@
          [ngClass]="{'error': form.controls.organizationAddress.invalid && (form.controls.organizationAddress.touched || form.controls.organizationAddress.dirty)}">
       <label for="organizationAddress">Адрес компании</label>
       <input type="text" id="organizationAddress"
-             autocomplete="false"
-             list="null"
+             name="{{currentDate}}_organizationAddress"
              formControlName="organizationAddress">
       <ng-container
         *ngIf="form.controls.organizationAddress.invalid && (form.controls.organizationAddress.touched || form.controls.organizationAddress.dirty)">
@@ -151,8 +146,7 @@
       <input
         type="text"
         id="contactFio"
-        autocomplete="false"
-        list="null"
+        name="{{currentDate}}_contactFio"
         formControlName="contactFio">
       <ng-container
         *ngIf="form.controls.contactFio.invalid && (form.controls.contactFio.touched || form.controls.contactFio.dirty)">
@@ -174,8 +168,7 @@
       <input
         type="text"
         id="contactEmail"
-        autocomplete="false"
-        list="null"
+        name="{{currentDate}}_contactEmail"
         formControlName="contactEmail">
       <ng-container
         *ngIf="form.controls.contactEmail.invalid && (form.controls.contactEmail.touched || form.controls.contactEmail.dirty)">
@@ -198,8 +191,7 @@
       <input
         type="text"
         id="contactPhone"
-        autocomplete="false"
-        list="null"
+        name="{{currentDate}}_contactPhone"
         prefix="+7"
         mask="(000) 000 00 00"
         [showMaskTyped]="true"
@@ -222,6 +214,14 @@
              (click)="$event.stopPropagation()">пользовательского соглашения</a>
         </span>
       </label>
+    </div>
+
+    <div class="required-fields-errors" *ngIf="form.invalid">
+      <div class="organization-name-error" *ngIf="form.controls.organizationName.invalid"></div>
+      <div class="contact-fio-error" *ngIf="form.controls.contactFio.invalid"></div>
+      <div class="contact-email-error" *ngIf="form.controls.contactEmail.invalid"></div>
+      <div class="contact-phone-error" *ngIf="form.controls.contactPhone.invalid"></div>
+      <div class="agree-error" *ngIf="form.controls.agree?.invalid"></div>
     </div>
 
     <div class="form-group" style="margin-top: 25px">

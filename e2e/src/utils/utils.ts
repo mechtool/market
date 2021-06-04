@@ -29,7 +29,7 @@ export async function navigateTo(url: string = browser.baseUrl): Promise<any> {
 }
 
 export async function restart(): Promise<any> {
-  return browser.restart()  as Promise<any>;
+  return browser.restart() as Promise<any>;
 }
 
 export function presenceOfAll(elementArrayFinder): any {

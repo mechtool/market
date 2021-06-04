@@ -17,6 +17,7 @@ type OperationType = 'register'|'edit';
 })
 export class OrganizationOperateComponent implements OnChanges {
   form: FormGroup;
+  currentDate = Date.now();
   @Input() organizationData: OrganizationResponseModel;
   @Input() operationType: OperationType = 'register';
   @Input() legalRequisites: { inn: string; kpp?: string; };

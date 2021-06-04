@@ -162,8 +162,24 @@ export class AppPage {
     return element(by.css('market-order-details-without-auth nz-radio-group[formcontrolname="deliveryMethod"] .ant-radio-wrapper-checked'));
   }
 
-  getDeliveryCity(): ElementFinder {
+  getDeliveryCityInput(): ElementFinder {
     return element(by.id('deliveryCity'));
+  }
+
+  getDeliveryCitySelect(): ElementFinder {
+    return element(by.css('nz-select-item'));
+  }
+
+  getErrors(): ElementArrayFinder {
+    return element.all(by.css('.ant-form-item-explain-error'));
+  }
+
+  getInputErrors(): ElementArrayFinder {
+    return element.all(by.css('.ant-input .error'));
+  }
+
+  getTermsOfUseError(): ElementFinder {
+    return element(by.css('.terms-of-use .error'))
   }
 
   getModalOrderSent(): ElementFinder {

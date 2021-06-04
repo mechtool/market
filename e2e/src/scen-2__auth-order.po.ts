@@ -146,15 +146,23 @@ export class AppPage {
     return element(by.cssContainingText('label', 'Доставка'));
   }
 
-  getDeliveryCity(): ElementFinder {
+  getDeliveryCitySelect(): ElementFinder {
+    return element(by.css('.ant-form nz-select-item'));
+  }
+
+  getCustomerSelect(): ElementFinder {
+    return element(by.css('.order__customer nz-select-item'));
+  }
+
+  getDeliveryCityInput(): ElementFinder {
     return element(by.id('deliveryCity'));
   }
 
-  getDeliveryStreet(): ElementFinder {
+  getDeliveryStreetInput(): ElementFinder {
     return element(by.id('deliveryStreet'));
   }
 
-  getDeliveryHouse(): ElementFinder {
+  getDeliveryHouseInput(): ElementFinder {
     return element(by.id('deliveryHouse'));
   }
 
@@ -168,6 +176,14 @@ export class AppPage {
 
   getMyOrdersElement(): ElementFinder {
     return element(by.cssContainingText('.item', 'Мои заказы'));
+  }
+
+  getErrors(): ElementArrayFinder {
+    return element.all(by.css('.ant-form-item-explain-error'))
+  }
+
+  getInputErrors(): ElementArrayFinder {
+    return element.all(by.css('.ant-input .error'));
   }
 
 }
