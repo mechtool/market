@@ -403,6 +403,17 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
 
   it('Шаг 14: Пользователь нажимает на кнопку оформления заказа', async() => {
     await browser.wait(until.presenceOf(page.getCartMakeOrderButton()), defaultTimeout);
+
+    await page.getCartMakeOrderButton().isEnabled()
+      .then((isEnabled) => {
+        console.log('\tКнопка заказа активна:', `${isEnabled ? 'ДА' : 'НЕТ'}`);
+      });
+
+    await page.getCartMakeOrderButton().getText()
+      .then((text) => {
+        console.log('\tНа кнопке написано:', text);
+      });
+
     await browserClick(page.getCartMakeOrderButton());
   });
 

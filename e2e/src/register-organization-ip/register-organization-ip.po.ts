@@ -27,11 +27,11 @@ export class RegisterOrganizationIPPage {
   }
 
   getOrganizationAgreeElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('.ant-checkbox-wrapper .ant-checkbox'));
+    return element(by.css('.ant-checkbox-wrapper .ant-checkbox'));
   }
 
   getBtnElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('button'));
+    return element(by.buttonText('Продолжить'));
   }
 
 }

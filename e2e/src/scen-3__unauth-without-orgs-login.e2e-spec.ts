@@ -241,11 +241,22 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
 
   it('Шаг 7: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationAgreeElement()), defaultTimeout);
-    await browserClick(registerOrganizationIPPage.getOrganizationAgreeElement());
-    await browser.sleep(1e3);
+    await registerOrganizationIPPage.getOrganizationAgreeElement().click();
+    await browser.sleep(3e3);
   });
 
   it('Шаг 8: Кнопка регистрации активна?', async() => {
+
+    await registerOrganizationIPPage.getBtnElement().isEnabled()
+      .then((isEnabled) => {
+        console.log('\tКнопка регистрации активна:', `${isEnabled ? 'ДА' : 'НЕТ'}`);
+      });
+
+    await registerOrganizationIPPage.getBtnElement().getText()
+      .then((text) => {
+        console.log('\tНа кнопке написано:', text);
+      });
+
     await expect(registerOrganizationIPPage.getBtnElement().isEnabled()).toEqual(true);
   });
 
@@ -278,7 +289,7 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
         console.log('\tТелефон:', res);
       });
 
-    await element(by.css('.required-fields-errors')).isPresent()
+    await element(by.css('.form-with-errors')).isPresent()
       .then((isPresent) => {
         console.log('\tЗаполнены все обязательные поля правильно:', `${isPresent ? 'НЕТ' : 'ДА'}`);
 

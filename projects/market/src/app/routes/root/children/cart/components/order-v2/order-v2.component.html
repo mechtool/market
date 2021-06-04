@@ -15,18 +15,19 @@
     </nz-tab>
   </nz-tabset>
 
-  <div class="form-errors" *ngIf="form.invalid"></div>
+  <div class="form-with-errors" *ngIf="form.invalid"></div>
 
   <div class="order__total_btn">
-    <button nz-button type="button" nzType="primary" (click)="validateAndSubmitOrder()" [disabled]="unavailableToOrder">
-      {{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}
-    </button>
-    <button *ngIf="selectedTab === 0 && isHistoryAvailable" nz-button nzType="link" type="button" [routerLink]="['/category']">
-      Продолжить подбор
-    </button>
-    <button *ngIf="selectedTab === 1" nz-button nzType="link" type="button" (click)="selectedTab = 0">
-      Вернуться к товарам
-    </button>
+    <button nz-button type="button" nzType="primary"
+            (click)="validateAndSubmitOrder()"
+            [disabled]="unavailableToOrder">{{isOrderType ? 'Оформить заказ' : 'Оформить запрос цен'}}</button>
+
+    <button *ngIf="selectedTab === 0 && isHistoryAvailable"
+            nz-button nzType="link" type="button"
+            [routerLink]="['/category']">Продолжить подбор</button>
+
+    <button *ngIf="selectedTab === 1" nz-button
+            nzType="link" type="button" (click)="selectedTab = 0">Вернуться к товарам</button>
   </div>
 
   <ng-template #orderDetailsBlock>

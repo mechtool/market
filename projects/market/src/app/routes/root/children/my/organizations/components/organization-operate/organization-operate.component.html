@@ -216,7 +216,7 @@
       </label>
     </div>
 
-    <div class="required-fields-errors" *ngIf="form.invalid">
+    <div class="form-with-errors" *ngIf="form.invalid">
       <div class="organization-name-error" *ngIf="form.controls.organizationName.invalid"></div>
       <div class="contact-fio-error" *ngIf="form.controls.contactFio.invalid"></div>
       <div class="contact-email-error" *ngIf="form.controls.contactEmail.invalid"></div>

@@ -115,7 +115,7 @@ export class AppPage {
   }
 
   getCartMakeOrderButton(): ElementFinder {
-    return element(by.cssContainingText('button', 'Оформить заказ'));
+    return element(by.buttonText('Оформить заказ'));
   }
 
   getTradeOfferCounterTitle(): ElementFinder {
@@ -187,7 +187,7 @@ export class AppPage {
   }
 
   getFormErrors(): ElementFinder {
-    return element(by.css('.form-errors'));
+    return element(by.css('.form-with-errors'));
   }
 
 }
