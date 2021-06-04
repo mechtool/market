@@ -183,7 +183,7 @@ export class AppPage {
   }
 
   getModalOrderSent(): ElementFinder {
-    return element(by.css('market-order-sent'));
+    return element(by.cssContainingText('market-order-sent', 'Заказ отправлен поставщику'));
   }
 
   getFormErrors(): ElementFinder {

@@ -243,10 +243,6 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationAgreeElement()), defaultTimeout);
     await browser.executeScript("arguments[0].scrollIntoView(true);", registerOrganizationIPPage.getOrganizationAgreeElement());
     await browser.executeScript("arguments[0].click();", registerOrganizationIPPage.getOrganizationAgreeElement());
-
-    // await registerOrganizationIPPage.getOrganizationAgreeElement().click();
-    // await browser.findElement(by.css('.ant-checkbox-wrapper .ant-checkbox')).click()
-
     await browser.sleep(3e3);
   });
 
@@ -355,12 +351,8 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
     })
-
     await browser.executeScript("arguments[0].scrollIntoView(true);", registerOrganizationIPPage.getBtnElement());
     await browser.executeScript("arguments[0].click();", registerOrganizationIPPage.getBtnElement());
-
-    // await registerOrganizationIPPage.getBtnElement().click();
-    // await browser.findElement(by.buttonText('Продолжить')).click();
   });
 
   it('Шаг 11: Видит страницу со списком текущих акций', async() => {
