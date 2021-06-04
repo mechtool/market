@@ -241,7 +241,11 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
 
   it('Шаг 7: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationAgreeElement()), defaultTimeout);
-    await browser.findElement(by.css('.ant-checkbox-wrapper .ant-checkbox')).click()
+    // await browser.findElement(by.css('.ant-checkbox-wrapper .ant-checkbox')).click()
+
+    await browser.executeScript("arguments[0].scrollIntoView(true);", registerOrganizationIPPage.getOrganizationAgreeElement());
+    await registerOrganizationIPPage.getOrganizationAgreeElement().click();
+
     await browser.sleep(3e3);
   });
 
@@ -347,16 +351,19 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
   });
 
   it('Шаг 10: Пользователь нажимает на кнопку регистрации организации', async() => {
-    browser.getCurrentUrl().then((url) => {
+    await browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
     })
 
-    await browser.findElement(by.buttonText('Продолжить')).click()
+    // await browser.findElement(by.buttonText('Продолжить')).click();
+
+    await browser.executeScript("arguments[0].scrollIntoView(true);", registerOrganizationIPPage.getBtnElement());
+    await registerOrganizationIPPage.getBtnElement().click();
   });
 
   it('Шаг 11: Видит страницу со списком текущих акций', async() => {
     await browser.sleep(2e3);
-    browser.getCurrentUrl().then((url) => {
+    await browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы акций:', decodeURIComponent(url));
     })
     await browser.wait(until.presenceOf(promoPage.getTitleElement()), defaultTimeout);

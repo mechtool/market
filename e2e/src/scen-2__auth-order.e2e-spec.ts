@@ -459,7 +459,10 @@ export async function authorizedUserMakesOrder(page: AppPage) {
         console.log('\tНа кнопке написано:', text);
       });
 
-    await browser.findElement(by.buttonText('Оформить заказ')).click()
+    // await browser.findElement(by.buttonText('Оформить заказ')).click();
+
+    await browser.executeScript("arguments[0].scrollIntoView(true);", page.getCartMakeOrderButton());
+    await page.getCartMakeOrderButton().click();
   });
 
   it('Шаг 10: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
