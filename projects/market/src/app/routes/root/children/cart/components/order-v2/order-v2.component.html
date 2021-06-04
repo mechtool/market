@@ -15,7 +15,19 @@
     </nz-tab>
   </nz-tabset>
 
-  <div class="form-with-errors" *ngIf="form.invalid"></div>
+  <div class="form-with-errors" *ngIf="form.invalid">
+    <div class="consumer-inn-error" *ngIf="form.controls.consumerInn.invalid"></div>
+    <div class="consumer-kpp-error" *ngIf="form.controls.consumerKpp.invalid"></div>
+    <div class="consumer-name-error" *ngIf="form.controls.consumerName.invalid"></div>
+    <div class="delivery-method-error" *ngIf="form.controls.deliveryMethod.invalid"></div>
+    <div class="contact-name-error" *ngIf="form.controls.contactName.invalid"></div>
+    <div class="contact-phone-error" *ngIf="form.controls.contactPhone.invalid"></div>
+    <div class="contact-email-error" *ngIf="form.controls.contactEmail.invalid"></div>
+    <div class="comment-for-supplier-error" *ngIf="form.controls.commentForSupplier.invalid"></div>
+    <div class="is-organization-agent-error" *ngIf="form.controls.isOrganizationAgent.invalid"></div>
+    <div class="delivery-to-error" *ngIf="form.controls.deliveryTo.invalid"></div>
+    <div class="items-error" *ngIf="form.controls.items.invalid"></div>
+  </div>
 
   <div class="order__total_btn">
     <button nz-button type="button" nzType="primary"

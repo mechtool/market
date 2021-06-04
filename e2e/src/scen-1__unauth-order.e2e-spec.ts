@@ -80,7 +80,7 @@ export function unauthorizedUserSearches(page: AppPage) {
   });
 
   it('Шаг 6: Пользователь вводит поисковой запрос и нажимает на кнопку поиска', async() => {
-    await page.getSearchBoxInput().sendKeys(randomQuery());
+    await page.getSearchBoxInput().sendKeys(randomQuery(true));
     await page.getSearchBoxButton().click();
   });
 
@@ -111,7 +111,7 @@ export function unauthorizedUserSearchesWithRegion(page: AppPage) {
 
   it('Шаг 4: Пользователь вводит новый поисковой запрос и нажимает на кнопку поиска', async() => {
     await page.getSearchBoxInput().clear();
-    await page.getSearchBoxInput().sendKeys(randomQuery(true));
+    await page.getSearchBoxInput().sendKeys(randomQuery());
     await page.getSearchBoxButton().click();
   });
 
@@ -396,6 +396,68 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
     await page.getFormErrors().isPresent()
       .then((isPresent) => {
         console.log('\tФорма заполнена с ошибками:', `${isPresent ? 'ДА' : 'НЕТ'}`);
+
+        if (isPresent) {
+          element(by.css('.consumer-inn-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле ИНН ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.consumer-kpp-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле КПП ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.consumer-name-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Название организации ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.delivery-method-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Предпочтительном способе поставки ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.contact-name-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Контактное лицо ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.contact-phone-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Телефон ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.contact-email-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле E-mail ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.consumer-inn-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле ИНН ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.comment-for-supplier-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Комментарий для поставщика ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.is-organization-agent-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Условия пользовательского соглашения ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.delivery-to-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ поле Укажите населенный пункт доставки ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+
+          element(by.css('.items-error')).isPresent()
+            .then((has) => {
+              console.log('\tВ Позициях ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
+            });
+        }
       });
 
     console.log('\t------------------------------->');

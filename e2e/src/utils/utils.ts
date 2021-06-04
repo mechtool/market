@@ -15,8 +15,8 @@ export function randomCategory(): number {
   return categories[randomItem(categories.length)];
 }
 
-export function randomQuery(repeated?: boolean): string {
-  if (repeated) {
+export function randomQuery(first?: boolean): string {
+  if (first) {
     return ['бумага', 'стул', 'перчатки'][randomItem(3)];
   }
   return ['вода', 'хлеб', 'молоко'][randomItem(3)];
