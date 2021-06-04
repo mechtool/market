@@ -304,8 +304,9 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
 
   it('Шаг 12: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
     await browser.wait(until.presenceOf(page.getIsOrganizationAgent()), defaultTimeout);
-    await browserClick(page.getIsOrganizationAgent());
-    await browser.sleep(1e3);
+    await browser.executeScript("arguments[0].scrollIntoView(true);", page.getIsOrganizationAgent());
+    await browser.executeScript("arguments[0].click();", page.getIsOrganizationAgent());
+    await browser.sleep(3e3);
   });
 
   it('Шаг 13: Пользователь перепроверяет какие значения указал', async() => {
@@ -480,7 +481,7 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
   });
 
   it('Шаг 15: Пользователь видит модальное окно с сообщением об отправке заказа', async() => {
-    await browser.sleep(3e3);
+    await browser.sleep(5e3);
     await browser.wait(until.presenceOf(page.getModalOrderSent()), defaultTimeout);
   });
 
