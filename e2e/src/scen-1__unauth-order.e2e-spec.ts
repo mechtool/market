@@ -443,11 +443,6 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
             .then((has) => {
               console.log('\tВ поле Укажите населенный пункт доставки ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
             });
-
-          element(by.css('.items-error')).isPresent()
-            .then((has) => {
-              console.log('\tВ Позициях ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
-            });
         }
       });
 

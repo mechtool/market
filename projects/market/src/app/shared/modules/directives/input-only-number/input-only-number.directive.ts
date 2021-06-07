@@ -20,7 +20,7 @@ export class OnlyNumberDirective {
       'ArrowLeft',
       'ArrowRight'
     ];
-    const keysWithMetaKeyToSkipValidation = ['a', 'c', 'v', 'x'];
+    const keysWithMetaKeyToSkipValidation = ['a', 'ф', 'c', 'с', 'v', 'м', 'x', 'ч'];
 
     if ((keysWithMetaKeyToSkipValidation.includes(e.key) && (e.ctrlKey || e.metaKey)) ||
       keysToSkipValidation.includes(e.key) || RE.test(e.key)
@@ -31,9 +31,7 @@ export class OnlyNumberDirective {
   }
 
   @HostListener('paste', ['$event']) onPaste(e) {
-    const pastedText = (e.originalEvent || e).clipboardData.getData(
-      'text/plain'
-    );
+    const pastedText = (e.originalEvent || e).clipboardData.getData('text/plain')?.trim();
 
     if (pastedText) {
       if (!RE.test(pastedText)) {
