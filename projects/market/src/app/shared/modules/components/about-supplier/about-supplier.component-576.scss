@@ -7,18 +7,15 @@
 
   .info_group__label {
     flex-grow: 1;
-    width: 50%;
+    width: 40%;
   }
 
+  .info_group__link,
   .info_group__value {
-    width: 50%;
+    width: 60%;
     text-align: left;
     font-size: var(--font-size-13);
     font-weight: var(--font-weight-medium);
-  }
-
-  .info_group__link {
-    text-align: left;
   }
 
   .section__btns .btn {

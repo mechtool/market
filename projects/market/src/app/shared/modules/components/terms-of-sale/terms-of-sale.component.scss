@@ -62,19 +62,13 @@
   &__label {
     padding-right: 10px;
     flex-shrink: 0;
+    width: 40%;
   }
 
   &__value {
     padding-right: 2px;
     flex-grow: 1;
-    text-align: right;
-  }
-
-  &__small {
-    max-width: 270px;
-  }
-
-  &__supplier {
-    max-width: 360px;
+    width: 60%;
+    max-width: 500px;
   }
 }

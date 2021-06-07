@@ -31,7 +31,6 @@
       [visibleSort]="productOffers?.length > 1"
       (sortingChanged)="changeSortingAndRefresh($event)"
       (positionChanged)="loadProducts($event)"
-      (scrollChanged)="scrollCommand = $event"
       *ngIf="!isNotSearchUsed || category">
 
       <ng-container ngProjectAs="tags-slot" *ngIf="showTags">

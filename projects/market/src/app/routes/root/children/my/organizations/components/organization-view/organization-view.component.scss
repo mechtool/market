@@ -6,7 +6,6 @@ a:hover {
 .supplier_title {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 }
 
 .supplier_image {
@@ -65,12 +64,12 @@ a:hover {
 .info_group__label {
   padding-right: 10px;
   flex-shrink: 0;
+  width: 30%;
 }
 
 .info_group__value {
   padding-right: 2px;
   flex-grow: 1;
-  text-align: right;
 }
 
 .info_group__value a:hover {

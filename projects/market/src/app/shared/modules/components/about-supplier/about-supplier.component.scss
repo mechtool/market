@@ -53,12 +53,12 @@
     padding-right: 10px;
     flex-shrink: 0;
     font-size: var(--font-size-15);
+    width: 30%;
   }
 
   &__value {
     padding-right: 2px;
     flex-grow: 1;
-    text-align: right;
     font-size: var(--font-size-15);
     max-width: 500px;
     margin-left: auto;
@@ -71,7 +71,6 @@
   &__link {
     padding-right: 2px;
     flex-grow: 1;
-    text-align: right;
     font-size: var(--font-size-15);
     cursor: pointer;
 
