@@ -21,6 +21,7 @@
       text-align: right;
 
       &_column {
+        text-align: left;
         flex-direction: column;
       }
 
@@ -66,6 +67,7 @@
 
         &_column {
           flex-direction: column;
+          text-align: left;
         }
       }
     }

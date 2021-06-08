@@ -295,8 +295,8 @@ export class RfpsComponent implements OnInit, OnDestroy {
         switchMap((res: RfpItemResponseModel) => {
           return defer(() => {
             if (res?.audience?.parties?.length) {
-              const audiencePartiesLegalIds = res.audience.parties.map((party) => innKppToLegalId(party?.inn, party?.kpp));
-              return forkJoin(audiencePartiesLegalIds.map((legalId) => this._organizationsService.getOrganizationByLegalId(legalId)))
+              const audiencePartiesInns = res.audience.parties.map((party) => party?.inn);
+              return forkJoin(audiencePartiesInns.map((inn) => this._organizationsService.findCounterpartyDataByInn(inn)));
             }
             return of(null);
           })

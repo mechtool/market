@@ -5,8 +5,9 @@ import {
   RfpItemResponseModel,
   RfpItemResponsePositionModel,
 } from '#shared/modules/common-services/models/rfp-item-response.model';
-import { OrganizationResponseModel, UserOrganizationModel } from '#shared/modules';
+import {CounterpartyResponseModel, OrganizationResponseModel, UserOrganizationModel} from '#shared/modules';
 import { saveAs } from 'file-saver';
+import { getBase64MimeType } from '#shared/utils';
 
 @Component({
   selector: 'market-rfp-view',
@@ -28,7 +29,7 @@ export class RfpViewComponent {
   datePlaced: string = null;
   dateCancelled: string = null;
   audienceRestrictionType: string = null;
-  audienceParties: OrganizationResponseModel[] = null;
+  audienceParties: CounterpartyResponseModel[] = null;
   attachments: RfpItemResponseAttachmentModel[] = null;
   positions: RfpItemResponsePositionModel[] = null;
   dateCollectingFrom: string = null;
@@ -41,7 +42,7 @@ export class RfpViewComponent {
   contactEmail: string = null;
 
   // tslint:disable-next-line:max-line-length
-  @Input() set configuration(conf: { rfpData: RfpItemResponseModel; userOrganizations: UserOrganizationModel[], audienceOrganizations?: OrganizationResponseModel[], deliveryRegionName?: string }) {
+  @Input() set configuration(conf: { rfpData: RfpItemResponseModel; userOrganizations: UserOrganizationModel[], audienceOrganizations?: CounterpartyResponseModel[], deliveryRegionName?: string }) {
     this.documentOrderNumber = conf.rfpData.documentOrderNumber;
     this.selectedOrganization = this._getSelectedOrganization(conf);
     this.dateLastUpdated = conf.rfpData.dateLastUpdated;
@@ -75,11 +76,12 @@ export class RfpViewComponent {
   }
 
   downloadFile(base64content: string, fileName?: string): void {
+    const dataUrl = `data:${getBase64MimeType(base64content)};base64,${base64content}`
     if (fileName) {
-      saveAs(base64content, fileName);
+      saveAs(dataUrl, fileName);
       return;
     }
-    saveAs(base64content);
+    saveAs(dataUrl);
   }
 
   destroy(): void {

@@ -15,7 +15,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { RfpsRoutingModule } from './rfps-routing.module';
 import { OnlyNumberModule, PipesModule } from '#shared/modules';
-import { RfpStatusPipe, OfferStatusPipe, RestrictionTypePipe } from './pipes';
+import { RfpStatusPipe, OfferStatusPipe, RestrictionTypePipe, PartyTitlePipe } from './pipes';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -71,6 +71,7 @@ import { ListEmptyComponent } from './components/list-empty/list-empty.component
     RestrictionTypePipe,
     RfpStatusPipe,
     OfferStatusPipe,
+    PartyTitlePipe,
     OfferListComponent,
     OfferViewComponent,
   ],

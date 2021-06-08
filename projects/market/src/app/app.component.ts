@@ -1,4 +1,11 @@
-import { Compiler, Component, ComponentFactoryResolver, Injector, OnDestroy, ViewContainerRef } from '@angular/core';
+import {
+  Compiler,
+  Component,
+  ComponentFactoryResolver,
+  Injector,
+  OnDestroy,
+  ViewContainerRef
+} from '@angular/core';
 import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs/operators';

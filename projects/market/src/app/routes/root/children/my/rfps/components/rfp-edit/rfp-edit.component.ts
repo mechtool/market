@@ -15,7 +15,7 @@ import {
 } from '#shared/modules';
 import { defer, forkJoin, fromEvent, Observable, of } from 'rxjs';
 import {catchError, debounceTime, filter, map, pairwise, startWith, switchMap, take, tap} from 'rxjs/operators';
-import { dataURLtoBlobSize, innKppToLegalId, uniqueArray } from '#shared/utils';
+import { dataURLtoBlobSize, getBase64MimeType, innKppToLegalId, uniqueArray } from '#shared/utils';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
@@ -167,8 +167,8 @@ export class RfpEditComponent implements OnInit {
       switchMap((res: RfpItemResponseModel) => {
         return defer(() => {
           if (res?.audience?.parties?.length) {
-            const audiencePartiesLegalIds = res.audience.parties.map((party) => innKppToLegalId(party?.inn, party?.kpp));
-            return forkJoin(audiencePartiesLegalIds.map((legalId) => this._organizationsService.getOrganizationByLegalId(legalId)))
+            const audiencePartiesInns = res.audience.parties.map((party) => party?.inn);
+            return forkJoin(audiencePartiesInns.map((inn) => this._organizationsService.findCounterpartyDataByInn(inn)));
           }
           return of(null);
         })
@@ -179,8 +179,8 @@ export class RfpEditComponent implements OnInit {
             .filter((org) => !!org)
             .map((org) => {
               return {
-                inn: org.legalRequisites?.inn,
-                kpp: org.legalRequisites?.kpp,
+                inn: org.inn,
+                ...(org.kpp && { kpp: org.kpp }),
                 name: org.name,
               }
             });
@@ -364,11 +364,12 @@ export class RfpEditComponent implements OnInit {
   }
 
   downloadFile(base64content: string, fileName?: string): void {
+    const dataUrl = `data:${getBase64MimeType(base64content)};base64,${base64content}`;
     if (fileName) {
-      saveAs(base64content, fileName);
+      saveAs(dataUrl, fileName);
       return;
     }
-    saveAs(base64content);
+    saveAs(dataUrl);
   }
 
   openModalAddAudienceParty() {
@@ -415,7 +416,8 @@ export class RfpEditComponent implements OnInit {
   handleInputChange(e): void {
     const currentAttachmentsArr = this.attachments.value;
     const currentAttachmentsSize = currentAttachmentsArr.reduce((accum, curr) => {
-      accum += dataURLtoBlobSize(curr.content);
+      const dataUrl = `data:${getBase64MimeType(curr.content)};base64,${curr.content}`
+      accum += dataURLtoBlobSize(dataUrl);
       return accum;
     }, 0);
 
@@ -448,7 +450,7 @@ export class RfpEditComponent implements OnInit {
     return (e) => {
       const attachmentsList = this.form.get('attachments') as FormArray;
       if ((file.name?.length <= 100)) {
-        attachmentsList.push(this._createAttachmentItem({ name: file.name, title: file.name, content: e.target.result }));
+        attachmentsList.push(this._createAttachmentItem({ content: e.target.result, name: file.name, title: file.name }));
       } else {
         this._notificationsService.error('Длина имени файла должна быть до 100 символов');
       }
@@ -598,8 +600,16 @@ export class RfpEditComponent implements OnInit {
         audience.parties.push({ inn: party.inn, kpp: party.kpp || 0});
       })
     }
+
+    const re = /^data:.+;base64,/;
     if (form.get('attachments').value?.length) {
-      attachments = form.get('attachments').value;
+      attachments = form.get('attachments').value.map((attachment) => {
+        const content = attachment.content.replace(re, '');
+        return {
+          ...attachment,
+          content: content,
+        }
+      })
     }
     if (form.get('positions').value?.length) {
       positions = form.get('positions').value.map((p) => {

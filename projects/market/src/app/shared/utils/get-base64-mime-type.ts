@@ -1,16 +1,16 @@
-export function getBase64MimeType(encoded: string) {
-  let result = null;
+export function getBase64MimeType(b64: string): string {
+  const DEFAULT_MIME_TYPE = 'application/octet-stream';
+  const signatures = {
+    '/9j': 'image/jpeg',
+    iVBORw0KGgo: 'image/png',
+    R0lGODdh: 'image/gif',
+    R0lGODlh: 'image/gif',
+    JVBERi0: 'application/pdf',
+  };
 
-  if (typeof encoded !== 'string') {
-    return result;
-  }
+  const foundSignature = Object.keys(signatures).find((signature) => {
+    return b64.indexOf(signature) === 0;
+  })
 
-  const mime = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
-
-  if (mime && mime.length) {
-    result = mime[1];
-  }
-
-  return result;
+  return foundSignature ? signatures[foundSignature] : DEFAULT_MIME_TYPE;
 }
-

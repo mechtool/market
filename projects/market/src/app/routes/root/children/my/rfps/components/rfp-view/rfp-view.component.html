@@ -35,12 +35,9 @@
       <span class="info_group__item__label">Доступно {{audienceRestrictionType === 'WHITE_LIST' ? 'только' : 'всем кроме'}}</span>
       <span class="info_group__item__value info_group__item__value_column">
         <span *ngFor="let party of audienceParties">
-          {{party.name}} ({{party.legalRequisites?.inn}}
-          <ng-container *ngIf="party.legalRequisites?.kpp">
-            / {{party.legalRequisites.kpp}}
-          </ng-container>)
+          {{party | marketPartyTitle}}
         </span>
-        </span>
+      </span>
     </div>
 
     <div class="info_group__item" *ngIf="attachments">

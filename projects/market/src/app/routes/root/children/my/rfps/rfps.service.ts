@@ -1,15 +1,16 @@
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { map, pluck, switchMap } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
 import format from 'date-fns/format';
 import {
-  BNetService, CommerceMlDocumentResponseModel, CommerceOfferMlModel,
+  BNetService,
+  CommerceOfferMlModel,
   EdiRequestModel,
-  IDocumentOfferDTO,
   RfpItemResponseModel,
   RfpListResponseItemModel
 } from '#shared/modules';
 import { OfferListItemModel } from './models';
+import { getBase64MimeType } from "#shared/utils";
 
 
 @Injectable()
@@ -25,7 +26,25 @@ export class RfpsService {
   }
 
   getUserRfpById(rfpId: string): Observable<RfpItemResponseModel> {
-    return this._bnetService.getUserRfpById(rfpId);
+    return this._bnetService.getUserRfpById(rfpId)
+      // .pipe(
+      //   map((data) => {
+      //     if (!data) {
+      //       return null;
+      //     }
+      //     return {
+      //       ...data,
+      //       ...(data.attachments?.length && {
+      //         attachments: data.attachments.map((attach) => {
+      //           return {
+      //             ...attach,
+      //             content: `data:${getBase64MimeType(attach.content)};base64,${attach.content}`,
+      //           }
+      //         })
+      //       }),
+      //     }
+      //   })
+      // )
   }
 
   cancelUserRfpById(id: string): Observable<any> {
