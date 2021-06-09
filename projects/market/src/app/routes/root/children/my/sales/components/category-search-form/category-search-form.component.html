@@ -26,7 +26,13 @@
 
     <nz-form-item class="register-area">
       <nz-form-control nzOffset="8">
-        <button style="margin-top: 15px" nz-button nzType="primary" (click)="save()" [disabled]="form.invalid">Сохранить</button>
+        <button
+          type="button"
+          style="margin-top: 15px"
+          nz-button
+          nzType="primary"
+          (click)="save()"
+          [disabled]="form.invalid">Сохранить</button>
       </nz-form-control>
     </nz-form-item>
 

@@ -19,11 +19,17 @@
 
       <div class="table_cell cell_ref_1cn_category_title" data-title="Категория 1СН:">
         {{item.ref1CnCategoryName}}
-        <button class="change_btn" nz-button nzType="dashed" nzShape="circle" nzSize="small"
-                (click)="changeCategory(item)"
-                nz-tooltip
-                nzTooltipTitle="Изменить категорию 1СН">
-          <i nz-icon nzType="form" nzTheme="outline"></i>
+        <button
+          type="button"
+          class="change_btn"
+          nz-button
+          nzType="dashed"
+          nzShape="circle"
+          nzSize="small"
+          (click)="changeCategory(item)"
+          nz-tooltip
+          nzTooltipTitle="Изменить категорию 1СН">
+            <i nz-icon nzType="form" nzTheme="outline"></i>
         </button>
       </div>
     </div>

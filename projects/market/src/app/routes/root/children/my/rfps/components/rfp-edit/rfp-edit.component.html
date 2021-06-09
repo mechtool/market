@@ -442,18 +442,24 @@
   </ng-template>
 
   <ng-template #sixthTpl>
-    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateCollectingFrom_dateCollectingTo'); else seventhTpl">
-      <p>Дата окончания сбора КП должна быть больше даты начала сбора КП</p>
+    <ng-container *ngIf="control.hasError('dateGreaterNow'); else seventhTpl">
+      <p>Дата не может быть в прошлом</p>
     </ng-container>
   </ng-template>
 
   <ng-template #seventhTpl>
-    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateCollectingTo_dateConsideringTo'); else eighthTpl">
-      <p>Дата окончания рассмотрения КП должна быть больше даты начала окончания КП</p>
+    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateCollectingFrom_dateCollectingTo'); else eighthTpl">
+      <p>Дата окончания сбора КП должна быть больше даты начала сбора КП</p>
     </ng-container>
   </ng-template>
 
   <ng-template #eighthTpl>
+    <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateCollectingTo_dateConsideringTo'); else ninethTpl">
+      <p>Дата окончания рассмотрения КП должна быть больше даты начала окончания КП</p>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #ninethTpl>
     <ng-container *ngIf="control.hasError('dateIsLessThanDate__dateConsideringTo_purchaseConditionsDateDesiredDeliveryTo')">
       <p>Желаемая дата доставки быть больше даты окончания рассмотрения КП</p>
     </ng-container>

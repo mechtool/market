@@ -28,6 +28,7 @@ import { BarcodeFormComponent } from '../barcodes-form/barcode-form.component';
 import { dateIsLessThanDate } from '#shared/validators/dates-collecting.validator';
 import { AbbreviatedBusinessNamePipe } from '#shared/modules/pipes/abbreviated-business-name.pipe';
 import { RfpsService } from '../../rfps.service';
+import {dateGreaterNow} from "#shared/validators";
 
 interface IAudienceParty {
   inn: string | number;
@@ -207,11 +208,11 @@ export class RfpEditComponent implements OnInit {
       contactEmail: this._fb.control(this.rfpData?.proposalRequirements?.contacts?.email || null, [Validators.required, Validators.maxLength(100), Validators.email]),
       contactPhone: this._fb.control(this.rfpData?.proposalRequirements?.contacts?.phone || null, [Validators.maxLength(16)]),
       // tslint:disable-next-line:max-line-length
-      dateCollectingFrom: this._fb.control(this.rfpData?.proposalRequirements?.termsAndConditions?.dateCollectingFrom || null, [Validators.required]),
+      dateCollectingFrom: this._fb.control(this.rfpData?.proposalRequirements?.termsAndConditions?.dateCollectingFrom || null, [Validators.required, dateGreaterNow()]),
       // tslint:disable-next-line:max-line-length
-      dateCollectingTo: this._fb.control(this.rfpData?.proposalRequirements?.termsAndConditions?.dateCollectingTo || null, [Validators.required, dateIsLessThanDate('dateCollectingFrom', 'dateCollectingTo')]),
+      dateCollectingTo: this._fb.control(this.rfpData?.proposalRequirements?.termsAndConditions?.dateCollectingTo || null, [Validators.required, dateGreaterNow(), dateIsLessThanDate('dateCollectingFrom', 'dateCollectingTo')]),
       // tslint:disable-next-line:max-line-length
-      dateConsideringTo: this._fb.control(this.rfpData?.proposalRequirements?.termsAndConditions?.dateConsideringTo || null, [Validators.required, dateIsLessThanDate('dateCollectingTo', 'dateConsideringTo')]),
+      dateConsideringTo: this._fb.control(this.rfpData?.proposalRequirements?.termsAndConditions?.dateConsideringTo || null, [Validators.required, dateGreaterNow(), dateIsLessThanDate('dateCollectingTo', 'dateConsideringTo')]),
       deliveryRegion: this._fb.control(this.deliveryRegion?.locality || this.deliveryRegion?.name || null),
       // tslint:disable-next-line:max-line-length
       selectedOrganization: this._fb.control(this.rfpData ? this._getSelectedOrganization(this.userOrganizations, this.rfpData) : this.userOrganizations[0], [Validators.required]),
@@ -363,8 +364,9 @@ export class RfpEditComponent implements OnInit {
     return isRestrictionTypeValid ? restrictionType : null;
   }
 
-  downloadFile(base64content: string, fileName?: string): void {
-    const dataUrl = `data:${getBase64MimeType(base64content)};base64,${base64content}`;
+  downloadFile(content: string, fileName?: string): void {
+    const re = /^data:.+;base64,/;
+    const dataUrl = re.test(content) ? content : `data:${getBase64MimeType(content)};base64,${content}`;
     if (fileName) {
       saveAs(dataUrl, fileName);
       return;
@@ -558,7 +560,7 @@ export class RfpEditComponent implements OnInit {
             this._router.navigateByUrl(`/my/rfps`);
           }, (err) => {
             if (err.error?.status === 422 && err.error?.validationError?.length) {
-              const validationErrorMessage =  err.validationError[0].message;
+              const validationErrorMessage =  err.error.validationError[0].message;
               this._notificationsService.error(`Произошла ошибка при редактировании запроса. ${validationErrorMessage}`);
             } else {
               this._notificationsService.error(`Произошла ошибка при редактировании запроса. Попробуйте еще раз.`);
