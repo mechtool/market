@@ -663,7 +663,7 @@ export class RfpEditComponent implements OnInit {
               }
           }),
           // tslint:disable-next-line:max-line-length
-          ...((form.get('deliveryRegion').value && typeof form.get('deliveryRegion').value === 'string' && this.deliveryRegion && this.deliveryRegion.locality.toLowerCase() === form.get('deliveryRegion').value.toLowerCase()) && {
+          ...((form.get('deliveryRegion').value && typeof form.get('deliveryRegion').value === 'string' && this.deliveryRegion && this.deliveryRegion?.locality?.toLowerCase() === form.get('deliveryRegion').value?.toLowerCase()) && {
             deliveryRegion: {
               countryCode: CountryCode.RUSSIA,
               fiasRegionCode: this.deliveryRegion.fias,
@@ -673,7 +673,7 @@ export class RfpEditComponent implements OnInit {
             deliveryDescription: form.get('deliveryRegion').value
           }),
           // tslint:disable-next-line:max-line-length
-          ...((form.get('deliveryRegion').value && typeof form.get('deliveryRegion').value === 'string' && this.deliveryRegion && this.deliveryRegion.locality.toLowerCase() !== form.get('deliveryRegion').value.toLowerCase()) && {
+          ...((form.get('deliveryRegion').value && typeof form.get('deliveryRegion').value === 'string' && this.deliveryRegion && this.deliveryRegion?.locality?.toLowerCase() !== form.get('deliveryRegion').value?.toLowerCase()) && {
             deliveryDescription: form.get('deliveryRegion').value
           }),
         }

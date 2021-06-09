@@ -27,24 +27,6 @@ export class RfpsService {
 
   getUserRfpById(rfpId: string): Observable<RfpItemResponseModel> {
     return this._bnetService.getUserRfpById(rfpId)
-      // .pipe(
-      //   map((data) => {
-      //     if (!data) {
-      //       return null;
-      //     }
-      //     return {
-      //       ...data,
-      //       ...(data.attachments?.length && {
-      //         attachments: data.attachments.map((attach) => {
-      //           return {
-      //             ...attach,
-      //             content: `data:${getBase64MimeType(attach.content)};base64,${attach.content}`,
-      //           }
-      //         })
-      //       }),
-      //     }
-      //   })
-      // )
   }
 
   cancelUserRfpById(id: string): Observable<any> {
