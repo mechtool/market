@@ -17,7 +17,6 @@ export * from './product-side';
 export * from './supplier-search-bar';
 export * from './search-area';
 export * from './search-results';
-export * from './search-counterparty';
 export * from './supplier-card';
 export * from './sorter';
 export * from './tag';

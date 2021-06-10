@@ -52,7 +52,6 @@ export class SingleOrganizationComponent implements OnInit {
   legalRequisites: { inn: string; kpp?: string };
   isEditable: boolean;
   isAdmin: boolean;
-  currentUserId: string;
 
   get orgId(): string {
     return this.organizationData?.id;
@@ -91,7 +90,6 @@ export class SingleOrganizationComponent implements OnInit {
       this._router.navigateByUrl(`/my/organizations/${this.organizationData?.id}?tab=${tabType}`);
     });
   }
-
 
   createAccessKeyComponentModal(): void {
     this._organizationsService.obtainAccessKey(this.orgId).subscribe(
@@ -197,27 +195,26 @@ export class SingleOrganizationComponent implements OnInit {
   }
 
   updateOrganization(data: any): void {
-    const contactPerson = {
-      fullName: data.contactFio,
-      email: data.contactEmail,
-      phone: data.contactPhone,
-    };
-
     const contacts = {
-      email: data.organizationEmail,
-      phone: data.organizationPhone,
-      website: data.organizationWebsite,
-      address: data.organizationAddress,
+      email: data.contactsEmail || '',
+      phone: data.contactsPhone || '',
+      website: data.contactsWebsite || '',
+      address: data.contactsAddress || ''
     };
 
     this._organizationsService
       .updateOrganization(this.orgId, {
-        contacts,
-        name: data.organizationName,
-        description: data.organizationDescription,
+        name: data.name,
+        description: data.description || '',
+        ...(Object.keys(contacts).length && { contacts }),
       })
       .pipe(
-        switchMap((res) => {
+        switchMap(() => {
+          const contactPerson = {
+            fullName: data.contactPersonFullName,
+            email: data.contactPersonEmail,
+            phone: data.contactPersonPhone,
+          };
           return this._organizationsService.updateOrganizationContact(this.orgId, contactPerson);
         }),
         switchMap((_) => this._organizationsService.getUserOrganizations()),

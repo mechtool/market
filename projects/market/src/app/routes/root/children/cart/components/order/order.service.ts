@@ -16,7 +16,7 @@ import {
   UserOrganizationModel
 } from '#shared/modules/common-services/models';
 import { notBlankValidator } from '#shared/utils/common-validators';
-import { DeliveryMethodModel } from '../order/models';
+import { DeliveryMethodModel } from './models';
 import { UserInfoModel } from '#shared/modules/common-services/models/user-info.model';
 import { UserStateService } from '#shared/modules/common-services/user-state.service';
 import {
@@ -32,13 +32,17 @@ import { currencyCode, innKppToLegalId, unsubscribeList } from '#shared/utils';
 import { catchError, delay, retry, switchMap, tap } from 'rxjs/operators';
 import { BehaviorSubject, of, Subscription } from 'rxjs';
 import { validate as isUuid } from 'uuid';
-import { innConditionValidator, kppConditionValidator, kppRequiredIfOrgConditionValidator } from './order-v2.validator';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { CartModalService } from '../../cart-modal.service';
 import format from 'date-fns/format';
+import {
+  innConditionValidator,
+  kppConditionValidator,
+  kppRequiredIfOrgConditionValidator
+} from '#shared/utils/organization-requisite-validators';
 
 @Injectable()
-export class OrderV2Service implements OnDestroy {
+export class OrderService implements OnDestroy {
   form: FormGroup;
 
   focus$: BehaviorSubject<string> = new BehaviorSubject(null);
@@ -195,7 +199,7 @@ export class OrderV2Service implements OnDestroy {
       consumerInn: this._fb.control(null,
         this.isAuthenticated && this.hasRegisteredOrganizations ? [] : [notBlankValidator, Validators.pattern('^[0-9]*$'), innConditionValidator]),
       consumerKpp: this._fb.control(null,
-        this.isAuthenticated && this.hasRegisteredOrganizations ? [] : [Validators.pattern('^[0-9]*$'), notBlankValidator, kppConditionValidator, kppRequiredIfOrgConditionValidator]),
+        this.isAuthenticated && this.hasRegisteredOrganizations ? [] : [Validators.pattern('^[0-9]*$'), notBlankValidator, kppConditionValidator, kppRequiredIfOrgConditionValidator('consumerInn')]),
       consumerName: this._fb.control(null,
         this.isAuthenticated && this.hasRegisteredOrganizations ? [] : [Validators.required, notBlankValidator, Validators.minLength(3), Validators.maxLength(300)]),
       total: this._fb.control(null),

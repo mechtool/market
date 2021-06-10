@@ -1,5 +1,4 @@
 <div class="content-wrapper page_inner">
-
   <div class="page_header">
     <h2>
       {{organizationData?.name | abbreviatedBusinessName}}
@@ -11,7 +10,6 @@
   </div>
 
   <div class="tabs_wrap tabs_wrap__moving">
-
     <span
       class="tab_item tab_item__main"
       [ngClass]="{'active': activeTabType == 'a'}"
@@ -44,43 +42,37 @@
         class="tab_item tab_long"
         (click)="createAccessKeyComponentModal()">Получить пароль
       </span>
-
     </ng-container>
-
   </div>
 
-
   <ng-container *ngIf="activeTabType == 'a'">
-
-    <market-organization-operate *ngIf="isEditable"
-      operationType="edit"
-      [organizationData]="organizationData"
-      [legalRequisites]="legalRequisites"
-      (organizationDataChange)="updateOrganization($event)">
-    </market-organization-operate>
+    <market-organization-manage *ngIf="isEditable"
+                                operationType="edit"
+                                [organizationData]="organizationData"
+                                [legalRequisites]="legalRequisites"
+                                (organizationDataChange)="updateOrganization($event)">
+    </market-organization-manage>
 
     <market-organization-view *ngIf="!isEditable"
-      [isAdmin]="isAdmin"
-      [organizationData]="organizationData"
-      [counterparty]="counterparty"
-      (editOrganizationChange)="isEditable = true">
+                              [isAdmin]="isAdmin"
+                              [organizationData]="organizationData"
+                              [counterparty]="counterparty"
+                              (editOrganizationChange)="isEditable = true">
     </market-organization-view>
-
   </ng-container>
 
   <market-organization-users *ngIf="activeTabType == 'b'"
-    [users]="users"
-    (removeUserRequestChange)="createRemoveUserModal($event)"
+                             [users]="users"
+                             (removeUserRequestChange)="createRemoveUserModal($event)"
   ></market-organization-users>
 
   <market-organization-requests *ngIf="activeTabType == 'c'"
-    [requests]="participationRequests"
-    (makeRequestDecisionRequestChange)="createMakeRequestDecisionModal($event)"
+                                [requests]="participationRequests"
+                                (makeRequestDecisionRequestChange)="createMakeRequestDecisionModal($event)"
   ></market-organization-requests>
 
   <market-organization-access-keys *ngIf="activeTabType == 'd'"
-    [accessKeys]="accessKeys"
-    (removeAccessKeyRequestChange)="createRemoveAccessKeyModal($event)"
+                                   [accessKeys]="accessKeys"
+                                   (removeAccessKeyRequestChange)="createRemoveAccessKeyModal($event)"
   ></market-organization-access-keys>
-
 </div>

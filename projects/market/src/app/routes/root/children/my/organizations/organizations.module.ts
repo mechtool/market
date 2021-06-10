@@ -4,14 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { OrganizationsRoutingModule } from './organizations-routing.module';
 import { OrganizationsComponent } from './organizations.component';
-import { SingleOrganizationComponent } from './components/single-organization/single-organization.component';
-import { ActiveOrganizationsComponent } from './components/active-organizations/active-organizations.component';
-import { SentRequestsComponent } from './components/sent-requests/sent-requests.component';
-import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
-import { OrganizationOperateComponent } from './components/organization-operate/organization-operate.component';
-import { OrganizationExistsComponent } from './components/organization-exists/organization-exists.component';
-import { AccessKeyComponent } from './components/access-key/access-key.component';
-import { AccessKeyStatusPipe, OrganizationRequestStatusPipe, PhoneFormattersPipe } from './pipes';
+import { AccessKeyStatusPipe, OrganizationRequestStatusPipe, PageHeaderPipe, PhoneFormattersPipe } from './pipes';
 import { SingleOrganizationGuard } from './guards';
 import { OrganizationViewComponent } from './components/organization-view/organization-view.component';
 import { OrganizationUsersComponent } from './components/organization-users/organization-users.component';
@@ -27,6 +20,15 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { OnlyNumberModule } from '#shared/modules/directives/input-only-number/input-only-number.module';
+import {
+  AccessKeyComponent,
+  ActiveOrganizationsComponent,
+  OrganizationManageComponent,
+  SentRequestsComponent,
+  SingleOrganizationComponent
+} from './components';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @NgModule({
   imports: [
@@ -42,15 +44,15 @@ import { OnlyNumberModule } from '#shared/modules/directives/input-only-number/i
     NzCollapseModule,
     NzToolTipModule,
     OnlyNumberModule,
+    NzFormModule,
+    NzInputModule,
   ],
   declarations: [
     OrganizationsComponent,
     ActiveOrganizationsComponent,
     SingleOrganizationComponent,
     SentRequestsComponent,
-    RequisitesCheckerComponent,
-    OrganizationOperateComponent,
-    OrganizationExistsComponent,
+    OrganizationManageComponent,
     AccessKeyComponent,
     OrganizationViewComponent,
     OrganizationUsersComponent,
@@ -62,6 +64,7 @@ import { OnlyNumberModule } from '#shared/modules/directives/input-only-number/i
     OrganizationRequestStatusPipe,
     AccessKeyStatusPipe,
     PhoneFormattersPipe,
+    PageHeaderPipe,
   ],
   providers: [SingleOrganizationGuard],
 })

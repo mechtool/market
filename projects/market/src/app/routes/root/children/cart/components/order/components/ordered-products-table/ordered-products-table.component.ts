@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { OrderV2Service } from '../../order-v2.service';
+import { OrderService } from '../../order.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationsService, TradeOffersService } from '#shared/modules';
 import { Router } from '@angular/router';
@@ -19,23 +19,23 @@ import { Router } from '@angular/router';
 export class OrderedProductsTableComponent implements AfterViewInit {
 
   get isOrderLoading() {
-    return this._orderV2Service.isOrderLoading;
+    return this._orderService.isOrderLoading;
   }
 
   get isOrderType(): boolean {
-    return this._orderV2Service.isOrderType;
+    return this._orderService.isOrderType;
   }
 
   get unavailableToOrder(): boolean {
-    return this._orderV2Service.unavailableToOrder;
+    return this._orderService.unavailableToOrder;
   }
 
   get minOrderAmountViolations(): any {
-    return this._orderV2Service.minOrderAmountViolations;
+    return this._orderService.minOrderAmountViolations;
   }
 
   get form(): FormGroup {
-    return this._orderV2Service.form;
+    return this._orderService.form;
   }
 
   get items(): FormArray {
@@ -48,7 +48,7 @@ export class OrderedProductsTableComponent implements AfterViewInit {
 
   constructor(
     private _router: Router,
-    private _orderV2Service: OrderV2Service,
+    private _orderService: OrderService,
     private _tradeOffersService: TradeOffersService,
     private _notificationsService: NotificationsService,
   ) {
@@ -77,6 +77,6 @@ export class OrderedProductsTableComponent implements AfterViewInit {
   }
 
   removeItem(item: any) {
-    this._orderV2Service.removeItem(item)
+    this._orderService.removeItem(item)
   }
 }

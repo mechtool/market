@@ -1,30 +1,29 @@
 <div class="content-wrapper page_inner">
 
   <div class="page_header">
-    <h2>{{pageHeader}}</h2>
+    <h2>{{activeTabType | marketPageHeader}}</h2>
   </div>
 
   <div class="tabs_wrap tabs_wrap__moving">
 
     <span *ngIf="activeTabType !== 'c'"
-      class="tab_item tab_item__main"
-      [ngClass]="{'active': activeTabType == 'a'}"
-      (click)="goToTab('a')">
+          class="tab_item tab_item__main"
+          [ngClass]="{'active': activeTabType == 'a'}"
+          (click)="goToTab('a')">
         <span class="data_counter data_counter__gray">Действующие</span>
     </span>
 
     <span *ngIf="activeTabType !== 'c'"
-      class="tab_item tab_long"
-      [ngClass]="{'active': activeTabType == 'b'}"
-      (click)="goToTab('b')">
+          class="tab_item tab_long"
+          [ngClass]="{'active': activeTabType == 'b'}"
+          (click)="goToTab('b')">
         <span class="data_counter" [attr.data_counter]="newSentRequests">Отправленные запросы</span>
     </span>
 
     <span *ngIf="activeTabType !== 'c'"
-      class="tab_item tab_long"
-      (click)="goToTab('c')">Добавить организацию
+          class="tab_item tab_long"
+          (click)="goToTab('c')">Добавить организацию
     </span>
-
   </div>
 
   <market-active-organizations
@@ -38,15 +37,12 @@
     *ngIf="activeTabType == 'b'"
   ></market-sent-requests>
 
-  <market-organization-operate
+  <market-organization-manage
     operationType="register"
     [legalRequisites]="checkedLegalRequisites"
     (organizationDataChange)="registerOrganization($event)"
-    *ngIf="activeTabType == 'c' && !existingOrganization"></market-organization-operate>
-
-  <market-organization-exists
-    [organization]="existingOrganization"
     (requestDataChange)="sendParticipationRequest($event)"
-    *ngIf="activeTabType == 'c' && existingOrganization"></market-organization-exists>
+    *ngIf="activeTabType == 'c'"
+  ></market-organization-manage>
 
 </div>

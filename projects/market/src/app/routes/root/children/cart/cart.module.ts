@@ -5,16 +5,15 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CartRoutingModule } from './cart-routing.module';
 import { CartComponent } from './cart.component';
 import {
-  CartOrderComponent,
   CartOrderQtyCounterComponent,
-  CartOrderV2Component,
+  CartOrderComponent,
   ImageUrlPipe,
   OrderDetailsComponent,
+  OrderDetailsWithoutAuthComponent,
   OrderedProductsTableComponent,
   OrderOrRequestPipe,
   OrderSentComponent,
-  OrderUnavailableComponent,
-  OrderV2Service,
+  OrderService,
   RegisterOrderSentComponent,
   VatConverterPipe
 } from './components';
@@ -32,7 +31,6 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { OrderDetailsWithoutAuthComponent } from './components/order-v2/components/order-details-without-auth';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { OnlyNumberModule } from '#shared/modules';
@@ -65,9 +63,7 @@ import { OnlyNumberModule } from '#shared/modules';
   declarations: [
     CartComponent,
     CartOrderComponent,
-    CartOrderV2Component,
     CartOrderQtyCounterComponent,
-    OrderUnavailableComponent,
     OrderSentComponent,
     RegisterOrderSentComponent,
     ImageUrlPipe,
@@ -79,7 +75,7 @@ import { OnlyNumberModule } from '#shared/modules';
   ],
   providers: [
     CartModalService,
-    OrderV2Service,
+    OrderService,
     { provide: LOCAL_PROVIDER_TOKEN, useValue: ru_RU_Mobile },
     PercentPipe,
   ]

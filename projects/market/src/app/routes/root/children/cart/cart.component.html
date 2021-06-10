@@ -5,12 +5,12 @@
   </div>
 
   <ng-container *ngIf="cartData?.content?.length">
-    <market-cart-order-v2
+    <market-cart-order
       *ngFor="let order of cartData.content; let i = index;"
       [order]="order"
       [positionInCart]="i"
       (cartDataChange)="setCartData($event)"
-    ></market-cart-order-v2>
+    ></market-cart-order>
   </ng-container>
 
   <ng-container *ngIf="!cartData?.content?.length">

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { OrderV2Service } from '../../order-v2.service';
+import { OrderService } from '../../order.service';
 import { FormGroup } from '@angular/forms';
-import { DeliveryMethodModel } from '../../../order/models';
+import { DeliveryMethodModel } from '../../models';
 import differenceInCalendarDays from 'date-fns/differenceInCalendarDays';
 import { Subscription } from 'rxjs';
 import { unsubscribeList } from '#shared/utils';
@@ -33,7 +33,7 @@ export class OrderDetailsComponent implements OnDestroy {
   private readonly _focusSubscription: Subscription;
 
   get form(): FormGroup {
-    return this._orderV2Service.form;
+    return this._orderService.form;
   }
 
   get currentDateFormat(): string {
@@ -51,41 +51,41 @@ export class OrderDetailsComponent implements OnDestroy {
   }
 
   get foundCities$() {
-    return this._orderV2Service.foundCities$;
+    return this._orderService.foundCities$;
   }
 
   get foundStreets$() {
-    return this._orderV2Service.foundStreets$;
+    return this._orderService.foundStreets$;
   }
 
   get foundHouses$() {
-    return this._orderV2Service.foundHouses$;
+    return this._orderService.foundHouses$;
   }
 
   get availableOrganizations() {
-    return this._orderV2Service.availableOrganizations;
+    return this._orderService.availableOrganizations;
   }
 
   get pickupPoints(): any[] {
-    return this._orderV2Service.pickupPoints;
+    return this._orderService.pickupPoints;
   }
 
   get deliveryZones(): any[] {
-    return this._orderV2Service.deliveryZones;
+    return this._orderService.deliveryZones;
   }
 
   get deliveryMethods(): DeliveryMethodModel[] {
-    return this._orderV2Service.deliveryMethods;
+    return this._orderService.deliveryMethods;
   }
 
   get selectedDelivery(): boolean {
-    return this._orderV2Service.selectedDelivery;
+    return this._orderService.selectedDelivery;
   }
 
   constructor(
-    private _orderV2Service: OrderV2Service,
+    private _orderService: OrderService,
   ) {
-    this._focusSubscription = this._orderV2Service.focus$
+    this._focusSubscription = this._orderService.focus$
       .subscribe((element) => {
         if (element === 'city') {
           this.elementInputStreet?.nativeElement.focus();

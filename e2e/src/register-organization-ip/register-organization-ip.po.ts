@@ -3,27 +3,27 @@ import { by, element, ElementFinder } from 'protractor';
 export class RegisterOrganizationIPPage {
 
   getRegisterOrganizationIP(): ElementFinder {
-    return element(by.css('market-organization-operate'));
+    return element(by.css('market-organization-manage'));
   }
 
   getOrganizationInnElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('#inn'));
+    return this.getRegisterOrganizationIP().element(by.id('inn'));
   }
 
   getOrganizationNameElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('#organizationName'));
+    return this.getRegisterOrganizationIP().element(by.id('name'));
   }
 
   getOrganizationContactFioElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('#contactFio'));
+    return this.getRegisterOrganizationIP().element(by.id('contactPersonFullName'));
   }
 
   getOrganizationContactEmailElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('#contactEmail'));
+    return this.getRegisterOrganizationIP().element(by.id('contactPersonEmail'));
   }
 
   getOrganizationContactPhoneElement(): ElementFinder {
-    return this.getRegisterOrganizationIP().element(by.css('#contactPhone'));
+    return this.getRegisterOrganizationIP().element(by.id('contactPersonPhone'));
   }
 
   getOrganizationAgreeElement(): ElementFinder {
@@ -31,7 +31,7 @@ export class RegisterOrganizationIPPage {
   }
 
   getBtnElement(): ElementFinder {
-    return element(by.buttonText('Продолжить'));
+    return element(by.buttonText('Сохранить'));
   }
 
 }

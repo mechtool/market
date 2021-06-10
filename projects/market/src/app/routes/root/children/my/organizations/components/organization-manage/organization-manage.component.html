@@ -1,0 +1,377 @@
+<div class="organization-manage">
+  <form nz-form [formGroup]="regOrgForm">
+
+    <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10">
+      <div nz-row nzGutter="8">
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzRequired nzFor="inn"
+                             nzTooltipTitle="Введите ИНН Вашей организации (10 цифр для юр.лица и 12 цифр для индивидуального предпринимателя)."
+                             nzTooltipIcon="info-circle">ИНН
+              </nz-form-label>
+              <input nz-input
+                     #elementInputInn
+                     marketOnlyNumber
+                     id="inn"
+                     name="{{currentDate}}_inn"
+                     type="text"
+                     [ngClass]="{'error': (regOrgForm.controls.inn.invalid && regOrgForm.controls.inn.touched) || regOrgForm.hasError('hasOrganizationAccess') || regOrgForm.hasError('hasAlreadyRequest')}"
+                     formControlName="inn">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="12"
+             *ngIf="regOrgForm.controls.inn.value?.length === 10 && (regOrgForm.controls.inn.valid || regOrgForm.controls.inn.disabled)">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzRequired nzFor="kpp"
+                             nzTooltipTitle="КПП организации (9 цифр, только для юр.лица)."
+                             nzTooltipIcon="info-circle">КПП
+              </nz-form-label>
+              <input nz-input
+                     #elementInputKpp
+                     marketOnlyNumber
+                     id="kpp"
+                     name="{{currentDate}}_kpp"
+                     type="text"
+                     [ngClass]="{'error': (regOrgForm.controls.kpp.invalid && regOrgForm.controls.kpp.touched) || regOrgForm.hasError('hasOrganizationAccess') || regOrgForm.hasError('hasAlreadyRequest')}"
+                     formControlName="kpp">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <p class="error" *ngIf="regOrgForm.hasError('hasOrganizationAccess')">
+        Вы уже имеете доступ к данной организации.
+      </p>
+
+      <p class="error" *ngIf="regOrgForm.hasError('hasAlreadyRequest')">
+        Вы уже сформировли запрос на прикрепление к данной организации.
+      </p>
+
+    </nz-form-control>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="name"
+                       nzTooltipTitle="Название юридического лица или ФИО индивидуального предпринимателя."
+                       nzTooltipIcon="info-circle">Название организации
+        </nz-form-label>
+        <input nz-input
+               #elementInputName
+               id="name"
+               name="{{currentDate}}_name"
+               type="text"
+               [ngClass]="{'error': (regOrgForm.controls.name.invalid && regOrgForm.controls.name.touched)  || regOrgForm.hasError('hasOrganizationAccess') || regOrgForm.hasError('hasAlreadyRequest')}"
+               formControlName="name">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10"
+                     *ngIf="!joinOrgForm.controls.isOrgExists.value">
+      <div nz-row nzGutter="8">
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzFor="contactsPhone"
+                             nzTooltipTitle="Телефон организации, на который может позвонить пользователь сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">Телефон организации
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactsPhone
+                     id="contactsPhone"
+                     name="{{currentDate}}_contactsPhone"
+                     type="text"
+                     [ngClass]="{'error': regOrgForm.controls.contactsPhone.invalid && regOrgForm.controls.contactsPhone.touched}"
+                     formControlName="contactsPhone"
+                     prefix="+7"
+                     mask="(000) 000 00 00"
+                     showMaskTyped="true">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzFor="contactsEmail"
+                             nzTooltipTitle="E-mail организации, на который может написать пользователь сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">E-mail организации
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactsEmail
+                     id="contactsEmail"
+                     name="{{currentDate}}_contactsEmail"
+                     type="text"
+                     [ngClass]="{'error': regOrgForm.controls.contactsEmail.invalid && regOrgForm.controls.contactsEmail.touched}"
+                     formControlName="contactsEmail">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="8">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzFor="contactsWebsite"
+                             nzTooltipTitle="Сайт организации, который может посетить пользователь сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">Сайт организации
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactsWebsite
+                     id="contactsWebsite"
+                     name="{{currentDate}}_contactsWebsite"
+                     type="text"
+                     [ngClass]="{'error': regOrgForm.controls.contactsWebsite.invalid && regOrgForm.controls.contactsWebsite.touched}"
+                     formControlName="contactsWebsite">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-form-control>
+
+    <nz-form-item *ngIf="!joinOrgForm.controls.isOrgExists.value">
+
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="contactsAddress"
+                       nzTooltipTitle="Фактический адрес организации, который будет доступен пользователям в Вашем профиле сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                       nzTooltipIcon="info-circle">Фактический адрес организации
+        </nz-form-label>
+        <input nz-input
+               #elementInputContactsAddress
+               id="contactsAddress"
+               name="{{currentDate}}_contactsAddress"
+               type="text"
+               [ngClass]="{'error': regOrgForm.controls.contactsAddress.invalid && regOrgForm.controls.contactsAddress.touched}"
+               formControlName="contactsAddress">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="!joinOrgForm.controls.isOrgExists.value">
+
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzFor="description"
+                       nzTooltipTitle="Описание деятельности организации, которое будет доступено пользователям в Вашем профиле сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                       nzTooltipIcon="info-circle">Описание деятельности организации
+        </nz-form-label>
+        <textarea nz-input
+                  #elementDescription
+                  id="description"
+                  name="{{currentDate}}_description"
+                  rows="6"
+                  formControlName="description"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item *ngIf="!joinOrgForm.controls.isOrgExists.value">
+
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl">
+        <nz-form-label nzRequired nzFor="contactPersonFullName"
+                       nzTooltipTitle="Представитель организации, с которым может связаться поддержка сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                       nzTooltipIcon="info-circle">Как обращаться к ответственному сотруднику?
+        </nz-form-label>
+        <input nz-input
+               #elementInputContactPersonFullName
+               id="contactPersonFullName"
+               name="{{currentDate}}_contactPersonFullName"
+               type="text"
+               [ngClass]="{'error': regOrgForm.controls.contactPersonFullName.invalid && regOrgForm.controls.contactPersonFullName.touched}"
+               formControlName="contactPersonFullName">
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10"
+                     *ngIf="!joinOrgForm.controls.isOrgExists.value">
+      <div nz-row nzGutter="8">
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzRequired nzFor="contactPersonPhone"
+                             nzTooltipTitle="Телефон представителя организации, на который может позвонить поддержка сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">Телефон ответственного сотрудника
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactPersonPhone
+                     id="contactPersonPhone"
+                     name="{{currentDate}}_contactPersonPhone"
+                     type="text"
+                     [ngClass]="{'error': regOrgForm.controls.contactPersonPhone.invalid && regOrgForm.controls.contactPersonPhone.touched}"
+                     formControlName="contactPersonPhone"
+                     prefix="+7"
+                     mask="(000) 000 00 00"
+                     showMaskTyped="true">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorTpl">
+              <nz-form-label nzRequired nzFor="contactPersonEmail"
+                             nzTooltipTitle="E-mail представителя организации, на который сможет написать поддержка сервиса «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">E-mail ответственного сотрудника
+              </nz-form-label>
+              <input nz-input
+                     #elementInputContactPersonEmail
+                     id="contactPersonEmail"
+                     name="{{currentDate}}_contactPersonEmail"
+                     type="email"
+                     [ngClass]="{'error': regOrgForm.controls.contactPersonEmail.invalid && regOrgForm.controls.contactPersonEmail.touched}"
+                     formControlName="contactPersonEmail">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-form-control>
+
+    <nz-form-item *ngIf="!joinOrgForm.controls.isOrgExists.value">
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorTpl"
+                       *ngIf="isRegistration">
+        <label nz-checkbox formControlName="isOrganizationAgent">
+            <span #elementIsOrganizationAgent class="terms-of-use"
+                  [ngClass]="{'error': regOrgForm.controls.isOrganizationAgent.invalid && regOrgForm.controls.isOrganizationAgent.touched}">
+              Я являюсь уполномоченным представителем регистрируемого юридического лица или индивидуального предпринимателя и принимаю условия
+              <a href="https://1cbn.ru/agreement/" target="_blank" rel="noopener noreferrer"
+                 (click)="$event.stopPropagation()">пользовательского соглашения сервиса</a>
+            </span>
+        </label>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item class="register-area" *ngIf="!joinOrgForm.controls.isOrgExists.value">
+      <nz-form-control>
+        <button nz-button nzType="primary" (click)="save()">Сохранить</button>
+        <button style="margin-left: 10px" nz-button nzType="link" [routerLink]="['/my/organizations']">Отмена</button>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #errorTpl let-control>
+      <ng-container *ngIf="control.hasError('required') && control.dirty">
+        <p>Поле обязательно для заполнения</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('maxlength')">
+        <p>Длина строки должна быть менее {{control.getError('maxlength').requiredLength}} символов</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('minlength')">
+        <p>Длина строки должна быть больше {{control.getError('minlength').requiredLength}} символов</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('pattern')">
+        <p>Введенная строка не соответствует формату url</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('blank') || control.hasError('max') || control.hasError('min')">
+        <p>Введено недопустимое значение</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('email')">
+        <p>Введен недопустимый email</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('mask')">
+        <p>Введен недопустимый телефон</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('innControlNumberCondition')">
+        <p>Введен недействительный ИНН</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('innLengthCondition')">
+        <p>Длина ИНН должна быть 10 или 12 цифр</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('kppLengthCondition')">
+        <p>Длина КПП должна быть 9 цифр</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('kppRequiredCondition') && control.dirty">
+        <p>Поле обязательно для заполнения</p>
+      </ng-container>
+    </ng-template>
+  </form>
+
+
+  <form nz-form [formGroup]="joinOrgForm" *ngIf="joinOrgForm.controls.isOrgExists.value">
+
+    <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10">
+      <p class="join-org-message">
+        В сервисе «1С:Бизнес-сеть.Торговая площадка»<br>
+        организация с указанными реквизитами уже зарегистрирована.<br>
+        Вы можете подать заявку на присоединение<span *ngIf="regOrgForm.controls.name.value">к «{{regOrgForm.controls.name.value}}»</span>.
+      </p>
+    </nz-form-control>
+
+    <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10">
+      <div nz-row nzGutter="8">
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorJoinOrgFormTpl">
+              <nz-form-label nzRequired nzFor="personName"
+                             nzTooltipTitle="ФИО человека, с которым, в случае необходимости, может связаться администратор, для присоединение учетной записи к организации зарегистрированной в сервисе «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">Как к Вам обращаться?
+              </nz-form-label>
+              <input nz-input
+                     #elementInputPersonName
+                     id="personName"
+                     name="{{currentDate}}_personName"
+                     type="text"
+                     [ngClass]="{'error': joinOrgForm.controls.personName.invalid && joinOrgForm.controls.personName.touched}"
+                     formControlName="personName">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzSm="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="errorJoinOrgFormTpl">
+              <nz-form-label nzRequired nzFor="personEmail"
+                             nzTooltipTitle="E-mail человека, на который, в случае необходимости, может написать администратор, для присоединение учетной записи к организации зарегистрированной в сервисе «1С:Бизнес-сеть.Торговая площадка»."
+                             nzTooltipIcon="info-circle">E-mail
+              </nz-form-label>
+              <input nz-input
+                     #elementInputPersonEmail
+                     id="personEmail"
+                     name="{{currentDate}}_personEmail"
+                     type="email"
+                     [ngClass]="{'error': joinOrgForm.controls.personEmail.invalid && joinOrgForm.controls.personEmail.touched}"
+                     formControlName="personEmail">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-form-control>
+
+    <nz-form-item>
+      <nz-form-control nzXs="24" nzSm="24" nzMd="18" nzLg="14" nzXl="14" nzXXl="10" [nzErrorTip]="errorJoinOrgFormTpl">
+        <nz-form-label nzRequired nzFor="messageForAdmin"
+                       nzTooltipTitle="Сообщение для администратора организации."
+                       nzTooltipIcon="info-circle">Сообщение администратору организации
+        </nz-form-label>
+        <textarea nz-input
+                  #elementMessageForAdmin
+                  id="messageForAdmin"
+                  name="{{currentDate}}_messageForAdmin"
+                  rows="6"
+                  [ngClass]="{'error': joinOrgForm.controls.messageForAdmin.invalid && joinOrgForm.controls.messageForAdmin.touched}"
+                  formControlName="messageForAdmin"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="form-with-errors" *ngIf="regOrgForm.invalid"></div>
+
+    <nz-form-item class="register-area">
+      <nz-form-control>
+        <button nz-button nzType="primary" (click)="send()">Отправить</button>
+        <button style="margin-left: 10px" nz-button nzType="link" [routerLink]="['/my/organizations']">Отмена</button>
+      </nz-form-control>
+    </nz-form-item>
+
+    <ng-template #errorJoinOrgFormTpl let-control>
+      <ng-container *ngIf="control.hasError('required') && control.dirty">
+        <p>Поле обязательно для заполнения</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('maxlength')">
+        <p>Длина строки должна быть менее {{control.getError('maxlength').requiredLength}} символов</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('blank')">
+        <p>Введено недопустимое значение</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('email')">
+        <p>Введен недопустимый email</p>
+      </ng-container>
+    </ng-template>
+  </form>
+</div>

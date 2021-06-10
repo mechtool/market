@@ -1,19 +1,10 @@
 import { Injectable } from '@angular/core';
-import { RegisterOrderSentComponent } from './components/order/components/register-order-sent';
-import { OrderUnavailableComponent } from './components/order/components/order-unavailable';
-import { OrderSentComponent } from './components/order/components/order-sent';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { OrderSentComponent, RegisterOrderSentComponent } from './components';
 
 @Injectable()
 export class CartModalService {
-  constructor(private _modalService: NzModalService) {}
-
-  openOrderUnavailableModal(): void {
-    this._modalService.create({
-      nzContent: OrderUnavailableComponent,
-      nzFooter: null,
-      nzWidth: 480,
-    });
+  constructor(private _modalService: NzModalService) {
   }
 
   openOrderSentModal(isOrderType: boolean): void {

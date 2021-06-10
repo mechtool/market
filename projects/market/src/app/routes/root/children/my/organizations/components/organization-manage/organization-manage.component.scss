@@ -1,0 +1,44 @@
+.organization-manage {
+
+
+  .join-org-message {
+    padding: 10px;
+    font-size: var(--font-size-18);
+    font-weight: var(--font-weight-medium);
+    line-height: 23px;
+  }
+
+  a {
+    color: inherit;
+    border-bottom: 1px solid #fedc8b;
+    text-decoration: none;
+
+    &:hover {
+      border: none;
+    }
+  }
+
+  p {
+    &.error {
+      color: #ff4d4f;
+      margin-top: -25px;
+    }
+  }
+
+  input {
+    &.error {
+      border-color: #ff4d4f;
+      color: #6a6a6a;
+    }
+  }
+
+  .terms-of-use {
+
+    display: block;
+    padding: 2px;
+
+    &.error {
+      border: 1px solid #ff4d4f;
+    }
+  }
+}

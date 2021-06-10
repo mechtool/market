@@ -1,49 +1,28 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { RequisitesCheckerComponent } from './components/requisites-checker/requisites-checker.component';
-import { filter, switchMap, tap } from 'rxjs/operators';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OrganizationsService } from '#shared/modules/common-services/organizations.service';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { UserService } from '#shared/modules/common-services/user.service';
-import { innKppToLegalId } from '#shared/utils';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserOrganizationModel } from '#shared/modules/common-services/models/user-organization.model';
-import { AccessKeyComponent } from './components/access-key/access-key.component';
-import { OrganizationResponseModel } from '#shared/modules/common-services/models/organization-response.model';
 import { ParticipationRequestResponseModel } from '#shared/modules/common-services/models/participation-request-response.model';
 import { ExternalProvidersService } from '#shared/modules/common-services/external-providers.service';
 import { MetrikaEventTypeModel } from '#shared/modules/common-services/models';
 import { LocalStorageService } from '#shared/modules';
+import { AccessKeyComponent } from './components';
+import { switchMap, tap } from 'rxjs/operators';
 
 type TabType = 'a' | 'b' | 'c';
-
-class RegNotAllowError implements Error {
-  message: string;
-  name: string;
-
-  constructor(message: string, name?: string) {
-    this.message = message
-    this.name = name
-  }
-}
 
 @Component({
   templateUrl: './organizations.component.html',
   styleUrls: ['./organizations.component.scss', './organizations.component-768.scss', './organizations.component-576.scss'],
 })
 export class OrganizationsComponent implements OnInit {
-  existingOrganization: OrganizationResponseModel = null;
   checkedLegalRequisites = null;
   newSentRequests: number;
   private _activeTabType: TabType;
-
-  get pageHeader(): string {
-    if (this.activeTabType === 'c') {
-      return 'Регистрация новой организации';
-    }
-    return 'Мои организации';
-  }
 
   get activeTabType(): TabType {
     return this._activeTabType;
@@ -85,12 +64,11 @@ export class OrganizationsComponent implements OnInit {
 
   sendParticipationRequest(data: any) {
     const bodyData = {
-      organizationId: this.existingOrganization.id,
-      notes: `Заявка на присоединение к организации ${this.existingOrganization.name} от ${data.fio} (${data.email}). ${data.message}`,
+      organizationId: data.organizationId,
+      notes: `Заявка на присоединение к организации ${data.name} от ${data.personName} (${data.personEmail}). ${data.messageForAdmin}`,
     };
     this._organizationsService.sendParticipationRequest(bodyData).subscribe(
       (_) => {
-        this.existingOrganization = null;
         this.goToTab('b');
       },
       (err) => {
@@ -106,24 +84,24 @@ export class OrganizationsComponent implements OnInit {
     };
 
     const contacts = {
-      ...(data.organizationEmail && { email: data.organizationEmail }),
-      ...(data.organizationPhone && { phone: data.organizationPhone }),
-      ...(data.organizationWebsite && { website: data.organizationWebsite }),
-      ...(data.organizationAddress && { address: data.organizationAddress }),
+      ...(data.contactsEmail && { email: data.contactsEmail }),
+      ...(data.contactsPhone && { phone: data.contactsPhone }),
+      ...(data.contactsWebsite && { website: data.contactsWebsite }),
+      ...(data.contactsAddress && { address: data.contactsAddress }),
     };
 
     const contactPerson = {
-      email: data.contactEmail,
-      fullName: data.contactFio,
-      phone: data.contactPhone,
+      email: data.contactPersonEmail,
+      fullName: data.contactPersonFullName,
+      phone: data.contactPersonPhone,
     };
 
     const regOrgData = {
       legalRequisites,
       contactPerson,
-      name: data.organizationName,
+      name: data.name,
       ...(Object.keys(contacts).length && { contacts }),
-      ...(data.organizationDescription && { description: data.organizationDescription }),
+      ...(data.description && { description: data.description }),
     };
 
     this._organizationsService
@@ -178,100 +156,29 @@ export class OrganizationsComponent implements OnInit {
   }
 
   private _watchQueryParamsChanges() {
-    this._activatedRoute.queryParams.pipe(filter((res) => res.tab)).subscribe(
-      (res) => {
-        const tabValue = res.tab.split(';')[0];
-        switch (tabValue) {
-          case 'a':
-            this._setActiveTabType('a');
-            break;
-          case 'b':
-            this._setActiveTabType('b');
-            break;
-          case 'c':
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_CHECK_INN_SHOW);
-            this._createRequisitesCheckerModal();
-            break;
-          default:
-            this._setActiveTabType('a');
-            break;
-        }
-      },
-      (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
-      },
-    );
-  }
-
-  private _createRequisitesCheckerModal() {
-    let legalRequisites = null;
-    const modal = this._modalService.create({
-      nzContent: RequisitesCheckerComponent,
-      nzViewContainerRef: this._viewContainerRef,
-      nzFooter: null,
-      nzWidth: 480,
-      nzComponentParams: {
-        inn: this._activatedRoute.snapshot.queryParamMap.get('inn'),
-        kpp: this._activatedRoute.snapshot.queryParamMap.get('kpp'),
-      },
-    });
-
-    modal.afterClose.pipe(filter((res) => !res && this.activeTabType !== 'c')).subscribe(() => {
-      this.goToTab(this.activeTabType);
-    });
-
-    const subscription = modal.componentInstance.legalRequisitesChange
-      .pipe(
-        switchMap((res) => {
-          legalRequisites = {
-            inn: res?.inn,
-            kpp: res?.kpp,
-          };
-          const legalId = innKppToLegalId(res?.inn, res?.kpp);
-          return this._organizationsService.getOrganizationByLegalId(legalId);
-        }),
-        switchMap((organization) => {
-          if (this._hasOrganizationAccess(organization)) {
-            this._setActiveTabType('a');
-            return throwError(new RegNotAllowError(`Вы уже имеете доступ к организации с ИНН: ${legalRequisites.inn}${legalRequisites.kpp ? ` КПП: ${legalRequisites.kpp}` : ''}.`));
+    this._activatedRoute.queryParams
+      .subscribe((res) => {
+          const tabValue = res.tab?.split(';')[0];
+          switch (tabValue) {
+            case 'a':
+              this._setActiveTabType('a');
+              break;
+            case 'b':
+              this._setActiveTabType('b');
+              break;
+            case 'c':
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.MODAL_CHECK_INN_SHOW);
+              this._setActiveTabType('c');
+              break;
+            default:
+              this._setActiveTabType('a');
+              break;
           }
-
-          if (this._hasAlreadyRequest(legalRequisites)) {
-            this._setActiveTabType('b');
-            return throwError(new RegNotAllowError(`Ранее вы уже сформировли запрос на прикрепление к организации с ИНН: ${legalRequisites.inn}${legalRequisites.kpp ? ` КПП: ${legalRequisites.kpp}` : ''}.`));
-          }
-          return of(organization);
-        })
-      )
-      .subscribe((organization) => {
-          modal.destroy(true);
-          subscription.unsubscribe();
-          this.existingOrganization = organization;
-          this.checkedLegalRequisites = legalRequisites;
-          this._setActiveTabType('c');
         },
         (err) => {
-          subscription.unsubscribe();
-          modal.destroy(true);
-
-          if (err instanceof RegNotAllowError) {
-            this._notificationsService.info(err.message);
-          } else {
-            this._notificationsService.error('Произошла ошибка при получении информации об организации');
-          }
+          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
         },
       );
-  }
-
-  private _hasOrganizationAccess(organization: OrganizationResponseModel) {
-    return organization && this._userService.organizations$.getValue().some((item) => item.organizationId === organization.id);
-  }
-
-  private _hasAlreadyRequest(legalRequisites) {
-    return this._userService.ownParticipationRequests$.getValue().some((part) =>
-      part.requestStatus.resolutionStatus === 'PENDING' &&
-      part.organization.legalRequisites.inn === legalRequisites.inn &&
-      (!legalRequisites.kpp || part.organization.legalRequisites.kpp === legalRequisites.kpp));
   }
 
   private _setActiveTabType(tabType: TabType) {

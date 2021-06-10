@@ -9,7 +9,6 @@ import {
 import { PromoPage } from './promo/promo.po';
 import { RegisterOrganizationIPPage } from './register-organization-ip/register-organization-ip.po';
 import {
-  browserClick,
   defaultContactEmail,
   defaultContactName,
   defaultContactPhone,
@@ -115,7 +114,7 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
           return true;
         }
       });
-    }, 10000);
+    }, defaultTimeout);
 
     await browser.switchTo().window(windowHandles[1]);
     await browser.wait(until.presenceOf(loginPage.getLoginInput()), defaultTimeout);
@@ -135,8 +134,8 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
     await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
   });
 
-  it('Шаг 6: Пользователь видит модальное окно "Регистрация новой организации"', async() => {
-    await browser.wait(until.presenceOf(page.getModalRegisterOrganizationElement()), defaultTimeout);
+  it('Шаг 6: Пользователь видит страницу регистрации новой организации', async() => {
+    await browser.wait(until.presenceOf(page.getRegisterOrganizationElement()), defaultTimeout);
     urlToRedirect = await browser.getCurrentUrl();
   });
 
@@ -144,15 +143,11 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
 
 export function userWithoutOrganizationsDeAuths(page: AppPage) {
 
-  it('Шаг 1: Пользователь нажимает на кнопку ESC', async() => {
-    browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
-  });
-
-  it('Шаг 2: Пользователь видит кнопку "Выход"', async() => {
+  it('Шаг 1: Пользователь видит кнопку "Выход"', async() => {
     await browser.wait(until.presenceOf(page.getLogoutElement()), defaultTimeout);
   });
 
-  it('Шаг 3: Пользователь нажимает на кнопку "Выход"', async() => {
+  it('Шаг 2: Пользователь нажимает на кнопку "Выход"', async() => {
     await page.getLogoutElement().click();
   });
 
@@ -176,7 +171,7 @@ export function userWithOrganizationsAuths(page: AppPage, loginPage: LoginItsPag
           return true;
         }
       });
-    }, 10000);
+    }, defaultTimeout);
 
     await browser.switchTo().window(windowHandles[1]);
     await browser.wait(until.presenceOf(loginPage.getLoginInput()), defaultTimeout);
@@ -208,22 +203,12 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await navigateTo(urlToRedirect);
   });
 
-  it('Шаг 2: Пользователь видит модальное окно "Регистрация новой организации"', async() => {
-    await browser.wait(until.presenceOf(page.getModalRegisterOrganizationElement()), defaultTimeout);
+  it('Шаг 2: Пользователь видит страницу регистрации новой организации', async() => {
+    await browser.wait(until.presenceOf(page.getRegisterOrganizationElement()), defaultTimeout);
+    // await browser.wait(until.presenceOf(page.getModalRegisterOrganizationElement()), defaultTimeout);
   });
 
-  it('Шаг 3: Пользователь вводит ИНН регистрируемой организации', async() => {
-    const inn = generateINNforIP();
-    await browser.wait(until.presenceOf(page.getModalRegisterOrganizationINN()), defaultTimeout);
-    await page.getModalRegisterOrganizationINN().sendKeys(inn);
-  });
-
-  it('Шаг 4: Пользователь нажимает на кнопку "Продолжить"', async() => {
-    await browser.wait(until.presenceOf(page.getModalRegisterOrganizationBtn()), defaultTimeout);
-    await browserClick(page.getModalRegisterOrganizationBtn());
-  });
-
-  it('Шаг 5: Пользователь видит форму для регистрации новой организации', async() => {
+  it('Шаг 3: Пользователь видит поля формы для регистрации новой организации', async() => {
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationNameElement()), defaultTimeout);
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationContactFioElement()), defaultTimeout);
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationContactEmailElement()), defaultTimeout);
@@ -232,7 +217,13 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getBtnElement()), defaultTimeout);
   });
 
-  it('Шаг 6: Пользователь заполняет поля в форме (Название организации, ФИО, email, телефон)', async() => {
+  it('Шаг 4: Пользователь вводит ИНН регистрируемой организации', async() => {
+    const inn = generateINNforIP();
+    await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationInnElement()), defaultTimeout);
+    await registerOrganizationIPPage.getOrganizationInnElement().sendKeys(inn);
+  });
+
+  it('Шаг 5: Пользователь заполняет поля в форме (Название организации, ФИО, email, телефон)', async() => {
     await registerOrganizationIPPage.getOrganizationNameElement().sendKeys(organizationName);
     await registerOrganizationIPPage.getOrganizationContactFioElement().sendKeys(defaultContactName);
     await registerOrganizationIPPage.getOrganizationContactEmailElement().sendKeys(defaultContactEmail);
@@ -241,8 +232,8 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
 
   it('Шаг 7: Пользователь соглашается с тем, что являюсь уполномоченным представителем регистрируемой организации', async() => {
     await browser.wait(until.presenceOf(registerOrganizationIPPage.getOrganizationAgreeElement()), defaultTimeout);
-    await browser.executeScript("arguments[0].scrollIntoView(true);", registerOrganizationIPPage.getOrganizationAgreeElement());
-    await browser.executeScript("arguments[0].click();", registerOrganizationIPPage.getOrganizationAgreeElement());
+    await browser.executeScript('arguments[0].scrollIntoView(true);', registerOrganizationIPPage.getOrganizationAgreeElement());
+    await browser.executeScript('arguments[0].click();', registerOrganizationIPPage.getOrganizationAgreeElement());
     await browser.sleep(3e3);
   });
 
@@ -293,33 +284,6 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await element(by.css('.form-with-errors')).isPresent()
       .then((isPresent) => {
         console.log('\tФорма имеет ошибки:', `${isPresent ? 'ДА' : 'НЕТ'}`);
-
-        if (isPresent) {
-          element(by.css('.organization-name-error')).isPresent()
-            .then((has) => {
-              console.log('\tВ поле Наименование ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
-            });
-
-          element(by.css('.contact-fio-error')).isPresent()
-            .then((has) => {
-              console.log('\tВ поле ФИО ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
-            });
-
-          element(by.css('.contact-email-error')).isPresent()
-            .then((has) => {
-              console.log('\tВ поле E-mail ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
-            });
-
-          element(by.css('.contact-phone-error')).isPresent()
-            .then((has) => {
-              console.log('\tВ поле Телефон ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
-            });
-
-          element(by.css('.agree-error')).isPresent()
-            .then((has) => {
-              console.log('\tВ поле Условия пользовательского соглашения ошибка:', `${has ? 'ДА' : 'НЕТ'}`);
-            });
-        }
       });
 
     console.log('\t------------------------------->');
@@ -329,8 +293,8 @@ export function userRegistersOrganizations(page: AppPage, registerOrganizationIP
     await browser.getCurrentUrl().then((url) => {
       console.log('\tURL страницы регистрации организации:', decodeURIComponent(url));
     })
-    await browser.executeScript("arguments[0].scrollIntoView(true);", registerOrganizationIPPage.getBtnElement());
-    await browser.executeScript("arguments[0].click();", registerOrganizationIPPage.getBtnElement());
+    await browser.executeScript('arguments[0].scrollIntoView(true);', registerOrganizationIPPage.getBtnElement());
+    await browser.executeScript('arguments[0].click();', registerOrganizationIPPage.getBtnElement());
   });
 
   it('Шаг 11: Видит страницу со списком текущих акций', async() => {

@@ -1,6 +1,31 @@
 import { FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-// todo вынести валидаторы ИНН, КПП в отдельный файл от сюда и из других мест в shared директорию и импортировать во всех местах
+export const innConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
+  const inn = formControl.value;
+  if (!inn) {
+    return { innCondition: true };
+  }
+
+  if (inn.length !== 10 && inn.length !== 12) {
+    return { innLengthCondition: true };
+  }
+
+  return checkInnValidity(inn.toString()) ? null : { innControlNumberCondition: true };
+};
+
+export const kppConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
+  const kpp = formControl.value;
+  return kpp && kpp.length !== 9 ? { kppLengthCondition: true } : null;
+}
+
+
+export function kppRequiredIfOrgConditionValidator(nameInn: string): ValidatorFn {
+  return (formControl: FormControl): ValidationErrors | null => {
+    const inn = formControl?.parent?.get(nameInn).value;
+    const kpp = formControl.value;
+    return inn?.length === 10 && !kpp ? { kppRequiredCondition: true } : null;
+  };
+}
 
 const checkInnValidity = (i): boolean => {
   if (i.match(/\D/)) {
@@ -56,26 +81,3 @@ const checkInnValidity = (i): boolean => {
   return false;
 };
 
-export const innConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
-  const inn = formControl.value;
-  if (!inn) {
-    return { innCondition: true };
-  }
-
-  if (inn.length !== 10 && inn.length !== 12) {
-    return { innLengthCondition: true };
-  }
-
-  return checkInnValidity(inn.toString()) ? null : { innControlNumberCondition: true };
-};
-
-export const kppConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
-  const kpp = formControl.value;
-  return kpp && kpp.length !== 9 ? { kppLengthCondition: true } : null;
-}
-
-export const kppRequiredIfOrgConditionValidator: ValidatorFn = (formControl: FormControl): ValidationErrors => {
-  const inn = formControl?.parent?.get('consumerInn').value;
-  const kpp = formControl.value;
-  return inn?.length === 10 && !kpp ? { kppRequiredCondition: true } : null;
-}

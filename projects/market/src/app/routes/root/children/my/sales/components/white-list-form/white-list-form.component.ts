@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { innConditionValidator } from '../../../organizations/components/requisites-checker/requisites-condition.validator';
 import { notBlankValidator } from '#shared/utils/common-validators';
 import { OrganizationsService } from '#shared/modules';
+import { innConditionValidator } from '#shared/utils/organization-requisite-validators';
 
 @Component({
   templateUrl: './white-list-form.component.html',
