@@ -38,7 +38,7 @@ export class PaymentDocumentComponent implements OnInit {
       },
       (err) => {
         this.isError = true;
-        this._notificationsService.error('Невозможно отобразить счет. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }

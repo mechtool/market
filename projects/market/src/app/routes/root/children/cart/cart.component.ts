@@ -35,7 +35,7 @@ export class CartComponent implements OnInit, OnDestroy {
           },
           (err) => {
             this._spinnerService.hide();
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+            this._notificationsService.error();
           },
         );
     });

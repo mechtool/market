@@ -1,23 +1,33 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzMessageDataOptions, NzMessageRef } from "ng-zorro-antd/message/typings";
+
+const CONFIGURATION = { nzDuration: 5000, nzPauseOnHover: true };
+const ERROR_VERY_DEFAULT_TEXT = 'Сервис временно недоступен. Попробуйте позднее.';
 
 @Injectable()
 export class NotificationsService {
+  private _errorTpl: TemplateRef<any> = null;
+
   constructor(private _messageService: NzMessageService) {}
 
-  info(message: string) {
-    this._messageService.info(message, { nzDuration: 5000 });
+  info(message: string | TemplateRef<void>, options?: NzMessageDataOptions): NzMessageRef {
+    return this._messageService.info(message, CONFIGURATION);
   }
 
-  success(message: string) {
-    this._messageService.success(message);
+  error(message?: string | TemplateRef<void>, options?: NzMessageDataOptions): NzMessageRef {
+    if (message) {
+      return this._messageService.error(message, CONFIGURATION);
+    }
+    if (!message && this._errorTpl) {
+      return this._messageService.error(this._errorTpl, CONFIGURATION);
+    }
+    if (!message && !this._errorTpl) {
+      return this._messageService.error(ERROR_VERY_DEFAULT_TEXT, CONFIGURATION);
+    }
   }
 
-  error(message: string) {
-    this._messageService.error(message, { nzDuration: 5000 });
-  }
-
-  custom(message: string | TemplateRef<void>, ms: number) {
-    this._messageService.info(message, { nzDuration: ms, nzPauseOnHover: true });
+  setErrorTemplate(errorTpl: TemplateRef<any>): void {
+    this._errorTpl = errorTpl;
   }
 }

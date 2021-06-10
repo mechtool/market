@@ -107,7 +107,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       ).subscribe((rfpId) => {
         this.goToOpenModalViewRfp(rfpId);
       }, (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       })
   }
 
@@ -130,7 +130,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       this._spinnerService.hide();
     }, () => {
       this._spinnerService.hide();
-      this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+      this._notificationsService.error();
     });
   }
 
@@ -166,7 +166,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
         this._spinnerService.hide();
       }, () => {
         this._spinnerService.hide();
-        this._notificationsService.error('Ошибка при получении списка запросов.');
+        this._notificationsService.error();
       });
   }
 
@@ -177,7 +177,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
         this._spinnerService.hide();
       }, () => {
         this._spinnerService.hide();
-        this._notificationsService.error('Ошибка при получении списка предложений.');
+        this._notificationsService.error();
       });
   }
 
@@ -342,7 +342,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       }, (err) => {
         modal?.destroy();
         this._resetQueryParams(['rfpId']);
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       })
 
   }
@@ -373,7 +373,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       }, (err) => {
         modal?.destroy();
         this._resetQueryParams(['offerId']);
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       })
   }
 

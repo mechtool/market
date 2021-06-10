@@ -49,7 +49,7 @@ export class PriceListTableComponent {
           this.startFeedChange.emit(true);
           this._notificationsService.info(err.message);
         } else {
-          this._notificationsService.error(`Произошла ошибка при постановке прайс-листа в очередь на обновление торговых предложений. Попробуйте позже.`);
+          this._notificationsService.error();
         }
       });
   }
@@ -79,7 +79,7 @@ export class PriceListTableComponent {
         if (err.message.includes('обновления')) {
           this._notificationsService.info(err.message);
         } else {
-          this._notificationsService.error(`Произошла ошибка при удалении прайс-листа. Попробуйте позже.`);
+          this._notificationsService.error();
         }
       });
   }

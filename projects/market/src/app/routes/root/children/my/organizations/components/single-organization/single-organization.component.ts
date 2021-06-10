@@ -20,17 +20,7 @@ import { iif, Observable, of, zip } from 'rxjs';
 type TabType = 'a' | 'b' | 'c' | 'd';
 const PAGE_SIZE = 100;
 
-const ERROR_DEFAULT = 'Невозможно обработать запрос. Внутренняя ошибка сервера.';
-const ERROR_GET_ACCESS_KEY = 'Произошла ошибка при получении ключа доступа.';
 const ERROR_DELETE_LAST_ADMIN = 'Невозможно удалить последнего администратора организации.';
-const ERROR_SAVE_ORG_UPDATES = 'Произошла ошибка при сохранении изменений в организации.';
-const ERROR_ACCEPT_REJECT_USER_TO_ORG = 'Произошла ошибка при добавлении/отказе пользователя в организацию.';
-const ERROR_REMOVE_USER_FROM_ORG = 'Произошла ошибка при удалении пользователя.';
-const ERROR_DELETE_ACCESS_KEY = 'Произошла ошибка при удалении одноразового пароля.';
-const ERROR_GET_ORG_INFO = 'Произошла ошибка при получении информации по организации.';
-const ERROR_GET_ORG_USERS = 'Произошла ошибка при получении пользователей организации.';
-const ERROR_GET_ORG_REQUESTS = 'Произошла ошибка при получении запросов на добавление в организацию.';
-const ERROR_GET_ORG_ACCESS_KEYS = 'Произошла ошибка при получении списка одноразовых паролей.';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -109,7 +99,7 @@ export class SingleOrganizationComponent implements OnInit {
         });
       },
       (err) => {
-        this._notificationsService.error(ERROR_GET_ACCESS_KEY);
+        this._notificationsService.error();
       },
     );
   }
@@ -189,7 +179,7 @@ export class SingleOrganizationComponent implements OnInit {
           }
         },
         (err) => {
-          this._notificationsService.error(ERROR_ACCEPT_REJECT_USER_TO_ORG);
+          this._notificationsService.error();
         },
       );
   }
@@ -226,7 +216,7 @@ export class SingleOrganizationComponent implements OnInit {
           this._resetOrganizationAndCounterpartyData(this.orgId);
         },
         (err) => {
-          this._notificationsService.error(ERROR_SAVE_ORG_UPDATES);
+          this._notificationsService.error();
         },
       );
   }
@@ -252,7 +242,7 @@ export class SingleOrganizationComponent implements OnInit {
         }
       },
       (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }
@@ -276,7 +266,7 @@ export class SingleOrganizationComponent implements OnInit {
         this._resetUsers(this.orgId);
       },
       (err) => {
-        this._notificationsService.error(ERROR_REMOVE_USER_FROM_ORG);
+        this._notificationsService.error();
       },
     );
   }
@@ -288,7 +278,7 @@ export class SingleOrganizationComponent implements OnInit {
         this._resetAccessKeys(this.orgId);
       },
       (err) => {
-        this._notificationsService.error(ERROR_DELETE_ACCESS_KEY);
+        this._notificationsService.error();
       },
     );
   }
@@ -299,7 +289,7 @@ export class SingleOrganizationComponent implements OnInit {
         this.init(res.id);
       },
       (err) => {
-        this._notificationsService.error(ERROR_DEFAULT);
+        this._notificationsService.error();
       },
     );
   }
@@ -337,7 +327,7 @@ export class SingleOrganizationComponent implements OnInit {
     ).subscribe(() => {
       },
       (err) => {
-        this._notificationsService.error(ERROR_GET_ORG_INFO);
+        this._notificationsService.error();
       },
     );
   }
@@ -348,7 +338,7 @@ export class SingleOrganizationComponent implements OnInit {
         this.users = res;
       },
       (err) => {
-        this._notificationsService.error(ERROR_GET_ORG_USERS);
+        this._notificationsService.error();
       },
     );
   }
@@ -365,7 +355,7 @@ export class SingleOrganizationComponent implements OnInit {
           this.participationRequests = res;
         },
         (err) => {
-          this._notificationsService.error(ERROR_GET_ORG_REQUESTS);
+          this._notificationsService.error();
         },
       );
   }
@@ -376,7 +366,7 @@ export class SingleOrganizationComponent implements OnInit {
         this.accessKeys = res;
       },
       (err) => {
-        this._notificationsService.error(ERROR_GET_ORG_ACCESS_KEYS);
+        this._notificationsService.error();
       },
     );
   }

@@ -29,7 +29,7 @@ import { SetupServicesModule } from '#shared/modules/setup-services';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { environment } from '#environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-import {FILTER_FORM_CONFIG, filterFormDefaultConfig} from "#shared/modules/components/search-area/config";
+import { FILTER_FORM_CONFIG, filterFormDefaultConfig } from "#shared/modules/components/search-area/config";
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {

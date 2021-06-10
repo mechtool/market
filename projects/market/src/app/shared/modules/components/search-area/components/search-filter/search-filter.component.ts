@@ -336,7 +336,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         this._updateModifiedFiltersCounter();
         this._submit();
       }, () => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       });
   }
 
@@ -397,7 +397,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           this.suppliersToChoose = data;
         },
         () => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
@@ -430,7 +430,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           this.locationsToChoose = data;
         },
         () => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
@@ -526,7 +526,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           this.form.get('supplier.name').patchValue(org?.name || '', { emitEvent: false, onlySelf: false });
         },
         () => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
@@ -568,7 +568,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         },
         (e) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
     }
@@ -582,7 +582,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
             this.availableCategories$.next([...res]);
           },
           () => {
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+            this._notificationsService.error();
           },
         )
       }

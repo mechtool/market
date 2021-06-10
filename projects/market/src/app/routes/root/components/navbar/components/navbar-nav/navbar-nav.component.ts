@@ -147,7 +147,7 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
         this._setNavItemActive(this._getActiveItem(this.navItems));
       },
       (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }

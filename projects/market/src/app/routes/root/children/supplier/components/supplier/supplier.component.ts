@@ -128,7 +128,7 @@ export class SupplierSingleComponent implements OnDestroy {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
     }
@@ -177,7 +177,7 @@ export class SupplierSingleComponent implements OnDestroy {
       if (e.status === 404) {
         this._router.navigate(['/404']);
       } else {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       }
     });
   }

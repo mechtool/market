@@ -51,7 +51,7 @@ export class ProductComponent implements OnDestroy {
         this.sort = param.sort ? param.sort : SortModel.ASC;
       },
       (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
     this._initProductOffers();
@@ -132,7 +132,7 @@ export class ProductComponent implements OnDestroy {
           if (err.status === 404) {
             this._router.navigate(['/404']);
           } else {
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+            this._notificationsService.error();
           }
         },
       );

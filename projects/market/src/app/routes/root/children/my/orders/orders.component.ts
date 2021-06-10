@@ -59,7 +59,7 @@ export class OrdersComponent implements OnDestroy {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
     }
@@ -80,7 +80,7 @@ export class OrdersComponent implements OnDestroy {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
     }
@@ -96,7 +96,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }
@@ -111,7 +111,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }
@@ -135,7 +135,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
     this._ediService.getAccounts(this.pageAccountDocuments, PAGE_SIZE).subscribe(
@@ -149,7 +149,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }

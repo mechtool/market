@@ -241,7 +241,7 @@ export class OrganizationManageComponent implements OnInit, OnDestroy {
         }
 
       }, (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       });
   }
 

@@ -83,7 +83,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
@@ -150,7 +150,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
           this._cdr.detectChanges();
         },
         (err) => {
-          this._notificationsService.error('Невозможно добавить товар в корзину. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
           this.isMadeOrder.emit(false);
           this.rollBackTotalPositions(Operation.ADD);
         },
@@ -206,7 +206,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
                 this.prevCount = value;
               },
               (err) => {
-                this._notificationsService.error('Невозможно изменить количество товаров. Внутренняя ошибка сервера.');
+                this._notificationsService.error();
                 this.isMadeOrder.emit(false);
                 this.rollBackTotalPositions();
               },
@@ -227,7 +227,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
                 this.isMadeOrder.emit(false);
               },
               (err) => {
-                this._notificationsService.error('Невозможно удалить товар из корзины. Внутренняя ошибка сервера.');
+                this._notificationsService.error();
                 this.isMadeOrder.emit(false);
                 this.rollBackTotalPositions(Operation.REMOVE);
               },

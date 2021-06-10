@@ -73,7 +73,7 @@ export class ProductOrderComponent implements OnInit {
           }
         },
         (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
@@ -91,7 +91,7 @@ export class ProductOrderComponent implements OnInit {
           }
         },
         (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }

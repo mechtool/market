@@ -72,7 +72,7 @@ export class OrganizationsComponent implements OnInit {
         this.goToTab('b');
       },
       (err) => {
-        this._notificationsService.error('Произошла ошибка при подаче заявки на добавление в организацию');
+        this._notificationsService.error();
       },
     );
   }
@@ -122,7 +122,7 @@ export class OrganizationsComponent implements OnInit {
           this.goToTab('a');
         },
         (err) => {
-          this._notificationsService.error('Произошла ошибка при регистрации организации');
+          this._notificationsService.error();
         },
       );
   }
@@ -150,7 +150,7 @@ export class OrganizationsComponent implements OnInit {
         });
       },
       (err) => {
-        this._notificationsService.error('Произошла ошибка при получении ключа доступа');
+        this._notificationsService.error();
       },
     );
   }
@@ -176,7 +176,7 @@ export class OrganizationsComponent implements OnInit {
           }
         },
         (err) => {
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
@@ -201,7 +201,7 @@ export class OrganizationsComponent implements OnInit {
         }
       },
       (err) => {
-        this._notificationsService.error('Произошла ошибка при получении запросов на присоединение');
+        this._notificationsService.error();
       },
     );
   }

@@ -206,7 +206,7 @@ export class PriceListCreatingFormComponent implements OnInit, OnDestroy {
         })
         this._router.navigateByUrl(`/my/sales`);
       }, (err) => {
-        this._notificationsService.error(`Произошла ошибка при сохранении прайс-листа. Попробуйте еще раз.`);
+        this._notificationsService.error();
       });
   }
 

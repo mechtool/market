@@ -66,7 +66,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.feedbackEvent.emit(true);
-          this._notificationsService.error('Произошла ошибка при отправке сообщения');
+          this._notificationsService.error();
         },
       );
   }

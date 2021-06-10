@@ -235,7 +235,7 @@ export class RfpEditComponent implements OnInit {
         this.foundCities = cities.filter(uniqueArray);
       },
       (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }
@@ -254,7 +254,7 @@ export class RfpEditComponent implements OnInit {
         this.form.get('documentOrderNumber').patchValue(`Запрос ${(new AbbreviatedBusinessNamePipe).transform(selectedOrganization.organizationName)} от ${format(new Date(), 'dd-MM-yyyy HH-mm')}`);
       },
       (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       },
     );
   }
@@ -391,7 +391,7 @@ export class RfpEditComponent implements OnInit {
         }
         modal.destroy();
       }, (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       });
   }
 
@@ -492,7 +492,7 @@ export class RfpEditComponent implements OnInit {
         }));
         modal.destroy();
       }, (err) => {
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       });
   }
 
@@ -563,7 +563,7 @@ export class RfpEditComponent implements OnInit {
               const validationErrorMessage =  err.error.validationError[0].message;
               this._notificationsService.error(`Произошла ошибка при редактировании запроса. ${validationErrorMessage}`);
             } else {
-              this._notificationsService.error(`Произошла ошибка при редактировании запроса. Попробуйте еще раз.`);
+              this._notificationsService.error();
             }
           });
         return;
@@ -578,7 +578,7 @@ export class RfpEditComponent implements OnInit {
             const validationErrorMessage =  err.error.validationError[0].message;
             this._notificationsService.error(`Произошла ошибка при создании запроса. ${validationErrorMessage}`);
           } else {
-            this._notificationsService.error(`Произошла ошибка при создании запроса. Попробуйте еще раз.`);
+            this._notificationsService.error();
           }
         });
 

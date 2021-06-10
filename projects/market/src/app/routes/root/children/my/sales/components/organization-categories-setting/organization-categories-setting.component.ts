@@ -39,7 +39,7 @@ export class OrganizationCategoriesSettingComponent implements OnInit {
         this._spinnerService.hide();
       }, (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+        this._notificationsService.error();
       });
   }
 
@@ -79,7 +79,7 @@ export class OrganizationCategoriesSettingComponent implements OnInit {
     }).subscribe((res) => {
       this._notificationsService.info('Настройки рубрикации сохранены. Для применения изменений к торговым предложениям запустите процесс обновления прайс-листа.');
     }, (err) => {
-      this._notificationsService.error('Невозможно сохранить настройки рубрикации. Внутренняя ошибка сервера, попробуйте позже.');
+      this._notificationsService.error();
     });
   }
 }

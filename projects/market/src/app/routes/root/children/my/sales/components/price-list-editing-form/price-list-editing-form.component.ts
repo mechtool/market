@@ -218,7 +218,7 @@ export class PriceListEditingFormComponent {
         if (err.message.includes('обновления')) {
           this._notificationsService.info(err.message);
         } else {
-          this._notificationsService.error(`Произошла ошибка при сохранении прайс-листа. Попробуйте еще раз.`);
+          this._notificationsService.error();
         }
       });
   }

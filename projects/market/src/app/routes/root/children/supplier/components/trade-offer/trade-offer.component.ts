@@ -137,7 +137,7 @@ export class TradeOfferComponent implements OnDestroy {
           if (err.status === 404) {
             this._router.navigate(['/404']);
           } else {
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+            this._notificationsService.error();
           }
         },
       );

@@ -81,7 +81,7 @@ export class SupplierListComponent implements AfterViewInit {
             this.suppliers.push(...this.supplierData._embedded.suppliers);
           },
           (err) => {
-            this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+            this._notificationsService.error();
           },
         );
       }
@@ -125,7 +125,7 @@ export class SupplierListComponent implements AfterViewInit {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error('Невозможно обработать запрос. Внутренняя ошибка сервера.');
+          this._notificationsService.error();
         },
       );
   }
