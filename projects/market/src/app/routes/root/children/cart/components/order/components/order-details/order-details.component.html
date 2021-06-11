@@ -126,59 +126,86 @@
                            Если Ваш населенный пункт отсутствует в списке - выберите ближайший и укажите точный адрес в комментарии к заказу."
                            nzTooltipIcon="info-circle">Укажите адрес доставки
             </nz-form-label>
-            <input nz-input
-                   #elementInputCity
-                   id="deliveryCity"
-                   name="{{currentDate}}_deliveryCity"
-                   type="text"
-                   placeholder="Город*"
-                   formControlName="cityFiasCode"
-                   [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable') || (form.controls.deliveryTo.invalid && form.controls.deliveryTo.touched)}"
-                   [nzAutocomplete]="auto_city">
+            <nz-input-group [nzSuffix]="cityFiasCodeClearTpl"
+                            [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable') || (form.controls.deliveryTo.invalid && form.controls.deliveryTo.touched)}">
+              <input nz-input
+                     #elementInputCity
+                     id="deliveryCity"
+                     name="{{currentDate}}_deliveryCity"
+                     type="text"
+                     placeholder="Город*"
+                     formControlName="cityFiasCode"
+                     [nzAutocomplete]="auto_city">
+            </nz-input-group>
 
             <nz-autocomplete #auto_city>
               <nz-auto-option *ngFor="let location of foundCities$ | async"
                               [nzValue]="location.fias"
                               [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
             </nz-autocomplete>
+
+            <ng-template #cityFiasCodeClearTpl>
+              <img class="input_clear" src="assets/img/svg/icon__close.svg"
+                   alt=""
+                   (click)="form.get('deliveryTo.cityFiasCode').reset()"
+                   *ngIf="form.get('deliveryTo.cityFiasCode').value">
+            </ng-template>
           </div>
 
           <div nz-col nzXs="24" nzSm="8">
-            <input nz-input
-                   #elementInputStreet
-                   id="deliveryStreet"
-                   name="{{currentDate}}_deliveryStreet"
-                   type="text"
-                   class="without-label"
-                   placeholder="Улица"
-                   formControlName="streetFiasCode"
-                   [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable')}"
-                   [nzAutocomplete]="auto_street">
+            <nz-form-label></nz-form-label>
+            <nz-input-group [nzSuffix]="streetFiasCodeClearTpl"
+                            [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable')}">
+              <input nz-input
+                     #elementInputStreet
+                     id="deliveryStreet"
+                     name="{{currentDate}}_deliveryStreet"
+                     type="text"
+                     placeholder="Улица"
+                     formControlName="streetFiasCode"
+                     [nzAutocomplete]="auto_street">
+            </nz-input-group>
 
             <nz-autocomplete #auto_street>
               <nz-auto-option *ngFor="let location of foundStreets$ | async"
                               [nzValue]="location.fias"
                               [nzLabel]="location.street">{{ location.street }}</nz-auto-option>
             </nz-autocomplete>
+
+            <ng-template #streetFiasCodeClearTpl>
+              <img class="input_clear" src="assets/img/svg/icon__close.svg"
+                   alt=""
+                   (click)="form.get('deliveryTo.streetFiasCode').reset()"
+                   *ngIf="form.get('deliveryTo.streetFiasCode').value">
+            </ng-template>
           </div>
 
           <div nz-col nzXs="24" nzSm="8">
-            <input nz-input
-                   #elementInputHouse
-                   id="deliveryHouse"
-                   name="{{currentDate}}_deliveryHouse"
-                   type="text"
-                   class="without-label"
-                   placeholder="Дом"
-                   formControlName="houseFiasCode"
-                   [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable')}"
-                   [nzAutocomplete]="auto_house">
+            <nz-form-label></nz-form-label>
+            <nz-input-group [nzSuffix]="houseFiasCodeClearTpl"
+                            [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable')}">
+              <input nz-input
+                     #elementInputHouse
+                     id="deliveryHouse"
+                     name="{{currentDate}}_deliveryHouse"
+                     type="text"
+                     placeholder="Дом"
+                     formControlName="houseFiasCode"
+                     [nzAutocomplete]="auto_house">
+            </nz-input-group>
 
             <nz-autocomplete #auto_house>
               <nz-auto-option *ngFor="let location of foundHouses$ | async"
                               [nzValue]="location.fias"
                               [nzLabel]="location.house">{{ location.house }}</nz-auto-option>
             </nz-autocomplete>
+
+            <ng-template #houseFiasCodeClearTpl>
+              <img class="input_clear" src="assets/img/svg/icon__close.svg"
+                   alt=""
+                   (click)="form.get('deliveryTo.houseFiasCode').reset()"
+                   *ngIf="form.get('deliveryTo.houseFiasCode').value">
+            </ng-template>
           </div>
 
           <p class="error" *ngIf="form.controls.deliveryTo.hasError('locationUnavailable')">
@@ -326,6 +353,9 @@
       </ng-container>
       <ng-container *ngIf="control.hasError('kppLengthCondition')">
         <p>Длина КПП должна быть 9 цифр</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('cityNotDefined') && control.dirty">
+        <p>Выберите населенный пункт из доступных в выпадающем списке</p>
       </ng-container>
     </ng-template>
   </form>

@@ -40,6 +40,7 @@ import {
   kppConditionValidator,
   kppRequiredIfOrgConditionValidator
 } from '#shared/utils/organization-requisite-validators';
+import { cityNotDefinedValidator } from './order-validators';
 
 @Injectable()
 export class OrderService implements OnDestroy {
@@ -805,11 +806,15 @@ export class OrderService implements OnDestroy {
           }
         }),
         switchMap((cityFiasCode) => {
-          if (!isUuid(cityFiasCode) && cityFiasCode?.length > 1) {
-            this.form.get('deliveryTo.city').patchValue(cityFiasCode, { onlySelf: true, emitEvent: false });
-            return this._locationService.searchAddresses({
-              deliveryCity: cityFiasCode,
-            }, Level.CITY);
+          if (!isUuid(cityFiasCode)) {
+            this._saveDelivery(null, null);
+
+            if (cityFiasCode?.length > 1) {
+              this.form.get('deliveryTo.city').patchValue(cityFiasCode, { onlySelf: true, emitEvent: false });
+              return this._locationService.searchAddresses({
+                deliveryCity: cityFiasCode,
+              }, Level.CITY);
+            }
           }
           return of([]);
         }),
@@ -845,7 +850,9 @@ export class OrderService implements OnDestroy {
           }
         }),
         switchMap((cityFiasCode) => {
-          if (!isUuid(cityFiasCode) && cityFiasCode?.length > 1) {
+          if (!isUuid(cityFiasCode)) {
+            this._saveDelivery(null, null);
+
             this.form.get('deliveryTo.houseFiasCode').patchValue(null, { onlySelf: true, emitEvent: false });
             this.form.get('deliveryTo.houseFiasCode').disable({ onlySelf: true, emitEvent: false });
 
@@ -854,9 +861,11 @@ export class OrderService implements OnDestroy {
 
             this.form.get('deliveryTo.city').patchValue(cityFiasCode, { onlySelf: true, emitEvent: false });
 
-            return this._locationService.searchAddresses({
-              deliveryCity: cityFiasCode,
-            }, Level.CITY);
+            if (cityFiasCode?.length > 1) {
+              return this._locationService.searchAddresses({
+                deliveryCity: cityFiasCode,
+              }, Level.CITY);
+            }
           }
           return of([]);
         }),
@@ -895,10 +904,12 @@ export class OrderService implements OnDestroy {
             this.form.get('deliveryTo.houseFiasCode').patchValue(null, { onlySelf: true, emitEvent: false });
             this.form.get('deliveryTo.street').patchValue(streetFiasCode, { onlySelf: true, emitEvent: false });
 
-            return this._locationService.searchAddresses({
-              deliveryCity: this.form.get('deliveryTo.city').value,
-              deliveryStreet: streetFiasCode,
-            }, Level.STREET);
+            if (streetFiasCode?.length > 0) {
+              return this._locationService.searchAddresses({
+                deliveryCity: this.form.get('deliveryTo.city').value,
+                deliveryStreet: streetFiasCode,
+              }, Level.STREET);
+            }
           }
           return of([]);
         }),
@@ -1019,7 +1030,7 @@ export class OrderService implements OnDestroy {
 
   private _changeValidatorInControlCityFiasCode(type) {
     if (type === DeliveryMethod.DELIVERY) {
-      this.form.get('deliveryTo.cityFiasCode').setValidators([Validators.required, notBlankValidator]);
+      this.form.get('deliveryTo.cityFiasCode').setValidators([Validators.required, cityNotDefinedValidator, notBlankValidator]);
       this.form.get('deliveryTo.cityFiasCode').updateValueAndValidity({ onlySelf: false, emitEvent: false });
     } else {
       this.form.get('deliveryTo.cityFiasCode').clearValidators();

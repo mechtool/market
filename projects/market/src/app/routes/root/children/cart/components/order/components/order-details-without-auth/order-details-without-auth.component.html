@@ -222,15 +222,18 @@
                        Если Ваш населенный пункт отсутствует в списке - выберите ближайший и укажите точный адрес в комментарии к заказу."
                        nzTooltipIcon="info-circle">Укажите населенный пункт доставки
         </nz-form-label>
-        <input nz-input
-               #elementInputCity
-               id="deliveryCity"
-               name="{{currentDate}}_delivery"
-               type="text"
-               placeholder="Начните вводить"
-               formControlName="cityFiasCode"
-               [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable') || (form.controls.deliveryTo.invalid && form.controls.deliveryTo.touched)}"
-               [nzAutocomplete]="auto_city">
+
+        <nz-input-group [nzSuffix]="cityFiasCodeClearTpl"
+                        [ngClass]="{'error': form.controls.deliveryTo.hasError('locationUnavailable') || (form.controls.deliveryTo.invalid && form.controls.deliveryTo.touched)}">
+          <input nz-input
+                 #elementInputCity
+                 id="deliveryCity"
+                 name="{{currentDate}}_delivery"
+                 type="text"
+                 placeholder="Начните вводить"
+                 formControlName="cityFiasCode"
+                 [nzAutocomplete]="auto_city">
+        </nz-input-group>
 
         <p class="error" *ngIf="form.controls.deliveryTo.hasError('locationUnavailable')">
           Указанный адрес не входит в зону доставки поставщика. Список доступных зон доставки смотрите выше.
@@ -242,6 +245,13 @@
                           [nzValue]="location.fias"
                           [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
         </nz-autocomplete>
+
+        <ng-template #cityFiasCodeClearTpl>
+            <img class="input_clear" src="assets/img/svg/icon__close.svg"
+                 alt=""
+                 (click)="form.get('deliveryTo.cityFiasCode').reset()"
+                 *ngIf="form.get('deliveryTo.cityFiasCode').value">
+        </ng-template>
       </nz-form-control>
     </nz-form-item>
 
@@ -303,6 +313,9 @@
       </ng-container>
       <ng-container *ngIf="control.hasError('kppRequiredCondition') && control.dirty">
         <p>Поле обязательно для заполнения</p>
+      </ng-container>
+      <ng-container *ngIf="control.hasError('cityNotDefined') && control.dirty">
+        <p>Выберите населенный пункт из доступных в выпадающем списке</p>
       </ng-container>
     </ng-template>
   </form>

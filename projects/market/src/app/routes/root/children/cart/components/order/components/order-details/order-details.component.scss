@@ -11,6 +11,17 @@
     height: 39px;
   }
 
+  ::ng-deep .ant-form-item-label > label:empty::after {
+    content: '';
+    position: relative;
+    top: -0.5px;
+    margin: 0 8px 0 2px;
+  }
+
+  .ant-input-affix-wrapper > input.ant-input {
+    padding: 7px 15px 7px 0;
+  }
+
   .organization-title {
     display: flex;
     align-items: center;
@@ -67,10 +78,6 @@
     }
   }
 
-  .without-label {
-    margin-top: 32px;
-  }
-
   .desktop {
     display: block;
   }
@@ -86,6 +93,22 @@
   }
 
   input {
+    &.error {
+      border-color: #ff4d4f;
+    }
+  }
+
+  .input_clear {
+    cursor: pointer;
+    opacity: 0.44;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  nz-input-group {
     &.error {
       border-color: #ff4d4f;
     }

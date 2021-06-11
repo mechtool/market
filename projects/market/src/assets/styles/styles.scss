@@ -144,6 +144,11 @@ textarea {
   }
 }
 
+textarea.ant-input {
+  padding: 10px 15px;
+  font-size: var(--font-size-base);
+}
+
 .no-selection {
   user-select: none;
 }

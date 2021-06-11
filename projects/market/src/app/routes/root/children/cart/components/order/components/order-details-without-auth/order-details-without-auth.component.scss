@@ -20,6 +20,10 @@
     }
   }
 
+  .ant-input-affix-wrapper > input.ant-input {
+    padding: 7px 15px 7px 0;
+  }
+
   nz-select {
     width: 100%;
   }
@@ -100,6 +104,22 @@
 
     &.error {
       border: 1px solid #ff4d4f;
+    }
+  }
+
+  .input_clear {
+    cursor: pointer;
+    opacity: 0.44;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  nz-input-group {
+    &.error {
+      border-color: #ff4d4f;
     }
   }
 }
