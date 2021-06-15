@@ -60,6 +60,7 @@
     <tr>
       <th scope="col">№</th>
       <th scope="col">Товары (работы, услуги)</th>
+      <th scope="col">Артикул</th>
       <th scope="col">Кол-во</th>
       <th scope="col">Цена</th>
       <th scope="col">НДС</th>
@@ -68,10 +69,10 @@
     <tr *ngFor="let product of document.products; let i = index">
       <td>{{i + 1}}</td>
       <td>{{product.productName}}</td>
+      <td>{{product.partNumber || '-'}}</td>
       <td>{{product.amount}} {{product.baseUnit.shortName}}.</td>
-      <td *ngIf="product.price">{{product.price | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
-      <td *ngIf="!product.price">-</td>
-      <td>{{product.tax?.vatSum | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
+      <td>{{product.price ? (product.price | marketMultiplier:'1.00' | currencyPrice: document.currency) : '-'}}</td>
+      <td>{{product.tax?.vatSum ? (product.tax?.vatSum | marketMultiplier:'1.00' | currencyPrice: document.currency) : '-'}}</td>
       <td>{{product.totalPrice | marketMultiplier:'1.00' | currencyPrice: document.currency}}</td>
     </tr>
   </table>
