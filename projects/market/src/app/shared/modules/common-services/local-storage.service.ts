@@ -9,7 +9,6 @@ import {
   TypeOfSearch,
 } from '../common-services/models';
 import { hexFrom } from '#shared/utils';
-import {BehaviorSubject} from "rxjs";
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
@@ -22,7 +21,6 @@ const HOME_REGION_SELECTED_STORAGE_KEY = 'home_region_selected';
 
 @Injectable()
 export class LocalStorageService {
-  isRegionSelected$: BehaviorSubject<boolean> = new BehaviorSubject(this._storage.get(HOME_REGION_SELECTED_STORAGE_KEY));
 
   constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {
   }
@@ -181,7 +179,6 @@ export class LocalStorageService {
   }
 
   approveRegion() {
-    this.isRegionSelected$.next(true);
     this._storage.set(HOME_REGION_SELECTED_STORAGE_KEY, true);
   }
 

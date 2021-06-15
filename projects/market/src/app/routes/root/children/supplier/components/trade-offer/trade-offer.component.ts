@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
-import {combineLatest, of, race, Subscription, throwError} from 'rxjs';
+import { combineLatest, of, Subscription, throwError } from 'rxjs';
 import {
   CounterpartyResponseModel,
+  CountryCode,
   ProductDto,
   SuppliersItemModel,
   TradeOfferResponseModel,
@@ -10,13 +11,13 @@ import {
 import {
   CartPromoterService,
   ExternalProvidersService, LocalStorageService,
+  LocationService,
   NotificationsService,
   OrganizationsService,
-  ProductService,
   TradeOffersService,
 } from '#shared/modules/common-services';
 import { ActivatedRoute, Router } from '@angular/router';
-import {catchError, filter, switchMap, take, tap} from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Meta } from '@angular/platform-browser';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { TradeOfferUnavailabilityComponent } from '../trade-offer-unavailability/trade-offer-unavailability.component';
@@ -43,17 +44,17 @@ export class TradeOfferComponent implements OnDestroy {
   }
 
   constructor(
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private _meta: Meta,
-    private _productService: ProductService,
+    private _router: Router,
+    private _modalService: NzModalService,
+    private _activatedRoute: ActivatedRoute,
+    private _locationService: LocationService,
     private _tradeOffersService: TradeOffersService,
     private _cartPromoterService: CartPromoterService,
+    private _localStorageService: LocalStorageService,
     private _organizationsService: OrganizationsService,
     private _notificationsService: NotificationsService,
     private _externalProvidersService: ExternalProvidersService,
-    private _modalService: NzModalService,
-    private _localStorageService: LocalStorageService,
   ) {
     this._initTradeOffer();
   }
@@ -106,7 +107,7 @@ export class TradeOfferComponent implements OnDestroy {
           this._externalProvidersService.fireGTMEvent(tag);
         }),
         tap((tradeOffer) => {
-          this._meta.updateTag({ itemprop: 'identifier', content: tradeOffer.sid});
+          this._meta.updateTag({ itemprop: 'identifier', content: tradeOffer.sid });
         }),
         switchMap((tradeOffer) => {
           const inn = tradeOffer.supplier.inn;
@@ -116,31 +117,69 @@ export class TradeOfferComponent implements OnDestroy {
           return throwError(err);
         }),
       ).subscribe(([tradeOffer, counterparty]) => {
-          this.tradeOffer = tradeOffer;
-          this.product = ProductDto.fromTradeOffer(tradeOffer);
-          this.supplier = this._mapSupplier(tradeOffer.supplier, counterparty);
-          const deliveryFiasCodes = this.tradeOffer.deliveryDescription?.deliveryRegions?.reduce((accum, curr) => {
-              if (curr.fiasCodes.length) {
-                accum.push(...curr.fiasCodes);
-              }
-              return accum;
-            }, []) || [];
-          const pickupFromFiasCodes = this.tradeOffer.deliveryDescription?.pickupFrom?.reduce((accum, curr) => {
-              if (curr.fiasCodes.length) {
-                accum.push(...curr.fiasCodes);
-              }
-              return accum;
-            }, []) || [];
-          this._openModalTradeOfferUnavailability(deliveryFiasCodes, pickupFromFiasCodes);
-        },
-        (err) => {
-          if (err.status === 404) {
-            this._router.navigate(['/404']);
-          } else {
-            this._notificationsService.error();
+        this.tradeOffer = tradeOffer;
+        this.product = ProductDto.fromTradeOffer(tradeOffer);
+        this.supplier = this._mapSupplier(tradeOffer.supplier, counterparty);
+        this._openModalTradeOfferUnavailabilityIfNecessary();
+      },
+      (err) => {
+        if (err.status === 404) {
+          this._router.navigate(['/404']);
+        } else {
+          this._notificationsService.error();
+        }
+      },
+    );
+  }
+
+  private _openModalTradeOfferUnavailabilityIfNecessary() {
+    const selectedCustomLocation = this._locationService.getSelectedCustomLocation();
+
+    if (!this._localStorageService.isApproveRegion() || !selectedCustomLocation || this._deliveryByRussia() || this._pickupFromHasFias(selectedCustomLocation.fias)) {
+      return;
+    } else {
+      const validDeliveryFiasCode = this.tradeOffer.deliveryDescription?.deliveryRegions?.reduce((accum, curr) => {
+        if (curr.fiasCodes.length) {
+          accum.push(...curr.fiasCodes);
+        }
+        return accum;
+      }, []) || [];
+
+      this._locationService.isDeliveryAvailable(selectedCustomLocation.fias, validDeliveryFiasCode)
+        .subscribe((isAvailable) => {
+          if (!isAvailable) {
+            this.modal = this._modalService.create({
+              nzTitle: 'Поставка невозможна',
+              nzContent: TradeOfferUnavailabilityComponent,
+              nzFooter: null,
+              nzWidth: 480,
+              nzComponentParams: {
+                locality: selectedCustomLocation.locality
+              },
+            });
+
+            const subscription = this.modal.componentInstance.changeRegionEvent
+              .subscribe((success) => {
+                if (success) {
+                  this.modal.destroy()
+                  subscription.unsubscribe();
+                  this._localStorageService.resetRegion();
+                  window.location.reload();
+                }
+              });
           }
-        },
-      );
+        });
+    }
+  }
+
+  private _deliveryByRussia(): boolean {
+    const deliveryRegions = this.tradeOffer.deliveryDescription.deliveryRegions;
+    return !deliveryRegions || !deliveryRegions?.length || deliveryRegions.some((place) => !place.fiasCodes?.length && place.countryOksmCode === CountryCode.RUSSIA);
+  }
+
+  private _pickupFromHasFias(fias: string): boolean {
+    const pickupFrom = this.tradeOffer.deliveryDescription.pickupFrom;
+    return pickupFrom?.some((pf) => pf.fiasCodes.includes(fias));
   }
 
   private _mapSupplier(supplier: TradeOfferSupplierModel, counterparty: CounterpartyResponseModel): SuppliersItemModel {
@@ -156,31 +195,5 @@ export class TradeOfferComponent implements OnDestroy {
       publicInfo: counterparty,
       isVerifiedOrg: supplier.isVerifiedOrg,
     };
-  }
-
-  private _openModalTradeOfferUnavailability(deliveryFiasCodes, pickupFromFiasCodes) {
-    const supplyFiasCodes = [...deliveryFiasCodes, ...pickupFromFiasCodes];
-    const { fias, locality } = this._localStorageService.getUserLocation();
-
-    this._isRegionSelectedSubscription = this._localStorageService.isRegionSelected$
-      .asObservable()
-      .pipe(
-        filter(r => r && !supplyFiasCodes.includes(fias)),
-        take(1)
-      )
-      .subscribe(() => {
-        const modalConfig = {
-          nzTitle: 'Поставка невозможна',
-          nzContent: TradeOfferUnavailabilityComponent,
-          nzFooter: null,
-          nzWidth: 480,
-          nzComponentParams: {
-            fias,
-            locality
-          },
-        };
-        this.modal = this._modalService.create(modalConfig);
-      });
-
   }
 }
