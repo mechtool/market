@@ -84,6 +84,12 @@ export class NavigationService implements OnDestroy {
           routerLink: ['/p/blog'],
         },
         {
+          label: 'О сервисе',
+          attributeId: 'info_menu_id',
+          icon: 'info',
+          routerLink: ['/about'],
+        },
+        {
           label: 'Корзина',
           attributeId: 'basket_menu_id',
           icon: 'basket',
@@ -108,13 +114,6 @@ export class NavigationService implements OnDestroy {
             this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
             this._authService.login();
           },
-        },
-        {
-          label: 'О сервисе',
-          attributeId: 'info_menu_id',
-          icon: 'info',
-          styleClass: 'delimiter',
-          routerLink: ['/about'],
         },
       ];
       const authedNavItems: NavItemModel[] = [
@@ -143,6 +142,12 @@ export class NavigationService implements OnDestroy {
           attributeId: 'blog_menu_id',
           icon: 'blog',
           routerLink: ['/p/blog'],
+        },
+        {
+          label: 'О сервисе',
+          attributeId: 'info_menu_id',
+          icon: 'info',
+          routerLink: ['/about'],
         },
         {
           label: 'Корзина',
@@ -187,13 +192,6 @@ export class NavigationService implements OnDestroy {
           command: () => {
             this._authService.logout(this._location.path()).subscribe();
           },
-        },
-        {
-          label: 'О сервисе',
-          attributeId: 'info_menu_id',
-          icon: 'info',
-          styleClass: 'delimiter',
-          routerLink: ['/about'],
         },
       ];
       this.navItems$.next((auth ? authedNavItems : notAuthedNavItems));
