@@ -1,0 +1,10 @@
+@media all and (max-width: 576px) {
+  ::ng-deep .ant-tree .ant-tree-node-content-wrapper {
+    white-space: normal;
+  }
+
+  .ant-form-item {
+    max-width: 90%;
+  }
+}
+

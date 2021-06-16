@@ -1,17 +1,15 @@
-::ng-deep .ant-select-tree.ant-select-tree-block-node .ant-select-tree-list-holder-inner .ant-select-tree-node-content-wrapper {
+::ng-deep .ant-tree .ant-tree-node-content-wrapper {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
-.category-search-form {
-  [nz-form] ::ng-deep .ant-form-item-explain.ant-form-item-explain-error {
-    display: contents;
-  }
+.ant-input-affix-wrapper > input.ant-input {
+  padding: 7px 15px 7px 0;
+}
 
-  ::ng-deep .ant-select-tree.ant-select-tree-block-node .ant-select-tree-list-holder-inner .ant-select-tree-node-content-wrapper {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
+.category-tree {
+  margin-top: 15px;
+  overflow-x: auto;
+  max-height: 400px;
 }
