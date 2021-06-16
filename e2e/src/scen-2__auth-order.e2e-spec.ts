@@ -150,13 +150,11 @@ export function authorizedUserSearchesWithRegion(page: AppPage) {
     await page.getSearchFilterPanelControlLocationInput().clear();
     await page.getSearchFilterPanelControlLocationInput().sendKeys(defaultDeliveryCity);
     await browser.sleep(1e3);
-    await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.DOWN);
     await page.getSearchFilterPanelControlLocationInput().sendKeys(protractor.Key.ENTER);
 
     await browser.sleep(1e3);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(defaultSupplierNameINN);
     await browser.sleep(2e3);
-    await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.DOWN);
     await page.getSearchFilterPanelControlSupplierInput().sendKeys(protractor.Key.ENTER);
   });
 
@@ -320,19 +318,16 @@ export async function authorizedUserMakesOrder(page: AppPage) {
     await browser.sleep(1e3);
     await page.getDeliveryCityInput().sendKeys(defaultDeliveryCity);
     await browser.sleep(2e3);
-    await page.getDeliveryCityInput().sendKeys(protractor.Key.DOWN);
     await page.getDeliveryCityInput().sendKeys(protractor.Key.ENTER);
     await browser.sleep(2e3);
 
     await page.getDeliveryStreetInput().sendKeys(defaultDeliveryStreet);
     await browser.sleep(1e3);
-    await page.getDeliveryStreetInput().sendKeys(protractor.Key.DOWN);
     await page.getDeliveryStreetInput().sendKeys(protractor.Key.ENTER);
     await browser.sleep(2e3);
 
     await page.getDeliveryHouseInput().sendKeys(defaultDeliveryHouse);
     await browser.sleep(1e3);
-    await page.getDeliveryHouseInput().sendKeys(protractor.Key.DOWN);
     await page.getDeliveryHouseInput().sendKeys(protractor.Key.ENTER);
     await browser.sleep(2e3);
 
