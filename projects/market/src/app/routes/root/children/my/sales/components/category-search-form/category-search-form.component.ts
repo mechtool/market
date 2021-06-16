@@ -71,10 +71,12 @@ export class CategorySearchFormComponent implements OnDestroy {
     const _filter = (node: NzTreeNodeOptions, result: NzTreeNodeOptions[]) => {
       if (node.title.toUpperCase().search(value) !== -1) {
         node.expanded = true;
+        node.children?.forEach(n => n.expanded = true);
         result.push(node);
         return result;
       }
-      if (Array.isArray(node.children)) {
+
+      if (node.children?.length) {
         const nodes = node.children.reduce((a, b) => _filter(b, a), [] as NzTreeNodeOptions[]);
         if (nodes.length) {
           const parentNode = { ...node, children: nodes };
