@@ -9,7 +9,7 @@ import {
   TradeOfferResponseModel,
   TradeOfferVatEnumModel,
 } from '#shared/modules/common-services/models';
-import { CartService, NotificationsService } from '#shared/modules/common-services';
+import { CartService } from '#shared/modules/common-services';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 
 @UntilDestroy({ checkProperties: true })
@@ -47,7 +47,10 @@ export class ProductOrderComponent implements OnInit {
     return this.tradeOffer.termsOfSale?.price?.matrix?.sort((one, two) => one.fromPackages - two.fromPackages) || [];
   }
 
-  constructor(private _fb: FormBuilder, private _cartService: CartService, private _notificationsService: NotificationsService) {
+  constructor(
+    private _fb: FormBuilder,
+    private _cartService: CartService,
+  ) {
     this.form = this._fb.group({
       totalPositions: 0,
     });
@@ -72,9 +75,6 @@ export class ProductOrderComponent implements OnInit {
             this.orderStatus = OrderStatusModal.TO_CART;
           }
         },
-        (err) => {
-          this._notificationsService.error();
-        },
       );
   }
 
@@ -89,9 +89,6 @@ export class ProductOrderComponent implements OnInit {
           if (evt.target.innerWidth > 576) {
             this.modalRef.close();
           }
-        },
-        (err) => {
-          this._notificationsService.error();
         },
       );
   }

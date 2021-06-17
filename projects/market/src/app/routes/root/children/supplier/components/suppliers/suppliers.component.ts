@@ -81,7 +81,7 @@ export class SupplierListComponent implements AfterViewInit {
             this.suppliers.push(...this.supplierData._embedded.suppliers);
           },
           (err) => {
-            this._notificationsService.error();
+            this._notificationsService.error(err);
           },
         );
       }
@@ -125,7 +125,7 @@ export class SupplierListComponent implements AfterViewInit {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }

@@ -72,7 +72,7 @@ export class OrganizationsComponent implements OnInit {
         this.goToTab('b');
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -122,7 +122,7 @@ export class OrganizationsComponent implements OnInit {
           this.goToTab('a');
         },
         (err) => {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }
@@ -150,7 +150,7 @@ export class OrganizationsComponent implements OnInit {
         });
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -175,9 +175,6 @@ export class OrganizationsComponent implements OnInit {
               break;
           }
         },
-        (err) => {
-          this._notificationsService.error();
-        },
       );
   }
 
@@ -201,7 +198,7 @@ export class OrganizationsComponent implements OnInit {
         }
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }

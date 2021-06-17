@@ -206,7 +206,7 @@ export class PriceListCreatingFormComponent implements OnInit, OnDestroy {
         })
         this._router.navigateByUrl(`/my/sales`);
       }, (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 

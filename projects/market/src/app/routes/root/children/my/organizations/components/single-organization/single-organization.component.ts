@@ -99,7 +99,7 @@ export class SingleOrganizationComponent implements OnInit {
         });
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -109,7 +109,7 @@ export class SingleOrganizationComponent implements OnInit {
       return res.uin === userId;
     });
     if (foundUser && foundUser.userGrants.isAdmin && this.users.filter((r) => r.userGrants.isAdmin).length <= 1) {
-      this._notificationsService.error(ERROR_DELETE_LAST_ADMIN);
+      this._notificationsService.error(null, ERROR_DELETE_LAST_ADMIN);
       return;
     }
     this._modal = this._modalService.create({
@@ -179,7 +179,7 @@ export class SingleOrganizationComponent implements OnInit {
           }
         },
         (err) => {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }
@@ -216,7 +216,7 @@ export class SingleOrganizationComponent implements OnInit {
           this._resetOrganizationAndCounterpartyData(this.orgId);
         },
         (err) => {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }
@@ -241,9 +241,6 @@ export class SingleOrganizationComponent implements OnInit {
             break;
         }
       },
-      (err) => {
-        this._notificationsService.error();
-      },
     );
   }
 
@@ -266,7 +263,7 @@ export class SingleOrganizationComponent implements OnInit {
         this._resetUsers(this.orgId);
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -278,7 +275,7 @@ export class SingleOrganizationComponent implements OnInit {
         this._resetAccessKeys(this.orgId);
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -287,9 +284,6 @@ export class SingleOrganizationComponent implements OnInit {
     this._activatedRoute.params.subscribe(
       (res) => {
         this.init(res.id);
-      },
-      (err) => {
-        this._notificationsService.error();
       },
     );
   }
@@ -327,7 +321,7 @@ export class SingleOrganizationComponent implements OnInit {
     ).subscribe(() => {
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -338,7 +332,7 @@ export class SingleOrganizationComponent implements OnInit {
         this.users = res;
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -355,7 +349,7 @@ export class SingleOrganizationComponent implements OnInit {
           this.participationRequests = res;
         },
         (err) => {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }
@@ -366,7 +360,7 @@ export class SingleOrganizationComponent implements OnInit {
         this.accessKeys = res;
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }

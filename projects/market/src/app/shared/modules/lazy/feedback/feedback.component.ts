@@ -64,9 +64,9 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       ).subscribe((res) => {
           this.feedbackEvent.emit(true);
         },
-        (error) => {
+        (err) => {
           this.feedbackEvent.emit(true);
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }

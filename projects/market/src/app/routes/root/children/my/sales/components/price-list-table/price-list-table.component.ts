@@ -49,7 +49,7 @@ export class PriceListTableComponent {
           this.startFeedChange.emit(true);
           this._notificationsService.info(err.message);
         } else {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         }
       });
   }
@@ -79,7 +79,7 @@ export class PriceListTableComponent {
         if (err.message.includes('обновления')) {
           this._notificationsService.info(err.message);
         } else {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         }
       });
   }

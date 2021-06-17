@@ -73,9 +73,9 @@ export class SalesComponent implements OnDestroy {
         if (priceLists?.some((pl) => pl.feedInfo.status === PriceListStatusEnum.IN_PROGRESS)) {
           this.listenPriceListFeeds();
         }
-      }, () => {
+      }, (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 
@@ -93,7 +93,7 @@ export class SalesComponent implements OnDestroy {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
   }
@@ -113,7 +113,7 @@ export class SalesComponent implements OnDestroy {
           },
           (err) => {
             this._spinnerService.hide();
-            this._notificationsService.error();
+            this._notificationsService.error(err);
           },
         );
     }

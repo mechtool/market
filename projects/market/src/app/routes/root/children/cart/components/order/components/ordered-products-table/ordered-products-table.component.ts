@@ -67,9 +67,9 @@ export class OrderedProductsTableComponent implements AfterViewInit {
         },
         (err: HttpErrorResponse) => {
           if (err.status === 404) {
-            this._notificationsService.error('Данный товар недоступен к просмотру');
+            this._notificationsService.error(null, 'Данный товар недоступен к просмотру');
           } else {
-            this._notificationsService.error();
+            this._notificationsService.error(err);
           }
         },
       );

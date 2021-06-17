@@ -273,7 +273,7 @@ export class CategoryComponent implements OnDestroy {
       }
     }, (err) => {
       this._spinnerService.hide();
-      this._notificationsService.error();
+      this._notificationsService.error(err);
     });
   }
 

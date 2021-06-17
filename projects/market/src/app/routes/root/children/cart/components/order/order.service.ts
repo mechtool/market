@@ -428,7 +428,7 @@ export class OrderService implements OnDestroy {
       },
       (err) => {
         this._isOrderLoading = false;
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -480,7 +480,7 @@ export class OrderService implements OnDestroy {
         this._send(relationType, this.registerAndMakeOrderLinkOrRegisterAndRequestForPriceLink, this._createRegisterOrderData(), token);
 
       }, (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 
@@ -531,7 +531,7 @@ export class OrderService implements OnDestroy {
         this.cartDataChange$.next(cartData);
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -755,7 +755,7 @@ export class OrderService implements OnDestroy {
             this._changeOrderData(cartData);
           },
           (err) => {
-            this._notificationsService.error();
+            this._notificationsService.error(err);
           },
         );
 

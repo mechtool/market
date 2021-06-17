@@ -335,8 +335,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         this._scrollToCategory();
         this._updateModifiedFiltersCounter();
         this._submit();
-      }, () => {
-        this._notificationsService.error();
+      }, (err) => {
+        this._notificationsService.error(err);
       });
   }
 
@@ -396,8 +396,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         (data) => {
           this.suppliersToChoose = data;
         },
-        () => {
-          this._notificationsService.error();
+        (err) => {
+          this._notificationsService.error(err);
         },
       );
   }
@@ -429,8 +429,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         (data) => {
           this.locationsToChoose = data;
         },
-        () => {
-          this._notificationsService.error();
+        (err) => {
+          this._notificationsService.error(err);
         },
       );
   }
@@ -525,8 +525,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
           this.form.get('supplier.isSelected').patchValue(true, { emitEvent: false, onlySelf: false });
           this.form.get('supplier.name').patchValue(org?.name || '', { emitEvent: false, onlySelf: false });
         },
-        () => {
-          this._notificationsService.error();
+        (err) => {
+          this._notificationsService.error(err);
         },
       );
   }
@@ -567,8 +567,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
             this.availableCategories$.next([...categories]);
           }
         },
-        (e) => {
-          this._notificationsService.error();
+        (err) => {
+          this._notificationsService.error(err);
         },
       );
     }
@@ -581,8 +581,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
             this.filteredCategories = res;
             this.availableCategories$.next([...res]);
           },
-          () => {
-            this._notificationsService.error();
+          (err) => {
+            this._notificationsService.error(err);
           },
         )
       }

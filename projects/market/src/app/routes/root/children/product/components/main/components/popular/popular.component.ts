@@ -48,7 +48,7 @@ export class MainPopularComponent implements OnInit {
         this.productOffers = this._productOffersCached
           .slice(0, this._isMobile ? MOBILE_NUMBER_RESTRICTION : this._productOffersCached.length);
       }, (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 

@@ -38,7 +38,7 @@ export class PaymentDocumentComponent implements OnInit {
       },
       (err) => {
         this.isError = true;
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }

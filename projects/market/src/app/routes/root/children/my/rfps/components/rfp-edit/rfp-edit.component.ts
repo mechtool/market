@@ -235,7 +235,7 @@ export class RfpEditComponent implements OnInit {
         this.foundCities = cities.filter(uniqueArray);
       },
       (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -252,9 +252,6 @@ export class RfpEditComponent implements OnInit {
         })
       ).subscribe(([,selectedOrganization]) => {
         this.form.get('documentOrderNumber').patchValue(`Запрос ${(new AbbreviatedBusinessNamePipe).transform(selectedOrganization.organizationName)} от ${format(new Date(), 'dd-MM-yyyy HH-mm')}`);
-      },
-      (err) => {
-        this._notificationsService.error();
       },
     );
   }
@@ -390,8 +387,6 @@ export class RfpEditComponent implements OnInit {
           this._addAudiencePartyByIndex(res);
         }
         modal.destroy();
-      }, (err) => {
-        this._notificationsService.error();
       });
   }
 
@@ -440,10 +435,10 @@ export class RfpEditComponent implements OnInit {
         });
       }
       else {
-        this._notificationsService.error(`Вложений не должно быть больше ${this.maxFilesNumber}`);
+        this._notificationsService.error(null, `Вложений не должно быть больше ${this.maxFilesNumber}`);
       }
     } else {
-      this._notificationsService.error(`Суммарный размер вложений не может быть более 5Мб`);
+      this._notificationsService.error(null, `Суммарный размер вложений не может быть более 5Мб`);
     }
 
   }
@@ -454,7 +449,7 @@ export class RfpEditComponent implements OnInit {
       if ((file.name?.length <= 100)) {
         attachmentsList.push(this._createAttachmentItem({ content: e.target.result, name: file.name, title: file.name }));
       } else {
-        this._notificationsService.error('Длина имени файла должна быть до 100 символов');
+        this._notificationsService.error(null, 'Длина имени файла должна быть до 100 символов');
       }
     }
   }
@@ -491,8 +486,6 @@ export class RfpEditComponent implements OnInit {
           value: this._fb.control(res, [Validators.maxLength(200)])
         }));
         modal.destroy();
-      }, (err) => {
-        this._notificationsService.error();
       });
   }
 
@@ -561,9 +554,10 @@ export class RfpEditComponent implements OnInit {
           }, (err) => {
             if (err.error?.status === 422 && err.error?.validationError?.length) {
               const validationErrorMessage =  err.error.validationError[0].message;
-              this._notificationsService.error(`Произошла ошибка при редактировании запроса. ${validationErrorMessage}`);
+              // todo перепроверить что за такие 422 хотел показывать Денис клиенту
+              this._notificationsService.error(null, `Произошла ошибка при редактировании запроса. ${validationErrorMessage}`);
             } else {
-              this._notificationsService.error();
+              this._notificationsService.error(err);
             }
           });
         return;
@@ -576,9 +570,10 @@ export class RfpEditComponent implements OnInit {
         }, (err: any) => {
           if (err.error?.status === 422 && err.error?.validationError?.length) {
             const validationErrorMessage =  err.error.validationError[0].message;
-            this._notificationsService.error(`Произошла ошибка при создании запроса. ${validationErrorMessage}`);
+            // todo перепроверить что за такие 422 хотел показывать Денис клиенту
+            this._notificationsService.error(null,`Произошла ошибка при создании запроса. ${validationErrorMessage}`);
           } else {
-            this._notificationsService.error();
+            this._notificationsService.error(err);
           }
         });
 

@@ -107,7 +107,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       ).subscribe((rfpId) => {
         this.goToOpenModalViewRfp(rfpId);
       }, (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       })
   }
 
@@ -128,9 +128,9 @@ export class RfpsComponent implements OnInit, OnDestroy {
         })
       ).subscribe(() => {
       this._spinnerService.hide();
-    }, () => {
+    }, (err) => {
       this._spinnerService.hide();
-      this._notificationsService.error();
+      this._notificationsService.error(err);
     });
   }
 
@@ -164,9 +164,9 @@ export class RfpsComponent implements OnInit, OnDestroy {
     this._setRfps$()
       .subscribe(() => {
         this._spinnerService.hide();
-      }, () => {
+      }, (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 
@@ -175,9 +175,9 @@ export class RfpsComponent implements OnInit, OnDestroy {
     this._setOffers$()
       .subscribe(() => {
         this._spinnerService.hide();
-      }, () => {
+      }, (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 
@@ -342,7 +342,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       }, (err) => {
         modal?.destroy();
         this._resetQueryParams(['rfpId']);
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       })
 
   }
@@ -373,7 +373,7 @@ export class RfpsComponent implements OnInit, OnDestroy {
       }, (err) => {
         modal?.destroy();
         this._resetQueryParams(['offerId']);
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       })
   }
 

@@ -7,7 +7,6 @@ import { UserService } from '#shared/modules/common-services/user.service';
 import { UserStateService } from '#shared/modules/common-services/user-state.service';
 import { NavItemModel } from '#shared/modules/common-services/models/nav-item.model';
 import { CartService } from '#shared/modules/common-services/cart.service';
-import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { unsubscribeList } from '#shared/utils';
 import { EdiService } from '#shared/modules/common-services/edi.service';
 
@@ -64,16 +63,15 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
   private _newInboundOrderDocumentsCounterSubscription: Subscription;
 
   constructor(
-    private injector: Injector,
-    private _location: Location,
     private _router: Router,
-    private _notificationsService: NotificationsService,
+    private _injector: Injector,
+    private _location: Location,
   ) {
-    this._ediService = this.injector.get(EdiService);
-    this._cartService = this.injector.get(CartService);
-    this._userService = this.injector.get(UserService);
-    this._navService = this.injector.get(NavigationService);
-    this._userStateService = this.injector.get(UserStateService);
+    this._ediService = this._injector.get(EdiService);
+    this._cartService = this._injector.get(CartService);
+    this._userService = this._injector.get(UserService);
+    this._navService = this._injector.get(NavigationService);
+    this._userStateService = this._injector.get(UserStateService);
   }
 
   ngOnInit() {
@@ -145,9 +143,6 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
       (res) => {
         this.navItems = res;
         this._setNavItemActive(this._getActiveItem(this.navItems));
-      },
-      (err) => {
-        this._notificationsService.error();
       },
     );
   }

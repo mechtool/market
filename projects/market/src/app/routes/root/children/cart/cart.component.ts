@@ -35,7 +35,7 @@ export class CartComponent implements OnInit, OnDestroy {
           },
           (err) => {
             this._spinnerService.hide();
-            this._notificationsService.error();
+            this._notificationsService.error(err);
           },
         );
     });

@@ -241,7 +241,7 @@ export class OrganizationManageComponent implements OnInit, OnDestroy {
         }
 
       }, (err) => {
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       });
   }
 

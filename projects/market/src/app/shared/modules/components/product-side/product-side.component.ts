@@ -82,9 +82,6 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
             this.form.controls.totalPositions.setValue(null, { onlySelf: true, emitEvent: false });
           }
         },
-        (err) => {
-          this._notificationsService.error();
-        },
       );
   }
 
@@ -150,7 +147,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
           this._cdr.detectChanges();
         },
         (err) => {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
           this.isMadeOrder.emit(false);
           this.rollBackTotalPositions(Operation.ADD);
         },
@@ -206,7 +203,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
                 this.prevCount = value;
               },
               (err) => {
-                this._notificationsService.error();
+                this._notificationsService.error(err);
                 this.isMadeOrder.emit(false);
                 this.rollBackTotalPositions();
               },
@@ -227,7 +224,7 @@ export class ProductSideComponent implements OnInit, AfterViewInit {
                 this.isMadeOrder.emit(false);
               },
               (err) => {
-                this._notificationsService.error();
+                this._notificationsService.error(err);
                 this.isMadeOrder.emit(false);
                 this.rollBackTotalPositions(Operation.REMOVE);
               },

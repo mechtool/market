@@ -59,7 +59,7 @@ export class OrdersComponent implements OnDestroy {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
     }
@@ -80,7 +80,7 @@ export class OrdersComponent implements OnDestroy {
         },
         (err) => {
           this._spinnerService.hide();
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         },
       );
     }
@@ -96,7 +96,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -111,7 +111,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }
@@ -135,7 +135,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
     this._ediService.getAccounts(this.pageAccountDocuments, PAGE_SIZE).subscribe(
@@ -149,7 +149,7 @@ export class OrdersComponent implements OnDestroy {
       },
       (err) => {
         this._spinnerService.hide();
-        this._notificationsService.error();
+        this._notificationsService.error(err);
       },
     );
   }

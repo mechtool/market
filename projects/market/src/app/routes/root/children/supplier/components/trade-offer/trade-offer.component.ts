@@ -126,7 +126,7 @@ export class TradeOfferComponent implements OnDestroy {
         if (err.status === 404) {
           this._router.navigate(['/404']);
         } else {
-          this._notificationsService.error();
+          this._notificationsService.error(err);
         }
       },
     );
