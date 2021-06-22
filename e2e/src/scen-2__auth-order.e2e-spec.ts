@@ -35,7 +35,7 @@ describe('Сценарий: Создание заказа от авторизо�
   });
 
   describe('Пользователь авторизуется в приложении', async() => {
-    authorizedUserAuths(page, loginPage);
+    userAuthenticated(page, loginPage);
   });
 
   describe('Пользователь выполняет поиск', async() => {
@@ -61,13 +61,13 @@ describe('Сценарий: Создание заказа от авторизо�
 });
 
 
-export function authorizedUserAuths(page: AppPage, loginPage: LoginItsPage) {
+export function userAuthenticated(page: AppPage, loginPage: LoginItsPage) {
 
-  it('Шаг 1: Пользователь видит кнопку "Войти"', async() => {
+  it('Шаг 1: Пользователь видит раздел меню "Войти"', async() => {
     await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь нажимает на кнопку "Войти"', async() => {
+  it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
     await page.getLoginElement().click();
   });
 
@@ -93,7 +93,7 @@ export function authorizedUserAuths(page: AppPage, loginPage: LoginItsPage) {
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит кнопку "Мои заказы"', async() => {
+  it('Шаг 5: Пользователь видит раздел меню "Мои заказы"', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
     await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
@@ -103,7 +103,7 @@ export function authorizedUserAuths(page: AppPage, loginPage: LoginItsPage) {
 
 export function authorizedUserSearches(page: AppPage) {
 
-  it('Шаг 1: Пользователь заходит на главную страницу и видит пользовательское соглашение', async() => {
+  it('Шаг 1: Пользователь на главной странице и видит пользовательское соглашение', async() => {
     await browser.wait(until.presenceOf(page.getCookieAgreement()), defaultTimeout);
   });
 

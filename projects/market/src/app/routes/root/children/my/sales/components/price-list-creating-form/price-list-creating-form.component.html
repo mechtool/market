@@ -216,6 +216,8 @@
       </nz-form-control>
     </nz-form-item>
 
+    <div class="form-with-errors" *ngIf="form.invalid"></div>
+
     <nz-form-item class="register-area">
       <nz-form-control>
         <button nz-button nzType="primary" [disabled]="form.invalid" (click)="save()">Сохранить</button>

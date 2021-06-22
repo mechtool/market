@@ -3,7 +3,8 @@
     <h2>Мои продажи</h2>
   </div>
 
-  <nz-tabset nzTabPosition="top" nzType="card" [(nzSelectedIndex)]="selectedTab" (nzSelectedIndexChange)="changeTab($event)"
+  <nz-tabset nzTabPosition="top" nzType="card" [(nzSelectedIndex)]="selectedTab"
+             (nzSelectedIndexChange)="changeTab($event)"
              [nzTabBarExtraContent]="selectedTab === 0 ? createNewPriceListTemplate : selectedTab === 1 ? refreshOrderDocumentsTemplate : emptyTemplate">
     <nz-tab nzTitle="Мои прайс-листы" (nzSelect)="initPriceLists()">
       <ng-template nz-tab>
@@ -34,8 +35,8 @@
 </div>
 
 <ng-template #inboundOrders>
-  <div class="customer-order" [attr.new-customer-order]="(newCustomerOrderDocumentsCounter$ | async) || null">Заказы
-    покупателей
+  <div class="customer-order" [attr.new-customer-order]="(newCustomerOrderDocumentsCounter$ | async) || null">
+    Заказы покупателей
   </div>
 </ng-template>
 

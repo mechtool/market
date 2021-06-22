@@ -63,7 +63,7 @@ describe('Сценарий: Авторизация пользователя бе
 });
 
 export function userAgrees(page: AppPage) {
-  it('Шаг 1: Пользователь заходит на главную страницу и видит пользовательское соглашение', async() => {
+  it('Шаг 1: Пользователь на главной странице и видит пользовательское соглашение', async() => {
     await browser.wait(until.presenceOf(page.getCookieAgreement()), defaultTimeout);
   });
 
@@ -83,11 +83,11 @@ export function userAgrees(page: AppPage) {
 }
 
 export function userGoesToPromoRoute(page: AppPage, promoPage: PromoPage) {
-  it('Шаг 1: Пользователь видит кнопку "Акции"', async() => {
+  it('Шаг 1: Пользователь видит раздел меню "Акции"', async() => {
     await browser.wait(until.presenceOf(page.getPromoElement()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь нажимает на кнопку "Акции"', async() => {
+  it('Шаг 2: Пользователь нажимает на раздел меню "Акции"', async() => {
     await page.getPromoElement().click();
   });
 
@@ -98,11 +98,11 @@ export function userGoesToPromoRoute(page: AppPage, promoPage: PromoPage) {
 
 export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginItsPage) {
 
-  it('Шаг 1: Пользователь видит кнопку "Войти"', async() => {
+  it('Шаг 1: Пользователь видит раздел меню войти "Войти"', async() => {
     await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь нажимает на кнопку "Войти"', async() => {
+  it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
     await page.getLoginElement().click();
   });
 
@@ -128,7 +128,7 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит кнопку "Мои заказы"', async() => {
+  it('Шаг 5: Пользователь видит раздел меню "Мои заказы"', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
     await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
@@ -143,11 +143,11 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
 
 export function userWithoutOrganizationsDeAuths(page: AppPage) {
 
-  it('Шаг 1: Пользователь видит кнопку "Выход"', async() => {
+  it('Шаг 1: Пользователь видит раздел меню "Выход"', async() => {
     await browser.wait(until.presenceOf(page.getLogoutElement()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь нажимает на кнопку "Выход"', async() => {
+  it('Шаг 2: Пользователь нажимает на раздел меню "Выход"', async() => {
     await page.getLogoutElement().click();
   });
 
@@ -155,11 +155,11 @@ export function userWithoutOrganizationsDeAuths(page: AppPage) {
 
 export function userWithOrganizationsAuths(page: AppPage, loginPage: LoginItsPage) {
 
-  it('Шаг 1: Пользователь видит кнопку "Войти"', async() => {
+  it('Шаг 1: Пользователь видит раздел меню "Войти"', async() => {
     await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
   });
 
-  it('Шаг 2: Пользователь нажимает на кнопку "Войти"', async() => {
+  it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
     await page.getLoginElement().click();
   });
 
@@ -185,7 +185,7 @@ export function userWithOrganizationsAuths(page: AppPage, loginPage: LoginItsPag
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит кнопку "Мои заказы"', async() => {
+  it('Шаг 5: Пользователь видит раздел меню "Мои заказы"', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
     await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
