@@ -68,7 +68,7 @@
           nzShape="circle"
           nzSize="small"
           nz-popconfirm
-          nzPopconfirmTitle="Вы действительно хотите удалить?"
+          nzPopconfirmTitle="Вы действительно хотите отменить?"
           [nzIcon]="withoutIconTpl"
           (nzOnConfirm)="cancelRfp(rfp.id)"
           [disabled]="rfp.status === 'CANCELLED' || rfp.status === 'COMPLETED'"

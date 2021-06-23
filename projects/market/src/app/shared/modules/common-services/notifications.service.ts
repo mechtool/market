@@ -1,6 +1,6 @@
 import { Injectable, TemplateRef } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzMessageDataOptions, NzMessageRef } from 'ng-zorro-antd/message/typings';
+import { NzMessageRef } from 'ng-zorro-antd/message/typings';
 import { ExternalProvidersService, UserStateService } from '#shared/modules';
 
 const CONFIGURATION = { nzDuration: 5000, nzPauseOnHover: true };
@@ -17,28 +17,12 @@ export class NotificationsService {
   ) {
   }
 
-  info(message: string | TemplateRef<void>, options?: NzMessageDataOptions): NzMessageRef {
+  info(message: string | TemplateRef<void>): NzMessageRef {
     return this._messageService.info(message, CONFIGURATION);
   }
 
-  error(err: any, message?: string | TemplateRef<void>, options?: NzMessageDataOptions): NzMessageRef {
-
-    if (err) {
-      const tag = {
-        event: 'siteerror',
-        uin: this.userId || 'anonymous',
-        url: location.href,
-        error: {
-          status: err.error?.status,
-          title: err.error?.title,
-          detail: err.error?.detail,
-          instance: err.error?.instance,
-          requestTraceId: err.error?.requestTraceId,
-          timestamp: err.error?.timestamp
-        },
-      };
-      this._externalProvidersService.fireGTMEvent(tag)
-    }
+  error(err: any, message?: string | TemplateRef<void>): NzMessageRef {
+    this._sendErrorDetailsToGTM(err);
 
     if (message) {
       return this._messageService.error(message, CONFIGURATION);
@@ -55,7 +39,16 @@ export class NotificationsService {
     this._errorTpl = errorTpl;
   }
 
-  private get userId(): string {
-    return this._userStateService.currentUser$.getValue()?.userInfo.userId;
+  private _sendErrorDetailsToGTM(err: any): void {
+    if (err) {
+      const _details = [err.error?.requestTraceId, err.error?.detail, err.error?.title, err.error?.instance].filter(v => v).join('|');
+
+      const tag = {
+        event: 'siteerror',
+        details: _details,
+        status: err.error?.status || 'no status',
+      };
+      this._externalProvidersService.fireGTMEvent(tag)
+    }
   }
 }
