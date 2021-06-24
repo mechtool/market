@@ -126,7 +126,7 @@
               Дата начала сбора предложений
             </nz-form-label>
             <nz-date-picker
-              nzFormat="yyyy-MM-dd"
+              nzFormat="с dd MMMM yyyy"
               nzPlaceHolder="Введите дату"
               nzShowToday="false"
               [nzDisabledDate]="disabledDateCollectingFrom.bind(this)"
@@ -142,7 +142,7 @@
               Дата окончания сбора КП
             </nz-form-label>
             <nz-date-picker
-              nzFormat="yyyy-MM-dd"
+              nzFormat="до dd MMMM yyyy"
               nzPlaceHolder="Введите дату"
               nzShowToday="false"
               [nzDisabledDate]="disabledDateCollectingTo.bind(this)"
@@ -158,7 +158,7 @@
               Дата окончания рассмотрения КП
             </nz-form-label>
             <nz-date-picker
-              nzFormat="yyyy-MM-dd"
+              nzFormat="до dd MMMM yyyy"
               nzPlaceHolder="Введите дату"
               nzShowToday="false"
               [nzDisabledDate]="disabledDateConsideringTo.bind(this)"
@@ -379,7 +379,7 @@
                   Желаемая дата доставки
                 </nz-form-label>
                 <nz-date-picker
-                  nzFormat="yyyy-MM-dd"
+                  nzFormat="dd MMMM yyyy"
                   nzPlaceHolder="Введите дату"
                   nzShowToday="false"
                   [nzDisabledDate]="disabledPurchaseConditionsDateDesiredDeliveryTo.bind(this)"
@@ -402,6 +402,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item class="register-area">
+      <div class="form-with-errors" *ngIf="form.invalid"></div>
       <nz-form-control>
         <button nz-button nzType="primary" (click)="save()">Сохранить</button>
         <button nz-button nzType="link" [routerLink]="['/my/rfps']">Отмена</button>

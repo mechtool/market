@@ -18,7 +18,7 @@
 
     &__value {
       display: flex;
-      text-align: right;
+      text-align: left;
 
       &_column {
         text-align: left;
@@ -62,7 +62,7 @@
 
       &__value {
         display: flex;
-        text-align: right;
+        text-align: left;
         flex-direction: column;
 
         &_column {
