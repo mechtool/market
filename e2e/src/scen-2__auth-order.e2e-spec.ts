@@ -79,7 +79,7 @@ export function userAuthenticated(page: AppPage, loginPage: LoginItsPage) {
           return true;
         }
       });
-    }, 10000);
+    }, defaultTimeout);
 
     await browser.switchTo().window(windowHandles[1]);
     await browser.wait(until.presenceOf(loginPage.getLoginInput()), defaultTimeout);

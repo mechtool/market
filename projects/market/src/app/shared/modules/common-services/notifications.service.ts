@@ -46,7 +46,7 @@ export class NotificationsService {
       const tag = {
         event: 'siteerror',
         details: _details,
-        status: err.error?.status || 'no status',
+        status: err.status || 'no status',
       };
       this._externalProvidersService.fireGTMEvent(tag)
     }
