@@ -214,7 +214,7 @@ export function authorizedUserCreatingNewRFP(page: AppPage) {
     await page.getPosition1ProductMaxPriceInput().clear();
     await page.getPosition1ProductMaxPriceInput().sendKeys(799);
 
-    await browser.sleep(1e3);
+    /*await browser.sleep(1e3);
     await browser.executeScript('arguments[0].scrollIntoView(true);', page.getPosition1DatePickerDesiredDelivery());
     await page.getPosition1DatePickerDesiredDelivery().click()
     await browser.sleep(1e3);
@@ -227,13 +227,13 @@ export function authorizedUserCreatingNewRFP(page: AppPage) {
     await page.getNextMonth().click();
     await browser.sleep(1e3);
     const items = await page.getDates();
-    await browserClick(items[randomItem(items.length)]);
+    await browserClick(items[randomItem(items.length)]);*/
   });
 
   it('Шаг 6: Пользователь заполняет форму для второй позиции товара', async() => {
     await browser.sleep(1e3);
     await browser.executeScript('arguments[0].scrollIntoView(true);', page.getNewPosition());
-    await page.getNewPosition().click();
+    await browser.executeScript('arguments[0].click();', page.getNewPosition());
 
     await browser.sleep(1e3);
     await browser.executeScript('arguments[0].scrollIntoView(true);', page.getPosition2ProductNameInput());
