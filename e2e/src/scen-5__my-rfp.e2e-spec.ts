@@ -331,7 +331,8 @@ export function authorizedUserEditingRFP(page: AppPage) {
 
   it('Шаг 2: Пользователь удаляет вторую позицию из запроса коммерческого предложения', async() => {
     await browser.sleep(2e3);
-    await page.getPositionRemover().last().click();
+    await browser.executeScript('arguments[0].scrollIntoView(true);', page.getPositionRemover().last());
+    await browser.executeScript('arguments[0].click();', page.getPositionRemover().last());
   });
 
   it('Шаг 3: Пользователь нажимает на кнопку "Сохранить"', async() => {
