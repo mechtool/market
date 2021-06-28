@@ -213,21 +213,6 @@ export function authorizedUserCreatingNewRFP(page: AppPage) {
     await browser.executeScript('arguments[0].scrollIntoView(true);', page.getPosition1ProductMaxPriceInput());
     await page.getPosition1ProductMaxPriceInput().clear();
     await page.getPosition1ProductMaxPriceInput().sendKeys(799);
-
-    /*await browser.sleep(1e3);
-    await browser.executeScript('arguments[0].scrollIntoView(true);', page.getPosition1DatePickerDesiredDelivery());
-    await page.getPosition1DatePickerDesiredDelivery().click()
-    await browser.sleep(1e3);
-    await page.getNextMonth().click();
-    await page.getNextMonth().click();
-    await page.getNextMonth().click();
-    await page.getNextMonth().click();
-    await page.getNextMonth().click();
-    await page.getNextMonth().click();
-    await page.getNextMonth().click();
-    await browser.sleep(1e3);
-    const items = await page.getDates();
-    await browserClick(items[randomItem(items.length)]);*/
   });
 
   it('Шаг 6: Пользователь заполняет форму для второй позиции товара', async() => {
