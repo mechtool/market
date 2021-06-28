@@ -134,18 +134,9 @@ export class RegionQuestionComponent implements OnDestroy {
   }
 
   private refreshPage() {
-    const currentUrl = this._router.url.split('?');
-
-    const params = currentUrl?.[1] ? currentUrl[1].split('&').reduce((prev, curr) => {
-      const param = curr.split('=');
-      prev[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
-      return prev;
-    }, {}) : null;
-
+    const currentUrl = this._router.url;
     this._router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => {
-      this._router.navigate([currentUrl?.[0]], {
-        queryParams: params
-      });
+      this._router.navigateByUrl(currentUrl);
     });
   }
 
