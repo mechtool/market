@@ -116,11 +116,11 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
-    @Inject(DOCUMENT) private _document: Document,
-    @Inject(FILTER_FORM_CONFIG) private _filterFormConfig: FilterFormConfigModel,
-    private _searchAreaService: SearchAreaService,
     private _fb: FormBuilder,
+    @Inject(DOCUMENT) private _document: Document,
+    private _searchAreaService: SearchAreaService,
     private _notificationsService: NotificationsService,
+    @Inject(FILTER_FORM_CONFIG) private _filterFormConfig: FilterFormConfigModel,
   ) {
   }
 

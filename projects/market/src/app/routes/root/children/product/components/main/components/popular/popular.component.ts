@@ -22,8 +22,6 @@ const MOBILE_NUMBER_RESTRICTION = 6;
 })
 export class MainPopularComponent implements OnInit {
   productOffers: ProductOffersModel[];
-  @Input() categoryId: string;
-  @Input() size: number;
 
   private _isMobile = false;
   private _productOffersCached: ProductOffersModel[];
@@ -41,7 +39,7 @@ export class MainPopularComponent implements OnInit {
   }
 
   private _getPopularNomenclatures(): void {
-    this._productService.getPopularProductOffers(this.categoryId, this.size)
+    this._productService.getPopularProductOffers()
       .subscribe((products) => {
         this._isMobile = this._navigationService.screenWidthLessThan(MOBILE_SCREEN_WIDTH_BREAKPOINT);
         this._productOffersCached = products._embedded.productOffers;

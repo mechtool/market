@@ -190,7 +190,7 @@
           <cdk-virtual-scroll-viewport itemSize="20" minBufferPx="300" maxBufferPx="600"
                                        class="viewport scrollbar" (click)="setCategoryId($event.target)">
             <div class="category_item"
-                 attr.data-id="{{category.id}}"
+                 [attr.data-id]="category.id"
                  *cdkVirtualFor="let category of filteredCategories"
                  [ngClass]="form.get('subCategoryId').value ? form.get('subCategoryId').value === category.id ? 'active' : 'disabled' : null">
               <div class="category_item_box"></div>

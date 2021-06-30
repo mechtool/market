@@ -61,9 +61,8 @@ export class BNetService {
     return this._apiService.get(`${API_URL}/product-offers/${id}`, { params });
   }
 
-  getPopularProducts(category?: string, pageSize?: number): Observable<ProductOffersListResponseModel> {
-    const params = this._params({ categoryId: category, size: pageSize })
-    return this._apiService.get(`${API_URL}/product-offers/popular`, { params });
+  getPopularProducts(): Observable<ProductOffersListResponseModel> {
+    return this._apiService.get(`${API_URL}/product-offers/popular`);
   }
 
   searchProductOffers(searchQuery: ProductOffersRequestModel, cacheable = true): Observable<ProductOffersListResponseModel> {

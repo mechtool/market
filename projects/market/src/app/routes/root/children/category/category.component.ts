@@ -354,7 +354,7 @@ export class CategoryComponent implements OnDestroy {
 // TODO: перенести в общий блок (main.component.ts)
 function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
   return {
-    q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
+    q: groupQuery.query?.length < 3 ? undefined : groupQuery.query,
     supplierId: groupQuery.filters?.supplierId,
     tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',

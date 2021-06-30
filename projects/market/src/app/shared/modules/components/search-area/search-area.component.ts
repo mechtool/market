@@ -78,8 +78,8 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
   private _submitChangesSubscription: Subscription;
 
   constructor(
-    private _searchAreaService: SearchAreaService,
     private _fb: FormBuilder,
+    private _searchAreaService: SearchAreaService,
   ) {
   }
 
