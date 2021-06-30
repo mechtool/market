@@ -220,7 +220,7 @@ export class SupplierSingleComponent implements OnDestroy {
 // TODO: перенести в общий блок (main.component.ts)
 export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
   return {
-    q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
+    q: groupQuery.query?.length < 3 ? undefined : groupQuery.query,
     tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
     isPickup: groupQuery.filters?.isPickup ? undefined : 'false',

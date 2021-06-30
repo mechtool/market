@@ -45,7 +45,7 @@ export class MainComponent implements OnInit {
 // TODO: перенести в общий блок (category.component.ts)
 export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
   return {
-    q: groupQuery.query?.length === 0 ? undefined : groupQuery.query,
+    q: groupQuery.query?.length < 3 ? undefined : groupQuery.query,
     supplierId: groupQuery.filters?.supplierId,
     tradeMark: groupQuery.filters?.tradeMark,
     isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
