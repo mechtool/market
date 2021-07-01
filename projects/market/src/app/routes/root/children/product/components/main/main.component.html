@@ -6,8 +6,9 @@
   [areAdditionalFiltersEnabled]="false"
   [filterCollapsed]="true"
   [enableSuggestions]="true"
-  (submitClick)="navigateToCategoryRoute($event)"
->
+  (submitBoxClick)="navigateToCategoryRoute($event)"
+  (submitFiltersClick)="updateResultsByFilters($event)">
+
   <ng-container ngProjectAs="upper-slot">
     <market-banners></market-banners>
   </ng-container>

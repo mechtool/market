@@ -1,15 +1,44 @@
 import { Params } from '@angular/router';
 import { AllGroupQueryFiltersModel } from '#shared/modules';
 
-export function containParameters(queryParams: Params): boolean {
-  return !!Object.keys(queryParams).length;
-}
-
 export function hasRequiredParameters(groupQuery: AllGroupQueryFiltersModel): boolean {
   return !!groupQuery.query || !!groupQuery.filters?.supplierId || !!groupQuery.filters?.categoryId || !!groupQuery.filters?.tradeMark;
 }
 
-export function queryParamsFrom(groupQuery: AllGroupQueryFiltersModel): Params {
+
+export function queryParamsForProductsFrom(groupQuery: AllGroupQueryFiltersModel): Params {
+  return {
+    ...(groupQuery.query?.length > 2 && { q: groupQuery.query }),
+    ...(groupQuery.filters?.supplierId && { supplierId: groupQuery.filters?.supplierId }),
+    ...(groupQuery.filters?.tradeMark && { tradeMark: groupQuery.filters?.tradeMark }),
+    ...(!groupQuery.filters?.isDelivery && { isDelivery: 'false' }),
+    ...(!groupQuery.filters?.isPickup && { isPickup: 'false' }),
+    ...(groupQuery.filters?.inStock && { inStock: 'true' }),
+    ...(groupQuery.filters?.withImages && { withImages: 'true' }),
+    ...(groupQuery.filters?.hasDiscount && { hasDiscount: 'true' }),
+    ...(groupQuery.filters?.features?.length && { features: groupQuery.filters.features }),
+    ...(groupQuery.filters?.priceFrom && { priceFrom: groupQuery.filters.priceFrom }),
+    ...(groupQuery.filters?.priceTo && { priceTo: groupQuery.filters.priceTo }),
+    ...(groupQuery.filters?.subCategoryId && { subCategoryId: groupQuery.filters?.subCategoryId }),
+  };
+}
+
+export function queryParamsForSupplierShopFrom(groupQuery: AllGroupQueryFiltersModel): Params {
+  return {
+    ...(groupQuery.query?.length > 2 && { q: groupQuery.query }),
+    ...(groupQuery.filters?.tradeMark && { tradeMark: groupQuery.filters?.tradeMark }),
+    ...(!groupQuery.filters?.isDelivery && { isDelivery: 'false' }),
+    ...(!groupQuery.filters?.isPickup && { isPickup: 'false' }),
+    ...(groupQuery.filters?.inStock && { inStock: 'true' }),
+    ...(groupQuery.filters?.withImages && { withImages: 'true' }),
+    ...(groupQuery.filters?.hasDiscount && { hasDiscount: 'true' }),
+    ...(groupQuery.filters?.priceFrom && { priceFrom: groupQuery.filters.priceFrom }),
+    ...(groupQuery.filters?.priceTo && { priceTo: groupQuery.filters.priceTo }),
+    ...(groupQuery.filters?.subCategoryId && { subCategoryId: groupQuery.filters?.subCategoryId }),
+  };
+}
+
+/*export function queryParamsFrom(groupQuery: AllGroupQueryFiltersModel): Params {
   const hasRequiredParams = hasRequiredRequestParams(groupQuery);
   return {
     q: groupQuery.query,
@@ -25,12 +54,12 @@ export function queryParamsFrom(groupQuery: AllGroupQueryFiltersModel): Params {
     sort: groupQuery.sort,
     page: groupQuery.page,
   };
-}
+}*/
 
 /**
  * Использовать где categoryId является частью url пути, а не query параметром
  */
-export function queryParamsWithoutCategoryIdFrom(groupQuery: AllGroupQueryFiltersModel): Params {
+/*export function queryParamsWithoutCategoryIdFrom(groupQuery: AllGroupQueryFiltersModel): Params {
   const hasRequiredParams = hasRequiredRequestParams(groupQuery);
   return {
     q: groupQuery.query,
@@ -45,7 +74,7 @@ export function queryParamsWithoutCategoryIdFrom(groupQuery: AllGroupQueryFilter
     sort: groupQuery.sort,
     page: groupQuery.page,
   };
-}
+}*/
 
 /**
  * Использовать где supplierId является частью url пути, а не query параметром

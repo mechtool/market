@@ -81,6 +81,12 @@ nz-input-group {
   }
 }
 
+.form-group_checkbox_one_line {
+  label {
+    margin: 5px 0 0 0;
+  }
+}
+
 .feature_wrap {
   &.d-none {
     display: none;
@@ -112,8 +118,9 @@ nz-input-group {
 
 .categories_content {
   .viewport {
-    height: 300px;
+    height: 180px;
     overflow-x: hidden;
+    border-bottom: 1px solid #BDBDBD;
 
     .category_item {
       display: flex;

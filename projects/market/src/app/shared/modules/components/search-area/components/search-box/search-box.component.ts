@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SpinnerService } from '#shared/modules/common-services';
 import { SearchAreaService } from '../../search-area.service';
 import { catchError, debounceTime, filter, map, startWith, switchMap } from 'rxjs/operators';
-import { combineLatest, defer, empty, fromEvent, Observable, of, Subscription } from 'rxjs';
+import { combineLatest, defer, fromEvent, Observable, of, Subscription } from 'rxjs';
 import { Overlay, OverlayConfig } from '@angular/cdk/overlay';
 import { SearchFilterComponent } from '../search-filter/search-filter.component';
 import { unsubscribeList } from '#shared/utils';
@@ -49,6 +49,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
     this._searchAreaService.enableSuggestions(val);
     this._searchAreaService.suggestionsEnabled = val;
   }
+
   @Input() set minQueryLength(val: number) {
     this._minQueryLength = val;
     this.form.get('query').setValidators([Validators.required, Validators.minLength(val)]);
@@ -97,7 +98,8 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
     private _cdr: ChangeDetectorRef,
     private _overlay: Overlay,
     private _injector: Injector,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this._initForm();
@@ -242,7 +244,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   }
 
   submit(): void {
-    this._searchAreaService.submitChanges$.next(true);
+    this._searchAreaService.submitBoxChanges$.next('box');
   }
 
   handleFilterBtnClick(): void {

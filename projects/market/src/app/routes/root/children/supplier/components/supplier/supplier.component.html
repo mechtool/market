@@ -15,16 +15,15 @@
     <nz-tab nzTitle="Торговые предложения">
       <ng-template nz-tab>
         <div class="area-container">
-          <market-search-area
+          <market-search-area *ngIf="supplier"
             [searchType]="'supplier'"
             [markerIsSupplierControlVisible]="false"
             [areCategoriesShown]="false"
             [filters]="filters"
             [query]="query"
             [filterCollapsed]="true"
-            (submitClick)="navigateToSupplierRoute($event)"
-            *ngIf="supplier"
-          >
+            (submitBoxClick)="navigateToSupplierRoute($event)"
+            (submitFiltersClick)="updateResultsByFilters($event)">
             <ng-container ngProjectAs="main-slot">
               <market-supplier-trade-offers-list
                 [supplier]="supplier"

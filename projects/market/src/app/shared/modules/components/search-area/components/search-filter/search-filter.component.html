@@ -22,8 +22,7 @@
             nz-input
             type="text"
             [ngClass]="{'error': false}"
-            autocomplete="false"
-            list="null"
+            name="{{currentDate}}_name"
             id="{{componentId}}_location"
             placeholder="{{!isIE ? 'Россия' : null}}"
             formControlName="name"
@@ -62,8 +61,7 @@
         <nz-form-label nzFor="{{componentId}}_inn">ИНН или наименование поставщика</nz-form-label>
         <nz-input-group [nzSuffix]="supplierNameClearTpl">
           <input nz-input type="text"
-                 autocomplete="false"
-                 list="null"
+                 name="{{currentDate}}_inn"
                  id="{{componentId}}_inn"
                  placeholder="{{!isIE ? 'Искать поставщика' : null}}"
                  formControlName="name"
@@ -75,8 +73,8 @@
         </nz-input-group>
 
         <nz-autocomplete nzBackfill #supplierAutocompleteTpl>
-          <nz-auto-option [nzDisabled]="true" *ngIf="form.get('supplier.name').value.length <= 2">Введите более 2
-            символов
+          <nz-auto-option [nzDisabled]="true" *ngIf="form.get('supplier.name').value.length <= 2">
+            Введите более 2 символов
           </nz-auto-option>
           <nz-auto-option *ngFor="let supplier of suppliersToChoose"
                           (click)="selectSupplier(supplier); $event.stopPropagation()"
@@ -100,8 +98,7 @@
         <nz-form-label nzFor="{{componentId}}_brand">Наименование бренда производителя</nz-form-label>
         <nz-input-group [nzSuffix]="trademarkClearTpl">
           <input nz-input type="text"
-                 autocomplete="false"
-                 list="null"
+                 name="{{currentDate}}_brand"
                  id="{{componentId}}_brand"
                  placeholder="{{!isIE ? 'Искать бренд' : null}}"
                  formControlName="tradeMark">
@@ -118,54 +115,66 @@
       </nz-form-control>
     </div>
 
-    <ng-container *ngIf="areAdditionalFiltersEnabled">
-      <div class="form-group_title">Способ доставки</div>
-      <div class="form-group_checkbox">
-        <label nz-checkbox formControlName="isPickup">Самовывоз</label>
-        <label nz-checkbox formControlName="isDelivery">Доставка</label>
+    <div class="form-group_title">Способ доставки</div>
+    <div class="form-group_checkbox_one_line">
+      <label nz-checkbox formControlName="isPickup"
+             nz-tooltip
+             [nzTooltipTitle]="form.get('isPickup').disabled ? 'Параметр «Самовывоз» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''"
+      >Самовывоз</label>
+      <label nz-checkbox formControlName="isDelivery"
+             style="margin-left: 25px"
+             nz-tooltip
+             [nzTooltipTitle]="form.get('isDelivery').disabled ? 'Параметр «Доставка» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''"
+      >Доставка</label>
+    </div>
+
+    <div class="form-group_title">Параметры поиска</div>
+    <div class="form-group_checkbox">
+      <label nz-checkbox formControlName="inStock"
+             nz-tooltip
+             [nzTooltipTitle]="form.get('inStock').disabled ? 'Параметр «В наличии» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''"
+      >В наличии</label>
+      <label nz-checkbox formControlName="withImages"
+             nz-tooltip
+             [nzTooltipTitle]="form.get('withImages').disabled ? 'Параметр «С картинками» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''"
+      >С картинками</label>
+      <label nz-checkbox formControlName="hasDiscount"
+             nz-tooltip
+             [nzTooltipTitle]="form.get('hasDiscount').disabled ? 'Параметр «Со скидкой» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''"
+      >Со скидкой</label>
+    </div>
+
+    <div class="form-group_title">Цена ₽</div>
+    <div class="range_wrap range_price">
+
+      <div class="range_inputs">
+        <nz-form-item>
+          <nz-form-control
+            nz-tooltip
+            [nzTooltipTitle]="form.get('priceFrom').disabled ? 'Параметр «Цена от» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''">
+            <input nz-input type="number"
+                   [ngClass]="{'error': form.controls.priceFrom.invalid || form.errors?.priceRangeCondition}"
+                   class="range_input range_from price_from"
+                   placeholder="от"
+                   name="{{currentDate}}_priceFrom"
+                   formControlName="priceFrom"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control
+            nz-tooltip
+            [nzTooltipTitle]="form.get('priceTo').disabled ? 'Параметр «Цена до» доступен если выбран хотя бы один критерий поиска: категория, наименование поставщика, наименование бренда или введен поисковой запрос.' : ''">
+            <input nz-input type="number"
+                   [ngClass]="{'error': form.controls.priceTo.invalid || form.errors?.priceRangeCondition}"
+                   class="range_input range_to price_to"
+                   placeholder="до"
+                   name="{{currentDate}}_priceTo"
+                   formControlName="priceTo"/>
+          </nz-form-control>
+        </nz-form-item>
       </div>
-
-      <div class="form-group_title">Параметры поиска</div>
-      <div class="form-group_checkbox">
-        <label nz-checkbox formControlName="inStock">В наличии</label>
-        <label nz-checkbox formControlName="withImages">С картинками</label>
-        <label nz-checkbox formControlName="hasDiscount">Со скидкой</label>
-      </div>
-
-      <div class="form-group_title">Цена ₽</div>
-      <div class="range_wrap range_price">
-
-        <div class="range_inputs">
-          <nz-form-item>
-            <nz-form-control>
-              <input nz-input type="number"
-                     [ngClass]="{'error': form.controls.priceFrom.invalid || form.errors?.priceRangeCondition}"
-                     name="price_from"
-                     class="range_input range_from price_from"
-                     placeholder="от"
-                     autocomplete="false"
-                     list="null"
-                     formControlName="priceFrom"/>
-            </nz-form-control>
-          </nz-form-item>
-
-
-          <nz-form-item>
-            <nz-form-control>
-              <input nz-input type="number"
-                     [ngClass]="{'error': form.controls.priceTo.invalid || form.errors?.priceRangeCondition}"
-                     name="price_to"
-                     class="range_input range_to price_to"
-                     placeholder="до"
-                     autocomplete="false"
-                     list="null"
-                     formControlName="priceTo"/>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-
-    </ng-container>
+    </div>
 
     <ng-container *ngIf="(availableCategories$ | async)?.length">
       <div class="form-group_title">Фильтр подкатегорий</div>
@@ -178,8 +187,7 @@
               #categorySearchQueryEl
               nz-input
               type="text"
-              autocomplete="false"
-              list="null"
+              name="{{currentDate}}_category"
               id="{{componentId}}_category"
               placeholder="{{!isIE ? 'Искать подкатегорию' : null}}"
               formControlName="categorySearchQuery">
@@ -187,7 +195,7 @@
         </div>
 
         <div class="categories_content">
-          <cdk-virtual-scroll-viewport itemSize="20" minBufferPx="300" maxBufferPx="600"
+          <cdk-virtual-scroll-viewport itemSize="24" minBufferPx="300" maxBufferPx="600"
                                        class="viewport scrollbar" (click)="setCategoryId($event.target)">
             <div class="category_item"
                  [attr.data-id]="category.id"
@@ -239,11 +247,9 @@
                     <nz-form-control>
                       <input nz-input type="number"
                              [ngClass]="{'error': feature.controls.numValueFrom.invalid || feature.errors?.numFeatureRangeCondition}"
-                             name="num_value_from"
                              class="range_input range_from price_from"
                              placeholder="от {{feature.value.min}}"
-                             autocomplete="false"
-                             list="null"
+                             name="{{currentDate}}_numValueFrom"
                              formControlName="numValueFrom"/>
                     </nz-form-control>
                   </nz-form-item>
@@ -252,11 +258,9 @@
                     <nz-form-control>
                       <input nz-input type="number"
                              [ngClass]="{'error': feature.controls.numValueTo.invalid || feature.errors?.numFeatureRangeCondition}"
-                             name="num_value_to"
                              class="range_input range_to price_to"
                              placeholder="до {{feature.value.max}}"
-                             autocomplete="false"
-                             list="null"
+                             name="{{currentDate}}_numValueTo"
                              formControlName="numValueTo"/>
                     </nz-form-control>
                   </nz-form-item>

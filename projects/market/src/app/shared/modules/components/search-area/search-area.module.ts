@@ -30,28 +30,30 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FILTER_FORM_CONFIG, filterFormDefaultConfig } from './config';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ObserversModule,
-    NzButtonModule,
-    NzCheckboxModule,
-    NzDropDownModule,
-    NzFormModule,
-    NzInputModule,
-    NzSliderModule,
-    NzAutocompleteModule,
-    NzIconModule,
-    ScrollingModule,
-    SpinnerModule,
-    ClickOutsideModule,
-    SharedDepsModule,
-    NzDatePickerModule,
-  ],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ObserversModule,
+        NzButtonModule,
+        NzCheckboxModule,
+        NzDropDownModule,
+        NzFormModule,
+        NzInputModule,
+        NzSliderModule,
+        NzAutocompleteModule,
+        NzIconModule,
+        ScrollingModule,
+        SpinnerModule,
+        ClickOutsideModule,
+        SharedDepsModule,
+        NzDatePickerModule,
+        NzToolTipModule,
+    ],
   declarations: [
     SearchAreaComponent,
     SearchBoxComponent,

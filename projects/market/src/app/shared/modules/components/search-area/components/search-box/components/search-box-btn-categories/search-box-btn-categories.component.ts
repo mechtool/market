@@ -1,10 +1,10 @@
 import { Component, forwardRef, Injector, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { ConnectionPositionPair, Overlay, OverlayConfig, PositionStrategy } from '@angular/cdk/overlay';
 import { Subscription } from 'rxjs';
-import { SearchBoxCategoryFinderComponent } from '../search-box-category-finder/search-box-category-finder.component';
-import { SearchAreaService } from '../../../../search-area.service';
+import { SearchBoxCategoryFinderComponent } from '#shared/modules/components/search-area/components/search-box/components/search-box-category-finder/search-box-category-finder.component';
+import { SearchAreaService } from '#shared/modules/components/search-area/search-area.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CategoryItemModel } from '../../../../models/category-item.model';
+import { CategoryItemModel } from '#shared/modules/components/search-area/models/category-item.model';
 import { unsubscribeList } from '#shared/utils';
 
 const positionsPair: ConnectionPositionPair[] = [
@@ -31,7 +31,10 @@ const positionsPair: ConnectionPositionPair[] = [
 @Component({
   selector: 'market-search-box-btn-categories',
   templateUrl: './search-box-btn-categories.component.html',
-  styleUrls: ['./search-box-btn-categories.component.scss', './search-box-btn-categories.component-576.scss'],
+  styleUrls: [
+    './search-box-btn-categories.component.scss',
+    './search-box-btn-categories.component-576.scss'
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -55,10 +58,10 @@ export class SearchBoxBtnCategoriesComponent implements OnInit, OnDestroy, Contr
   }
 
   constructor(
-    private _searchAreaService: SearchAreaService,
     private _overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef,
     private _injector: Injector,
+    private _searchAreaService: SearchAreaService,
+    private _viewContainerRef: ViewContainerRef,
   ) {
   }
 
@@ -84,10 +87,11 @@ export class SearchBoxBtnCategoriesComponent implements OnInit, OnDestroy, Contr
   }
 
   private _handleCategorySelectedItemChanges(): void {
-    this._categorySelectedItemSubscription = this._searchAreaService.categorySelectedItem$.subscribe((item) => {
-      this.categorySelected = item || null;
-      this._searchAreaService.closeOverlay();
-    });
+    this._categorySelectedItemSubscription = this._searchAreaService.categorySelectedItem$
+      .subscribe((category) => {
+        this.categorySelected = category || null;
+        this._searchAreaService.closeOverlay();
+      });
   }
 
   private _getOverlayConfig({ origin }): OverlayConfig {

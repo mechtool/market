@@ -3,8 +3,14 @@ import { LocalStorageService } from '#shared/modules/common-services/local-stora
 import { DefaultSearchAvailableModel } from '#shared/modules/common-services/models/default-search-available.model';
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { addURLParameters, removeURLParameters, unsubscribeList, updateUrlParameters } from '#shared/utils';
-import { BehaviorSubject, combineLatest, defer, forkJoin, of, Subscription } from 'rxjs';
+import {
+  addURLParameters,
+  queryParamsForProductsFrom,
+  removeURLParameters,
+  unsubscribeList,
+  updateUrlParameters
+} from '#shared/utils';
+import { combineLatest, defer, forkJoin, of, Subscription } from 'rxjs';
 import { NotificationsService } from '#shared/modules/common-services/notifications.service';
 import { NavigationService } from '#shared/modules/common-services/navigation.service';
 import { CategoryService } from '#shared/modules/common-services/category.service';
@@ -16,7 +22,7 @@ import {
   SortModel,
 } from '#shared/modules/common-services/models';
 import { ProductService } from '#shared/modules/common-services/product.service';
-import { SpinnerService } from '#shared/modules';
+import { SearchResultsService, SpinnerService } from '#shared/modules';
 import { filter, switchMap, tap } from 'rxjs/operators';
 
 @Component({
@@ -38,63 +44,32 @@ export class CategoryComponent implements OnDestroy {
   page = 0;
   pageSize = 60;
   pos: number;
-  scrollCommand: string;
   areAdditionalFiltersEnabled = false;
-  request: any = null;
-  urlSubscription: Subscription;
+
+  showClearAllFilters = false;
+
+  private request: any = null;
+  private urlSubscription: Subscription;
+  private utmTags = ['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'yclid'];
+  private isUrlInitiallyLoaded = false;
   private unlocked = true;
 
-  deliveryAreaChange$: BehaviorSubject<any> = new BehaviorSubject(null);
-  isLocationInitiallyLoaded = false;
-  utmTags = ['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'yclid'];
-  isUrlInitiallyLoaded = false;
 
-  get isNotSearchUsed(): boolean {
-    const queryParamsToCheck = ['q', 'supplierId', 'tradeMark', 'inStock', 'withImages', 'hasDiscount', 'features', 'priceFrom', 'priceTo', 'subCategoryId', 'isDelivery', 'isPickup', 'sort'];
-    const queryParamMap = this._activatedRoute.snapshot.queryParamMap;
-    const paramMap = this._activatedRoute.snapshot.paramMap;
-
-    if (paramMap.has('id') && !!paramMap.get('id')) {
-      return !queryParamMap.keys.some((queryParam) => queryParamsToCheck.includes(queryParam));
-    }
-    if (queryParamMap.has('q') && queryParamMap.get('q').length >= 3) {
-      return false;
-    }
-    if (queryParamMap.has('supplierId')) {
-      return false;
-    }
-    if (queryParamMap.has('tradeMark')) {
-      return false;
-    }
-    if (queryParamMap.has('subCategoryId')) {
-      return false;
-    }
-    return true;
-  }
-
-  get showTags(): boolean {
-    const queryParamKeys = [...this._activatedRoute.snapshot.queryParamMap.keys];
-    const indexQ = queryParamKeys.indexOf('q');
-    if (indexQ > -1) {
-      queryParamKeys.splice(indexQ, 1);
-    }
-    const indexPage = queryParamKeys.indexOf('page');
-    if (indexPage > -1) {
-      queryParamKeys.splice(indexPage, 1);
-    }
-    return !!this._activatedRoute.snapshot.paramMap.get('id') || !!queryParamKeys.length;
+  get isSearchUsed(): boolean {
+    return this.query?.length > 2 || !!this.filters.subCategoryId || !!this.filters.categoryId || !!this.filters.supplierId || !!this.filters.tradeMark;
   }
 
   constructor(
     private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private _localStorageService: LocalStorageService,
-    private _notificationsService: NotificationsService,
-    private _navigationService: NavigationService,
-    private _categoryService: CategoryService,
+    private _location: Location,
     private _productService: ProductService,
     private _spinnerService: SpinnerService,
-    private _location: Location,
+    private _activatedRoute: ActivatedRoute,
+    private _categoryService: CategoryService,
+    private _navigationService: NavigationService,
+    private _localStorageService: LocalStorageService,
+    private _notificationsService: NotificationsService,
+    private _searchResultsService: SearchResultsService,
   ) {
     this._init();
   }
@@ -104,16 +79,77 @@ export class CategoryComponent implements OnDestroy {
     unsubscribeList([this.urlSubscription]);
   }
 
-  navigateInCategoryRoute(filterGroup: AllGroupQueryFiltersModel): void {
-    const deliveryArea = filterGroup.filters?.deliveryArea || null;
-    if (deliveryArea === null || deliveryArea !== this.deliveryAreaChange$.getValue()) {
-      if (!this.isLocationInitiallyLoaded) {
-        this.isLocationInitiallyLoaded = true;
-      } else {
-        this.deliveryAreaChange$.next(deliveryArea);
-      }
+  updateResultsByFilters(filterGroup: AllGroupQueryFiltersModel): void {
+    this.query = filterGroup.query;
+    this.filters = filterGroup.filters;
+
+    if (!this.isSearchUsed) {
+      this.areAdditionalFiltersEnabled = false;
+      return;
     }
 
+    this._spinnerService.show();
+
+    this.areAdditionalFiltersEnabled = true;
+
+    const categoryId = filterGroup.filters?.categoryId || null;
+    const page = this._activatedRoute.snapshot.queryParamMap.get('page');
+    const pos = this._activatedRoute.snapshot.queryParamMap.get('pos');
+    const sort = this._activatedRoute.snapshot.queryParamMap.get('sort');
+    const queryParams = {
+      ...queryParamsForProductsFrom(filterGroup),
+      ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page }),
+      ...(this._activatedRoute.snapshot.queryParamMap.has('pos') && { pos }),
+      ...(this._activatedRoute.snapshot.queryParamMap.has('sort') && { sort }),
+    }
+
+    this._initShowClearAllFilters();
+
+    this._location.go(`/category${categoryId ? `/${categoryId}` : ''}`, this._paramsToString(queryParams));
+    this._searchResultsService.searchingResultsChanges$.next(true);
+
+    const currentUrl = this._location.path().split('?');
+    const catId = currentUrl[0]?.split('/')[2];
+    const params = currentUrl[1] ? currentUrl[1].split('&').reduce((prev, curr) => {
+      const param = curr.split('=');
+      prev[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
+      return prev;
+    }, {}) : {};
+
+    this.request = {
+      query: params['q'] || '',
+      filters: this._getRequestParams(catId, params),
+      size: this.pageSize,
+      ...(this.sort && { sort: this.sort }),
+      ...(this.page && { page: this.page }),
+    };
+
+    this.productOffersList = null;
+    this.productOffers = [];
+    this.productsTotal = 0;
+
+    this._productService.searchProductOffers(this.request)
+      .subscribe((productOffers) => {
+        this.productOffersList = productOffers;
+        this.productOffers = this.productOffersList._embedded.productOffers;
+        this.productsTotal = this.productOffersList.page.totalElements;
+
+        this.summaryFeaturesData = {
+          hasProducts: this.productsTotal > 0,
+          featuresQueries: this.filters?.features,
+          values: this.productOffersList._embedded.summary?.features
+        };
+
+        this._searchResultsService.scrollCommandChanges$.next('stand');
+        this._spinnerService.hide();
+
+      }, (err) => {
+        this._spinnerService.hide();
+        this._notificationsService.error(err);
+      });
+  }
+
+  navigateInCategoryRoute(filterGroup: AllGroupQueryFiltersModel): void {
     const categoryId = filterGroup.filters?.categoryId || null;
     const page = this._activatedRoute.snapshot.queryParamMap.get('page');
     const pos = this._activatedRoute.snapshot.queryParamMap.get('pos');
@@ -121,7 +157,7 @@ export class CategoryComponent implements OnDestroy {
 
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        ...queryParamsFromNew(filterGroup),
+        ...queryParamsForProductsFrom(filterGroup),
         ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page }),
         ...(this._activatedRoute.snapshot.queryParamMap.has('pos') && { pos }),
         ...(this._activatedRoute.snapshot.queryParamMap.has('sort') && { sort }),
@@ -168,26 +204,62 @@ export class CategoryComponent implements OnDestroy {
     });
   }
 
-  changeSortingAndRefresh(sort: SortModel) : void {
-    const categoryId = this._activatedRoute.snapshot.paramMap.get('id');
+  changeSortingAndRefresh(sort: SortModel): void {
+    this.sort = sort;
     const queryParamsListToRemove = [...this.utmTags, 'page', 'pos'];
-    const queryParamsNext = JSON.parse(JSON.stringify(this._activatedRoute.snapshot.queryParams));
-    queryParamsNext.sort = sort;
-    queryParamsListToRemove.forEach((queryParam) => {
-      queryParamsNext[queryParam] = null;
-    });
-    const navigationExtras: NavigationExtras = {
-      queryParams: queryParamsNext
-    }
-    this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], navigationExtras);
+    const currentUrl = this._location.path().split('?');
+    const categoryId = currentUrl[0]?.split('/')[2];
+
+    const params: any = currentUrl[1] ? currentUrl[1].split('&').reduce((prev, curr) => {
+      const param = curr.split('=');
+      if (!queryParamsListToRemove.includes(decodeURIComponent(param[0]))) {
+        prev[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
+      }
+      return prev;
+    }, {}) : {};
+
+    params.sort = sort;
+
+    this._location.go(`/category${categoryId ? `/${categoryId}` : ''}`, this._paramsToString(params));
+
+    this.request = {
+      query: params['q'] || '',
+      filters: this._getRequestParams(categoryId, params),
+      size: this.pageSize,
+      sort: this.sort,
+    };
+
+    this._spinnerService.show();
+
+    this.productOffersList = null;
+    this.productOffers = [];
+    this.productsTotal = 0;
+
+    this._productService.searchProductOffers(this.request)
+      .subscribe((productOffers) => {
+        this.productOffersList = productOffers;
+        this.productOffers = this.productOffersList._embedded.productOffers;
+        this.productsTotal = this.productOffersList.page.totalElements;
+
+        this.summaryFeaturesData = {
+          hasProducts: this.productsTotal > 0,
+          featuresQueries: this.filters?.features,
+          values: this.productOffersList._embedded.summary?.features
+        };
+
+        this._spinnerService.hide();
+
+      }, (err) => {
+        this._spinnerService.hide();
+        this._notificationsService.error(err);
+      });
   }
 
   private _init(): void {
     let categoryId = '';
     this.urlSubscription = combineLatest([
-      this.deliveryAreaChange$,
-      this._activatedRoute.paramMap,
-      this._activatedRoute.queryParamMap
+      this._activatedRoute.params,
+      this._activatedRoute.queryParams
     ]).pipe(
       tap(() => {
         const paramMap = this._activatedRoute.snapshot.paramMap;
@@ -196,6 +268,9 @@ export class CategoryComponent implements OnDestroy {
         this._setFilters(paramMap, queryParamMap);
         this._setAdditionalFiltersVisibility(paramMap, queryParamMap);
         this._setSorting(queryParamMap);
+        this._initShowClearAllFilters();
+
+        this._searchResultsService.searchingResultsChanges$.next(true);
 
         categoryId = paramMap.get('id');
         this.page = +queryParamMap.get('page') || 0;
@@ -203,7 +278,7 @@ export class CategoryComponent implements OnDestroy {
 
         this.request = {
           query: queryParamMap.get('q') || '',
-          filters: this._getRequestFilters(paramMap, queryParamMap),
+          filters: this._filtersFrom(paramMap, queryParamMap),
           size: this.pageSize,
           ...(this.sort && { sort: this.sort }),
           ...(this.page && { page: this.page }),
@@ -224,7 +299,7 @@ export class CategoryComponent implements OnDestroy {
         )
       }),
       filter(() => {
-        const pass = !!categoryId || !this.isNotSearchUsed;
+        const pass = !!categoryId || this.isSearchUsed;
         if (!pass) {
           this._spinnerService.hide();
         }
@@ -267,9 +342,11 @@ export class CategoryComponent implements OnDestroy {
       };
 
       if (this._activatedRoute.snapshot.queryParamMap.has('pos')) {
-        this.scrollCommand = 'scroll';
+        this._searchResultsService.scrollCommandChanges$.next('scroll');
+
       } else {
-        this.scrollCommand = 'stand';
+        this._searchResultsService.scrollCommandChanges$.next('stand');
+
       }
     }, (err) => {
       this._spinnerService.hide();
@@ -277,7 +354,29 @@ export class CategoryComponent implements OnDestroy {
     });
   }
 
-  private _getRequestFilters(paramMap, queryParamMap) {
+  private _getRequestParams(categoryId: string, params: any) {
+    return {
+      ...('supplierId' in params && { supplierId: params['supplierId'] }),
+      ...('tradeMark' in params && { tradeMark: params['tradeMark'] }),
+      ...('isDelivery' in params && { isDelivery: params['isDelivery'] !== 'false' }),
+      ...('isPickup' in params && { isPickup: params['isPickup'] !== 'false' }),
+      ...('inStock' in params && { inStock: params['inStock'] === 'true' }),
+      ...('withImages' in params && { withImages: params['withImages'] === 'true' }),
+      ...('hasDiscount' in params && { hasDiscount: params['hasDiscount'] === 'true' }),
+      ...('priceFrom' in params && { priceFrom: +params['priceFrom'] }),
+      ...('priceTo' in params && { priceTo: +params['priceTo'] }),
+      ...('features' in params && { features: params['features'] }),
+      ...(categoryId && { categoryId: categoryId }),
+      ...('subCategoryId' in params && { categoryId: params['subCategoryId'] }),
+    };
+  }
+
+  private _setFilters(paramMap: Params, queryParamMap: Params) {
+    this.query = queryParamMap?.has('q') ? queryParamMap.get('q') : '';
+    this.filters = this._filtersFrom(paramMap, queryParamMap, true);
+  }
+
+  private _filtersFrom(paramMap, queryParamMap, hasSubCategoryId = false) {
     return {
       ...(queryParamMap.has('supplierId') && { supplierId: queryParamMap.get('supplierId') }),
       ...(queryParamMap.has('tradeMark') && { tradeMark: queryParamMap.get('tradeMark') }),
@@ -290,21 +389,16 @@ export class CategoryComponent implements OnDestroy {
       ...(queryParamMap.has('priceTo') && { priceTo: +queryParamMap.get('priceTo') }),
       ...(queryParamMap.has('features') && { features: queryParamMap.getAll('features') }),
       ...(paramMap.has('id') && paramMap.get('id') !== '' && { categoryId: paramMap.get('id') }),
-      ...(queryParamMap.has('subCategoryId') && { categoryId: queryParamMap.get('subCategoryId') }),
+      ...(hasSubCategoryId && queryParamMap.has('subCategoryId') && { subCategoryId: queryParamMap.get('subCategoryId') }),
+      ...(!hasSubCategoryId && queryParamMap.has('subCategoryId') && { categoryId: queryParamMap.get('subCategoryId') }),
     };
-  }
-
-  private _setFilters(paramMap: Params, queryParamMap: Params) {
-    this.query = queryParamMap?.has('q') ? queryParamMap.get('q') : '';
-    this.filters = this._getRequestFilters(paramMap, queryParamMap);
   }
 
   private _setAdditionalFiltersVisibility(paramMap: Params, queryParamMap: Params) {
     if (paramMap.get('id')) {
       this.areAdditionalFiltersEnabled = true;
-    }
-    if (!paramMap.get('id')) {
-      if (queryParamMap.get('q') && queryParamMap.get('q').length >= 3) {
+    } else {
+      if (queryParamMap.get('q') && queryParamMap.get('q').length > 2) {
         this.areAdditionalFiltersEnabled = true;
       }
       if (queryParamMap.get('supplierId')) {
@@ -323,48 +417,57 @@ export class CategoryComponent implements OnDestroy {
     this.sort = queryParamMap.get('sort') || null;
   }
 
+  private _initShowClearAllFilters() {
+    this.showClearAllFilters = !!this.category || !!Object.keys(queryParamsForProductsFrom({ filters: this.filters })).length;
+  }
+
   private _changeQueryParamsPagePosInUrl(page: number, pos: number) {
     let url;
+
+    const currentUrl = this._location.path().split('?');
+    const params = currentUrl[1] ? currentUrl[1].split('&').reduce((prev, curr) => {
+      const param = curr.split('=');
+      prev[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
+      return prev;
+    }, {}) : {};
+
     if (page) {
-      if (this._activatedRoute.snapshot.queryParamMap.get('page')) {
+      if ('page' in params) {
         const params = new Map([['page', page], ['pos', pos]]);
-        url = updateUrlParameters(this._router.url, params);
+        url = updateUrlParameters(this._location.path(), params);
       } else {
-        url = removeURLParameters(this._router.url, 'pos');
+        url = removeURLParameters(this._location.path(), 'pos');
         const params = new Map([['page', page], ['pos', pos]]);
         url = addURLParameters(url, params);
       }
+      this._location.replaceState(url);
     } else if (!page && pos > 3) {
-      if (this._activatedRoute.snapshot.queryParamMap.get('pos')) {
+      if ('pos' in params) {
         const params = new Map([['pos', pos]]);
-        url = removeURLParameters(this._router.url, 'page');
+        url = removeURLParameters(this._location.path(), 'page');
         url = updateUrlParameters(url, params);
       } else {
         const params = new Map([['pos', pos]]);
-        url = addURLParameters(this._router.url, params);
+        url = addURLParameters(this._location.path(), params);
       }
+      this._location.replaceState(url);
     } else {
-      url = removeURLParameters(this._router.url, 'page', 'pos');
-      this._router.navigateByUrl(url, { skipLocationChange: true })
-    }
-    this._location.replaceState(url);
-  }
-}
+      url = removeURLParameters(this._location.path(), 'page', 'pos');
+      this._location.replaceState(url);
 
-// TODO: перенести в общий блок (main.component.ts)
-function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
-  return {
-    q: groupQuery.query?.length < 3 ? undefined : groupQuery.query,
-    supplierId: groupQuery.filters?.supplierId,
-    tradeMark: groupQuery.filters?.tradeMark,
-    isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
-    isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
-    inStock: !groupQuery.filters?.inStock ? undefined : 'true',
-    withImages: !groupQuery.filters?.withImages ? undefined : 'true',
-    hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
-    features: !groupQuery.filters?.features?.length ? undefined : groupQuery.filters.features,
-    priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
-    priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
-    subCategoryId: groupQuery.filters?.subCategoryId,
-  };
+      if (pos > 0) {
+        this._router.navigateByUrl(url, { skipLocationChange: true })
+      }
+    }
+  }
+
+  private _paramsToString(queryParams: any): string {
+    return Object.entries(queryParams)
+      .map((value) => {
+        if (Array.isArray(value[1])) {
+          return value[1].map(val => `${value[0]}=${val}`).join('&')
+        }
+        return `${value[0]}=${value[1]}`;
+      }).join('&');
+  }
 }

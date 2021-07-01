@@ -61,6 +61,7 @@ const DATE_PATTERN = /^([0-9]{4}[-/]?((0[13-9]|1[012])[-/]?(0[1-9]|[12][0-9]|30)
   styleUrls: ['./search-filter.component.scss', './search-filter.component-992.scss'],
 })
 export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
+  currentDate = Date.now();
   componentId = Math.random();
   form: FormGroup;
   filteredCategories: CategoryModel[] = null;
@@ -78,10 +79,6 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get featuresData(): FormArray {
     return this.form?.controls?.featuresData as FormArray;
-  }
-
-  get areAdditionalFiltersEnabled() {
-    return this._searchAreaService.areAdditionalFiltersEnabled;
   }
 
   get filterCollapsed(): boolean {
@@ -110,6 +107,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   private _serviceFormCategoryIdChangeSubscription: Subscription;
   private _featuresDataChangeSubscription: Subscription;
   private _newSummaryFeaturesDataChangeSubscription: Subscription;
+  private _filterSetChangeSubscription: Subscription;
 
   get searchType(): 'category' | 'supplier' {
     return this._searchAreaService.searchType;
@@ -140,6 +138,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (this.searchType !== 'supplier') {
       this._handleSupplierNameChanges();
+      this._handleFilterSetChange();
     }
 
     this._setAvailableCategories();
@@ -168,6 +167,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       this._serviceFormCategoryIdChangeSubscription,
       this._featuresDataChangeSubscription,
       this._newSummaryFeaturesDataChangeSubscription,
+      this._filterSetChangeSubscription,
     ]);
   }
 
@@ -181,7 +181,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   save(): void {
-    this._submit();
+    this._submit('box');
     if (this._searchAreaService.screenWidthLessThan(SCREEN_WIDTH_BREAKPOINT)) {
       this.close();
     }
@@ -334,7 +334,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         this.serviceForm.get('base.categoryId').patchValue(catId, { emitEvent: false, onlySelf: true });
         this._scrollToCategory();
         this._updateModifiedFiltersCounter();
-        this._submit();
+        this._submit('box');
       }, (err) => {
         this._notificationsService.error(err);
       });
@@ -499,6 +499,29 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  private _handleFilterSetChange() {
+    this._filterSetChangeSubscription = this._searchAreaService.filterSetChanges$
+      .subscribe((isAvailable) => {
+        if (isAvailable) {
+          this.form.get('isDelivery').enable();
+          this.form.get('isPickup').enable();
+          this.form.get('inStock').enable();
+          this.form.get('withImages').enable();
+          this.form.get('hasDiscount').enable();
+          this.form.get('priceFrom').enable();
+          this.form.get('priceTo').enable();
+        } else {
+          this.form.get('isDelivery').disable();
+          this.form.get('isPickup').disable();
+          this.form.get('inStock').disable();
+          this.form.get('withImages').disable();
+          this.form.get('hasDiscount').disable();
+          this.form.get('priceFrom').disable();
+          this.form.get('priceTo').disable();
+        }
+      });
+  }
+
   private _setInitialFormLocation(): void {
     if (this._searchAreaService.hasUserLocation()) {
       const userLocation = this._searchAreaService.getUserLocation();
@@ -531,29 +554,32 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       );
   }
 
-  private _submit(): void {
-    this._searchAreaService.submitChanges$.next(true);
+  private _submit(type: 'box' | 'filters'): void {
+    this._searchAreaService.submitBoxChanges$.next(type);
   }
 
   private _submitIfNeeded([obj1, obj2]: [any, any]): void {
-    const readyToSubmit = obj1 !== null
-      ? PROPS_AUTO_SUBMIT.some((prop) => {
+    if (obj1 === null) {
+      return;
+    }
 
-        const oldObj = getPropValueByPath(prop, obj1);
-        const newObj = getPropValueByPath(prop, obj2);
+    const readyToSubmit = PROPS_AUTO_SUBMIT.some((prop) => {
 
-        if (Array.isArray(newObj)) {
-          if (oldObj.length === 0 && newObj.length === 0) {
-            return false;
-          }
-          return oldObj.length !== newObj.length || newObj.some((value) => !oldObj.includes(value));
+      const oldObj = getPropValueByPath(prop, obj1);
+      const newObj = getPropValueByPath(prop, obj2);
+
+      if (Array.isArray(newObj)) {
+        if (oldObj.length === 0 && newObj.length === 0) {
+          return false;
         }
+        return oldObj.length !== newObj.length || newObj.some((value) => !oldObj.includes(value));
+      }
 
-        return oldObj !== newObj;
-      })
-      : !obj2.categorySearchQuery;
+      return oldObj !== newObj;
+    })
+
     if (readyToSubmit && this.form.valid) {
-      this._submit();
+      this._submit('filters');
     }
   }
 

@@ -6,6 +6,7 @@ import { unsubscribeList } from '#shared/utils';
 import { Subscription } from 'rxjs';
 import { DefaultSearchAvailableModel } from '#shared/modules/common-services/models/default-search-available.model';
 import { AllGroupQueryFiltersModel } from '#shared/modules/common-services/models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'market-search-area',
@@ -15,7 +16,8 @@ import { AllGroupQueryFiltersModel } from '#shared/modules/common-services/model
 })
 export class SearchAreaComponent implements OnInit, OnDestroy {
   private _query = '';
-  @Output() submitClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
+  @Output() submitBoxClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
+  @Output() submitFiltersClick: EventEmitter<AllGroupQueryFiltersModel> = new EventEmitter();
   @Output() categoryIdClear: EventEmitter<any> = new EventEmitter();
 
   @Input() set query(val: string) {
@@ -48,7 +50,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
   }
 
   @Input() set areAdditionalFiltersEnabled(val: boolean) {
-    this._searchAreaService.areAdditionalFiltersEnabled = val;
+    this._searchAreaService.filterSetChanges$.next(val);
   }
 
   get query(): string {
@@ -79,19 +81,28 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
 
   constructor(
     private _fb: FormBuilder,
+    private _activatedRoute: ActivatedRoute,
     private _searchAreaService: SearchAreaService,
   ) {
+    this._activatedRoute.params
+      .subscribe((params) => {
+        this._searchAreaService.changeCategorySelectedItem(params.id)
+      })
   }
 
   ngOnInit() {
-    this._submitChangesSubscription = this._searchAreaService.submitChanges$
+    this._submitChangesSubscription = this._searchAreaService.submitBoxChanges$
       .pipe(
         debounceTime(this._searchAreaService.debounceTime),
         tap(() => this.form.updateValueAndValidity()),
         filter((res) => !!res && this.form.valid),
       )
-      .subscribe((res) => {
-        this._submitData();
+      .subscribe((val) => {
+        if (val === 'filters') {
+          this._submitData(true);
+        } else {
+          this._submitData(false);
+        }
       });
   }
 
@@ -105,7 +116,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
     this._fillForm(controlName);
   }
 
-  private _submitData() {
+  private _submitData(isChangedFilters: boolean) {
     const data = {
       query: this.form.get('base.query').value,
       filters: {
@@ -119,9 +130,7 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
         ...(this._isFormControlValueSubmittable('filters.features') && { features: this.form.get('filters.features').value }),
         ...(this._isFormControlValueSubmittable('filters.priceFrom') && { priceFrom: this.form.get('filters.priceFrom').value }),
         ...(this._isFormControlValueSubmittable('filters.priceTo') && { priceTo: this.form.get('filters.priceTo').value }),
-        ...(this._isFormControlValueSubmittable('filters.subCategoryId') && {
-          subCategoryId: this.form.get('filters.subCategoryId').value,
-        }),
+        ...(this._isFormControlValueSubmittable('filters.subCategoryId') && { subCategoryId: this.form.get('filters.subCategoryId').value }),
         ...(this.searchType !== 'supplier' && this._isFormControlValueSubmittable('base.categoryId') && { categoryId: this.form.get('base.categoryId').value }),
         ...(this._isFormControlValueSubmittable('filters.location.fias') && {
           deliveryArea: this.form.get('filters.location.fias').value,
@@ -129,7 +138,12 @@ export class SearchAreaComponent implements OnInit, OnDestroy {
         }),
       },
     };
-    this.submitClick.emit(data);
+
+    if (isChangedFilters) {
+      this.submitFiltersClick.emit(data);
+    } else {
+      this.submitBoxClick.emit(data);
+    }
   }
 
   private _isFormControlValueSubmittable(controlName: string): boolean {

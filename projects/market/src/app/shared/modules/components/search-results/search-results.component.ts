@@ -1,9 +1,12 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { CategoryModel, ProductOffersModel, SortModel } from '#shared/modules/common-services/models';
-import { ActivatedRoute } from '@angular/router';
-import { containParameters } from '#shared/utils';
 import { MAX_VALUE } from '#shared/modules/pipes/found.pipe';
 import { IPageInfo, VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { Location } from '@angular/common';
+import { SearchResultsService } from './search-results.service';
+import { Subscription } from 'rxjs';
+import { unsubscribeList } from '#shared/utils';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'market-search-results',
@@ -15,7 +18,10 @@ import { IPageInfo, VirtualScrollerComponent } from 'ngx-virtual-scroller';
     './search-results.component-576.scss',
   ],
 })
-export class SearchResultComponent {
+export class SearchResultComponent implements OnDestroy {
+  queryParams: any;
+  isRequestFulfilled: boolean;
+
   @Input() category: CategoryModel;
   @Input() productOffers: ProductOffersModel[];
   @Input() productsTotal: number;
@@ -23,26 +29,6 @@ export class SearchResultComponent {
   @Input() pageSize = 60;
   @Input() visibleSort = false;
   @Input() sort;
-  @Input()
-  set scrollCommand(command: string) {
-    if (command === 'scroll') {
-      const index = +this._activatedRoute.snapshot.queryParamMap.get('pos');
-      if (index) {
-        this._scrollToIndex(index, 200).then(() => setTimeout(() => {
-            this.unlocked = true;
-          }, 1200)
-        );
-      } else {
-        this.unlocked = true;
-        this.scrollChanged.emit(null);
-      }
-    }
-
-    if (command === 'stand') {
-      this.unlocked = true;
-      this.scrollChanged.emit(null);
-    }
-  }
 
   @Output() sortingChanged: EventEmitter<SortModel> = new EventEmitter();
   @Output() positionChanged: EventEmitter<{ pos: number; page: number }> = new EventEmitter();
@@ -50,9 +36,9 @@ export class SearchResultComponent {
 
   @ViewChild(VirtualScrollerComponent) private virtualScroller: VirtualScrollerComponent;
 
-  isRequestFulfilled: boolean;
-  queryParams: any;
   private unlocked = false;
+  private readonly _searchingResultsChangesSubscription: Subscription;
+  private readonly _scrollCommandChangesSubscription: Subscription;
 
   get showResult() {
     if (this.productOffers?.length) {
@@ -71,12 +57,49 @@ export class SearchResultComponent {
   }
 
   constructor(
+    private _location: Location,
     private _activatedRoute: ActivatedRoute,
+    private _searchResultsService: SearchResultsService,
   ) {
-    this._activatedRoute.queryParams.subscribe((queryParams) => {
-      this.isRequestFulfilled = containParameters(queryParams);
-      this.queryParams = queryParams;
-    });
+    this._scrollCommandChangesSubscription = this._searchResultsService.scrollCommandChanges$
+      .subscribe((scrollCommand) => {
+        if (scrollCommand === 'scroll') {
+          const index = +this._activatedRoute.snapshot.queryParamMap.get('pos');
+          if (index) {
+            this._scrollToIndex(index, 200).then(() => setTimeout(() => {
+                this.unlocked = true;
+              }, 1200)
+            );
+          } else {
+            this.unlocked = true;
+            this.scrollChanged.emit(null);
+          }
+        }
+
+        if (scrollCommand === 'stand') {
+          this.unlocked = true;
+          this.scrollChanged.emit(null);
+        }
+      });
+
+    this._searchingResultsChangesSubscription = this._searchResultsService.searchingResultsChanges$
+      .subscribe((isChange) => {
+        if (isChange) {
+          const currentUrl = this._location.path().split('?');
+
+          this.queryParams = currentUrl[1] ? currentUrl[1].split('&').reduce((prev, curr) => {
+            const param = curr.split('=');
+            prev[decodeURIComponent(param[0])] = decodeURIComponent(param[1]);
+            return prev;
+          }, {}) : {};
+
+          this.isRequestFulfilled = !!Object.keys(this.queryParams).length;
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    unsubscribeList([this._searchingResultsChangesSubscription, this._scrollCommandChangesSubscription]);
   }
 
   sortChange(sort: SortModel) {

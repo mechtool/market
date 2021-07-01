@@ -8,6 +8,7 @@ import {
   NotificationsService,
   SuggestionService
 } from '#shared/modules/common-services';
+import { queryParamsForProductsFrom } from '#shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -16,6 +17,8 @@ import {
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  firstCall = true;
+
   constructor(
     private _router: Router,
     private _suggestionService: SuggestionService,
@@ -37,25 +40,15 @@ export class MainComponent implements OnInit {
 
     const categoryId = filterGroup.filters?.categoryId || null;
     this._router.navigate(['./category', ...(categoryId ? [categoryId] : [])], {
-      queryParams: queryParamsFromNew(filterGroup),
+      queryParams: queryParamsForProductsFrom(filterGroup),
     });
   }
-}
 
-// TODO: перенести в общий блок (category.component.ts)
-export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
-  return {
-    q: groupQuery.query?.length < 3 ? undefined : groupQuery.query,
-    supplierId: groupQuery.filters?.supplierId,
-    tradeMark: groupQuery.filters?.tradeMark,
-    isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
-    isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
-    inStock: !groupQuery.filters?.inStock ? undefined : 'true',
-    withImages: !groupQuery.filters?.withImages ? undefined : 'true',
-    hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
-    features: !groupQuery.filters?.features?.length ? undefined : groupQuery.filters?.features,
-    priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
-    priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
-    subCategoryId: groupQuery.filters?.subCategoryId,
-  };
+  updateResultsByFilters(filterGroup: AllGroupQueryFiltersModel): void {
+    if (this.firstCall) {
+      this.firstCall = false;
+      return;
+    }
+    this.navigateToCategoryRoute(filterGroup);
+  }
 }

@@ -23,7 +23,7 @@ import {
   SupplierService,
   TradeOffersService,
 } from '#shared/modules/common-services';
-import { unsubscribeList } from '#shared/utils';
+import { queryParamsForSupplierShopFrom, unsubscribeList } from '#shared/utils';
 import { VerificationStatusEnum } from '#shared/modules/common-services/models/verification-status.model';
 
 const PAGE_SIZE = 30;
@@ -90,6 +90,11 @@ export class SupplierSingleComponent implements OnDestroy {
     return req
   }
 
+  updateResultsByFilters(filterGroup: AllGroupQueryFiltersModel) {
+    // todo Переписать логику по образу этого метода в CategoryComponent
+    this.navigateToSupplierRoute(filterGroup);
+  }
+
   navigateToSupplierRoute(filterGroup: AllGroupQueryFiltersModel) {
     const deliveryArea = filterGroup.filters?.deliveryArea || null;
     if (deliveryArea === null || deliveryArea !== this.deliveryAreaChange$.getValue()) {
@@ -104,7 +109,7 @@ export class SupplierSingleComponent implements OnDestroy {
 
     const navigationExtras = {
       queryParams: {
-        ...queryParamsFromNew(filterGroup),
+        ...queryParamsForSupplierShopFrom(filterGroup),
         ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page }),
       },
     };
@@ -163,7 +168,7 @@ export class SupplierSingleComponent implements OnDestroy {
         this.req = this._createReq(queryParamMap, this.supplier.inn)
 
       }),
-      switchMap(( ) => {
+      switchMap(() => {
         return this._tradeOffersService.search({ ...this.req, page: this.page });
       })
     ).subscribe((tradeOffers) => {
@@ -215,20 +220,4 @@ export class SupplierSingleComponent implements OnDestroy {
     };
   }
 
-}
-
-// TODO: перенести в общий блок (main.component.ts)
-export function queryParamsFromNew(groupQuery: AllGroupQueryFiltersModel): Params {
-  return {
-    q: groupQuery.query?.length < 3 ? undefined : groupQuery.query,
-    tradeMark: groupQuery.filters?.tradeMark,
-    isDelivery: groupQuery.filters?.isDelivery ? undefined : 'false',
-    isPickup: groupQuery.filters?.isPickup ? undefined : 'false',
-    inStock: !groupQuery.filters?.inStock ? undefined : 'true',
-    withImages: !groupQuery.filters?.withImages ? undefined : 'true',
-    hasDiscount: !groupQuery.filters?.hasDiscount ? undefined : 'true',
-    priceFrom: groupQuery.filters?.priceFrom === null ? undefined : groupQuery.filters.priceFrom,
-    priceTo: groupQuery.filters?.priceTo === null ? undefined : groupQuery.filters.priceTo,
-    subCategoryId: groupQuery.filters?.subCategoryId,
-  };
 }

@@ -23,7 +23,7 @@ import {
 import { SearchItemHistoryModel } from './models/search-item-history.model';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CategoryItemModel, SearchResultsTitleEnumModel } from './models';
-import { map, tap } from 'rxjs/operators';
+import { map, take, tap } from 'rxjs/operators';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { APP_CONFIG, AppConfigModel } from '../../../../config';
@@ -41,7 +41,8 @@ export class SearchAreaService {
   filterCollapsed = false;
   mobileFilterShowed = false;
   panelSearchFilterName = 'panel_search-filter';
-  submitChanges$: BehaviorSubject<boolean> = new BehaviorSubject(null);
+  submitBoxChanges$: BehaviorSubject<'box' | 'filters'> = new BehaviorSubject(null);
+  filterSetChanges$: BehaviorSubject<boolean> = new BehaviorSubject(null);
   form: FormGroup;
 
   version = Math.random();
@@ -71,8 +72,6 @@ export class SearchAreaService {
   isActiveResultsItemTypeHistorical = false;
 
   categorySelectedItem$: BehaviorSubject<CategoryItemModel> = new BehaviorSubject(null);
-
-  areAdditionalFiltersEnabled = true;
 
   get debounceTime(): number {
     return this._appConfig.debounceTime;
@@ -236,6 +235,16 @@ export class SearchAreaService {
 
   getSupplierCategoriesList(supplierId: string): Observable<CategoryModel[]> {
     return this._categoryService.getSupplierCategoriesList({ suppliers: [supplierId] });
+  }
+
+  changeCategorySelectedItem(categoryId: string) {
+    this._categoryService.getCategory(categoryId)
+      .pipe(
+        take(1)
+      )
+      .subscribe((category) => {
+        this.categorySelectedItem$.next(category);
+      })
   }
 
   private _hasSearchHistoryInBrowser(): boolean {
