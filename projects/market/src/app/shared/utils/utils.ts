@@ -8,7 +8,10 @@ export function hexFrom(text: string): string {
 
 export function waitFor(condition, callback): void {
   if(!condition()) {
-    window.setTimeout(waitFor.bind(null, condition, callback), 100);
+    const t = window.setTimeout(()=> {
+      window.clearTimeout(t);
+      waitFor(condition, callback);
+    }, 100);
   } else {
     callback();
   }

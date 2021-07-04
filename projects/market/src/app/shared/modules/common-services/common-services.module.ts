@@ -4,7 +4,7 @@ import { ApiService } from './api.service';
 import { BNetService } from './bnet.service';
 import { AuthService } from './auth.service';
 import { CacheService } from './cache.service';
-import { CategoryService } from './category.service';
+import { CategoryService } from '#shared/modules';
 import { NavigationService } from './navigation.service';
 import { BreadcrumbsService } from './breadcrumbs.service';
 import { ResponsiveService } from './responsive.service';
@@ -32,6 +32,7 @@ import { CartPromoterService } from './cart-promoter.service';
 import { BannerService } from './banner.service';
 import { PagesStaticService } from './pages-static.service';
 import { PriceListsService } from './price-lists.service';
+import {SwUpdateService} from '#shared/modules/common-services/sw-update.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -71,6 +72,7 @@ export class CommonServicesModule {
         ExternalProvidersService,
         OverlayService,
         PriceListsService,
+        SwUpdateService,
       ],
     };
   }
