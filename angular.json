@@ -45,6 +45,7 @@
             "inlineStyleLanguage": "scss",
             "aot": true,
             "assets": [
+              "projects/market/src/manifest.webmanifest",
               "projects/market/src/sitemap.xml",
               "projects/market/src/assets",
               {
@@ -73,7 +74,9 @@
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules"]
             },
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "projects/market/ngsw-config.json"
           },
           "configurations": {
             "dev": {

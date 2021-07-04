@@ -29,7 +29,8 @@ import { SetupServicesModule } from '#shared/modules/setup-services';
 import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-deps.module';
 import { environment } from '#environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FILTER_FORM_CONFIG, filterFormDefaultConfig } from "#shared/modules/components/search-area/config";
+import { FILTER_FORM_CONFIG, filterFormDefaultConfig } from '#shared/modules/components/search-area/config';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 registerLocaleData(ru);
 const antDesignIcons = AllIcons as {
@@ -56,6 +57,12 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     SharedDepsModule,
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:3000'
+    }),
   ],
   providers: [
     { provide: 'googleTagManagerId', useValue: environment.gtmID },
