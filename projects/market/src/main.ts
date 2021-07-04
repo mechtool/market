@@ -8,9 +8,8 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch((err) => {
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(() => {
     const spinnerEl = <HTMLDivElement>document.querySelector('.spinner');
     const maintenanceEl = <HTMLDivElement>document.querySelector('.maintenance');
     spinnerEl.style.display = 'none';

@@ -12,6 +12,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { unsubscribeList } from '#shared/utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import {SwUpdateService} from '#shared/modules/common-services/sw-update.service';
 
 @Component({
   selector: 'market-app',
@@ -31,9 +32,10 @@ export class AppComponent implements OnDestroy {
     private _cfr: ComponentFactoryResolver,
     private _userStateService: UserStateService,
     private _viewContainerRef: ViewContainerRef,
+    private _swUpdate : SwUpdateService,
     private _externalProvidersService: ExternalProvidersService,
   ) {
-    this._routeChangeSubscription = this._routeChanges$().subscribe((res) => {
+    this._routeChangeSubscription = this._routeChanges$().subscribe(() => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();
       this._externalProvidersService.hitYandexMetrika();
     });
@@ -46,6 +48,7 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy() {
     unsubscribeList([this._routeChangeSubscription]);
+    console.log('');
   }
 
   async loadFeedbackComponent() {
@@ -72,11 +75,11 @@ export class AppComponent implements OnDestroy {
 
   private _authedUserWindowCloseChanges$(): Observable<string> {
     return fromEvent(window, 'beforeunload').pipe(
-      filter((ev) => {
+      filter(() => {
         return !!this._userStateService.currentUser$.value?.userInfo.userId;
       }),
       tap((ev) => ev.preventDefault()),
-      map((res) => this._userStateService.currentUser$.value.userInfo.userId),
+      map(() => this._userStateService.currentUser$.value.userInfo.userId),
     );
   }
 }

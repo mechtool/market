@@ -10,9 +10,7 @@ export class DelayedPreloadingStrategy implements PreloadingStrategy {
   constructor() { }
 
   preload(route: Route, load: () => Observable<any>): Observable<any> {
-    const loadRoute = (delay: number) => (delay && !Number.isNaN(+delay))
-      ? timer(delay).pipe(flatMap(_ => load()))
-      : load();
+    const loadRoute = (delay: number) => (delay && !Number.isNaN(+delay)) ? timer(delay).pipe(flatMap(() => load())) : load();
     return route.data && route.data.preload
       ? loadRoute(route.data.delay)
       : of(null);
