@@ -58,7 +58,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
+      enabled: true,
       registrationStrategy: 'registerWhenStable:3000'
     }),
   ],
