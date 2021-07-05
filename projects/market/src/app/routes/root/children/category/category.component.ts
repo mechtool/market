@@ -457,7 +457,11 @@ export class CategoryComponent implements OnDestroy {
         if (Array.isArray(value[1])) {
           return value[1].map(val => `${value[0]}=${val}`).join('&')
         }
-        return `${value[0]}=${value[1]}`;
-      }).join('&');
+        if (value[1]) {
+          return `${value[0]}=${value[1]}`;
+        }
+      })
+      .filter(param => !!param)
+      .join('&');
   }
 }
