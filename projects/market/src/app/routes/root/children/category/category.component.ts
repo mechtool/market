@@ -46,6 +46,7 @@ export class CategoryComponent implements OnDestroy {
   pos: number;
   areAdditionalFiltersEnabled = false;
 
+  isLoading = false;
   showClearAllFilters = false;
 
   private request: any = null;
@@ -53,7 +54,6 @@ export class CategoryComponent implements OnDestroy {
   private utmTags = ['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'yclid'];
   private isUrlInitiallyLoaded = false;
   private unlocked = true;
-
 
   get isSearchUsed(): boolean {
     return this.query?.length > 2 || !!this.filters.subCategoryId || !!this.filters.categoryId || !!this.filters.supplierId || !!this.filters.tradeMark;
@@ -83,15 +83,6 @@ export class CategoryComponent implements OnDestroy {
     this.query = filterGroup.query;
     this.filters = filterGroup.filters;
 
-    if (!this.isSearchUsed) {
-      this.areAdditionalFiltersEnabled = false;
-      return;
-    }
-
-    this._spinnerService.show();
-
-    this.areAdditionalFiltersEnabled = true;
-
     const categoryId = filterGroup.filters?.categoryId || null;
     const page = this._activatedRoute.snapshot.queryParamMap.get('page');
     const pos = this._activatedRoute.snapshot.queryParamMap.get('pos');
@@ -116,6 +107,14 @@ export class CategoryComponent implements OnDestroy {
       return prev;
     }, {}) : {};
 
+    if (!this.isSearchUsed) {
+      this.areAdditionalFiltersEnabled = false;
+      return;
+    }
+
+    this.isLoading = true;
+    this.areAdditionalFiltersEnabled = true;
+
     this.request = {
       query: params['q'] || '',
       filters: this._getRequestParams(catId, params),
@@ -123,10 +122,6 @@ export class CategoryComponent implements OnDestroy {
       ...(this.sort && { sort: this.sort }),
       ...(this.page && { page: this.page }),
     };
-
-    this.productOffersList = null;
-    this.productOffers = [];
-    this.productsTotal = 0;
 
     this._productService.searchProductOffers(this.request)
       .subscribe((productOffers) => {
@@ -141,10 +136,10 @@ export class CategoryComponent implements OnDestroy {
         };
 
         this._searchResultsService.scrollCommandChanges$.next('stand');
-        this._spinnerService.hide();
+        this.isLoading = false;
 
       }, (err) => {
-        this._spinnerService.hide();
+        this.isLoading = false;
         this._notificationsService.error(err);
       });
   }
@@ -205,6 +200,7 @@ export class CategoryComponent implements OnDestroy {
   }
 
   changeSortingAndRefresh(sort: SortModel): void {
+    this.isLoading = true;
     this.sort = sort;
     const queryParamsListToRemove = [...this.utmTags, 'page', 'pos'];
     const currentUrl = this._location.path().split('?');
@@ -229,12 +225,6 @@ export class CategoryComponent implements OnDestroy {
       sort: this.sort,
     };
 
-    this._spinnerService.show();
-
-    this.productOffersList = null;
-    this.productOffers = [];
-    this.productsTotal = 0;
-
     this._productService.searchProductOffers(this.request)
       .subscribe((productOffers) => {
         this.productOffersList = productOffers;
@@ -247,10 +237,10 @@ export class CategoryComponent implements OnDestroy {
           values: this.productOffersList._embedded.summary?.features
         };
 
-        this._spinnerService.hide();
+        this.isLoading = false;
 
       }, (err) => {
-        this._spinnerService.hide();
+        this.isLoading = false;
         this._notificationsService.error(err);
       });
   }

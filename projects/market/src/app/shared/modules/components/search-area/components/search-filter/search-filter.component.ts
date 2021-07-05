@@ -252,6 +252,9 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
         this.form.get('subCategoryId').patchValue(el.dataset.id);
       } else if (formValue === id) {
         this.form.get('subCategoryId').patchValue('');
+
+        (this.form.controls.features as FormArray).clear();
+        (this.form.controls.featuresData as FormArray).clear();
       }
     }
   }
@@ -323,6 +326,12 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
       .valueChanges.pipe(
         distinctUntilChanged(),
         tap((categoryId) => catId = categoryId),
+        tap((categoryId) => {
+          if (!categoryId.length) {
+            (this.form.controls.features as FormArray).clear();
+            (this.form.controls.featuresData as FormArray).clear();
+          }
+        }),
         switchMap((categoryId) => {
           return this._searchAreaService.getSubCategoriesList(categoryId)
         })

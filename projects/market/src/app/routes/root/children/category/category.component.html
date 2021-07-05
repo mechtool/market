@@ -21,23 +21,26 @@
 
     <market-main-popular *ngIf="!isSearchUsed"></market-main-popular>
 
-    <market-search-results *ngIf="isSearchUsed"
-      [productOffers]="productOffers"
-      [productsTotal]="productsTotal"
-      [category]="category"
-      [page]="page"
-      [sort]="sort"
-      [pageSize]="pageSize"
-      [visibleSort]="productOffers?.length > 1"
-      (sortingChanged)="changeSortingAndRefresh($event)"
-      (positionChanged)="loadProducts($event)">
+    <div [ngClass]="{'isLoading': isLoading}">
+      <market-search-results *ngIf="isSearchUsed"
+                             [productOffers]="productOffers"
+                             [productsTotal]="productsTotal"
+                             [category]="category"
+                             [page]="page"
+                             [sort]="sort"
+                             [pageSize]="pageSize"
+                             [visibleSort]="productOffers?.length > 1"
+                             (sortingChanged)="changeSortingAndRefresh($event)"
+                             (positionChanged)="loadProducts($event)">
 
-      <ng-container ngProjectAs="tags-slot" *ngIf="showClearAllFilters">
-        <market-tag (click)="resetUrlFilters()">
-          Сбросить все фильтры
-        </market-tag>
-      </ng-container>
+        <ng-container ngProjectAs="tags-slot" *ngIf="showClearAllFilters">
+          <market-tag (click)="resetUrlFilters()">
+            Сбросить все фильтры
+          </market-tag>
+        </ng-container>
 
-    </market-search-results>
+      </market-search-results>
+    </div>
+
   </ng-container>
 </market-search-area>
