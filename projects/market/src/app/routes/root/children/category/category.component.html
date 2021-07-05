@@ -19,9 +19,9 @@
 
   <ng-container ngProjectAs="main-slot">
 
-    <market-main-popular *ngIf="!isSearchUsed"></market-main-popular>
-
     <div [ngClass]="{'isLoading': isLoading}">
+      <market-main-popular *ngIf="!isSearchUsed"></market-main-popular>
+
       <market-search-results *ngIf="isSearchUsed"
                              [productOffers]="productOffers"
                              [productsTotal]="productsTotal"

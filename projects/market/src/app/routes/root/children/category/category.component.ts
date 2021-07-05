@@ -80,22 +80,13 @@ export class CategoryComponent implements OnDestroy {
   }
 
   updateResultsByFilters(filterGroup: AllGroupQueryFiltersModel): void {
-    this.query = filterGroup.query;
-    this.filters = filterGroup.filters;
 
-    const categoryId = filterGroup.filters?.categoryId || null;
-    const page = this._activatedRoute.snapshot.queryParamMap.get('page');
-    const pos = this._activatedRoute.snapshot.queryParamMap.get('pos');
-    const sort = this._activatedRoute.snapshot.queryParamMap.get('sort');
     const queryParams = {
       ...queryParamsForProductsFrom(filterGroup),
-      ...(this._activatedRoute.snapshot.queryParamMap.has('page') && { page }),
-      ...(this._activatedRoute.snapshot.queryParamMap.has('pos') && { pos }),
-      ...(this._activatedRoute.snapshot.queryParamMap.has('sort') && { sort }),
+      ...(this.sort && { sort: this.sort }),
     }
 
-    this._initShowClearAllFilters();
-
+    const categoryId = filterGroup.filters?.categoryId || null;
     this._location.go(`/category${categoryId ? `/${categoryId}` : ''}`, this._paramsToString(queryParams));
     this._searchResultsService.searchingResultsChanges$.next(true);
 
@@ -107,8 +98,14 @@ export class CategoryComponent implements OnDestroy {
       return prev;
     }, {}) : {};
 
-    if (!this.isSearchUsed) {
+    const isSearchUsed = filterGroup.query?.length > 2 || !!filterGroup.filters.subCategoryId
+      || !!filterGroup.filters.categoryId || !!filterGroup.filters.supplierId || !!filterGroup.filters.tradeMark;
+
+    if (!isSearchUsed) {
       this.areAdditionalFiltersEnabled = false;
+      this.query = filterGroup.query;
+      this.filters = filterGroup.filters;
+      this._initShowClearAllFilters();
       return;
     }
 
@@ -134,6 +131,10 @@ export class CategoryComponent implements OnDestroy {
           featuresQueries: this.filters?.features,
           values: this.productOffersList._embedded.summary?.features
         };
+
+        this.query = filterGroup.query;
+        this.filters = filterGroup.filters;
+        this._initShowClearAllFilters();
 
         this._searchResultsService.scrollCommandChanges$.next('stand');
         this.isLoading = false;
