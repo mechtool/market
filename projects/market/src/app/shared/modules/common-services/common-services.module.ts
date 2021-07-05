@@ -4,7 +4,7 @@ import { ApiService } from './api.service';
 import { BNetService } from './bnet.service';
 import { AuthService } from './auth.service';
 import { CacheService } from './cache.service';
-import { CategoryService } from '#shared/modules';
+import { CategoryService} from './category.service';
 import { NavigationService } from './navigation.service';
 import { BreadcrumbsService } from './breadcrumbs.service';
 import { ResponsiveService } from './responsive.service';

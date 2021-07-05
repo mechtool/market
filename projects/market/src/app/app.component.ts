@@ -48,7 +48,6 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy() {
     unsubscribeList([this._routeChangeSubscription]);
-    console.log('');
   }
 
   async loadFeedbackComponent() {
