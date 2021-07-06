@@ -75,7 +75,6 @@
               "includePaths": ["node_modules"]
             },
             "scripts": [],
-            "serviceWorker": true,
             "ngswConfigPath": "projects/market/ngsw-config.json"
           },
           "configurations": {

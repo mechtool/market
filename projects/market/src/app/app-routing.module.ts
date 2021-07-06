@@ -13,62 +13,62 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        data: { preload: true, delay : 0},
+        data: { preload: false},
         loadChildren: () => import('./routes/root/children/product/product.module').then((m) => m.ProductModule),
       },
       {
         path: 'category',
-        data: { preload: true, delay: 3000 },
+        data: { preload: false },
         loadChildren: () => import('./routes/root/children/category/category.module').then((m) => m.CategoryModule),
       },
       {
         path: 'promo',
-        data: { preload: true, delay: 2500 },
+        data: { preload: false },
         loadChildren: () => import('./routes/root/children/promo/promo.module').then((m) => m.PromoModule),
       },
       {
         path: 'p',
-        data: { preload: true, delay: 2000 },
+        data: { preload: false},
         loadChildren: () => import('./shared/modules/components/pages/pages.module').then((m) => m.PagesModule),
       },
       {
         path: 'supplier',
-        data: { preload: true, delay: 1500},
+        data: { preload: false},
         loadChildren: () => import('./routes/root/children/supplier/supplier.module').then((m) => m.SupplierModule),
       },
       {
         path: 'cart',
-        data: { preload: true, delay: 1500 },
+        data: { preload: false },
         loadChildren: () => import('./routes/root/children/cart/cart.module').then((m) => m.CartModule),
       },
       {
         path: 'blank',
-        data: { preload: true, delay: 1500 },
+        data: { preload: false},
         loadChildren: () => import('./routes/root/children/blank/blank.module').then((m) => m.BlankModule),
       },
       {
         path: 'my',
-        data: { preload: true , delay: 2000 },
+        data: { preload: false },
         canActivate: [AuthGuard],
         children: [
           {
             path: 'orders',
-            data: { preload: true, delay: 1000 },
+            data: { preload: false},
             loadChildren: () => import('./routes/root/children/my/orders/orders.module').then((m) => m.OrdersModule),
           },
           {
             path: 'sales',
-            data: { preload: true, delay: 1000 },
+            data: { preload: false },
             loadChildren: () => import('./routes/root/children/my/sales/sales.module').then((m) => m.SalesModule),
           },
           {
             path: 'organizations',
-            data: { preload: true, delay: 1000 },
+            data: { preload: false },
             loadChildren: () => import('./routes/root/children/my/organizations/organizations.module').then((m) => m.OrganizationsModule),
           },
           {
             path: 'rfps',
-            data: { preload: true, delay : 1000 },
+            data: { preload: false },
             loadChildren: () => import('./routes/root/children/my/rfps/rfps.module').then((m) => m.RfpsModule),
           },
           {
@@ -80,7 +80,7 @@ const routes: Routes = [
       },
       {
         path: 'about',
-        data: { preload: true , delay: 2500 },
+        data: { preload: false },
         loadChildren: () => import('./routes/root/children/about/about.module').then((m) => m.AboutModule),
       },
       {
