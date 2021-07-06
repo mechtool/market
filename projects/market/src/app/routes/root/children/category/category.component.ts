@@ -54,9 +54,10 @@ export class CategoryComponent implements OnDestroy {
   private utmTags = ['utm_campaign', 'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'yclid'];
   private isUrlInitiallyLoaded = false;
   private unlocked = true;
+  private _isSearchUsed = false;
 
   get isSearchUsed(): boolean {
-    return this.query?.length > 2 || !!this.filters.subCategoryId || !!this.filters.categoryId || !!this.filters.supplierId || !!this.filters.tradeMark;
+    return this._isSearchUsed;
   }
 
   constructor(
@@ -81,6 +82,9 @@ export class CategoryComponent implements OnDestroy {
 
   updateResultsByFilters(filterGroup: AllGroupQueryFiltersModel): void {
 
+    this.query = filterGroup.query;
+    this.filters = filterGroup.filters;
+
     const queryParams = {
       ...queryParamsForProductsFrom(filterGroup),
       ...(this.sort && { sort: this.sort }),
@@ -103,8 +107,7 @@ export class CategoryComponent implements OnDestroy {
 
     if (!isSearchUsed) {
       this.areAdditionalFiltersEnabled = false;
-      this.query = filterGroup.query;
-      this.filters = filterGroup.filters;
+      this._initSearchUsed();
       this._initShowClearAllFilters();
       return;
     }
@@ -132,8 +135,7 @@ export class CategoryComponent implements OnDestroy {
           values: this.productOffersList._embedded.summary?.features
         };
 
-        this.query = filterGroup.query;
-        this.filters = filterGroup.filters;
+        this._initSearchUsed();
         this._initShowClearAllFilters();
 
         this._searchResultsService.scrollCommandChanges$.next('stand');
@@ -260,6 +262,7 @@ export class CategoryComponent implements OnDestroy {
         this._setAdditionalFiltersVisibility(paramMap, queryParamMap);
         this._setSorting(queryParamMap);
         this._initShowClearAllFilters();
+        this._initSearchUsed();
 
         this._searchResultsService.searchingResultsChanges$.next(true);
 
@@ -410,6 +413,10 @@ export class CategoryComponent implements OnDestroy {
 
   private _initShowClearAllFilters() {
     this.showClearAllFilters = !!this.category || !!Object.keys(queryParamsForProductsFrom({ filters: this.filters })).length;
+  }
+
+  private _initSearchUsed() {
+    this._isSearchUsed = this.query?.length > 2 || !!this.filters.subCategoryId || !!this.filters.categoryId || !!this.filters.supplierId || !!this.filters.tradeMark;
   }
 
   private _changeQueryParamsPagePosInUrl(page: number, pos: number) {
