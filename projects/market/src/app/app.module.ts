@@ -23,6 +23,7 @@ import {
   NavbarComponent,
   NavbarMobileNavComponent,
   NavbarNavComponent,
+  NewNavbarComponent,
   RegionQuestionModule
 } from './routes/root/components';
 import { SetupServicesModule } from '#shared/modules/setup-services';
@@ -30,6 +31,8 @@ import { SharedDepsModule } from '#shared/modules/modules/shared-deps/shared-dep
 import { environment } from '#environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FILTER_FORM_CONFIG, filterFormDefaultConfig } from '#shared/modules/components/search-area/config';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 registerLocaleData(ru);
@@ -39,7 +42,14 @@ const antDesignIcons = AllIcons as {
 const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesignIcons[key]);
 
 @NgModule({
-  declarations: [AppComponent, RootComponent, NavbarComponent, NavbarMobileNavComponent, NavbarNavComponent],
+  declarations: [
+    AppComponent,
+    RootComponent,
+    NavbarComponent,
+    NavbarMobileNavComponent,
+    NavbarNavComponent,
+    NewNavbarComponent
+  ],
   imports: [
     BrowserModule,
     RouterModule,
@@ -51,6 +61,8 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     OverlayModule,
     RecaptchaV3Module,
     NzIconModule,
+    NzMenuModule,
+    NzDropDownModule,
     BreadcrumbsModule,
     RegionQuestionModule,
     CookieAgreementModule,

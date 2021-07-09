@@ -99,10 +99,12 @@ export function userGoesToPromoRoute(page: AppPage, promoPage: PromoPage) {
 export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит раздел меню войти "Войти"', async() => {
-    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAnonymousMenuElement()), defaultTimeout);
+    await page.getAnonymousMenuElement().click();
   });
 
   it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
+    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
     await page.getLoginElement().click();
   });
 
@@ -128,10 +130,10 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит раздел меню "Мои заказы"', async() => {
+  it('Шаг 5: Пользователь видит меню для аутентифицированного пользователя', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
-    await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAuthenticatedMenuElement()), defaultTimeout);
   });
 
   it('Шаг 6: Пользователь видит страницу регистрации новой организации', async() => {
@@ -144,10 +146,12 @@ export function userWithoutOrganizationsAuths(page: AppPage, loginPage: LoginIts
 export function userWithoutOrganizationsDeAuths(page: AppPage) {
 
   it('Шаг 1: Пользователь видит раздел меню "Выход"', async() => {
-    await browser.wait(until.presenceOf(page.getLogoutElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAuthenticatedMenuElement()), defaultTimeout);
+    await page.getAuthenticatedMenuElement().click();
   });
 
   it('Шаг 2: Пользователь нажимает на раздел меню "Выход"', async() => {
+    await browser.wait(until.presenceOf(page.getLogoutElement()), defaultTimeout);
     await page.getLogoutElement().click();
   });
 
@@ -156,10 +160,12 @@ export function userWithoutOrganizationsDeAuths(page: AppPage) {
 export function userWithOrganizationsAuths(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит раздел меню "Войти"', async() => {
-    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAnonymousMenuElement()), defaultTimeout);
+    await page.getAnonymousMenuElement().click();
   });
 
   it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
+    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
     await page.getLoginElement().click();
   });
 
@@ -185,10 +191,10 @@ export function userWithOrganizationsAuths(page: AppPage, loginPage: LoginItsPag
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит раздел меню "Мои заказы"', async() => {
+  it('Шаг 5: Пользователь видит меню для аутентифицированного пользователя', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
-    await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAnonymousMenuElement()), defaultTimeout);
     // TODO: remove ESCAPE
     await browser.sleep(1e3);
     browser.actions().sendKeys(protractor.Key.ESCAPE).perform();

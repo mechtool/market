@@ -18,12 +18,20 @@ export class AppPage {
     return element(by.cssContainingText('button', 'Да, все верно'));
   }
 
+  getAnonymousMenuElement(): ElementFinder {
+    return element(by.id('anonymous_menu_id'));
+  }
+
+  getAuthenticatedMenuElement(): ElementFinder {
+    return element(by.id('authenticated_menu_id'));
+  }
+
   getLoginElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Войти'));
+    return element(by.id('login_menu_id'));
   }
 
   getMySalesElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Мои продажи'));
+    return element(by.cssContainingText('li', 'Мои продажи'));
   }
 
   getMyPriceListElement(): ElementFinder {

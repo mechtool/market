@@ -69,10 +69,12 @@ describe('Сценарий: Работа с разделом сайта "Мои 
 export function userAuthenticated(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит раздел меню "Войти"', async() => {
-    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAnonymousMenuElement()), defaultTimeout);
+    await page.getAnonymousMenuElement().click();
   });
 
   it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
+    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
     await page.getLoginElement().click();
   });
 
@@ -98,10 +100,10 @@ export function userAuthenticated(page: AppPage, loginPage: LoginItsPage) {
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит раздел меню "Мои продажи"', async() => {
+  it('Шаг 5: Пользователь видит меню для аутентифицированного пользователя', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
-    await browser.wait(until.presenceOf(page.getMySalesElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAuthenticatedMenuElement()), defaultTimeout);
   });
 
 }
@@ -127,6 +129,8 @@ export function authorizedUserExaminesMySales(page: AppPage) {
   });
 
   it('Шаг 5: Пользователь переходит в раздел сайта "Мои продажи"', async() => {
+    await browser.wait(until.presenceOf(page.getAuthenticatedMenuElement()), defaultTimeout);
+    await page.getAuthenticatedMenuElement().click();
     await browser.wait(until.presenceOf(page.getMySalesElement()), defaultTimeout);
     await page.getMySalesElement().click();
   });
@@ -384,6 +388,8 @@ export function authorizedUserGoesToSupplierStore(page: AppPage) {
 export function authorizedUserDeletesPriceList(page: AppPage) {
 
   it('Шаг 1: Пользователь возвращается в раздел сайта "Мои продажи"', async() => {
+    await browser.wait(until.presenceOf(page.getAuthenticatedMenuElement()), defaultTimeout);
+    await page.getAuthenticatedMenuElement().click();
     await browser.wait(until.presenceOf(page.getMySalesElement()), defaultTimeout);
     await page.getMySalesElement().click();
   });

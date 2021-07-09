@@ -20,13 +20,10 @@ export class NavbarMobileNavComponent {
   constructor(
     private _navService: NavigationService,
     private _cartService: CartService,
-  ) {}
+  ) {
+  }
 
   openMenu() {
     this._navService.openMenu();
-  }
-
-  goToRoot() {
-    this._navService.goTo();
   }
 }

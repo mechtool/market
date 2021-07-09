@@ -24,3 +24,4 @@ export * from './terms-of-sale';
 export * from './trade-offer-card';
 export * from './empty-organizations-info';
 export * from './spinner';
+export * from './address-search-form';

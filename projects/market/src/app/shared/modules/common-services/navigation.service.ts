@@ -262,10 +262,6 @@ export class NavigationService implements OnDestroy {
     }
   }
 
-  goTo(route: string[] = ['/']) {
-    this._router.navigate(route);
-  }
-
   navigateReloadable(commands: any[], extras?: NavigationExtras) {
     this._router.navigateByUrl('/blank', { skipLocationChange: true }).then(() => this._router.navigate(commands, extras));
   }

@@ -13,32 +13,10 @@
             <button nz-button nzType="link" nzSize="small" (click)="approveRegion(notification)">
               <span>Да, все верно</span>
             </button>
-           <button style="margin-left: 5px" nz-button nzType="link" nzSize="small" (click)="newRegion(addressSearchFormTemplateRef, notification)">
+           <button style="margin-left: 5px" nz-button nzType="link" nzSize="small" (click)="newRegion(notification)">
               <span>Выбрать другой</span>
             </button>
           </span>
     </div>
-  </ng-template>
-
-  <ng-template #addressSearchFormTemplateRef>
-    <form nz-form [formGroup]="form">
-      <nz-form-item>
-        <nz-form-control>
-          <input nz-input
-                 name="{{currentDate}}_city"
-                 type="text"
-                 id="city"
-                 placeholder="Введите название населенного пункта"
-                 formControlName="cityFiasCode"
-                 [nzAutocomplete]="auto_city">
-
-          <nz-autocomplete #auto_city>
-            <nz-auto-option *ngFor="let location of foundCities"
-                            [nzValue]="location.fias"
-                            [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </nz-form-item>
-    </form>
   </ng-template>
 </div>

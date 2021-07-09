@@ -1,17 +1,9 @@
-import {
-  Compiler,
-  Component,
-  ComponentFactoryResolver,
-  Injector,
-  OnDestroy,
-  ViewContainerRef
-} from '@angular/core';
-import { AuthService, ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
+import { Component, OnDestroy } from '@angular/core';
+import { ExternalProvidersService, UserService, UserStateService } from '#shared/modules/common-services';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, tap } from 'rxjs/operators';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { unsubscribeList } from '#shared/utils';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import {SwUpdateService} from '#shared/modules/common-services/sw-update.service';
 
 @Component({
@@ -24,14 +16,8 @@ export class AppComponent implements OnDestroy {
 
   constructor(
     private _router: Router,
-    private _injector: Injector,
-    private _compiler: Compiler,
-    private _authService: AuthService,
     private _userService: UserService,
-    private _modalService: NzModalService,
-    private _cfr: ComponentFactoryResolver,
     private _userStateService: UserStateService,
-    private _viewContainerRef: ViewContainerRef,
     private _externalProvidersService: ExternalProvidersService,
     private _swUpdate : SwUpdateService,
   ) {
@@ -49,24 +35,6 @@ export class AppComponent implements OnDestroy {
 
   ngOnDestroy() {
     unsubscribeList([this._routeChangeSubscription]);
-  }
-
-  async loadFeedbackComponent() {
-
-    const feedbackComponent = (await import(`./shared/modules/lazy/feedback/feedback.component`)).FeedbackComponent;
-    const modal = this._modalService.create({
-      nzContent: feedbackComponent,
-      nzViewContainerRef: this._viewContainerRef,
-      nzFooter: null,
-      nzWidth: 450,
-    });
-
-    const subscription = modal.componentInstance.feedbackEvent.subscribe((success) => {
-      if (success) {
-        modal.destroy(true);
-        subscription.unsubscribe();
-      }
-    });
   }
 
   private _routeChanges$(): Observable<NavigationEnd> {

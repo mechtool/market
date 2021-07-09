@@ -1,0 +1,136 @@
+<div class="navigation">
+
+  <div class="header__site">
+    <div class="location">
+      <a (click)="changeCity()">
+        <img src="./assets/img/svg/placeholder.svg" alt="Населенный пункт доставки"
+             title="Населенный пункт доставки">
+        <span>{{city ? city : 'Выберите населенный пункт доставки'}}</span>
+      </a>
+    </div>
+
+    <div class="info">
+      <span>Маркетплейс <strong>«1С»</strong> - площадка для мелкооптовых закупок организации</span>
+    </div>
+
+    <div class="feedback">
+      <a (click)="loadFeedbackComponent()">
+        <img src="./assets/img/svg/feedback.svg" alt="Обратная связь"
+             title="Обратная связь">
+        <span>Обратная связь</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <div class="icon__site">
+      <a [routerLink]="['/']">
+        <img src="./assets/img/svg/icon__site.svg" alt="1С:Торговая площадка" title="1С:Торговая площадка">
+      </a>
+    </div>
+
+    <div class="menu_left">
+      <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzMatchRouter>
+          <a [routerLink]="['/category']">Товары</a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a [routerLink]="['/supplier']">Поставщики</a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a [routerLink]="['/p/promo']">Акции</a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a [routerLink]="['/p/blog']">Блог</a>
+        </li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a [routerLink]="['/about']">О сервисе</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="menu_right">
+      <ul nz-menu nzMode="horizontal">
+
+        <li nz-submenu [nzTitle]="titleForAnonymousTpl" *ngIf="isAnonymous"></li>
+
+        <li nz-submenu [nzTitle]="titleForAuthenticatedTpl" *ngIf="isAuthenticated"></li>
+
+        <li nz-menu-item nzMatchRouter>
+          <a class="counter" [attr.data-counter]="productsInCart | marketNaviCounter" [routerLink]="['/cart']">
+            <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
+            Корзина
+          </a>
+        </li>
+
+        <ng-template #titleForAnonymousTpl>
+          <a id="anonymous_menu_id" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuForAnonymous" (nzVisibleChange)="showMenu($event)">
+            Войти
+            <ng-container *ngIf="menuIsDisplayed; then upTpl else downTpl"></ng-container>
+          </a>
+
+          <nz-dropdown-menu #menuForAnonymous="nzDropdownMenu">
+            <ul nz-menu>
+              <li id="login_menu_id" nz-menu-item (click)="login()">
+                Войти
+              </li>
+              <li id="register_menu_id" nz-menu-item (click)="register()">
+                Зарегистрироваться
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </ng-template>
+
+        <ng-template #titleForAuthenticatedTpl>
+          <a id="authenticated_menu_id" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuForAuthenticated" (nzVisibleChange)="showMenu($event)">
+            <img src="./assets/img/svg/icon__personal.svg" alt="" title="">
+            {{userInfo.login}}
+            <ng-container *ngIf="menuIsDisplayed; then upTpl else downTpl"></ng-container>
+          </a>
+
+          <nz-dropdown-menu #menuForAuthenticated="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item nzMatchRouter>
+                <a class="counter"
+                   [attr.data-counter]="participationRequests | marketNaviCounter"
+                   [routerLink]="['/my/organizations']">Мои организации</a>
+              </li>
+
+              <li nz-menu-item nzMatchRouter>
+                <a class="counter"
+                   [attr.data-counter]="newAccountDocuments | marketNaviCounter"
+                   [routerLink]="['/my/orders']">Мои заказы</a>
+              </li>
+
+              <li nz-menu-item nzMatchRouter>
+                <a [routerLink]="['/my/rfps']">Мои запросы</a>
+              </li>
+
+              <li nz-menu-item nzMatchRouter>
+                <a class="counter"
+                   [attr.data-counter]="newInboundOrderDocuments | marketNaviCounter"
+                   [routerLink]="['/my/sales']">Мои продажи</a>
+              </li>
+
+              <li nz-menu-item>
+                <a (click)="logout()">Выход</a>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </ng-template>
+
+        <ng-template #upTpl>
+          <i style="font-size: 10px" nz-icon nzType="up"></i>
+        </ng-template>
+
+        <ng-template #downTpl>
+          <i style="font-size: 10px" nz-icon nzType="down"></i>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</div>

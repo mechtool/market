@@ -1,17 +1,18 @@
 <div class="logo">
-  <div class="opener" (click)="goToRoot()">
-    <img class="opener_image" src="./assets/img/svg/icon__site.svg" alt="1С:Торговая площадка" title="1С:Торговая площадка" >
+  <div class="opener" [routerLink]="['/']">
+    <img class="opener_image" src="./assets/img/svg/icon__site.svg" alt="1С:Торговая площадка"
+         title="1С:Торговая площадка">
   </div>
-  <h1 class="label" (click)="goToRoot()">1С:Торговая площадка</h1>
+  <h1 class="label" [routerLink]="['/']">1С:Торговая площадка</h1>
 </div>
 <div class="nav-btns">
-    <a class="btn btn_bordered" [routerLink]="['/cart']">
-      <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
-      <span class="counter" *ngIf="getCartCounter$ | async as cartCounter">{{cartCounter | marketNaviCounter}}</span>
-    </a>
-    <a class="btn btn_bordered btn_mobile-menu" (click)="openMenu()">
-      <span></span>
-    </a>
+  <a class="btn btn_bordered" [routerLink]="['/cart']">
+    <img src="./assets/img/svg/icon__basket.svg" alt="Корзина" title="Корзина">
+    <span class="counter" *ngIf="getCartCounter$ | async as cartCounter">{{cartCounter | marketNaviCounter}}</span>
+  </a>
+  <a class="btn btn_bordered btn_mobile-menu" (click)="openMenu()">
+    <span></span>
+  </a>
 </div>
 
 

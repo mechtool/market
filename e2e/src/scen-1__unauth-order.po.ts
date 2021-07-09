@@ -63,11 +63,7 @@ export class AppPage {
   }
 
   getTradeOfferTitle(): ElementFinder {
-    return element(by.css('market-product-gallery h2.title'));
-  }
-
-  getTradeOfferFeaturesTitle(): ElementFinder {
-    return element(by.cssContainingText('h3', 'Особенности предложения'));
+    return element(by.css('.title-block .title'));
   }
 
   getCartBlock(): ElementFinder {
@@ -99,7 +95,7 @@ export class AppPage {
   }
 
   getCartElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Корзина'));
+    return element(by.cssContainingText('li', 'Корзина'));
   }
 
   getCartTitle(): ElementFinder {

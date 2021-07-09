@@ -1,0 +1,21 @@
+<div class="address-search-form">
+  <form nz-form [formGroup]="form">
+    <nz-form-item>
+      <nz-form-control>
+        <input nz-input
+               name="{{currentDate}}_city"
+               type="text"
+               id="city"
+               placeholder="Введите название населенного пункта"
+               formControlName="cityFiasCode"
+               [nzAutocomplete]="auto_city">
+
+        <nz-autocomplete #auto_city>
+          <nz-auto-option *ngFor="let location of foundCities"
+                          [nzValue]="location.fias"
+                          [nzLabel]="location.locality">{{ location.locality }}</nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>

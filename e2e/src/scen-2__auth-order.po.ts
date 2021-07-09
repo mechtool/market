@@ -67,11 +67,7 @@ export class AppPage {
   }
 
   getTradeOfferTitle(): ElementFinder {
-    return element(by.css('market-product-gallery h2.title'));
-  }
-
-  getTradeOfferFeaturesTitle(): ElementFinder {
-    return element(by.cssContainingText('h3', 'Особенности предложения'));
+    return element(by.css('.title-block .title'));
   }
 
   getCartBlock(): ElementFinder {
@@ -103,7 +99,7 @@ export class AppPage {
   }
 
   getCartElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Корзина'));
+    return element(by.cssContainingText('li', 'Корзина'));
   }
 
   getCartTitle(): ElementFinder {
@@ -170,12 +166,16 @@ export class AppPage {
     return element(by.css('market-order-sent'));
   }
 
-  getLoginElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Войти'));
+  getAnonymousMenuElement(): ElementFinder {
+    return element(by.id('anonymous_menu_id'));
   }
 
-  getMyOrdersElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Мои заказы'));
+  getAuthenticatedMenuElement(): ElementFinder {
+    return element(by.id('authenticated_menu_id'));
+  }
+
+  getLoginElement(): ElementFinder {
+    return element(by.id('login_menu_id'));
   }
 
   getErrors(): ElementArrayFinder {

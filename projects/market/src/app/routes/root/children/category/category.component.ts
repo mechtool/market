@@ -177,6 +177,7 @@ export class CategoryComponent implements OnDestroy {
     if (this.unlocked && params.page > this.productOffersList?.page.number && params.page < this.productOffersList?.page.totalPages) {
       this.unlocked = false;
       this.request = { ...this.request, page: params.page, sort: this.sort, size: this.pageSize };
+      this.isLoading = true;
 
       this._productService.searchProductOffers(this.request)
         .subscribe((productOffers) => {
@@ -184,9 +185,11 @@ export class CategoryComponent implements OnDestroy {
             this.productOffers.push(...this.productOffersList._embedded.productOffers);
             this.productsTotal = this.productOffersList.page.totalElements;
             this.unlocked = true;
+            this.isLoading = false;
           },
           (err) => {
             this.unlocked = true;
+            this.isLoading = false;
           },
         );
     }

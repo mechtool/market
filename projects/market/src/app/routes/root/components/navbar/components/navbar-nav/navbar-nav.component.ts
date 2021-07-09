@@ -100,13 +100,13 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
       this._setNavItemActive(navItem);
     }
     if (navItem.command) {
-      if (this._navService.screenWidthLessThan(1300)) {
+      if (this._navService.screenWidthLessThan(768)) {
         this._navService.closeMenu();
       }
       navItem.command();
     }
     if (navItem.routerLink) {
-      if (this._navService.screenWidthLessThan(1300)) {
+      if (this._navService.screenWidthLessThan(768)) {
         this._navService.closeMenu();
       }
       this._router.navigate(navItem.routerLink, {});
@@ -118,24 +118,6 @@ export class NavbarNavComponent implements OnInit, OnDestroy {
 
   closeMenu(): void {
     this._navService.closeMenu();
-  }
-
-  goToRoot() {
-    if (this._navService.screenWidthGreaterThan(992)) {
-      this._navService.goTo();
-    }
-  }
-
-  openMenuWidthLessThan1300() {
-    if (!this._navService.isMenuOpened && this._navService.screenWidthLessThan(1300)) {
-      this._navService.openMenu();
-    }
-  }
-
-  closeMenuWidthLessThan1300() {
-    if (this._navService.isMenuOpened && this._navService.screenWidthLessThan(1300)) {
-      this._navService.closeMenu();
-    }
   }
 
   private _setNavigation() {

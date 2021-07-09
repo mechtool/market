@@ -64,10 +64,12 @@ describe('Сценарий: Создание заказа от авторизо�
 export function userAuthenticated(page: AppPage, loginPage: LoginItsPage) {
 
   it('Шаг 1: Пользователь видит раздел меню "Войти"', async() => {
-    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAnonymousMenuElement()), defaultTimeout);
+    await page.getAnonymousMenuElement().click();
   });
 
   it('Шаг 2: Пользователь нажимает на раздел меню "Войти"', async() => {
+    await browser.wait(until.presenceOf(page.getLoginElement()), defaultTimeout);
     await page.getLoginElement().click();
   });
 
@@ -93,10 +95,10 @@ export function userAuthenticated(page: AppPage, loginPage: LoginItsPage) {
     await loginPage.getLoginButton().click();
   });
 
-  it('Шаг 5: Пользователь видит раздел меню "Мои заказы"', async() => {
+  it('Шаг 5: Пользователь видит меню для аутентифицированного пользователя', async() => {
     await browser.switchTo().window(windowHandles[0]);
     windowHandles = null;
-    await browser.wait(until.presenceOf(page.getMyOrdersElement()), defaultTimeout);
+    await browser.wait(until.presenceOf(page.getAuthenticatedMenuElement()), defaultTimeout);
   });
 
 }
@@ -198,9 +200,10 @@ export function authorizedUserFindsTradeOffer(page: AppPage) {
   });
 
   it('Шаг 4: Пользователь видит описание торгового предложения', async() => {
+    await browser.sleep(2e3);
     await browser.wait(until.presenceOf(page.getTradeOfferTitle()), defaultTimeout);
-    await browser.wait(until.presenceOf(page.getTradeOfferFeaturesTitle()), defaultTimeout);
     tradeOfferTitle = await page.getTradeOfferTitle().getText();
+    console.log(`\tВыбран товар с названием - ${tradeOfferTitle}`);
   });
 }
 

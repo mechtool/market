@@ -30,24 +30,28 @@ export class AppPage {
     return element(by.cssContainingText('h3', 'Особенности предложения'));
   }
 
+  getAnonymousMenuElement(): ElementFinder {
+    return element(by.id('anonymous_menu_id'));
+  }
+
+  getAuthenticatedMenuElement(): ElementFinder {
+    return element(by.id('authenticated_menu_id'));
+  }
+
   getLoginElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Войти'));
+    return element(by.id('login_menu_id'));
   }
 
   getRegisterElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Зарегистрироваться'));
+    return element(by.id('register_menu_id'));
   }
 
   getLogoutElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Выход'));
-  }
-
-  getMyOrdersElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Мои заказы'));
+    return element(by.cssContainingText('li', 'Выход'));
   }
 
   getPromoElement(): ElementFinder {
-    return element(by.cssContainingText('.item', 'Акции'));
+    return element(by.cssContainingText('li', 'Акции'));
   }
 
   getRegisterOrganizationElement(): ElementFinder {

@@ -1,7 +1,9 @@
 @media all and (max-width: 768px) {
-  :host {
-    display: flex;
+  .root {
     flex-direction: column;
-    position: relative;
+  }
+
+  .content {
+    padding: 0 10px 40px;
   }
 }

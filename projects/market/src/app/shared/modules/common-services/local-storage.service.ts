@@ -9,6 +9,7 @@ import {
   TypeOfSearch,
 } from '../common-services/models';
 import { hexFrom } from '#shared/utils';
+import { BehaviorSubject } from 'rxjs';
 
 const SEARCH_QUERIES_HISTORY_STORAGE_KEY = 'search_queries_history_list';
 const USER_LOCATION_STORAGE_KEY = 'user_location';
@@ -22,7 +23,10 @@ const HOME_REGION_SELECTED_STORAGE_KEY = 'home_region_selected';
 @Injectable()
 export class LocalStorageService {
 
+  userLocation$: BehaviorSubject<LocationModel> = new BehaviorSubject(null);
+
   constructor(@Inject(LOCAL_STORAGE) private _storage: StorageService) {
+    this.userLocation$.next(this.getUserLocation())
   }
 
   getSearchQueriesHistoryList(query?: string): SuggestionResponseModel {
@@ -131,6 +135,7 @@ export class LocalStorageService {
   }
 
   putUserLocation(location: LocationModel) {
+    this.userLocation$.next(location)
     this._storage.set(USER_LOCATION_STORAGE_KEY, location);
   }
 
@@ -139,6 +144,7 @@ export class LocalStorageService {
   }
 
   removeUserLocation(): void {
+    this.userLocation$.next(null)
     this._storage.remove(USER_LOCATION_STORAGE_KEY);
   }
 

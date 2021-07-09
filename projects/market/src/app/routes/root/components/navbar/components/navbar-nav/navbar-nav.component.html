@@ -1,8 +1,8 @@
 <div class="logo">
-  <div class="opener" (click)="goToRoot()">
+  <div class="opener">
     <img src="assets/img/svg/icon__site.svg" alt="1С:Торговая площадка" title="1С:Торговая площадка">
   </div>
-  <div class="label" (click)="goToRoot()">
+  <div class="label">
     <h1>1С:Торговая площадка</h1>
     <span class="user-login" *ngIf="userLogin">
       <img alt="{{userLogin}}" src="assets/img/svg/icon__personal.svg"> {{userLogin}}
@@ -16,7 +16,7 @@
   </button>
 </div>
 
-<div class="panel scrollbar" (mouseenter)="openMenuWidthLessThan1300()" (mouseleave)="closeMenuWidthLessThan1300()">
+<div class="panel scrollbar">
   <ul class="list">
     <li
       class="item"
@@ -37,7 +37,8 @@
             {{item.label}}
           </span>
 
-        <span [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
+        <span
+          [ngClass]="{'expandable': item.items?.length && !item.expanded, 'collapsible': item.items?.length && item.expanded}"></span>
       </a>
       <ul class="list list-secondary" *ngIf="item.items?.length && item.expanded">
         <li class="item sub_item" *ngFor="let subItem of item.items">

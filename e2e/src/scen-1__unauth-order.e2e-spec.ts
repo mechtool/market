@@ -157,9 +157,10 @@ export function unauthorizedUserFindsTradeOffer(page: AppPage) {
   });
 
   it('Шаг 4: Пользователь видит описание торгового предложения', async() => {
+    await browser.sleep(2e3);
     await browser.wait(until.presenceOf(page.getTradeOfferTitle()), defaultTimeout);
-    await browser.wait(until.presenceOf(page.getTradeOfferFeaturesTitle()), defaultTimeout);
     tradeOfferTitle = await page.getTradeOfferTitle().getText();
+    console.log(`\tВыбран товар с названием - ${tradeOfferTitle}`);
   });
 }
 
@@ -244,7 +245,7 @@ export function unauthorizedUserMakesOrder(page: AppPage) {
     const productsWithSameTitle = await page.getCartProductsTitles().filter(async(title) => {
       return await title.getText() === tradeOfferTitle;
     })
-    await expect(productsWithSameTitle.length).toBeGreaterThan(0)
+    await expect(productsWithSameTitle.length).toBeGreaterThan(0);
   });
 
   it('Шаг 3: Пользователь нажимает на кнопку оформления заказа', async() => {

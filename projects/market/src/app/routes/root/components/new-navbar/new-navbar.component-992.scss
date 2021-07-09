@@ -1,0 +1,16 @@
+@media all and (max-width: 992px) {
+  .navigation {
+    .header__site {
+      height: 50px;
+      padding: 15px;
+    }
+
+    .navbar {
+      margin-top: 50px;
+    }
+  }
+
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+    margin: 0 13px;
+  }
+}
