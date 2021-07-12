@@ -69,8 +69,8 @@ export class SalesComponent implements OnDestroy {
       .subscribe((priceLists) => {
         this._spinnerService.hide();
         this.priceLists = priceLists;
-        this.priceLists?.sort((one, two) => one.name < two.name ? -1 : (one.name > two.name ? 1 : 0))
-        if (priceLists?.some((pl) => pl.feedInfo.status === PriceListStatusEnum.IN_PROGRESS)) {
+        this.priceLists?.sort((one, two) => one.name < two.name ? -1 : (one.name > two.name ? 1 : 0));
+        if (priceLists?.some((pl) => (pl.feedInfo.status === PriceListStatusEnum.IN_PROGRESS || pl.feedInfo.status === PriceListStatusEnum.InProgress))) {
           this.listenPriceListFeeds();
         }
       }, (err) => {
@@ -133,7 +133,7 @@ export class SalesComponent implements OnDestroy {
       ).subscribe((priceLists) => {
         this.priceLists = priceLists;
         this.priceLists?.sort((one, two) => one.name < two.name ? -1 : (one.name > two.name ? 1 : 0))
-        if (priceLists?.every((pl) => pl.feedInfo.status !== PriceListStatusEnum.IN_PROGRESS)) {
+        if (priceLists?.every((pl) => (pl.feedInfo.status !== PriceListStatusEnum.IN_PROGRESS && pl.feedInfo.status !== PriceListStatusEnum.InProgress))) {
           this.feedsSubscription?.unsubscribe();
         }
       }, () => {

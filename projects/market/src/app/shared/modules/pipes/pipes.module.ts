@@ -25,6 +25,7 @@ import { YesNoPipe } from './yes-no.pipe';
 import { DocumentStatusPipe } from './document-status.pipe';
 import { DocumentStatusMessagePipe } from './document-status-message.pipe';
 import { PriceListStatusPipe } from './price-list-status.pipe';
+import { PriceListStatusMessagePipe } from './price-list-status-message.pipe';
 import { LogPipe } from './log.pipe';
 import { MinQuantityPipe } from './min-quantity.pipe';
 import { SlicerPipe } from './slicer.pipe';
@@ -56,6 +57,7 @@ import { SlicerPipe } from './slicer.pipe';
     CastControlPipe,
     YesNoPipe,
     PriceListStatusPipe,
+    PriceListStatusMessagePipe,
     LogPipe,
     MinQuantityPipe,
     SlicerPipe,
@@ -86,6 +88,7 @@ import { SlicerPipe } from './slicer.pipe';
     CastControlPipe,
     YesNoPipe,
     PriceListStatusPipe,
+    PriceListStatusMessagePipe,
     LogPipe,
     MinQuantityPipe,
     SlicerPipe,

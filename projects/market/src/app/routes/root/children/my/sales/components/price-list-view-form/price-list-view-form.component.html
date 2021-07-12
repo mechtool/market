@@ -73,7 +73,13 @@
   <div class="info_group">
     <span class="info_group__label">Состояние загрузки прайс-листа</span>
     <span
-      class="info_group__value">{{priceList.feedInfo.status | priceListStatus : priceList.feedInfo.lastCompletionTime}}</span>
+      class="info_group__value">
+      <img *ngIf="(priceList.feedInfo.status !== 'IN_PROGRESS' && priceList.feedInfo.status !== 'InProgress' && priceList.feedInfo.status !== 'COMPLETED' && priceList.feedInfo.status !== 'Completed')"
+           class="img_warning"
+           src="./assets/img/svg/warning.svg"
+           alt="">
+      {{priceList.feedInfo.status | priceListStatus : priceList.feedInfo.lastCompletionTime}}
+    </span>
   </div>
 </div>
 

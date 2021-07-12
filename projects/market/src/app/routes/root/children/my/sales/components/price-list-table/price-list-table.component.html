@@ -40,9 +40,12 @@
            (click)="openPriceList(priceList)">
           <span class="status"
                 nz-tooltip
-                [nzTooltipTitle]="priceList.feedInfo.status === 'IN_PROGRESS'
-                ? 'Запущен процесс обновления торговых предложений. Операции с прайс-листом станут доступны после завершения процесса.' : ''">
-            <i *ngIf="priceList.feedInfo.status === 'IN_PROGRESS'" nz-icon nzType="sync" nzSpin></i>
+                [nzTooltipTitle]="priceList.feedInfo.status | priceListStatusMessage">
+            <i *ngIf="(priceList.feedInfo.status === 'IN_PROGRESS' || priceList.feedInfo.status === 'InProgress')" nz-icon nzType="sync" nzSpin></i>
+            <img *ngIf="(priceList.feedInfo.status !== 'IN_PROGRESS' && priceList.feedInfo.status !== 'InProgress' && priceList.feedInfo.status !== 'COMPLETED' && priceList.feedInfo.status !== 'Completed')"
+                 class="img_warning"
+                 src="./assets/img/svg/warning.svg"
+                 alt="">
             <span>
               {{priceList.feedInfo.status | priceListStatus : priceList.feedInfo.lastCompletionTime}}
             </span>
@@ -62,12 +65,12 @@
 
       <div class="table_cell cell_action" data-title="Действие:"
            nz-tooltip
-           [nzTooltipTitle]="priceList.feedInfo.status === 'IN_PROGRESS'
+           [nzTooltipTitle]="(priceList.feedInfo.status === 'IN_PROGRESS' || priceList.feedInfo.status === 'InProgress')
                 ? 'Запущен процесс обновления торговых предложений. Операции с прайс-листом станут доступны после завершения процесса.'
                 : ''">
         <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
                 (click)="startFeed(priceList)"
-                [disabled]="priceList.feedInfo.status === 'IN_PROGRESS'"
+                [disabled]="(priceList.feedInfo.status === 'IN_PROGRESS' || priceList.feedInfo.status === 'InProgress')"
                 nz-tooltip
                 nzTooltipTitle="Запустить процесс обновления прайс-листа">
           <i nz-icon nzType="file-sync" nzTheme="outline"></i>
@@ -76,7 +79,7 @@
 
         <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
                 [routerLink]="['/my/sales/edit/' + priceList.externalCode]"
-                [disabled]="priceList.feedInfo.status === 'IN_PROGRESS'"
+                [disabled]="(priceList.feedInfo.status === 'IN_PROGRESS' || priceList.feedInfo.status === 'InProgress')"
                 style="margin-left: 5px"
                 nz-tooltip
                 nzTooltipTitle="Редактировать прайс-лист">
@@ -88,7 +91,7 @@
                 nzPopconfirmTitle="Вы действительно хотите удалить?"
                 [nzIcon]="withoutIconTpl"
                 (nzOnConfirm)="delete(priceList)"
-                [disabled]="priceList.feedInfo.status === 'IN_PROGRESS'"
+                [disabled]="(priceList.feedInfo.status === 'IN_PROGRESS' || priceList.feedInfo.status === 'InProgress')"
                 style="margin-left: 5px;"
                 nz-tooltip
                 nzTooltipTitle="Удалить прайс-лист">
