@@ -12,6 +12,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { unsubscribeList } from '#shared/utils';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import {SwUpdateService} from '#shared/modules/common-services/sw-update.service';
 
 @Component({
   selector: 'market-app',
@@ -32,6 +33,7 @@ export class AppComponent implements OnDestroy {
     private _userStateService: UserStateService,
     private _viewContainerRef: ViewContainerRef,
     private _externalProvidersService: ExternalProvidersService,
+    private _swUpdate : SwUpdateService,
   ) {
     this._routeChangeSubscription = this._routeChanges$().subscribe(() => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();

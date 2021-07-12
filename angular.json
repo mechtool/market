@@ -33,7 +33,6 @@
             "commonChunk": true,
             "extractLicenses": true,
             "namedChunks": true,
-            "sourceMap": true,
             "optimization": false,
             "outputHashing": "all",
             "outputPath": "dist/market/stage",
@@ -45,6 +44,7 @@
             "inlineStyleLanguage": "scss",
             "aot": true,
             "assets": [
+              "projects/market/src/market.ngsw.js",
               "projects/market/src/manifest.webmanifest",
               "projects/market/src/sitemap.xml",
               "projects/market/src/assets",
@@ -75,10 +75,15 @@
               "includePaths": ["node_modules"]
             },
             "scripts": [],
-            "ngswConfigPath": "projects/market/ngsw-config.json"
+            "ngswConfigPath": "projects/market/ngsw-config.json",
+            "serviceWorker": true
           },
           "configurations": {
             "dev": {
+              "sourceMap": true,
+              "serviceWorker": false,
+              "optimization": false,
+              "buildOptimizer": false,
               "fileReplacements": [
                 {
                   "replace": "projects/market/src/environments/environment.ts",
@@ -94,6 +99,17 @@
                   "with": "projects/market/src/environments/environment.stage.ts"
                 }
               ],
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "serviceWorker" : true,
+              "sourceMap": false,
+              "buildOptimizer": true,
               "outputPath": "dist/market/stage"
             },
             "production": {
@@ -111,6 +127,9 @@
                 },
                 "fonts": true
               },
+              "serviceWorker" :  true,
+              "sourceMap": false,
+              "buildOptimizer": true,
               "outputPath": "dist/market/prod"
             },
             "remote": {

@@ -32,6 +32,7 @@ import { CartPromoterService } from './cart-promoter.service';
 import { BannerService } from './banner.service';
 import { PagesStaticService } from './pages-static.service';
 import { PriceListsService } from './price-lists.service';
+import {SwUpdateService} from '#shared/modules/common-services/sw-update.service';
 
 @NgModule({
   imports: [CommonModule, NzMessageModule, NzModalModule],
@@ -71,6 +72,7 @@ export class CommonServicesModule {
         ExternalProvidersService,
         OverlayService,
         PriceListsService,
+        SwUpdateService,
       ],
     };
   }

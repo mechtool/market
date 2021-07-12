@@ -57,6 +57,10 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     SharedDepsModule,
     SetupServicesModule.forRoot(),
     CommonServicesModule.forRoot(),
+    ServiceWorkerModule.register('market.ngsw.js', {
+      enabled: environment.serviceWorker,
+      registrationStrategy: 'registerWhenStable:3000'
+    }),
   ],
   providers: [
     { provide: 'googleTagManagerId', useValue: environment.gtmID },

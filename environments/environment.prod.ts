@@ -6,4 +6,5 @@ export const environment = {
   recaptchaV3SiteKey: '6Ld7utQZAAAAAFFHDpsosgD-fw3jA0xwD_f25wZ1',
   metrikaID: 67089850,
   production: true,
+  serviceWorker : true
 };

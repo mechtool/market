@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "scripts": {
     "ng": "ng",
-    "build:p": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production --sourceMap=true & lite-server",
+    "build:p": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production & lite-server",
     "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=es5",
     "start:remote": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=remote",
     "build:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=dev",
