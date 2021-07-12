@@ -35,6 +35,7 @@ export class AppComponent implements OnDestroy {
     private _externalProvidersService: ExternalProvidersService,
     private _swUpdate : SwUpdateService,
   ) {
+    this._swUpdate.setUp();
     this._routeChangeSubscription = this._routeChanges$().subscribe(() => {
       this._externalProvidersService.resetYandexTranslatePopupPosition();
       this._externalProvidersService.hitYandexMetrika();
