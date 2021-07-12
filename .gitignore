@@ -49,6 +49,5 @@ Thumbs.db
 /proxy.conf.js
 
 .prettierrc.js
-.gitignore
 bs-config.json
 projects/market/.idea/
