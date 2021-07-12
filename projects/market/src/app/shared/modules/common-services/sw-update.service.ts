@@ -4,7 +4,7 @@ import {SwUpdate} from '@angular/service-worker';
 
 @Injectable()
 export class SwUpdateService implements OnDestroy{
-  public subs = [];
+  private subs = [];
   constructor(
     @Inject(PLATFORM_ID) private _platformId: Object,
     public swUpdate : SwUpdate) {
