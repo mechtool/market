@@ -23,7 +23,7 @@ export class ProductService {
   searchProductOffers(groupQuery: AllGroupQueryFiltersModel, cacheable = true): Observable<ProductOffersListResponseModel> {
     const fias = this._fias();
     const searchQuery = {
-      q: groupQuery.query,
+      q: groupQuery.query?.length > 100 ? groupQuery.query.slice(0, 100) : groupQuery.query,
       categoryId: groupQuery.filters?.categoryId,
       priceFrom: groupQuery.filters?.priceFrom ? groupQuery.filters.priceFrom * 100 : undefined,
       priceTo: groupQuery.filters?.priceTo ? groupQuery.filters.priceTo * 100 : undefined,
