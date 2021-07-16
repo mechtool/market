@@ -30,10 +30,10 @@ export class PriceListTableComponent {
     this._priceListsService.getPriceListFeed(priceList.externalCode)
       .pipe(
         switchMap((feed) => {
-          if (feed.status === PriceListStatusEnum.IN_PROGRESS || feed.status === PriceListStatusEnum.InProgress) {
+          if (feed.lastCompletionStatus === PriceListStatusEnum.InProgress) {
             this.priceLists?.forEach((pl) => {
               if (pl.id === priceList.id) {
-                pl.feedInfo.status = PriceListStatusEnum.InProgress;
+                pl.feedInfo.lastCompletionStatus = PriceListStatusEnum.InProgress;
               }
             });
             return throwError(new Error('Прайс-лист поставлен в очередь на обновление торговых предложений.'));
@@ -58,10 +58,10 @@ export class PriceListTableComponent {
     this._priceListsService.getPriceListFeed(priceList.externalCode)
       .pipe(
         switchMap((feed) => {
-          if (feed.status === PriceListStatusEnum.IN_PROGRESS || feed.status === PriceListStatusEnum.InProgress) {
+          if (feed.lastCompletionStatus === PriceListStatusEnum.InProgress) {
             this.priceLists?.forEach((pl) => {
               if (pl.id === priceList.id) {
-                pl.feedInfo.status = PriceListStatusEnum.InProgress;
+                pl.feedInfo.lastCompletionStatus = PriceListStatusEnum.InProgress;
               }
             });
             return throwError(new Error('Ранее был запущен автоматический процесс обновления торговых предложений. Удаление прайс-листа невозможно, попробуйте позже.'));

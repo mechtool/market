@@ -47,7 +47,8 @@ export class PriceListResponseModel {
     priceListExternalId: string;
     priceListExternalUrl: string;
     contactsEmail: string;
-    status: PriceListStatusEnum;
+    lastCompletionStatus?: PriceListStatusEnum;
+    failMessage?: string;
     lastCompletionTime: string;
   };
 }

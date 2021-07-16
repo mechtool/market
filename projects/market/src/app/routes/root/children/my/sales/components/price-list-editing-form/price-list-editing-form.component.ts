@@ -44,7 +44,7 @@ export class PriceListEditingFormComponent {
         })
       )
       .subscribe((priceList) => {
-        if (priceList.feedInfo.status === PriceListStatusEnum.IN_PROGRESS || priceList.feedInfo.status === PriceListStatusEnum.InProgress) {
+        if (priceList.feedInfo.lastCompletionStatus === PriceListStatusEnum.InProgress) {
           this._notificationsService.info(`Ранее был запущен процесс автоматического обновления торговых предложений. Редактирование прайс-листа станет доступно после завершения процесса.`);
           this._router.navigateByUrl(`/my/sales`);
         } else {
@@ -185,7 +185,7 @@ export class PriceListEditingFormComponent {
     this._priceListsService.getPriceListFeed(this.form.controls.externalCode.value)
       .pipe(
         switchMap((feed) => {
-          if (feed.status === PriceListStatusEnum.IN_PROGRESS || feed.status === PriceListStatusEnum.InProgress) {
+          if (feed.lastCompletionStatus === PriceListStatusEnum.InProgress) {
             return throwError(new Error('Ранее был запущен процесс автоматического обновления торговых предложений. Сохраненить изменения невозможно, попробуйте позже.'));
           }
           return this._priceListsService.updatePriceList(this.form.controls.priceListId.value, this._formToPriceList())

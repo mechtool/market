@@ -26,18 +26,27 @@
     }
 
     .cell_status {
-      width: 185px;
+      width: 200px;
+      max-width: 200px;
+
+      .status {
+        display: block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        align-items: center;
+
+        img {
+          width: 25px;
+          height: 25px;
+          padding-bottom: 4px;
+        }
+      }
     }
 
     .cell_action {
       width: 120px;
     }
-  }
-
-  .img_warning {
-    width: 25px;
-    height: 25px;
-    padding-bottom: 4px;
   }
 }
 
