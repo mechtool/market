@@ -16,6 +16,7 @@ import { throwError } from 'rxjs';
   ],
 })
 export class PriceListTableComponent {
+  feedStarted = false
   @Input() priceLists: PriceListResponseModel[] = [];
   @Output() startFeedChange: EventEmitter<boolean> = new EventEmitter();
 
@@ -27,6 +28,10 @@ export class PriceListTableComponent {
   }
 
   startFeed(priceList: PriceListResponseModel) {
+    if (this.feedStarted) {
+      return;
+    }
+    this.feedStarted = true;
     this._priceListsService.getPriceListFeed(priceList.externalCode)
       .pipe(
         switchMap((feed) => {
@@ -44,7 +49,9 @@ export class PriceListTableComponent {
       .subscribe(() => {
         this.startFeedChange.emit(true);
         this._notificationsService.info(`Прайс-лист поставлен в очередь на обновление торговых предложений.`)
+        this.feedStarted = false;
       }, (err) => {
+        this.feedStarted = false;
         if (err.message.includes('обновление')) {
           this.startFeedChange.emit(true);
           this._notificationsService.info(err.message);

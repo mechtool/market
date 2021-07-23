@@ -25,6 +25,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 })
 export class PriceListCreatingFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
+  feedStarted = false
   currentDate = Date.now();
   availableOrganizations$: BehaviorSubject<UserOrganizationModel[]>;
   private dateActualToSubscription: Subscription;
@@ -179,6 +180,11 @@ export class PriceListCreatingFormComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    if (this.feedStarted) {
+      return;
+    }
+    this.feedStarted = true;
+
     this._priceListsService.placePriceList(this._formToPriceList())
       .pipe(
         switchMap(() => {
@@ -204,8 +210,11 @@ export class PriceListCreatingFormComponent implements OnInit, OnDestroy {
             margin: '10px auto 0 auto'
           },
         })
-        this._router.navigateByUrl(`/my/sales`);
+        this._router.navigateByUrl(`/my/sales`).then(() => {
+          this.feedStarted = false;
+        });
       }, (err) => {
+        this.feedStarted = false;
         this._notificationsService.error(err);
       });
   }

@@ -20,6 +20,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 })
 export class PriceListEditingFormComponent {
   form: FormGroup;
+  feedStarted = false
   currentDate = Date.now();
   availableOrganizations$: BehaviorSubject<UserOrganizationModel[]>;
   private dateActualToSubscription: Subscription;
@@ -182,6 +183,11 @@ export class PriceListEditingFormComponent {
   }
 
   save() {
+    if (this.feedStarted) {
+      return;
+    }
+    this.feedStarted = true;
+
     this._priceListsService.getPriceListFeed(this.form.controls.externalCode.value)
       .pipe(
         switchMap((feed) => {
@@ -213,8 +219,11 @@ export class PriceListEditingFormComponent {
             margin: '10px auto 0 auto'
           },
         });
-        this._router.navigateByUrl(`/my/sales`);
+        this._router.navigateByUrl(`/my/sales`).then(() => {
+          this.feedStarted = false;
+        });
       }, (err) => {
+        this.feedStarted = false;
         if (err.message.includes('обновления')) {
           this._notificationsService.info(err.message);
         } else {

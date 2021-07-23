@@ -69,7 +69,7 @@
                 : ''">
         <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
                 (click)="startFeed(priceList)"
-                [disabled]="priceList.feedInfo.lastCompletionStatus === 'InProgress'"
+                [disabled]="priceList.feedInfo.lastCompletionStatus === 'InProgress' || feedStarted"
                 nz-tooltip
                 nzTooltipTitle="Запустить процесс обновления прайс-листа">
           <i nz-icon nzType="file-sync" nzTheme="outline"></i>
@@ -78,7 +78,7 @@
 
         <button nz-button nzType="dashed" nzShape="circle" nzSize="small"
                 [routerLink]="['/my/sales/edit/' + priceList.externalCode]"
-                [disabled]="priceList.feedInfo.lastCompletionStatus === 'InProgress'"
+                [disabled]="priceList.feedInfo.lastCompletionStatus === 'InProgress' || feedStarted"
                 style="margin-left: 5px"
                 nz-tooltip
                 nzTooltipTitle="Редактировать прайс-лист">
@@ -90,7 +90,7 @@
                 nzPopconfirmTitle="Вы действительно хотите удалить?"
                 [nzIcon]="withoutIconTpl"
                 (nzOnConfirm)="delete(priceList)"
-                [disabled]="priceList.feedInfo.lastCompletionStatus === 'InProgress'"
+                [disabled]="priceList.feedInfo.lastCompletionStatus === 'InProgress' || feedStarted"
                 style="margin-left: 5px;"
                 nz-tooltip
                 nzTooltipTitle="Удалить прайс-лист">
