@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "scripts": {
     "ng": "ng",
-    "build:p": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production & lite-server",
+    "build:p": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=stage --sourceMap=true & lite-server",
     "start": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=es5",
     "start:remote": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=remote",
     "build:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=dev",
@@ -43,6 +43,7 @@
     "classlist.js": "^1.1.20150312",
     "css-vars-ponyfill": "^2.4.3",
     "file-saver": "^2.0.5",
+    "lite-server": "^2.6.1",
     "ng-lazyload-image": "^9.1.0",
     "ng-recaptcha": "^7.0.1",
     "ng-zorro-antd": "^11.4.2",
