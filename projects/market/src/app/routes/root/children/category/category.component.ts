@@ -116,7 +116,7 @@ export class CategoryComponent implements OnDestroy {
     this.areAdditionalFiltersEnabled = true;
 
     this.request = {
-      query: params['q'] || '',
+      query: params['q']?.length > 2 ? params['q'] : '',
       filters: this._getRequestParams(catId, params),
       size: this.pageSize,
       ...(this.sort && { sort: this.sort }),
@@ -225,7 +225,7 @@ export class CategoryComponent implements OnDestroy {
     this._location.go(`/category${categoryId ? `/${categoryId}` : ''}`, this._paramsToString(params));
 
     this.request = {
-      query: params['q'] || '',
+      query: params['q']?.length > 2 ? params['q'] : '',
       filters: this._getRequestParams(categoryId, params),
       size: this.pageSize,
       sort: this.sort,
@@ -274,7 +274,7 @@ export class CategoryComponent implements OnDestroy {
         this.pos = +queryParamMap.get('pos') || 0;
 
         this.request = {
-          query: queryParamMap.get('q') || '',
+          query: queryParamMap.get('q')?.length > 2 ? queryParamMap.get('q') : '',
           filters: this._filtersFrom(paramMap, queryParamMap),
           size: this.pageSize,
           ...(this.sort && { sort: this.sort }),
