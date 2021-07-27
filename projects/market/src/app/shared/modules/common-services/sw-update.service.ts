@@ -18,10 +18,11 @@ export class SwUpdateService implements OnDestroy {
 
   setUp() {
     if (isPlatformBrowser(this._platformId) && this.swUpdate.isEnabled) {
+      const d = true;
       this.caches = this.doc?.defaultView?.caches;
       this.subs.push(this.swUpdate.available.subscribe(() => {
         this._deleteCaches().then(()=> {
-            this.swUpdate.activateUpdate();
+            d && this.swUpdate.activateUpdate();
         })
       }));
       const t = setTimeout(() => {
