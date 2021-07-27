@@ -4,7 +4,7 @@ import {SwUpdate} from '@angular/service-worker';
 
 @Injectable()
 export class SwUpdateService implements OnDestroy {
-  private caches;
+  private win;
   private subs = [];
 
   constructor(
@@ -18,26 +18,13 @@ export class SwUpdateService implements OnDestroy {
 
   setUp() {
     if (isPlatformBrowser(this._platformId) && this.swUpdate.isEnabled) {
-      this.caches = this.doc?.defaultView?.caches;
-      this.subs.push(this.swUpdate.available.subscribe(() => {
-        this._deleteCaches().then(()=> {
-            this.swUpdate.activateUpdate();
-        })
-      }));
-      const t = setTimeout(() => {
-        this.swUpdate.checkForUpdate();
+      const t = setTimeout(()=>{
+        const channel = new BroadcastChannel('sw-messages');
+        channel.postMessage({type : 'checkUpdate'});
         clearTimeout(t);
-      }, 500)
+      }, 500);
+
     }
-  }
-  async _deleteCaches(){
-    const cacheNames = await this.caches.keys();
-    return new Promise((res)=> {
-      cacheNames.forEach((cacheName) => {
-        this.caches.delete(cacheName)
-      })
-      res(true);
-    });
   }
 }
 
