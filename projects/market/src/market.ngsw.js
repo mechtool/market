@@ -4,8 +4,7 @@ let version = '0.0.1';
 self.addEventListener('activate', (event)=> {
   event.waitUntil(
     caches.keys().then((names) =>{
-      console.log('1');
-      console.log('2');
+      console.log('22');
       for (let name of names) caches.delete(name);
     }))
 });
@@ -17,6 +16,6 @@ channel.addEventListener('message', (event)=> {
   }
   else if(event.data.type === 'checkUpdate'){
     self.registration.update();
-    console.log('2');
+    console.log('33');
   }
 })
