@@ -8,7 +8,7 @@
     "start:remote": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng s market -c=remote",
     "build:dev": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=dev",
     "build:stage": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=stage && node ./sw-timestamp.js",
-    "build:prod": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production",
+    "build:prod": "node --max_old_space_size=8048 ./node_modules/@angular/cli/bin/ng b market -c=production && node ./sw-timestamp.js",
     "build": "npm run build:dev && npm run build:stage && npm run build:prod",
     "postbuild:dev": "shx cp -R robots-not-prod.txt dist/market/dev/robots.txt && node optimize-css.js dist/market/dev",
     "postbuild:stage": "shx cp -R robots-not-prod.txt dist/market/stage/robots.txt && node optimize-css.js dist/market/stage",
