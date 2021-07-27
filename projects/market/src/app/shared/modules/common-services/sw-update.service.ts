@@ -17,7 +17,6 @@ export class SwUpdateService implements OnDestroy {
   }
 
   setUp() {
-    console.log('55');
     if (isPlatformBrowser(this._platformId) && this.swUpdate.isEnabled) {
       const t = setTimeout(()=>{
         const channel = new BroadcastChannel('sw-messages');
