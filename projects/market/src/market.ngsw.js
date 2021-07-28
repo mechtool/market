@@ -5,7 +5,6 @@ self.addEventListener('activate', (event)=> {
   event.waitUntil(
     caches.keys().then((names) =>{
       for (let name of names) caches.delete(name);
-      console.log('cache is cleared');
     }))
 });
 let channel = new BroadcastChannel('sw-messages');
@@ -16,6 +15,5 @@ channel.addEventListener('message', (event)=> {
   }
   else if(event.data.type === 'checkUpdate'){
     self.registration.update();
-    console.log('check update');
   }
 })

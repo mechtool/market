@@ -108,7 +108,7 @@
                 "fonts": true
               },
               "serviceWorker" : true,
-              "sourceMap": true,
+              "sourceMap": false,
               "buildOptimizer": true,
               "outputPath": "dist/market/stage"
             },
