@@ -18,6 +18,8 @@ export class RootComponent {
     private _breadcrumbsService: BreadcrumbsService,
     private _responsiveService: ResponsiveService,
   ) {
-    this._responsiveService.init();
+    try {
+      this._responsiveService.init();
+    }catch (err){}
   }
 }

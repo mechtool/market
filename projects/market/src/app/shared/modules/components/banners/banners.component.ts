@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import {ChangeDetectorRef, Component, Inject, OnDestroy, PLATFORM_ID, ViewChild} from '@angular/core';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
 import { BannerItemModel } from './models';
 import { combineLatest, interval, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -30,13 +30,16 @@ export class BannersComponent implements OnDestroy {
     private _navService: NavigationService,
     private _responsiveService: ResponsiveService,
     @Inject(DOCUMENT) private _document: Document,
+    @Inject(PLATFORM_ID) private _platformId: Object,
   ) {
-    this._bannerService.getBanners()
-      .subscribe((banners) => {
-        this.bannerItems = banners._embedded.items;
-        this._handleCarouselVisibility();
-        this._detectScrollAppearanceAndReinitCarousel();
-      });
+    if(isPlatformBrowser(this._platformId)) {
+      this._bannerService.getBanners()
+        .subscribe((banners) => {
+          this.bannerItems = banners._embedded.items;
+          this._handleCarouselVisibility();
+          this._detectScrollAppearanceAndReinitCarousel();
+        });
+    }
   }
 
   ngOnDestroy() {

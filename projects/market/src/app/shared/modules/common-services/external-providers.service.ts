@@ -45,8 +45,8 @@ export class ExternalProvidersService {
   }
 
   fireGTMEvent(tag: any): void {
-    if (this._isProduction) {
-      this._gtmService.pushTag(tag);
+    if (this._isProduction && isPlatformBrowser(this._platformId)) {
+      this._gtmService.pushTag(tag).catch((err) => true);
     }
   }
 

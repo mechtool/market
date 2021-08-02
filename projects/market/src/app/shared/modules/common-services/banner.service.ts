@@ -13,7 +13,9 @@ export class BannerService {
   }
 
   getBanners(): Observable<BannersListResponseModel> {
-    const pageId = removeLastSlash(location.pathname);
-    return this._bnetService.getBanners(pageId);
+    try {
+      const pageId = removeLastSlash(location.pathname);
+      return this._bnetService.getBanners(pageId);
+    }catch (err){}
   }
 }

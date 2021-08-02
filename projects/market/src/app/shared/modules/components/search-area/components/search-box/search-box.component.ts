@@ -102,19 +102,21 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._initForm();
-    this._attachForm();
-    this._setPlaceholder();
-    this._handleEscapeChanges();
-    this._handleResizeChanges();
-    this._handleKeyUpChange();
-    if (this._searchAreaService.suggestionsEnabled) {
-      this._handleFocusQueryChanges();
-      this._handleActiveResultsItemChange();
-    }
-    if (this.form.get('categoryId')?.value) {
-      this._handleCategoryIdChanges();
-    }
+    try {
+      this._initForm();
+      this._attachForm();
+      this._setPlaceholder();
+      this._handleEscapeChanges();
+      this._handleResizeChanges();
+      this._handleKeyUpChange();
+      if (this._searchAreaService.suggestionsEnabled) {
+        this._handleFocusQueryChanges();
+        this._handleActiveResultsItemChange();
+      }
+      if (this.form.get('categoryId')?.value) {
+        this._handleCategoryIdChanges();
+      }
+    }catch (err){}
   }
 
   ngOnDestroy() {

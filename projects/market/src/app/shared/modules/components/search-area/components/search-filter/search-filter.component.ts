@@ -67,7 +67,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
   filteredCategories: CategoryModel[] = null;
   locationsToChoose: LocationModel[] = Megacity.ALL;
   suppliersToChoose: SuppliersItemModel[] = null;
-  isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+  isIE ;
   availableCategories$: BehaviorSubject<CategoryModel[]> = new BehaviorSubject(null);
 
   @ViewChild(CdkVirtualScrollViewport) private _viewPort: CdkVirtualScrollViewport;
@@ -120,6 +120,9 @@ export class SearchFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     private _notificationsService: NotificationsService,
     @Inject(FILTER_FORM_CONFIG) private _filterFormConfig: FilterFormConfigModel,
   ) {
+    try {
+      this.isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
+    }catch (err){}
   }
 
   resetControl(controlName: string) {

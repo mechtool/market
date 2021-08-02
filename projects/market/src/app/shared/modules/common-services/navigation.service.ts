@@ -1,5 +1,5 @@
-import { ComponentRef, Injectable, OnDestroy, ViewContainerRef } from '@angular/core';
-import { Location } from '@angular/common';
+import {ComponentRef, Inject, Injectable, OnDestroy, PLATFORM_ID, ViewContainerRef} from '@angular/core';
+import {isPlatformBrowser, Location} from '@angular/common';
 import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { BehaviorSubject, fromEvent, Subscription } from 'rxjs';
@@ -49,153 +49,156 @@ export class NavigationService implements OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private _userStateService: UserStateService,
     private _externalProvidersService: ExternalProvidersService,
+    @Inject(PLATFORM_ID) private _platformId: Object,
   ) {
-    this.setHistory();
-    this._componentPortal = new ComponentPortal(NavbarNavComponent);
-    this._updateLayoutOnResolutionChanges();
-    this._renderInitialNavBar();
-    this._setInitialNavBarType();
-    this._userStateService.currentUser$.subscribe((auth) => {
-      const notAuthedNavItems: NavItemModel[] = [
-        {
-          label: 'Товары',
-          attributeId: 'product_menu_id',
-          icon: 'search',
-          command: () => {
-            this.navigateReloadable(['/category']);
+    try {
+      this.setHistory();
+      this._componentPortal = new ComponentPortal(NavbarNavComponent);
+      this._updateLayoutOnResolutionChanges();
+      this._renderInitialNavBar();
+      this._setInitialNavBarType();
+      this._userStateService.currentUser$.subscribe((auth) => {
+        const notAuthedNavItems: NavItemModel[] = [
+          {
+            label: 'Товары',
+            attributeId: 'product_menu_id',
+            icon: 'search',
+            command: () => {
+              this.navigateReloadable(['/category']);
+            },
           },
-        },
-        {
-          label: 'Поставщики',
-          attributeId: 'supplier_menu_id',
-          icon: 'supplier',
-          routerLink: ['/supplier'],
-        },
-        {
-          label: 'Акции',
-          attributeId: 'promo_menu_id',
-          icon: 'favorite',
-          routerLink: ['/p/promo'],
-        },
-        {
-          label: 'Блог',
-          attributeId: 'blog_menu_id',
-          icon: 'blog',
-          routerLink: ['/p/blog'],
-        },
-        {
-          label: 'О сервисе',
-          attributeId: 'info_menu_id',
-          icon: 'info',
-          routerLink: ['/about'],
-        },
-        {
-          label: 'Корзина',
-          attributeId: 'basket_menu_id',
-          icon: 'basket',
-          styleClass: 'delimiter',
-          routerLink: ['/cart'],
-          counter: 0,
-        },
-        {
-          label: 'Зарегистрироваться',
-          attributeId: 'register_menu_id',
-          icon: 'personal',
-          command: () => {
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER);
-            this._authService.register();
+          {
+            label: 'Поставщики',
+            attributeId: 'supplier_menu_id',
+            icon: 'supplier',
+            routerLink: ['/supplier'],
           },
-        },
-        {
-          label: 'Войти',
-          attributeId: 'login_menu_id',
-          icon: 'enter',
-          command: () => {
-            this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
-            this._authService.login();
+          {
+            label: 'Акции',
+            attributeId: 'promo_menu_id',
+            icon: 'favorite',
+            routerLink: ['/p/promo'],
           },
-        },
-      ];
-      const authedNavItems: NavItemModel[] = [
-        {
-          label: 'Товары',
-          attributeId: 'product_menu_id',
-          icon: 'search',
-          command: () => {
-            this.navigateReloadable(['/category']);
+          {
+            label: 'Блог',
+            attributeId: 'blog_menu_id',
+            icon: 'blog',
+            routerLink: ['/p/blog'],
           },
-        },
-        {
-          label: 'Поставщики',
-          attributeId: 'supplier_menu_id',
-          icon: 'supplier',
-          routerLink: ['/supplier'],
-        },
-        {
-          label: 'Акции',
-          attributeId: 'promo_menu_id',
-          icon: 'favorite',
-          routerLink: ['/p/promo'],
-        },
-        {
-          label: 'Блог',
-          attributeId: 'blog_menu_id',
-          icon: 'blog',
-          routerLink: ['/p/blog'],
-        },
-        {
-          label: 'О сервисе',
-          attributeId: 'info_menu_id',
-          icon: 'info',
-          routerLink: ['/about'],
-        },
-        {
-          label: 'Корзина',
-          attributeId: 'basket_menu_id',
-          icon: 'basket',
-          styleClass: 'delimiter',
-          routerLink: ['/cart'],
-          counter: 0,
-        },
-        {
-          label: 'Мои заказы',
-          attributeId: 'orders_menu_id',
-          routerLink: ['/my/orders'],
-          icon: 'order',
-          counter: 0,
-        },
-        {
-          label: 'Мои запросы',
-          attributeId: 'rfps_menu_id',
-          routerLink: ['/my/rfps'],
-          icon: 'rfps',
-          counter: 0,
-        },
-        {
-          label: 'Мои продажи',
-          attributeId: 'sales_menu_id',
-          routerLink: ['/my/sales'],
-          icon: 'sale',
-          counter: 0,
-        },
-        {
-          label: 'Мои организации',
-          attributeId: 'organization_menu_id',
-          routerLink: ['/my/organizations'],
-          icon: 'organization',
-          counter: 0,
-        },
-        {
-          label: 'Выход',
-          attributeId: 'logout_menu_id',
-          icon: 'logout',
-          command: () => {
-            this._authService.logout(this._location.path()).subscribe();
+          {
+            label: 'О сервисе',
+            attributeId: 'info_menu_id',
+            icon: 'info',
+            routerLink: ['/about'],
           },
-        },
-      ];
-      this.navItems$.next((auth ? authedNavItems : notAuthedNavItems));
-    })
+          {
+            label: 'Корзина',
+            attributeId: 'basket_menu_id',
+            icon: 'basket',
+            styleClass: 'delimiter',
+            routerLink: ['/cart'],
+            counter: 0,
+          },
+          {
+            label: 'Зарегистрироваться',
+            attributeId: 'register_menu_id',
+            icon: 'personal',
+            command: () => {
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.REGISTER);
+              this._authService.register();
+            },
+          },
+          {
+            label: 'Войти',
+            attributeId: 'login_menu_id',
+            icon: 'enter',
+            command: () => {
+              this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.SIGN_IN);
+              this._authService.login();
+            },
+          },
+        ];
+        const authedNavItems: NavItemModel[] = [
+          {
+            label: 'Товары',
+            attributeId: 'product_menu_id',
+            icon: 'search',
+            command: () => {
+              this.navigateReloadable(['/category']);
+            },
+          },
+          {
+            label: 'Поставщики',
+            attributeId: 'supplier_menu_id',
+            icon: 'supplier',
+            routerLink: ['/supplier'],
+          },
+          {
+            label: 'Акции',
+            attributeId: 'promo_menu_id',
+            icon: 'favorite',
+            routerLink: ['/p/promo'],
+          },
+          {
+            label: 'Блог',
+            attributeId: 'blog_menu_id',
+            icon: 'blog',
+            routerLink: ['/p/blog'],
+          },
+          {
+            label: 'О сервисе',
+            attributeId: 'info_menu_id',
+            icon: 'info',
+            routerLink: ['/about'],
+          },
+          {
+            label: 'Корзина',
+            attributeId: 'basket_menu_id',
+            icon: 'basket',
+            styleClass: 'delimiter',
+            routerLink: ['/cart'],
+            counter: 0,
+          },
+          {
+            label: 'Мои заказы',
+            attributeId: 'orders_menu_id',
+            routerLink: ['/my/orders'],
+            icon: 'order',
+            counter: 0,
+          },
+          {
+            label: 'Мои запросы',
+            attributeId: 'rfps_menu_id',
+            routerLink: ['/my/rfps'],
+            icon: 'rfps',
+            counter: 0,
+          },
+          {
+            label: 'Мои продажи',
+            attributeId: 'sales_menu_id',
+            routerLink: ['/my/sales'],
+            icon: 'sale',
+            counter: 0,
+          },
+          {
+            label: 'Мои организации',
+            attributeId: 'organization_menu_id',
+            routerLink: ['/my/organizations'],
+            icon: 'organization',
+            counter: 0,
+          },
+          {
+            label: 'Выход',
+            attributeId: 'logout_menu_id',
+            icon: 'logout',
+            command: () => {
+              this._authService.logout(this._location.path()).subscribe();
+            },
+          },
+        ];
+        this.navItems$.next((auth ? authedNavItems : notAuthedNavItems));
+      })
+    }catch (err){}
   }
 
   ngOnDestroy() {
@@ -220,11 +223,15 @@ export class NavigationService implements OnDestroy {
   }
 
   screenWidthGreaterThan(val: number): boolean {
-    return window.innerWidth > val || document.documentElement.clientWidth > val || document.body.clientWidth > val;
+    try {
+      return window.innerWidth > val || document.documentElement.clientWidth > val || document.body.clientWidth > val;
+    }catch (err){}
   }
 
   screenWidthLessThan(val: number): boolean {
-    return window.innerWidth <= val || document.documentElement.clientWidth <= val || document.body.clientWidth <= val;
+    try {
+      return window.innerWidth <= val || document.documentElement.clientWidth <= val || document.body.clientWidth <= val;
+    }catch (err){}
   }
 
   openMenu() {
@@ -248,7 +255,7 @@ export class NavigationService implements OnDestroy {
       this.isNavBarMinified$.next(this._isNavBarMinified);
       this._isMenuOpened = false;
       this.overlayRef.dispose();
-      if (window.innerWidth > 992) {
+      if (isPlatformBrowser(this._platformId) && window.innerWidth > 992) {
         this.selectedPortal = this._componentPortal;
       }
     });
@@ -257,7 +264,8 @@ export class NavigationService implements OnDestroy {
   closeMenu() {
     this._isMenuOpened = false;
     this.overlayRef?.dispose();
-    if (window.innerWidth > 992) {
+
+    if (isPlatformBrowser(this._platformId) && window.innerWidth > 992) {
       this.selectedPortal = this._componentPortal;
     }
   }
@@ -267,54 +275,58 @@ export class NavigationService implements OnDestroy {
   }
 
   private _updateLayoutOnResolutionChanges(): void {
-    fromEvent(window, 'resize')
-      .pipe(debounceTime(10))
-      .subscribe(
-        (evt: any) => {
-          if (evt.target.innerWidth > 1300) {
-            this._isNavBarMinified = false;
-            this.isNavBarMinified$.next(this._isNavBarMinified);
-            this.selectedPortal = this._componentPortal;
-            if (this.overlayRef && this.overlayRef.hasAttached()) {
-              this.overlayRef.dispose();
-            }
-          }
-          if (evt.target.innerWidth > 992 && evt.target.innerWidth <= 1300) {
-            this._isNavBarMinified = true;
-            this.isNavBarMinified$.next(this._isNavBarMinified);
-            if (this._isMenuOpened) {
-              this.overlayRef.dispose();
-              this.openMenu();
-              this.selectedPortal = null;
-            }
-            if (!this._isMenuOpened) {
+    if(isPlatformBrowser(this._platformId)) {
+      fromEvent(window, 'resize')
+        .pipe(debounceTime(10))
+        .subscribe(
+          (evt: any) => {
+            if (evt.target.innerWidth > 1300) {
+              this._isNavBarMinified = false;
+              this.isNavBarMinified$.next(this._isNavBarMinified);
               this.selectedPortal = this._componentPortal;
+              if (this.overlayRef && this.overlayRef.hasAttached()) {
+                this.overlayRef.dispose();
+              }
             }
-          }
-          if (evt.target.innerWidth <= 992) {
-            this._isNavBarMinified = false;
-            this.isNavBarMinified$.next(this._isNavBarMinified);
-            this.selectedPortal = null;
-            if (this._isMenuOpened) {
-              this.overlayRef.dispose();
-              this.openMenu();
+            if (evt.target.innerWidth > 992 && evt.target.innerWidth <= 1300) {
+              this._isNavBarMinified = true;
+              this.isNavBarMinified$.next(this._isNavBarMinified);
+              if (this._isMenuOpened) {
+                this.overlayRef.dispose();
+                this.openMenu();
+                this.selectedPortal = null;
+              }
+              if (!this._isMenuOpened) {
+                this.selectedPortal = this._componentPortal;
+              }
             }
-          }
-          if (evt.target.innerWidth <= 768) {
-          }
-        },
-        (err) => {
-          console.log('error');
-        },
-      );
+            if (evt.target.innerWidth <= 992) {
+              this._isNavBarMinified = false;
+              this.isNavBarMinified$.next(this._isNavBarMinified);
+              this.selectedPortal = null;
+              if (this._isMenuOpened) {
+                this.overlayRef.dispose();
+                this.openMenu();
+              }
+            }
+            if (evt.target.innerWidth <= 768) {
+            }
+          },
+          (err) => {
+            console.log('error');
+          },
+        );
+    }
   }
 
   private _renderInitialNavBar(): void {
-    setTimeout(() => {
-      if (window.innerWidth > 992) {
-        this.selectedPortal = this._componentPortal;
-      }
-    }, 0);
+    if(isPlatformBrowser(this._platformId)) {
+      setTimeout(() => {
+        if (window.innerWidth > 992) {
+          this.selectedPortal = this._componentPortal;
+        }
+      }, 0);
+    }
   }
 
   private _setInitialNavBarType(): void {

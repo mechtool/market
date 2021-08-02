@@ -34,8 +34,10 @@ export class MainPopularComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this._getPopularNomenclatures();
-    this._handleScrollChanges();
+    try {
+      this._getPopularNomenclatures();
+      this._handleScrollChanges();
+    }catch (err){}
   }
 
   private _getPopularNomenclatures(): void {

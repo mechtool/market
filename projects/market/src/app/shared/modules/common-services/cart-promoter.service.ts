@@ -1,24 +1,34 @@
-import { Injectable } from '@angular/core';
-import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
+import {Inject, Injectable, Injector, PLATFORM_ID} from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { CartPromoterComponent } from '#shared/modules/components/cart-promoter';
+import { CartPromoterComponent } from '../../../shared/modules/components/cart-promoter';
+import {isPlatformBrowser} from '@angular/common';
 
 @Injectable()
 export class CartPromoterService {
 
+  private _idle;
   readyGoToCart = true;
 
-  constructor(private _idle: Idle,
-              private _modalService: NzModalService,
+  constructor(
+    @Inject(PLATFORM_ID) private _platformId: Object,
+    private _injector : Injector,
+    private _modalService: NzModalService,
   ) {
-    _idle.setIdle(5);
-    _idle.setTimeout(5);
-    _idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    _idle.onTimeout.subscribe(() => {
+    if(isPlatformBrowser(this._platformId)){
+      this.setUp();
+    }
+  }
+
+  async setUp(){
+    const m = await import('@ng-idle/core');
+    this._idle = this._injector.get(m.Idle);
+    this._idle.setIdle(5);
+    this._idle.setTimeout(5);
+    this._idle.setInterrupts(m.DEFAULT_INTERRUPTSOURCES);
+    this._idle.onTimeout.subscribe(() => {
       this._openModal()
     });
   }
-
   start() {
     if (this.readyGoToCart && !this._idle.isRunning()) {
       this._idle.watch();

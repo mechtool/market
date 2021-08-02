@@ -17,7 +17,9 @@ export class NomenclatureCardComponent implements AfterViewInit {
   @Input() productOffer: ProductOffersModel;
 
   ngAfterViewInit() {
-    dispatchEvent(new CustomEvent('scroll'));
+    try {
+      dispatchEvent(new CustomEvent('scroll'));
+    }catch (err){true}
   }
 
   get imageUrl() {
