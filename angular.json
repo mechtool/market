@@ -35,7 +35,7 @@
             "namedChunks": true,
             "optimization": false,
             "outputHashing": "all",
-            "outputPath": "dist/market/stage",
+            "outputPath": "dist/market/browser",
             "index": "projects/market/src/index.html",
             "indexTransform": "projects/market/src/index-html-transform.ts",
             "main": "projects/market/src/main.ts",
@@ -236,6 +236,105 @@
               "baseUrl": "https://10.70.7.10:4200"
             }
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/market/server",
+            "main": "projects/market/server.ts",
+            "tsConfig": "projects/market/tsconfig.server.json",
+            "outputHashing": "media",
+            "optimization": false,
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules"
+              ]
+            },
+            "extractLicenses": true,
+            "inlineStyleLanguage": "scss",
+            "externalDependencies": [
+              "@nestjs/microservices",
+              "@nestjs/microservices/microservices-module",
+              "@nestjs/websockets",
+              "@nestjs/websockets/socket-module",
+              "cache-manager"
+            ]
+          },
+          "configurations": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.dev.ts"
+                }
+              ],
+              "optimization": false,
+              "sourceMap": true
+            },
+            "stage": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.stage.ts"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false
+            },
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": false,
+              "sourceMap": false
+            },
+            "remote": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/market/src/environments/environment.ts",
+                  "with": "projects/market/src/environments/environment.remote.ts"
+                }
+              ]
+            },
+            "es5": {}
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "market:build:development",
+              "serverTarget": "market:server:development"
+            },
+            "production": {
+              "browserTarget": "market:build:production",
+              "serverTarget": "market:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "market:build:production",
+              "serverTarget": "market:server:production"
+            },
+            "development": {
+              "browserTarget": "market:build:development",
+              "serverTarget": "market:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

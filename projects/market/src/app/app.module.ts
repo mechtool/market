@@ -51,7 +51,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map((key) => antDesi
     NewNavbarComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     RouterModule,
     AppRoutingModule,
     HttpClientModule,

@@ -8,10 +8,12 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+document.addEventListener('DOMContentLoaded', () => {
+     platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(() => {
     const spinnerEl = <HTMLDivElement>document.querySelector('.spinner');
     const maintenanceEl = <HTMLDivElement>document.querySelector('.maintenance');
     spinnerEl.style.display = 'none';
     maintenanceEl.style.display = 'flex';
   });
+   });
