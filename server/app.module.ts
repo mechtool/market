@@ -7,7 +7,7 @@ import { AppServerModule } from '../projects/market/src/main.server';
   imports: [
     AngularUniversalModule.forRoot({
       bootstrap: AppServerModule,
-      viewsPath: join(process.cwd(), 'dist/market/browser')
+      viewsPath: join(process.cwd(), 'dist/market/prod')
     })
   ]
 })

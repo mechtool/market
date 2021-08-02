@@ -24,8 +24,8 @@
     "analyze:prod": "webpack-bundle-analyzer dist/market/prod/stats.json",
     "dev:ssr": "ng run market:serve-ssr",
     "serve:ssr": "node dist/market/server/main.js",
-    "build:ssr": "ng build && ng run market:server",
-    "prerender": "ng run market:prerender --no-guess-routes",
+    "build:ssr": "npm run build:prod && ng run market:server",
+    "prerender": "ng run market:prerender:production --no-guess-routes",
     "prebuild:ssr": "ngcc"
   },
   "private": true,
