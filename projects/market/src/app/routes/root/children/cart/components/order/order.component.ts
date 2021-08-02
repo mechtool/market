@@ -55,6 +55,10 @@ export class CartOrderComponent implements OnInit, OnDestroy {
     return this._orderService.unavailableToOrder;
   }
 
+  get orderInProgress(): boolean {
+    return this._orderService.orderInProgress;
+  }
+
   constructor(
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
@@ -106,7 +110,9 @@ export class CartOrderComponent implements OnInit, OnDestroy {
   }
 
   validateAndSubmitOrder() {
-    this._orderService.validateAndSubmitOrder();
+    if (!this.orderInProgress) {
+      this._orderService.validateAndSubmitOrder();
+    }
   }
 
 }

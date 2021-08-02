@@ -60,6 +60,7 @@ export class OrderService implements OnDestroy {
   private _order: CartDataOrderResponseModel;
   private _deliveryMethods: DeliveryMethodModel[] = null;
   private _availableOrganizations: UserOrganizationModel[];
+  private _orderInProgress = false;
 
   private _consumerSubscription: Subscription;
   private _recaptchaSubscription: Subscription;
@@ -84,6 +85,10 @@ export class OrderService implements OnDestroy {
 
   get isAuthenticated(): boolean {
     return !!this.userInfo;
+  }
+
+  get orderInProgress(): boolean {
+    return this._orderInProgress;
   }
 
   get hasRegisteredOrganizations(): boolean {
@@ -296,6 +301,7 @@ export class OrderService implements OnDestroy {
   }
 
   validateAndSubmitOrder() {
+    this._orderInProgress = true;
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.TRY_ORDER);
     this._externalProvidersService.fireYandexMetrikaEvent(MetrikaEventTypeModel.ORDER_TRY_PARAMETRIZED, {
       ...(this.isMakeOrderOrRequestForPrice && {
@@ -317,6 +323,7 @@ export class OrderService implements OnDestroy {
     if (this.form.invalid) {
       if (this.selectedTabChange$.getValue() === 0) {
         this.selectedTabChange$.next(1);
+        this._orderInProgress = false;
         return;
       }
 
@@ -375,6 +382,7 @@ export class OrderService implements OnDestroy {
           },
         },
       });
+      this._orderInProgress = false;
       return;
     }
 
@@ -481,6 +489,7 @@ export class OrderService implements OnDestroy {
 
       }, (err) => {
         this._notificationsService.error(err);
+        this._orderInProgress = false;
       });
   }
 
@@ -529,9 +538,11 @@ export class OrderService implements OnDestroy {
             .openRegisterAndOrderSentModal(this.isOrderType, this.isAnonymous, this.form.value.consumerInn, this.form.value.consumerKpp);
         }
         this.cartDataChange$.next(cartData);
+        this._orderInProgress = false;
       },
       (err) => {
         this._notificationsService.error(err);
+        this._orderInProgress = false;
       },
     );
   }
